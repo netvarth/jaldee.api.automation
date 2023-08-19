@@ -1,0 +1,55 @@
+*** Settings ***
+Suite Teardown    Delete All Sessions
+Test Teardown     Delete All Sessions
+Force Tags        Service
+Library           Collections
+Library           String
+Library           json
+Library           requests
+Library           FakerLibrary
+Library           Process
+Library           OperatingSystem
+Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ConsumerKeywords.robot
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/musers.py
+
+
+*** Test Cases ***
+
+JD-TC-CreateServiceWithRequest-1
+
+    [Documentation]   Create  service for a valid provider.
+
+    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${SERVICE1}=    FakerLibrary.word
+    ${DAY1}=  get_date
+    ${service_duration}=   Random Int   min=5   max=10
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+
+    ${resp}=  Create Service  ${SERVICE1}   ${desc}   ${service_duration}   ${status[0]}  
+    ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
+    ...   ${bool[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid1}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${sid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update Service  ${sid1}  ${SERVICE1}   ${desc}   ${service_duration}   ${status[0]}  
+    ...  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${servicecharge}  ${bool[0]} 
+    ...   ${bool[1]}   date=${bool[1]}  serviceBookingType=${serviceBookingType[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${sid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200

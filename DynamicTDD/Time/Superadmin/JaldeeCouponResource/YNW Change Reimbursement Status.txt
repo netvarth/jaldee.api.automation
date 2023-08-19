@@ -1,0 +1,641 @@
+*** Settings ***
+Suite Teardown    Run Keywords  Delete All Sessions  resetsystem_time
+Test Teardown     Delete All Sessions
+Force Tags        POC
+Library           Collections
+Library           String
+Library           json
+Resource          ../../ProviderKeywords.txt
+Resource          ../../ConsumerKeywords.txt
+Resource        ../../SuperAdminKeywords.txt
+Suite Setup     Run Keywords  clear_jaldeecoupon  OnamCoupon2020  AND  clear_queue  ${PUSERNAME7}  AND  clear_waitlist  ${PUSERNAME7}  AND  clear_payment_invoice  ${PUSERNAME7}  AND  clear_service  ${PUSERNAME7}  AND  clear_location  ${PUSERNAME7}    AND  clear_jaldeecoupon  OnamCoupon2018  AND  clear_jaldeecoupon  Coupon01_01  AND  clear_jaldeecoupon  Coupon02  AND  clear_jaldeecoupon  Coupon03  AND  clear_jaldeecoupon  Coupon04  AND  clear_jaldeecoupon  Coupon05  AND  clear_jaldeecoupon  Coupon06  AND  clear_jaldeecoupon  Coupon07  AND  clear_jaldeecoupon  Coupon08  AND  clear_jaldeecoupon  Coupon09  AND  clear_jaldeecoupon  Coupon10  AND  clear_jaldeecoupon  Coupon11  AND  clear_jaldeecoupon  Coupon12  AND  clear_jaldeecoupon  Coupon13  AND  clear_jaldeecoupon  Coupon14  AND  clear_jaldeecoupon  Coupon15  AND  clear_jaldeecoupon  Coupon16   AND  clear_tax_gstNum  13DEFBV1100M2Z6
+
+*** Variables ***
+
+${SERVICE1}  Note Book1105
+${SERVICE2}  boots105
+${SERVICE3}  pen105
+${SERVICE4}  ABCD105
+${queue1}  morning
+${LsTime}   08:00 AM
+${LeTime}   09:00 AM
+
+${sTime}    09:00 PM
+${eTime}    11:00 PM
+${longi}        89.524764
+${latti}        86.524764
+*** Test Cases ***
+
+YNW-TC-Change reimbursement status-1
+    clear_reimburseReport
+    clear_payment_invoice  ${PUSERNAME7}
+    Comment  Get reimbursement report    
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=   Get Active License
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
+    ${resp}=   ProviderLogout
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Get BusinessDomainsConf
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${d1}  ${resp.json()[0]['domain']}
+    Set Test Variable  ${d2}  ${resp.json()[1]['domain']}
+    Set Test Variable  ${sd1}  ${resp.json()[0]['subDomains'][0]['subDomain']}
+    Set Test Variable  ${sd2}  ${resp.json()[0]['subDomains'][1]['subDomain']}
+    Set Test Variable  ${sd3}  ${resp.json()[1]['subDomains'][0]['subDomain']}
+    Set Test Variable  ${sd4}  ${resp.json()[1]['subDomains'][1]['subDomain']}
+    ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
+    ${licenses}=  Jaldee Coupon Target License  ${lic1}
+    ${DAY1}=  get_date
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${DAY2}=  add_date  10
+    Set Suite Variable  ${DAY2}  ${DAY2}
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Create Jaldee Coupon  OnamCoupon2020  Onam Coupon  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  100  1000  10  10  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Push Jaldee Coupon  OnamCoupon2020  Onam Coupon Offer
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Create Jaldee Coupon  Coupon01_01  Onam Coupon  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  100  1000  10  10  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Push Jaldee Coupon  Coupon01_01  Onam Coupon Offer
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  SuperAdmin Logout 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Update Tax Percentage  18  13DEFBV1100M2Z6  
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Enable Tax
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${pid}=  get_acc_id  ${PUSERNAME7}
+    ${cid}=  get_id  ${CUSERNAME5}
+    Set Suite Variable  ${cid}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${resp}=  Create Location  ABCDE  ${longi}  ${latti}  www.sampleurl.com  680010  Thadathil House  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${LsTime}  ${LeTime}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Suite Variable  ${lid}  ${resp.json()} 
+    ${resp}=  Create Service  ${SERVICE1}  Description   2  ACTIVE  Waitlist  True  email  50  500  True  True
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${s_id1}  ${resp.json()}
+    ${resp}=  Create Service  ${SERVICE2}  Description   2  ACTIVE  Waitlist  True  email  0  500  False  True
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${s_id2}  ${resp.json()}
+    ${resp}=  Create Service  ${SERVICE3}  Description   2  ACTIVE  Waitlist  True  email  0  500  False  False
+    Should Be Equal As Strings  ${resp.status_code}  200     
+    Set Suite Variable  ${s_id3}  ${resp.json()}
+
+    ${resp}=  Create Service  ${SERVICE4}  Description   2  ACTIVE  Waitlist  True  email  0  500  False  True
+    Should Be Equal As Strings  ${resp.status_code}  200     
+    Set Suite Variable  ${s_id4}  ${resp.json()}
+    
+    ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  100  ${lid}  ${s_id1}  ${s_id2}  ${s_id3}  ${s_id4}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${qid1}  ${resp.json()}
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}   
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  New  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  590.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  590.0
+
+    ${resp}=  Get Jaldee Coupons By Coupon_code  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['couponState']}  NEW
+    ${resp}=  Enable Jaldee Coupon By Provider  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons By Coupon_code  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.json()['couponState']}  ENABLED
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons By Coupon_code  Coupon01_01
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['couponState']}  NEW
+    ${resp}=  Enable Jaldee Coupon By Provider  Coupon01_01
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons By Coupon_code  Coupon01_01
+    Should Be Equal As Strings  ${resp.json()['couponState']}  ENABLED
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Apply Jaldee Coupon By Provider  OnamCoupon2020  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jCoupon']['OnamCoupon2020']['value']}  50.0
+    Should Contain  ${resp.json()['jCoupon']['OnamCoupon2020']['systemNote']}  NO_OTHER_COUPONS_ALLOWED
+    Should Contain  ${resp.json()['jCoupon']['OnamCoupon2020']['systemNote']}  COUPON_APPLIED
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  540.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  540.0
+    ${resp}=  Accept Payment  ${wid}  cash  540  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Payment By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  SUCCESS  
+    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  cash
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  540.0
+
+    ${resp}=  Settl Bill  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
+
+    sleep  2s
+
+    ${end}=  add_time24  0  0
+    ${start}=  add_time24  0  -5
+    ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reimburse Reports By Provider
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${invoice_id}  ${resp.json()[0]['invoiceId']}
+    Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  50.0
+
+    ${resp}=  Request For Payment of Jaldeecoupon  ${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Reimburse Reports By Provider  id-eq=${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  REQUESTED
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Stats  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['usageAmt']}  50.0
+    Should Be Equal As Strings  ${resp.json()['usageCount']}  1
+    Should Be Equal As Strings  ${resp.json()['reimbursed']}  0.0 
+    Should Be Equal As Strings  ${resp.json()['balanceDue']}  50.0
+
+    ${invoice1}=  Reimburse Ivoices  ${invoice_id}  payment of reimburse  CHEQUE  private note  JC
+    ${invoices}=  Create List  ${invoice1}
+    ${resp}=  Reimburse Payment  ${invoices}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reimbursement By InvoiceId  ${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['invoice']['invoiceId']}  ${invoice_id}
+    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['displayNote']}  payment of reimburse
+    Should Be Equal As Strings  ${resp.json()[0]['privateNote']}  private note
+    Should Be Equal As Strings  ${resp.json()[0]['jcTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['jaldeePaymentmode']}  CHEQUE
+    Should Be Equal As Strings  ${resp.json()[0]['grandTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['paidBy']['id']}  2
+    Should Be Equal As Strings  ${resp.json()[0]['paidBy']['userName']}  asha.support
+
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  INDISPUTE
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "Cannot change the status of a paid invoice"
+
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Get Reimburse Reports By Provider  id-eq=${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['providerId']}  ${pid}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['reportFromDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['reportEndDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeBank']}  0.0
+    Should Contain  ${resp.json()[0]['listOfJaldeeCoupons']}  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeCoupons']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  PAID
+    Should Be Equal As Strings  ${resp.json()[0]['subJcTotalPaid']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
+    Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
+
+YNW-TC-Change reimbursement status-2
+    clear_reimburseReport
+    clear_payment_invoice  ${PUSERNAME7}
+    Comment  Get reimbursement report    
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${pid}=  get_acc_id  ${PUSERNAME7}
+    ${cid}=  get_id  ${CUSERNAME1}
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}   
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  New  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  590.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  590.0
+
+    ${resp}=  Apply Jaldee Coupon By Provider  OnamCoupon2020  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jCoupon']['OnamCoupon2020']['value']}  50.0
+    Should Contain  ${resp.json()['jCoupon']['OnamCoupon2020']['systemNote']}  NO_OTHER_COUPONS_ALLOWED
+    Should Contain  ${resp.json()['jCoupon']['OnamCoupon2020']['systemNote']}  COUPON_APPLIED
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  540.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  540.0
+    ${resp}=  Accept Payment  ${wid}  cash  540  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Payment By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  SUCCESS  
+    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  cash
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  540.0
+
+    ${resp}=  Settl Bill  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
+
+    sleep  2s
+
+    ${end}=  add_time24  0  0
+    ${start}=  add_time24  0  -5
+    ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reimburse Reports By Provider
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${invoice_id}  ${resp.json()[0]['invoiceId']}
+    Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  PAYMENTPENDING
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Stats  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['usageAmt']}  50.0
+    Should Be Equal As Strings  ${resp.json()['usageCount']}  1
+    Should Be Equal As Strings  ${resp.json()['reimbursed']}  0.0 
+    Should Be Equal As Strings  ${resp.json()['balanceDue']}  50.0
+
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  INDISPUTE
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reimburse Reports By Provider
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceId']}  ${invoice_id}
+    Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  INDISPUTE
+
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Get Reimburse Reports By Provider  id-eq=${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['providerId']}  ${pid}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['reportFromDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['reportEndDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeBank']}  0.0
+    Should Contain  ${resp.json()[0]['listOfJaldeeCoupons']}  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeCoupons']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  INDISPUTE
+    Should Be Equal As Strings  ${resp.json()[0]['subJcTotalPaid']}  0.0
+    Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
+    Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  0.0
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  PAID
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "Cannot change the status of a invoice to paid"
+
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  PAYMENTPENDING
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reimburse Reports By Provider
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceId']}  ${invoice_id}
+    Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  PAYMENTPENDING
+
+    ${invoice1}=  Reimburse Ivoices  ${invoice_id}  payment of reimburse  CHEQUE  private note  TOTAL
+    ${invoices}=  Create List  ${invoice1}
+    ${resp}=  Reimburse Payment  ${invoices}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reimbursement By InvoiceId  ${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['invoice']['invoiceId']}  ${invoice_id}
+    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['displayNote']}  payment of reimburse
+    Should Be Equal As Strings  ${resp.json()[0]['privateNote']}  private note
+    Should Be Equal As Strings  ${resp.json()[0]['jcTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['jaldeePaymentmode']}  CHEQUE
+    Should Be Equal As Strings  ${resp.json()[0]['grandTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['paidBy']['id']}  2
+    Should Be Equal As Strings  ${resp.json()[0]['paidBy']['userName']}  asha.support
+
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  INDISPUTE
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "Cannot change the status of a paid invoice"
+
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Get Reimburse Reports By Provider  id-eq=${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['providerId']}  ${pid}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['reportFromDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['reportEndDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeBank']}  0.0
+    Should Contain  ${resp.json()[0]['listOfJaldeeCoupons']}  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeCoupons']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  PAID
+    Should Be Equal As Strings  ${resp.json()[0]['subJcTotalPaid']}  50.0
+    Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
+    Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
+
+YNW-TC-Change reimbursement status-UH1
+    Comment  Change reimbursement status without login  
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  NOTPAID
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings   ${resp.json()}   "Session Expired"
+
+YNW-TC-Change reimbursement status -UH2
+    Comment   Consumer do Change reimbursement status
+    ${resp}=   Consumer Login  ${CUSERNAME}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  NOTPAID
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings   ${resp.json()}   "Session Expired"
+
+YNW-TC-Change reimbursement status -UH3
+    Comment   Provider do Change reimbursement status
+    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  NOTPAID
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings   ${resp.json()}   "Session Expired"
+
+*** Comment ***
+YNW-TC-Change reimbursement status-2
+    Comment     Reimburse payment of same jaldee coupon and same provider and Get reimbursement report 
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${pid}=  get_acc_id  ${PUSERNAME7}
+    ${cid}=  get_id  ${CUSERNAME}
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}   
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  New  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  590.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  590.0
+
+    ${resp}=  Apply Jaldee Coupon By Provider  OnamCoupon2020  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jCoupon']['OnamCoupon2020']['value']}  50.0
+    Should Contain  ${resp.json()['jCoupon']['OnamCoupon2020']['systemNote']}  NO_OTHER_COUPONS_ALLOWED
+    Should Contain  ${resp.json()['jCoupon']['OnamCoupon2020']['systemNote']}  COUPON_APPLIED
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  540.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  540.0
+    ${resp}=  Accept Payment  ${wid}  cash  540  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Payment By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  SUCCESS  
+    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  cash
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  540.0
+
+    ${resp}=  Settl Bill  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
+    sleep  02s
+    ${end}=  add_time24  0  0
+    ${start}=  add_time24  0  -5
+    ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${invoice_id}  ${resp.json()[0]['invoiceId']}
+    
+    ${resp}=  Request For Payment of Jaldeecoupon  ${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Reimburse Reports By Provider  id-eq=${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  REQUESTED
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Stats  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['usageAmt']}  100.0
+    Should Be Equal As Strings  ${resp.json()['usageCount']}  2
+    Should Be Equal As Strings  ${resp.json()['reimbursed']}  50.0 
+    Should Be Equal As Strings  ${resp.json()['balanceDue']}  50.0
+
+    ${invoice1}=  Reimburse Ivoices  ${invoice_id}  payment of reimburse  CASH  private note
+    ${invoices}=  Create List  ${invoice1}
+    ${resp}=  Reimburse Payment  ${invoices}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reimbursement By InvoiceId  ${invoice_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  NOTPAID
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+YNW-TC-Change reimbursement status-3
+    Comment  SA do reimuburse payment of 2 jaldeee coupon and same provider
+    change_system_time  0  1  
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${cid}=  get_id  ${CUSERNAME1}
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}   
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  New  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  590.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  590.0
+
+    ${resp}=  Apply Jaldee Coupon By Provider  OnamCoupon2020  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jCoupon']['OnamCoupon2020']['value']}  50.0
+    Should Contain  ${resp.json()['jCoupon']['OnamCoupon2020']['systemNote']}  NO_OTHER_COUPONS_ALLOWED
+    Should Contain  ${resp.json()['jCoupon']['OnamCoupon2020']['systemNote']}  COUPON_APPLIED
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  540.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  540.0
+    ${resp}=  Accept Payment  ${wid}  cash  540  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Payment By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  SUCCESS  
+    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  cash
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  540.0
+
+    ${resp}=  Settl Bill  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
+
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  hi  True  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}   
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  New  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  590.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  590.0
+
+    ${resp}=  Apply Jaldee Coupon By Provider  Coupon01_01  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jCoupon']['Coupon01_01']['value']}  50.0
+    Should Contain  ${resp.json()['jCoupon']['Coupon01_01']['systemNote']}  NO_OTHER_COUPONS_ALLOWED
+    Should Contain  ${resp.json()['jCoupon']['Coupon01_01']['systemNote']}  COUPON_APPLIED
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    Should Be Equal As Strings  ${resp.json()['netRate']}  540.0
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  540.0
+    ${resp}=  Accept Payment  ${wid}  cash  540  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Payment By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  SUCCESS  
+    Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  cash
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  540.0
+
+    ${resp}=  Settl Bill  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
+
+    sleep  02s
+    ${end}=  add_time24  0  0
+    ${start}=  add_time24  0  -5
+    ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${invoice_id}  ${resp.json()[0]['invoiceId']}
+
+    ${resp}=  Request For Payment of Jaldeecoupon  ${invoice_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Reimburse Reports By Provider
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['status']}  REQUESTED
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  Get Jaldee Coupons Stats  OnamCoupon2020
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['usageAmt']}  200.0
+    Should Be Equal As Strings  ${resp.json()['usageCount']}  4
+    Should Be Equal As Strings  ${resp.json()['reimbursed']}  100.0 
+    Should Be Equal As Strings  ${resp.json()['balanceDue']}  100.0
+
+    ${resp}=  Get Jaldee Coupons Stats  Coupon01_01
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['usageAmt']}  50.0
+    Should Be Equal As Strings  ${resp.json()['usageCount']}  1
+    Should Be Equal As Strings  ${resp.json()['reimbursed']}  0.0 
+    Should Be Equal As Strings  ${resp.json()['balanceDue']}  50.0
+
+    ${pid}=  get_acc_id  ${PUSERNAME7}
+    ${invoice1}=  Reimburse Ivoices  ${invoice_id}  payment of reimburse  CASH  private note
+    ${invoices}=  Create List  ${invoice1}
+    ${resp}=  Reimburse Payment  ${invoices}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reimbursement By InvoiceId  ${invoice_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Change Reimbursement Status  ${invoice_id}  NOTPAID
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+

@@ -1,0 +1,16 @@
+#Remove all docker container instances
+docker rm `docker ps -aq`
+
+#Show all docker images
+docker images
+
+#remove redundant docker images
+docker rmi <docker id1> <docker id2> ... <docker idn>
+
+#find currently running docker container id
+docker ps
+
+#kill the currently running docker process
+docker kill <Container ID>
+
+

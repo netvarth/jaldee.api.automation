@@ -1,0 +1,306 @@
+*** Settings ***
+Suite Teardown    Delete All Sessions
+Test Teardown     Run Keywords  Delete All Sessions
+Force Tags        Membership Service
+Library           Collections
+Library           String
+Library           json
+Library           FakerLibrary
+Library           RequestsLibrary
+Library           OperatingSystem
+Library           /ebs/TDD/excelfuncs.py
+Library		      /ebs/TDD/Imageupload.py
+Resource          /ebs/TDD/SuperAdminKeywords.robot
+Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_musers.py
+
+*** Variables ***
+
+${xlFile}      ${EXECDIR}/TDD/Member Registration.xlsx   
+${self}      0
+@{emptylist}
+${jpg}     /ebs/TDD/small.jpg
+${fakemem}    1235
+
+*** Test Cases ***
+
+
+JD-TC-Get_Before_Member_QNR-1
+
+    [Documentation]  Get Before Member QNR
+
+    ${wb}=  readWorkbook  ${xlFile}
+    ${sheet1}  GetCurrentSheet   ${wb}
+    Set Suite Variable   ${sheet1}
+    ${colnames}=  getColumnHeaders  ${sheet1}
+    Log List  ${colnames}
+    Log List  ${QnrChannel}
+    Log List  ${QnrTransactionType}
+    Set Suite Variable   ${colnames}
+    ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
+    Log   ${servicenames}
+    Set Suite Variable   ${servicenames}
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    ${accountId}=    get_acc_id       ${PUSERNAME47}
+    Set Suite Variable                ${accountId}
+
+    ${description}=    FakerLibrary.bs
+    ${name}=           FakerLibrary.firstName
+    ${displayname}=    FakerLibrary.firstName
+    ${effectiveFrom}=  get_date
+    ${effectiveTo}=    add_date  10 
+    Set Suite Variable    ${description}
+    Set Suite Variable    ${name}
+    Set Suite Variable    ${displayname}
+    Set Suite Variable    ${effectiveFrom}
+    Set Suite Variable    ${effectiveTo}
+
+    ${resp}=    Create Membership Service     ${description}    ${servicenames[0]}    ${displayname}    ${effectiveFrom}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${membershipid}    ${resp.json()}
+
+    ${resp}=    Get Membership Service 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${accountId}    ${xlFile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Questionnaire List   ${accountId}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+
+    ${j}=  Evaluate  ${len}+1
+
+    FOR  ${i}  IN RANGE   1  ${j}
+        Set Suite Variable    ${qid11}    ${resp.json()[${i}-1]['id']}
+        ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
+        Log  ${qns.json()}
+        Should Be Equal As Strings  ${qns.status_code}  200
+        Should Be Equal As Strings   ${qns.json()['status']}  ${status[1]}
+    END
+
+    FOR  ${i}  IN RANGE   1  ${j}
+        ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
+        Log  ${qns.json()}
+        Should Be Equal As Strings  ${qns.status_code}  200
+        Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
+    END
+    
+    ${resp}=  Get Questionnaire List   ${accountId}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Questionnaire List By Provider   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
+      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[12]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['id']} 
+      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[12]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
+      Exit For Loop If   '${id}' != '${None}'
+    END
+    Set Suite Variable   ${id}
+    Set Suite Variable   ${qnrid}
+
+    ${qns}   Get Provider Questionnaire By Id   ${id}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+
+    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
+    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+
+    ${qns}   Get Provider Questionnaire By Id   ${id}  
+    Log  ${qns.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+    Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
+    Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
+
+    ${resp}=  ProviderLogout
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${qns.status_code}  200
+
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable    ${lastName}
+    ${number1}    Generate random string    10    123456789
+    ${number1}    Convert To Integer  ${number1}
+    Set Suite Variable    ${number1}
+    ${email}=    FakerLibrary.Email
+    Set Suite Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${number1}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${number1}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${number1}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${number1}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${resp}=    Create Membership     ${firstName}    ${lastName}    ${number1}    ${membershipid}    ${countryCodes[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable     ${memberid1}    ${resp.json()}
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${QnrChannel[1]}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+    Set Suite Variable    ${qid}     ${respo.json()['questionnaireId']}
+    Set Suite Variable    ${Quid}     ${respo.json()['id']}
+
+JD-TC-Get_Before_Member_QNR-UH1
+
+    [Documentation]  Get Before Member QNR with invalid member id
+
+    ${resp}=    ProviderConsumer Login with token   ${number1}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${fakemem}    ${QnrChannel[1]}
+    Log  ${respo.content}
+    Should Be Equal As Strings    ${respo.status_code}  200
+    Should Be Equal As Strings    ${respo.json()['id']}    0
+
+JD-TC-Get_Before_Member_QNR-UH2
+
+    [Documentation]  Get Before Member QNR with empty member id
+
+    ${resp}=    ProviderConsumer Login with token   ${number1}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${empty}    ${QnrChannel[1]}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  404
+
+JD-TC-Get_Before_Member_QNR-UH3
+
+    [Documentation]  Get Before Member QNR where QNR Channel is phonein
+
+    ${resp}=    ProviderConsumer Login with token   ${number1}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${QnrChannel[2]}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+    Should Be Equal As Strings    ${respo.json()['id']}    0
+
+JD-TC-Get_Before_Member_QNR-UH4
+
+    [Documentation]  Get Before Member QNR where QNR Channel is walkin
+
+    ${resp}=    ProviderConsumer Login with token   ${number1}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${QnrChannel[0]}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+    Should Be Equal As Strings    ${respo.json()['id']}    0
+
+JD-TC-Get_Before_Member_QNR-UH5
+
+    [Documentation]  Get Before Member QNR where QNR Channel is any
+
+    ${resp}=    ProviderConsumer Login with token   ${number1}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${QnrChannel[3]}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+    Should Be Equal As Strings    ${respo.json()['id']}    0
+
+JD-TC-Get_Before_Member_QNR-UH6
+
+    [Documentation]  Get Before Member QNR where QNR Channel is empty
+
+    ${resp}=    ProviderConsumer Login with token   ${number1}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${empty}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  404
+
+JD-TC-Get_Before_Member_QNR-UH7
+
+    [Documentation]  Get Before Member QNR with provider login
+
+    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${QnrChannel[1]}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+    Should Be Equal As Strings    ${respo.json()['id']}    0
+
+JD-TC-Get_Before_Member_QNR-UH8
+
+    [Documentation]  Get Before Member QNR with consumer login
+
+    ${resp}=  Consumer Login  ${CUSERNAME21}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${QnrChannel[1]}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+
+JD-TC-Get_Before_Member_QNR-UH9
+
+    [Documentation]  Get Before Member QNR without login
+
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${QnrChannel[1]}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  419
+    Should Be Equal As Strings    ${respo.json()}    ${SESSION_EXPIRED}

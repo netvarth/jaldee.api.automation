@@ -1,0 +1,144 @@
+{
+	"id": "customizedJBProfile",
+	"displayName": "Jaldee Bank Payment Profile",
+	"destBank": ["JALDEE"],
+	"indiaPay": true,
+	"indianPaymodes": [{
+		"mode": "Cash",
+		"gatewayFee": {
+			"fixedPctValue": 0,
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValueMax": 0,
+			"fixedPctValueMin": 0
+		}
+	}, {
+		"mode": "UPI",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "Mock",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "Cash",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "CC",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "JCASH",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "DC",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "NB",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "WALLET",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "PAYLATER",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 0,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}],
+	"internationalPay": true,
+	"internationalPaymodes": [{
+		"mode": "CC",
+		"gatewayFee": {
+			"fixedPctValue": 0,
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValueMax": 0,
+			"fixedPctValueMin": 0
+		}
+	}, {
+		"mode": "Mock",
+		"gatewayFee": {
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValue": 3,
+			"fixedPctValueMin": 0,
+			"fixedPctValueMax": 0
+		}
+	}, {
+		"mode": "JCASH",
+		"gatewayFee": {
+			"fixedPctValue": 0,
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValueMax": 0,
+			"fixedPctValueMin": 0
+		}
+	}, {
+		"mode": "Cash",
+		"gatewayFee": {
+			"fixedPctValue": 0,
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValueMax": 0,
+			"fixedPctValueMin": 0
+		}
+	}, {
+		"mode": "DC",
+		"gatewayFee": {
+			"fixedPctValue": 0,
+			"chargeConsumer": ["NO"],
+			"fixedAmountValue": 0,
+			"fixedPctValueMax": 0,
+			"fixedPctValueMin": 0
+		}
+	}]
+}

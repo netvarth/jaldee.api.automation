@@ -1,0 +1,300 @@
+*** Settings ***
+Suite Teardown  Run Keywords  Delete All Sessions  resetsystem_time
+Test Teardown   Delete All Sessions
+Force Tags      POC
+Library         Collections
+Library         String
+Library         json
+Resource        ../../ProviderKeywords.txt
+Resource        ../../ConsumerKeywords.txt
+Resource        ../../SuperAdminKeywords.txt
+Suite Setup     Run Keywords  clear_jaldeecoupon  OnamCoupon2018  AND  clear_jaldeecoupon  Coupon001  AND  clear_jaldeecoupon  CouponXXX
+*** Variables ***
+${longi}        89.524764
+${latti}        88.259874
+${longi1}       70.524764
+${latti1}       88.259874
+
+*** Test Cases ***
+
+YNW-TC-GetJaldeeCouponsCount-1
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  Get BusinessDomainsConf
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${d1}  ${resp.json()[0]['domain']}
+    Set Test Variable  ${d2}  ${resp.json()[1]['domain']}
+    Set Test Variable  ${sd1}  ${resp.json()[0]['subDomains'][0]['subDomain']}
+    Set Test Variable  ${sd2}  ${resp.json()[0]['subDomains'][1]['subDomain']}
+    Set Test Variable  ${sd3}  ${resp.json()[1]['subDomains'][0]['subDomain']}
+    Set Test Variable  ${sd4}  ${resp.json()[1]['subDomains'][1]['subDomain']}
+    ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
+    ${resp}=   Get Licensable Packages
+    Should Be Equal As Strings   ${resp.status_code}   200
+    Set Suite Variable  ${lic1}  ${resp.json()[0]['pkgId']}
+    Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
+    ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
+    ${DAY1}=  get_date
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${DAY2}=  add_date  10
+    Set Suite Variable  ${DAY2}  ${DAY2}
+    ${DAY3}=  add_date  12
+    Set Suite Variable  ${DAY3}  ${DAY3}
+    ${DAY4}=  add_date  14
+    Set Suite Variable  ${DAY4}  ${DAY4}
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DRAFT
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${draftcount}  ${resp.json()}
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=ACTIVE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${activecount}  ${resp.json()}
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=CANCELLED
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${disablecount}  ${resp.json()}
+    ${resp}=  Get Jaldee Coupons Count  startDate-eq=${DAY1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${startcount1}  ${resp.json()}
+    ${resp}=  Get Jaldee Coupons Count  startDate-eq=${DAY2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${startcount2}  ${resp.json()}
+    ${resp}=  Get Jaldee Coupons Count  endDate-eq=${DAY2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${endcount1}  ${resp.json()}
+    ${resp}=  Get Jaldee Coupons Count  endDate-eq=${DAY3}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${endcount2}  ${resp.json()}
+    ${c_date}=  get_date
+    ${resp}=  Get Jaldee Coupons Count  createdDate-eq=${c_date}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${todaycount}  ${resp.json()}
+
+
+    ${resp}=  Create Jaldee Coupon  OnamCoupon2018  CouponZZZ  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  1000  1000  5  2  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Create Jaldee Coupon  Coupon001  CouponZZZ  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  1000  1000  5  2  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${p1}=  get_acc_id  ${PUSERNAME1}
+    ${p1}=  Convert To String  ${p1}
+    Set Suite Variable  ${p1}
+    ${resp}=  ProviderLogin  ${PUSERNAME}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${p2}=  get_acc_id  ${PUSERNAME}
+    ${p2}=  Convert To String  ${p2}
+    Set Suite Variable  ${p2}
+    ${pro_ids}=  Create List  ${p1}  ${p2}
+    Set Suite Variable  ${pro_ids}
+    ${resp}=   ProviderLogout
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Create Jaldee Coupon For Providers  CouponXXX  CouponXXX  Xmas offer   STUDENT  ${DAY2}  ${DAY3}  PERCENTAGE  50  100  false  false  100  250  1000  5  2  false  false  false  false  false  consumer first use  50% offer  ${pro_ids}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Count  couponCode-eq=OnamCoupon2018
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+    ${resp}=  Get Jaldee Coupons Count  couponCode-eq=Coupon001
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+    ${resp}=  Get Jaldee Coupons Count  couponCode-eq=CouponXXX
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+
+YNW-TC-GetJaldeeCouponsCount-2
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Count
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${totalcount}  ${resp.json()}
+    ${count}=  Evaluate  ${totalcount}-1
+    ${resp}=  Get Jaldee Coupons Count  couponCode-neq=OnamCoupon2018
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+
+YNW-TC-GetJaldeeCouponsCount-3
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${count}=  Evaluate  ${draftcount}+3
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DRAFT
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${resp}=  Push Jaldee Coupon  OnamCoupon2018  CouponZZZ Offer
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${count}=  Evaluate  ${draftcount}+2
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DRAFT
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${count}=  Evaluate  ${activecount}+1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=ACTIVE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${resp}=  Push Jaldee Coupon  Coupon001  CouponZZZ Offer
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${count}=  Evaluate  ${draftcount}+1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DRAFT
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${count}=  Evaluate  ${activecount}+2
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=ACTIVE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${resp}=  Disable Jaldee Coupon  OnamCoupon2018  reason
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep  03s
+    ${count}=  Evaluate  ${count}-1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=ACTIVE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${count}=  Evaluate  ${disablecount}+1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=CANCELLED
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${count}=  Evaluate  ${draftcount}+1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DRAFT
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+
+
+YNW-TC-GetJaldeeCouponsCount-4
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Count  couponName-eq=CouponZZZ
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  2
+    ${resp}=  Get Jaldee Coupons Count  couponName-eq=CouponXXX
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+
+YNW-TC-GetJaldeeCouponsCount-5
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Count
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${totalcount}  ${resp.json()}
+    ${count}=  Evaluate  ${totalcount}-2
+    ${resp}=  Get Jaldee Coupons Count  couponName-neq=CouponZZZ
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${count}=  Evaluate  ${totalcount}-1
+    ${resp}=  Get Jaldee Coupons Count  couponName-neq=CouponXXX
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+
+YNW-TC-GetJaldeeCouponsCount-6
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${count}=  Evaluate  ${startcount1}+2
+    ${resp}=  Get Jaldee Coupons Count  startDate-eq=${DAY1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${count}=  Evaluate  ${startcount2}+1
+    ${resp}=  Get Jaldee Coupons Count  startDate-eq=${DAY2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+
+YNW-TC-GetJaldeeCouponsCount-7
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${count}=  Evaluate  ${endcount1}+2
+    ${resp}=  Get Jaldee Coupons Count  endDate-eq=${DAY2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${count}=  Evaluate  ${endcount2}+1
+    ${resp}=  Get Jaldee Coupons Count  endDate-eq=${DAY3}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+
+YNW-TC-GetJaldeeCouponsCount-8
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${c_date}=  get_date
+    Set Suite Variable  ${c_date}
+    ${fdate}=  add_date  1
+    ${count}=  Evaluate  ${todaycount}+3
+    ${resp}=  Get Jaldee Coupons Count  createdDate-eq=${c_date}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  ${count}
+    ${resp}=  Get Jaldee Coupons Count  createdDate-eq=${fdate}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  0
+
+YNW-TC-GetJaldeeCouponsCount -UH1
+    Comment   Get jaldee coupons without login  
+    ${resp}=  Get Jaldee Coupons Count  CreatedDate-eq=${c_date}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings   ${resp.json()}   "Session Expired"
+ 
+YNW-TC-GetJaldeeCouponsCount -UH2
+    Comment   Consumer try to Get jaldee coupons count
+    ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=  Get Jaldee Coupons Count  CreatedDate-eq=${c_date}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings   ${resp.json()}   "Session Expired"
+
+YNW-TC-GetJaldeeCouponsCount -UH3
+    Comment   Provider try to Get jaldee coupons count
+    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Get Jaldee Coupons Count  CreatedDate-eq=${c_date}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings   ${resp.json()}   "Session Expired"
+
+
+*** Comment ***
+    change_system_date  13
+    ${DAY}=  get_date
+    Log  ${DAY}
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=ACTIVE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  0
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DISABLE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DRAFT
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=EXPIRED
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+    ${resp}=  Push Jaldee Coupon  CouponXXX  CouponZZZ Offer
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=ACTIVE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DISABLE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=DRAFT
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  0
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-eq=EXPIRED
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  1
+
+YNW-TC-GetJaldeeCouponsCount-4
+    resetsystem_time  
+    Comment    Get jaldee coupons count by superadmin
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-neq=ACTIVE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  2
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-neq=DISABLE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  2
+    ${resp}=  Get Jaldee Coupons Count  couponStatus-neq=DRAFT
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}  3

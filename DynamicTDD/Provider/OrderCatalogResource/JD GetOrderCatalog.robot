@@ -1,0 +1,348 @@
+*** Settings ***
+Suite Teardown    Delete All Sessions
+Test Teardown     Run Keywords     Delete All Sessions
+...               AND           Remove File  cookies.txt
+Force Tags        ORDER ITEM
+Library           Collections
+Library           String
+Library           json
+Library           requests
+Library           FakerLibrary
+Library           Process
+Library           OperatingSystem
+Library           /ebs/TDD/db.py
+Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py
+
+
+*** Test Cases ***
+
+JD-TC-Get_Order_Catalog-1
+
+    [Documentation]  Provider Create catalog for shoppingcart and verify
+
+    clear_Item  ${PUSERNAME22}
+    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${displayName1}=   FakerLibrary.name 
+    Set Suite Variable  ${displayName1} 
+    ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2 
+    Set Suite Variable  ${shortDesc1}   
+    ${itemDesc1}=  FakerLibrary.Sentence   nb_words=3 
+    Set Suite Variable  ${itemDesc1}   
+    ${price1}=  Random Int  min=50   max=300 
+    Set Suite Variable  ${price1}
+    ${price1float}=  twodigitfloat  ${price1}
+    Set Suite Variable  ${price1float}
+    ${price2float}=   Convert To Number   ${price1}  2
+    Set Suite Variable  ${price2float}
+
+    ${itemName1}=   FakerLibrary.name
+    Set Suite Variable  ${itemName1}   
+
+    ${itemName2}=   FakerLibrary.name
+    Set Suite Variable  ${itemName2}
+
+    ${itemNameInLocal1}=  FakerLibrary.Sentence   nb_words=2 
+    Set Suite Variable  ${itemNameInLocal1}  
+ 
+    ${promoPrice1}=  Random Int  min=10   max=${price1} 
+    Set Suite Variable  ${promoPrice1}
+
+    ${promoPrice1float}=   Convert To Number   ${promoPrice1}  2
+    Set Suite Variable  ${promoPrice1float}
+
+    ${promoPrcnt1}=   Evaluate    random.uniform(0.0,80)
+    ${promotionalPrcnt1}=  twodigitfloat  ${promoPrcnt1}
+    Set Suite Variable  ${promotionalPrcnt1}
+    ${note1}=  FakerLibrary.Sentence
+    Set Suite Variable  ${note1}   
+    ${itemCode1}=   FakerLibrary.word 
+    Set Suite Variable  ${itemCode1}  
+
+    ${itemCode2}=   FakerLibrary.word 
+    Set Suite Variable  ${itemCode2}   
+    ${promoLabel1}=   FakerLibrary.word 
+    Set Suite Variable  ${promoLabel1}
+
+    ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[0]}    ${bool[0]}    ${itemCode1}    ${bool[0]}    ${promotionLabelType[3]}    ${promoLabel1}      
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${Pid1}  ${resp.json()}
+
+    ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[0]}    ${itemName2}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode2}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${Pid2}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${Pid1} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[1]}   status=${status[0]}    itemName=${itemName1}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[0]}   isStockAvailable=${bool[0]}   
+    Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[0]}   itemCode=${itemCode1}    
+    #  promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1} 
+
+
+    ${resp}=   Get Item By Id  ${Pid2} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200    
+    Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[0]}   status=${status[0]}    itemName=${itemName2}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
+    Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
+
+    
+    ${startDate}=  get_date
+    Set Suite Variable  ${startDate}
+    ${endDate}=  add_date  10      
+    Set Suite Variable  ${endDate}
+
+    # ${noOfOccurance}=  Random Int  min=0   max=10
+    # Set Suite Variable  ${noOfOccurance}
+
+    Set Suite Variable  ${noOfOccurance}   0
+
+    ${sTime1}=  add_time  0  15
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_time   0  30
+    Set Suite Variable   ${eTime1}
+
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}
+
+    ${deliveryCharge}=  Random Int  min=1   max=100
+    Set Suite Variable  ${deliveryCharge}
+
+    ${Title}=  FakerLibrary.Sentence   nb_words=2 
+    Set Suite Variable  ${Title} 
+    ${Text}=  FakerLibrary.Sentence   nb_words=4
+    Set Suite Variable  ${Text}
+
+    ${minQuantity}=  Random Int  min=1   max=3
+    Set Suite Variable  ${minQuantity}
+
+    ${maxQuantity}=  Random Int  min=${minQuantity}   max=50
+    Set Suite Variable  ${maxQuantity}
+
+    ${catalogDesc}=   FakerLibrary.name 
+    Set Suite Variable  ${catalogDesc} 
+
+    ${cancelationPolicy}=  FakerLibrary.Sentence   nb_words=5
+    Set Suite Variable  ${cancelationPolicy} 
+
+
+    ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noOfOccurance}
+    ${timeSlots1}=  Create Dictionary  sTime=${sTime1}   eTime=${eTime1}
+    ${timeSlots}=  Create List  ${timeSlots1}
+    ${catalogSchedule}=  Create Dictionary  recurringType=${recurringtype[1]}  repeatIntervals=${list}  startDate=${startDate}   terminator=${terminator}   timeSlots=${timeSlots}
+    Set Suite Variable  ${catalogSchedule}
+    # -----------------------
+    ${pickUp}=  Create Dictionary  orderPickUp=${boolean[1]}   pickUpSchedule=${catalogSchedule}   pickUpOtpVerification=${boolean[1]}   pickUpScheduledAllowed=${boolean[1]}   pickUpAsapAllowed=${boolean[1]}
+    Set Suite Variable  ${pickUp}
+    # -----------------------
+    ${homeDelivery}=  Create Dictionary  homeDelivery=${boolean[1]}   deliverySchedule=${catalogSchedule}   deliveryOtpVerification=${boolean[1]}   deliveryRadius=5   scheduledHomeDeliveryAllowed=${boolean[1]}   asapHomeDeliveryAllowed=${boolean[1]}   deliveryCharge=${deliveryCharge}
+    Set Suite Variable  ${homeDelivery}
+    # -----------------------
+    ${preInfo}=  Create Dictionary  preInfoEnabled=${boolean[1]}   preInfoTitle=${Title}   preInfoText=${Text}   
+    Set Suite Variable  ${preInfo}
+    # -----------------------
+    ${postInfo}=  Create Dictionary  postInfoEnabled=${boolean[1]}   postInfoTitle=${Title}   postInfoText=${Text}   
+    Set Suite Variable  ${postInfo}
+    # -----------------------
+    ${orderStatus_list}=  Create List  ${orderStatuses[0]}  ${orderStatuses[2]}   ${orderStatuses[3]}  ${orderStatuses[11]}   ${orderStatuses[12]}
+    Set Suite Variable  ${orderStatus_list}
+    # -----------------------
+    ${item1_Id}=  Create Dictionary  itemId=${Pid1}
+    ${catalogItem1}=  Create Dictionary  item=${item1_Id}    minQuantity=${minQuantity}   maxQuantity=${maxQuantity}  
+    ${catalogItem}=  Create List   ${catalogItem1}
+    Set Suite Variable  ${catalogItem}
+    # -----------------------
+    
+
+    Set Suite Variable  ${orderType1}        ${OrderTypes[0]}
+    Set Suite Variable  ${ACTIVE_Status}     ${catalogStatus[0]}
+    Set Suite Variable  ${INACTIVE_Status}   ${catalogStatus[1]}
+    Set Suite Variable  ${paymentType}       ${AdvancedPaymentType[0]}
+
+    ${advanceAmount}=  Random Int  min=1   max=1000
+    Set Suite Variable  ${advanceAmount}
+
+    ${far}=  Random Int  min=1   max=1000
+    Set Suite Variable  ${far}
+
+    ${soon}=  Random Int  min=1   max=1000
+    Set Suite Variable  ${soon}
+
+    Set Suite Variable  ${minNumberItem}   1
+
+    Set Suite Variable  ${maxNumberItem}   5
+
+    ${catalogName1}=   FakerLibrary.word 
+    Set Suite Variable  ${catalogName1}
+
+    ${resp}=  Create Catalog For ShoppingCart   ${catalogName1}  ${catalogDesc}   ${catalogSchedule}   ${orderType1}   ${paymentType}   ${orderStatus_list}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${ACTIVE_Status}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo}   postInfo=${postInfo}    
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${CatalogId1}   ${resp.json()}
+
+    ${resp}=  Get Order Catalog    ${CatalogId1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response  ${resp}  id=${CatalogId1}  catalogName=${catalogName1}  catalogDesc=${catalogDesc}   orderType=${orderType1}   orderStatuses=${orderStatus_list}   minNumberItem=${minNumberItem}    maxNumberItem=${maxNumberItem}  cancellationPolicy=${cancelationPolicy}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['recurringType']}     ${recurringtype[1]}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['repeatIntervals']}   ${list}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['startDate']}         ${startDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['endDate']}         ${endDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['noOfOccurance']}   ${noOfOccurance}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['sTime']}   ${sTime1}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['eTime']}   ${eTime1}
+    Should Be Equal As Strings   ${resp.json()['catalogStatus']}    ${ACTIVE_Status}
+
+
+JD-TC-Get_Order_Catalog-2
+    [Documentation]  Provider Create catalog for shoppinglist and verify 
+    clear_Item  ${PUSERNAME108}
+    ${resp}=  ProviderLogin  ${PUSERNAME108}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    Set Suite Variable  ${orderType2}       ${OrderTypes[1]}
+    ${resp}=  Create Catalog For ShoppingList   ${catalogName1}  ${EMPTY}   ${catalogSchedule}   ${orderType2}   ${paymentType}   ${orderStatus_list}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${CatalogId2}   ${resp.json()}
+
+    ${resp}=  Get Order Catalog    ${CatalogId2}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response  ${resp}  id=${CatalogId2}  catalogName=${catalogName1}  catalogDesc=${EMPTY}   orderType=${orderType2}   orderStatuses=${orderStatus_list}   minNumberItem=${minNumberItem}    maxNumberItem=${maxNumberItem}  cancellationPolicy=${cancelationPolicy}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['recurringType']}     ${recurringtype[1]}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['repeatIntervals']}   ${list}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['startDate']}         ${startDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['endDate']}         ${endDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['noOfOccurance']}   ${noOfOccurance}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['sTime']}   ${sTime1}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['eTime']}   ${eTime1}
+    
+    ${catalogName2}=   FakerLibrary.lastname 
+    Set Suite Variable  ${catalogName2}
+
+    ${resp}=  Create Catalog For ShoppingList   ${catalogName2}  ${EMPTY}   ${catalogSchedule}   ${orderType2}   ${paymentType}   ${orderStatus_list}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${ACTIVE_Status}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo}   postInfo=${postInfo} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${CatalogId3}   ${resp.json()}
+
+    ${resp}=  Get Order Catalog    ${CatalogId3}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${CatalogId3}  catalogName=${catalogName2}  catalogDesc=${EMPTY}   orderType=${orderType2}   orderStatuses=${orderStatus_list}   minNumberItem=${minNumberItem}    maxNumberItem=${maxNumberItem}  cancellationPolicy=${cancelationPolicy}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['recurringType']}     ${recurringtype[1]}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['repeatIntervals']}   ${list}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['startDate']}         ${startDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['endDate']}         ${endDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['noOfOccurance']}   ${noOfOccurance}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['sTime']}   ${sTime1}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['eTime']}   ${eTime1}
+    
+
+JD-TC-Get_Order_Catalog-UH1
+    [Documentation]  Get catalog using invalid id
+    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Invalid_id}=  Random Int  min=100000   max=500000 
+
+    ${resp}=   Get Order Catalog  ${Invalid_id} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_CATALOG_FOUND}"
+
+
+JD-TC-Get_Order_Catalog-UH2
+    [Documentation]   Get catalog Without login
+    ${resp}=   Get Order Catalog    ${CatalogId1} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
+
+    
+JD-TC-Get_Order_Catalog-UH3
+    [Documentation]   Login as consumer and Get catalog
+    ${resp}=   Consumer Login  ${CUSERNAME16}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Order Catalog    ${CatalogId1} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}" 
+
+
+JD-TC-Get_Order_Catalog-UH4
+    [Documentation]   A provider try to Get another providers catalog
+    clear_Item  ${PUSERNAME200}
+    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Order Catalog    ${CatalogId1} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
+
+
+JD-TC-Get_Order_Catalog-3
+    [Documentation]  Change Catalog Status as INACTIVE and verify
+    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Order Catalog    ${CatalogId1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=  Change Catalog Status    ${CatalogId1}    INACTIVE
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Get Order Catalog    ${CatalogId1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response  ${resp}  id=${CatalogId1}  catalogName=${catalogName1}  catalogDesc=${catalogDesc}   orderType=${orderType1}   orderStatuses=${orderStatus_list}   minNumberItem=${minNumberItem}    maxNumberItem=${maxNumberItem}  cancellationPolicy=${cancelationPolicy}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['recurringType']}     ${recurringtype[1]}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['repeatIntervals']}   ${list}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['startDate']}         ${startDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['endDate']}         ${endDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['noOfOccurance']}   ${noOfOccurance}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['sTime']}   ${sTime1}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['eTime']}   ${eTime1}
+    Should Be Equal As Strings   ${resp.json()['catalogStatus']}    ${INACTIVE_Status}
+
+
+JD-TC-Get_Order_Catalog-4
+    [Documentation]  Change Catalog Status as ACTIVE and verify
+    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Order Catalog    ${CatalogId1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=  Change Catalog Status    ${CatalogId1}    ACTIVE
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Order Catalog    ${CatalogId1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response  ${resp}  id=${CatalogId1}  catalogName=${catalogName1}  catalogDesc=${catalogDesc}   orderType=${orderType1}   orderStatuses=${orderStatus_list}   minNumberItem=${minNumberItem}    maxNumberItem=${maxNumberItem}  cancellationPolicy=${cancelationPolicy}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['recurringType']}     ${recurringtype[1]}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['repeatIntervals']}   ${list}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['startDate']}         ${startDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['endDate']}         ${endDate}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['terminator']['noOfOccurance']}   ${noOfOccurance}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['sTime']}   ${sTime1}
+    Should Be Equal As Strings   ${resp.json()['catalogSchedule']['timeSlots'][0]['eTime']}   ${eTime1}
+    Should Be Equal As Strings   ${resp.json()['catalogStatus']}    ${ACTIVE_Status}
+
+
