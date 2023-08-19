@@ -89,7 +89,7 @@ JD-TC-LoanApplicationRemark-1
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -369,7 +369,7 @@ JD-TC-LoanApplicationRemark-2
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -502,7 +502,7 @@ JD-TC-LoanApplicationRemark-3
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -628,7 +628,7 @@ JD-TC-LoanApplicationRemark-3
 
 #     clear Customer  ${PUSERNAME83}
 
-#     Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+#     Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 #     ${gender}=  Random Element    ${Genderlist}
 #     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -748,7 +748,7 @@ JD-TC-LoanApplicationRemark-3
 
 #     clear Customer  ${PUSERNAME83}
 
-#     Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+#     Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 #     ${gender}=  Random Element    ${Genderlist}
 #     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     # ${dob}=  Convert To String  ${dob}
@@ -869,7 +869,7 @@ JD-TC-LoanApplicationRemark-6
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -996,7 +996,7 @@ JD-TC-LoanApplicationRemark-7
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -1123,7 +1123,7 @@ JD-TC-LoanApplicationRemark-UH1
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -1259,7 +1259,7 @@ JD-TC-LoanApplicationRemark-Uh2
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}

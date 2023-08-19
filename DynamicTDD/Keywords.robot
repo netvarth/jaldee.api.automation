@@ -12,7 +12,8 @@ Variables           superadminmessagesapi.py
 ${SUSERNAME}              admin.support@jaldee.com
 ${PASSWORD}               Netvarth12
 ${SPASSWORD}              Netvarth1
-${Invalid_email}          inv.ynwtest@netvarth.com
+${test_mail}              test@jaldee.com
+${Invalid_email}          inv.${test_mail}
 ${merchantid}             6811180
 @{wl_status}              checkedIn     arrived   started   prepaymentPending   cancelled    done   unrevertable   failed   blocked
 @{waitlist_cancl_reasn}   closingSoon   tooFull   prePaymentPending   holiday   noshowup   blocked   QueueDisabled   self

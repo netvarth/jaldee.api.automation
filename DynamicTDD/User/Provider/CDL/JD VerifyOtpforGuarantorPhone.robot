@@ -455,7 +455,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'

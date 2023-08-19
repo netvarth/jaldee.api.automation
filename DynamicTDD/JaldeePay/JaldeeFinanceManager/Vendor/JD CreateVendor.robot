@@ -66,7 +66,7 @@ JD-TC-CreateVendor-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -160,7 +160,7 @@ JD-TC-CreateVendor-UH1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     
@@ -227,7 +227,7 @@ JD-TC-CreateVendor-UH2
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     
     ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Bank Account Number
@@ -288,7 +288,7 @@ JD-TC-CreateVendor-UH3
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     
@@ -350,7 +350,7 @@ JD-TC-CreateVendor-UH4
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
@@ -412,7 +412,7 @@ JD-TC-CreateVendor-UH5
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
@@ -474,7 +474,7 @@ JD-TC-CreateVendor-UH6
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
@@ -536,7 +536,7 @@ JD-TC-CreateVendor-UH7
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=   Create List
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname

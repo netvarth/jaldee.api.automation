@@ -88,7 +88,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -1284,7 +1284,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
      ${name3}=  FakerLibrary.name
      ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
      ${bs}=  FakerLibrary.bs
      ${city}=   get_place
      ${latti}=  get_latitude
@@ -1473,7 +1473,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+99664
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Activation  ${PUSERNAME_N}  1

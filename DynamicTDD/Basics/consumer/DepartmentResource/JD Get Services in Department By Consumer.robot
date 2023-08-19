@@ -63,7 +63,7 @@ JD-TC-Create Services and Enable Department
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${MUSERNAME_K}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${MUSERNAME_K}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -106,7 +106,7 @@ JD-TC-Create Services and Enable Department
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${MUSERNAME_K}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${MUSERNAME_K}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname_A}  ${lastname_A}   ${email_id}
     Log  ${resp.json()}

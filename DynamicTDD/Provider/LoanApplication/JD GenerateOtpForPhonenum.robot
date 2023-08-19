@@ -106,7 +106,7 @@ JD-TC-GenerateotpForPhoneNum-1
     ${dob}=  Convert To String  ${dob}
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${phone} 
     Log  ${resp.content}
@@ -203,7 +203,7 @@ JD-TC-GenerateotpForPhoneNum-2
     ${dob}=  Convert To String  ${dob}
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${phonenum5} 
     Log  ${resp.content}

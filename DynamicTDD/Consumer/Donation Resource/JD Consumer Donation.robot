@@ -246,7 +246,7 @@ JD-TC-ConsumerDonation-5
         ${donar_lname}=  FakerLibrary.last_name
         ${address}=  get_address
         ${ph1}=  Evaluate  ${CUSERNAME9}+58963
-        ${resp}=  Donation By Consumer  ${con_id}  ${sid3}  ${lid2}  ${don_amt}  ${donar_fname}  ${donar_lname}  ${address}  ${ph1}  ${P_Email}${donar_fname}.ynwtest@netvarth.com  ${acc_id}
+        ${resp}=  Donation By Consumer  ${con_id}  ${sid3}  ${lid2}  ${don_amt}  ${donar_fname}  ${donar_lname}  ${address}  ${ph1}  ${P_Email}${donar_fname}.${test_mail}  ${acc_id}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200  
         
@@ -263,7 +263,7 @@ JD-TC-ConsumerDonation-5
         Should Be Equal As Strings  ${resp.json()['donor']['lastName']}  ${donar_lname}
         Should Be Equal As Strings  ${resp.json()['donor']['address']}  ${address}
         Should Be Equal As Strings  ${resp.json()['donor']['phoneNo']}  ${ph1}
-        Should Be Equal As Strings  ${resp.json()['donor']['email']}  ${P_Email}${donar_fname}.ynwtest@netvarth.com
+        Should Be Equal As Strings  ${resp.json()['donor']['email']}  ${P_Email}${donar_fname}.${test_mail}
 
 JD-TC-ConsumerDonation-UH1
         [Documentation]   Consumer doing a donation for a amount that not in range
@@ -409,7 +409,7 @@ JD-TC-ConsumerDonation-6
         ${address}=  FakerLibrary.address
         ${dob}=  FakerLibrary.Date
         ${gender}    Random Element    ${Genderlist}
-        ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${CUSERPH0}.ynwtest@netvarth.com
+        ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${CUSERPH0}.${test_mail}
         ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH0_EMAIL}  countryCode=+${country_code}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200 

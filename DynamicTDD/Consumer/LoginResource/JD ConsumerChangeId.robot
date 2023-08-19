@@ -31,7 +31,7 @@ JD-TC-Update consumer number-1
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76068
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME_0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME_0}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERNAME_0}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Activation  ${CUSERNAME_0}  1
@@ -88,7 +88,7 @@ JD-TC-Update consumer number-UH1
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76067
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME_0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME_0}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERNAME_0}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Activation  ${CUSERNAME_0}  1
@@ -137,7 +137,7 @@ JD-TC-Update consumer number-UH2
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76066
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME_0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME_0}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERNAME_0}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Activation  ${CUSERNAME_0}  1
@@ -186,7 +186,7 @@ JD-TC-Update consumer number-2
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERNAME_0}+${alt_Number}
-    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERNAME_0}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Activation  ${CUSERNAME_0}  1
@@ -264,7 +264,7 @@ JD-TC-Update consumer number-3
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERNAME_0}+${alt_Number}
-    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERNAME_0}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -392,7 +392,7 @@ JD-TC-Update consumer number-4
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${Consumer1_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.ynwtest@netvarth.com
+    ${Consumer1_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${Consumer1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${Consumer1_EMAIL}   countryCode=+${country_code1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -492,7 +492,7 @@ JD-TC-Update consumer number-UH3
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${Consumer1_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.ynwtest@netvarth.com
+    ${Consumer1_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${Consumer1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${Consumer1_EMAIL}   countryCode=+${country_code1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -580,7 +580,7 @@ JD-TC-Update consumer number-UH4
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${Consumer1_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.ynwtest@netvarth.com
+    ${Consumer1_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${Consumer1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${Consumer1_EMAIL}  countryCode=+${country_code1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -606,7 +606,7 @@ JD-TC-Update consumer number-UH4
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${Consumer2_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code2}.ynwtest@netvarth.com
+    ${Consumer2_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code2}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${Consumer2}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${Consumer2_EMAIL}   countryCode=+${country_code2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -664,7 +664,7 @@ JD-TC-Update consumer number-UH5
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERNAME_0}+${alt_Number}
-    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERNAME_0}   ${alternativeNo}  ${dob}  ${gender}   ${email}   +91
     Should Be Equal As Strings    ${resp.status_code}    200
    ${resp}=  Consumer Activation  ${email}  1
@@ -729,7 +729,7 @@ JD-TC-Update consumer number-UH6
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERNAME_0}+${alt_Number}
-    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERNAME_0}   ${alternativeNo}  ${dob}  ${gender}   ${email}   +91
     Should Be Equal As Strings    ${resp.status_code}    200
    ${resp}=  Consumer Activation  ${email}  1
@@ -844,7 +844,7 @@ JD-TC-Update consumer number-5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.ynwtest@netvarth.com
+    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -918,7 +918,7 @@ JD-TC-Update consumer number-6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.ynwtest@netvarth.com
+    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

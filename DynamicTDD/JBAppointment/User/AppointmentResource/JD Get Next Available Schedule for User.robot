@@ -122,7 +122,7 @@ JD-TC-NextAvailableSchedule for User-1
     clear_service   ${PUSERPH0}
     clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -141,7 +141,7 @@ JD-TC-NextAvailableSchedule for User-1
     Should Be Equal As Strings  ${resp.json()['id']}      ${u_id}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
     # Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
-    # Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  state=${state}  deptId=${dep_id} 
+    # Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  state=${state}  deptId=${dep_id} 
 
     ${resp}=  SendProviderResetMail   ${PUSERPH0}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -545,7 +545,7 @@ JD-TC-NextAvailableSchedule for User-4
     clear_service   ${PUSERPH1}
     clear_appt_schedule   ${PUSERPH1}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -556,7 +556,7 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Strings  ${resp.json()['id']}      ${u_id}
     # Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-    # Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH1}.ynwtest@netvarth.com   state=${state}  deptId=${dep_id}
+    # Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH1}.${test_mail}   state=${state}  deptId=${dep_id}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -675,7 +675,7 @@ JD-TC-NextAvailableSchedule for User-4
     clear_service   ${PUSERPH2}
     clear_appt_schedule   ${PUSERPH2}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH2}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH2}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}

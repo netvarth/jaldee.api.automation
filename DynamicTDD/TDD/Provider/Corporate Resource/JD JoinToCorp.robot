@@ -63,7 +63,7 @@ JD-TC-JoinToCorp-1
     ${c_name}=  FakerLibrary.word
     Set Test Variable   ${c_name}
     ${c_code}=  FakerLibrary.word
-    ${email}=   Set Variable  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com
+    ${email}=   Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     clear_corporate   father
     ${resp}=   Create Corporate   ${c_name}  ${c_code}  ${email}  ${PUSERNAME_Z}  ${firstname}  ${lastname}  ${PUSERNAME_Z}  ${pkg}   ${domain_id}   ${subdomain_id}
     Log   ${resp.json()}
@@ -96,7 +96,7 @@ JD-TC-JoinToCorp-2
     ${c_name}=  FakerLibrary.word
     Set Test Variable   ${c_name}
     ${c_code}=  FakerLibrary.word
-    ${email}=   Set Variable  ${P_Email}${PUSERNAME3}.ynwtest@netvarth.com
+    ${email}=   Set Variable  ${P_Email}${PUSERNAME3}.${test_mail}
     clear_corporate   father
     ${resp}=   Create Corporate   ${c_name}  ${c_code}  ${email}  ${PUSERNAME1}  ${firstname}  ${lastname}  ${PUSERNAME2}  ${pkg}   ${domain_id}   ${subdomain_id}
     Log   ${resp.json()}

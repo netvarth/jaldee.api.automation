@@ -123,7 +123,7 @@ JD-TC-Loan Application Manual Approval-1
     ${dob}=  Convert To String  ${dob}
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${phone} 
     Log  ${resp.content}
@@ -568,7 +568,7 @@ JD-TC-Loan Application Manual Approval-2
     ${whpnum}=  Evaluate  ${PUSERNAME}+345245
     ${tlgnum}=  Evaluate  ${PUSERNAME}+347345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -606,7 +606,7 @@ JD-TC-Loan Application Manual Approval-2
 
   
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -648,7 +648,7 @@ JD-TC-Loan Application Manual Approval-2
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -919,7 +919,7 @@ JD-TC-Loan Application Manual Approval-3
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  Get Loan Application SP Internal Status   
     Log  ${resp.content}
@@ -1108,7 +1108,7 @@ JD-TC-Loan Application Manual Approval-4
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
 
     ${resp}=    Generate Loan Application Otp for Phone Number    ${phone}  ${cc}
@@ -1327,7 +1327,7 @@ JD-TC-Loan Application Manual Approval-UH1
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
 
     ${resp}=    Generate Loan Application Otp for Phone Number    ${phone}  ${cc}

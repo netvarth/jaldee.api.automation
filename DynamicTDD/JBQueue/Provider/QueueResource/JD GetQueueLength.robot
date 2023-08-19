@@ -58,7 +58,7 @@ JD-TC-GetQueueLength-1
       ${name3}=  FakerLibrary.name
       ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
       ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-      ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_F}.ynwtest@netvarth.com  ${views}
+      ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_F}.${test_mail}  ${views}
       ${bs}=  FakerLibrary.bs
       ${city}=   FakerLibrary.state
       ${latti}=  get_latitude

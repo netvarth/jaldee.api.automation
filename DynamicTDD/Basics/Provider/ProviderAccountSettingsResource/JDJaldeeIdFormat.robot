@@ -26,7 +26,7 @@ JD-TC-JaldeeIDformat-1
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${ph2}=  Evaluate  ${PUSERNAME23}+72000
-    Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph2}  ${EMPTY}
@@ -61,7 +61,7 @@ JD-TC-JaldeeIDformat-2
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${ph2}=  Evaluate  ${PUSERNAME23}+72003
-    Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${m_jid}=  Random Int  min=10  max=50
@@ -101,7 +101,7 @@ JD-TC-JaldeeIDformat-3
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${ph2}=  Evaluate  ${PUSERNAME23}+72002
-    Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph2}  ${EMPTY}
@@ -136,7 +136,7 @@ JD-TC-JaldeeIDformat-4
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${ph2}=  Evaluate  ${PUSERNAME23}+72002
-    Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph2}  ${EMPTY}

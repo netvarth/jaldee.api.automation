@@ -153,7 +153,7 @@ JD-TC-Change SpInternal Status-1
     
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -333,7 +333,7 @@ JD-TC-Change SpInternal Status-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${P_phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${P_phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'

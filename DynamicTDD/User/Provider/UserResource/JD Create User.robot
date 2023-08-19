@@ -119,7 +119,7 @@ JD-TC-CreateUser-1
     ${whpnum}=  Evaluate  ${PUSERNAME}+346245
     ${tlgnum}=  Evaluate  ${PUSERNAME}+346345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -150,7 +150,7 @@ JD-TC-CreateUser-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   state=${state}  pincode=${pin}   deptId=0  subdomain=${sub_domain_id}
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}   state=${state}  pincode=${pin}   deptId=0  subdomain=${sub_domain_id}
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${whpnum} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
@@ -179,7 +179,7 @@ JD-TC-CreateUser-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}    ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
@@ -233,7 +233,7 @@ JD-TC-CreateUser-2
     Set Test Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}
    
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -270,7 +270,7 @@ JD-TC-CreateUser-2
     Set Test Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -308,7 +308,7 @@ JD-TC-CreateUser-2
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
@@ -336,7 +336,7 @@ JD-TC-CreateUser-2
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city1}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
@@ -353,7 +353,7 @@ JD-TC-CreateUser-2
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U3}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city2}   ignore_case=True 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state2}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}    
@@ -412,7 +412,7 @@ JD-TC-CreateUser-3
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -443,7 +443,7 @@ JD-TC-CreateUser-3
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${depid1}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       ${sub_domain_id3}
@@ -479,7 +479,7 @@ JD-TC-CreateUser-4
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -510,7 +510,7 @@ JD-TC-CreateUser-4
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${depid1}  
@@ -548,7 +548,7 @@ JD-TC-CreateUser-5
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[1]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[1]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -573,7 +573,7 @@ JD-TC-CreateUser-5
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[1]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
@@ -611,7 +611,7 @@ JD-TC-CreateUser-6
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[2]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${sub_domain_id1}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[2]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id1}  ${sub_domain_id1}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id4}  ${resp.json()}
@@ -637,7 +637,7 @@ JD-TC-CreateUser-6
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U5}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}  ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
@@ -661,7 +661,7 @@ JD-TC-CreateUser-UH1
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.status_code}  404
@@ -680,7 +680,7 @@ JD-TC-CreateUser-UH2
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id2}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id2}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_DEPARTMENT}"
@@ -697,7 +697,7 @@ JD-TC-CreateUser-UH3
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${MOBILE_NO_USED}"
@@ -712,7 +712,7 @@ JD-TC-CreateUser-UH4
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${lastname3}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${EMPTY}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${lastname3}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${EMPTY}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.status_code}  422
@@ -729,7 +729,7 @@ JD-TC-CreateUser-UH5
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${EMPTY}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${EMPTY}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${VALID_FIRST_NAME}"
@@ -745,7 +745,7 @@ JD-TC-CreateUser-UH6
     ${address3}=  get_address
     ${dob3}=  FakerLibrary.Date
     ${pin3}=  get_pincode  
-    ${resp}=  Create User  ${firstname3}  ${EMPTY}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${EMPTY}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id1}  ${sub_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${VALID_LAST_NAME}"
@@ -753,7 +753,7 @@ JD-TC-CreateUser-UH6
 JD-TC-CreateUser -UH7
     [Documentation]   Provider create a User without login  
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
@@ -764,7 +764,7 @@ JD-TC-CreateUser -UH8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
@@ -787,7 +787,7 @@ JD-TC-CreateUser -7
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -858,7 +858,7 @@ JD-TC-CreateUser -7
     ${dob1}=  FakerLibrary.Date
     ${pin1}=  get_pincode
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -992,7 +992,7 @@ JD-TC-CreateUser -UH9
     ${address1}=  get_address
     ${dob1}=  FakerLibrary.Date
     ${pin1}=  get_pincode  
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  +${country_code}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.${test_mail}   ${userType[0]}  ${pin1}  +${country_code}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     # Should Be Equal As Strings  "${resp.json()}"  "${INVALID_COUNTRY_CODE}"
@@ -1058,7 +1058,7 @@ JD-TC-CreateUser -UH10
     Set Test Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[1]}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[1]}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -1081,7 +1081,7 @@ JD-TC-CreateUser -UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  
     ...    mobileNo=${User1}  dob=${dob1}  gender=${Genderlist[0]}  
-    ...   userType=${userType[0]}  status=ACTIVE  email=${P_Email}${User1}.ynwtest@netvarth.com  
+    ...   userType=${userType[0]}  status=ACTIVE  email=${P_Email}${User1}.${test_mail}  
     ...   state=${state1}  deptId=${dep_id}  subdomain=${userSubDomain}
     Should Be Equal As Strings   ${resp.json()['city']}   ${city1}   ignore_case=True
 
@@ -1090,7 +1090,7 @@ JD-TC-CreateUser -UH10
     ${address2}=  get_address
     ${dob2}=  FakerLibrary.Date
     ${pin2}=  get_pincode
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${User1}101.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  +${country_code1}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${User1}101.${test_mail}   ${userType[0]}  ${pin2}  +${country_code1}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVAID_USER_PHONE_NUMBER}"
@@ -1139,7 +1139,7 @@ JD-TC-CreateUser -UH11
     ${dob1}=  FakerLibrary.Date
     ${pin1}=  get_pincode
 
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${EMPTY}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.${test_mail}   ${userType[0]}  ${pin1}  ${EMPTY}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${COUNTRY_CODEREQUIRED}"
@@ -1212,7 +1212,7 @@ JD-TC-CreateUser -8
 
     clear_users  ${CUSERPH0}
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${CUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${CUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${CUSERPH0}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${CUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1290,7 +1290,7 @@ JD-TC-CreateUser -9
 
     clear_users  ${CUSERPH_SECOND}
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${CUSERPH_SECOND}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${CUSERPH_SECOND}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${CUSERPH_SECOND}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${CUSERPH_SECOND}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1316,7 +1316,7 @@ JD-TC-CreateUser -10
     ${address}=  get_address
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    ${email}  Set Variable  ${C_Email}_${lastname}${CUSERPH0}.ynwtest@netvarth.com
+    ${email}  Set Variable  ${C_Email}_${lastname}${CUSERPH0}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${email} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1397,7 +1397,7 @@ JD-TC-CreateUser -10
 
     clear_users  ${newNo}
     ${pin3}=  get_pincode
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${newNo}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${newNo}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${newNo}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${newNo}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1451,7 +1451,7 @@ JD-TC-CreateUser -UH12
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     ${pin}=  get_pincode
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME8}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME8}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME8}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME8}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${MOBILE_NO_USED}"
@@ -1521,7 +1521,7 @@ JD-TC-CreateUser -11
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+3457
     clear_users  ${PUSERPH1}
   
-    ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${countryCodes[1]}  ${PUSERPH1}  ${countryCodes[1]}  ${PUSERPH1}
+    ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${countryCodes[1]}  ${PUSERPH1}  ${countryCodes[1]}  ${PUSERPH1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1707,7 +1707,7 @@ JD-TC-CreateUser -13
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+4567
     clear_users  ${PUSERPH1}
    
-    ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${EMPTY}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${EMPTY}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${PHONE_NUMBER_CAN_NOT_REMOVE_NO_EMAIL}
@@ -1796,7 +1796,7 @@ JD-TC-CreateUser -14
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+3667
     clear_users  ${PUSERPH1}
    
-    ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${EMPTY}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Update User   ${u_id}   ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${EMPTY}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${PHONE_NUMBER_CAN_NOT_REMOVE_NO_EMAIL}
@@ -1904,7 +1904,7 @@ JD-TC-CreateUser-UH16
     ${whpnum}=  Evaluate  ${HLMUSERNAME18}+336250
     ${tlgnum}=  Evaluate  ${HLMUSERNAME18}+336351
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${ph1}  ${dep_id54}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  00000  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${ph1}  ${dep_id54}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  00000  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVAID_WHATSAPP_NUMBER}
@@ -1912,7 +1912,7 @@ JD-TC-CreateUser-UH16
     # ${resp}=  Get User By Id  ${u_id54}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  id=${u_id54}  firstName=${firstname}  lastName=${lastname}   mobileNo=${ph1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${ph1}.ynwtest@netvarth.com  city=${city}  state=${state}  pincode=${pin}   deptId=${dep_id54}  subdomain=${userSubDomain}
+    # Verify Response  ${resp}  id=${u_id54}  firstName=${firstname}  lastName=${lastname}   mobileNo=${ph1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${ph1}.${test_mail}  city=${city}  state=${state}  pincode=${pin}   deptId=${dep_id54}  subdomain=${userSubDomain}
     # Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${EMPTY} 
     # Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     # Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
@@ -2019,14 +2019,14 @@ JD-TC-CreateUser-16
     ${whpnum}=  Evaluate  ${HLMUSERNAME18}+336245
     ${tlgnum}=  Evaluate  ${HLMUSERNAME18}+336345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id55}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id55}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id55}  firstName=${firstname}  lastName=${lastname}   mobileNo=${ph1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${ph1}.ynwtest@netvarth.com   state=${state}  pincode=${pin}   deptId=${dep_id55}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id55}  firstName=${firstname}  lastName=${lastname}   mobileNo=${ph1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${ph1}.${test_mail}   state=${state}  pincode=${pin}   deptId=${dep_id55}  subdomain=${userSubDomain}
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${whpnum} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
@@ -2038,14 +2038,14 @@ JD-TC-CreateUser-16
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph2}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph2}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id57}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id57}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id57}  firstName=${firstname}  lastName=${lastname}   mobileNo=${ph2}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${ph2}.ynwtest@netvarth.com   state=${state}  pincode=${pin}   deptId=${dep_id55}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id57}  firstName=${firstname}  lastName=${lastname}   mobileNo=${ph2}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${ph2}.${test_mail}   state=${state}  pincode=${pin}   deptId=${dep_id55}  subdomain=${userSubDomain}
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${whpnum} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
@@ -2117,7 +2117,7 @@ JD-TC-CreateUser-UH13
     ${whpnum}=  Evaluate  ${HLMUSERNAME18}+336246
     ${tlgnum}=  Evaluate  ${HLMUSERNAME18}+336347
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${EMPTY}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${EMPTY}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${COUNTRY_CODEREQUIRED}
@@ -2187,7 +2187,7 @@ JD-TC-CreateUser-UH14
     ${whpnum}=  Evaluate  ${HLMUSERNAME18}+336248
     ${tlgnum}=  Evaluate  ${HLMUSERNAME18}+336349
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${EMPTY}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id55}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${EMPTY}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${COUNTRY_CODEREQUIRED}
@@ -2225,7 +2225,7 @@ JD-TC-CreateUser-UH15
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com   ${userType[3]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[3]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}      Invalid user
@@ -2263,7 +2263,7 @@ JD-TC-CreateUser-17
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com   ${userType[4]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[4]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -2286,7 +2286,7 @@ JD-TC-CreateUser-17
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[4]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0
@@ -2326,7 +2326,7 @@ JD-TC-CreateUser-18
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com   ${userType[5]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[5]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -2349,7 +2349,7 @@ JD-TC-CreateUser-18
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[5]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}  ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0 
@@ -2389,7 +2389,7 @@ JD-TC-CreateUser-19
     Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com   ${userType[6]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[6]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -2412,7 +2412,7 @@ JD-TC-CreateUser-19
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[6]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U4}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city3}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state3}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0 

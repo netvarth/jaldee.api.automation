@@ -58,7 +58,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-1
     ${dob}=  		 FakerLibrary.Date
     ${gender}    	 Random Element    ${Genderlist}
     ${code}=         FakerLibrary.word
-	${email}=   	 Set Variable  ${P_Email}${code}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+9452 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
@@ -82,7 +82,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-2
     ${dob}=  		 FakerLibrary.Date
     ${gender}    	 Random Element    ${Genderlist}
     ${code}=         FakerLibrary.word
-	${email}=   	 Set Variable  ${P_Email}${code}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+1302 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
@@ -128,7 +128,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-3
     ${dob}=  		 FakerLibrary.Date
     ${gender}    	 Random Element    ${Genderlist}
     ${code}=         FakerLibrary.word
-	${email}=   	 Set Variable  ${P_Email}${code}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+1355
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
@@ -179,7 +179,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-UH1
     ${dob}=  		 FakerLibrary.Date
     ${gender}    	 Random Element    ${Genderlist}
     ${code}=         FakerLibrary.word
-	${email}=   	 Set Variable  ${P_Email}${code}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+8002 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
@@ -201,7 +201,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-UH2
     ${dob}=  		 FakerLibrary.Date
     ${gender}    	 Random Element    ${Genderlist}
     ${code}=         FakerLibrary.word
-	${email}=   	 Set Variable  ${P_Email}${city}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${city}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+1998 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
@@ -222,7 +222,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-UH3
     ${dob}=  		 FakerLibrary.Date
     ${gender}    	 Random Element    ${Genderlist}
     ${code}=         FakerLibrary.word
-	${email}=   	 Set Variable  ${P_Email}${code}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+5443 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     

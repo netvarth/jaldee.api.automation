@@ -101,7 +101,7 @@ JD-TC-partner_Suspended-1
     Set Suite Variable    ${firstName}
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable    ${lastName}
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
@@ -530,7 +530,7 @@ JD-TC-partner_Suspended-UH3
     Set Suite Variable    ${firstName}
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable    ${lastName}
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}

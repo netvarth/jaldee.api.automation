@@ -227,7 +227,7 @@ JD-TC-ServiceOptionPaymentForOrder-1
     ${DAY1}=  add_date   12
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME39}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME39}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME39}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -481,7 +481,7 @@ JD-TC-ServiceOptionPaymentForOrder-2
     ${DAY1}=  add_date   12
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME38}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME38}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME38}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -774,7 +774,7 @@ JD-TC-ServiceOptionPaymentForOrder-3
     ${DAY1}=  add_date   12
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME32}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME32}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME32}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -1104,7 +1104,7 @@ JD-TC-ServiceOptionPaymentForOrder-4
     ${DAY1}=  add_date   12
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME30}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME30}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME30}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -1356,7 +1356,7 @@ JD-TC-ServiceOptionPaymentForOrder-5
     ${DAY1}=  add_date   12
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME29}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME29}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME29}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}

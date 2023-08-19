@@ -26,7 +26,7 @@ ${conEmail1simi}    simi.sabu@netvarth.com
 ${EmailProConsreshma}    reshma.mohan@netvarth.com
 ${Emailhisham}       mohammed.hisham@netvarth.com
 ${emailsimi}        simicsabu63@gmail.com
-${usermail}         simi.ynwtest@netvarth.com
+${usermail}         simi.${test_mail}
 ${ConsMobilenum}     9605118778  
 ${MobilenumHi}       6282559238
 ${MobilenumRIA}    9995805992
@@ -470,7 +470,7 @@ Billable
 #      Set Suite Variable  ${gender1}
 #     #  ${ph2}=  Evaluate  ${PUSERNAME230}+86233
 #     #  Set Suite Variable  ${ph2}
-#     #  Set Suite Variable  ${email2}  ${firstname1}${ph2}${C_Email}.ynwtest@netvarth.com
+#     #  Set Suite Variable  ${email2}  ${firstname1}${ph2}${C_Email}.${test_mail}
 #      ${resp}=  AddCustomer with email   Raigan   AR   ${EMPTY}  ${conEmail1simi}  ${gender1}  ${dob1}  ${MobilenumHi}  ${EMPTY}
 #      Should Be Equal As Strings  ${resp.status_code}  200
 #      Log  ${resp.json()}
@@ -579,7 +579,7 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 # *** comment ***
 #     Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-#     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  pincode=${pin}   deptId=0  subdomain=${sub_domain_id}
+#     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  pincode=${pin}   deptId=0  subdomain=${sub_domain_id}
 #     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${whpnum} 
 #     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
 #     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
@@ -605,7 +605,7 @@ Billable
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-#         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  
+#         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}  
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
 #         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
@@ -964,7 +964,7 @@ Billable
 #     Set Suite Variable  ${ph_nos1}
 #     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
 #     Set Suite Variable  ${ph_nos2}
-#     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.ynwtest@netvarth.com  ${views}
+#     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.${test_mail}  ${views}
 
 #     ${resp}=  Get Business Profile
 #     Log  ${resp.json()}
@@ -984,7 +984,7 @@ Billable
 #     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
 #     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
 #     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-#     Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${bs}.ynwtest@netvarth.com
+#     Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${bs}.${test_mail}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
@@ -3270,7 +3270,7 @@ Billable
     #  ${name3}=  FakerLibrary.name
     #  ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     #  ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    #  ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    #  ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     #  ${bs}=  FakerLibrary.bs
     #  ${city}=   get_place
     #  ${latti}=  get_latitude
@@ -3536,7 +3536,7 @@ Billable
     # ${dob2}=  FakerLibrary.Date
     # ${pin}=  get_pincode
    
-    # ${resp}=  Create User  Sam  roy  ${dob2}  ${Genderlist[0]}  ${P_Email}${USERNAME3}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    # ${resp}=  Create User  Sam  roy  ${dob2}  ${Genderlist[0]}  ${P_Email}${USERNAME3}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -3688,7 +3688,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
      ${name3}=  FakerLibrary.name
      ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
      ${bs}=  FakerLibrary.bs
      ${city}=   get_place
      ${latti}=  get_latitude
@@ -3952,7 +3952,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${ConsMobilenum}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${ConsMobilenum}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${EmailProConsreshma}
     Log  ${resp.json()}
@@ -4079,7 +4079,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     # ${C_lastName}=   FakerLibrary.name 
      ${C_num1}    Random Int  min=123456   max=999999
     # ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    # Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    # Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -4090,7 +4090,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     ${country_code}    Convert To Integer  ${country_code}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -4215,7 +4215,7 @@ JD-TC-Order_MassCommunication-1
     #  ${name3}=  FakerLibrary.name
     #  ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     #  ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    #  ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    #  ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     #  ${bs}=  FakerLibrary.bs
     #  ${city}=   get_place
     #  ${latti}=  get_latitude
@@ -4532,7 +4532,7 @@ JD-TC-Order_MassCommunication-1
     ${DATE12}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
     Set Suite Variable  ${DATE12}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${f_Name}${ConsMobilenum}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${f_Name}${ConsMobilenum}.${test_mail}
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${ConsMobilenum}  ${PASSWORD}
     Log  ${resp.json()}
@@ -4794,7 +4794,7 @@ JD-TC-Payment By Consumer-1
     # ${name3}=  FakerLibrary.name
     # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     # ${bs}=  FakerLibrary.bs
     # ${city}=   get_place
     # ${latti}=  get_latitude
@@ -5102,7 +5102,7 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     #  ${name3}=  FakerLibrary.name
     #  ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     #  ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    #  ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    #  ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     #  ${bs}=  FakerLibrary.bs
     #  ${city}=   get_place
     #  ${latti}=  get_latitude
@@ -5372,7 +5372,7 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  Sam  roy  ${dob2}  ${Genderlist[0]}  ${P_Email}${USERNAME3}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  Sam  roy  ${dob2}  ${Genderlist[0]}  ${P_Email}${USERNAME3}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${USERNAME3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id3}  ${resp.json()}

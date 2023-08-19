@@ -66,7 +66,7 @@ JD-TC-ManageBranchSP-1
 
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+77520 
     Set Suite Variable   ${PHONE11}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE11}${\n}
@@ -86,7 +86,7 @@ JD-TC-ManageBranchSP-1
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
 
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${DAY1}=  get_date
@@ -138,7 +138,7 @@ JD-TC-ManageBranchSP-1
 	${PHONE1}=  Evaluate  ${PUSERNAME}+7744 
     Set Suite Variable   ${PHONE1}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
-	${email}=   	 Set Variable  ${P_Email}${PHONE1}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PHONE1}.${test_mail}
     
 	${resp}=   ProviderKeywordsforBranchSP.Create Branch SP  ${f_name}  ${l_name}   ${PHONE1}   ${email}  ${subdomain}  ${PASSWORD}
 	Log  ${resp.json()}

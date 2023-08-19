@@ -332,7 +332,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-2
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -344,7 +344,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-2
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -394,7 +394,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Contact_Number}=  Evaluate  ${CUSERNAME20}+11111111
-    Set Test Variable  ${NEW_email}  ${firstname}${Contact_Number}.ynwtest@netvarth.com
+    Set Test Variable  ${NEW_email}  ${firstname}${Contact_Number}.${test_mail}
 
     ${resp}=   Update Order For HomeDelivery   ${orderid1}  ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${DAY1}    ${Contact_Number}    ${NEW_email}   ${countryCodes[1]}  
     Log   ${resp.json()}
@@ -450,7 +450,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -462,7 +462,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Test Variable  ${EMPTY_List}
     ${O_sTime1}=  add_time   0  25
@@ -526,7 +526,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Contact_Number}=  Evaluate  ${CUSERNAME20}+11111111
-    Set Test Variable  ${NEW_email}  ${firstname}${Contact_Number}.ynwtest@netvarth.com
+    Set Test Variable  ${NEW_email}  ${firstname}${Contact_Number}.${test_mail}
 
     ${resp}=   Update Order For HomeDelivery   ${orderid1}  ${bool[1]}    ${address}    ${O_sTime1}    ${O_eTime1}   ${DAY1}    ${Contact_Number}    ${NEW_email}   ${countryCodes[1]}  
     Log   ${resp.json()}
@@ -581,7 +581,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -593,7 +593,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Test Variable  ${EMPTY_List}
     ${O_sTime1}=  add_time   0  20
@@ -658,7 +658,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Contact_Number}=  Evaluate  ${CUSERNAME20}+11111111
-    Set Test Variable  ${NEW_email}  ${firstname}${Contact_Number}.ynwtest@netvarth.com
+    Set Test Variable  ${NEW_email}  ${firstname}${Contact_Number}.${test_mail}
 
     ${resp}=   Update Order For HomeDelivery   ${orderid1}  ${bool[1]}    ${address}    ${O_sTime1}    ${O_eTime1}   ${DAY1}    ${Contact_Number}    ${NEW_email}   ${countryCodes[1]}  
     Log   ${resp.json()}

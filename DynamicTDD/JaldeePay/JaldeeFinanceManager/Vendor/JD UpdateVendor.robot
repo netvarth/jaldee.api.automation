@@ -98,7 +98,7 @@ JD-TC-UpdateVendor-1
     Set Suite Variable       ${PO_Number}
     ${vendor_ph}=          Evaluate                  ${PUSERNAME}+${PO_Number}
     Set Suite Variable       ${vendor_ph}
-    Set Suite Variable       ${email1}                  ${vender_name}${vendor_ph}.ynwtest@netvarth.com
+    Set Suite Variable       ${email1}                  ${vender_name}${vendor_ph}.${test_mail}
     ${address}=              FakerLibrary.city
     Set Suite Variable       ${address}
 

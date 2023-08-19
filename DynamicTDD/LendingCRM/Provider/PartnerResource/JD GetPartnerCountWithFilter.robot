@@ -89,8 +89,8 @@ JD-TC-Get_partner_Count-1
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     # Set Suite Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Suite Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${lname}${C_Email}.ynwtest@netvarth.com
-    Set Suite Variable    ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${lname}${C_Email}.${test_mail}
+    Set Suite Variable    ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${note}        FakerLibrary.sentence
     Set Suite Variable    ${note}

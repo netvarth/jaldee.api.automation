@@ -79,7 +79,7 @@ JD-TC-AssignTeamToUser-1
      Set Suite Variable  ${city1}   ${resp.json()[0]['PostOffice'][0]['District']}   
      Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']} 
     
-     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -109,7 +109,7 @@ JD-TC-AssignTeamToUser-1
      Set Suite Variable  ${city2}   ${resp.json()[0]['PostOffice'][0]['District']}   
      Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}
     
-     ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -128,7 +128,7 @@ JD-TC-AssignTeamToUser-1
      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['mobileNo']}  ${PUSERNAME_U1}
      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['dob']}  ${dob1}
      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()[0]['users'][0]['email']}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()[0]['users'][0]['email']}  ${P_Email}${PUSERNAME_U1}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['city']}  ${city1}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['state']}  ${state1}
      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['countryCode']}  ${countryCodes[1]}
@@ -141,7 +141,7 @@ JD-TC-AssignTeamToUser-1
      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['mobileNo']}  ${PUSERNAME_U2}
      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['dob']}  ${dob2}
      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()[0]['users'][1]['email']}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()[0]['users'][1]['email']}  ${P_Email}${PUSERNAME_U2}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['city']}  ${city2}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['state']}  ${state2}
      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['countryCode']}  ${countryCodes[1]}
@@ -176,7 +176,7 @@ JD-TC-AssignTeamToUser-2
      Set Test Variable  ${city3}   ${resp.json()[0]['PostOffice'][0]['District']}   
      Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}
     
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -202,7 +202,7 @@ JD-TC-AssignTeamToUser-2
      Set Test Variable  ${city4}   ${resp.json()[0]['PostOffice'][0]['District']}   
      Set Test Variable  ${state4}  ${resp.json()[0]['PostOffice'][0]['State']}
     
-     ${resp}=  Create User  ${firstname4}  ${lastname4}  ${dob4}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com   ${userType[0]}  ${pin4}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname4}  ${lastname4}  ${dob4}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[0]}  ${pin4}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id4}  ${resp.json()}
@@ -225,7 +225,7 @@ JD-TC-AssignTeamToUser-2
      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['mobileNo']}  ${PUSERNAME_U1}
      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['dob']}  ${dob1}
      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()[0]['users'][0]['email']}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()[0]['users'][0]['email']}  ${P_Email}${PUSERNAME_U1}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['city']}  ${city1}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['state']}  ${state1}
      Should Be Equal As Strings  ${resp.json()[0]['users'][0]['countryCode']}  ${countryCodes[1]}
@@ -238,7 +238,7 @@ JD-TC-AssignTeamToUser-2
      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['mobileNo']}  ${PUSERNAME_U2}
      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['dob']}  ${dob2}
      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()[0]['users'][1]['email']}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()[0]['users'][1]['email']}  ${P_Email}${PUSERNAME_U2}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['city']}  ${city2}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['state']}  ${state2}
      Should Be Equal As Strings  ${resp.json()[0]['users'][1]['countryCode']}  ${countryCodes[1]}
@@ -251,7 +251,7 @@ JD-TC-AssignTeamToUser-2
      Should Be Equal As Strings  ${resp.json()[0]['users'][2]['mobileNo']}  ${PUSERNAME_U3}
      Should Be Equal As Strings  ${resp.json()[0]['users'][2]['dob']}  ${dob3}
      Should Be Equal As Strings  ${resp.json()[0]['users'][2]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()[0]['users'][2]['email']}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()[0]['users'][2]['email']}  ${P_Email}${PUSERNAME_U3}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][2]['city']}  ${city3}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][2]['state']}  ${state3}
      Should Be Equal As Strings  ${resp.json()[0]['users'][2]['countryCode']}  ${countryCodes[1]}
@@ -264,7 +264,7 @@ JD-TC-AssignTeamToUser-2
      Should Be Equal As Strings  ${resp.json()[0]['users'][3]['mobileNo']}  ${PUSERNAME_U4}
      Should Be Equal As Strings  ${resp.json()[0]['users'][3]['dob']}  ${dob4}
      Should Be Equal As Strings  ${resp.json()[0]['users'][3]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()[0]['users'][3]['email']}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()[0]['users'][3]['email']}  ${P_Email}${PUSERNAME_U4}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][3]['city']}  ${city4}
 #      Should Be Equal As Strings  ${resp.json()[0]['users'][3]['state']}  ${state4}
      Should Be Equal As Strings  ${resp.json()[0]['users'][3]['countryCode']}  ${countryCodes[1]}
@@ -278,7 +278,7 @@ JD-TC-AssignTeamToUser-2
      Should Be Equal As Strings  ${resp.json()[1]['users'][0]['mobileNo']}  ${PUSERNAME_U3}
      Should Be Equal As Strings  ${resp.json()[1]['users'][0]['dob']}  ${dob3}
      Should Be Equal As Strings  ${resp.json()[1]['users'][0]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()[1]['users'][0]['email']}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()[1]['users'][0]['email']}  ${P_Email}${PUSERNAME_U3}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()[1]['users'][0]['city']}  ${city3}
 #      Should Be Equal As Strings  ${resp.json()[1]['users'][0]['state']}  ${state3}
      Should Be Equal As Strings  ${resp.json()[1]['users'][0]['countryCode']}  ${countryCodes[1]}
@@ -291,7 +291,7 @@ JD-TC-AssignTeamToUser-2
      Should Be Equal As Strings  ${resp.json()[1]['users'][1]['mobileNo']}  ${PUSERNAME_U4}
      Should Be Equal As Strings  ${resp.json()[1]['users'][1]['dob']}  ${dob4}
      Should Be Equal As Strings  ${resp.json()[1]['users'][1]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()[1]['users'][1]['email']}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()[1]['users'][1]['email']}  ${P_Email}${PUSERNAME_U4}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()[1]['users'][1]['city']}  ${city4}
 #      Should Be Equal As Strings  ${resp.json()[1]['users'][1]['state']}  ${state4}
      Should Be Equal As Strings  ${resp.json()[1]['users'][1]['countryCode']}  ${countryCodes[1]}
@@ -382,7 +382,7 @@ JD-TC-AssignTeamToUser-4
      Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[2]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[2]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${u_id3}  ${resp.json()}
@@ -419,7 +419,7 @@ JD-TC-AssignTeamToUser-4
      Should Be Equal As Strings  ${resp.json()['users'][0]['mobileNo']}  ${PUSERNAME_U5}
      Should Be Equal As Strings  ${resp.json()['users'][0]['dob']}  ${dob3}
      Should Be Equal As Strings  ${resp.json()['users'][0]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()['users'][0]['email']}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()['users'][0]['email']}  ${P_Email}${PUSERNAME_U5}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['city']}  ${city3}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['state']}  ${state3}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['countryCode']}  ${countryCodes[1]}
@@ -454,7 +454,7 @@ JD-TC-AssignTeamToUser-5
      Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[1]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[1]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[1]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[1]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${u_id3}  ${resp.json()}
@@ -482,7 +482,7 @@ JD-TC-AssignTeamToUser-5
      Should Be Equal As Strings  ${resp.json()['users'][0]['mobileNo']}  ${PUSERNAME_U5}
      Should Be Equal As Strings  ${resp.json()['users'][0]['dob']}  ${dob3}
      Should Be Equal As Strings  ${resp.json()['users'][0]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()['users'][0]['email']}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()['users'][0]['email']}  ${P_Email}${PUSERNAME_U5}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['city']}  ${city3}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['state']}  ${state3}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['countryCode']}  ${countryCodes[1]}
@@ -514,7 +514,7 @@ JD-TC-AssignTeamToUser-6
      Set Test Variable  ${city3}   ${resp.json()[0]['PostOffice'][0]['District']}   
      Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}
     
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${u_id6}  ${resp.json()}
@@ -540,7 +540,7 @@ JD-TC-AssignTeamToUser-6
      Set Test Variable  ${city4}   ${resp.json()[0]['PostOffice'][0]['District']}   
      Set Test Variable  ${state4}  ${resp.json()[0]['PostOffice'][0]['State']}
     
-     ${resp}=  Create User  ${firstname4}  ${lastname4}  ${dob4}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com   ${userType[0]}  ${pin4}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname4}  ${lastname4}  ${dob4}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[0]}  ${pin4}  ${countryCodes[1]}  ${PUSERNAME_U4}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${u_id7}  ${resp.json()}
@@ -585,7 +585,7 @@ JD-TC-AssignTeamToUser-6
      Should Be Equal As Strings  ${resp.json()['users'][0]['mobileNo']}  ${PUSERNAME_U3}
      Should Be Equal As Strings  ${resp.json()['users'][0]['dob']}  ${dob3}
      Should Be Equal As Strings  ${resp.json()['users'][0]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()['users'][0]['email']}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()['users'][0]['email']}  ${P_Email}${PUSERNAME_U3}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['city']}  ${city3}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['state']}  ${state3}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['countryCode']}  ${countryCodes[1]}
@@ -597,7 +597,7 @@ JD-TC-AssignTeamToUser-6
      Should Be Equal As Strings  ${resp.json()['users'][1]['mobileNo']}  ${PUSERNAME_U4}
      Should Be Equal As Strings  ${resp.json()['users'][1]['dob']}  ${dob4}
      Should Be Equal As Strings  ${resp.json()['users'][1]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()['users'][1]['email']}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()['users'][1]['email']}  ${P_Email}${PUSERNAME_U4}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()['users'][1]['city']}  ${city4}
 #      Should Be Equal As Strings  ${resp.json()['users'][1]['state']}  ${state4}
 #      Should Be Equal As Strings  ${resp.json()['users'][1]['countryCode']}  ${countryCodes[1]}
@@ -613,7 +613,7 @@ JD-TC-AssignTeamToUser-6
      Should Be Equal As Strings  ${resp.json()['users'][0]['mobileNo']}  ${PUSERNAME_U3}
      Should Be Equal As Strings  ${resp.json()['users'][0]['dob']}  ${dob3}
      Should Be Equal As Strings  ${resp.json()['users'][0]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()['users'][0]['email']}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()['users'][0]['email']}  ${P_Email}${PUSERNAME_U3}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['city']}  ${city3}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['state']}  ${state3}
 #      Should Be Equal As Strings  ${resp.json()['users'][0]['countryCode']}  ${countryCodes[1]}
@@ -625,7 +625,7 @@ JD-TC-AssignTeamToUser-6
      Should Be Equal As Strings  ${resp.json()['users'][1]['mobileNo']}  ${PUSERNAME_U4}
      Should Be Equal As Strings  ${resp.json()['users'][1]['dob']}  ${dob4}
      Should Be Equal As Strings  ${resp.json()['users'][1]['gender']}  ${Genderlist[0]}
-     Should Be Equal As Strings  ${resp.json()['users'][1]['email']}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com
+     Should Be Equal As Strings  ${resp.json()['users'][1]['email']}  ${P_Email}${PUSERNAME_U4}.${test_mail}
 #      Should Be Equal As Strings  ${resp.json()['users'][1]['city']}  ${city4}
 #      Should Be Equal As Strings  ${resp.json()['users'][1]['state']}  ${state4}
 #      Should Be Equal As Strings  ${resp.json()['users'][1]['countryCode']}  ${countryCodes[1]}
@@ -672,7 +672,7 @@ JD-TC-AssignTeamToUser-UH1
      Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${u_id3}  ${resp.json()}
@@ -719,7 +719,7 @@ JD-TC-AssignTeamToUser-UH2
      Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -807,7 +807,7 @@ JD-TC-AssignTeamToUser-UH7
      Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${u_id3}  ${resp.json()}
@@ -867,7 +867,7 @@ JD-TC-AssignTeamToUser-UH8
      Set Test Variable  ${state3}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
  
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}   ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${u_id3}  ${resp.json()}

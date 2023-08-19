@@ -97,9 +97,9 @@ JD-TC-GetOrderSettingsStoreContactinfo-2
     Set Suite Variable  ${ph2}
     ${whatsappNo}=  Evaluate  ${PUSERPH0}+3000000000
     Set Suite Variable  ${whatsappNo}
-    ${Email1}=   Set Variable  ${lName}${ph1}.ynwtest@netvarth.com
+    ${Email1}=   Set Variable  ${lName}${ph1}.${test_mail}
     Set Suite Variable  ${Email1}
-    ${Email2}=   Set Variable  ${lName}${ph2}.ynwtest@netvarth.com
+    ${Email2}=   Set Variable  ${lName}${ph2}.${test_mail}
     Set Suite Variable  ${Email2}
     ${address}=  get_address
     Set Suite Variable  ${address}
@@ -139,9 +139,9 @@ JD-TC-GetOrderSettingsStoreContactinfo-3
     Set Suite Variable  ${ph4}
     ${whatsappNo2}=  Evaluate  ${PUSERPH0}+3000000002
     Set Suite Variable  ${whatsappNo2}
-    ${Email3}=   Set Variable  ${lName}${ph3}.ynwtest@netvarth.com
+    ${Email3}=   Set Variable  ${lName}${ph3}.${test_mail}
     Set Suite Variable  ${Email3}
-    ${Email4}=   Set Variable  ${lName}${ph4}.ynwtest@netvarth.com
+    ${Email4}=   Set Variable  ${lName}${ph4}.${test_mail}
     Set Suite Variable  ${Email4}
     ${address2}=  get_address
     Set Suite Variable  ${address2}
@@ -182,7 +182,7 @@ JD-TC-GetOrderSettingsStoreContactinfo-4
     Should Be Equal As Strings  ${resp.json()['lastName']}     ${P38_lName}
     Should Be Equal As Strings  ${resp.json()['phone']}        ${Ph38}
 
-    Set Suite Variable  ${email_id38}  ${P38_lName}${PUSERNAME38}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id38}  ${P38_lName}${PUSERNAME38}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${pid38}   ${P38_fName}   ${P38_lName}   ${email_id38}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -204,7 +204,7 @@ JD-TC-GetOrderSettingsStoreContactinfo-4
     Set Suite Variable  ${fName3}
     ${lName3}=    FakerLibrary.word
     Set Suite Variable  ${lName3}
-    Set Suite Variable  ${email_id2}  ${lName3}${PUSERNAME38}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id2}  ${lName3}${PUSERNAME38}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${pid38}   ${fName3}   ${lName2}   ${email_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

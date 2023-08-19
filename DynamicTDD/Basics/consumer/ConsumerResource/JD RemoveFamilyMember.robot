@@ -192,7 +192,7 @@ JD-TC-RemoveFamilyMember-UH2
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME25}+76008
-      Set Test Variable  ${email}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME23}  ${EMPTY}

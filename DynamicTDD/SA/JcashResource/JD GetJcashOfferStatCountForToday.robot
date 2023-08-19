@@ -167,7 +167,7 @@ JD-TC-GetJcashOfferStatCountToday-2
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -233,7 +233,7 @@ JD-TC-GetJcashOfferStatCountToday-3
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH2}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH2}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH2}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -410,7 +410,7 @@ JD-TC-GetJcashOfferStatCountToday-5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH3}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH3}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -437,7 +437,7 @@ JD-TC-GetJcashOfferStatCountToday-5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH4}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH4}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

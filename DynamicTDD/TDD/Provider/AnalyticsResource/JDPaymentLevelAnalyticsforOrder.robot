@@ -64,7 +64,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     Set Suite Variable  ${pid}
     
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME_A}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME_A}.${test_mail}
 
     ${resp}=  Update Email   ${acc_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -80,7 +80,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -328,7 +328,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -336,7 +336,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
         Set Test Variable  ${address}
 
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
         ${resp}=   Create Order For HomeDelivery   ${cookie}   ${pid}    ${self}    ${CatalogId3}   ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME${a}}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
         Log   ${resp.json()}
@@ -533,7 +533,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-2
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -541,7 +541,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-2
         Set Test Variable  ${address}
 
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
         ${resp}=   Create Order For HomeDelivery   ${cookie}   ${pid}    ${self}    ${CatalogId3}   ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME${a}}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
         Log   ${resp.json()}
@@ -778,7 +778,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-3
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -786,7 +786,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-3
         Set Test Variable  ${address}
 
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
         ${resp}=   Create Order For HomeDelivery   ${cookie}   ${pid}    ${self}    ${CatalogId3}   ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME${a}}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
         Log   ${resp.json()}
@@ -1015,7 +1015,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1023,7 +1023,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
         Set Test Variable  ${address}
 
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         
         ${resp}=   Create Order By Provider For HomeDelivery    ${cookie}  ${cid${a}}   ${cid${a}}   ${CatalogId3}   ${boolean[1]}   ${address}  ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME${a}}    ${email}  ${orderNote}  ${countryCodes[1]}  ${item_id1}   ${item_quantity1}
         Log   ${resp.json()}
@@ -1209,7 +1209,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-6
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1217,7 +1217,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-6
         Set Test Variable  ${address}
 
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
         ${resp}=   Create Order For HomeDelivery   ${cookie}   ${pid}    ${self}    ${CatalogId3}   ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME${a}}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
         Log   ${resp.json()}

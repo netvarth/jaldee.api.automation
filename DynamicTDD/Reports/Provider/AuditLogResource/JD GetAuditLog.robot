@@ -923,7 +923,7 @@ JD-TC-GetAuditLog -35
     ${PUSERPH26}=  Evaluate  ${PUSERNAME}+475638
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH26}${\n}
     Set Test Variable   ${PUSERPH26}
-    Set Test Variable  ${email}  ${fname}${PUSERPH26}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${fname}${PUSERPH26}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email  ${fname}  ${lname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${PUSERPH26}   ${EMPTY}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -80,7 +80,7 @@ JD-TC-AccountLevelAnalyticsforDonation-1
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     Set Suite Variable  ${pid}
     
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME_A}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME_A}.${test_mail}
 
     ${resp}=  Update Email   ${acc_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -96,7 +96,7 @@ JD-TC-AccountLevelAnalyticsforDonation-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude

@@ -115,7 +115,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-1
     ${dob}=  Convert To String  ${dob}
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${phone} 
     Log  ${resp.content}
@@ -522,7 +522,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-2
 
     
 
-    # Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    # Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -532,7 +532,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-2
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${consumernumber} 
     Log  ${resp.content}
@@ -785,7 +785,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-3
 
     clear Customer  ${PUSERNAME85}
 
-    # Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    # Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}

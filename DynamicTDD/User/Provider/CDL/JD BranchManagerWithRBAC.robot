@@ -460,7 +460,7 @@ JD-TC-BranchManager-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -765,7 +765,7 @@ JD-TC-BranchManager-7
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${dealerfname1}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${dealerfname1}${C_Email}.${test_mail}
     
     ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
     Log  ${resp.content}

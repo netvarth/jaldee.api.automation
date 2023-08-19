@@ -194,7 +194,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-1
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Contain  ${resp.json()['response']}  <td><input name=\"amount\" value=540.00 /></td>
-    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.ynwtest@netvarth.com /></td>
+    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.${test_mail} /></td>
     # Should Contain  ${resp.json()['response']}  <td>Phone: </td>\n   <td><input name=\"phone\" value=1087654326 ></td>
     # Should Contain  ${resp.json()['response']}  \"merchantId\":\"6675005\"
      
@@ -386,7 +386,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-2
     # ${resp}=  Make payment Consumer  440  CC  ${wid}  ${pid}  billPayment
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Contain  ${resp.json()['response']}  <td><input name=\"amount\" value=440.00 /></td>
-    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.ynwtest@netvarth.com /></td>
+    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.${test_mail} /></td>
     # Should Contain  ${resp.json()['response']}  <td>Phone: </td>\n   <td><input name=\"phone\" value=1087654326 ></td>
     ${resp}=  Make payment Consumer Mock  440  ${bool[1]}  ${wid}  ${pid}  billPayment
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -579,7 +579,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-3
     # ${resp}=  Make payment Consumer  400  CC  ${wid}  ${pid}  billPayment
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Contain  ${resp.json()['response']}  <td><input name=\"amount\" value=400.00 /></td>
-    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.ynwtest@netvarth.com /></td>
+    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.${test_mail} /></td>
     # Should Contain  ${resp.json()['response']}  <td>Phone: </td>\n   <td><input name=\"phone\" value=1087654326 ></td>
     ${resp}=  Make payment Consumer Mock  400  ${bool[1]}  ${wid}  ${pid}  billPayment
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -762,7 +762,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-4
     # ${resp}=  Make payment Consumer  540  CC  ${wid}  ${pid}  billPayment
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Contain  ${resp.json()['response']}  <td><input name=\"amount\" value=540.00 /></td>
-    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.ynwtest@netvarth.com /></td>
+    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.${test_mail} /></td>
     # Should Contain  ${resp.json()['response']}  <td>Phone: </td>\n   <td><input name=\"phone\" value=1087654326 ></td>
     ${resp}=  Make payment Consumer Mock  540  ${bool[1]}  ${wid}  ${pid}  billPayment
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -901,7 +901,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-5
     # ${resp}=  Make payment Consumer  540  CC  ${wid}  ${pid}  billPayment
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Contain  ${resp.json()['response']}  <td><input name=\"amount\" value=540.00 /></td>
-    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.ynwtest@netvarth.com /></td>
+    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.${test_mail} /></td>
     # Should Contain  ${resp.json()['response']}  <td>Phone: </td>\n   <td><input name=\"phone\" value=1087654326 ></td>
     ${resp}=  Make payment Consumer Mock  540  ${bool[1]}  ${wid}  ${pid}  billPayment
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -988,7 +988,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-6
     # ${resp}=  Make payment Consumer  540  CC  ${wid}  ${pid}  billPayment
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Contain  ${resp.json()['response']}  <td><input name=\"amount\" value=540.00 /></td>
-    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.ynwtest@netvarth.com /></td>
+    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.${test_mail} /></td>
     # Should Contain  ${resp.json()['response']}  <td>Phone: </td>\n   <td><input name=\"phone\" value=1087654326 ></td>
     ${resp}=  Make payment Consumer Mock  540  ${bool[1]}  ${wid}  ${pid}  billPayment
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1095,7 +1095,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH2
     # ${resp}=  Make payment Consumer  590  CC  ${wid}  ${pid}  billPayment
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Contain  ${resp.json()['response']}  <td><input name=\"amount\" value=590.00 /></td>
-    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.ynwtest@netvarth.com /></td>
+    # Should Contain  ${resp.json()['response']}  <td><input name=\"email\" id=\"email\" value=c5.${test_mail} /></td>
     # Should Contain  ${resp.json()['response']}  <td>Phone: </td>\n   <td><input name=\"phone\" value=1087654326 ></td>
     ${resp}=  Make payment Consumer Mock  590  ${bool[1]}  ${wid}  ${pid}  billPayment
     Should Be Equal As Strings  ${resp.status_code}  200

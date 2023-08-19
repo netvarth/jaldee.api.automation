@@ -37,7 +37,7 @@ JD-TC-UpdateOrderItems-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME94}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME94}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -189,7 +189,7 @@ JD-TC-UpdateOrderItems-1
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -199,7 +199,7 @@ JD-TC-UpdateOrderItems-1
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email0}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Suite Variable  ${email0}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -307,7 +307,7 @@ JD-TC-UpdateOrderItems-1
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -315,7 +315,7 @@ JD-TC-UpdateOrderItems-1
     Set Test Variable  ${address1}
 
     ${firstname2}=  FakerLibrary.first_name
-    Set Suite Variable  ${email1}  ${firstname2}${CUSERNAME21}.ynwtest@netvarth.com
+    Set Suite Variable  ${email1}  ${firstname2}${CUSERNAME21}.${test_mail}
     ${resp}=   Update Order For HomeDelivery   ${orderid1}    ${bool[1]}    ${address1}    ${sTime1}    ${eTime1}   ${DAY2}    ${CUSERNAME21}   ${email1}  ${countryCodes[1]}  
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -406,7 +406,7 @@ JD-TC-UpdateOrderItems-2
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -415,7 +415,7 @@ JD-TC-UpdateOrderItems-2
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME5}   ${PASSWORD}
     Log   ${resp.json()}
@@ -519,7 +519,7 @@ JD-TC-UpdateOrderItems-3
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -528,7 +528,7 @@ JD-TC-UpdateOrderItems-3
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME5}   ${PASSWORD}
     Log   ${resp.json()}
@@ -647,7 +647,7 @@ JD-TC-UpdateOrderItems-4
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -656,7 +656,7 @@ JD-TC-UpdateOrderItems-4
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME5}   ${PASSWORD}
     Log   ${resp.json()}
@@ -774,7 +774,7 @@ JD-TC-UpdateOrderItems-5
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -784,7 +784,7 @@ JD-TC-UpdateOrderItems-5
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME21}   ${PASSWORD}
     Log   ${resp.json()}
@@ -875,7 +875,7 @@ JD-TC-UpdateOrderItems-6
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -885,7 +885,7 @@ JD-TC-UpdateOrderItems-6
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME21}   ${PASSWORD}
     Log   ${resp.json()}
@@ -976,7 +976,7 @@ JD-TC-UpdateOrderItems-7
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -986,7 +986,7 @@ JD-TC-UpdateOrderItems-7
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME4}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME4}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME4}   ${PASSWORD}
     Log   ${resp.json()}
@@ -1074,7 +1074,7 @@ JD-TC-UpdateOrderItems-UH1
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1084,7 +1084,7 @@ JD-TC-UpdateOrderItems-UH1
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME21}   ${PASSWORD}
     Log   ${resp.json()}
@@ -1124,7 +1124,7 @@ JD-TC-UpdateOrderItems-UH1
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=90
 #     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
 #     ${firstname}=  FakerLibrary.first_name
-#     Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.ynwtest@netvarth.com
+#     Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
 
 #     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME21}   ${PASSWORD}
 #     Log   ${resp.json()}
@@ -1169,7 +1169,7 @@ JD-TC-UpdateOrderItems-UH3
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME199}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME199}.${test_mail}
 
     ${resp}=  Update Email   ${pid0}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1290,7 +1290,7 @@ JD-TC-UpdateOrderItems-UH3
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1299,7 +1299,7 @@ JD-TC-UpdateOrderItems-UH3
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME20}   ${PASSWORD}
     Log   ${resp.json()}
@@ -1365,7 +1365,7 @@ JD-TC-UpdateOrderItems-UH4
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1375,7 +1375,7 @@ JD-TC-UpdateOrderItems-UH4
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME4}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME4}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME4}   ${PASSWORD}
     Log   ${resp.json()}
@@ -1420,7 +1420,7 @@ JD-TC-UpdateOrderItems-UH6
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME199}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME199}.${test_mail}
 
     ${resp}=  Update Email   ${pid0}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1541,7 +1541,7 @@ JD-TC-UpdateOrderItems-UH6
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1550,7 +1550,7 @@ JD-TC-UpdateOrderItems-UH6
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME20}   ${PASSWORD}
     Log   ${resp.json()}
@@ -1602,7 +1602,7 @@ JD-TC-UpdateOrderItems-UH7
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME199}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME199}.${test_mail}
 
     ${resp}=  Update Email   ${pid0}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1723,7 +1723,7 @@ JD-TC-UpdateOrderItems-UH7
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1732,7 +1732,7 @@ JD-TC-UpdateOrderItems-UH7
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME20}   ${PASSWORD}
     Log   ${resp.json()}
@@ -1787,7 +1787,7 @@ JD-TC-UpdateOrderItems-8
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME115}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME115}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1939,7 +1939,7 @@ JD-TC-UpdateOrderItems-8
     ${DAY1}=  add_date   12
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity1}   max=${maxQuantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME2}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME2}.${test_mail}
 
     ${resp}=   Create Order For Pickup     ${cookie}  ${accId1}   ${self}   ${CatalogId2}   ${bool[1]}   ${sTime0}   ${eTime0}   ${DAY1}    ${CUSERNAME2}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id0}  ${item_quantity1} 
     Log   ${resp.json()}
@@ -2014,7 +2014,7 @@ JD-TC-UpdateOrderItems-9
     ${DAY}=  get_date
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity1}   max=${maxQuantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME5}   ${PASSWORD}
     Log   ${resp.json()}
@@ -2118,7 +2118,7 @@ JD-TC-UpdateOrderItems-10
     ${DAY}=  get_date
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity1}   max=${maxQuantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME5}   ${PASSWORD}
     Log   ${resp.json()}
@@ -2235,7 +2235,7 @@ JD-TC-UpdateOrderItems-11
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME189}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME189}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2426,7 +2426,7 @@ JD-TC-UpdateOrderItems-11
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2436,7 +2436,7 @@ JD-TC-UpdateOrderItems-11
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME4}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME4}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME189}  ${PASSWORD}
@@ -2548,7 +2548,7 @@ JD-TC-UpdateDeliveryCharge-12
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id2}  ${firstname}${PUSERNAME101}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id2}  ${firstname}${PUSERNAME101}.${test_mail}
 
     ${resp}=  Update Email   ${pid2}   ${firstname}   ${lastname}   ${email_id2}
     Log  ${resp.json()}
@@ -2712,7 +2712,7 @@ JD-TC-UpdateDeliveryCharge-12
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2724,7 +2724,7 @@ JD-TC-UpdateDeliveryCharge-12
     ${item_quantity2}=  Convert To Number  ${item_quantity2}  1
 
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
 
     ${resp}=   Create Order For HomeDelivery  ${cookie}   ${accId11}    ${self}    ${CatalogId11}   ${bool[1]}    ${address}    ${sTime2}    ${eTime2}   ${DAY11}    ${CUSERNAME10}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id2}    ${item_quantity2} 
     Log   ${resp.json()}
@@ -2740,7 +2740,7 @@ JD-TC-UpdateDeliveryCharge-12
     ${DAY12}=  add_date   14
     ${address}=  get_address
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     ${resp}=   Create Order For Pickup   ${cookie}   ${accId11}    ${self}    ${CatalogId11}   ${bool[1]}   ${sTime2}    ${eTime2}   ${DAY12}    ${CUSERNAME10}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id2}    ${item_quantity2} 
     Log   ${resp.json()}

@@ -43,7 +43,7 @@ JD-TC-GetNotificationSettings_of_User-1
      Set Suite Variable  ${lastname_A}
      ${MUSERNAME_E1}=  Evaluate  ${MUSERNAME}+8810188
      ${highest_package}=  get_highest_license_pkg
-     Set Suite Variable  ${EMAIL_id0}   ${P_Email}${MUSERNAME_E1}.ynwtest@netvarth.com
+     Set Suite Variable  ${EMAIL_id0}   ${P_Email}${MUSERNAME_E1}.${test_mail}
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${EMAIL_id0}  ${domains}  ${sub_domains}  ${MUSERNAME_E1}    ${highest_package[0]}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
@@ -142,7 +142,7 @@ JD-TC-GetNotificationSettings_of_User-2
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+354709
     clear_users  ${PUSERNAME_U1}
     Set Suite Variable  ${PUSERNAME_U1}
-    Set Suite Variable  ${PUser1_EMAIL}   ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Set Suite Variable  ${PUser1_EMAIL}   ${P_Email}${PUSERNAME_U1}.${test_mail}
     ${firstname1}=  FakerLibrary.name
     Set Suite Variable  ${firstname1}
     ${lastname1}=  FakerLibrary.last_name
@@ -162,7 +162,7 @@ JD-TC-GetNotificationSettings_of_User-2
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+${number2}
     clear_users  ${PUSERNAME_U2}
     Set Suite Variable  ${PUSERNAME_U2}
-    Set Suite Variable  ${PUser2_EMAIL}   ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com
+    Set Suite Variable  ${PUser2_EMAIL}   ${P_Email}${PUSERNAME_U2}.${test_mail}
     ${firstname2}=  FakerLibrary.name
     Set Suite Variable  ${firstname2}
     ${lastname2}=  FakerLibrary.last_name
@@ -326,7 +326,7 @@ JD-TC-GetNotificationSettings_of_User-4
     ${PUSERNAME_U12}=  Evaluate  ${PUSERNAME}+${number12}
     clear_users  ${PUSERNAME_U12}
     Set Suite Variable  ${PUSERNAME_U12}  
-    Set Suite Variable  ${PUser12_EMAIL}   ${P_Email}${PUSERNAME_U12}.ynwtest@netvarth.com
+    Set Suite Variable  ${PUser12_EMAIL}   ${P_Email}${PUSERNAME_U12}.${test_mail}
     Set Suite Variable  @{PUser12_EMAIL_list}   ${PUser12_EMAIL}
 
     # ----------------------------------------------------------------------------
@@ -383,7 +383,7 @@ JD-TC-GetNotificationSettings_of_User-5
     Set Suite Variable  ${PUSERNAME_U13}  
     # Set Suite Variable  @{PUSERNAME_U13_list}   ${PUSERNAME_U13}
 
-    Set Suite Variable  ${PUser13_EMAIL}   ${P_Email}${PUSERNAME_U13}.ynwtest@netvarth.com
+    Set Suite Variable  ${PUser13_EMAIL}   ${P_Email}${PUSERNAME_U13}.${test_mail}
     Set Suite Variable  @{PUser13_EMAIL_list}   ${PUser13_EMAIL}
 
     # Set Test Variable  @{PushMSG_Num_list}   ${PUSERNAME_U1}
@@ -436,7 +436,7 @@ JD-TC-GetNotificationSettings_of_User-6
     Set Suite Variable  ${PUSERNAME_U14}  
     # Set Suite Variable  @{PUSERNAME_U14_list}   ${PUSERNAME_U14}
 
-    Set Suite Variable  ${PUser14_EMAIL}   ${P_Email}${PUSERNAME_U14}.ynwtest@netvarth.com
+    Set Suite Variable  ${PUser14_EMAIL}   ${P_Email}${PUSERNAME_U14}.${test_mail}
     Set Suite Variable  @{PUser14_EMAIL_list}   ${PUser14_EMAIL}
 
     # Set Test Variable  @{PushMSG_Num_list}   ${PUSERNAME_U1}
@@ -489,7 +489,7 @@ JD-TC-GetNotificationSettings_of_User-7
     Set Suite Variable  ${PUSERNAME_U15}  
     # Set Suite Variable  @{PUSERNAME_U15_list}   ${PUSERNAME_U15}
 
-    Set Suite Variable  ${PUser15_EMAIL}   ${P_Email}${PUSERNAME_U15}.ynwtest@netvarth.com
+    Set Suite Variable  ${PUser15_EMAIL}   ${P_Email}${PUSERNAME_U15}.${test_mail}
     Set Suite Variable  @{PUser15_EMAIL_list}   ${PUser15_EMAIL}
     # Set Test Variable  @{PushMSG_Num_list}   ${PUSERNAME_U1}
     ${MSG_Ph1}=  Create Dictionary   number=${PUSERNAME_U15}   countryCode=${countryCode_CC1}
@@ -873,8 +873,8 @@ JD-TC-GetNotificationSettings_of_User-15
     ${PUSERNAME_SMS_list}=  create List    ${MSG_Ph1}   ${MSG_Ph2}
     Set Suite Variable  @{PUSERNAME_SMS_list}
 
-    Set Suite Variable  ${PUser15_EMAIL}   ${P_Email}${PUSERNAME_U15}.ynwtest@netvarth.com
-    Set Suite Variable  ${PUser25_EMAIL}   ${P_Email}${PUSERNAME_U25}.ynwtest@netvarth.com
+    Set Suite Variable  ${PUser15_EMAIL}   ${P_Email}${PUSERNAME_U15}.${test_mail}
+    Set Suite Variable  ${PUser25_EMAIL}   ${P_Email}${PUSERNAME_U25}.${test_mail}
     Set Suite Variable  @{PUser_EMAIL2_list}   ${PUser15_EMAIL}  ${PUser25_EMAIL}
     # Set Suite Variable  @{PushMSG_Num2_list}   ${PUSERNAME_U1}  ${PUSERNAME_U2}
     ${PushMSG1}=  Create Dictionary   number=${PUSERNAME_U1}   countryCode=${countryCode_CC1}
@@ -1173,7 +1173,7 @@ JD-TC-GetNotificationSettings_of_User-UH6
     Set Suite Variable  ${dob1}
     ${pin}=  get_pincode
 
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U20}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U20}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U20}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U20}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u40_id1}  ${resp.json()}

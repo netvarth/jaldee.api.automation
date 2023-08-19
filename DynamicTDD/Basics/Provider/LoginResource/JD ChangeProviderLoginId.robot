@@ -25,7 +25,7 @@ JD-TC-ChangeProviderLoginId-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${mail}=   FakerLibrary.word
-    ${PUSEREMAIL18}=  Set Variable  ${P_Email}${mail}.ynwtest@netvarth.com
+    ${PUSEREMAIL18}=  Set Variable  ${P_Email}${mail}.${test_mail}
     Set Suite Variable  ${PUSEREMAIL18}
     ${resp}=  Send Verify Login   ${PUSEREMAIL18}
     Log   ${resp.json()}
@@ -166,7 +166,7 @@ JD-TC-ChangeProviderLoginId-CLEAR
     ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     ${mail}=   FakerLibrary.word
-    ${PUSEREMAIL17}=  Set Variable  ${P_Email}${mail}.ynwtest@netvarth.com
+    ${PUSEREMAIL17}=  Set Variable  ${P_Email}${mail}.${test_mail}
     Set Suite Variable            ${PUSEREMAIL17}
     ${resp}=  Send Verify Login   ${PUSEREMAIL17} 
     Should Be Equal As Strings    ${resp.status_code}  200

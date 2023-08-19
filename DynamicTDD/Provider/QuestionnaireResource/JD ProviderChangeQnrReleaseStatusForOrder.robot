@@ -248,7 +248,7 @@ JD-TC-ProviderChangeQnrReleaseStatus-1
     ${DAY1}=  db.get_date
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME21}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -462,7 +462,7 @@ JD-TC-ProviderChangeQnrReleaseStatus--UH3
     ${DAY1}=  add_date   12
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME21}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -625,7 +625,7 @@ JD-TC-ProviderChangeQnrReleaseStatus-UH4
     ${DAY1}=  add_date   12
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname1}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME26}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME26}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME26}    firstName=${fname1}   lastName=${lname1}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}

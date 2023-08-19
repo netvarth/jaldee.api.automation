@@ -124,7 +124,7 @@ JD-TC-GetAvailableJcashById-2
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname}${CUSERPH1}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH1}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH1}  1
@@ -241,7 +241,7 @@ JD-TC-GetAvailableJcashById-3
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname}${CUSERPH1}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH1}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname1}  ${lastname1}  ${address}  ${CUSERPH1}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH1}  1

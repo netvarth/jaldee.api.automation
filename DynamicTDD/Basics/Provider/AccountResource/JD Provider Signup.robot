@@ -72,11 +72,11 @@ JD-TC-Provider_Signup-3
     ${ph2}=  Evaluate  ${PUSERNAME}+5666557
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.ynwtest@netvarth.com  ${d3}  ${sd3}  ${ph2}   3
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.${test_mail}  ${d3}  ${sd3}  ${ph2}   3
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Activation  ${firstname}${P_Email}.ynwtest@netvarth.com  0
+    ${resp}=  Account Activation  ${firstname}${P_Email}.${test_mail}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${firstname}${P_Email}.ynwtest@netvarth.com  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${firstname}${P_Email}.${test_mail}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Provider Login  ${ph2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -141,7 +141,7 @@ JD-TC-Provider Signup-UH4
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
 
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.ynwtest@netvarth.com  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}  countryCode=${countryCode}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.${test_mail}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}  countryCode=${countryCode}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -162,7 +162,7 @@ JD-TC-Provider Signup-UH5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.ynwtest@netvarth.com
+    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH3_EMAIL}  countryCode=${countryCodes[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -201,7 +201,7 @@ JD-TC-Provider Signup-UH5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.ynwtest@netvarth.com  ${d1}  ${sd1}  ${CUSERPH3}  ${licid}  countryCode=${countryCodes[1]}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.${test_mail}  ${d1}  ${sd1}  ${CUSERPH3}  ${licid}  countryCode=${countryCodes[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -278,7 +278,7 @@ JD-TC-Provider Signup-4
     ${whpnum}=  Evaluate  ${PUSERPH0}+356245
     ${tlgnum}=  Evaluate  ${PUSERPH0}+356345
 
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${User1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${User1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -288,7 +288,7 @@ JD-TC-Provider Signup-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  
     ...   mobileNo=${User1}  dob=${dob1}  gender=${Genderlist[0]}  
-    ...   userType=${userType[0]}  status=ACTIVE  email=${P_Email}${User1}.ynwtest@netvarth.com  
+    ...   userType=${userType[0]}  status=ACTIVE  email=${P_Email}${User1}.${test_mail}  
     ...   state=${state1}  deptId=${dep_id}  subdomain=${userSubDomain}
     ${NeededString}=    Fetch From Left    ${city1}    (
     ${Lower_city1} = 	Convert To Lower Case 	${NeededString}
@@ -351,7 +351,7 @@ JD-TC-Provider Signup-4
     # ${name3}=  FakerLibrary.name
     # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${User1}.ynwtest@netvarth.com  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${User1}.${test_mail}  ${views}
     # ${bs}=  FakerLibrary.bs
     # ${city}=   get_place
     # ${latti}=  get_latitude
@@ -436,7 +436,7 @@ JD-TC-Provider Signup-5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.ynwtest@netvarth.com
+    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH3_EMAIL}   countryCode=${countryCodes[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}     422
@@ -460,7 +460,7 @@ JD-TC-Provider Signup-5
     # ${address}=  FakerLibrary.address
     # ${dob}=  FakerLibrary.Date
     # ${gender}    Random Element    ${Genderlist}
-    # ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code2}.ynwtest@netvarth.com
+    # ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code2}.${test_mail}
     # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH3_EMAIL}   countryCode=${countryCodes[0]}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -531,7 +531,7 @@ JD-TC-Provider Signup-5
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -599,7 +599,7 @@ JD-TC-Provider Signup-UH6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.ynwtest@netvarth.com  ${domain}  ${sub_domains}  ${PUSERPH0}  ${licid}  countryCode=${countryCodes[1]}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.${test_mail}  ${domain}  ${sub_domains}  ${PUSERPH0}  ${licid}  countryCode=${countryCodes[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.status_code}  422
@@ -631,7 +631,7 @@ JD-TC-Provider Signup-UH6
     # ${name3}=  FakerLibrary.name
     # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERPH0}.${test_mail}  ${views}
     # ${bs}=  FakerLibrary.bs
     # ${city}=   get_place
     # ${latti}=  get_latitude
@@ -704,7 +704,7 @@ JD-TC-Provider Signup-UH7
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.ynwtest@netvarth.com  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}  countryCode=${EMPTY}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.${test_mail}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}  countryCode=${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${COUNTRY_CODEREQUIRED}"
@@ -778,7 +778,7 @@ JD-TC-Provider Signup-UH8
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.ynwtest@netvarth.com  ${d1}  ${sd1}  ${CUSERPH0}  ${licid}  countryCode=${countryCodes[1]}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.${test_mail}  ${d1}  ${sd1}  ${CUSERPH0}  ${licid}  countryCode=${countryCodes[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.status_code}  422
@@ -809,7 +809,7 @@ JD-TC-Provider Signup-7
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.ynwtest@netvarth.com  ${d1}  ${sd1}  ${PUSERNAME37}  ${licid}  countryCode=${country_code}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${firstname}${P_Email}.${test_mail}  ${d1}  ${sd1}  ${PUSERNAME37}  ${licid}  countryCode=${country_code}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

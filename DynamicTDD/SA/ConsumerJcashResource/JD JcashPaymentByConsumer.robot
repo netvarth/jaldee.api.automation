@@ -236,7 +236,7 @@ JD-TC-JcashPaymentByConsumer-1
     # ${address}=  FakerLibrary.address
     # ${dob}=  FakerLibrary.Date
     # ${gender}    Random Element    ${Genderlist}
-    # ${CUSERMAIL2}=   Set Variable  ${C_Email}ph2424.ynwtest@netvarth.com
+    # ${CUSERMAIL2}=   Set Variable  ${C_Email}ph2424.${test_mail}
     # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -262,7 +262,7 @@ JD-TC-JcashPaymentByConsumer-1
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+76068
-    Set Test Variable  ${email}  ${firstname}${CUSERPH1}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH1}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH1}  1
@@ -543,7 +543,7 @@ JD-TC-JcashPaymentByConsumer-2
     # ${address}=  FakerLibrary.address
     # ${dob}=  FakerLibrary.Date
     # ${gender}    Random Element    ${Genderlist}
-    # ${CUSERMAIL2}=   Set Variable  ${C_Email}ph2487.ynwtest@netvarth.com
+    # ${CUSERMAIL2}=   Set Variable  ${C_Email}ph2487.${test_mail}
     # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH2}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -570,7 +570,7 @@ JD-TC-JcashPaymentByConsumer-2
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+76068
-    Set Test Variable  ${email}  ${firstname}${CUSERPH2}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH2}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH2}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH2}  1
@@ -747,7 +747,7 @@ JD-TC-JcashPaymentByConsumer-3
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME150}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME150}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -928,7 +928,7 @@ JD-TC-JcashPaymentByConsumer-3
     # ${address}=  FakerLibrary.address
     # ${dob}=  FakerLibrary.Date
     # ${gender}    Random Element    ${Genderlist}
-    # ${CUSERMAIL2}=   Set Variable  ${C_Email}ph2407.ynwtest@netvarth.com
+    # ${CUSERMAIL2}=   Set Variable  ${C_Email}ph2407.${test_mail}
     # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -954,7 +954,7 @@ JD-TC-JcashPaymentByConsumer-3
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+76068
-    Set Test Variable  ${email}  ${firstname}${CUSERPH3}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH3}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH3}  1
@@ -992,7 +992,7 @@ JD-TC-JcashPaymentByConsumer-3
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1004,7 +1004,7 @@ JD-TC-JcashPaymentByConsumer-3
     ${country_code}    Convert To Integer  ${country_code}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}  
    
@@ -1144,7 +1144,7 @@ JD-TC-JcashPaymentByConsumer-4
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph20.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph20.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1354,7 +1354,7 @@ JD-TC-JcashPaymentByConsumer-5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH5}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH5}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH5}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1598,7 +1598,7 @@ JD-TC-JcashPaymentByConsumer-6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH6}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH6}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH6}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1641,7 +1641,7 @@ JD-TC-JcashPaymentByConsumer-6
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1652,7 +1652,7 @@ JD-TC-JcashPaymentByConsumer-6
     ${country_code}    Convert To Integer  ${country_code}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     
     ${item1_total}=  Evaluate  ${item_quantity1} * ${promoPrice1}
     ${totalTaxAmount}=  Evaluate  ${item1_total} * ${gstpercentage[3]} / 100
@@ -1850,7 +1850,7 @@ JD-TC-JcashPaymentByConsumer-7
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2027,7 +2027,7 @@ JD-TC-JcashPaymentByConsumer-8
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH4}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH4}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2273,7 +2273,7 @@ JD-TC-JcashPaymentByConsumer-9
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH5}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH5}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH5}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2568,7 +2568,7 @@ JD-TC-JcashPaymentByConsumer-10
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH6}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH6}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH6}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2609,7 +2609,7 @@ JD-TC-JcashPaymentByConsumer-10
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2620,7 +2620,7 @@ JD-TC-JcashPaymentByConsumer-10
     ${country_code}    Convert To Integer  ${country_code}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     
     ${item1_total}=  Evaluate  ${item_quantity1} * ${promoPrice1}
     ${totalTaxAmount}=  Evaluate  ${item1_total} * ${gstpercentage[3]} / 100
@@ -2877,7 +2877,7 @@ JD-TC-JcashPaymentByConsumer-11
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3023,7 +3023,7 @@ JD-TC-JcashPaymentByConsumer-12
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3254,7 +3254,7 @@ JD-TC-JcashPaymentByConsumer-13
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3488,7 +3488,7 @@ JD-TC-JcashPaymentByConsumer-14
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH2}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH2}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH2}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3659,7 +3659,7 @@ JD-TC-JcashPaymentByConsumer-15
     
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME106}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME106}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -3825,7 +3825,7 @@ JD-TC-JcashPaymentByConsumer-15
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH3}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH3}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3868,7 +3868,7 @@ JD-TC-JcashPaymentByConsumer-15
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -3879,7 +3879,7 @@ JD-TC-JcashPaymentByConsumer-15
     ${country_code}    Convert To Integer  ${country_code}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     
     ${item1_total}=  Evaluate  ${item_quantity1} * ${promoPrice1}
@@ -4004,7 +4004,7 @@ JD-TC-JcashPaymentByConsumer-16
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH3}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH3}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4050,7 +4050,7 @@ JD-TC-JcashPaymentByConsumer-16
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
 
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -4416,7 +4416,7 @@ JD-TC-JcashPaymentByConsumer-17
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4789,7 +4789,7 @@ JD-TC-JcashPaymentByConsumer-clear
 #     ${address}=  FakerLibrary.address
 #     ${dob}=  FakerLibrary.Date
 #     ${gender}    Random Element    ${Genderlist}
-#     ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+#     ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
 #     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4940,7 +4940,7 @@ JD-TC-JcashPaymentByConsumer-3
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph2424.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph2424.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

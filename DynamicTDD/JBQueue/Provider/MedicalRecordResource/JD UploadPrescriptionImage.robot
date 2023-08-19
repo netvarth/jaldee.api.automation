@@ -65,7 +65,7 @@ JD-TC-Uploadprescription-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -126,7 +126,7 @@ JD-TC-Uploadprescription-1
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     # ${ph3}=  Evaluate  ${PUSERNAME230}+72002
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME1}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -251,7 +251,7 @@ JD-TC-Uploadprescription-2
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -441,7 +441,7 @@ JD-TC-Uploadprescription-UH4
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME2}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

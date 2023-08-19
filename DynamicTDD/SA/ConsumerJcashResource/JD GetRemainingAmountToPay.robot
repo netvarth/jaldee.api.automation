@@ -163,7 +163,7 @@ JD-TC-GetRemainingAmountToPay-1
     # ${address}=  FakerLibrary.address
     # ${dob}=  FakerLibrary.Date
     # ${gender}    Random Element    ${Genderlist}
-    # ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname_C0}${CUSERPH0}.ynwtest@netvarth.com
+    # ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname_C0}${CUSERPH0}.${test_mail}
     # ${resp}=  Consumer SignUp  ${firstname_C0}  ${lastname_C0}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -194,7 +194,7 @@ JD-TC-GetRemainingAmountToPay-1
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname_C0}${CUSERPH0}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname_C0}${CUSERPH0}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname_C0}  ${lastname_C0}  ${address}  ${CUSERPH0}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH0}  1
@@ -229,7 +229,7 @@ JD-TC-GetRemainingAmountToPay-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME47}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME47}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -460,7 +460,7 @@ JD-TC-GetRemainingAmountToPay-3
     # ${address}=  FakerLibrary.address
     # ${dob}=  FakerLibrary.Date
     # ${gender}    Random Element    ${Genderlist}
-    # ${CUSERPH2_EMAIL}=   Set Variable  ${C_Email}${lastname_C0}${CUSERPH2}.ynwtest@netvarth.com
+    # ${CUSERPH2_EMAIL}=   Set Variable  ${C_Email}${lastname_C0}${CUSERPH2}.${test_mail}
     # ${resp}=  Consumer SignUp  ${firstname_C0}  ${lastname_C0}  ${address}  ${CUSERPH2}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -491,7 +491,7 @@ JD-TC-GetRemainingAmountToPay-3
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname_C0}${CUSERPH2}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname_C0}${CUSERPH2}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname_C0}  ${lastname_C0}  ${address}  ${CUSERPH2}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH2}  1
@@ -583,7 +583,7 @@ JD-TC-GetRemainingAmountToPay-4
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname_C1}${CUSERPH1}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname_C1}${CUSERPH1}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname_C1}  ${lastname_C1}  ${address}  ${CUSERPH1}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH1}  1
@@ -815,7 +815,7 @@ JD-TC-GetRemainingAmountToPay-5
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname_C3}${CUSERPH3}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname_C3}${CUSERPH3}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname_C3}  ${lastname_C3}  ${address}  ${CUSERPH3}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH3}  1

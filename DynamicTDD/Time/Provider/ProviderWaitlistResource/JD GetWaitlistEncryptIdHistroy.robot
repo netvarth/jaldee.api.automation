@@ -57,7 +57,7 @@ JD-TC-GetWaitlistEncryptedIDHistory-1
     ${lastname}=  FakerLibrary.last_name
     ${PC_number}=   Random Int  min=100   max=1000
     ${ph1}=  Evaluate  ${CUSERNAME2}+${PC_number}
-    Set Test Variable  ${email2}  ${firstname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph1}  ${EMPTY}

@@ -41,9 +41,9 @@ JD-TC-Get SalesChannelById1
     ${pri_ph}=  Evaluate  ${PUSERNAME}+30134
     ${alt_ph1}=  Evaluate  ${PUSERNAME}+1008006
     ${alt_ph2}=  Evaluate  ${PUSERNAME}+1008007
-    ${pri_email}=    Set Variable  ${contact_lname}.ynwtest@netvarth.com
-    ${alt_email1}=  Set Variable   ${contact_fname}.ynwtest@netvarth.com
-    ${alt_email2}=  Set Variable   ${contact_lname}.ynwtest@netvarth.com
+    ${pri_email}=    Set Variable  ${contact_lname}.${test_mail}
+    ${alt_email1}=  Set Variable   ${contact_fname}.${test_mail}
+    ${alt_email2}=  Set Variable   ${contact_lname}.${test_mail}
     ${private_note}=   FakerLibrary.sentence
     ${model_code}=    FakerLibrary.Word
     ${kycDoneBy}=   FakerLibrary.name

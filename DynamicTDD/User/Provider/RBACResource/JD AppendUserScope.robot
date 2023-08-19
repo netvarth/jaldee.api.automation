@@ -993,7 +993,7 @@ JD-TC-AppendUserScope-10
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable   ${custid}    ${resp.json()[0]['id']}
     Set Test Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Test Variable    ${email}  ${lastname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${lastname}${C_Email}.${test_mail}
 
     ${resp}=    Generate Loan Application Otp for Phone Number    ${phone}  ${countryCodes[0]}
     Log  ${resp.content}
@@ -1383,7 +1383,7 @@ JD-TC-AppendUserScope-11
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable   ${custid}    ${resp.json()[0]['id']}
     Set Test Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Test Variable    ${email}  ${lastname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${lastname}${C_Email}.${test_mail}
 
     ${resp}=    Generate Loan Application Otp for Phone Number    ${phone}  ${countryCodes[0]}
     Log  ${resp.content}

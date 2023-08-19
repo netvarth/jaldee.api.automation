@@ -109,7 +109,7 @@ JD-TC-SubSubdomainLevelAnalytics-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -1584,7 +1584,7 @@ JD-TC-SubdomainLevelAnalytics-11
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME200}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME200}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1720,7 +1720,7 @@ JD-TC-SubdomainLevelAnalytics-11
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
         Set Test Variable   ${CUSERPH${a}}   ${CUSERPH}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1731,7 +1731,7 @@ JD-TC-SubdomainLevelAnalytics-11
         ${country_code}    Convert To Integer  ${country_code}
         ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${EMPTY_List}=  Create List
         Set Suite Variable  ${EMPTY_List}
 
@@ -1789,7 +1789,7 @@ JD-TC-SubdomainLevelAnalytics-11
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
         Set Test Variable   ${CUSERPH${a}}   ${CUSERPH}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1800,7 +1800,7 @@ JD-TC-SubdomainLevelAnalytics-11
         ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
         Set Suite Variable  ${item_quantity1}
         ${firstname}=  FakerLibrary.first_name
-        Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${orderNote}=  FakerLibrary.Sentence   nb_words=5
         Set Suite Variable  ${orderNote}
 
@@ -1901,7 +1901,7 @@ JD-TC-SubdomainLevelAnalytics-12
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME200}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME200}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2030,7 +2030,7 @@ JD-TC-SubdomainLevelAnalytics-12
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
         Set Test Variable   ${CUSERPH${a}}   ${CUSERPH}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2041,7 +2041,7 @@ JD-TC-SubdomainLevelAnalytics-12
         ${country_code}    Convert To Integer  ${country_code}
         ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${EMPTY_List}=  Create List
         Set Suite Variable  ${EMPTY_List}
 
@@ -2099,7 +2099,7 @@ JD-TC-SubdomainLevelAnalytics-12
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
         Set Test Variable   ${CUSERPH${a}}   ${CUSERPH}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2110,7 +2110,7 @@ JD-TC-SubdomainLevelAnalytics-12
         ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
         Set Suite Variable  ${item_quantity1}
         ${firstname}=  FakerLibrary.first_name
-        Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${orderNote}=  FakerLibrary.Sentence   nb_words=5
         Set Suite Variable  ${orderNote}
 
@@ -2277,7 +2277,7 @@ JD-TC-SubdomainLevelAnalytics-13
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME200}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME200}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2406,7 +2406,7 @@ JD-TC-SubdomainLevelAnalytics-13
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
         Set Test Variable   ${CUSERPH${a}}   ${CUSERPH}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2417,7 +2417,7 @@ JD-TC-SubdomainLevelAnalytics-13
         ${country_code}    Convert To Integer  ${country_code}
         ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${EMPTY_List}=  Create List
         Set Suite Variable  ${EMPTY_List}
 
@@ -2475,7 +2475,7 @@ JD-TC-SubdomainLevelAnalytics-13
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
         Set Test Variable   ${CUSERPH${a}}   ${CUSERPH}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2486,7 +2486,7 @@ JD-TC-SubdomainLevelAnalytics-13
         ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
         Set Suite Variable  ${item_quantity1}
         ${firstname}=  FakerLibrary.first_name
-        Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${orderNote}=  FakerLibrary.Sentence   nb_words=5
         Set Suite Variable  ${orderNote}
 
@@ -2653,7 +2653,7 @@ JD-TC-SubdomainLevelAnalytics-14
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME200}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME200}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2782,7 +2782,7 @@ JD-TC-SubdomainLevelAnalytics-14
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
         Set Test Variable   ${CUSERPH${a}}   ${CUSERPH}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2793,7 +2793,7 @@ JD-TC-SubdomainLevelAnalytics-14
         ${country_code}    Convert To Integer  ${country_code}
         ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${EMPTY_List}=  Create List
         Set Suite Variable  ${EMPTY_List}
 
@@ -2851,7 +2851,7 @@ JD-TC-SubdomainLevelAnalytics-14
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
         Set Test Variable   ${CUSERPH${a}}   ${CUSERPH}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH${a}}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2862,7 +2862,7 @@ JD-TC-SubdomainLevelAnalytics-14
         ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
         Set Suite Variable  ${item_quantity1}
         ${firstname}=  FakerLibrary.first_name
-        Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${orderNote}=  FakerLibrary.Sentence   nb_words=5
         Set Suite Variable  ${orderNote}
 
@@ -3070,7 +3070,7 @@ JD-TC-SubdomainLevelAnalytics-15
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -3274,7 +3274,7 @@ JD-TC-SubdomainLevelAnalytics-15
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76060
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Activation  ${PUSERNAME_N}  1
@@ -3424,7 +3424,7 @@ JD-TC-SubdomainLevelAnalytics-16
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -3624,7 +3624,7 @@ JD-TC-SubdomainLevelAnalytics-16
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76068
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${PUSERNAME_N}  1
@@ -3810,7 +3810,7 @@ JD-TC-SubdomainLevelAnalytics-17
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76068
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
     ${resp}=  iphone App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  iphone App Consumer Activation  ${PUSERNAME_N}  1
@@ -4004,7 +4004,7 @@ JD-TC-SubdomainLevelAnalytics-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude

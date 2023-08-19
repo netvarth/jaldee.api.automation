@@ -216,7 +216,7 @@ JD-TC-Delete Item-UH1
 #     ${name3}=  FakerLibrary.name
 #     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
 #     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-#     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com  ${views}
+#     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERPH0}.${test_mail}  ${views}
 #     ${bs}=  FakerLibrary.bs
 #     ${city}=   get_place
 #     ${latti}=  get_latitude
@@ -238,7 +238,7 @@ JD-TC-Delete Item-UH1
 
 #     ${firstname}=  FakerLibrary.first_name
 #      ${lastname}=  FakerLibrary.last_name
-#      Set Test Variable  ${email2}  ${firstname}${C_Email}.ynwtest@netvarth.com
+#      Set Test Variable  ${email2}  ${firstname}${C_Email}.${test_mail}
 #      ${gender}=  Random Element    ${Genderlist}
 #      ${dob}=  FakerLibrary.Date
 #      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME1}  ${EMPTY}
@@ -285,7 +285,7 @@ JD-TC-Delete Item-UH1
 #     ${lastname}=  FakerLibrary.last_name
 #     ${dob}=  FakerLibrary.Date
 #     ${ph2}=  Evaluate  ${PUSERNAME5}+61005
-#     Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+#     Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
 #     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${Genderlist[0]}  ${dob}  ${ph2}   ${EMPTY}
 #     Set Suite Variable  ${cid}  ${resp.json()}
 #     Log  ${resp.json()}
@@ -330,7 +330,7 @@ JD-TC-Delete Item-UH1
 #     ${lastname}=  FakerLibrary.last_name
 #     ${dob}=  FakerLibrary.Date
 #     ${ph2}=  Evaluate  ${PUSERNAME225}+71015
-#     Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+#     Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
 #     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${Genderlist[0]}  ${dob}  ${CUSERNAME5}   ${EMPTY}
 #     Set Suite Variable  ${cid1}  ${resp.json()}
 #     Log  ${resp.json()}

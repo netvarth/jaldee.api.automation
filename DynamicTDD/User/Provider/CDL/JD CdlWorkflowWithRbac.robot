@@ -864,7 +864,7 @@ JD-TC-MafilWorkflow-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -1062,7 +1062,7 @@ JD-TC-MafilWorkflow-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.${test_mail}
     
     ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
     Log  ${resp.content}
@@ -1777,7 +1777,7 @@ JD-TC-MafilWorkflow-3
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME1}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME1}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}    
     Log   ${resp.json()}
@@ -1874,7 +1874,7 @@ JD-TC-MafilWorkflow-3
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME2}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME2}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
     Log   ${resp.json()}
@@ -1897,7 +1897,7 @@ JD-TC-MafilWorkflow-3
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME3}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME3}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
     Log   ${resp.json()}
@@ -1922,7 +1922,7 @@ JD-TC-MafilWorkflow-3
     
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME4}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME4}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME4}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}    
     Log   ${resp.json()}
@@ -2040,7 +2040,7 @@ JD-TC-MafilWorkflow-3
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -2196,7 +2196,7 @@ JD-TC-MafilWorkflow-3
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.${test_mail}
     
     ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
     Log  ${resp.content}
@@ -2657,7 +2657,7 @@ JD-TC-MafilWorkflow-4
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME1}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME1}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}    
     Log   ${resp.json()}
@@ -2748,7 +2748,7 @@ JD-TC-MafilWorkflow-4
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME2}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME2}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
     Log   ${resp.json()}
@@ -2771,7 +2771,7 @@ JD-TC-MafilWorkflow-4
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME3}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME3}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
     Log   ${resp.json()}
@@ -2796,7 +2796,7 @@ JD-TC-MafilWorkflow-4
     
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME4}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME4}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME4}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}    
     Log   ${resp.json()}
@@ -2954,7 +2954,7 @@ JD-TC-MafilWorkflow-4
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.${test_mail}
     
     ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
     Log  ${resp.content}
@@ -3791,7 +3791,7 @@ JD-TC-MafilWorkflow-5
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -3946,7 +3946,7 @@ JD-TC-MafilWorkflow-5
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.${test_mail}
     
     ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
     Log  ${resp.content}
@@ -4847,7 +4847,7 @@ JD-TC-MafilWorkflow-5
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -5041,7 +5041,7 @@ JD-TC-MafilWorkflow-5
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
     ${firstname_A}=    FakerLibrary.name
-    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.${test_mail}
     
     ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
     Log  ${resp.content}
@@ -5242,7 +5242,7 @@ JD-TC-MafilWorkflow-5
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    Set Test Variable    ${email}  ${customerLastName}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${customerLastName}${C_Email}.${test_mail}
 
     ${resp}=  Generate Otp for co-applicant Email     ${loanid}    ${loanuid}   ${email}  
     Log  ${resp.content}

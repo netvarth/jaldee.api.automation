@@ -82,7 +82,7 @@ JD-TC-CreateBusinessProfile-1
 #     Set Suite Variable  ${ph_nos1}
 #     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
 #     Set Suite Variable  ${ph_nos2}
-#     ${emails1}=  Emails  ${name3}  Email  ${companySuffix}${P_Email}.ynwtest@netvarth.com  ${views}
+#     ${emails1}=  Emails  ${name3}  Email  ${companySuffix}${P_Email}.${test_mail}  ${views}
 #     Set Suite Variable  ${emails1}
 #     ${resp}=  Create Business Profile without details  ${EMPTY}  ${EMPTY}   ${companySuffix}  ${ph_nos1}  ${ph_nos2}  ${emails1}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -345,7 +345,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d1}
 #     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
 #     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-#     Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${companySuffix}${P_Email}.ynwtest@netvarth.com
+#     Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${companySuffix}${P_Email}.${test_mail}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
@@ -374,7 +374,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d1}
 #     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
 #     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-#     Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${companySuffix}${P_Email}.ynwtest@netvarth.com
+#     Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${companySuffix}${P_Email}.${test_mail}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
@@ -424,7 +424,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d1}
 #     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
 #     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-#     Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${companySuffix}${P_Email}.ynwtest@netvarth.com
+#     Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${companySuffix}${P_Email}.${test_mail}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
 #     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}

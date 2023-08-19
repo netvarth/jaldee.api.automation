@@ -93,7 +93,7 @@ JD-TC-Update JDN Settings-1
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+852
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}850.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}850.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -240,7 +240,7 @@ JD-TC-Update JDN Settings-3
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+862
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}860.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}860.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name

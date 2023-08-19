@@ -80,7 +80,7 @@ JD-TC-GetUsersByDepartment-1
      Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -113,7 +113,7 @@ JD-TC-GetUsersByDepartment-1
      Set Test Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -122,9 +122,9 @@ JD-TC-GetUsersByDepartment-1
     ${resp}=  Get Users By Department  ${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  1  id=${u_id}  firstName=${firstname}  lastName=${lastname}   primaryMobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com    state=${state}
+    Verify Response List  ${resp}  1  id=${u_id}  firstName=${firstname}  lastName=${lastname}   primaryMobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U1}.${test_mail}    state=${state}
     Should Be Equal As Strings  ${resp.json()[1]['city']}      ${city}    ignore_case=True
-    Verify Response List  ${resp}  2  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}   primaryMobileNo=${PUSERNAME_U2}  dob=${dob1}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   state=${state1}
+    Verify Response List  ${resp}  2  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}   primaryMobileNo=${PUSERNAME_U2}  dob=${dob1}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U2}.${test_mail}   state=${state1}
     Should Be Equal As Strings  ${resp.json()[2]['city']}      ${city1}    ignore_case=True
      
 JD-TC-GetUsersByDepartment-2
@@ -174,7 +174,7 @@ JD-TC-GetUsersByDepartment-2
      Set Suite Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
      
-     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U4}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${PUSERNAME_U4}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -182,7 +182,7 @@ JD-TC-GetUsersByDepartment-2
     ${resp}=  Get Users By Department  ${depid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname3}  lastName=${lastname3}   primaryMobileNo=${PUSERNAME_U4}  dob=${dob3}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com    state=${state3}
+    Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname3}  lastName=${lastname3}   primaryMobileNo=${PUSERNAME_U4}  dob=${dob3}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U4}.${test_mail}    state=${state3}
     Should Be Equal As Strings  ${resp.json()[0]['city']}      ${city3}    ignore_case=True
 
     ${resp}=  Get Users By Department  ${dep_id}
@@ -225,7 +225,7 @@ JD-TC-GetUsersByDepartment-3
      Set Suite Variable  ${state4}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Suite Variable  ${pin4}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-     ${resp}=  Create User  ${firstname4}  ${lastname4}  ${dob4}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[0]}  ${pin4}  ${countryCodes[0]}  ${PUSERNAME_U5}  ${dep_id1}  ${sud_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname4}  ${lastname4}  ${dob4}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[0]}  ${pin4}  ${countryCodes[0]}  ${PUSERNAME_U5}  ${dep_id1}  ${sud_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id4}  ${resp.json()}
@@ -234,10 +234,10 @@ JD-TC-GetUsersByDepartment-3
      ${resp}=  Get Users By Department  ${depid1}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname3}  lastName=${lastname3}   primaryMobileNo=${PUSERNAME_U4}  dob=${dob3}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com    state=${state3}
+     Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname3}  lastName=${lastname3}   primaryMobileNo=${PUSERNAME_U4}  dob=${dob3}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U4}.${test_mail}    state=${state3}
     Should Be Equal As Strings  ${resp.json()[0]['city']}      ${city3}    ignore_case=True
 
-     Verify Response List  ${resp}  1  id=${u_id4}  firstName=${firstname4}  lastName=${lastname4}   primaryMobileNo=${PUSERNAME_U5}  dob=${dob4}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com    state=${state4}
+     Verify Response List  ${resp}  1  id=${u_id4}  firstName=${firstname4}  lastName=${lastname4}   primaryMobileNo=${PUSERNAME_U5}  dob=${dob4}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U5}.${test_mail}    state=${state4}
     Should Be Equal As Strings  ${resp.json()[1]['city']}      ${city4}    ignore_case=True
 
 
@@ -254,10 +254,10 @@ JD-TC-GetUsersByDepartment-4
      ${resp}=  Get Users By Department  ${depid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname3}  lastName=${lastname3}  primaryMobileNo=${PUSERNAME_U4}  dob=${dob3}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U4}.ynwtest@netvarth.com  city=${city3}  state=${state3}
+    Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname3}  lastName=${lastname3}  primaryMobileNo=${PUSERNAME_U4}  dob=${dob3}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U4}.${test_mail}  city=${city3}  state=${state3}
     Should Be Equal As Strings  ${resp.json()[0]['city']}      ${city3}    ignore_case=True
 
-    Verify Response List  ${resp}  1  id=${u_id4}  firstName=${firstname4}  lastName=${lastname4}  primaryMobileNo=${PUSERNAME_U5}  dob=${dob4}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com  city=${city4}  state=${state4}
+    Verify Response List  ${resp}  1  id=${u_id4}  firstName=${firstname4}  lastName=${lastname4}  primaryMobileNo=${PUSERNAME_U5}  dob=${dob4}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U5}.${test_mail}  city=${city4}  state=${state4}
     Should Be Equal As Strings  ${resp.json()[1]['city']}      ${city4}    ignore_case=True
 
 

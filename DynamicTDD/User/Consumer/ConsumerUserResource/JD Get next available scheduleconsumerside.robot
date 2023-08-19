@@ -106,7 +106,7 @@ JD-TC-NextAvailableSchedule consumer -1
     clear_service   ${PUSERPH9}
     clear_appt_schedule   ${PUSERPH9}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH9}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH9}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH9}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH9}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -115,7 +115,7 @@ JD-TC-NextAvailableSchedule consumer -1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH9}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH9}.ynwtest@netvarth.com   deptId=${dep_id} 
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH9}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH9}.${test_mail}   deptId=${dep_id} 
 
     ${resp}=    Get Locations
     Log   ${resp.content}
@@ -693,7 +693,7 @@ JD-TC-NextAvailableSchedule consumer -UH4
     clear_service   ${PUSERPH11}
     clear_appt_schedule   ${PUSERPH11}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH11}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH11}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH11}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH11}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -703,7 +703,7 @@ JD-TC-NextAvailableSchedule consumer -UH4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH11}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH11}.ynwtest@netvarth.com  deptId=${dep_id} 
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH11}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH11}.${test_mail}  deptId=${dep_id} 
 
     ${resp}=    Get Locations
     Log   ${resp.content}
@@ -816,7 +816,7 @@ JD-TC-NextAvailableSchedule consumer -UH5
    # ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
    # Run Keyword If  '${resp}' != '${None}'   Log   ${resp.content}
    
-  #  ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH11}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH11}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+  #  ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH11}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH11}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
    # Log   ${resp.content}
    # Should Be Equal As Strings  ${resp.status_code}  200
    # Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -935,7 +935,7 @@ JD-TC-NextAvailableSchedule consumer -UH6
    # ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
    # Run Keyword If  '${resp}' != '${None}'   Log   ${resp.content}
    
-  #  ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH11}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH11}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+  #  ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH11}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH11}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
    # Log   ${resp.content}
    # Should Be Equal As Strings  ${resp.status_code}  200
    # Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -1071,7 +1071,7 @@ JD-TC-NextAvailableSchedule consumer -UH7
     clear_service   ${PUSERPH9}
     clear_appt_schedule   ${PUSERPH9}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH9}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH9}  ${dep_id2}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH9}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH9}  ${dep_id2}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -1080,7 +1080,7 @@ JD-TC-NextAvailableSchedule consumer -UH7
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-  #  Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH9}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH9}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id} 
+  #  Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH9}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH9}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id} 
 
     ${resp}=    Get Locations
     Log   ${resp.content}
@@ -1212,7 +1212,7 @@ JD-TC-NextAvailableSchedule consumer -UH8
     clear_service   ${PUSERPH9}
     clear_appt_schedule   ${PUSERPH9}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH9}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH9}  ${dep_id2}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH9}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH9}  ${dep_id2}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -1221,7 +1221,7 @@ JD-TC-NextAvailableSchedule consumer -UH8
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-  #  Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH9}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH9}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id} 
+  #  Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH9}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH9}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id} 
 
     ${resp}=    Get Locations
     Log   ${resp.content}
@@ -1382,7 +1382,7 @@ JD-TC-NextAvailableSchedule consumer -5
     clear_service   ${PUSERPH13}
     clear_appt_schedule   ${PUSERPH13}
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH13}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH13}  ${dep_id3}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH13}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH13}  ${dep_id3}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -1391,9 +1391,9 @@ JD-TC-NextAvailableSchedule consumer -5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-  #  Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH9}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH9}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id} 
+  #  Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH9}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH9}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id} 
      
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH9}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH9}  ${dep_id2}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH9}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERPH9}  ${dep_id2}  ${EMPTY}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}

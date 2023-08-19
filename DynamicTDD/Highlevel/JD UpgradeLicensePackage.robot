@@ -30,7 +30,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 # ${ph8}         1021667632
 # ${ph9}         1894490093
 # ${ph10}        1021667633
-# ${email2}      pb.ynwtest@netvarth.com
+# ${email2}      pb.${test_mail}
 # ${sTime}         06:00 AM
 # ${eTime}	     08:00 AM
 # ${longi}            89.524764

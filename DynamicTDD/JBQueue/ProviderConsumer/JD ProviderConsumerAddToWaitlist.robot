@@ -87,7 +87,7 @@ JD-TC-Add To WaitlistByConsumer-1
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
     
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -137,7 +137,7 @@ JD-TC-Add To WaitlistByConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2317,7 +2317,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+100100306
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}ph303.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}ph303.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -2365,7 +2365,7 @@ JD-TC-Add To WaitlistByConsumer-UH16
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH3}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH3}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2866,7 +2866,7 @@ JD-TC-Add To WaitlistByConsumer-24
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -2905,7 +2905,7 @@ JD-TC-Add To WaitlistByConsumer-24
     ${resp}=  Update Specialization  ${spec}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH8}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH8}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}

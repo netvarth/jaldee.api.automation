@@ -79,7 +79,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     # Should Be Equal As Strings      ${resp.status_code}  200
     # Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    # Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    # Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -178,7 +178,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${consumernumber}  
     Log  ${resp.content}

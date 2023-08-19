@@ -121,7 +121,7 @@ JD-TC-Disable Item-UH1
 #     ${gender}=  Random Element    ${Genderlist}
 #     ${dob}=  FakerLibrary.Date
 #     ${ph2}=  Evaluate  ${PUSERNAME18}+71016
-#     Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+#     Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
 #     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME4}   ${EMPTY}
 #     Set Suite Variable  ${cid}  ${resp.json()}
 #     Log  ${resp.json()}

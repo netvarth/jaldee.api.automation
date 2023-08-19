@@ -129,7 +129,7 @@ JD-TC-GetDonations-1
         Set Suite Variable  ${don_amt2}
         ${don_amt_float2}=  twodigitfloat  ${don_amt2}
 
-        ${resp}=  Donation By Consumer  ${con_id}  ${sid2}  ${loc_id1}  ${don_amt2}  ${donar_fname}  ${donar_lname}  ${address}  ${ph1}  ${P_Email}${donar_fname}.ynwtest@netvarth.com  ${acc_id}
+        ${resp}=  Donation By Consumer  ${con_id}  ${sid2}  ${loc_id1}  ${don_amt2}  ${donar_fname}  ${donar_lname}  ${address}  ${ph1}  ${P_Email}${donar_fname}.${test_mail}  ${acc_id}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200  
         
@@ -174,7 +174,7 @@ JD-TC-GetDonations-1
         Should Be Equal As Strings  ${resp.json()[0]['donor']['lastName']}  ${donar_lname}
         Should Be Equal As Strings  ${resp.json()[0]['donor']['address']}  ${address}
         Should Be Equal As Strings  ${resp.json()[0]['donor']['phoneNo']}  ${ph1}
-        Should Be Equal As Strings  ${resp.json()[0]['donor']['email']}  ${P_Email}${donar_fname}.ynwtest@netvarth.com
+        Should Be Equal As Strings  ${resp.json()[0]['donor']['email']}  ${P_Email}${donar_fname}.${test_mail}
 
 JD-TC-GetDonations-2
         [Documentation]   Consumer Get Donations Count
@@ -195,7 +195,7 @@ JD-TC-GetDonations-2
         Should Be Equal As Strings  ${resp.json()[0]['donor']['lastName']}  ${donar_lname}
         Should Be Equal As Strings  ${resp.json()[0]['donor']['address']}  ${address}
         Should Be Equal As Strings  ${resp.json()[0]['donor']['phoneNo']}  ${ph1}
-        Should Be Equal As Strings  ${resp.json()[0]['donor']['email']}  ${P_Email}${donar_fname}.ynwtest@netvarth.com
+        Should Be Equal As Strings  ${resp.json()[0]['donor']['email']}  ${P_Email}${donar_fname}.${test_mail}
 
 JD-TC-GetDonations-3
         [Documentation]   Consumer Get Donations Count
@@ -228,7 +228,7 @@ JD-TC-GetDonations-4
         Should Be Equal As Strings  ${resp.json()[0]['donor']['lastName']}  ${donar_lname}
         Should Be Equal As Strings  ${resp.json()[0]['donor']['address']}  ${address}
         Should Be Equal As Strings  ${resp.json()[0]['donor']['phoneNo']}  ${ph1}
-        Should Be Equal As Strings  ${resp.json()[0]['donor']['email']}  ${P_Email}${donar_fname}.ynwtest@netvarth.com
+        Should Be Equal As Strings  ${resp.json()[0]['donor']['email']}  ${P_Email}${donar_fname}.${test_mail}
 
 JD-TC-GetDonations-5
         [Documentation]   Consumer Get Donations Count
@@ -262,7 +262,7 @@ JD-TC-GetDonations-6
         Should Be Equal As Strings  ${resp.json()[0]['donor']['lastName']}  ${donar_lname}
         Should Be Equal As Strings  ${resp.json()[0]['donor']['address']}  ${address}
         Should Be Equal As Strings  ${resp.json()[0]['donor']['phoneNo']}  ${ph1}
-        Should Be Equal As Strings  ${resp.json()[0]['donor']['email']}  ${P_Email}${donar_fname}.ynwtest@netvarth.com
+        Should Be Equal As Strings  ${resp.json()[0]['donor']['email']}  ${P_Email}${donar_fname}.${test_mail}
 
 JD-TC-GetDonations-7
         [Documentation]   Consumer get donations but there is no donation done by consumer

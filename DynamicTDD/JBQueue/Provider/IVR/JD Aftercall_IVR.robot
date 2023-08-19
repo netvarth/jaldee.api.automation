@@ -265,7 +265,7 @@ JD-TC-Aftercall_IVR-1
     Set Suite Variable  ${agent_id}
     ${agent_name}    FakerLibrary.firstName
     Set Suite Variable  ${agent_name} 
-    Set Suite Variable  ${email}  ${agent_name}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${agent_name}.${test_mail}
     ${agent_ex}    FakerLibrary.Random Number
     Set Suite Variable  ${agent_ex}
     ${numb}    Random Number 	digits=5 

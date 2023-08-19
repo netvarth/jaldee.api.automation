@@ -107,7 +107,7 @@ JD-TC-Partner Pan Validation For Loan Application-1
     ${dob}=  Convert To String  ${dob}
     ${firstName}=    FakerLibrary.firstName
     ${lastName}=    FakerLibrary.lastName
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}

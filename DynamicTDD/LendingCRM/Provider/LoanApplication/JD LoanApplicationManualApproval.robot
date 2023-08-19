@@ -140,7 +140,7 @@ JD-TC-Loan Application Manual Approval-1
     ${dob}=  Convert To String  ${dob}
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${phone} 
     Log  ${resp.content}
@@ -278,7 +278,7 @@ JD-TC-Loan Application Manual Approval-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${P_phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${P_phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -716,7 +716,7 @@ JD-TC-Loan Application Manual Approval-2
     ${dob}=  Convert To String  ${dob}
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${phone1} 
     Log  ${resp.content}
@@ -854,7 +854,7 @@ JD-TC-Loan Application Manual Approval-2
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${P_phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${P_phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -1176,7 +1176,7 @@ JD-TC-Loan Application Manual Approval-3
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  Get Loan Application SP Internal Status   
     Log  ${resp.content}
@@ -1365,7 +1365,7 @@ JD-TC-Loan Application Manual Approval-4
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
 
     ${resp}=    Generate Loan Application Otp for Phone Number    ${phone}  ${cc}
@@ -1584,7 +1584,7 @@ JD-TC-Loan Application Manual Approval-UH1
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
 
     ${resp}=    Generate Loan Application Otp for Phone Number    ${phone}  ${cc}

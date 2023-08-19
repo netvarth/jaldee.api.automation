@@ -875,7 +875,7 @@ JD-TC-CreateHoliday-11
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME100}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME100}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1016,7 +1016,7 @@ JD-TC-CreateHoliday-11
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1027,7 +1027,7 @@ JD-TC-CreateHoliday-11
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email0}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Suite Variable  ${email0}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -1112,7 +1112,7 @@ JD-TC-CreateHoliday-12
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1122,7 +1122,7 @@ JD-TC-CreateHoliday-12
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME5}   ${PASSWORD}
     Log   ${resp.json()}
@@ -1237,7 +1237,7 @@ JD-TC-CreateHoliday-UH10
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
       ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-      ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.ynwtest@netvarth.com
+      ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
       ${views}=  Evaluate  random.choice($Views)  random
       ${name1}=  FakerLibrary.name
       ${name2}=  FakerLibrary.name

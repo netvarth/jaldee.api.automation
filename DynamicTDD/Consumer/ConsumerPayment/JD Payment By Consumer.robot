@@ -87,7 +87,7 @@ JD-TC-Payment By Consumer-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -126,7 +126,7 @@ JD-TC-Payment By Consumer-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH2}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH2}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -345,7 +345,7 @@ JD-TC-Payment By Consumer-2
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -384,7 +384,7 @@ JD-TC-Payment By Consumer-2
     ${resp}=  Update Specialization  ${spec}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH1}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH1}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2100,7 +2100,7 @@ JD-TC-Payment By Consumer-13
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -2139,7 +2139,7 @@ JD-TC-Payment By Consumer-13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH2}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH2}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2780,7 +2780,7 @@ JD-TC-Payment By Consumer-2
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -2815,7 +2815,7 @@ JD-TC-Payment By Consumer-2
     ${resp}=  Update Specialization  ${spec}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH3}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH3}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}

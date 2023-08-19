@@ -40,7 +40,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME130}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME130}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -251,7 +251,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -262,7 +262,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Test Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -297,7 +297,7 @@ JD-TC-CreateOrderForElectronicDelivery-2
     ${DAY1}=  add_date   12
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -334,7 +334,7 @@ JD-TC-CreateOrderForElectronicDelivery-3
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Test Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -367,7 +367,7 @@ JD-TC-CreateOrderForElectronicDelivery-4
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -398,7 +398,7 @@ JD-TC-CreateOrderForElectronicDelivery-5
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -429,7 +429,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH1
     ${DAY1}=  add_date   16
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -454,7 +454,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH2
     ${DAY1}=  subtract_date   1
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -478,7 +478,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH3
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -534,7 +534,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH6
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Test Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -564,7 +564,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH7
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -588,7 +588,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH8
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -627,7 +627,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH9
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Test Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 

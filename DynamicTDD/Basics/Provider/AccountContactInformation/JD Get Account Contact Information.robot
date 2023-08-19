@@ -133,7 +133,7 @@ JD-TC-Get Account Contact information-1
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${email}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -345,7 +345,7 @@ JD-TC-Get Account Contact information-2
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id1}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${email}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -456,7 +456,7 @@ JD-TC-Get Account Contact information-3
     ${lastname}=  FakerLibrary.last_name
     # ${highest_package}=  get_highest_license_pkg
     ${lowest_package}=   get_lowest_license_pkg
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${email}  ${d1}  ${sd}  ${PUSERNAME0}   ${lowest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -551,7 +551,7 @@ JD-TC-Get Account Contact information-3
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    # Set Test Variable  ${email1}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    # Set Test Variable  ${email1}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id2}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${email}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -595,7 +595,7 @@ JD-TC-Get Account Contact information-4
     ${lastname}=  FakerLibrary.last_name
     # ${highest_package}=  get_highest_license_pkg
     ${lowest_package}=   get_lowest_license_pkg
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME2}${C_Email}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${email}  ${d1}  ${sd}  ${PUSERNAME2}   ${lowest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -700,7 +700,7 @@ JD-TC-Get Account Contact information-4
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    # Set Test Variable  ${email1}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    # Set Test Variable  ${email1}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id2}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -744,7 +744,7 @@ JD-TC-Get Account Contact information-5
     ${lastname}=  FakerLibrary.last_name
     # ${highest_package}=  get_highest_license_pkg
     ${lowest_package}=   get_lowest_license_pkg
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME2}${C_Email}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${email}  ${d1}  ${sd}  ${PUSERNAME3}   ${lowest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -839,7 +839,7 @@ JD-TC-Get Account Contact information-5
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email1}  ${firstname1}${PUSERNAME3}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email1}  ${firstname1}${PUSERNAME3}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id2}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${email1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -994,7 +994,7 @@ JD-TC-Get Account Contact information-6
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id3}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${email}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1183,14 +1183,14 @@ JD-TC-Get Account Contact information-7
     ${whpnum}=  Evaluate  ${PUSERNAME_U1}+335243
     ${tlgnum}=  Evaluate  ${PUSERNAME_U1}+335143
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U1}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U1}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${userSubDomain}
 
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -1213,7 +1213,7 @@ JD-TC-Get Account Contact information-7
     comment   WAITLISTADD
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}     ${EventType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}      ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}      ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERNAME_U1} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERNAME_U1} 
@@ -1223,7 +1223,7 @@ JD-TC-Get Account Contact information-7
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}     ${EventType[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}      ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}      ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERNAME_U1} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERNAME_U1} 
@@ -1233,7 +1233,7 @@ JD-TC-Get Account Contact information-7
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[2]['eventType']}     ${EventType[7]}
-    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}      ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}      ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_U1} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERNAME_U1} 
@@ -1243,7 +1243,7 @@ JD-TC-Get Account Contact information-7
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp.json()[3]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}     ${EventType[8]}
-    Should Be Equal As Strings  ${resp.json()[3]['email'][0]}      ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[3]['email'][0]}      ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${PUSERNAME_U1} 
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${PUSERNAME_U1} 
@@ -1275,7 +1275,7 @@ JD-TC-Get Account Contact information-8
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Suite Variable  ${email_L}  ${firstname1}${PUSERNAME15}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_L}  ${firstname1}${PUSERNAME15}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id4}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${email_L}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

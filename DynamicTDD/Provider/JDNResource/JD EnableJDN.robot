@@ -61,7 +61,7 @@ JD-TC-EnableJDN-1
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -229,7 +229,7 @@ JD-TC-EnableJDN-3
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+506
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -540,7 +540,7 @@ JD-TC-EnableJDN-8
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+665
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH5}.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH5}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name

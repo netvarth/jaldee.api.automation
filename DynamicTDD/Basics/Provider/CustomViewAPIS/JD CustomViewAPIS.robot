@@ -163,7 +163,7 @@ JD-TC-CustomViewAPIS-1
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 
    
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${BUSER0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${BUSER0}  ${dep_id02}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${BUSER0}  ${countryCodes[0]}  ${BUSER0}  
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${BUSER0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${BUSER0}  ${dep_id02}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${BUSER0}  ${countryCodes[0]}  ${BUSER0}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -173,7 +173,7 @@ JD-TC-CustomViewAPIS-1
     ${state1} = 	Convert To Lower Case 	${state}
     ${state2} = 	Convert To Lower Case 	${resp.json()['state']}
     Should Be Equal As Strings   ${state1}  ${state2}
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${BUSER0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${BUSER0}.ynwtest@netvarth.com  
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${BUSER0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${BUSER0}.${test_mail}  
     ...  deptId=${depid02}  subdomain=${userSubDomain}  
     # ...  address=${address}  city=${district}  locationName=${city}  state=${state}  
     
@@ -338,14 +338,14 @@ JD-TC-CustomViewAPIS-2
     ${state}=  FakerLibrary.state
     Set Suite Variable  ${state}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${MUSERNAME0}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${MUSERNAME0}.ynwtest@netvarth.com  ${location}  ${state}  ${depid02}  ${sub_domain_id}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${MUSERNAME0}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${MUSERNAME0}.${test_mail}  ${location}  ${state}  ${depid02}  ${sub_domain_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  mobileNo=${MUSERNAME0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${MUSERNAME0}.ynwtest@netvarth.com  city=${location}  state=${state}  deptId=${depid02}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  mobileNo=${MUSERNAME0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${MUSERNAME0}.${test_mail}  city=${location}  state=${state}  deptId=${depid02}  subdomain=${userSubDomain}
 
     ${name}=   FakerLibrary.word
     ${resp}=   Create CustomeView   ${name}  ${bool[1]}  ${depid02}  ${sid05}  ${que_id1}  ${u_id}

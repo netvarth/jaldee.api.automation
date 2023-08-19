@@ -101,7 +101,7 @@ JD-TC-create_partner_user-1
     Set Suite Variable    ${firstName}
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable    ${lastName}
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
@@ -249,7 +249,7 @@ JD-TC-create_partner_user-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${P_phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${P_phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -446,7 +446,7 @@ JD-TC-create_partner_user-UH1
     Set Suite Variable    ${firstName1}
     ${lastName1}=    FakerLibrary.lastName
     Set Suite Variable    ${lastName1}
-    Set Suite Variable  ${email1}  ${firstName1}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email1}  ${firstName1}${C_Email}.${test_mail}
 
     ${inv}    FakerLibrary.Random Number
 
@@ -473,7 +473,7 @@ JD-TC-create_partner_user-UH2
     Set Suite Variable    ${firstName1}
     ${lastName1}=    FakerLibrary.lastName
     Set Suite Variable    ${lastName1}
-    Set Suite Variable  ${email1}  ${firstName1}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email1}  ${firstName1}${C_Email}.${test_mail}
 
     ${resp}=    Create Partner User     ${empty}    ${Puid1}       ${firstName1}     ${countryCodes[0]}     ${mobileNob}    ${email1}    ${bool[0]}    ${bool[0]}     ${bool[1]}
     Log  ${resp.content}
@@ -497,7 +497,7 @@ JD-TC-create_partner_user-UH3
     Set Suite Variable    ${firstName1}
     ${lastName1}=    FakerLibrary.lastName
     Set Suite Variable    ${lastName1}
-    Set Suite Variable  ${email1}  ${firstName1}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email1}  ${firstName1}${C_Email}.${test_mail}
 
     ${inv}    FakerLibrary.Random Number
 

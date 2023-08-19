@@ -164,7 +164,7 @@ SignUp Account
         # ${Temp1}=  Evaluate   ${PC}+1
         # ${PC}=  Set Variable If   '${is_corp}' == 'False'  ${Temp1}  ${PC}
         # Set Global Variable  ${PC} 
-        Set Test Variable  ${email_id}  ${B_Email}${BUSER}.ynwtest@netvarth.com
+        Set Test Variable  ${email_id}  ${B_Email}${BUSER}.${test_mail}
 
         ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
         Log  ${resp.json()}
@@ -188,7 +188,7 @@ SignUp Account
         ${name3}=  FakerLibrary.name
         ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-        ${emails1}=  Emails  ${name3}  Email  ${B_EMAIL}${US}.ynwtest@netvarth.com  ${views}
+        ${emails1}=  Emails  ${name3}  Email  ${B_EMAIL}${US}.${test_mail}  ${views}
         ${bs}=  FakerLibrary.bs
         # ${city}=   get_place
         # ${latti}=  get_latitude
@@ -215,7 +215,7 @@ SignUp Account
         Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
         Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
         Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${B_EMAIL}${US}.ynwtest@netvarth.com
+        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${B_EMAIL}${US}.${test_mail}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}

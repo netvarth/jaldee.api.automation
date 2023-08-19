@@ -81,7 +81,7 @@ JD-TC-GetUsers-1
      ${whpnum}=  Evaluate  ${PUSERNAME}+316215
      ${tlgnum}=  Evaluate  ${PUSERNAME}+316315
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -119,7 +119,7 @@ JD-TC-GetUsers-1
      Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Suite Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-     ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[2]}  ${pin2}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[2]}  ${pin2}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -140,7 +140,7 @@ JD-TC-GetUsers-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}     
@@ -173,7 +173,7 @@ JD-TC-GetUsers-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city2}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state2}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
@@ -194,7 +194,7 @@ JD-TC-GetUsers-2
      ${resp}=  Get User    userType-eq=${userType[2]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200  
-     Verify Response List  ${resp}  0  id=${u_id2}  firstName=${firstname2}   mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com  city=${city2}  state=${state2}  deptId=0  subdomain=0  admin=${bool[1]}  
+     Verify Response List  ${resp}  0  id=${u_id2}  firstName=${firstname2}   mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.${test_mail}  city=${city2}  state=${state2}  deptId=0  subdomain=0  admin=${bool[1]}  
 
 JD-TC-GetUsers-3
      [Documentation]  Get users by firstName
@@ -206,7 +206,7 @@ JD-TC-GetUsers-3
      ${resp}=  Get User    firstName-eq=${firstname} 
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200 
-     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}   
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}   
 
 JD-TC-GetUsers-4
      [Documentation]  Get users by lastName
@@ -218,7 +218,7 @@ JD-TC-GetUsers-4
      ${resp}=  Get User    lastName-eq=${lastname} 
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}    
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}    
 
 JD-TC-GetUsers-5
      [Documentation]  Get users by status
@@ -242,7 +242,7 @@ JD-TC-GetUsers-5
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}     
@@ -269,7 +269,7 @@ JD-TC-GetUsers-5
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city2}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state2}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0
@@ -300,7 +300,7 @@ JD-TC-GetUsers-6
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
      #    ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}     
@@ -330,7 +330,7 @@ JD-TC-GetUsers-7
      ${resp}=  Get User    primaryMobileNo-eq=${PUSERNAME_U1}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200  
-     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  
 
 JD-TC-GetUsers-9
      [Documentation]  Get users by state
@@ -342,7 +342,7 @@ JD-TC-GetUsers-9
      ${resp}=  Get User    state-eq=${state}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200  
-     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  
 
 JD-TC-GetUsers-10
      [Documentation]  Get users by isAdmin
@@ -354,7 +354,7 @@ JD-TC-GetUsers-10
      ${resp}=  Get User    isAdmin-eq=${bool[0]}  
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200 
-     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}    mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}   
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}    mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}   
 
 
 JD-TC-GetUsers-11
@@ -367,7 +367,7 @@ JD-TC-GetUsers-11
      ${resp}=  Get User    city-eq=${city2}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Verify Response List  ${resp}  0  id=${u_id2}  firstName=${firstname2}  lastName=${lastname2}   mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com  city=${city2}  state=${state2}  deptId=0  subdomain=0  admin=${bool[1]}   
+     Verify Response List  ${resp}  0  id=${u_id2}  firstName=${firstname2}  lastName=${lastname2}   mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.${test_mail}  city=${city2}  state=${state2}  deptId=0  subdomain=0  admin=${bool[1]}   
 
 JD-TC-GetUsers-12
      [Documentation]  Get users by pinCode
@@ -379,7 +379,7 @@ JD-TC-GetUsers-12
      ${resp}=  Get User    pinCode-eq=${pin} 
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200  
-     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}   
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}   
    
 JD-TC-GetUsers -UH1
      [Documentation]   Provider get Users without login      
@@ -466,7 +466,7 @@ JD-TC-GetUsers-13
     ${whpnum5}=  Evaluate  ${MUSERNAME67}+336245
     ${tlgnum5}=  Evaluate  ${MUSERNAME67}+336345
 
-    ${resp}=  Create User  ${firstname5}  ${lastname5}  ${dob5}  ${Genderlist[0]}  ${P_Email}${ph5}.ynwtest@netvarth.com   ${userType[0]}  ${pin5}  ${countryCodes[1]}  ${ph5}  ${dep_id1}  ${sub_domain_id}  ${bool[1]}  ${countryCodes[1]}  ${whpnum5}  ${countryCodes[1]}  ${tlgnum5}
+    ${resp}=  Create User  ${firstname5}  ${lastname5}  ${dob5}  ${Genderlist[0]}  ${P_Email}${ph5}.${test_mail}   ${userType[0]}  ${pin5}  ${countryCodes[1]}  ${ph5}  ${dep_id1}  ${sub_domain_id}  ${bool[1]}  ${countryCodes[1]}  ${whpnum5}  ${countryCodes[1]}  ${tlgnum5}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id5}  ${resp.json()}
@@ -483,7 +483,7 @@ JD-TC-GetUsers-13
     ${dob6}=  FakerLibrary.Date
     ${pin6}=  get_pincode
     
-    ${resp}=  Create User  ${firstname6}  ${lastname6}  ${dob6}  ${Genderlist[0]}  ${P_Email}${ph6}.ynwtest@netvarth.com   ${userType[1]}  ${pin6}  ${countryCodes[1]}  ${ph6}  ${dep_id1}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname6}  ${lastname6}  ${dob6}  ${Genderlist[0]}  ${P_Email}${ph6}.${test_mail}   ${userType[1]}  ${pin6}  ${countryCodes[1]}  ${ph6}  ${dep_id1}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id6}  ${resp.json()}
@@ -495,7 +495,7 @@ JD-TC-GetUsers-13
     ${dob7}=  FakerLibrary.Date
     ${pin7}=  get_pincode
    
-    ${resp}=  Create User  ${firstname7}  ${lastname7}  ${dob7}  ${Genderlist[0]}  ${P_Email}${ph7}.ynwtest@netvarth.com   ${userType[2]}  ${pin7}  ${countryCodes[1]}  ${ph7}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname7}  ${lastname7}  ${dob7}  ${Genderlist[0]}  ${P_Email}${ph7}.${test_mail}   ${userType[2]}  ${pin7}  ${countryCodes[1]}  ${ph7}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id7}  ${resp.json()}
@@ -503,4 +503,4 @@ JD-TC-GetUsers-13
     ${resp}=  Get User    userType-eq=${userType[0]}   isAdmin-eq=${bool[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    Verify Response List  ${resp}  0  id=${u_id5}  firstName=${firstname5}  lastName=${lastname5}   mobileNo=${ph5}  dob=${dob5}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${ph5}.ynwtest@netvarth.com  city=${city5}  state=${state5}  deptId=${dep_id1}  subdomain=${sub_domain_id}  admin=${bool[1]}   
+    Verify Response List  ${resp}  0  id=${u_id5}  firstName=${firstname5}  lastName=${lastname5}   mobileNo=${ph5}  dob=${dob5}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${ph5}.${test_mail}  city=${city5}  state=${state5}  deptId=${dep_id1}  subdomain=${sub_domain_id}  admin=${bool[1]}   

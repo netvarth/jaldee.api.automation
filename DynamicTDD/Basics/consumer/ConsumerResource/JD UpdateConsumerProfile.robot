@@ -69,7 +69,7 @@ JD-TC-UpConsumerProf-2
 
 JD-TC-UpConsumerProf-3
     [Documentation]   update Consumer profile of a valid Consumer with email id
-    ${CUSERMAIL0}=   Set Variable  ${C_Email}ph401.ynwtest@netvarth.com
+    ${CUSERMAIL0}=   Set Variable  ${C_Email}ph401.${test_mail}
     ${resp}=  ConsumerLogin  ${CUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Consumer Profile With Emailid  ${firstname}  ${lastname}  ${address}  ${dob}  ${gender}  ${CUSERMAIL0}
@@ -90,7 +90,7 @@ JD-TC-UpConsumerProf-4
 
 JD-TC-UpConsumerProf-5
     [Documentation]   update Consumer profile of a valid Consumer with another email id
-    ${CUSERMAIL1}=   Set Variable  ${C_Email}ph402.ynwtest@netvarth.com
+    ${CUSERMAIL1}=   Set Variable  ${C_Email}ph402.${test_mail}
     Set Suite Variable   ${CUSERMAIL1}
     ${resp}=  ConsumerLogin  ${CUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200

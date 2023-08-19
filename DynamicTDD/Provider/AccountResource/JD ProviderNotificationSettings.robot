@@ -43,7 +43,7 @@ JD-TC-ProviderNotificationSettings-1
 
     Set Suite Variable  ${d1}  ${domresp.json()[${dval}]['domain']}
     Set Suite Variable  ${sd1}  ${domresp.json()[${dval}]['subDomains'][${sdval}]['subDomain']}
-    Set Suite Variable  ${EMAIL_id0}   ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Suite Variable  ${EMAIL_id0}   ${P_Email}${PUSERPH0}.${test_mail}
     Log  ${d1}
     Log  ${sd1}
 
@@ -174,7 +174,7 @@ JD-TC-ProviderNotificationSettings-2
 
 # JD-TC-ProviderNotification-1
 #     ${PUSERPH}=  Evaluate  ${PUSERNAME2}+8000
-#     ${PUSEREM}=  Set Variable  ${P_EMAIL}de.ynwtest@netvarth.com
+#     ${PUSEREM}=  Set Variable  ${P_EMAIL}de.${test_mail}
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD 
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
@@ -532,7 +532,7 @@ JD-TC-ProviderNotificationSettings-2
 
 # JD-TC-GetProviderNotification-UH-5
 #     ${PUSERPH}=  Evaluate  ${PUSERNAME4}+7000
-#     ${PUSEREM}=  Set Variable  ${P_EMAIL}de.ynwtest@netvarth.com
+#     ${PUSEREM}=  Set Variable  ${P_EMAIL}de.${test_mail}
 #     [Documentation]  Get Notification  Settings For WAITLISTADD with consumer Login 
 #     ${resp}=  Consumer Login  ${CUSERNAME0}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -547,7 +547,7 @@ JD-TC-ProviderNotificationSettings-2
 
 # JD-TC-GetProviderNotification-UH-6
 #     ${PUSERPH}=  Evaluate  ${PUSERNAME4}+7000
-#     ${PUSEREM}=  Set Variable  ${P_EMAIL}de.ynwtest@netvarth.com
+#     ${PUSEREM}=  Set Variable  ${P_EMAIL}de.${test_mail}
 #     [Documentation]  Get Notification  Settings For WAITLISTCANCEL with consumer Login 
 #     ${resp}=  Consumer Login  ${CUSERNAME0}  ${PASSWORD}
 #     Log  ${resp.json()}

@@ -38,7 +38,7 @@ JD-TC-JD S3-1
     Set Suite Variable  ${ph_nos1} 
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  all  
     Set Suite Variable  ${ph_nos2} 
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs1}.ynwtest@netvarth.com  all
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs1}.${test_mail}  all
     Set Suite Variable  ${emails1}
     ${bs_name}=  FakerLibrary.bs
     Set Suite Variable   ${bs_name}
@@ -85,7 +85,7 @@ JD-TC-JD S3-2
     # Set Suite Variable  ${phoneno1}
     # ${phoneno2}=  Phone Numbers  ${n2}  PhoneNo  ${phon2}  all  
     # Set Suite Variable  ${phoneno2}
-    ${emails1}=  Set Variable  ${P_Email}${bs2}.ynwtest@netvarth.com 
+    ${emails1}=  Set Variable  ${P_Email}${bs2}.${test_mail} 
     ${bs_name1}=  FakerLibrary.bs
     Set Suite Variable   ${bs_name1}
     ${bs_desc1}=  FakerLibrary.bs
@@ -406,7 +406,7 @@ JD-TC-VerifyJD S3-1
     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}        ${domain1}
     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sub_domain1}
     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}             ${name3}
-    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}          ${P_Email}${bs1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}          ${P_Email}${bs1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}       ${name1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}    ${ph1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}       ${name2}
@@ -445,7 +445,7 @@ JD-TC-VerifyJDJD S3-2
     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}        ${domain2}
     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${subdomain2}
     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}             ${n3}
-    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}          ${P_Email}${bs2}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}          ${P_Email}${bs2}.${test_mail}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}       ${n1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}    ${phon1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}       ${n2}

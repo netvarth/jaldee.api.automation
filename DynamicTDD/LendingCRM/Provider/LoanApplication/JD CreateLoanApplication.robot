@@ -93,7 +93,7 @@ JD-TC-CreateLoanApplication-1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -274,7 +274,7 @@ JD-TC-CreateLoanApplication-1
 #     Log  ${resp.content}
 #     Should Be Equal As Strings      ${resp.status_code}  200
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-#     Set Test Variable    ${email}  ${lname1}${C_Email}.ynwtest@netvarth.com
+#     Set Test Variable    ${email}  ${lname1}${C_Email}.${test_mail}
 
 
 #     ${resp}=  categorytype   ${account_id}
@@ -392,7 +392,7 @@ JD-TC-CreateLoanApplication-3
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -501,7 +501,7 @@ JD-TC-CreateLoanApplication-4
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -610,7 +610,7 @@ JD-TC-CreateLoanApplication-5
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -719,7 +719,7 @@ JD-TC-CreateLoanApplication-6
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -828,7 +828,7 @@ JD-TC-CreateLoanApplication-7
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -937,7 +937,7 @@ JD-TC-CreateLoanApplication-8
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1054,7 +1054,7 @@ JD-TC-CreateLoanApplication-9
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1164,7 +1164,7 @@ JD-TC-CreateLoanApplication-10
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1273,7 +1273,7 @@ JD-TC-CreateLoanApplication-UH1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1371,7 +1371,7 @@ JD-TC-CreateLoanApplication-11
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1480,7 +1480,7 @@ JD-TC-CreateLoanApplication-12
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1589,7 +1589,7 @@ JD-TC-CreateLoanApplication-13
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1698,7 +1698,7 @@ JD-TC-CreateLoanApplication-14
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1807,7 +1807,7 @@ JD-TC-CreateLoanApplication-15
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1924,7 +1924,7 @@ JD-TC-CreateLoanApplication-16
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -2033,7 +2033,7 @@ JD-TC-CreateLoanApplication-17
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -2142,7 +2142,7 @@ JD-TC-CreateLoanApplication-18
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -2251,7 +2251,7 @@ JD-TC-CreateLoanApplication-UH2
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -2359,7 +2359,7 @@ JD-TC-CreateLoanApplication-20
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -2468,7 +2468,7 @@ JD-TC-CreateLoanApplication-21
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -2577,7 +2577,7 @@ JD-TC-CreateLoanApplication-22
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -2686,7 +2686,7 @@ JD-TC-CreateLoanApplication-UH3
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     # Set Test Variable    ${countryCodes[0]}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
     
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}

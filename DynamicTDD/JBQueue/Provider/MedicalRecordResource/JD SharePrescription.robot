@@ -83,7 +83,7 @@ JD-TC-Shareprescription-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -173,7 +173,7 @@ JD-TC-Shareprescription-1
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     # ${ph3}=  Evaluate  ${PUSERNAME230}+72002
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME1}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -390,7 +390,7 @@ JD-TC-Shareprescription-2
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -1021,7 +1021,7 @@ JD-TC-Shareprescription-7
 
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${lname}${CUSERNAME8}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${lname}${CUSERNAME8}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${fname}  ${lname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME8}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1435,7 +1435,7 @@ JD-TC-Shareprescription-10
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   get_place
     ${latti}=  get_latitude
@@ -1508,7 +1508,7 @@ JD-TC-Shareprescription-10
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1521,7 +1521,7 @@ JD-TC-Shareprescription-10
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${countryCodes[0]}  ${PUSERNAME_U2}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${countryCodes[0]}  ${PUSERNAME_U2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -1584,7 +1584,7 @@ JD-TC-Shareprescription-10
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME1}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1868,7 +1868,7 @@ JD-TC-Shareprescription-UH3
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME3}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME3}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME3}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1956,7 +1956,7 @@ JD-TC-Shareprescription-UH4
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME2}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2348,7 +2348,7 @@ JD-TC-Shareprescription-11
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     # ${ph3}=  Evaluate  ${PUSERNAME230}+72002
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME12}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME12}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME12}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2445,7 +2445,7 @@ JD-TC-Shareprescription-12
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     # ${ph3}=  Evaluate  ${PUSERNAME230}+72002
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME23}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME23}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME23}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2875,7 +2875,7 @@ JD-TC-Shareprescription-16
 
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${lname}${CUSERNAME16}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${lname}${CUSERNAME16}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${fname}  ${lname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME8}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3257,7 +3257,7 @@ JD-TC-Shareprescription-19
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME2}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3524,7 +3524,7 @@ JD-TC-Shareprescription-UH13
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME3}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME3}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME24}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3606,7 +3606,7 @@ JD-TC-Shareprescription-UH14
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME25}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME25}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME25}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

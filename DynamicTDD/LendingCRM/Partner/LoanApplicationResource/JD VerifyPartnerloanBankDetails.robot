@@ -140,7 +140,7 @@ JD-TC-Verify Partner loan Bank Details-1
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -411,7 +411,7 @@ JD-TC-Verify Partner loan Bank Details-2
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -652,7 +652,7 @@ JD-TC-Verify Partner loan Bank Details-3
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -893,7 +893,7 @@ JD-TC-Verify Partner loan Bank Details-4
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1134,7 +1134,7 @@ JD-TC-Verify Partner loan Bank Details-5
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1375,7 +1375,7 @@ JD-TC-Verify Partner loan Bank Details-6
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1616,7 +1616,7 @@ JD-TC-Verify Partner loan Bank Details-7
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1857,7 +1857,7 @@ JD-TC-Verify Partner loan Bank Details-8
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -2097,7 +2097,7 @@ JD-TC-Verify Partner loan Bank Details-9
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -2338,7 +2338,7 @@ JD-TC-Verify Partner loan Bank Details-10
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -2579,7 +2579,7 @@ JD-TC-Verify Partner loan Bank Details-11
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -2820,7 +2820,7 @@ JD-TC-Verify Partner loan Bank Details-12
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -3061,7 +3061,7 @@ JD-TC-Verify Partner loan Bank Details-13
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -3302,7 +3302,7 @@ JD-TC-Verify Partner loan Bank Details-14
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -3543,7 +3543,7 @@ JD-TC-Verify Partner loan Bank Details-15
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -3784,7 +3784,7 @@ JD-TC-Verify Partner loan Bank Details-16
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -4025,7 +4025,7 @@ JD-TC-Verify Partner loan Bank Details-17
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -4266,7 +4266,7 @@ JD-TC-Verify Partner loan Bank Details-18
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}

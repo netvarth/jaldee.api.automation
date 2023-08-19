@@ -63,7 +63,7 @@ JD-TC-AddCustomer-2
      Set Suite Variable  ${gender1}
      ${ph2}=  Evaluate  ${PUSERNAME230}+86233
      Set Suite Variable  ${ph2}
-     Set Suite Variable  ${email2}  ${firstname1}${ph2}${C_Email}.ynwtest@netvarth.com
+     Set Suite Variable  ${email2}  ${firstname1}${ph2}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname1}  ${lastname1}  ${EMPTY}  ${email2}  ${gender1}  ${dob1}  ${ph2}  ${EMPTY}
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
@@ -104,7 +104,7 @@ JD-TC-AddCustomer-4
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
      ${ph5}=  Evaluate  ${PUSERNAME233}+72004
-     Set Test Variable  ${email}  ${firstname}${ph5}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email}  ${firstname}${ph5}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${ph5}  ${EMPTY}
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
@@ -135,7 +135,7 @@ JD-TC-AddCustomer-5
      ${lastname}=  FakerLibrary.last_name
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
-     Set Test Variable  ${email5}  ${firstname}${PUSERNAME231}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email5}  ${firstname}${PUSERNAME231}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email5}  ${gender}  ${dob}  ${PUSERNAME231}  ${EMPTY}
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -149,7 +149,7 @@ JD-TC-AddCustomer-5
      ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${cid}  ${firstname}  ${lastname}  ${dob}  ${gender1}  ${ph6}
      Should Be Equal As Strings  ${resp.status_code}  200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}
-     Set Test Variable  ${email5}  ${firstname}${ph6}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email5}  ${firstname}${ph6}${C_Email}.${test_mail}
      ${firstname2}=  FakerLibrary.first_name
      ${lastname2}=  FakerLibrary.last_name
      ${dob2}=  FakerLibrary.Date
@@ -178,7 +178,7 @@ JD-TC-AddCustomer-6
      Set Test variable  ${gender}
      ${ph3}=  Evaluate  ${PUSERNAME230}+72002
      Set Suite Variable  ${ph3}
-     Set Test Variable  ${email}  ${firstname}${ph3}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email}  ${firstname}${ph3}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -204,7 +204,7 @@ JD-TC-AddCustomer-7
      ${ph3}=  Evaluate  ${PUSERNAME230}+72004
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
-     Set Test Variable  ${email}  ${firstname1}${ph3}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email}  ${firstname1}${ph3}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname1}  ${lastname1}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
@@ -223,7 +223,7 @@ JD-TC-AddCustomer-8
      ${lastname}=  FakerLibrary.last_name
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
-     Set Test Variable  ${email}  ${firstname}${PUSERNAME231}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email}  ${firstname}${PUSERNAME231}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${PUSERNAME231}  ${EMPTY}
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
@@ -378,7 +378,7 @@ JD-TC-AddCustomer-10
      ${lastname}=  FakerLibrary.last_name
      # ${ph5}=  Evaluate  ${PUSERNAME23}+72085
      ${ph6}=  Evaluate  ${PUSERNAME22}+72088
-     Set Test Variable  ${email2}  ${firstname}${ph6}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email2}  ${firstname}${ph6}${C_Email}.${test_mail}
      ${gender}=  Random Element    ${Genderlist}
      ${dob}=  FakerLibrary.Date
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph6}  ${ph3}
@@ -488,7 +488,7 @@ JD-TC-AddCustomer-11
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${ph5}=  Evaluate  ${PUSERNAME231}+72064
-     Set Test Variable  ${email2}  ${firstname}${ph5}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email2}  ${firstname}${ph5}${C_Email}.${test_mail}
      ${gender}=  Random Element    ${Genderlist}
      ${dob}=  FakerLibrary.Date
      ${m_jid}=  Random Int  min=10  max=50
@@ -586,7 +586,7 @@ JD-TC-AddCustomer-12
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${ph6}=  Evaluate  ${PUSERNAME23}+72078
-     Set Test Variable  ${email2}  ${firstname}${ph6}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email2}  ${firstname}${ph6}${C_Email}.${test_mail}
      ${gender}=  Random Element    ${Genderlist}
      ${dob}=  FakerLibrary.Date
      ${m_jid}=  Random Int  min=51  max=60
@@ -842,7 +842,7 @@ JD-TC-AddCustomer-UH4
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
      ${ph7}=  Evaluate  ${PUSERNAME230}+72006
-     Set Test Variable  ${email6}  ${firstname}${ph7}${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email6}  ${firstname}${ph7}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email6}  ${gender}  ${dob}  ${ph7}  ${EMPTY}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid}  ${resp.json()}
@@ -2293,7 +2293,7 @@ JD-TC-AddCustomer-23
      ${name3}=  FakerLibrary.name
      ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
      ${bs}=  FakerLibrary.bs
      ${city}=   get_place
      ${latti}=  get_latitude
@@ -2825,7 +2825,7 @@ JD-TC-AddCustomer-9
      ${lastname}=  FakerLibrary.last_name
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
-     Set Test Variable  ${email}  ${firstname}231${C_Email}.ynwtest@netvarth.com
+     Set Test Variable  ${email}  ${firstname}231${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${EMPTY}  ${EMPTY}
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200

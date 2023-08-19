@@ -250,7 +250,7 @@ JD-TC-Update_JCash_Offer-3
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname_C0}${CUSERPH0}.ynwtest@netvarth.com
+    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname_C0}${CUSERPH0}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname_C0}  ${lastname_C0}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

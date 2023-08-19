@@ -43,7 +43,7 @@ JD-TC-GetProviderNotificationSettings-1
 
     Set Suite Variable  ${d1}  ${domresp.json()[${dval}]['domain']}
     Set Suite Variable  ${sd1}  ${domresp.json()[${dval}]['subDomains'][${sdval}]['subDomain']}
-    Set Suite Variable  ${EMAIL_id0}   ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Suite Variable  ${EMAIL_id0}   ${P_Email}${PUSERPH0}.${test_mail}
     Log  ${d1}
     Log  ${sd1}
 
@@ -153,7 +153,7 @@ JD-TC-GetProviderNotificationSettings-2
 
     # ${USERPH1}=  Convert To String   ${PUSERPH0}
     Set Suite Variable  ${USERPH1}   ${PUSERPH0}
-    Set Suite Variable  ${PUser_EMAIL2}   ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com
+    Set Suite Variable  ${PUser_EMAIL2}   ${P_Email}${PUSERNAME_U2}.${test_mail}
     Set Suite Variable  @{PUser_EMAIL_list2}   ${PUser_EMAIL2}
     ${PushMSG}=  Create Dictionary   number=${USERPH1}   countryCode=${countryCode_CC1}
     Set Suite Variable  @{PushMSG_Num_list2}    ${PushMSG} 
@@ -921,8 +921,8 @@ JD-TC-GetProviderNotificationSettings-22
     Set Suite Variable  @{SMS_OneNum_list}   ${Ph1}
 
 
-    Set Suite Variable  ${EMAIL1}   ${P_Email}${Phone_Num1}.ynwtest@netvarth.com
-    Set Suite Variable  ${EMAIL2}   ${P_Email}${Phone_Num2}.ynwtest@netvarth.com
+    Set Suite Variable  ${EMAIL1}   ${P_Email}${Phone_Num1}.${test_mail}
+    Set Suite Variable  ${EMAIL2}   ${P_Email}${Phone_Num2}.${test_mail}
     ${TwoEMAIL_list}=  create List  ${EMAIL1}  ${EMAIL2}
     Set Suite Variable  @{TwoEMAIL_list}
     Set Suite Variable  @{OneEMAIL_list}   ${EMAIL1}
@@ -938,7 +938,7 @@ JD-TC-GetProviderNotificationSettings-22
     # Set Suite Variable  @{SMS_Num_list2}    ${MSG_Ph1}  
 
     # Set Suite Variable  ${USERPH1}   ${PUSERPH0}
-    # Set Suite Variable  ${PUser_EMAIL2}   ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com
+    # Set Suite Variable  ${PUser_EMAIL2}   ${P_Email}${PUSERNAME_U2}.${test_mail}
     # Set Suite Variable  @{PUser_EMAIL_list2}   ${PUser_EMAIL2}
     # ${PushMSG}=  Create Dictionary   number=${USERPH1}   countryCode=${countryCodes[0]}
     # Set Suite Variable  @{PushMSG_Num_list2}    ${PushMSG}
@@ -1336,8 +1336,8 @@ JD-TC-GetProviderNotificationSettings-31
     # Set Suite Variable  @{SMS_OneNum_list}   ${Phone_Num1}
 
 
-    # Set Suite Variable  ${EMAIL1}   ${P_Email}${Phone_Num1}.ynwtest@netvarth.com
-    # Set Suite Variable  ${EMAIL2}   ${P_Email}${Phone_Num2}.ynwtest@netvarth.com
+    # Set Suite Variable  ${EMAIL1}   ${P_Email}${Phone_Num1}.${test_mail}
+    # Set Suite Variable  ${EMAIL2}   ${P_Email}${Phone_Num2}.${test_mail}
     # ${TwoEMAIL_list}=  create List  ${EMAIL1}  ${EMAIL2}
     # Set Suite Variable  @{TwoEMAIL_list}
     # Set Suite Variable  @{OneEMAIL_list}   ${EMAIL1}

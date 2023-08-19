@@ -74,7 +74,7 @@ JD-TC-EnableDisableUser-1
      Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -88,7 +88,7 @@ JD-TC-EnableDisableUser-1
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
-     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=INACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com    state=${state}  deptId=${dep_id}   pincode=${pin}
+     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=INACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}    state=${state}  deptId=${dep_id}   pincode=${pin}
      Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
 
      ${resp}=  EnableDisable User  ${u_id}  ${toggle[0]}
@@ -98,7 +98,7 @@ JD-TC-EnableDisableUser-1
      ${resp}=  Get User By Id  ${u_id}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com    state=${state}  deptId=${dep_id}  pincode=${pin}
+     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}    state=${state}  deptId=${dep_id}  pincode=${pin}
      Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
 JD-TC-EnableDisableUser -UH1
      [Documentation]   Provider enable a User without login      

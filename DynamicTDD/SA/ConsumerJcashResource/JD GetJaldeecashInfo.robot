@@ -122,7 +122,7 @@ JD-TC-GetJcashDetails-1
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname}${CUSERPH1}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH1}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH1}  1
@@ -262,7 +262,7 @@ JD-TC-GetJcashDetails-2
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname1}${CUSERPH0}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname1}${CUSERPH0}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname1}  ${lastname1}  ${address}  ${CUSERPH0}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH0}  1
@@ -461,7 +461,7 @@ JD-TC-GetJcashDetails-5
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname}${CUSERPH2}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH2}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH2}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH2}  1
@@ -557,7 +557,7 @@ JD-TC-GetJcashDetails-6
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+760654
-    Set Test Variable  ${email}  ${firstname}${CUSERPH3}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH3}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH3}  1

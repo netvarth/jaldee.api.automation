@@ -47,8 +47,8 @@ JD-TC-DisableOrderSettings-1
     # Set Suite Variable  ${lastname2}
 
     ${provfname}  ${provlname}=  Split String  ${P235_fName}
-    Set Suite Variable  ${email_id235}  ${provfname}.${provlname}.ynwtest@netvarth.com
-    # Set Suite Variable  ${email_id235}  ${PUSERNAME235}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id235}  ${provfname}.${provlname}.${test_mail}
+    # Set Suite Variable  ${email_id235}  ${PUSERNAME235}${C_Email}.${test_mail}
 
     ${resp}=  Update Email   ${pid235}   ${P235_fName}   ${P235_lName}   ${email_id235}
     Log  ${resp.json()}
@@ -108,8 +108,8 @@ JD-TC-DisableOrderSettings-2
     ${ph1}=  Evaluate  ${PUSERNAME28}+1000000000
     ${ph2}=  Evaluate  ${PUSERNAME28}+2000000000
     ${whatsappNo}=  Evaluate  ${PUSERNAME28}+3000000000
-    ${Email1}=   Set Variable  ${fName}${ph1}.ynwtest@netvarth.com
-    ${Email2}=   Set Variable  ${fName}${ph2}.ynwtest@netvarth.com
+    ${Email1}=   Set Variable  ${fName}${ph1}.${test_mail}
+    ${Email2}=   Set Variable  ${fName}${ph2}.${test_mail}
     ${address}=  get_address
 
     ${storeContactInfo}=  Create Dictionary  firstName=${fName}  lastName=${lName}  primCountryCode=+91  phone=${ph1}  secCountryCode=+91   alternatePhone=${ph2}  email=${Email1}  alternateEmail=${Email2}  address=${address}  whatsAppCountryCode=+91  whatsappNo=${whatsappNo} 

@@ -430,7 +430,7 @@ JD-TC-BranchOperationHead-1
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${SOUSERNAME3}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${SOUSERNAME3}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${SOUSERNAME3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
     Log   ${resp.json()}
@@ -505,7 +505,7 @@ JD-TC-BranchOperationHead-1
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${BOHUSERNAME2}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${BOHUSERNAME2}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${BOHUSERNAME2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
     Log   ${resp.json()}
@@ -615,7 +615,7 @@ JD-TC-BranchOperationHead-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -801,7 +801,7 @@ JD-TC-BranchOperationHead-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -1201,7 +1201,7 @@ JD-TC-BranchOperationHead-12
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -1347,7 +1347,7 @@ JD-TC-BranchOperationHead-12
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${dealerfname1}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${dealerfname1}${C_Email}.${test_mail}
     
     ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
     Log  ${resp.content}

@@ -245,7 +245,7 @@ JD-TC-FixedWaitingTime-6
       Set Suite Variable  ${ph_nos1} 
       ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  all  
       Set Suite Variable  ${ph_nos2} 
-      ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs1}.ynwtest@netvarth.com  all
+      ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs1}.${test_mail}  all
       Set Suite Variable  ${emails1}
       ${bs_name}=  FakerLibrary.bs
       Set Suite Variable   ${bs_name}
