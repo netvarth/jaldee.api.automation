@@ -33,10 +33,17 @@ Get branch by license
     FOR   ${a}  IN RANGE  ${length}
             
         ${Branch_PH}=  Set Variable  ${MUSERNAME${a}}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+        
         ${resp}=   Get Active License
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
@@ -55,7 +62,7 @@ JD-TC-Consumer Signup-1
     [Documentation]   Create consumer via qrcode with all valid attributes 
 
     clear_customer   ${PUSERNAME152}
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -83,7 +90,7 @@ JD-TC-Consumer Signup-1
 
     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH0}${\n}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -97,7 +104,7 @@ JD-TC-Consumer Signup-2
     [Documentation]    Create another consumer with phone number which is not activated but have done signup
     
     clear_customer   ${PUSERNAME15}
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -134,7 +141,7 @@ JD-TC-Consumer Signup-2
 
     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,7 +154,7 @@ JD-TC-Consumer Signup-3
     [Documentation]   Create a Consumer with existing provider's phone number
 
     clear_customer   ${PUSERNAME15}
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME15}
@@ -173,7 +180,7 @@ JD-TC-Consumer Signup-3
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -186,7 +193,7 @@ JD-TC-Consumer Signup-4
     [Documentation]   Create consumer with different country code
 
     clear_customer   ${PUSERNAME15}
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -217,7 +224,7 @@ JD-TC-Consumer Signup-4
 
     # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH2}${\n}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -231,7 +238,7 @@ JD-TC-Consumer Signup-4
 JD-TC-Consumer Signup-5
     [Documentation]   sign up a provider consumer as consumer with walkinConsumerBecomesJdCons as false.
     clear_customer   ${PUSERNAME8}
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -312,7 +319,7 @@ JD-TC-Consumer Signup-5
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${PUSERPH0}${\n}
 
-    # ${resp}=  Provider Login  ${buser}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -328,7 +335,7 @@ JD-TC-Consumer Signup-5
     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH0}${\n}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -343,7 +350,7 @@ JD-TC-Consumer Signup-6
     ${licId}  ${licname}=  get_highest_license_pkg
     ${buser}=   Get branch by license   ${licId}
     
-    ${resp}=  Provider Login  ${buser}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -361,9 +368,12 @@ JD-TC-Consumer Signup-6
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -441,7 +451,7 @@ JD-TC-Consumer Signup-6
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${PUSERPH0}${\n}
 
-    # ${resp}=  Provider Login  ${buser}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -453,7 +463,7 @@ JD-TC-Consumer Signup-6
 JD-TC-Consumer Signup-7
     [Documentation]   sign up a provider consumer as consumer after waitlist
     clear_customer   ${PUSERNAME82}
-    ${resp}=  Provider Login  ${PUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -465,9 +475,15 @@ JD-TC-Consumer Signup-7
     clear_location  ${PUSERNAME82}
     clear_queue  ${PUSERNAME82}
     Clear_service  ${PUSERNAME82}
-    ${resp}=  Create Sample Queue
+    ${resp} =  Create Sample Queue
     Set Test Variable  ${s_id}  ${resp['service_id']}
     Set Test Variable  ${qid}   ${resp['queue_id']}
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+100200204
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
@@ -484,7 +500,7 @@ JD-TC-Consumer Signup-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  ${cnote}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
@@ -525,7 +541,7 @@ JD-TC-Consumer Signup-7
 
     # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
 
-    # ${resp}=  Provider Login  ${PUSERNAME82}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -563,7 +579,7 @@ JD-TC-Consumer Signup-UH3
     [Documentation]    signup a consumer with phone number and check provider consumer then try to  add as customer
     
     clear_customer   ${PUSERNAME15}
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -594,7 +610,7 @@ JD-TC-Consumer Signup-UH3
 
     # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -612,7 +628,7 @@ JD-TC-Consumer Signup-UH4
     [Documentation]   Create consumer via qrcode with  9 digit phone number
 
     clear_customer   ${PUSERNAME152}
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

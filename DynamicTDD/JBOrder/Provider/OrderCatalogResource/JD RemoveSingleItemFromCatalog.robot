@@ -27,8 +27,18 @@ ${self}    0
 JD-TC-Remove_Single_Item_From_Catalog-1
     [Documentation]  Create order catalog and Remove Items From Catalog after that
     clear_Item  ${PUSERNAME89}
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     ${displayName1}=   FakerLibrary.name 
     Set Suite Variable  ${displayName1}  
@@ -93,16 +103,16 @@ JD-TC-Remove_Single_Item_From_Catalog-1
     Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[0]}   status=${status[0]}    itemName=${itemName2}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
     Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
 
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -206,7 +216,7 @@ JD-TC-Remove_Single_Item_From_Catalog-2
 
     [Documentation]  Create order catalog using mandatory fields and Remove Items From Catalog after that
    
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName5}=   FakerLibrary.firstname 
@@ -236,7 +246,7 @@ JD-TC-Remove_Single_Item_From_Catalog-3
 
     [Documentation]  Create order catalog using mandatory fields and Remove Items From Catalog after that
    
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName6}=   FakerLibrary.name 
@@ -267,7 +277,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH1
 
     [Documentation]  Try to remove already removed item from catalog
    
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Order Catalog    ${CatalogId66}  
@@ -283,7 +293,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH1
 
 JD-TC-Remove_Single_Item_From_Catalog-UH2
     [Documentation]  Remove items from catalog using invalid catalog_id
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -297,7 +307,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH2
 
 JD-TC-Remove_Single_Item_From_Catalog-UH3
     [Documentation]  Remove items from catalog using invalid item_id
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -336,7 +346,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH5
 JD-TC-Remove_Single_Item_From_Catalog-UH6
     [Documentation]   A provider try to Remove items from catalog of another provider
     clear_Item  ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -349,7 +359,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH6
 
 JD-TC-Remove_Single_Item_From_Catalog-4
     [Documentation]  Remove all Items From Catalog
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName7}=   FakerLibrary.lastname 
@@ -381,9 +391,13 @@ JD-TC-Remove_Single_Item_From_Catalog-4
 
 JD-TC-Remove_Single_Item_From_Catalog-UH7
     [Documentation]    Place an order By Consumer for Home Delivery. After that update catalog item quantity
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     ${accId}=  get_acc_id  ${PUSERNAME89}
 
     ${resp}=  Get Order Settings by account id
@@ -411,7 +425,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   1
+    ${DAY1}=  db.add_timezone_date  ${tz}  1
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -425,7 +439,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH7
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
     
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
@@ -449,7 +463,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -458,7 +472,7 @@ JD-TC-Remove_Single_Item_From_Catalog-UH7
     # clear_service  ${PUSERNAME89}
     # clear_customer   ${PUSERNAME89}
     # clear_Item   ${PUSERNAME89}
-    # ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -495,15 +509,15 @@ JD-TC-Remove_Single_Item_From_Catalog-UH7
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${item_id5}  ${resp.json()}
 
-    # ${startDate}=  get_date
-    # ${endDate}=  add_date  10      
+    # ${startDate}=  db.get_date_by_timezone  ${tz}
+    # ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    # ${startDate1}=  add_date   11
-    # ${endDate1}=  add_date  15 
+    # ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    # ${endDate1}=  db.add_timezone_date  ${tz}  15   
 
     # ${noOfOccurance}=  Random Int  min=0   max=0
-    # ${sTime2}=  add_time  0  15
-    # ${eTime2}=  add_time   3  30   
+    # ${sTime2}=  add_timezone_time  ${tz}  0  15  
+    # ${eTime2}=  add_timezone_time  ${tz}  3  30     
     # ${list}=  Create List  1  2  3  4  5  6  7
     # ${deliveryCharge}=  Random Int  min=1   max=100
     # ${Title}=  FakerLibrary.Sentence   nb_words=2 
@@ -556,9 +570,9 @@ JD-TC-Remove_Single_Item_From_Catalog-UH7
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     
-    # ${DAY1}=  add_date   12
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
-    # # ${sTime1}=  add_time  0  15
+    # # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     # # ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # # ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}

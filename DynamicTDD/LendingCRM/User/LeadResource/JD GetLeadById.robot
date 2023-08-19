@@ -41,7 +41,7 @@ JD-TC-GetLeadById-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${id}  ${resp.json()['id']}
@@ -68,9 +68,21 @@ JD-TC-GetLeadById-1
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -121,7 +133,7 @@ JD-TC-GetLeadById-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -153,7 +165,7 @@ JD-TC-GetLeadById-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -188,7 +200,7 @@ JD-TC-GetLeadById-2
 
     [Documentation]   Create multiple leads for different users and get the leads by id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -224,7 +236,7 @@ JD-TC-GetLeadById-2
     Should Be Equal As Strings  ${resp.json()['title']}         ${title}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -251,7 +263,7 @@ JD-TC-GetLeadById-3
     [Documentation]   Create multiple leads for different users then add manager and get the leads by id.
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -286,7 +298,7 @@ JD-TC-GetLeadById-3
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
     Should Be Equal As Strings  ${resp.json()['manager']['id']}   ${u_id1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -316,7 +328,7 @@ JD-TC-GetLeadById-4
 
     [Documentation]   Create leads for users then change manager and get the leads by id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -334,7 +346,7 @@ JD-TC-GetLeadById-4
 JD-TC-GetLeadById-5
 
     [Documentation]   Create leads for users then remove manager and get the leads by id.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -352,7 +364,7 @@ JD-TC-GetLeadById-8
 
     [Documentation]   Create leads for users then remove assignee and get the leads by id.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -370,7 +382,7 @@ JD-TC-GetLeadById-9
 
     [Documentation]   Create leads for users and change the location then get the leads by id.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -399,7 +411,7 @@ JD-TC-GetLeadById-10
 
     [Documentation]   get another provider's lead.
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -434,7 +446,7 @@ JD-TC-GetLeadById-13
 
     [Documentation]   Get lead by invalid lead id.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -451,7 +463,7 @@ JD-TC-GetLeadById-14
 
     [Documentation]   Get lead by without giving lead id.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -466,7 +478,7 @@ JD-TC-GetLeadById-6
 
     [Documentation]   Create leads for users then add assignee and get the leads by id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -484,7 +496,7 @@ JD-TC-GetLeadById-7
 
     [Documentation]   Create leads for users then change assignee and get the leads by id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

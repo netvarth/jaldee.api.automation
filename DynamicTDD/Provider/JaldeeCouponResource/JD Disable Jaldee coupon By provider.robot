@@ -35,7 +35,7 @@ ${SERVICE3}  pen11
 
 JD-TC-DisableJaldeeCoupon-1
     [Documentation]   Disable a jaldee coupon by provider
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_queue  ${PUSERNAME1}  
     clear_service  ${PUSERNAME1}  
@@ -59,9 +59,9 @@ JD-TC-DisableJaldeeCoupon-1
     ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
     ${locations}=  Create List  ${loc1}  ${loc2}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -84,7 +84,7 @@ JD-TC-DisableJaldeeCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -101,12 +101,12 @@ JD-TC-DisableJaldeeCoupon-1
 
 JD-TC-DisableJaldeeCoupon-2
     [Documentation]   Disable  a jaldee coupon by provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME1}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME1}
     ${p2}=  Convert To String  ${p2}
@@ -126,7 +126,7 @@ JD-TC-DisableJaldeeCoupon-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code01}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -168,7 +168,7 @@ JD-TC-DisableJaldeeCoupon-3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code50}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -183,7 +183,7 @@ JD-TC-DisableJaldeeCoupon-3
 
 JD-TC-DisableJaldeeCoupon-UH2
     [Documentation]   Disable a already disabled jaldee coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Disable Jaldee Coupon By Provider  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -191,7 +191,7 @@ JD-TC-DisableJaldeeCoupon-UH2
 
 JD-TC-DisableJaldeeCoupon-UH3
     [Documentation]   Disable a already disabled jaldee coupon by Superadmin
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -203,7 +203,7 @@ JD-TC-DisableJaldeeCoupon-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -240,7 +240,7 @@ JD-TC-DisableJaldeeCoupon-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Disable Jaldee Coupon By Provider  ${cupn_code55}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -249,7 +249,7 @@ JD-TC-DisableJaldeeCoupon-UH4
 
 JD-TC-DisableJaldeeCoupon-5
     [Documentation]   Disable jaldee coupon by provider after upgrade license package
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_queue  ${PUSERNAME50}    
@@ -280,7 +280,7 @@ JD-TC-DisableJaldeeCoupon-5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code02}
@@ -310,7 +310,7 @@ JD-TC-DisableJaldeeCoupon-5
 
 JD-TC-DisableJaldeeCoupon-UH6
     [Documentation]   Disable a invalid jaldee coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Disable Jaldee Coupon By Provider  invalidcoupon
@@ -333,7 +333,7 @@ JD-TC-DisableJaldeeCoupon -UH8
 
 JD-TC-DisableJaldeeCoupon -UH9
     [Documentation]   Another Provider disable a Jaldee Coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Disable Jaldee Coupon By Provider  ${cupn_code02}
     Should Be Equal As Strings    ${resp.status_code}   422

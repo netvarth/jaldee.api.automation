@@ -21,6 +21,9 @@ ${latti}        88.259874
 ${longi1}       70.524764
 ${latti1}       88.259874
 ${invalid_coupon}   xyz
+${tz}   Asia/Kolkata
+
+
 *** Test Cases ***
 JD-TC-DeleteJaldeeCoupon-1
     [Documentation]    Create a jaldee coupon by superadmin login and delete before push operation(Draft coupon)
@@ -39,9 +42,9 @@ JD-TC-DeleteJaldeeCoupon-1
     Set Suite Variable  ${lic1}  ${resp.json()[0]['pkgId']}
     Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
-    ${DAY1}=  get_date  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}  
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -71,12 +74,12 @@ JD-TC-DeleteJaldeeCoupon-1
 
 JD-TC-DeleteJaldeeCoupon-2
     [Documentation]    Create jaldee coupon for specific providers and delete it before push operation(Draft coupon)
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME1}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME2}
     ${p2}=  Convert To String  ${p2}
@@ -116,9 +119,9 @@ JD-TC-DeleteJaldeeCoupon-UH1
     Set Suite Variable  ${lic1}  ${resp.json()[0]['pkgId']}
     Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -141,12 +144,12 @@ JD-TC-DeleteJaldeeCoupon-UH1
 
 JD-TC-DeleteJaldeeCoupon-UH2
     [Documentation]    Create jaldee coupon for specific providers and delete it after push operation(Active coupon)
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME3}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME4}
     ${p2}=  Convert To String  ${p2}
@@ -209,7 +212,7 @@ JD-TC-DeleteJaldeeCoupon -UH6
 
 JD-TC-DeleteJaldeeCoupon -UH7
     [Documentation]   Consumer create a Jaldee Coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Delete Jaldee Coupon  ${cupn_code3}
     Should Be Equal As Strings    ${resp.status_code}   419

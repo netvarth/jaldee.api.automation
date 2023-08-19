@@ -22,7 +22,7 @@ JD-TC-GetVendorById-1
 
     [Documentation]  Create Vendor for an SP and verify the details.
 
-    ${resp}=  Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

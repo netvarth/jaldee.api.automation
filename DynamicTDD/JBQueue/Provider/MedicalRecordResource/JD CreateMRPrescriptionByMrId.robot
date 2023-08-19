@@ -43,7 +43,7 @@ JD-TC-Createprescription-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+7850775
+    ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+78503425
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_C}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -52,18 +52,21 @@ JD-TC-Createprescription-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName}    ${resp.json()['userName']}         
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     ${pid}=  get_acc_id  ${PUSERNAME_C}
     Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_C}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_C}+25566122
@@ -75,18 +78,22 @@ JD-TC-Createprescription-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -138,18 +145,23 @@ JD-TC-Createprescription-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${C_date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
     Set Suite Variable   ${C_date}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable   ${strt_time}
-    ${end_time}=    add_time  3  00  
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -161,14 +173,13 @@ JD-TC-Createprescription-1
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -284,18 +295,21 @@ JD-TC-Createprescription-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id1}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName1}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName1}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id1}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName1}    ${resp.json()['userName']}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
     ${pid0}=  get_acc_id  ${PUSERNAME_D}
     Set Suite Variable  ${pid0}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_D}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_D}+25566122
@@ -307,18 +321,22 @@ JD-TC-Createprescription-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -366,16 +384,20 @@ JD-TC-Createprescription-2
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id2}    ${resp}  
+    Set Suite Variable    ${loc_id2}    ${resp} 
+    ${resp}=   Get Location ById  ${loc_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}   
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id2}    ${resp}  
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time1}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time1}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable   ${strt_time1}
-    ${end_time}=    add_time  3  00  
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2} 
@@ -387,7 +409,7 @@ JD-TC-Createprescription-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -399,7 +421,7 @@ JD-TC-Createprescription-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -408,8 +430,8 @@ JD-TC-Createprescription-2
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${wid2}  ${bookingType[0]}  ${consultationMode[0]}  ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -463,7 +485,7 @@ JD-TC-Createprescription-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -475,7 +497,7 @@ JD-TC-Createprescription-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -484,8 +506,8 @@ JD-TC-Createprescription-3
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -538,7 +560,7 @@ JD-TC-Createprescription-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -550,7 +572,7 @@ JD-TC-Createprescription-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -559,8 +581,8 @@ JD-TC-Createprescription-4
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${wid}   ${bookingType[0]}  ${consultationMode[1]}   ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -615,19 +637,19 @@ JD-TC-Createprescription-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -636,8 +658,8 @@ JD-TC-Createprescription-5
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${wid}  ${bookingType[0]}  ${consultationMode[2]}  ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -691,19 +713,19 @@ JD-TC-Createprescription-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${DAY}=       get_date
+    ${DAY}=       db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -712,8 +734,8 @@ JD-TC-Createprescription-6
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[3]}   ${DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -735,7 +757,6 @@ JD-TC-Createprescription-6
     Should Be Equal As Strings  ${resp.json()['mrCreatedBy']}                       ${id}
     
 
-
     ${pre_list1}=  Create Dictionary  medicine_name=${EMPTY}  frequency=${EMPTY}  duration=${EMPTY}  instructions=${EMPTY}  dosage=${EMPTY}
     
     ${resp}=  Create MR prescription by mr id   ${mr_id}  ${EMPTY}  ${pre_list1}  
@@ -754,6 +775,7 @@ JD-TC-Createprescription-6
     Should Be Equal As Strings  ${resp.json()['prescriptionsList'][0]['dosage']}         ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['notes']}                                  ${EMPTY}
    
+
 JD-TC-Createprescription-7
     [Documentation]   Create prescription with two prescriptions.
 
@@ -761,19 +783,19 @@ JD-TC-Createprescription-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -783,8 +805,8 @@ JD-TC-Createprescription-7
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[3]}   ${DAY}  ${status[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -860,19 +882,19 @@ JD-TC-Createprescription-8
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
        
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${cidfor}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -886,8 +908,8 @@ JD-TC-Createprescription-8
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -934,6 +956,7 @@ JD-TC-Createprescription-8
     Should Be Equal As Strings  ${resp.json()['prescriptionsList'][0]['dosage']}         ${dosage}
     Should Be Equal As Strings  ${resp.json()['notes']}                                  ${notes}
 
+
 JD-TC-Createprescription-9
     [Documentation]   Create prescription for appointment(walkin).
 
@@ -948,7 +971,7 @@ JD-TC-Createprescription-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -968,10 +991,10 @@ JD-TC-Createprescription-9
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -1035,13 +1058,13 @@ JD-TC-Createprescription-9
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
 
-    # ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    # ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}   ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mr_id}   ${resp.json()}
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Get MR By Id  ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1118,14 +1141,13 @@ JD-TC-Createprescription-10
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME7}   
     Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1147,7 +1169,7 @@ JD-TC-Createprescription-10
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1157,8 +1179,8 @@ JD-TC-Createprescription-10
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1245,14 +1267,13 @@ JD-TC-Createprescription-11
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME7}   
     Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1274,7 +1295,7 @@ JD-TC-Createprescription-11
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1288,8 +1309,8 @@ JD-TC-Createprescription-11
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1352,7 +1373,7 @@ JD-TC-Createprescription-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1373,11 +1394,11 @@ JD-TC-Createprescription-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime4}=  add_time  0  15
+    ${sTime4}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=20  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -1385,7 +1406,7 @@ JD-TC-Createprescription-12
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     Set Suite Variable   ${parallel} 
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id2}  ${duration}  ${bool1}  ${ser_id2}
     Log  ${resp.json()}
@@ -1414,9 +1435,9 @@ JD-TC-Createprescription-12
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_time_secs
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${apptTime}=  db.get_date_time_by_timezone  ${tz}
+    ${apptTakenTime}=  db.remove_date_time_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
@@ -1447,7 +1468,7 @@ JD-TC-Createprescription-12
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
@@ -1481,7 +1502,7 @@ JD-TC-Createprescription-12
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
@@ -1501,8 +1522,8 @@ JD-TC-Createprescription-12
     Log   ${resp.status_code}
     Should Be Equal As Strings   ${resp.status_code}   200
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1563,7 +1584,7 @@ JD-TC-Createprescription-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1572,7 +1593,7 @@ JD-TC-Createprescription-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
-    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+    Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
 
     ${statusUpdatedTime0}=  convert_slot_12hr_first  ${slot1}
 
@@ -1584,16 +1605,15 @@ JD-TC-Createprescription-13
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_time_secs
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${apptTime}=  db.get_date_time_by_timezone  ${tz}
+    ${apptTakenTime}=  db.remove_date_time_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${ser_id2}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1617,7 +1637,7 @@ JD-TC-Createprescription-13
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
@@ -1632,8 +1652,8 @@ JD-TC-Createprescription-13
     Should Be Equal As Strings   ${resp.json()['availableSlots'][1]['time']}   ${slot2}
     Should Be Equal As Strings   ${resp.json()['availableSlots'][1]['noOfAvailbleSlots']}   0
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1698,7 +1718,7 @@ JD-TC-Createprescription-13
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
@@ -1765,13 +1785,16 @@ JD-TC-Createprescription-14
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${userName3}    ${resp.json()['userName']}   
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${userName3}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${userName3}    ${resp.json()['userName']}   
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
-    ${DAY1}=  get_date
+
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
     ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
@@ -1783,18 +1806,22 @@ JD-TC-Createprescription-14
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1838,9 +1865,16 @@ JD-TC-Createprescription-14
 
     ${id}=  get_id  ${MUSERNAME_E}
     ${bs}=  FakerLibrary.bs
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1883,16 +1917,17 @@ JD-TC-Createprescription-14
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime2}=  add_time  0  15
-    ${eTime1}=  add_time   2  30
+    ${sTime2}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
 
     ${resp}=  Get Locations
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=05  max=10
@@ -1936,7 +1971,6 @@ JD-TC-Createprescription-14
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -1948,8 +1982,8 @@ JD-TC-Createprescription-14
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${DAY1}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1995,14 +2029,15 @@ JD-TC-Createprescription-14
     Should Be Equal As Strings  ${resp.json()['prescriptionsList'][0]['dosage']}         ${dosage}
     Should Be Equal As Strings  ${resp.json()['notes']}                                  ${notes}
 
+
 JD-TC-Createprescription-15
     [Documentation]   Create prescription for MR having prescription.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${med_name1}=      FakerLibrary.name
     ${frequency1}=     FakerLibrary.word
     ${duration1}=      FakerLibrary.sentence
@@ -2031,7 +2066,7 @@ JD-TC-Createprescription-15
 JD-TC-Createprescription-UH1
     [Documentation]   Create prescription for a canceled waitlist (After MR creation provider cancel the waitlist and try to create mr prescreption)
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2044,18 +2079,17 @@ JD-TC-Createprescription-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     ${desc}=   FakerLibrary.word
-    ${CUR_DAY}=  get_date   
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}   
     ${resp}=  Add To Waitlist  ${cid3}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid3} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid3}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2142,14 +2176,13 @@ JD-TC-Createprescription-UH2
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME17}   
     Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -2171,7 +2204,7 @@ JD-TC-Createprescription-UH2
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2190,13 +2223,13 @@ JD-TC-Createprescription-UH2
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mr_id}   ${resp.json()}
     
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Get MR By Id  ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2229,7 +2262,7 @@ JD-TC-Createprescription-UH2
     Should Be Equal As Strings  ${resp.json()['apptStatus']}        ${appt_status[4]}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}    ${sch_id}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2251,7 +2284,7 @@ JD-TC-Createprescription-UH2
 JD-TC-Createprescription-UH3
     [Documentation]   Create prescription using another provider's MR.
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2312,7 +2345,7 @@ JD-TC-Createprescription-UH6
  
     [Documentation]   Create prescription for a future waitlist(walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2325,18 +2358,17 @@ JD-TC-Createprescription-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${FUT_DAY}=  add_date   3
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}   3
     ${resp}=  Add To Waitlist  ${cid2}  ${ser_id2}  ${que_id2}  ${FUT_DAY}  ${desc}  ${bool[1]}  ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid4} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid4}  ${bookingType[0]}  ${consultationMode[3]}  ${FUT_DAY}  ${status[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -2383,11 +2415,15 @@ JD-TC-Createprescription-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 	
     ${lid2}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -2397,17 +2433,17 @@ JD-TC-Createprescription-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid2}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.json()}
@@ -2439,9 +2475,9 @@ JD-TC-Createprescription-UH7
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${apptTime}=  db.get_date_time_by_timezone  ${tz}
+    ${apptTakenTime}=  db.remove_date_time_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -2472,7 +2508,7 @@ JD-TC-Createprescription-UH7
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
@@ -2486,8 +2522,8 @@ JD-TC-Createprescription-UH7
     Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   0
 
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2552,7 +2588,7 @@ JD-TC-Createprescription-UH7
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}

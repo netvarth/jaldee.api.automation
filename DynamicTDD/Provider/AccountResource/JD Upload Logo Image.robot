@@ -14,7 +14,7 @@ Test Teardown     Remove File  cookies.txt
 
 JD-TC-Upload Logo Image-1
     [Documentation]   Provider check to  Upload Logo image
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  pyproviderlogin  ${PUSERNAME17}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp}  200  

@@ -236,7 +236,7 @@ JD-TC-GetQuestionnaireByUuidForOrder-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -282,7 +282,7 @@ JD-TC-GetQuestionnaireByUuidForOrder-1
         Log  ${ttype}
         ${u_ttype}=    Remove Duplicates    ${ttype}
         Log  ${u_ttype}
-        ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}  ${item_id1}  
+        ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}  ${item_id1}  
     END
     Set Suite Variable  ${CatalogId1}
 
@@ -306,7 +306,7 @@ JD-TC-GetQuestionnaireByUuidForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -346,7 +346,7 @@ JD-TC-GetQuestionnaireByUuidForOrder-1
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${DAY1}=  db.get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first} 	${rest} = 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first}${CUSERNAME15}.ynwtest@netvarth.com
@@ -372,7 +372,7 @@ JD-TC-GetQuestionnaireByUuidForOrder-1
     Should Be Equal As Strings  ${resp.json()['homeDelivery']}            ${bool[1]} 
     Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -414,13 +414,14 @@ D-TC-GetQuestionnaireByUuidForOrder-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -480,7 +481,7 @@ D-TC-GetQuestionnaireByUuidForOrder-2
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=  db.get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first} 	${rest} = 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first}${CUSERNAME16}.ynwtest@netvarth.com

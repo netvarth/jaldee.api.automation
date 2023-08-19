@@ -27,18 +27,18 @@ JD-TC-Waitlist Rating By Consumer-1
     clear_queue    ${PUSERNAME10}
     clear_service  ${PUSERNAME10}
     clear_rating    ${PUSERNAME10}
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME10}
     Set Suite Variable  ${pid} 
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${DAY}=  get_date  
+    ${DAY}=  db.get_date_by_timezone  ${tz}  
     Set Suite Variable  ${DAY} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     ${desc}=  FakerLibrary.word
     ${ser_durtn}=   Random Int  min=2   max=10
     ${total_amount}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
@@ -56,8 +56,8 @@ JD-TC-Waitlist Rating By Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_4}  ${resp.json()}
     ${qname}=   FakerLibrary.word
-    ${sTime1}=  subtract_time   1  00
-    ${eTime1}=   add_time    5   00
+    ${sTime1}=  subtract_timezone_time  ${tz}   1  00
+    ${eTime1}=   add_timezone_time  ${tz}    5   00
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
     ${resp}=  Create Queue  ${qname}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}   ${parallel}    ${capacity}    ${lid1}  ${sId_1}  ${sId_2}  ${sId_3}  ${sId_4} 
@@ -141,7 +141,6 @@ JD-TC-Rating Added By Consumer-UH2
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${q1_l1}  ${DAY}  ${sId_4}  ${cnote}  ${bool[0]}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${pid}=  get_acc_id  ${PUSERNAME2}
@@ -167,7 +166,7 @@ JD-TC-Rating Added By Consumer-UH3
 JD-TC-Verify Waitlist Rating By Consumer-1
 	[Documentation]    Verify Rating Added By Consumer by login of a consumer
 
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200

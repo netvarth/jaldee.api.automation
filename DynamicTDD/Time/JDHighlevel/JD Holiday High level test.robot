@@ -21,7 +21,7 @@ ${SERVICE2}    Cutting11
 
 JD-TC-HolidayHighlevel-1
       [Documentation]  create a  holiday for the current day, Then update queue and checking waitlist operations[Fixed calculation mode]
-      ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       clear_service   ${PUSERNAME10} 
       ${description}=  FakerLibrary.sentence
@@ -35,27 +35,36 @@ JD-TC-HolidayHighlevel-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${sId_2}  ${resp.json()}
       clear_location  ${PUSERNAME10}
-      ${city}=   get_place
+      # ${city}=   get_place
+      # Set Suite Variable  ${city}
+      # ${latti}=  get_latitude
+      # Set Suite Variable  ${latti}
+      # ${longi}=  get_longitude
+      # Set Suite Variable  ${longi}
+      # ${postcode}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode}
+      # ${address}=  get_address
+      # Set Suite Variable  ${address}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       Set Suite Variable  ${city}
-      ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
       Set Suite Variable  ${address}
       ${parking}    Random Element   ${parkingType}
       Set Suite Variable  ${parking}
       ${24hours}    Random Element    ${bool}
       Set Suite Variable  ${24hours}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}
-      ${sTime}=  db.get_time
+      # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time   0  30
+      ${eTime}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime}
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.json()}
@@ -67,12 +76,12 @@ JD-TC-HolidayHighlevel-1
       # Should Be Equal As Strings  ${resp.status_code}  200
       # Set Suite Variable  ${qid}  ${resp.json()[0]['id']}
 
-      ${DAY2}=  add_date  10
+      ${DAY2}=  db.add_timezone_date  ${tz}  10  
       ${queue_name}=  FakerLibrary.bs
       ${parallel}=   Random Int  min=1   max=1
       ${capacity}=  Random Int   min=10   max=20
-      ${sTime1}=  subtract_time  2  00
-      ${eTime1}=  add_time   3  30
+      ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+      ${eTime1}=  add_timezone_time  ${tz}  3  30  
       Set Test Variable  ${qTime}   ${sTime1}-${eTime1}
       ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${capacity}  ${lid}  ${sId_1}  ${sId_2}
       Log  ${resp.json()}
@@ -100,7 +109,7 @@ JD-TC-HolidayHighlevel-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Should Not Contain  ${resp.json()}  id=${qid}
-      ${hTime}=  add_time  0  ${trnTime}  
+      ${hTime}=  add_timezone_time  ${tz}  0  ${trnTime}  
       ${queue1}=  FakerLibrary.word
       ${resp}=  Update Queue  ${qid}  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${hTime}  1  3  ${lid}  ${sId_1}  ${sId_2} 
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -114,7 +123,6 @@ JD-TC-HolidayHighlevel-1
       ${cid}=  get_id  ${CUSERNAME1}
       ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -131,9 +139,9 @@ JD-TC-HolidayHighlevel-1
 
 JD-TC-HolidayHighlevel-2
       [Documentation]  update queue again and checking waitlist operations[Fixed calculation mode]
-      ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${lTime}=  add_time   0  20
+      ${lTime}=  add_timezone_time  ${tz}  0  20  
       ${queue1}=  FakerLibrary.word
       ${resp}=  Update Queue  ${qid}  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${lTime}  1  1  ${lid}  ${sId_1}
       Log  ${resp.json()}
@@ -151,7 +159,7 @@ JD-TC-HolidayHighlevel-2
 
 JD-TC-HolidayHighlevel-3
       [Documentation]  create a  holiday in between the husiness schedule, Then checking waitlist operations[Fixed calculation mode]
-      ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       clear_service   ${PUSERNAME20} 
       ${description}=  FakerLibrary.sentence
@@ -165,27 +173,35 @@ JD-TC-HolidayHighlevel-3
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${sId_2}  ${resp.json()}
       clear_location  ${PUSERNAME20}
-      ${city}=   get_place
+      # ${city}=   get_place
+      # Set Suite Variable  ${city}
+      # ${latti}=  get_latitude
+      # Set Suite Variable  ${latti}
+      # ${longi}=  get_longitude
+      # Set Suite Variable  ${longi}
+      # ${postcode}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode}
+      # ${address}=  get_address
+      # Set Suite Variable  ${address}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       Set Suite Variable  ${city}
-      ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
       Set Suite Variable  ${address}
       ${parking}    Random Element   ${parkingType}
       Set Suite Variable  ${parking}
       ${24hours}    Random Element    ${bool}
       Set Suite Variable  ${24hours}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}
-      ${sTime}=  add_time  0  1
+      ${sTime}=  add_timezone_time  ${tz}  0  1
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time  4  0
+      ${eTime}=  add_timezone_time  ${tz}  4  0  
       Set Suite Variable   ${eTime}
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.json()}
@@ -199,8 +215,8 @@ JD-TC-HolidayHighlevel-3
       ${resp}=  Update Waitlist Settings  ${calc_mode[1]}   ${trnTime}  ${bool[1]}  ${bool[1]}  ${bool[1]}   ${bool[0]}   ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${description}=  FakerLibrary.word
-      ${h1}=  add_time  2  0  
-      ${h2}=  add_time  3  0
+      ${h1}=  add_timezone_time  ${tz}  2  0    
+      ${h2}=  add_timezone_time  ${tz}  3  0  
       # ${resp}=  Create Holiday  ${DAY}  ${description}  ${h1}  ${h2}
       # Log  ${resp.json()}
       # Should Be Equal As Strings  ${resp.status_code}  200
@@ -229,7 +245,6 @@ JD-TC-HolidayHighlevel-3
       ${cid}=  get_id  ${CUSERNAME1}
       ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -246,7 +261,7 @@ JD-TC-HolidayHighlevel-3
       Verify Response  ${resp}  appxWaitingTime=${trnTime}
       sleep  03s
       change_system_time  2  10
-      ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${cid2}=  get_id  ${CUSERNAME3}
       ${resp}=  Add To Waitlist  ${cid2}  ${sId_1}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cid2}
@@ -265,7 +280,7 @@ JD-TC-HolidayHighlevel-3
 
 JD-TC-HolidayHighlevel-4
       [Documentation]   Add a consumer to the waitlist for the current day
-      ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       clear_service   ${PUSERNAME30} 
       ${description}=  FakerLibrary.sentence
@@ -279,27 +294,36 @@ JD-TC-HolidayHighlevel-4
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${sId_2}  ${resp.json()}
       clear_location  ${PUSERNAME30}
-      ${city}=   get_place
+      # ${city}=   get_place
+      # Set Suite Variable  ${city}
+      # ${latti}=  get_latitude
+      # Set Suite Variable  ${latti}
+      # ${longi}=  get_longitude
+      # Set Suite Variable  ${longi}
+      # ${postcode}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode}
+      # ${address}=  get_address
+      # Set Suite Variable  ${address}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       Set Suite Variable  ${city}
-      ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
       Set Suite Variable  ${address}
       ${parking}    Random Element   ${parkingType}
       Set Suite Variable  ${parking}
       ${24hours}    Random Element    ${bool}
       Set Suite Variable  ${24hours}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}
-      ${sTime}=  db.get_time
+      # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time   0  120
+      ${eTime}=  add_timezone_time  ${tz}   0  120
       Set Suite Variable   ${eTime}
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.json()}
@@ -314,11 +338,10 @@ JD-TC-HolidayHighlevel-4
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}   ${trnTime}  ${bool[1]}  ${bool[1]}  ${bool[1]}   ${bool[0]}   ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${DAY2}=  add_date  2
+      ${DAY2}=  db.add_timezone_date  ${tz}  2  
       ${cid}=  get_id  ${CUSERNAME1}
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY2}  hi  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid2}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -327,7 +350,6 @@ JD-TC-HolidayHighlevel-4
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid}  ${DAY2}  hi  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid3}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -337,7 +359,6 @@ JD-TC-HolidayHighlevel-4
       ${cid}=  get_id  ${CUSERNAME2}
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY2}  hi  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid4}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid4} 

@@ -18,25 +18,34 @@ Suite Setup     Run Keywords  clear_queue  ${PUSERNAME2}  AND  clear_location  $
 
 JD-TC-EnableDisableOnlineCheckin-1
     [Documentation]  Enable online checkin by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME215}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_location  ${PUSERNAME215}
-    ${DAY1}=  get_date
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${longi}=   get_longitude
-    Set Suite Variable  ${longi}
-    ${latti}=   get_latitude
-    Set Suite Variable  ${latti}
     ${companySuffix}=  FakerLibrary.companySuffix
     Set Suite Variable   ${companySuffix}
-    ${postcode}=  FakerLibrary.postcode
-    Set Suite Variable   ${postcode}
-    ${address}=  get_address
-    Set Suite Variable   ${address}
-    ${sTime}=  add_time  9   0
+    # ${longi}=   get_longitude
+    # Set Suite Variable  ${longi}
+    # ${latti}=   get_latitude
+    # Set Suite Variable  ${latti}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable   ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable   ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    Set Suite Variable  ${city}
+    Set Suite Variable  ${latti}
+    Set Suite Variable  ${longi}
+    Set Suite Variable  ${postcode}
+    Set Suite Variable  ${address}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  9   0
     Set Suite Variable   ${sTime}   
-    ${eTime}=  add_time  10  0
+    ${eTime}=  add_timezone_time  ${tz}  10  0
     Set Suite Variable   ${eTime}
     ${city}=   get_place
     Set Suite Variable   ${city}
@@ -56,16 +65,20 @@ JD-TC-EnableDisableOnlineCheckin-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
 JD-TC-EnableDisableOnlineCheckin-2
     [Documentation]  Disable online checkin by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Online Checkin
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=False
 
 JD-TC-EnableDisableOnlineCheckin-UH1      
@@ -98,7 +111,7 @@ JD-TC-EnableDisableOnlineCheckin-UH4
 
 JD-TC-EnableDisableOnlineCheckin-UH5
     [Documentation]  Enable a already enabled online checkin
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   View Waitlist Settings
     Log  ${resp.json()}
@@ -115,7 +128,7 @@ JD-TC-EnableDisableOnlineCheckin-UH5
 
 JD-TC-EnableDisableOnlineCheckin-UH6
     [Documentation]  Disable a already disabled online checkin
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Online Checkin
     Log  ${resp.json()}
@@ -127,7 +140,7 @@ JD-TC-EnableDisableOnlineCheckin-UH6
 
 JD-TC-EnableDisableOnlineCheckin-3
     [Documentation]  Disable search data and try to enable online chek in
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Enable Search Data
     Log  ${resp.json()}
@@ -142,8 +155,9 @@ JD-TC-EnableDisableOnlineCheckin-3
      
 JD-TC-EnableDisableOnlineCheckin-4
     [Documentation]  Disable search data and and check waitlist settings
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200     
     ${resp}=  View Waitlist Settings
-    Log   ${resp.json()}    
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True  futureDateWaitlist=True

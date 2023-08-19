@@ -23,7 +23,7 @@ Variables   /ebs/TDD/varfiles/consumermail.py
 JD-TC-NextAvailableSchedule consumer -1
     [Documentation]   Get next available schedule for user when there is only one schedule
 
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME58}
@@ -125,10 +125,10 @@ JD-TC-NextAvailableSchedule consumer -1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -202,7 +202,7 @@ JD-TC-NextAvailableSchedule consumer -1
 JD-TC-NextAvailableSchedule consumer -2
     [Documentation]   Get next available schedule  when there more than one schedule
 
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME58}
@@ -229,11 +229,11 @@ JD-TC-NextAvailableSchedule consumer -2
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  5
-    # ${sTime1}=  db.get_time
+    ${sTime1}=  add_timezone_time  ${tz}  0  5  
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -246,8 +246,8 @@ JD-TC-NextAvailableSchedule consumer -2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime2}=  add_two  ${eTime1}  5
     ${delta2}=  FakerLibrary.Random Int  min=40  max=80
@@ -339,7 +339,7 @@ JD-TC-NextAvailableSchedule consumer -2
 JD-TC-NextAvailableSchedule consumer -3
     [Documentation]   Get next available schedule by provider login
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -372,11 +372,12 @@ JD-TC-NextAvailableSchedule consumer -3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  5
-     ${sTime1}=  db.get_time
+    ${sTime1}=  add_timezone_time  ${tz}  0  5  
+   # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -447,7 +448,7 @@ JD-TC-NextAvailableSchedule consumer -4
 JD-TC-NextAvailableSchedule consumer -UH1
     [Documentation]   Get next available schedule for user with invalid account id
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -501,7 +502,7 @@ JD-TC-NextAvailableSchedule consumer -UH1
 JD-TC-NextAvailableSchedule consumer -UH2
     [Documentation]   Get next available schedule for user with invalid location id
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -555,7 +556,7 @@ JD-TC-NextAvailableSchedule consumer -UH2
 JD-TC-NextAvailableSchedule consumer -UH3
     [Documentation]   Get next available schedule for user with invalid user id
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -611,7 +612,7 @@ JD-TC-NextAvailableSchedule consumer -UH4
     [Documentation]   Get next available schedule ,to gave another provider location 
     
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${MUSERNAME48}
@@ -713,10 +714,10 @@ JD-TC-NextAvailableSchedule consumer -UH4
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE2}  ${dep_id}  ${u_id1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -729,7 +730,7 @@ JD-TC-NextAvailableSchedule consumer -UH4
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -785,7 +786,7 @@ JD-TC-NextAvailableSchedule consumer -UH5
     [Documentation]   Get next available schedule , another provider userid
 
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${MUSERNAME48}
@@ -847,7 +848,7 @@ JD-TC-NextAvailableSchedule consumer -UH5
     END
 
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -904,7 +905,7 @@ JD-TC-NextAvailableSchedule consumer -UH6
     [Documentation]   Get next available schedule another provider account id
 
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${MUSERNAME48}
@@ -966,7 +967,7 @@ JD-TC-NextAvailableSchedule consumer -UH6
     END
 
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1019,7 +1020,7 @@ JD-TC-NextAvailableSchedule consumer -UH6
 JD-TC-NextAvailableSchedule consumer -UH7
     [Documentation]   Get next available schedule  with same provider another location without appt
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1089,15 +1090,23 @@ JD-TC-NextAvailableSchedule consumer -UH7
 
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id2}  ${u_id1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1161,7 +1170,7 @@ JD-TC-NextAvailableSchedule consumer -UH7
 JD-TC-NextAvailableSchedule consumer -UH8
     [Documentation]   Get next available schedule  with same provider another location disable
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1229,15 +1238,23 @@ JD-TC-NextAvailableSchedule consumer -UH8
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id2}  ${u_id1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1300,7 +1317,7 @@ JD-TC-NextAvailableSchedule consumer -UH8
 JD-TC-NextAvailableSchedule consumer -5
     [Documentation]   Get next available schedule  with same provider another location and  another userid
     ${pid}=  get_acc_id  ${MUSERNAME58}
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1414,10 +1431,10 @@ JD-TC-NextAvailableSchedule consumer -5
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id3}  ${u_id2}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime2}=  add_time  0  20
+    ${sTime2}=  add_timezone_time  ${tz}  0  20
     ${delta2}=  FakerLibrary.Random Int  min=20  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta2}
     ${schedule_name2}=  FakerLibrary.bs
@@ -1448,10 +1465,10 @@ JD-TC-NextAvailableSchedule consumer -5
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
     
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  15  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs

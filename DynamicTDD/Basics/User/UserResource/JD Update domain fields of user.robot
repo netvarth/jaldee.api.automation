@@ -38,7 +38,7 @@ JD-TC-UpdateDomainVirtualField-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -131,14 +131,14 @@ JD-TC-UpdateDomainVirtualField-UH3
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
      Log  ${iscorp_subdomains}
      Set Test Variable  ${domains}  ${iscorp_subdomains[3]['domain']}
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${d}  ${resp.json()['sector']}
     ${fields}=   Get Domain level Fields  ${d}
     Log  ${fields.json()}
     Should Be Equal As Strings    ${fields.status_code}   200
     ${virtual_fields1}=  get_Domainfields  ${fields.json()}
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Domain_Level Of User  ${virtual_fields1}  ${u_id}
@@ -148,7 +148,7 @@ JD-TC-UpdateDomainVirtualField-UH3
 
 JD-TC-UpdateDomainVirtualField-UH4
     [Documentation]   update domain virtual fields  of a valid user with invalid user id
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Domain_Level Of User  ${virtual_fields}  000

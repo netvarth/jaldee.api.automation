@@ -12,6 +12,7 @@ from RequestsLibrary.utils import is_file_descriptor
 from robot.api import logger
 from faker import Faker
 from Keywordspy import *
+from db import ecrypt_data, decrypt_data, Set_TZ_Header
 BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP
 SA_BASE_URL = "http://"+HOST+"/superadmin/rest/mgmt"
@@ -87,13 +88,16 @@ def log_request(response):
 # Service Provider Login
 def spLogin(phno,pswd,countrycode=91):
     s = requests.Session()
-    url = BASE_URL+'/provider/login'
+    # url = BASE_URL+'/provider/login'
+    url = BASE_URL+'/provider/login/encrypt'
     try:
         headers = {
                 'Content-type': "application/json",
                 'Accept': "application/json",
             }
-        data = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
+        jsondata = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
+        encrypted_data=  ecrypt_data(jsondata)
+        data= json.dumps(encrypted_data)
         r = s.post(url, data=data, headers=headers)
         # print s.cookies
         # print "--------------"
@@ -595,14 +599,22 @@ def providerWLCom(cookie_dict, uuid, msg, type, caption, msgid=None, file=None):
 
 comfile='/ebs/TDD/image.jpg'
 
-def OrderImageUpload(cookie_dict, accId, caption, order, file=comfile):
-    url = BASE_URL + '/consumer/orders?account=' + str(accId)
+def OrderImageUpload(cookie_dict, accId, caption, order, custHeaders, file=comfile, **kwargs):
+    # url = BASE_URL + '/consumer/orders?account=' + str(accId)
+    url = BASE_URL + '/consumer/orders'
     s = requests.Session()
     s.cookies.update(cookie_dict)      
     try:
-        headers = {
-            'Content-Type': "multipart/form-data",
-        }
+        # headers = {
+        #     'Content-Type': "multipart/form-data",
+        # }
+        parameters = {'account': str(accId)}
+
+        tzheaders, kwargs, locparam =Set_TZ_Header (**kwargs)
+        custHeaders.update(tzheaders)
+        parameters.update(locparam)
+        print(custHeaders,parameters)
+
         cap_dict = {"0":str(caption)}
 
         if file in (None, '') or not file.strip():
@@ -617,7 +629,7 @@ def OrderImageUpload(cookie_dict, accId, caption, order, file=comfile):
                 'order': (None, json.dumps(order), 'application/json')
                 }
         print (files_data) 
-        resp = s.post(url, files=files_data)
+        resp = s.post(url, params=parameters, files=files_data, headers=custHeaders)
         log_request(resp)
         log_response(resp)
         return resp
@@ -657,19 +669,23 @@ def OrderImageUploadByProvider(cookie_dict,  caption, order, file=comfile):
         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 
-def ShoppingCartUpload(cookie_dict,  accId, order):
-    url = BASE_URL + '/consumer/orders?account=' + str(accId)
+def ShoppingCartUpload(cookie_dict,  accId, order, custHeaders, **kwargs):
+    # url = BASE_URL + '/consumer/orders?account=' + str(accId)
+    url = BASE_URL + '/consumer/orders'
     s = requests.Session()
     s.cookies.update(cookie_dict)      
     try:
-        headers = {
-            'Content-Type': "multipart/form-data",
-        }
+        
+        parameters = {'account': str(accId)}
         files_data = {
             'order': (None, json.dumps(order), 'application/json')
             }
         print (files_data) 
-        resp = s.post(url, files=files_data)
+        tzheaders, kwargs, locparam =Set_TZ_Header (**kwargs)
+        custHeaders.update(tzheaders)
+        parameters.update(locparam)
+        print(custHeaders,parameters)
+        resp = s.post(url, params=parameters, files=files_data, headers=custHeaders)
         log_request(resp)
         log_response(resp)
         return resp

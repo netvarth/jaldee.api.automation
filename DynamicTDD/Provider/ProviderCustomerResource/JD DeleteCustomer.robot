@@ -18,7 +18,7 @@ ${self}        0
 
 JD-TC-DeleteCustomer-1
      [Documentation]  Delete a customer with valid customerid and verify its deleted
-     ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -36,7 +36,7 @@ JD-TC-DeleteCustomer-1
  
 JD-TC-DeleteCustomer-UH1
       [Documentation]  Delete a customer with already deleted customerid
-      ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  DeleteCustomer  ${customerId}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -44,7 +44,7 @@ JD-TC-DeleteCustomer-UH1
      
 JD-TC-DeleteCustomer-UH2
       [Documentation]  Delete a customer with invalid customer id
-      ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  DeleteCustomer  0
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -67,22 +67,28 @@ JD-TC-DeleteCustomer-UH4
     
 JD-TC-DeleteCustomer-UH5  
       [Documentation]  Delete a customer after waitlisted in a queue(Here we can't delete the waitlisted customer is in arrived or checkin state customer is in  cancel state we can delete )
-      ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       clear_location  ${PUSERNAME8}
       clear_queue  ${PUSERNAME8}
       ${resp}=   ProviderKeywords.Get Queues
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
       ${ph2}=  Evaluate  ${PUSERNAME1}+71008
       ${gender}=  Random Element    ${Genderlist}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}   ${ph2}  ${EMPTY} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cId}  ${resp.json()}
@@ -90,7 +96,6 @@ JD-TC-DeleteCustomer-UH5
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cId} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -119,7 +124,7 @@ JD-TC-DeleteCustomer-UH5
 
 JD-TC-DeleteCustomer-2
      [Documentation]  Delete a customer with valid customerid and verify its deleted
-     ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${ph}=  Evaluate  ${PUSERNAME230}+71006
      ${resp}=  AddCustomer  ${ph}

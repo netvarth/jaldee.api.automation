@@ -51,7 +51,7 @@ JD-TC-UserLoginwithEmployeeid-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -158,7 +158,7 @@ JD-TC-UserLoginwithEmployeeid-2
 
     [Documentation]  again update the user with employeeid and try to login.
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -184,7 +184,7 @@ JD-TC-UserLoginwithEmployeeid-3
 
     [Documentation]  create a new user and get the employeeid then try to login with that employee id.
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -232,7 +232,7 @@ JD-TC-UserLoginwithEmployeeid-4
 
     [Documentation]  create a new user with employeeid then try to login with that employee id.    
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

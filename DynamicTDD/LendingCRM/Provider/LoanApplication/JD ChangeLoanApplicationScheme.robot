@@ -58,7 +58,7 @@ JD-TC-Change Loan Application Scheme-1
                                   
     [Documentation]               Create a loan And try to Change Loan Application Scheme.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -108,9 +108,14 @@ JD-TC-Change Loan Application Scheme-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     clear Customer  ${PUSERNAME87}
@@ -454,7 +459,7 @@ JD-TC-Change Loan Application Scheme-2
                                   
     [Documentation]               Create a loan And try to Change Loan Application SUBVENTION Scheme.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -473,7 +478,7 @@ JD-TC-Change Loan Application Scheme-3
                                   
     [Documentation]               After approvel request try to Change Loan Application Scheme.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -538,7 +543,7 @@ JD-TC-Change Loan Application Scheme-4
                                   
     [Documentation]               After credit approved try to Change Loan Application Scheme.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -566,7 +571,7 @@ JD-TC-Change Loan Application Scheme-UH1
                                   
     [Documentation]               After approved try to Change Loan Application Scheme.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -600,7 +605,7 @@ JD-TC-Change Loan Application Scheme-UH2
                                   
     [Documentation]               Change Loan Application Scheme with invalid loanuid.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -615,7 +620,7 @@ JD-TC-Change Loan Application Scheme-UH3
                                   
     [Documentation]               Change Loan Application Scheme with invalid schemeid.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

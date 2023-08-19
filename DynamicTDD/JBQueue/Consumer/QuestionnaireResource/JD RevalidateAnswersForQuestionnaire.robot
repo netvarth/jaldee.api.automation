@@ -15,6 +15,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
+# ${xlFile}      ${EXECDIR}/ebs/TDD/sampleqnr.xlsx
 ${xlFile}      ${EXECDIR}/TDD/sampleqnr.xlsx    # DataSheet
 ${xlFile2}      ${EXECDIR}/TDD/qnr.xlsx    # DataSheet 2
 ${self}      0
@@ -43,13 +44,14 @@ JD-TC-RevalidateConsumerQuestionnaire-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -87,11 +89,12 @@ JD-TC-RevalidateConsumerQuestionnaire-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}    ${xlFile} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -173,13 +176,14 @@ JD-TC-RevalidateConsumerQuestionnaire-1
 JD-TC-RevalidateConsumerQuestionnaire-2
     [Documentation]  Revalidate service questionnaire with updated data.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -259,13 +263,14 @@ JD-TC-RevalidateConsumerQuestionnaire-2
 JD-TC-RevalidateConsumerQuestionnaire-3
     [Documentation]  Revalidate service questionnaire with just the updated part data.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -358,13 +363,14 @@ JD-TC-RevalidateConsumerQuestionnaire-3
 JD-TC-RevalidateConsumerQuestionnaire-UH1
     [Documentation]  Revalidate service questionnaire with incorrect data.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -468,7 +474,7 @@ JD-TC-RevalidateConsumerQuestionnaire-UH2
 JD-TC-RevalidateConsumerQuestionnaire-UH3
     [Documentation]  Revalidate data by provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

@@ -20,19 +20,20 @@ JD-TC-GetHolidayById-1
 
     clear_location    ${PUSERNAME32}
     clear_service     ${PUSERNAME32}
-    ${resp}=  ProviderLogin  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ACC_ID32}=  get_acc_id   ${PUSERNAME32}
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Create Sample Queue
     Set Suite Variable   ${loc_id}   ${resp['location_id']}
     Set Suite Variable   ${ser_id}   ${resp['service_id']}
     Set Suite Variable   ${que_id}   ${resp['queue_id']}
     ${resp}=  Get Queue By Location and service By Date  ${loc_id}  ${ser_id}  ${CUR_DAY}  ${ACC_ID32}
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${strt_time}    ${resp.json()[0]['effectiveSchedule']['timeSlots'][0]['sTime']} 
     Set Test Variable   ${end_time}     ${resp.json()[0]['effectiveSchedule']['timeSlots'][0]['eTime']}
-    ${DAY2}=  add_date  1
+    ${DAY2}=  db.add_timezone_date  ${tz}  1  
     ${desc}=    FakerLibrary.name
     Set Test Variable      ${desc}
     ${list}=  Create List   1  2  3  4  5  6  7
@@ -43,6 +44,7 @@ JD-TC-GetHolidayById-1
     Set Suite Variable  ${holi_id}    ${resp.json()['holidayId']}
     ${resp}=   Get Holiday By Id  ${holi_id}
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response    ${resp}  description=${desc}   id=${holi_id} 
     Should Be Equal As Strings   ${resp.json()['holidaySchedule']['recurringType']}                     ${recurringtype[1]}
     Should Be Equal As Strings   ${resp.json()['holidaySchedule']['repeatIntervals']}                   ${list}  
@@ -71,7 +73,7 @@ JD-TC-GetHolidayById-UH2
 JD-TC-GetHolidayById-UH3
     [Documentation]  Get holiday details of another provider
 
-    ${resp}=  ProviderLogin  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Id  ${holi_id}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -80,7 +82,7 @@ JD-TC-GetHolidayById-UH3
 JD-TC-GetHolidayById-UH4
     [Documentation]  Get an invalid holiday details
 
-    ${resp}=  ProviderLogin  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Id   0
     Should Be Equal As Strings  ${resp.status_code}  422

@@ -54,7 +54,7 @@ JD-TC-AddLoanBankDetails-1
                                   
     [Documentation]               Create Loan Application and add loan bank details.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -102,9 +102,14 @@ JD-TC-AddLoanBankDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${gender}=  Random Element    ${Genderlist}
@@ -414,7 +419,7 @@ JD-TC-AddLoanBankDetails-2
                                   
     [Documentation]               Create Loan Application and add loan bank Details without Requst For Aadhar Validation and pan.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -478,7 +483,7 @@ JD-TC-AddLoanBankDetails-3
                                   
     [Documentation]               Create Loan Application and add loan bank Details invalid orginfrom.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -553,7 +558,7 @@ JD-TC-AddLoanBankDetails-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -612,7 +617,7 @@ JD-TC-AddLoanBankDetails-UH1
     [Documentation]  Create Loan Application and add loan bank Details invalid originUid.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -621,6 +626,7 @@ JD-TC-AddLoanBankDetails-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype           ${account_id}
@@ -779,7 +785,7 @@ JD-TC-AddLoanBankDetails-5
     [Documentation]               Create Loan Application and add loan bank Details invalid loanApplicationUid.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -857,7 +863,7 @@ JD-TC-AddLoanBankDetails-6
                                   
     [Documentation]               Create Loan Application and add loan bank Details EMPTY loanApplicationUid.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -894,7 +900,7 @@ JD-TC-AddLoanBankDetails-7
     [Documentation]               Create Loan Application and add loan bank Details EMPTY originUid.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -957,7 +963,7 @@ JD-TC-AddLoanBankDetails-8
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankName.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1020,7 +1026,7 @@ JD-TC-AddLoanBankDetails-9
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankAccountNo.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1083,7 +1089,7 @@ JD-TC-AddLoanBankDetails-10
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankIfsc.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1146,7 +1152,7 @@ JD-TC-AddLoanBankDetails-11
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankAddress1.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1208,7 +1214,7 @@ JD-TC-AddLoanBankDetails-12
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankAddress2.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1270,7 +1276,7 @@ JD-TC-AddLoanBankDetails-13
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankCity.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1332,7 +1338,7 @@ JD-TC-AddLoanBankDetails-14
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankState.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1394,7 +1400,7 @@ JD-TC-AddLoanBankDetails-15
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankPin.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1456,7 +1462,7 @@ JD-TC-AddLoanBankDetails-16
     [Documentation]               Create Loan Application and add loan bank Details EMPTY bankStatementAttachments.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1518,7 +1524,7 @@ JD-TC-AddLoanBankDetails-17
     [Documentation]               Create Loan Application and add loan bank Details with .sh file bankStatementAttachments.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1582,7 +1588,7 @@ JD-TC-AddLoanBankDetails-18
     [Documentation]               Create Loan Application and add loan bank Details two time.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

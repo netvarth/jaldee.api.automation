@@ -38,17 +38,17 @@ JD-TC-GetQueueLength-1
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_F}${\n}
       Set Suite Variable  ${PUSERNAME_F}
 
-      ${resp}=  Provider Login  ${PUSERNAME_F}  ${PASSWORD}
-      Log   ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
+      # ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${DAY1}=  get_date
+      
       ${list}=  Create List  1  2  3  4  5  6  7
       ${ph1}=  Evaluate  ${PUSERNAME_F}+15566124
       ${ph2}=  Evaluate  ${PUSERNAME_F}+25566128
@@ -60,18 +60,22 @@ JD-TC-GetQueueLength-1
       ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
       ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_F}.ynwtest@netvarth.com  ${views}
       ${bs}=  FakerLibrary.bs
-      ${city}=   FakerLibrary.state
-      ${latti}=  get_latitude
-      ${longi}=  get_longitude
       ${companySuffix}=  FakerLibrary.companySuffix
-      ${postcode}=  FakerLibrary.postcode
-      ${address}=  get_address
+      # ${city}=   FakerLibrary.state
+      # ${latti}=  get_latitude
+      # ${longi}=  get_longitude
+      # ${postcode}=  FakerLibrary.postcode
+      # ${address}=  get_address
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       ${parking}   Random Element   ${parkingType}
       ${24hours}    Random Element    ${bool}
       ${desc}=   FakerLibrary.sentence
       ${url}=   FakerLibrary.url
-      ${sTime}=  add_time  0  15
-      ${eTime}=  add_time   0  45
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      ${sTime}=  add_timezone_time  ${tz}  0  15  
+      ${eTime}=  add_timezone_time  ${tz}  0  45  
       ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -110,20 +114,26 @@ JD-TC-GetQueueLength-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-      ${DAY1}=  get_date
+      
+      ${lid}=  Create Sample Location
+      Set Suite Variable  ${lid}
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+      ${s_id1}=  Create Sample Service  ${SERVICE1}
+      Set Suite Variable  ${s_id1}
+
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY1}  ${DAY1}
-      ${DAY2}=  add_date  10      
+      ${DAY2}=  db.add_timezone_date  ${tz}  10        
       Set Suite Variable  ${DAY2}  ${DAY2}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}  ${list}
-      ${sTime1}=  subtract_time  1  15
+      ${sTime1}=  subtract_timezone_time  ${tz}  1  15
       Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_time   0  30
+      ${eTime1}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime1}
-      ${lid}=  Create Sample Location
-      Set Suite Variable  ${lid}
-      ${s_id1}=  Create Sample Service  ${SERVICE1}
-      Set Suite Variable  ${s_id1}
       ${queue_name}=  FakerLibrary.bs
       ${resp}=  Create Queue  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id1}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -133,13 +143,14 @@ JD-TC-GetQueueLength-1
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid1}  ${resp.json()}
+
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
+      
       ${cid}=  get_id  ${CUSERNAME2}
       ${desc}=   FakerLibrary.word
 
@@ -151,7 +162,6 @@ JD-TC-GetQueueLength-1
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}   ${cid2}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Get Queue Length  ${qid1}  ${DAY1}
@@ -163,12 +173,11 @@ JD-TC-GetQueueLength-1
 
 JD-TC-GetQueueLength-2
       [Documentation]   Get queue length after STARTED
-      ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
       ${resp}=  Get Queue Length  ${qid1}  ${DAY1}
@@ -183,18 +192,16 @@ JD-TC-GetQueueLength-2
 
 JD-TC-GetQueueLength-3
       [Documentation]   Get Queue length after CANCEL
-      ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Get Queue Length  ${qid1}  ${DAY1}
@@ -213,18 +220,16 @@ JD-TC-GetQueueLength-3
       
 JD-TC-GetQueueLength-4
       [Documentation]   Get Queue length after CHECK_IN
-      ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Get Queue Length  ${qid1}  ${DAY1}
@@ -254,14 +259,13 @@ JD-TC-GetQueueLength-4
 
 JD-TC-GetQueueLength-5
       [Documentation]   Get future queue length after STARTED
-      ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY2}=  add_date  1
+      ${DAY2}=  db.add_timezone_date  ${tz}  1  
       Set Suite Variable  ${DAY2}  ${DAY2}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
       ${resp}=  Get Queue Length  ${qid1}  ${DAY2}
@@ -276,18 +280,16 @@ JD-TC-GetQueueLength-5
 
 JD-TC-GetQueueLength-6
       [Documentation]   Get future queue length after CANCEL
-      ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Get Queue Length  ${qid1}  ${DAY2}
@@ -306,18 +308,16 @@ JD-TC-GetQueueLength-6
       
 JD-TC-GetQueueLength-7
       [Documentation]   Get future queue length after CHECK_IN
-      ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Get Queue Length  ${qid1}  ${DAY2}
@@ -362,7 +362,7 @@ JD-TC-GetQueueLength-UH2
 *** Comment ***
 JD-TC-GetQueueLength-3
       [Documentation]   Get Queue length after DONE
-      ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=   Enable Waitlist
       Should Be Equal As Strings  ${resp.status_code}  200

@@ -77,7 +77,7 @@ JD-TC-Loan Approval-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -90,9 +90,16 @@ JD-TC-Loan Approval-1
     # Set Suite Variable  ${p_id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -131,8 +138,13 @@ JD-TC-Loan Approval-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  Get Account Settings
@@ -193,7 +205,7 @@ JD-TC-Loan Approval-1
 
 
    
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get User By Id  ${u_id}
@@ -230,7 +242,7 @@ JD-TC-Loan Approval-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${account_id}  ${resp.json()['id']}
@@ -547,7 +559,7 @@ JD-TC-Loan Approval-1
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -576,7 +588,7 @@ JD-TC-Loan Approval-2
     [Documentation]               Try to Approved a loan Two times.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -592,7 +604,7 @@ JD-TC-Loan Approval-3
                                   
     [Documentation]               Manual Approval one argunemt is empty then try to approved the loan.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -601,8 +613,13 @@ JD-TC-Loan Approval-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=    Generate Loan Application Otp for Phone Number    ${phone}  ${cc}
@@ -759,7 +776,7 @@ JD-TC-Loan Approval-3
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -788,7 +805,7 @@ JD-TC-Loan Approval-4
     [Documentation]               Create Loan Application and try to approve with empty schemeid.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -813,7 +830,7 @@ JD-TC-Loan Approval-5
     [Documentation]               Create Loan Application and try to approve with empty loanuid.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -827,7 +844,7 @@ JD-TC-Loan Approval-6
     [Documentation]               Try to Approved a loan with user login.
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

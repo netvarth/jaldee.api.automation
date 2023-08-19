@@ -18,7 +18,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 @{acceptPaymentBy}   cash  other
 
-${empty}=  0
+${empty}   0
+${tz}   Asia/Kolkata
 
 ***Test Cases***
 
@@ -28,10 +29,10 @@ JD-SA-TC-Accept Payments-1
 	#${amountToPay}   24
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 	Set Test Variable  ${collectedDate}
@@ -90,10 +91,10 @@ JD-SA-TC-Accept Payments-2
 	#${amountToPay}=   12
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	Set Test Variable  ${collectedDate}
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
@@ -150,10 +151,10 @@ JD-SA-TC-Accept Payments-3
 	#${amountToPay}=   12
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 
@@ -213,7 +214,7 @@ JD-SA-TC-Accept Payments-3
 #	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 #	Should Be Equal As Strings  ${resp.status_code}  200
 #	${id}=  get_acc_id  ${PUSERNAME67}
-#	${collectedDate}=  add_date  -2
+#	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 #	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
 #	${resp}=  Get Invoices superadmin  ${id}  NotPaid
 #	Log  ${resp.content}
@@ -233,7 +234,7 @@ JD-SA-TC-Accept Payments -UH1
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${id}=  get_acc_id  ${PUSERNAME67}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 
@@ -259,7 +260,7 @@ JD-SA-TC-Accept Payments -4
 	${id}=  get_acc_id   ${PUSERNAME25}
 	${cancelReason}=     FakerLibrary.name
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 
@@ -314,7 +315,7 @@ JD-SA-TC-Accept Payments -UH2
     ${note}=     FakerLibrary.text
 
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${resp}=   Get Addons Metadata For Superadmin
 	Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -352,7 +353,7 @@ JD-SA-TC-Accept Payments -UH3
     [Documentation]   Acceptpayment on invoice With ConsumerLogin
     ${resp} =   Consumer Login  ${CUSERNAME}  ${PASSWORD}
  	${id} =  get_acc_id   ${CUSERNAME1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cancelReason}=     FakerLibrary.name
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
@@ -366,9 +367,9 @@ JD-SA-TC-Accept Payments -UH3
 
 JD-SA-TC-Accept Payments -UH4
   [Documentation]   Acceptpayment on invoice with Providerlogin
-	${resp} =  ProviderLogin    ${PUSERNAME}  ${PASSWORD}
+	${resp} =  Encrypted Provider Login    ${PUSERNAME}  ${PASSWORD}
 	${id}=  get_acc_id   ${PUSERNAME2}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 
@@ -388,10 +389,10 @@ JD-SA-TC-Accept Payments -5
     [Documentation]  Superadmin AcceptPayment On Statement -Empty note
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 
@@ -450,10 +451,10 @@ JD-SA-TC-Accept Payments -UH5
     [Documentation]  Superadmin AcceptPayment On Statement -but it's a Cancelled Statement
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 
@@ -505,10 +506,10 @@ JD-SA-TC-Accept Payments -UH6
     [Documentation]  Superadmin AcceptPayment On Statement -but CollectedDate is Empty
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 
@@ -560,10 +561,10 @@ JD-SA-TC-Accept Payments -UH7
     [Documentation]  Superadmin AcceptPayment On Statement -but CollectedDate is Future date
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${F_collectedDate}=  add_date  2
+	${F_collectedDate}=  db.add_timezone_date  ${tz}  2  
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 
@@ -613,10 +614,10 @@ JD-SA-TC-Accept Payments-6
 	#${amountToPay}=   12
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	Set Test Variable  ${collectedDate}
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
@@ -676,10 +677,10 @@ JD-SA-TC-Accept Payments-7
 	#${amountToPay}=   12
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
-	${DAY1}=  get_date
+	${DAY1}=  db.get_date_by_timezone  ${tz}
 	${acceptBy}=  evaluate  random.choice($acceptPaymentBy)  random
     Set Suite Variable  ${createdDate}  ${DAY1}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	Set Test Variable  ${collectedDate}
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
@@ -731,7 +732,7 @@ JD-SA-TC-Accept Payments-7
 	${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${id}=  get_acc_id   ${PUSERNAME67}
-	${collectedDate}=  add_date  -2
+	${collectedDate}=  db.add_timezone_date  ${tz}  -2
 	${cltdby}=   FakerLibrary.name
     ${note}=     FakerLibrary.text
 

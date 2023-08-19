@@ -39,7 +39,7 @@ JD-TC-ChangeLeadStatus-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -76,9 +76,16 @@ JD-TC-ChangeLeadStatus-1
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
     END
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -129,7 +136,7 @@ JD-TC-ChangeLeadStatus-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +168,7 @@ JD-TC-ChangeLeadStatus-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -193,7 +200,7 @@ JD-TC-ChangeLeadStatus-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -225,7 +232,7 @@ JD-TC-ChangeLeadStatus-2
 
     [Documentation]   Change lead status to Credit Score Generated.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -298,7 +305,7 @@ JD-TC-ChangeLeadStatus-3
 
     [Documentation]   change the lead status to Sales Verified then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -315,7 +322,7 @@ JD-TC-ChangeLeadStatus-4
 
     [Documentation]   change the lead status to Login then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -333,7 +340,7 @@ JD-TC-ChangeLeadStatus-5
 
     [Documentation]   change the lead status to Login Verified then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -351,7 +358,7 @@ JD-TC-ChangeLeadStatus-6
 
     [Documentation]   change the lead status to Credit Recommendation then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -369,7 +376,7 @@ JD-TC-ChangeLeadStatus-7
 
     [Documentation]   change the lead status to Loan Sanction then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -387,7 +394,7 @@ JD-TC-ChangeLeadStatus-8
 
     [Documentation]   change the lead status to Loan Disbursement then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -427,7 +434,7 @@ JD-TC-ChangeLeadStatus-9
 
     [Documentation]   change the lead status Loan Disbursement to Credit Recommendation then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -444,7 +451,7 @@ JD-TC-ChangeLeadStatus-10
 
     [Documentation]   change the lead status Credit Recommendation to Login Verified then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -461,7 +468,7 @@ JD-TC-ChangeLeadStatus-11
 
     [Documentation]   change the lead status Login Verified to Login then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -478,7 +485,7 @@ JD-TC-ChangeLeadStatus-12
 
     [Documentation]   change the lead status Login to Sales Verified then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -495,7 +502,7 @@ JD-TC-ChangeLeadStatus-13
 
     [Documentation]   change the lead status Sales Verified to Credit Score Generated then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -511,7 +518,7 @@ JD-TC-ChangeLeadStatus-14
 
     [Documentation]   change the lead status Credit Score Generated to KYC Updated then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -528,7 +535,7 @@ JD-TC-ChangeLeadStatus-15
 
     [Documentation]   change the lead status KYC Updated to New then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -545,7 +552,7 @@ JD-TC-ChangeLeadStatus-16
 
     [Documentation]   change the lead status New to Credit Score Generated then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -565,7 +572,7 @@ JD-TC-ChangeLeadStatus-17
 
     [Documentation]   change the lead status New to Login Verified then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -581,7 +588,7 @@ JD-TC-ChangeLeadStatus-18
 
     [Documentation]   change the lead status New to Loan Disbursement then verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -602,7 +609,7 @@ JD-TC-ChangeLeadStatus-UH3
 
     [Documentation]   Change the lead status to assigned after assign the lead to an assignee.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -624,7 +631,7 @@ JD-TC-ChangeLeadStatus-
 
     [Documentation]   change the lead status after closed the lead.
 
-    ${resp}=  Provider Login  ${MUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME80}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

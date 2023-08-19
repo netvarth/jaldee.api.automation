@@ -34,7 +34,7 @@ JD-TC-UploadAttachment-1
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Vendor)
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -168,7 +168,7 @@ JD-TC-UploadAttachment-UH1
 
     [Documentation]  Create Category and upload a attachment with invalid Vendor id.
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}

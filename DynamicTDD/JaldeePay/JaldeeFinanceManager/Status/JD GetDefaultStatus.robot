@@ -27,7 +27,7 @@ JD-TC-get Default status-1
 
     [Documentation]  Create statuses,get all status and verify default one .
 
-    ${resp}=  Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}

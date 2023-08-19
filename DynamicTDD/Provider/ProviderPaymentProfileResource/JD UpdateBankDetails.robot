@@ -30,14 +30,14 @@ JD-TC-UpdateBankDetails-1
 
     [Documentation]  Create and update bank details with another phone number for a provider by superadmin.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pid}=  get_acc_id  ${PUSERNAME154}
     Set Suite Variable  ${pid}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
    
@@ -98,7 +98,7 @@ JD-TC-UpdateBankDetails-2
 
     [Documentation]  Create and update bank details with another another pancard number for a provider by superadmin.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -129,7 +129,7 @@ JD-TC-UpdateBankDetails-3
 
     [Documentation]  Update my own bank details for a provider by superadmin after did the payu verification.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -168,7 +168,7 @@ JD-TC-UpdateBankDetails-4
 
     [Documentation]  Create and update my own bank details for a provider by superadmin and get the bank details by provider..
 
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -190,7 +190,7 @@ JD-TC-UpdateBankDetails-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -210,7 +210,7 @@ JD-TC-UpdateBankDetails-6
 
     [Documentation]  Update my own bank details for a provider without phone number.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -252,7 +252,7 @@ JD-TC-UpdateBankDetails-UH4
 
     [Documentation]  Update bank details using invalid bank id.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -276,7 +276,7 @@ JD-TC-UpdateBankDetails-7
 
     [Documentation]  Update bank details without pancard number.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -291,7 +291,7 @@ JD-TC-UpdateBankDetails-8
 
     [Documentation]  Update bank details without bank account number.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -306,7 +306,7 @@ JD-TC-UpdateBankDetails-9
 
     [Documentation]  Update bank details without bank name.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -321,7 +321,7 @@ JD-TC-UpdateBankDetails-10
 
     [Documentation]  Update bank details without ifsc code.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -336,7 +336,7 @@ JD-TC-UpdateBankDetails-11
 
     [Documentation]  Update bank details without name on pan card.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -351,7 +351,7 @@ JD-TC-UpdateBankDetails-12
 
     [Documentation]  Update bank details without Account holder's name.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -366,7 +366,7 @@ JD-TC-UpdateBankDetails-13
 
     [Documentation]  Update bank details without branch city.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -381,7 +381,7 @@ JD-TC-UpdateBankDetails-5
 
     [Documentation]  Update my own bank details for a provider without any deatils by superadmin.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

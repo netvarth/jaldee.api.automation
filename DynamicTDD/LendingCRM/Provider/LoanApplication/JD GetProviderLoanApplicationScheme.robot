@@ -25,7 +25,7 @@ JD-TC-GetLoanApplicationScheme-1
                                   
     [Documentation]           Get Loan Application Scheme
     
-    ${resp}=  Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}

@@ -19,7 +19,7 @@ ${a}  20
 
 JD-TC-Update Tax Percentage-1
        [Documentation]   Update Tax valid provider
-       ${resp}=   ProviderLogin  ${PUSERNAME20}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${gstper}=  Random Element  ${gstpercentage}
        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -40,10 +40,14 @@ JD-TC-Update Tax Percentage-2
        ${length}=  Get Length   ${len}
      
        FOR   ${a}  IN RANGE   ${length}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+       ${decrypted_data}=  db.decrypt_data  ${resp.content}
+       Log  ${decrypted_data}
+       ${domain}=   Set Variable    ${decrypted_data['sector']}
+       ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${check}  ${resp2.json()['pos']}
@@ -62,7 +66,7 @@ JD-TC-Update Tax Percentage-2
 
 JD-TC-Update Tax Percentage -3
        [Documentation]  create bill with changed tax
-       ${resp}=   ProviderLogin  ${PUSERNAME26}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_customer   ${PUSERNAME26}
        
@@ -88,11 +92,17 @@ JD-TC-Update Tax Percentage -3
 
        ${resp}=  Create Sample Location
        Set Test Variable    ${loc_id}   ${resp} 
-       ${DAY1}=  get_date 
+
+       ${resp}=   Get Location By Id   ${loc_id} 
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+       Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+       ${DAY1}=  db.get_date_by_timezone  ${tz} 
        ${q_name}=    FakerLibrary.name
        ${list}=  Create List   1  2  3  4  5  6  7
-       ${strt_time}=   add_time  1  00
-       ${end_time}=    add_time  6  00 
+       ${strt_time}=   add_timezone_time  ${tz}  1  00  
+       ${end_time}=    add_timezone_time  ${tz}  6  00   
        ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
        ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
        ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id}  ${s_id1}
@@ -142,7 +152,7 @@ JD-TC-Update Tax Percentage-UH1
 
        [Documentation]   Update tax above 100 %
 
-       ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${gstper}=  FakerLibrary.pyfloat  left_digits=3   right_digits=1    positive=True
        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -170,7 +180,7 @@ JD-TC-Update Tax Percentage-UH3
 
 JD-TC-Update Tax Percentage-UH4
        [Documentation]  Update Tax GSTno greater than 15
-       ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${gstper}=  Random Element  ${gstpercentage}
        ${resp}=  Update Tax Percentage  ${gstper}  16DEFBV1100M2Y21
@@ -179,7 +189,7 @@ JD-TC-Update Tax Percentage-UH4
 
 JD-TC-Update Tax Percentage-UH5
        [Documentation]  Update Tax GSTno less than 15
-       ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${gstper}=  Random Element  ${gstpercentage}
        ${resp}=  Update Tax Percentage  ${gstper}  16DEFBV1100M2Z
@@ -188,7 +198,7 @@ JD-TC-Update Tax Percentage-UH5
 
 JD-TC-Update Tax Percentage-UH6
        [Documentation]  Update Tax GST tax is empty
-       ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
        ${resp}=  Update Tax Percentage  ${NONE}  ${GST_num}
@@ -197,7 +207,7 @@ JD-TC-Update Tax Percentage-UH6
 
 JD-TC-Update Tax Percentage-UH7
        [Documentation]  Update Tax is zero 
-       ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
        ${resp}=  Update Tax Percentage  0  ${GST_num}
@@ -206,7 +216,7 @@ JD-TC-Update Tax Percentage-UH7
 
 JD-TC-Update Tax Percentage-UH8
        [Documentation]  Update Tax is negative No 
-       ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${gstper}=  Random Element  ${gstpercentage}
        ${gstper}=  Evaluate  ${gstper}*-1
@@ -217,7 +227,7 @@ JD-TC-Update Tax Percentage-UH8
 
 JD-TC-Update Tax Percentage-UH9
        [Documentation]  Update gst number with an already existing number 
-       ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${gstper}=  Random Element  ${gstpercentage}
        ${resp}=  Update Tax Percentage  ${gstper}  ${GSTNO}
@@ -228,7 +238,7 @@ JD-TC-Update Tax Percentage-UH9
 
 *** comment***
 JD-TC-Update Tax Percentage -3 Verification
-       ${resp}=   ProviderLogin  ${PUSERNAME26}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${description}=  FakerLibrary.sentence
        ${gstper}=  Random Element  ${gstpercentage}
@@ -237,7 +247,7 @@ JD-TC-Update Tax Percentage -3 Verification
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Enable Tax
        Should Be Equal As Strings    ${resp.status_code}   200
-       ${DAY1}=  get_date
+       ${DAY1}=  db.get_date_by_timezone  ${tz}
        ${resp}=  Get Queues
        Should Be Equal As Strings  ${resp.status_code}  200
        Set Test Variable  ${qid}  ${resp.json()[0]['id']}

@@ -59,16 +59,21 @@ JD-TC-ConsumerAppointmentCommunication-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_H}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_H}${\n}
     Set Suite Variable  ${PUSERNAME_H}
 
-    # ${resp}=  Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id2}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id2}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${p_id2}  ${resp.json()['id']}
 
     Set Test Variable  ${email_id}  ${PUSERNAME_H}.${P_EMAIL}.ynwtest@netvarth.com
 
@@ -78,7 +83,6 @@ JD-TC-ConsumerAppointmentCommunication-1
 
 # *** Comment ***
     
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_H}+15566001
     ${ph2}=  Evaluate  ${PUSERNAME_H}+25566002
@@ -92,18 +96,22 @@ JD-TC-ConsumerAppointmentCommunication-1
     ${bsname}=  FakerLibrary.bs
     Set Suite Variable   ${bsname}
     ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz1}
+    ${DAY1}=  db.get_date_by_timezone  ${tz1}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz1}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz1}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule   ${bsname}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -156,15 +164,24 @@ JD-TC-ConsumerAppointmentCommunication-1
 
     ${pid}=  get_acc_id  ${PUSERNAME_H}
     Set Suite Variable   ${pid}
-    ${DAY1}=  get_date
-    Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime2}=  db.get_time
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime2}=  add_two   ${sTime2}  ${delta}
+    # ${sTime2}=  db.get_time_by_timezone   ${tz}  
+    
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime2}=  add_two   ${sTime2}  ${delta}
+
     clear_appt_schedule   ${PUSERNAME_H}
     ${SERVICE1}=   FakerLibrary.name
     Set Suite Variable   ${SERVICE1}
@@ -179,6 +196,7 @@ JD-TC-ConsumerAppointmentCommunication-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
+    
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -580,7 +598,7 @@ JD-TC-ConsumerAppointmentCommunication-5
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     
-    ${resp}=  Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -627,7 +645,7 @@ JD-TC-ConsumerAppointmentCommunication-6
     [Documentation]  Send appointment communication message to Provider after Starting appointment.
 
     ${cid}=  get_id  ${CUSERNAME33}
-    ${resp}=  Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_Consumermsg  ${CUSERNAME33}
@@ -675,7 +693,7 @@ JD-TC-ConsumerAppointmentCommunication-7
     clear_Consumermsg  ${CUSERNAME33}
     clear_Providermsg  ${PUSERNAME_H}
 
-    ${resp}=  Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -723,7 +741,7 @@ JD-TC-ConsumerAppointmentCommunication-8
     clear_Consumermsg  ${CUSERNAME21}
     clear_Providermsg  ${PUSERNAME_H}
 
-    ${resp}=  Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -822,7 +840,7 @@ JD-TC-ConsumerAppointmentCommunication-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

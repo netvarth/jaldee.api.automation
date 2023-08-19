@@ -120,13 +120,14 @@ JD-TC-ReSubmitQuestionnaireForOrder-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -197,7 +198,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-1
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${catalogid}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}   ${item_id2}
+            ${catalogid}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}   ${item_id2}
             
         END
     END
@@ -237,7 +238,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -291,7 +292,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-1
     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=   Split String 	 ${fname}   
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME34}.ynwtest@netvarth.com
@@ -359,13 +360,14 @@ JD-TC-ReSubmitQuestionnaireForOrder-2
     
     clear_customer   ${PUSERNAME170}
     
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -395,7 +397,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-2
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}  200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME34}.ynwtest@netvarth.com
@@ -473,7 +475,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-2
 JD-TC-ReSubmitQuestionnaireForOrder-3
     [Documentation]  Resubmit questionnaire for order after starting order
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -514,7 +516,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-3
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME34}.ynwtest@netvarth.com
@@ -535,7 +537,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${orderid1}
 
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -598,7 +600,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-3
 JD-TC-ReSubmitQuestionnaireForOrder-4
     [Documentation]  Resubmit questionnaire for order after completing order
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -639,7 +641,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-4
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME34}.ynwtest@netvarth.com
@@ -660,7 +662,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${orderid1}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
 
     ${resp}=  Change Order Status   ${orderid1}   ${orderStatuses[9]}
@@ -722,7 +724,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-4
 JD-TC-ReSubmitQuestionnaireForOrder-UH1
     [Documentation]  Resubmit questionnaire for cancelled order.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -763,7 +765,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-UH1
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME34}.ynwtest@netvarth.com
@@ -835,13 +837,14 @@ JD-TC-ReSubmitQuestionnaireForOrder-UH1
 JD-TC-ReSubmitQuestionnaireForOrder-UH2
     [Documentation]  Resubmit answers with invalid data.
 
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -883,7 +886,7 @@ JD-TC-ReSubmitQuestionnaireForOrder-UH2
     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME34}.ynwtest@netvarth.com

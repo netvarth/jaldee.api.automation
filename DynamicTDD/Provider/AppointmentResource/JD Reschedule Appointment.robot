@@ -36,7 +36,7 @@ JD-TC-Reschedule Appointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -100,6 +100,11 @@ JD-TC-Reschedule Appointment-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -109,16 +114,16 @@ JD-TC-Reschedule Appointment-1
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -145,9 +150,9 @@ JD-TC-Reschedule Appointment-1
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
@@ -268,7 +273,7 @@ JD-TC-Reschedule Appointment-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -310,6 +315,11 @@ JD-TC-Reschedule Appointment-2
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -321,17 +331,17 @@ JD-TC-Reschedule Appointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -363,9 +373,9 @@ JD-TC-Reschedule Appointment-2
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -488,7 +498,7 @@ JD-TC-Reschedule Appointment-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -508,6 +518,11 @@ JD-TC-Reschedule Appointment-3
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -519,17 +534,17 @@ JD-TC-Reschedule Appointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -563,9 +578,9 @@ JD-TC-Reschedule Appointment-3
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -681,7 +696,7 @@ JD-TC-Reschedule Appointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -701,6 +716,11 @@ JD-TC-Reschedule Appointment-4
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -712,11 +732,11 @@ JD-TC-Reschedule Appointment-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -772,9 +792,9 @@ JD-TC-Reschedule Appointment-4
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -883,7 +903,7 @@ JD-TC-Reschedule Appointment-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -915,6 +935,11 @@ JD-TC-Reschedule Appointment-5
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -926,11 +951,11 @@ JD-TC-Reschedule Appointment-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -989,9 +1014,9 @@ JD-TC-Reschedule Appointment-5
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -1108,7 +1133,7 @@ JD-TC-Reschedule Appointment-6
     Set Suite Variable   ${billable_providers}
     Set Suite Variable   ${multilocPro}
 
-    ${resp}=  Provider Login  ${multilocPro[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1162,7 +1187,15 @@ JD-TC-Reschedule Appointment-6
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${lid1}=  Create Sample Location 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     clear_appt_schedule   ${multilocPro[4]}
 
     ${resp}=  Get Appointment Schedules
@@ -1172,11 +1205,11 @@ JD-TC-Reschedule Appointment-6
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -1240,9 +1273,9 @@ JD-TC-Reschedule Appointment-6
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -1353,7 +1386,7 @@ JD-TC-Reschedule Appointment-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1373,6 +1406,11 @@ JD-TC-Reschedule Appointment-7
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -1384,17 +1422,17 @@ JD-TC-Reschedule Appointment-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=2  max=2
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     # ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool[1]}  ${s_id}
     Log  ${resp.json()}
@@ -1428,9 +1466,9 @@ JD-TC-Reschedule Appointment-7
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -1542,7 +1580,7 @@ JD-TC-Reschedule Appointment-8
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1562,6 +1600,11 @@ JD-TC-Reschedule Appointment-8
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -1573,11 +1616,11 @@ JD-TC-Reschedule Appointment-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -1634,9 +1677,9 @@ JD-TC-Reschedule Appointment-8
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -1745,7 +1788,7 @@ JD-TC-Reschedule Appointment-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -1768,6 +1811,11 @@ JD-TC-Reschedule Appointment-9
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -1779,17 +1827,17 @@ JD-TC-Reschedule Appointment-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     # ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool[1]}  ${s_id}
     Log  ${resp.json()}
@@ -1823,9 +1871,9 @@ JD-TC-Reschedule Appointment-9
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -1990,7 +2038,7 @@ JD-TC-Reschedule Appointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2037,23 +2085,29 @@ JD-TC-Reschedule Appointment-10
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -2105,9 +2159,9 @@ JD-TC-Reschedule Appointment-10
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -2143,7 +2197,7 @@ JD-TC-Reschedule Appointment-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2197,7 +2251,7 @@ JD-TC-Reschedule Appointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2346,7 +2400,7 @@ JD-TC-Reschedule Appointment-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2386,6 +2440,11 @@ JD-TC-Reschedule Appointment-11
     Set Test Variable   ${servicecharge}   ${resp.json()[0]['totalAmount']}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
@@ -2396,17 +2455,18 @@ JD-TC-Reschedule Appointment-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -2454,9 +2514,9 @@ JD-TC-Reschedule Appointment-11
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -2490,7 +2550,7 @@ JD-TC-Reschedule Appointment-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2544,7 +2604,7 @@ JD-TC-Reschedule Appointment-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2696,7 +2756,7 @@ JD-TC-Reschedule Appointment-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2722,23 +2782,28 @@ JD-TC-Reschedule Appointment-12
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -2782,9 +2847,9 @@ JD-TC-Reschedule Appointment-12
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -2814,7 +2879,7 @@ JD-TC-Reschedule Appointment-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2863,7 +2928,7 @@ JD-TC-Reschedule Appointment-12
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime} 
 
     ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid1}
@@ -2975,7 +3040,7 @@ JD-TC-Reschedule Appointment-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3001,6 +3066,11 @@ JD-TC-Reschedule Appointment-13
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -3011,11 +3081,11 @@ JD-TC-Reschedule Appointment-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -3061,9 +3131,9 @@ JD-TC-Reschedule Appointment-13
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -3092,7 +3162,7 @@ JD-TC-Reschedule Appointment-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3141,7 +3211,7 @@ JD-TC-Reschedule Appointment-13
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime} 
 
     ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid1}
@@ -3278,7 +3348,7 @@ JD-TC-Reschedule Appointment-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3289,7 +3359,7 @@ JD-TC-Reschedule Appointment-14
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+10014587
@@ -3308,14 +3378,17 @@ JD-TC-Reschedule Appointment-14
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  subtract_time  1  15
-    ${eTime}=  add_time   0  30 
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${sTime}=  subtract_timezone_time  ${tz}  1  15
+    ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -3342,6 +3415,11 @@ JD-TC-Reschedule Appointment-14
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -3352,11 +3430,12 @@ JD-TC-Reschedule Appointment-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -3402,9 +3481,9 @@ JD-TC-Reschedule Appointment-14
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -3433,7 +3512,7 @@ JD-TC-Reschedule Appointment-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3482,7 +3561,7 @@ JD-TC-Reschedule Appointment-14
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime} 
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
@@ -3617,7 +3696,7 @@ JD-TC-Reschedule Appointment-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3643,6 +3722,11 @@ JD-TC-Reschedule Appointment-15
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -3653,11 +3737,12 @@ JD-TC-Reschedule Appointment-15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -3703,9 +3788,9 @@ JD-TC-Reschedule Appointment-15
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -3734,7 +3819,7 @@ JD-TC-Reschedule Appointment-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3784,7 +3869,7 @@ JD-TC-Reschedule Appointment-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime} 
     
     sleep  2s
@@ -3921,7 +4006,7 @@ JD-TC-Reschedule Appointment-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3946,6 +4031,11 @@ JD-TC-Reschedule Appointment-16
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -3957,17 +4047,17 @@ JD-TC-Reschedule Appointment-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -3994,9 +4084,9 @@ JD-TC-Reschedule Appointment-16
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -4113,7 +4203,7 @@ JD-TC-Reschedule Appointment-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4133,6 +4223,11 @@ JD-TC-Reschedule Appointment-18
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -4160,17 +4255,17 @@ JD-TC-Reschedule Appointment-18
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['futureAppt']}   ${bool[0]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -4205,9 +4300,9 @@ JD-TC-Reschedule Appointment-18
 
     ${apptfor}=   db.apptfor  ${cid}  ${slot1}  ${fname} 
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -4294,7 +4389,7 @@ JD-TC-Reschedule Appointment-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4314,6 +4409,11 @@ JD-TC-Reschedule Appointment-19
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -4325,11 +4425,11 @@ JD-TC-Reschedule Appointment-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -4393,9 +4493,9 @@ JD-TC-Reschedule Appointment-19
 
     ${apptfor}=   db.apptfor  ${cid}  ${slot1}  ${fname}  
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -4476,7 +4576,7 @@ JD-TC-Reschedule Appointment-20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4496,6 +4596,11 @@ JD-TC-Reschedule Appointment-20
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -4507,11 +4612,11 @@ JD-TC-Reschedule Appointment-20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -4575,9 +4680,9 @@ JD-TC-Reschedule Appointment-20
 
     ${apptfor}=   db.apptfor  ${cid}  ${slot1}  ${fname}  
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -4657,7 +4762,7 @@ JD-TC-Reschedule Appointment-21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4721,6 +4826,11 @@ JD-TC-Reschedule Appointment-21
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -4730,16 +4840,16 @@ JD-TC-Reschedule Appointment-21
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -4780,9 +4890,9 @@ JD-TC-Reschedule Appointment-21
     ${apptfor1}=  Create Dictionary  id=${mem_id}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
@@ -4902,7 +5012,7 @@ JD-TC-Reschedule Appointment-22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4966,6 +5076,11 @@ JD-TC-Reschedule Appointment-22
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -4975,17 +5090,17 @@ JD-TC-Reschedule Appointment-22
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10   
-    ${DAY3}=  add_date  4   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
+    ${DAY3}=  db.add_timezone_date  ${tz}  4     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -5032,9 +5147,9 @@ JD-TC-Reschedule Appointment-22
     ${apptfor1}=  Create Dictionary  id=${mem_id}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
@@ -5159,7 +5274,7 @@ JD-TC-Reschedule Appointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5179,6 +5294,11 @@ JD-TC-Reschedule Appointment-UH1
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -5190,16 +5310,16 @@ JD-TC-Reschedule Appointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -5226,9 +5346,9 @@ JD-TC-Reschedule Appointment-UH1
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -5328,7 +5448,7 @@ JD-TC-Reschedule Appointment-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5389,10 +5509,10 @@ JD-TC-Reschedule Appointment-UH2
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid}   ${resp.json()}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -5414,7 +5534,7 @@ JD-TC-Reschedule Appointment-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5434,6 +5554,11 @@ JD-TC-Reschedule Appointment-UH2
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -5445,16 +5570,16 @@ JD-TC-Reschedule Appointment-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -5481,9 +5606,9 @@ JD-TC-Reschedule Appointment-UH2
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -5551,7 +5676,7 @@ JD-TC-Reschedule Appointment-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5571,6 +5696,11 @@ JD-TC-Reschedule Appointment-UH4
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -5582,17 +5712,17 @@ JD-TC-Reschedule Appointment-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${DAY3}=  subtract_date  2    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    ${DAY3}=  db.subtract_timezone_date  ${tz}   2    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -5619,9 +5749,9 @@ JD-TC-Reschedule Appointment-UH4
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -5686,7 +5816,7 @@ JD-TC-Reschedule Appointment-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5706,6 +5836,11 @@ JD-TC-Reschedule Appointment-UH5
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -5717,17 +5852,17 @@ JD-TC-Reschedule Appointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -5754,9 +5889,9 @@ JD-TC-Reschedule Appointment-UH5
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -5821,7 +5956,7 @@ JD-TC-Reschedule Appointment-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5841,6 +5976,11 @@ JD-TC-Reschedule Appointment-UH6
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -5852,17 +5992,17 @@ JD-TC-Reschedule Appointment-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -5889,9 +6029,9 @@ JD-TC-Reschedule Appointment-UH6
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -5956,7 +6096,7 @@ JD-TC-Reschedule Appointment-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5976,6 +6116,11 @@ JD-TC-Reschedule Appointment-UH7
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -5987,17 +6132,17 @@ JD-TC-Reschedule Appointment-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -6024,9 +6169,9 @@ JD-TC-Reschedule Appointment-UH7
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -6095,7 +6240,7 @@ JD-TC-Reschedule Appointment-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -6115,6 +6260,11 @@ JD-TC-Reschedule Appointment-UH8
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -6126,24 +6276,24 @@ JD-TC-Reschedule Appointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d}   
     ${weekday}=   get_weekday_by_date  ${DAY3}
     ${weekday}=   Convert To String  ${weekday}
     ${list}=  Create List  1  2  3  4  5  6  7
     Remove Values From List  ${list}  ${weekday}
     Log  ${list}
-    # ${DAY3}=  add_date  12    
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     # ${list}=  Create List  1  2  3  4  5  6
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -6170,9 +6320,9 @@ JD-TC-Reschedule Appointment-UH8
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -6218,7 +6368,7 @@ JD-TC-Reschedule Appointment-UH8
 
     # ${list}=  Create List  ${1}  ${2}  ${3}  ${4}  ${5}  ${6}
     # FOR  ${i}  IN RANGE  10
-    #     ${DAY3}=  add_date  ${i}
+    #     ${DAY3}=  db.add_timezone_date  ${tz}  ${i}
     #     ${weekday}=   get_weekday_by_date  ${DAY3}
     #     ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Not Contain Value  ${list}  ${weekday}
     #     Log Many  ${status} 	${value}
@@ -6246,7 +6396,7 @@ JD-TC-Reschedule Appointment-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -6266,6 +6416,11 @@ JD-TC-Reschedule Appointment-UH9
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -6277,17 +6432,17 @@ JD-TC-Reschedule Appointment-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -6314,9 +6469,9 @@ JD-TC-Reschedule Appointment-UH9
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -6363,7 +6518,7 @@ JD-TC-Reschedule Appointment-UH9
 
     ${holidayname}=   FakerLibrary.word
     ${rand}=  FakerLibrary.Random Int  min=1  max=10
-    ${holiday_date}=  add_date  ${rand}
+    ${holiday_date}=  db.add_timezone_date  ${tz}  ${rand}
     ${list}=  Create List   1  2  3  4  5  6  7
     ${desc}=    FakerLibrary.name
     # ${resp}=  Create Holiday  ${holiday_date}  ${holidayname}  ${sTime1}  ${eTime1}
@@ -6398,7 +6553,7 @@ JD-TC-Reschedule Appointment-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -6418,6 +6573,11 @@ JD-TC-Reschedule Appointment-UH10
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -6429,17 +6589,17 @@ JD-TC-Reschedule Appointment-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -6466,9 +6626,9 @@ JD-TC-Reschedule Appointment-UH10
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -6517,7 +6677,7 @@ JD-TC-Reschedule Appointment-UH10
     ${eTime2}=   add_two   ${sTime2}  ${duration}
     ${holidayname}=   FakerLibrary.word
     ${rand}=  FakerLibrary.Random Int  min=1  max=10
-    ${holiday_date}=  add_date  ${rand}
+    ${holiday_date}=  db.add_timezone_date  ${tz}  ${rand}
     ${list}=  Create List   1  2  3  4  5  6  7
     ${desc}=    FakerLibrary.name
     # ${resp}=  Create Holiday  ${holiday_date}  ${holidayname}  ${sTime2}  ${eTime2}
@@ -6557,7 +6717,7 @@ JD-TC-Reschedule Appointment-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -6577,6 +6737,11 @@ JD-TC-Reschedule Appointment-UH11
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -6588,17 +6753,17 @@ JD-TC-Reschedule Appointment-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -6625,9 +6790,9 @@ JD-TC-Reschedule Appointment-UH11
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -6704,7 +6869,7 @@ JD-TC-Reschedule Appointment-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -6724,6 +6889,11 @@ JD-TC-Reschedule Appointment-UH12
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -6735,17 +6905,17 @@ JD-TC-Reschedule Appointment-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -6772,9 +6942,9 @@ JD-TC-Reschedule Appointment-UH12
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -6847,7 +7017,7 @@ JD-TC-Reschedule Appointment-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -6867,6 +7037,11 @@ JD-TC-Reschedule Appointment-UH13
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -6878,17 +7053,17 @@ JD-TC-Reschedule Appointment-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -6915,9 +7090,9 @@ JD-TC-Reschedule Appointment-UH13
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -6984,7 +7159,7 @@ JD-TC-Reschedule Appointment-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -7004,23 +7179,28 @@ JD-TC-Reschedule Appointment-UH14
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -7062,7 +7242,7 @@ JD-TC-Reschedule Appointment-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -7088,10 +7268,10 @@ JD-TC-Reschedule Appointment-UH15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -7124,9 +7304,9 @@ JD-TC-Reschedule Appointment-UH15
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -7174,7 +7354,7 @@ JD-TC-Reschedule Appointment-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -7194,23 +7374,28 @@ JD-TC-Reschedule Appointment-UH15
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -7250,7 +7435,7 @@ JD-TC-Reschedule Appointment-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -7276,10 +7461,10 @@ JD-TC-Reschedule Appointment-UH16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  db.get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta1}=  FakerLibrary.Random Int  min=10  max=30
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -7308,7 +7493,7 @@ JD-TC-Reschedule Appointment-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -7328,6 +7513,11 @@ JD-TC-Reschedule Appointment-UH16
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -7339,9 +7529,9 @@ JD-TC-Reschedule Appointment-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  db.get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta}=  FakerLibrary.Random Int  min=30  max=60
     ${sTime2}=  add_two   ${eTime1}  ${delta/5}
@@ -7349,7 +7539,7 @@ JD-TC-Reschedule Appointment-UH16
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -7376,9 +7566,9 @@ JD-TC-Reschedule Appointment-UH16
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -7443,7 +7633,7 @@ JD-TC-Reschedule Appointment-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -7463,6 +7653,11 @@ JD-TC-Reschedule Appointment-UH17
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -7474,17 +7669,17 @@ JD-TC-Reschedule Appointment-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -7511,9 +7706,9 @@ JD-TC-Reschedule Appointment-UH17
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -7582,7 +7777,7 @@ JD-TC-Reschedule Appointment-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -7602,6 +7797,11 @@ JD-TC-Reschedule Appointment-UH18
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -7613,17 +7813,17 @@ JD-TC-Reschedule Appointment-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -7650,9 +7850,9 @@ JD-TC-Reschedule Appointment-UH18
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -7729,7 +7929,7 @@ JD-TC-Reschedule Appointment-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -7749,6 +7949,11 @@ JD-TC-Reschedule Appointment-UH19
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -7760,17 +7965,17 @@ JD-TC-Reschedule Appointment-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -7797,9 +8002,9 @@ JD-TC-Reschedule Appointment-UH19
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -7864,7 +8069,7 @@ JD-TC-Reschedule Appointment-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -7884,6 +8089,11 @@ JD-TC-Reschedule Appointment-UH20
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -7895,17 +8105,17 @@ JD-TC-Reschedule Appointment-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -7932,9 +8142,9 @@ JD-TC-Reschedule Appointment-UH20
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -8000,7 +8210,7 @@ JD-TC-Reschedule Appointment-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -8020,6 +8230,11 @@ JD-TC-Reschedule Appointment-UH21
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -8031,17 +8246,17 @@ JD-TC-Reschedule Appointment-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    # ${DAY3}=  add_date  12    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${DAY3}=  db.add_timezone_date  ${tz}  12    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -8068,9 +8283,9 @@ JD-TC-Reschedule Appointment-UH21
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -8135,7 +8350,7 @@ JD-TC-Reschedule Appointment-UH22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -8155,6 +8370,11 @@ JD-TC-Reschedule Appointment-UH22
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -8166,16 +8386,16 @@ JD-TC-Reschedule Appointment-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -8202,9 +8422,9 @@ JD-TC-Reschedule Appointment-UH22
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -8269,7 +8489,7 @@ JD-TC-Reschedule Appointment-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8295,22 +8515,27 @@ JD-TC-Reschedule Appointment-UH23
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -8350,9 +8575,9 @@ JD-TC-Reschedule Appointment-UH23
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -8381,7 +8606,7 @@ JD-TC-Reschedule Appointment-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8430,7 +8655,7 @@ JD-TC-Reschedule Appointment-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime} 
 
     ${reason}=  Random Element  ${cancelReason}
@@ -8500,7 +8725,7 @@ JD-TC-Reschedule Appointment-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8526,22 +8751,27 @@ JD-TC-Reschedule Appointment-UH24
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -8581,9 +8811,9 @@ JD-TC-Reschedule Appointment-UH24
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -8612,7 +8842,7 @@ JD-TC-Reschedule Appointment-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8661,7 +8891,7 @@ JD-TC-Reschedule Appointment-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime} 
 
     ${reason}=  Random Element  ${cancelReason}
@@ -8731,7 +8961,7 @@ JD-TC-Reschedule Appointment-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8757,22 +8987,28 @@ JD-TC-Reschedule Appointment-UH25
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -8812,9 +9048,9 @@ JD-TC-Reschedule Appointment-UH25
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -8843,7 +9079,7 @@ JD-TC-Reschedule Appointment-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8894,7 +9130,7 @@ JD-TC-Reschedule Appointment-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
 
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime} 
     
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
@@ -8971,7 +9207,7 @@ JD-TC-Reschedule Appointment-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -9003,23 +9239,29 @@ JD-TC-Reschedule Appointment-UH26
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -9071,9 +9313,9 @@ JD-TC-Reschedule Appointment-UH26
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -9103,9 +9345,9 @@ JD-TC-Reschedule Appointment-UH26
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -9149,7 +9391,7 @@ JD-TC-Reschedule Appointment-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -9236,7 +9478,7 @@ JD-TC-Reschedule Appointment-UH27
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -9256,6 +9498,11 @@ JD-TC-Reschedule Appointment-UH27
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -9267,11 +9514,11 @@ JD-TC-Reschedule Appointment-UH27
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -9330,9 +9577,9 @@ JD-TC-Reschedule Appointment-UH27
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -9399,7 +9646,7 @@ JD-TC-Reschedule Appointment-UH28
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${multilocPro[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -9419,7 +9666,15 @@ JD-TC-Reschedule Appointment-UH28
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
-    ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${lid1}=  Create Sample Location 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${multilocPro[4]}
 
     ${resp}=  Get Appointment Schedules
@@ -9435,11 +9690,11 @@ JD-TC-Reschedule Appointment-UH28
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -9498,9 +9753,9 @@ JD-TC-Reschedule Appointment-UH28
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -9567,7 +9822,7 @@ JD-TC-Reschedule Appointment-UH29
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -9653,17 +9908,17 @@ JD-TC-Reschedule Appointment-UH29
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -9717,9 +9972,9 @@ JD-TC-Reschedule Appointment-UH29
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -9752,7 +10007,7 @@ JD-TC-Reschedule Appointment-UH29
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -9863,7 +10118,7 @@ JD-TC-Reschedule Appointment-UH30
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -9902,23 +10157,29 @@ JD-TC-Reschedule Appointment-UH30
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -9970,9 +10231,9 @@ JD-TC-Reschedule Appointment-UH30
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -10006,7 +10267,7 @@ JD-TC-Reschedule Appointment-UH30
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -10051,7 +10312,7 @@ JD-TC-Reschedule Appointment-UH30
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -10159,7 +10420,7 @@ JD-TC-Reschedule Appointment-UH31
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -10194,6 +10455,11 @@ JD-TC-Reschedule Appointment-UH31
     Set Test Variable   ${servicecharge}   ${resp.json()[0]['totalAmount']}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
@@ -10204,17 +10470,18 @@ JD-TC-Reschedule Appointment-UH31
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -10262,9 +10529,9 @@ JD-TC-Reschedule Appointment-UH31
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.name
@@ -10298,7 +10565,7 @@ JD-TC-Reschedule Appointment-UH31
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -10352,7 +10619,7 @@ JD-TC-Reschedule Appointment-UH31
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -10454,7 +10721,7 @@ JD-TC-Reschedule Appointment-UH32
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -10474,6 +10741,11 @@ JD-TC-Reschedule Appointment-UH32
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -10485,11 +10757,11 @@ JD-TC-Reschedule Appointment-UH32
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -10552,9 +10824,9 @@ JD-TC-Reschedule Appointment-UH32
 
     ${apptfor}=   db.apptfor  ${cid}  ${slot1}  ${fname}  
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -10621,7 +10893,7 @@ JD-TC-Reschedule Appointment-UH33
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -10646,6 +10918,11 @@ JD-TC-Reschedule Appointment-UH33
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME149}
 
     ${resp}=  Get Appointment Schedules
@@ -10657,17 +10934,17 @@ JD-TC-Reschedule Appointment-UH33
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
@@ -10700,9 +10977,9 @@ JD-TC-Reschedule Appointment-UH33
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word

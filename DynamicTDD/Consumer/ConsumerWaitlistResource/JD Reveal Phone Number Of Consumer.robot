@@ -26,18 +26,18 @@ JD-TC-Reveal Phone Number of Consumer-1
 	
     clear_queue    ${PUSERNAME13}
     clear_service  ${PUSERNAME13}
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME13}
     Set Suite Variable  ${pid} 
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${DAY}=  get_date  
+    ${DAY}=  db.get_date_by_timezone  ${tz}  
     Set Suite Variable  ${DAY} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     ${desc}=  FakerLibrary.word
     ${ser_durtn}=   Random Int  min=2   max=10
     ${total_amount}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
@@ -46,8 +46,8 @@ JD-TC-Reveal Phone Number of Consumer-1
     Set Suite Variable  ${sId_1}  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${qname}=   FakerLibrary.word
-    ${sTime1}=  subtract_time   1  00
-    ${eTime1}=   add_time    5   00
+    ${sTime1}=  subtract_timezone_time  ${tz}   1  00
+    ${eTime1}=   add_timezone_time  ${tz}    5   00
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
     ${resp}=  Create Queue  ${qname}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}   ${parallel}    ${capacity}   ${lid1}  ${sId_1}  
@@ -76,7 +76,7 @@ JD-TC-Reveal Phone Number of Consumer-1
     ${resp}=  Consumer Logout   
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By Id  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -96,7 +96,7 @@ JD-TC-Reveal Phone Number of Consumer-1
     ${resp}=  Consumer Logout   
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By Id  ${wid}
     Log   ${resp.json()}
@@ -115,7 +115,7 @@ JD-TC-Reveal Phone Number of Consumer-2
     Verify Response List  ${resp}  0  id=${pid} 
     ${resp}=  Reveal Phone Number  ${pid}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
-	${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME13}
     Set Test Variable  ${pid1} 
@@ -150,8 +150,8 @@ JD-TC-Reveal Phone Number of Consumer-2
     Set Suite Variable  ${sId_2}  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${qname1}=   FakerLibrary.word
-    ${sTime1}=  subtract_time   1  00
-    ${eTime1}=   add_time    5   00
+    ${sTime1}=  subtract_timezone_time  ${tz}   1  00
+    ${eTime1}=   add_timezone_time  ${tz}    5   00
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
     ${resp}=  Create Queue  ${qname1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}    ${parallel}   ${capacity}   ${lid2}  ${sId_2}  
@@ -160,7 +160,6 @@ JD-TC-Reveal Phone Number of Consumer-2
     ${resp}=  Add To Waitlist  ${cid1}  ${sId_2}  ${q1_l2}  ${DAY}  ${cnote}  ${bool[0]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1}
@@ -178,7 +177,7 @@ JD-TC-Reveal Phone Number of Consumer-2
     ${resp}=  Consumer Logout  
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid1}
@@ -201,7 +200,7 @@ JD-TC-Reveal Phone Number of Consumer-2
     ${resp}=  Consumer Logout  
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid1}
@@ -212,7 +211,7 @@ JD-TC-Reveal Phone Number of Consumer-2
 JD-TC-Reveal Phone Number of Consumer-UH1 
 	[Documentation]  Set Reveal phone number of consumer by login of a provider   
     
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid3}=  get_acc_id  ${PUSERNAME13}
     Set Test Variable  ${pid3} 
@@ -231,7 +230,7 @@ JD-TC-Reveal Phone Number of Consumer-UH2
 JD-TC-Reveal Phone Number of Consumer-UH3
 	[Documentation]  Set Reveal phone number of consumer by another provider's account id  
     clear waitlist   ${PUSERNAME13}
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid4}=  get_acc_id  ${PUSERNAME13}
     Set Test Variable  ${pid4}  ${pid4}

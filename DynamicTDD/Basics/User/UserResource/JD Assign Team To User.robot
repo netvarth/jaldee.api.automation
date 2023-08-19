@@ -15,17 +15,19 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-AssignTeamToUser-1
      [Documentation]  Assign team to multiple users
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
      ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
      
      sleep  2s
      ${resp}=  Get Departments
@@ -152,7 +154,7 @@ JD-TC-AssignTeamToUser-1
 
 JD-TC-AssignTeamToUser-2
      [Documentation]  Assign  multiple team to multiple users
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+601197
@@ -301,7 +303,7 @@ JD-TC-AssignTeamToUser-2
 
 JD-TC-AssignTeamToUser-3
      [Documentation]  Create team by user login with user type PROVIDER with admin privilage TRUE and assign team
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -316,7 +318,7 @@ JD-TC-AssignTeamToUser-3
      @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${team_size2}=  Random Int  min=10  max=50
@@ -356,7 +358,7 @@ JD-TC-AssignTeamToUser-3
 
 JD-TC-AssignTeamToUser-4
      [Documentation]  Create team by user login with user type ADMIN then assign team to user
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330099
@@ -392,7 +394,7 @@ JD-TC-AssignTeamToUser-4
      @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
-     ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${team_size2}=  Random Int  min=10  max=50
@@ -428,7 +430,7 @@ JD-TC-AssignTeamToUser-4
 
 JD-TC-AssignTeamToUser-5
      [Documentation]  Create team by user login with user type ASSISTANT with admin privilage TRUE then try to assign team
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330081
@@ -464,7 +466,7 @@ JD-TC-AssignTeamToUser-5
      @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
-     ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${user_ids}=  Create List  ${u_id3}
@@ -490,7 +492,7 @@ JD-TC-AssignTeamToUser-5
 
 JD-TC-AssignTeamToUser-6
      [Documentation]  Assign  multiple users with same mutiple team 
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+601121
@@ -646,7 +648,7 @@ JD-TC-AssignTeamToUser-6
 
 JD-TC-AssignTeamToUser-UH1
      [Documentation]  Create team by user login with user type ASSISTANT with admin privilage FALSE then try to assign team
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330082
@@ -682,7 +684,7 @@ JD-TC-AssignTeamToUser-UH1
      @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
-     ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${user_ids}=  Create List  ${u_id3}
@@ -693,7 +695,7 @@ JD-TC-AssignTeamToUser-UH1
     
 JD-TC-AssignTeamToUser-UH2
      [Documentation]  Create team by user login with user type PROVIDER with admin privilage FALSE then try to assign team
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330098
@@ -729,7 +731,7 @@ JD-TC-AssignTeamToUser-UH2
      @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
-     ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${user_ids}=  Create List  ${u_id3}
@@ -740,7 +742,7 @@ JD-TC-AssignTeamToUser-UH2
 
 JD-TC-AssignTeamToUser-UH3
      [Documentation]  Assign a user to empty team 
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${user_ids}=  Create List  ${u_id3}
@@ -751,7 +753,7 @@ JD-TC-AssignTeamToUser-UH3
 
 JD-TC-AssignTeamToUser-UH4
      [Documentation]  Assign empty users to a team
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${user_ids}=  Create List  
@@ -781,7 +783,7 @@ JD-TC-AssignTeamToUser -UH6
 
 JD-TC-AssignTeamToUser-UH7
      [Documentation]  Assign a disabled user to team
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330032
@@ -841,7 +843,7 @@ JD-TC-AssignTeamToUser-UH7
 ***comment***
 JD-TC-AssignTeamToUser-UH8
      [Documentation]  Assign a same user to same team multiple times
-     ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330033

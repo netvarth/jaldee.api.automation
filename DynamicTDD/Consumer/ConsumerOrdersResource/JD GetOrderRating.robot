@@ -47,7 +47,7 @@ JD-TC-GetOrderRating-1
     clear_service  ${PUSERNAME111}
     clear_customer   ${PUSERNAME111}
     clear_Item   ${PUSERNAME111}
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -104,22 +104,22 @@ JD-TC-GetOrderRating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -204,7 +204,7 @@ JD-TC-GetOrderRating-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -264,7 +264,7 @@ JD-TC-GetOrderRating-1
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}    1
 
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${rating1} =  roundval  ${rating1}  2
@@ -283,7 +283,7 @@ JD-TC-GetOrderRating-2
     clear_service  ${PUSERNAME112}
     clear_customer   ${PUSERNAME112}
     clear_Item   ${PUSERNAME112}
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -340,22 +340,22 @@ JD-TC-GetOrderRating-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -437,7 +437,7 @@ JD-TC-GetOrderRating-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -491,7 +491,7 @@ JD-TC-GetOrderRating-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   11
+    ${DAY1}=  db.add_timezone_date  ${tz}  11  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -563,7 +563,7 @@ JD-TC-GetOrderRating-3
     clear_service  ${PUSERNAME113}
     clear_customer   ${PUSERNAME113}
     clear_Item   ${PUSERNAME113}
-    ${resp}=  ProviderLogin  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -620,22 +620,22 @@ JD-TC-GetOrderRating-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -725,7 +725,7 @@ JD-TC-GetOrderRating-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -791,7 +791,7 @@ JD-TC-GetOrderRating-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${DAY2}=  subtract_date  2
+    ${DAY2}=  db.subtract_timezone_date  ${tz}   2
     ${resp}=  Get Order Rating    createdDate-eq=${DAY2}
     Log   ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200

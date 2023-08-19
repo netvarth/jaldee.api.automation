@@ -15,7 +15,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-GetLabelById-1
 	[Documentation]  Create a label for a valid provider then get label by id
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Label  ${PUSERNAME6}
     ${Values}=  FakerLibrary.Words  	nb=9
@@ -64,7 +64,7 @@ JD-TC-GetLabelById -UH2
 
 JD-TC-GetLabelById-UH3
     [Documentation]  Get a Label by id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Get Label By Id  ${invalid_id}
@@ -74,7 +74,7 @@ JD-TC-GetLabelById-UH3
 
 JD-TC-GetLabelById-UH4
     [Documentation]  Get a Label by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Label By Id  ${label_id}
     Should Be Equal As Strings  ${resp.status_code}  422

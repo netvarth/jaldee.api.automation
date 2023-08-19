@@ -24,7 +24,7 @@ ${digits}       0123456789
 
 JD-TC-GetDonations-1
         [Documentation]   Consumer Get Donation By Id
-        ${resp}=  Provider Login  ${PUSERNAME57}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         # delete_donation_service  ${PUSERNAME57}
@@ -53,7 +53,12 @@ JD-TC-GetDonations-1
         #Should Be Equal As Strings    ${resp.status_code}   200
 
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -88,7 +93,7 @@ JD-TC-GetDonations-1
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME57}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         # ${don_amt1}=  Evaluate  ${min_don_amt}*${multiples[0]}

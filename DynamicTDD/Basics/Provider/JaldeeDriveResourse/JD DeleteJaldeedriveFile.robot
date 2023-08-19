@@ -60,7 +60,7 @@ ${CUSERPH}      ${CUSERNAME}
 #     [Documentation]  Delete  file
 
 #     clear_Item  ${PUSERNAME12}
-#     ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${acc_id}=  get_acc_id  ${PUSERNAME12}
 #     Set Test Variable   ${acc_id}
@@ -139,7 +139,7 @@ ${CUSERPH}      ${CUSERNAME}
 
 #     [Documentation]  file upload to private folder and delete file by provider
 
-#     ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${acc_id}=  get_acc_id  ${PUSERNAME19}
 #     Set Test Variable  ${providerId}   ${acc_id}
@@ -182,7 +182,7 @@ ${CUSERPH}      ${CUSERNAME}
 
 #   [Documentation]    a file  upload by user and delete file by user
 
-#     ${resp}=  Provider Login  ${HLMUSERNAME16}   ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}   ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${pid}=  get_acc_id  ${HLMUSERNAME16} 
@@ -281,7 +281,7 @@ ${CUSERPH}      ${CUSERNAME}
 #     Should Be Equal As Strings  ${resp[0].status_code}  200
 #     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-#     ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=    Get Locations
@@ -337,7 +337,7 @@ ${CUSERPH}      ${CUSERNAME}
 #     Set Test Variable   ${jc_id} 
 #     clear_Consumermsg  ${CUSERNAME15}
 
-#     ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -410,7 +410,7 @@ ${CUSERPH}      ${CUSERNAME}
 
 #     [Documentation]  a file send to provider by consumer and delete file by provider login
     
-#     ${resp}=  Provider Login  ${PUSERNAME214}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Set Test Variable  ${PUSERNAME214}
@@ -488,7 +488,7 @@ ${CUSERPH}      ${CUSERNAME}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${resp}=   ProviderLogin     ${PUSERNAME214}   ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login     ${PUSERNAME214}   ${PASSWORD} 
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -519,7 +519,7 @@ JD-TC-DeleteJaldeedriveFile-UH2
    
     
     # clear_customer     ${HLMUSERNAME4}
-    ${resp}=  Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4} 
@@ -555,12 +555,14 @@ JD-TC-DeleteJaldeedriveFile-UH2
     END
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -632,7 +634,7 @@ JD-TC-DeleteJaldeedriveFile-UH2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${PUSERPH0}
@@ -673,7 +675,7 @@ JD-TC-DeleteJaldeedriveFile-UH2
   #  Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        ${cid2}
    # Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}    ${u_id} 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -712,7 +714,7 @@ JD-TC-DeleteJaldeedriveFaile-UH4
     [Documentation]  delete  file by another provider login
     clear_Providermsg  ${PUSERNAME185}
 
-    ${resp}=   ProviderLogin     ${PUSERNAME10}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME10}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -744,7 +746,7 @@ JD-TC-DeleteJaldeedriveFile-UH6
 
   [Documentation]    a file upload to branch and delete user
 
-    ${resp}=  Provider Login  ${HLMUSERNAME14}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME14} 
@@ -776,7 +778,7 @@ JD-TC-DeleteJaldeedriveFile-UH6
     Log                                 ${resp.content}
      Set Test Variable  ${fileid}        ${resp.json()['${id}']['files'][0]['id']}   
    
-    ${resp}=  Provider Login   ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
   
   

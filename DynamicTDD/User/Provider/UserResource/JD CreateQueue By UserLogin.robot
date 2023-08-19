@@ -29,7 +29,7 @@ JD-TC-CreateQueueByUserLogin-1
 
     [Documentation]  Create a queue for user
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -42,8 +42,13 @@ JD-TC-CreateQueueByUserLogin-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
         Set Suite Variable  ${locId1}
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get Business Profile
@@ -54,9 +59,12 @@ JD-TC-CreateQueueByUserLogin-1
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -81,18 +89,18 @@ JD-TC-CreateQueueByUserLogin-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${resp}=    Get Locations
@@ -134,7 +142,7 @@ JD-TC-CreateQueueByUserLogin-2
 
     [Documentation]    Create a second queue to the same user with more services
 
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -170,7 +178,7 @@ JD-TC-CreateQueueByUserLogin-3
 
     [Documentation]    Create a queue with same details of another user
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${u_id1}=  Create Sample User
@@ -188,7 +196,7 @@ JD-TC-CreateQueueByUserLogin-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Create Service For User  ${SERVICE5}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
@@ -217,12 +225,12 @@ JD-TC-CreateQueueByUserLogin-3
 JD-TC-CreateQueueByUserLogin-4
     [Documentation]    Create 2 queues with same time schedule on different days
 
-    ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime3}=  add_time  0  50
+    ${sTime3}=  add_timezone_time  ${tz}  0  50
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  15
+    ${eTime3}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${eTime3}
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
@@ -287,7 +295,7 @@ JD-TC-CreateQueueByUserLogin-UH3
 
     [Documentation]    Create a queue in a location with same queue name
 
-    ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id1}  ${s_id3}
     Log  ${resp.json()}
@@ -298,7 +306,7 @@ JD-TC-CreateQueueByUserLogin-UH4
 
      [Documentation]  Create a queue for a user with branch's service id
 
-     ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc}=   FakerLibrary.sentence
@@ -321,7 +329,7 @@ JD-TC-CreateQueueByUserLogin-UH5
 
     [Documentation]    Create a queue for a user in a location without service details
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue without Service For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id}
@@ -333,7 +341,7 @@ JD-TC-CreateQueueByUserLogin-UH6
 
     [Documentation]    Create a queue in a location without location details
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${EMPTY}  ${u_id}  ${s_id}
     Log  ${resp.json()}
@@ -344,7 +352,7 @@ JD-TC-CreateQueueByUserLogin-UH7
 
     [Documentation]    Create a queue for a account with user service details
     
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Queue  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}
     Log  ${resp.json()}

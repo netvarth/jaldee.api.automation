@@ -34,7 +34,7 @@ JD-TC-EnableDisableUser-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -119,7 +119,7 @@ JD-TC-EnableDisableUser -UH2
 
 JD-TC-EnableDisableUser-UH3
      [Documentation]  Enable a user with invalid id by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  EnableDisable User  000  ${toggle[1]}
@@ -129,7 +129,7 @@ JD-TC-EnableDisableUser-UH3
 
 JD-TC-EnableDisableUser-UH4
      [Documentation]  Enable a already enabled user 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  EnableDisable User  ${u_id}  ${toggle[0]}
@@ -139,7 +139,7 @@ JD-TC-EnableDisableUser-UH4
 
 JD-TC-EnableDisableUser-UH5
      [Documentation]  Disable a already disabled user 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  EnableDisable User  ${u_id}  ${toggle[1]}

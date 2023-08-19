@@ -47,7 +47,7 @@ JD-TC-ServiceCreationByUserLogin-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -58,12 +58,14 @@ JD-TC-ServiceCreationByUserLogin-1
      Set Suite Variable  ${bs}
 
      ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
      sleep  2s
      ${u_id}=  Create Sample User
@@ -77,12 +79,12 @@ JD-TC-ServiceCreationByUserLogin-1
      @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-ServiceCreationByUserLogin-2   
     [Documentation]  Create  a service for a valid user 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${description}=  FakerLibrary.sentence
     Set Suite Variable  ${description}
@@ -103,7 +105,7 @@ JD-TC-ServiceCreationByUserLogin-2
 
 JD-TC-ServiceCreationByUserLogin-3
      [Documentation]  Create  a service for a valid user with service name same as another user
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${u_id}=  Create Sample User
@@ -113,7 +115,7 @@ JD-TC-ServiceCreationByUserLogin-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
     Log  ${resp.json()}
@@ -145,7 +147,7 @@ JD-TC-ServiceCreationByUserLogin -UH2
 
 JD-TC-ServiceCreationByUserLogin-UH3      
      [Documentation]  Create an already existing service
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  000
@@ -162,7 +164,7 @@ JD-TC-ServiceCreationByUserLogin-4
      ${length}=  Get Length   ${len}
      ${licId}  ${licname}=  get_highest_license_pkg
      FOR   ${a}  IN RANGE   0  ${length}
-          ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+          ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
           Log  ${resp.json()}
           Should Be Equal As Strings    ${resp.status_code}    200
           Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -187,12 +189,14 @@ JD-TC-ServiceCreationByUserLogin-4
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
      
      ${resp}=  Get Departments 
      Log  ${resp.json()}
@@ -256,7 +260,7 @@ JD-TC-ServiceCreationByUserLogin-4
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  Create Service For User  ${SERVICE1}  ${desc}   ${ser_duratn}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}

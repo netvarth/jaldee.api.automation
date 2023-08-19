@@ -83,12 +83,15 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -103,19 +106,22 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}200.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -170,9 +176,9 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     Set Suite Variable   ${sub_domains}
     ${licenses}=  Jaldee Coupon Target License  ${licid}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.json()}
@@ -199,7 +205,7 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${pid}=  get_acc_id  ${PUSERPH0}
@@ -264,14 +270,17 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
   
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  5  15
-    ${eTime}=  add_time   6  30
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parkingType[0]}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -304,8 +313,8 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     
 
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_time  1  00
-    ${end_time}=    add_time  1  00 
+    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${s_id1}  ${s_id2}  ${s_id3}  
@@ -384,7 +393,7 @@ JD-TC-WaitlistAdvancePaymentdetails-3
 JD-TC-WaitlistAdvancePaymentdetails-4
     [Documentation]    Get Waitlist advance payment details when waitlist needs Advance amount (Advance amount same as service total price).
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
@@ -402,8 +411,8 @@ JD-TC-WaitlistAdvancePaymentdetails-4
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  add_time  2   00
-    ${eTime}=  add_time   2   15
+    ${sTime}=  add_timezone_time  ${tz}  2  00  
+    ${eTime}=  add_timezone_time  ${tz}  2  15  
     ${parallel}=   Random Int  min=1   max=2
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${loc_id1}  ${sid4} 
     Log  ${resp.json()}
@@ -418,10 +427,10 @@ JD-TC-WaitlistAdvancePaymentdetails-4
     ${cupn_code}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -493,7 +502,7 @@ JD-TC-WaitlistAdvancePaymentdetails-5
 JD-TC-WaitlistAdvancePaymentdetails-6
     [Documentation]    Get Waitlist advance payment details with Enable JDN  
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -534,7 +543,7 @@ JD-TC-WaitlistAdvancePaymentdetails-6
 JD-TC-WaitlistAdvancePaymentdetails-7
     [Documentation]     Get Waitlist advance payment details with disabled JDN
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -613,7 +622,7 @@ JD-TC-WaitlistAdvancePaymentdetails-UH2
 JD-TC-WaitlistAdvancePaymentdetails-UH3
     [Documentation]    Get Waitlist advancepayment details by using provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -647,7 +656,7 @@ JD-TC-WaitlistAdvancePaymentdetails-UH5
 JD-TC-WaitlistAdvancePaymentdetails-UH6
     [Documentation]    Get Waitlist advancepayment details by applying a coupon.(If Coupon start date is a future date)
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -657,10 +666,10 @@ JD-TC-WaitlistAdvancePaymentdetails-UH6
     ${cupn_code1}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  add_date   1
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.add_timezone_date  ${tz}  1
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -700,8 +709,8 @@ JD-TC-WaitlistAdvancePaymentdetails-UH6
 JD-TC-WaitlistAdvancePaymentdetails-UH7
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon rule contain  maxConsumerUseLimitPerProvider is one
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -725,7 +734,7 @@ JD-TC-WaitlistAdvancePaymentdetails-UH7
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -752,7 +761,7 @@ JD-TC-WaitlistAdvancePaymentdetails-UH7
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid}  ${wid[0]}  
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -770,14 +779,14 @@ JD-TC-WaitlistAdvancePaymentdetails-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY3}=  add_date  1
+    ${DAY3}=  db.add_timezone_date  ${tz}  1  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${qid2}  ${DAY1}  ${s_id4}  ${desc}  ${bool[0]}  ${coupons}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid1}  ${wid[0]} 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

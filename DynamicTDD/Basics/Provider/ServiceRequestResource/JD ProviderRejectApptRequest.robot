@@ -27,10 +27,14 @@ JD-TC-ProviderrejectApptRequest-1
 
     [Documentation]   Reject an appt request by provider..
 
-    ${resp}=  Provider Login  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -39,8 +43,7 @@ JD-TC-ProviderrejectApptRequest-1
 
     clear_appt_schedule   ${PUSERNAME11}
 
-    ${DAY1}=  get_date
-    Set Suite Variable   ${DAY1}
+    
     ${SERVICE1}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
@@ -67,6 +70,14 @@ JD-TC-ProviderrejectApptRequest-1
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
     END
 
+    ${resp}=   Get Location By Id   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    
     ${resp}=  Create Sample Schedule   ${lid}   ${sid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

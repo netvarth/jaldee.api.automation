@@ -74,16 +74,15 @@ JD-TC-ConsumerMassCommunication-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_B}
 
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_B}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_B}+25566122
@@ -95,18 +94,22 @@ JD-TC-ConsumerMassCommunication-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -155,23 +158,29 @@ JD-TC-ConsumerMassCommunication-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
-    Set Suite Variable  ${CUR_DAY}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}    ${resp}  
     ${resp}=   Create Sample Service  ${SERVICE2}
     Set Suite Variable    ${ser_id2}    ${resp}  
     ${resp}=   Create Sample Service  ${SERVICE3}
-    Set Suite Variable    ${ser_id3}    ${resp}  
+    Set Suite Variable    ${ser_id3}    ${resp}
+    
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY}  
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=1
     Set Suite Variable   ${parallel}
@@ -185,13 +194,11 @@ JD-TC-ConsumerMassCommunication-1
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id2}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid2}  ${wid[0]}
     sleep   5s
@@ -243,7 +250,6 @@ JD-TC-ConsumerMassCommunication-1
     sleep  3s
 
 
-     
     ${resp}=  Get provider communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -368,7 +374,7 @@ JD-TC-ConsumerMassCommunication-1
 
 JD-TC-ConsumerMassCommunication-2
     [Documentation]  Provider sending another consumer mass communication with one waitlist id
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     #Log   ${msg}
 
@@ -459,7 +465,7 @@ JD-TC-ConsumerMassCommunication-2
 
 JD-TC-ConsumerMassCommunication-3
     [Documentation]  Provider sending another consumer mass communication with all medium set as false
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_consumer_msgs  ${CUSERPH0}
@@ -523,7 +529,7 @@ JD-TC-ConsumerMassCommunication-3
 
 JD-TC-ConsumerMassCommunication-UH1
     [Documentation]  Provider sending another consumer mass communication without communication msg
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cookie}   ${resp}=    Imageupload.spLogin     ${PUSERNAME_B}     ${PASSWORD}
@@ -546,7 +552,7 @@ JD-TC-ConsumerMassCommunication-UH1
 
 JD-TC-ConsumerMassCommunication-UH2
     [Documentation]  Provider sending another consumer mass communication without uuid
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -570,7 +576,7 @@ JD-TC-ConsumerMassCommunication-UH2
 
 JD-TC-ConsumerMassCommunication-UH3
     [Documentation]  Provider sending another consumer mass communication with invalid uuid
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_uuid}=   Random Int  min=222   max=555
 
@@ -595,7 +601,7 @@ JD-TC-ConsumerMassCommunication-UH3
 
 JD-TC-ConsumerMassCommunication-UH4
     [Documentation]  Provider sending another consumer mass communication with another provider uuid
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 

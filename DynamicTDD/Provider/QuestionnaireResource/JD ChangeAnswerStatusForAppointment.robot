@@ -92,7 +92,7 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -100,6 +100,7 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -165,7 +166,7 @@ JD-TC-ChangeAnsStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -190,7 +191,7 @@ JD-TC-ChangeAnsStatusForAppt-1
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -317,7 +318,7 @@ JD-TC-ChangeAnsStatusForAppt-1
 JD-TC-ChangeAnsStatusForAppt-2
     [Documentation]   change Answer status to complete from incomplete for online appointment.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -340,7 +341,7 @@ JD-TC-ChangeAnsStatusForAppt-2
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -455,7 +456,7 @@ JD-TC-ChangeAnsStatusForAppt-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -487,7 +488,7 @@ JD-TC-ChangeAnsStatusForAppt-3
     [Documentation]   change status to complete for already completed uploads.
     # comment  file gives error, audio/video gives 200.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -554,7 +555,7 @@ JD-TC-ChangeAnsStatusForAppt-3
 JD-TC-ChangeAnsStatusForAppt-4
     [Documentation]   change answer status to complete after resubmitting the answers.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -577,7 +578,7 @@ JD-TC-ChangeAnsStatusForAppt-4
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -732,7 +733,7 @@ JD-TC-ChangeAnsStatusForAppt-4
 JD-TC-ChangeAnsStatusForAppt-5
     [Documentation]   change answer status to complete per upload question.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -755,7 +756,7 @@ JD-TC-ChangeAnsStatusForAppt-5
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -881,7 +882,7 @@ JD-TC-ChangeAnsStatusForAppt-5
 JD-TC-ChangeAnsStatusForAppt-UH1
     [Documentation]   change answer status to complete without giving details.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -904,7 +905,7 @@ JD-TC-ChangeAnsStatusForAppt-UH1
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1027,7 +1028,7 @@ JD-TC-ChangeAnsStatusForAppt-UH1
 JD-TC-ChangeAnsStatusForAppt-UH2
     [Documentation]   change answer status without provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1050,7 +1051,7 @@ JD-TC-ChangeAnsStatusForAppt-UH2
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1168,7 +1169,7 @@ JD-TC-ChangeAnsStatusForAppt-UH2
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED}
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1181,7 +1182,7 @@ JD-TC-ChangeAnsStatusForAppt-UH2
 JD-TC-ChangeAnsStatusForAppt-UH3
     [Documentation]   change answer status without file uid
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1204,7 +1205,7 @@ JD-TC-ChangeAnsStatusForAppt-UH3
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1330,7 +1331,7 @@ JD-TC-ChangeAnsStatusForAppt-UH3
 JD-TC-ChangeAnsStatusForAppt-UH4
     [Documentation]   change answer status without labelname
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1353,7 +1354,7 @@ JD-TC-ChangeAnsStatusForAppt-UH4
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1480,7 +1481,7 @@ JD-TC-ChangeAnsStatusForAppt-UH4
 JD-TC-ChangeAnsStatusForAppt-UH5
     [Documentation]   change answer status without column id
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1503,7 +1504,7 @@ JD-TC-ChangeAnsStatusForAppt-UH5
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1630,7 +1631,7 @@ JD-TC-ChangeAnsStatusForAppt-UH5
 JD-TC-ChangeAnsStatusForAppt-UH6
     [Documentation]   change answer status with invalid appointment id.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1691,7 +1692,7 @@ JD-TC-ChangeAnsStatusForAppt-UH6
 JD-TC-ChangeAnsStatusForAppt-UH7
     [Documentation]   change answer status with another provider's appointment id.
 
-    ${resp}=  Provider Login  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1706,7 +1707,7 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1754,7 +1755,7 @@ JD-TC-ChangeAnsStatusForAppt-UH7
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1813,7 +1814,7 @@ JD-TC-ChangeAnsStatusForAppt-UH7
 JD-TC-ChangeAnsStatusForAppt-UH8
     [Documentation]   change answer status with another label name.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1874,7 +1875,7 @@ JD-TC-ChangeAnsStatusForAppt-UH8
 JD-TC-ChangeAnsStatusForAppt-UH9
     [Documentation]   change answer status with non existant label name.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1937,7 +1938,7 @@ JD-TC-ChangeAnsStatusForAppt-UH9
 JD-TC-ChangeAnsStatusForAppt-UH10
     [Documentation]   change answer status with invalid file id.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1999,7 +2000,7 @@ JD-TC-ChangeAnsStatusForAppt-UH10
 JD-TC-ChangeAnsStatusForAppt-6
     [Documentation]   change answer status to complete after resubmitting the answers.
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2022,7 +2023,7 @@ JD-TC-ChangeAnsStatusForAppt-6
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}

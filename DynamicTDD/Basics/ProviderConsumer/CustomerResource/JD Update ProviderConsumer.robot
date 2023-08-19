@@ -30,7 +30,7 @@ JD-TC-UpdateProviderConsumer-1
     
     [Documentation]  update Provider Consumer where jaldee integration disabled AND with new customer
     
-    ${resp}=  Provider Login  ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=    get_acc_id       ${PUSERNAME16}
@@ -66,7 +66,7 @@ JD-TC-UpdateProviderConsumer-2
     
     [Documentation]  update Provider Consumer where jaldee integration Enabled
     
-    ${resp}=  Provider Login  ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -74,14 +74,20 @@ JD-TC-UpdateProviderConsumer-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get jaldeeIntegration Settings

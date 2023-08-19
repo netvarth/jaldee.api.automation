@@ -34,7 +34,7 @@ JD-TC-Get_Business_Logo-1
                                   
     [Documentation]               Get Business Logo
     
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -67,7 +67,7 @@ JD-TC-Get_Business_Logo-UH1
                                   
     [Documentation]               Get Business Logo where Business logo is removed
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -95,7 +95,7 @@ JD-TC-Get_Business_Logo-UH2
                                   
     [Documentation]               Get Business Logo without uploading
     
-    ${resp}=  Provider Login  ${PUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}

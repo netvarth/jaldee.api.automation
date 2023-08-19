@@ -7,10 +7,18 @@
 # set -x
 # PS4='\033[0;33m+(${BASH_SOURCE}:${LINENO}):\033[0m ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
-if [[ "$(< /proc/sys/kernel/osrelease)" == *Microsoft ]]; then 
+uname -r
+cat /proc/version
+if grep -qi microsoft /proc/version; then
+  echo "Ubuntu on Windows"
+else
+  echo "native Linux"
+fi
+cat /proc/sys/kernel/osrelease
+if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
     echo "Ubuntu on Windows"
-    MYSQL_HOST='127.0.0.1'
-    REDIS_HOST='127.0.0.1'
+    MYSQL_HOST="$(hostname).local"
+    REDIS_HOST="$(hostname).local"
     
 else 
     echo "native Linux"
@@ -134,7 +142,7 @@ backup()
     createconf
     echo -e "\nBacking up Database to - ${DB_BACKUP_PATH}/${DATABASE_NAME}-${TODAY}.sql"
     # mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DefaultDB_NAME} > ${DB_BACKUP_PATH}/${DATABASE_NAME}-${TODAY}.sql
-    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DefaultDB_NAME} --result-file=${DB_BACKUP_PATH}/${DATABASE_NAME}-${TODAY}.sql
+    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --databases ${DATABASE_NAME} --result-file=${DB_BACKUP_PATH}/${DATABASE_NAME}-${TODAY}.sql
     
 }
 

@@ -20,7 +20,7 @@ ${self}                   0
 JD-TC-UpdateMemId-1
 
     [Documentation]    update   member id for a consumer  with new member id
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -116,7 +116,7 @@ JD-TC-UpdateMemId-2
 
     [Documentation]    update  member id with  different member id for different consumers in two different  consumer groups  
    
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -246,7 +246,7 @@ JD-TC-UpdateMemId-3
 
     [Documentation]   update member id with  same member id for same consumer  in two different  consumer group 
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -381,7 +381,7 @@ JD-TC-UpdateMemId-UH2
 JD-TC-UpdateMemId-UH3
 
     [Documentation]   update member id with another group name
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_customer_groups  ${PUSERNAME24}
@@ -428,7 +428,7 @@ JD-TC-UpdateMemId-UH3
 JD-TC-UpdateMemId-UH4
 
     [Documentation]  update member id for a customer, that customer doesn't exit customer group  
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -474,7 +474,7 @@ JD-TC-UpdateMemId-UH5
 
     [Documentation]  another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${groupName1}=   FakerLibrary.word
@@ -499,7 +499,7 @@ JD-TC-UpdateMemId-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  Provider Login  ${PUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -511,7 +511,7 @@ JD-TC-UpdateMemId-UH5
 JD-TC-UpdateMemId-UH6
 
     [Documentation]  update member id with same member id
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -569,7 +569,7 @@ JD-TC-UpdateMemId-UH6
 JD-TC-UpdateMemId-UH7
 
     [Documentation]  update member id for two consumer with same member id in same group
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -676,7 +676,7 @@ JD-TC-UpdateMemId-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -684,21 +684,51 @@ JD-TC-UpdateMemId-4
     ${id}=  get_id  ${MUSERNAME_E}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid2}=  Create Sample Location
     Set Suite Variable  ${lid2}
+    
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid3}=  Create Sample Location
     Set Suite Variable  ${lid3}
+    
+    ${resp}=   Get Location ById  ${lid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
 
 
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -749,11 +779,15 @@ JD-TC-UpdateMemId-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_customer_groups  ${PUSERNAME_U1}
     clear_customer   ${PUSERNAME_U1}
@@ -847,7 +881,7 @@ JD-TC-UpdateMemId-5
 
     [Documentation]  create member id by user update member id by branch
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -880,7 +914,7 @@ JD-TC-UpdateMemId-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}   ${mem}
    
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  

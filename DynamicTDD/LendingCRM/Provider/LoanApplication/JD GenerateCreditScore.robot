@@ -62,7 +62,7 @@ JD-TC-Generate Credit Score-MAFIL Score-1
     [Documentation]               Create a loan And try to Generate Credit Score-MAFIL Score.
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -648,7 +648,7 @@ JD-TC-Generate Credit Score-MAFIL Score-UH1
                                   
     [Documentation]                Generate Credit Score-MAFIL Score with invalid loanuid.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -663,7 +663,7 @@ JD-TC-Generate Credit Score-MAFIL Score-UH2
                                   
     [Documentation]                Generate Credit Score-MAFIL Score with invalid kycid.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

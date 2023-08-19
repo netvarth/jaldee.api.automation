@@ -26,8 +26,8 @@ JD-TC-Provider_Signup
 
     [Documentation]    Create a provider with all valid attributes
     
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
 
     ${randint}    Generate Random String    length=4    chars=[NUMBERS]
     ${index}  Convert To Integer    ${randint}
@@ -84,14 +84,13 @@ JD-TC-Provider_Signup
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  03s
 
-    ${resp}=  Provider Login  ${ph}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     # Log to Console   ${resp.content}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Append To File  ${EXECDIR}/phnumbers.txt  ${ph}${\n}
 
     
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${ph}+10000
     ${ph2}=  Evaluate  ${ph}+20000

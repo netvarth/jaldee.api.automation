@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-EnableDisableJaldeeIntegrationSettings-1
     [Documentation]   Enabling jaldeeIntegration Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[0]}  ${boolean[1]}  ${boolean[1]}
     Log  ${resp.json()}
@@ -36,7 +36,7 @@ JD-TC-EnableDisableJaldeeIntegrationSettings-1
 JD-TC-EnableDisableJaldeeIntegrationSettings-2
 
     [Documentation]   Enabling jaldeeIntegration Settings1
-    ${resp}=  ProviderLogin  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[0]}  ${boolean[0]}  ${boolean[1]}
     Log  ${resp.json()}
@@ -55,7 +55,7 @@ JD-TC-EnableDisableJaldeeIntegrationSettings-2
 JD-TC-EnableDisableJaldeeIntegrationSettings-3
 
     [Documentation]   Enabling jaldeeIntegration Settings2
-    ${resp}=  ProviderLogin  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[0]}  ${boolean[0]}  ${boolean[0]}
     Log  ${resp.json()}
@@ -88,7 +88,7 @@ JD-TC-EnableDisableJaldeeIntegrationSettings-UH3
 
     [Documentation]   try to enbale jaldee integration settings to already enabled jaldee integration setting
 
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[1]}
     Log  ${resp.json()}
@@ -102,7 +102,7 @@ JD-TC-EnableDisableJaldeeIntegrationSettings-UH4
 
     [Documentation]   try to disale jaldee integration settings to already disabled jaldee integration setting
 
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[0]}  ${boolean[1]}  ${boolean[1]}
     Log  ${resp.json()}

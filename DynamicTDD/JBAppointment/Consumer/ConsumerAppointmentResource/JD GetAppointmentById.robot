@@ -23,21 +23,33 @@ JD-TC-GetConsumerAppointmentById-1
 
     [Documentation]  Consumer get appointment ById for a valid Provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME10}
     clear_location  ${PUSERNAME10}
     ${pid1}=  get_acc_id  ${PUSERNAME10}
     Set Suite Variable   ${pid1}
-    ${DAY1}=  get_date
-    Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${lid}=  Create Sample Location
+    # Set Suite Variable   ${lid}
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}
@@ -114,21 +126,32 @@ JD-TC-GetConsumerAppointmentById-2
 
     [Documentation]  Consumer get appointment ById, When Consumer Mode is ONLINE Appointment.
     
-    ${resp}=  Provider Login  ${PUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME18}
     clear_location  ${PUSERNAME18}
     ${pid2}=  get_acc_id  ${PUSERNAME18}
     Set Suite Variable   ${pid2}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${lid}=  Create Sample Location
+    # Set Suite Variable   ${lid}
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
@@ -227,7 +250,7 @@ JD-TC-GetConsumerAppointmentById-UH3
 
 	[Documentation]  Get Consumer Appointment ById  using another provider.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pidUH3}=  get_acc_id  ${PUSERNAME15}
     ${resp}=   Get consumer Appointment By Id   ${pidUH3}  ${apptid1}

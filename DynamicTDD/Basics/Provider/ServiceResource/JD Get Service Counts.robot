@@ -31,7 +31,7 @@ ${start}    150
 JD-TC-GetServiceCount-1
 
     [Documentation]   Get Service Counts
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service       ${PUSERNAME111} 
     ${min_pre}=   Random Int  min=200  max=500
@@ -56,7 +56,7 @@ JD-TC-GetServiceCount-2
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=   Random Int  min=600  max=800
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Service  ${SERVICE2}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}  ${bool[1]}   ${bool[0]} 
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -74,7 +74,7 @@ JD-TC-GetServiceCount-3
     ${min_pre}=  Convert To Number  ${min_pre}  1
     ${Total}=   Random Int  min=600  max=800
     ${Total}=  Convert To Number  ${Total}  1
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Service  ${SERVICE4}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}  ${bool[1]}   ${bool[0]} 
     Log  ${resp.json()}

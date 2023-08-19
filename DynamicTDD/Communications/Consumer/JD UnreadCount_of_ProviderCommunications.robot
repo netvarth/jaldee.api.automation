@@ -22,10 +22,15 @@ JD-TC-Unread Count of Provider Communications-INDEPENDENT_SP-1
     Set Suite Variable  ${cR_id1}  ${cR_id1}
     clear_Consumermsg  ${CUSERNAME28}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pR_id1}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
     ${account_id1}=  get_acc_id  ${PUSERNAME1}
     Set Suite Variable  ${account_id1}
 
@@ -143,10 +148,10 @@ JD-TC-Unread Count of Provider Communications-INDEPENDENT_SP-2
     Set Suite Variable  ${cR_id1}  ${cR_id1}
     clear_Consumermsg  ${CUSERNAME28}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
+    # Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
 
       ${c_id}=  get_id  ${CUSERNAME28}
     Set Suite Variable   ${c_id} 
@@ -238,7 +243,7 @@ JD-TC-Unread Count of Provider Communications-INDEPENDENT_SP-2
 JD-TC-Unread Count of Provider Communications-INDEPENDENT_SP-3
     [Documentation]  When multiple number of Providers communicate with a consumer
     clear_Consumermsg  ${CUSERNAME28}
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     # ${msg1}=   FakerLibrary.Word
@@ -260,10 +265,15 @@ JD-TC-Unread Count of Provider Communications-INDEPENDENT_SP-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${pR_id2}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pR_id2}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pR_id2}  ${resp.json()['id']}
     ${account_id2}=  get_acc_id  ${PUSERNAME2}
     Set Suite Variable  ${account_id2}  ${account_id2}
     # ${msg2}=   FakerLibrary.Word
@@ -369,7 +379,7 @@ JD-TC-Unread Count of Provider Communications-INDEPENDENT_SP-4
     clear_Consumermsg  ${CUSERNAME28}
     clear_Consumermsg  ${CUSERNAME29}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -500,7 +510,7 @@ JD-TC-Unread Count of Provider Communications-BRANCH-5
     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -511,10 +521,7 @@ JD-TC-Unread Count of Provider Communications-BRANCH-5
     Set Suite Variable  ${bs}
 
 
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
+    
     ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
     ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000000000
     ${views}=  Random Element    ${Views}
@@ -525,26 +532,34 @@ JD-TC-Unread Count of Provider Communications-BRANCH-5
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    # ${sTime}=  add_time  0  15
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
     # Set Suite Variable   ${sTime}
-    # ${eTime}=  add_time   0  45
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # Set Suite Variable   ${eTime}
-    ${sTime}=  subtract_time  0  30
-    # ${sTime}=  subtract_time  0  05
+    ${sTime}=  subtract_timezone_time  ${tz}  0  30
+    # ${sTime}=  subtract_timezone_time  ${tz}  0  05
     Set Suite Variable  ${BsTime30}  ${sTime}
-    # ${eTime}=  subtract_time  1  00
-    ${eTime}=  add_time   1  00
+    # ${eTime}=  subtract_timezone_time  ${tz}  1  00
+    ${eTime}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable  ${BeTime30}  ${eTime}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  ${list}
     ${resp}=  Update Business Profile with schedule    ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -557,9 +572,16 @@ JD-TC-Unread Count of Provider Communications-BRANCH-5
     sleep   02s
 
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -624,10 +646,15 @@ JD-TC-Unread Count of Provider Communications-BRANCH-5
     Set Suite Variable  ${cR_id1}  ${cR_id1}
     clear_Consumermsg  ${CUSERNAME28}
 
-    ${resp}=   ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pR_id1}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
     ${account_id1}=  get_acc_id  ${MUSERNAME_E1}
     Set Suite Variable  ${account_id1}
 
@@ -750,7 +777,7 @@ JD-TC-Unread Count of Provider Communications-BRANCH-6
     clear_Consumermsg  ${CUSERNAME30}
     clear_Consumermsg  ${CUSERNAME29}
 
-    ${resp}=   ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -36,10 +36,14 @@ JD-TC-CreateOrderByProviderForHomeDelivery-1
     clear_service  ${PUSERNAME117}
     clear_customer   ${PUSERNAME117}
     clear_Item   ${PUSERNAME117}
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME117}
     Set Suite Variable  ${accId3} 
@@ -128,21 +132,26 @@ JD-TC-CreateOrderByProviderForHomeDelivery-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
+
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
    
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  00 
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime3}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -253,7 +262,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-1
     # ${cid20}=  get_id  ${CUSERNAME20}
     # Set Suite Variable   ${cid20}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -308,10 +317,10 @@ JD-TC-CreateOrderByProviderForHomeDelivery-1
 JD-TC-CreateOrderByProviderForHomeDelivery-2
     [Documentation]    Create order by provider for Home Delivery when payment type is FIXED (AdvancePayment is required)
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
    
     ${resp}=  Get Order Catalog    ${CatalogId2}  
     Log   ${resp.json()}
@@ -323,7 +332,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-2
 
     # ${cid20}=  get_id  ${CUSERNAME20}
     # Set Suite Variable   ${cid20}
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
@@ -358,7 +367,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-2
 JD-TC-CreateOrderByProviderForHomeDelivery-UH1
     [Documentation]    Place an order By Provider for Home delivery a date other than in catalog schedule.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -370,7 +379,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${Add_Day1}=  add_date   1
+    ${Add_Day1}=  db.add_timezone_date  ${tz}  1
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
@@ -385,11 +394,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH1
 JD-TC-CreateOrderByProviderForHomeDelivery-UH2
     [Documentation]   place an order by Provider for a past date.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${Sub_DAY1}=  subtract_date   1
+    ${Sub_DAY1}=  db.subtract_timezone_date  ${tz}    1
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
@@ -405,11 +414,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH2
 JD-TC-CreateOrderByProviderForHomeDelivery-UH3
     [Documentation]   place an order by Provider  without an order date.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${Sub_DAY1}=  subtract_date   1
+    ${Sub_DAY1}=  db.subtract_timezone_date  ${tz}    1
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
@@ -428,7 +437,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  ListFamilyMember
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -443,7 +452,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH4
 
     ${resp}=  ListFamilyMemberByProvider  ${cid20}
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     # ${INVALID_Fid}=  Random Int  min=10000   max=50000
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
@@ -460,12 +469,12 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH4
 JD-TC-CreateOrderByProviderForHomeDelivery-UH5
     [Documentation]    Place an order By Provider for an item not in catalog.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
@@ -482,11 +491,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH5
 JD-TC-CreateOrderByProviderForHomeDelivery-UH6
     [Documentation]    Place an order By Provider for Home delivery with item quantity less than that of minimum quantity in catalog.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY7}=  add_date   7
+    ${DAY7}=  db.add_timezone_date  ${tz}   7
     ${limit}=   Evaluate  ${minQuantity3} - 1
     ${quantity1}=  FakerLibrary.Random Int  min=1   max=${limit}
     ${quantity1}=  Convert To Number  ${quantity1}  1
@@ -525,11 +534,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH6
 JD-TC-CreateOrderByProviderForHomeDelivery-UH7
     [Documentation]    Place an order By provider for Home Delivery with item quantity greater than that of maximum quantity in catalog.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${limit}=   Evaluate  ${maxQuantity3} + 1
     ${quantity1}=  FakerLibrary.Random Int  min=${limit}   max=100
     ${quantity1}=  Convert To Number  ${quantity1}  1
@@ -567,11 +576,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH7
 
 JD-TC-CreateOrderByProviderForHomeDelivery-UH8
     [Documentation]    Place an order By Provider for Home delivery with Home_delivery as false.
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -584,11 +593,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH8
 
 JD-TC-CreateOrderByProviderForHomeDelivery-UH9
     [Documentation]    Place an order By Provider for Home Delivery without Home_Delivery_Address.
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -612,11 +621,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH9
 
 JD-TC-CreateOrderByProviderForHomeDelivery-UH10
     [Documentation]   place an order by provider without item.
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -629,11 +638,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH10
 
 JD-TC-CreateOrderByProviderForHomeDelivery-UH11
     [Documentation]   place an order by provider for zero items.
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   9
+    ${DAY1}=  db.add_timezone_date  ${tz}  9
     ${MIN_QUANTITY_REQUIRED}=  Format String   ${MIN_QUANTITY_REQUIRED}   ${minQuantity3}
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
@@ -677,7 +686,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH12
     Should Be Equal As Strings   ${resp.status_code}    200
     
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${resp}=   Create Order By Provider For HomeDelivery    ${cookie}   ${cid20}   ${cid20}   ${CatalogId1}   ${boolean[1]}   ${address}    ${sTime3}    ${eTime3}   ${DAY1}    ${CUSERNAME20}    ${email}  ${orderNote}  ${countryCodes[1]}  ${item_id3}   ${item_quantity1}  ${item_id4}   ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
@@ -687,7 +696,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH12
 JD-TC-CreateOrderByProviderForHomeDelivery-UH13
     [Documentation]    Create Order without login.
     ${empty_cookie}=  Create Dictionary
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${resp}=   Create Order By Provider For HomeDelivery    ${empty_cookie}  ${cid20}   ${cid20}   ${CatalogId1}   ${boolean[1]}   ${address}    ${sTime3}    ${eTime3}   ${DAY1}    ${CUSERNAME20}    ${email}  ${orderNote}  ${countryCodes[1]}  ${item_id3}   ${item_quantity1}  ${item_id4}   ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    419
@@ -697,7 +706,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH13
 JD-TC-CreateOrderByProviderForHomeDelivery-UH14
     [Documentation]    Place an order By provider for Home Delivery for disabled item.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -705,7 +714,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -730,7 +739,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH14
 JD-TC-CreateOrderByProviderForHomeDelivery-UH15
     [Documentation]    Place an order By provider for Home Delivery for removed item.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -738,7 +747,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -753,11 +762,11 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH15
 
 JD-TC-CreateOrderByProviderForHomeDelivery-UH16
     [Documentation]   place an order by provider  without any timings.
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -772,7 +781,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH16
 JD-TC-CreateOrderByProviderForHomeDelivery-UH17
     [Documentation]   place an order by provider without enable order settings.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -781,7 +790,7 @@ JD-TC-CreateOrderByProviderForHomeDelivery-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableOrder']}==${bool[1]}   Disable Order Settings
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

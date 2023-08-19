@@ -79,7 +79,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
         Set Test Variable  ${Dom}   ${resp.json()['sector']}
@@ -111,7 +111,7 @@ JD-TC-Change Status Of Uploaded File-1
     Log  ${NBFCMUSERNAME3}
     Set Suite Variable  ${NBFCMUSERNAME3}
     
-    ${resp}=  Provider Login  ${NBFCMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -766,7 +766,7 @@ JD-TC-Change Status Of Uploaded File-1
 
 # .....Create Dealer By Sales Officer.......
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -887,7 +887,7 @@ JD-TC-Change Status Of Uploaded File-UH1
                                   
     [Documentation]               Change satus of uploaded file where QNR Status is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -900,7 +900,7 @@ JD-TC-Change Status Of Uploaded File-UH2
                                   
     [Documentation]               Change satus of uploaded file where QNR Status where qnr Status is INCOMPLETE
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -914,7 +914,7 @@ JD-TC-Change Status Of Uploaded File-UH3
                                   
     [Documentation]               Change satus of uploaded file where partner id is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -927,7 +927,7 @@ JD-TC-Change Status Of Uploaded File-UH4
                                   
     [Documentation]               Change satus of uploaded file with invalid partner id
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

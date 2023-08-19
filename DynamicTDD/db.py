@@ -28,11 +28,21 @@ from phonenumbers.phonenumberutil import (
     region_code_for_country_code,
     region_code_for_number,
 )
+
+# from timezonefinder import TimezoneFinder
+from robot.api import logger
+
 from base64 import b64encode, b64decode
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 
-db_host = "127.0.0.1"
+
+if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
+    db_host = "host.docker.internal"
+else:
+    db_host = "127.0.0.1"
+
+# db_host = "127.0.0.1"
 db_user = "root"
 db_passwd = "netvarth"
 db = "ynw"
@@ -57,6 +67,29 @@ multiuser_metric_id=21
 #     except MySQLdb.Error as e:
 #         print ("Exception:", e)
         # print ("Exception at line no:", e.__traceback__.tb_lineno)
+
+def log_response(response):
+    logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
+                                              response.url) +
+                "status=%s, reason=%s \n " % (response.status_code,
+                                              response.reason) +
+                "headers=%s \n " % response.headers +
+                "body=%s \n " % (response.text))
+
+
+def log_request(response):
+    request = response.request
+    if response.history:
+        original_request = response.history[0].request
+        redirected = '(redirected) '
+    else:
+        original_request = request
+        redirected = ''
+    logger.info("%s Request : " % original_request.method.upper() +
+                "url=%s %s\n " % (original_request.url, redirected) +
+                "path_url=%s \n " % original_request.path_url +
+                "headers=%s \n " % original_request.headers +
+                "body=%s \n " % (original_request.body))
 
 def connect_db(host, user, passwd, db):
     try:
@@ -1156,6 +1189,8 @@ def get_time():
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     date,time= data.split()
     try:
@@ -1201,6 +1236,8 @@ def get_date():
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     date,time= data.split()
     try:
@@ -1512,6 +1549,8 @@ def add_time24(h,m):
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     # print data
     try:
@@ -1662,6 +1701,18 @@ def get_pin_loc() :
         district = random_row['District']
         state = random_row['State']
     return pin,place,district,state
+
+def get_lat_long_add_pin() :
+    # with open(pfile,'r', encoding="utf-8") as data:
+    with open(addressfile,'r', encoding="utf-8") as data:
+        csv_reader=csv.DictReader(data)
+        k=list(csv_reader)
+        random_row = random.choice(k)
+        lat = random_row['Latitude']
+        lon = random_row['Longitude']
+        pin = random_row['Pincode']
+        add = random_row['Place'] + ',' + random_row['District'] + ',' + random_row['State']+ '-' + str(random_row['Pincode'])
+    return lat,lon,str(pin),add.strip()
 
 def get_Subdomainfields(datas) :
     fake = Faker()
@@ -2227,6 +2278,8 @@ def get_time_secs():
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     date,time= data.split()
     try:
@@ -2958,6 +3011,8 @@ def get_date_time():
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     date,time= data.split()
     try:
@@ -2982,7 +3037,10 @@ def remove_secs(time):
 
 def remove_date_time_secs(time):
     try:
-        time1= datetime.datetime.strptime(time, '%Y-%m-%d %I:%M:%S %p')
+        if time.endswith(("AM", "PM", "am", "pm")):
+            time1= datetime.datetime.strptime(time, '%Y-%m-%d %I:%M:%S %p')
+        else:
+            time1= datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
         t= time1.strftime("%Y-%m-%d %I:%M %p")
         return t
     except Exception as e:
@@ -5833,6 +5891,247 @@ def time_difference(start_time, end_time):
     return f"{hours:02}:{minutes:02}:{seconds:02}"
 
 
+def get_Timezone_by_lat_long(latitude, longitude):
+    # tf = TimezoneFinder()
+    # print (type(latitude), float(latitude))
+    # print (type(longitude), float(longitude))
+    # tz = tf.timezone_at(lng=float(longitude), lat=float(latitude))
+    BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
+    URL = BASE_URL + '/provider/location/timezone/'+ str(latitude) +'/'+ str(longitude)
+    # URL = BASE_URL + '/provider/location/timezone/'+ latitude +'/'+ longitude
+    print (URL)
+    r = requests.get(url = URL)
+    print (r)
+    log_request(r)
+    log_response(r)
+    data = r.json()
+    print (data)
+    return  data
+
+def get_time_by_timezone(tz):
+    BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
+    zone, loc = tz.split('/')
+    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    try:
+        r = requests.get(url = URL)
+        log_request(r)
+        log_response(r)
+        print(r.status_code)
+        # r.raise_for_status()
+        data = r.json()
+        date,time= data.split()
+        time1= datetime.datetime.strptime(time, '%H:%M:%S').time()
+        t= time1.strftime("%I:%M %p")
+        return t
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+    
+
+def get_date_by_timezone(tz):
+    BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
+    zone, loc = tz.split('/')
+    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
+    data = r.json()
+    date,time= data.split()
+    try:
+        b= datetime.datetime.strptime(date, '%Y-%m-%d').date()
+        date = b.strftime("%Y-%m-%d")
+        return date
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def get_date_time_by_timezone(tz):
+    BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
+    zone, loc = tz.split('/')
+    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
+    data = r.json()
+    return data
+    # date,time= data.split()
+    # try:
+    #     b= datetime.datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
+    #     date = b.strftime("%Y-%m-%d %I:%M %p")
+    #     return date
+    # except Exception as e:
+    #     print ("Exception:", e)
+    #     print ("Exception at line no:", e.__traceback__.tb_lineno)
+    #     return 0
+
+def add_timezone_time(tz,h,m):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time1= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time1 + datetime.timedelta(hours=int(h),minutes=int(m))
+        newtime = b.strftime("%I:%M %p")
+        return newtime
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def subtract_timezone_time(tz,h,m):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time2= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time2- datetime.timedelta(hours=int(h),minutes=int(m))
+        newtime = b.strftime("%I:%M %p")
+        return newtime
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+       
+def add_timezone_date(tz, days):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time2= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time2 + datetime.timedelta(days=int(days))
+        newdate = b.strftime("%Y-%m-%d")
+        return newdate
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def subtract_timezone_date(tz,days):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time2= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time2 - datetime.timedelta(days=int(days))
+        newdate = b.strftime("%Y-%m-%d")
+        return newdate
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+
+def get_timezone_weekday(tz):   
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        d1= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S').isoweekday()
+        day=int(d1)
+        if day==7:
+            return 1
+        else:
+            return day+1
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+# def get_weekday_by_date(date):
+#     try:
+#         d= datetime.datetime.strptime(date, '%Y-%m-%d').isoweekday()
+#         day=int(d)
+#         if day==7:
+#             return 1
+#         else:
+#             return day+1
+#     except Exception as e:
+#         print ("Exception:", e)
+#         print ("Exception at line no:", e.__traceback__.tb_lineno)
+#         return 0
+
+
+def timezone_bill_cycle(tz):
+    # date = datetime.date.today()
+    current_date= get_date_by_timezone(tz)
+    date= datetime.datetime.strptime(current_date, '%Y-%m-%d').date()
+    mo= date.month
+    ye= date.year
+    try:
+        if (mo==12):
+            d= date.replace(year=ye+1,month=1)
+        else :
+            d= date.replace(month=mo+1)
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        a= calendar.monthrange(ye,mo+1)
+        d= date.replace(month=mo+1,day=a[1])
+    return str(d)
+
+def timezone_bill_cycle_annual(tz):
+    current_date= get_date_by_timezone(tz)
+    # date = datetime.date.today()
+    date= datetime.datetime.strptime(current_date, '%Y-%m-%d').date()
+    mo= date.month
+    ye= date.year
+    try:
+        d= date.replace(year=ye+1)
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        a= calendar.monthrange(ye+1,mo)
+        d=date.replace(year=ye+1,day=a[1])
+    return str(d)
+
+
+def add_tz_time24(tz,h,m):
+    current_dt= get_date_time_by_timezone(tz)
+    # print data
+    try:
+        a= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')        
+        b= a + datetime.timedelta(hours=int(h),minutes=int(m))
+        t = b.strftime("%Y-%m-%d %H:%M:%S")
+        return t
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0  
+    
+
+def get_tz_time_secs(tz):
+    current_dt= get_date_time_by_timezone(tz)
+    date,time= current_dt.split()
+    try:
+        time1= datetime.datetime.strptime(time, '%H:%M:%S').time()
+        t= time1.strftime("%I:%M:%S %p")
+        return t
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+
+def add_tz_time_sec(tz,h,m,s):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time2= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time2 + datetime.timedelta(hours=int(h),minutes=int(m),seconds=int(s))
+        t = b.strftime("%I:%M:%S %p")
+        return t
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def change_date_with_tz(tz,date):
+    # date= datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    y,m,d=date.split("-")
+    # t = datetime.datetime.now()
+    current_time= get_time_by_timezone(tz)
+    t= datetime.datetime.strptime(current_time, '%I:%M %p').time()
+    t = datetime.datetime(year=int(y),month=int(m),day=int(d),hour=t.hour,minute=t.minute)
+    str=t.strftime("%m%d%H%M%y.%S")
+    user=os.environ['USERNAME']
+    hostip=os.environ['IP_ADDRESS']
+    userpass=os.environ['SSHPASS']
+    # os.system("sudo date '%s'" %str)
+    command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+    subprocess.call(command2, shell=True)
+    command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S date "+str
+    subprocess.call(command, shell=True)
 def getMimetype(*files):
     filetype={}
     for file in files:
@@ -5867,6 +6166,8 @@ cbc_iv_key="RW5jRGVjSmFsZGVlMDYyMw=="
 def ecrypt_data(data):
 
     try:
+        # cbc_key= load_property('aes.cbc.secret')
+        # iv_key= load_property('aes.cbc.iv')
         dec_secret = b64decode(cbc_secret_key)
         dec_iv = b64decode(cbc_iv_key)
         data = bytes(data, 'utf-8')
@@ -5882,6 +6183,8 @@ def ecrypt_data(data):
         # print("b64 encoded data: ",b64_encoded_data)
         string_data = b64_encoded_data.decode()
         print(string_data)
+        # json_object = json.loads(string_data)
+        # return  b64_encoded_data
         return  string_data
     except Exception as e:
         print ("Exception:", e)
@@ -5890,6 +6193,8 @@ def ecrypt_data(data):
     
 def decrypt_data(data):
     try:
+        # cbc_key= load_property('aes.cbc.secret')
+        # iv_key= load_property('aes.cbc.iv')
         dec_secret = b64decode(cbc_secret_key)
         dec_iv = b64decode(cbc_iv_key)
         b64_decoded_data=  b64decode(data)
@@ -5910,3 +6215,97 @@ def decrypt_data(data):
             print ("Exception:", e)
             print ("Exception at line no:", e.__traceback__.tb_lineno)
 
+
+def Set_TZ_Header(**kwargs):
+    tzheaders= {} 
+    locparam= {}
+    print("kwargs: ",kwargs)
+    if kwargs=={} or kwargs.get("timeZone")== None or kwargs.get("location") == None :
+        tzheaders.update({'timeZone':'Asia/Kolkata'})
+        print("default time zone set: ",tzheaders)
+    else:
+        for key, value in kwargs.items():
+            if key == 'timeZone':
+                tzheaders.update({'timeZone':value})
+                removed_value = kwargs.pop(key, 'No Key found')
+                print(key," Removed from kwargs -", removed_value)
+                # print(tzheaders)
+                print("user provided time zone set: ",tzheaders)
+            elif key == 'location':
+                locparam.update({key:value})
+                removed_value = kwargs.pop(key, 'No Key found')
+                print(key," Removed from kwargs -", removed_value)
+                # print(locparam)
+                print("user provided location param set: ",locparam)
+    print("Final kwargs: ",kwargs)
+    return  tzheaders, kwargs, locparam
+
+
+def CDLcategorytype(account):
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try:
+        with dbconn.cursor() as cur:
+            date= get_date()
+            mySql_insert_query = """INSERT INTO ynw.crm_category_tbl(account,type_enum,name,alias_name,conversion_value,status,created_by,created_date,modified_by)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) """
+
+            records_to_insert = [(account,4,'CDL','CDL','1.0',0,1,date,0)]
+            cur.executemany(mySql_insert_query, records_to_insert)            
+            dbconn.commit()
+         
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        pass
+    finally:
+        if dbconn is not None:
+            dbconn.close()
+
+
+def CDLtype(account):
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try:
+        with dbconn.cursor() as cur:
+            date= get_date()
+            mySql_insert_query = """INSERT INTO ynw.crm_type_tbl(account,type_enum,name,status,created_by,created_date,modified_by)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s) """
+
+            records_to_insert = [(account,4,'Direct walkin',0,1,date,0),
+                                 (account,4,'Referral',0,1,date,0),
+                                 (account,4,'Social Media',0,1,date,0),
+                                 (account,4,'Dealer Point',0,1,date,0),
+                                 (account,4,'Business Associate',0,1,date,0),
+                                 (account,4,'MAFIL Branch',0,1,date,0)]
+            cur.executemany(mySql_insert_query, records_to_insert)            
+            dbconn.commit()
+         
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        pass
+    finally:
+        if dbconn is not None:
+            dbconn.close()
+
+
+def CDLEnqStatus(account):
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try:
+        with dbconn.cursor() as cur:
+            date= get_date()
+            mySql_insert_query = """INSERT INTO ynw.crm_status_tbl(account,type_enum,name,alias_name,status,created_by,created_date,modified_by,is_blocked,is_canceled,is_closed,is_default,is_editable,is_verified,is_done,is_rejected,is_pending)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
+
+            records_to_insert = [(account,3,'Follow Up','Follow Up',0,1,date,0, 0, 0, 0, 1, 1, 0, 0, 0, 0),
+                 (account,3,'Completed','Completed',0,1,date,0, 0, 0, 1, 0, 0, 0, 0, 0, 0)]
+                                 
+            cur.executemany(mySql_insert_query, records_to_insert)  
+            dbconn.commit()
+         
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        pass
+    finally:
+        if dbconn is not None:
+            dbconn.close()

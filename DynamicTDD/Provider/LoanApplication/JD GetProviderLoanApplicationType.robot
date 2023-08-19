@@ -28,7 +28,7 @@ JD-TC-GetLoanApplicationType-1
     [Documentation]              Get loan application type
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}

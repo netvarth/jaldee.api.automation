@@ -38,7 +38,7 @@ JD-TC-RemoveFamilyMember-1
 JD-TC-RemoveFamilyMember-2
 
       [Documentation]  Delete a family member after waitlisted in a queue in consumer side then check that family member in provider side
-      ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${pid0}=  get_acc_id  ${PUSERNAME83}
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -46,9 +46,15 @@ JD-TC-RemoveFamilyMember-2
       clear_location  ${PUSERNAME83}
       clear_queue  ${PUSERNAME83}
       Clear_service  ${PUSERNAME83}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       
       ${resp}=   ProviderLogout
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -65,7 +71,7 @@ JD-TC-RemoveFamilyMember-2
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${mem_id6}  ${resp.json()}
 
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${cnote}=   FakerLibrary.word
       ${resp}=  Add To Waitlist Consumers  ${pid0}  ${qid}  ${DAY}  ${s_id}  ${cnote}  ${bool[0]}  ${mem_id6} 
       Log  ${resp.json()}
@@ -84,7 +90,7 @@ JD-TC-RemoveFamilyMember-2
       Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid}
       Set Test Variable  ${cfid}   ${resp.json()['waitlistingFor'][0]['id']}
 
-      ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       
       ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}
@@ -111,7 +117,7 @@ JD-TC-RemoveFamilyMember-2
       ${resp}=  ListFamilyMember
       Should Not Contain  ${resp.json()}  id=${mem_id6}
 
-      ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${resp}=  ListFamilyMemberByProvider  ${cid}
       Log   ${resp.json()}
@@ -128,7 +134,7 @@ JD-TC-RemoveFamilyMember-2
 
 JD-TC-RemoveFamilyMember-UH1
       [Documentation]  consumer remove provider side Waitlisted family member    
-      ${resp}=   ProviderLogin  ${PUSERNAME25}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${pid0}=  get_acc_id  ${PUSERNAME25}
       clear_customer   ${PUSERNAME25}
@@ -137,8 +143,13 @@ JD-TC-RemoveFamilyMember-UH1
       ${resp}=  Get Queues
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}   200
-      ${resp}=  Create Sample Queue  
+      ${resp}=  Create Sample Queue
       Set Suite Variable  ${qid1}   ${resp['queue_id']}
+      Set Suite Variable  ${lid}   ${resp['location_id']}
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
       ${resp}=  AddCustomer  ${CUSERNAME22}
       Log   ${resp.json()}
@@ -157,11 +168,10 @@ JD-TC-RemoveFamilyMember-UH1
       ${resp}=  Get Queue ById  ${qid1}
       Log  ${resp.json()}
       ${s_id1}=  Set Variable  ${resp.json()['services'][0]['id']}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${resp}=  Add To Waitlist  ${id}  ${s_id1}  ${qid1}  ${DAY}  ${note}  ${bool[1]}  ${fid}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${wid}  ${wid[0]}
 
@@ -187,7 +197,7 @@ JD-TC-RemoveFamilyMember-UH1
      
 JD-TC-RemoveFamilyMember-UH2
       [Documentation]  Consumer Remove provider side Waitlisted family member  after cancel a waitlist  
-      ${resp}=   ProviderLogin  ${PUSERNAME25}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -211,11 +221,10 @@ JD-TC-RemoveFamilyMember-UH2
       ${resp}=  Get Queue ById  ${qid1}
       Log  ${resp.json()}
       ${s_id1}=  Set Variable  ${resp.json()['services'][0]['id']}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${resp}=  Add To Waitlist  ${id}  ${s_id1}  ${qid1}  ${DAY}  ${note}  ${bool[1]}  ${fid}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${wid}  ${wid[0]}
 
@@ -279,7 +288,7 @@ JD-TC-RemoveFamilyMember-UH5
 ***comment***
 JD-TC-RemoveFamilyMember-UH6
       [Documentation]  Delete a family member after waitlisted in a queue and check that family member in consumer side
-      ${resp}=   ProviderLogin  ${PUSERNAME4}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME25}
       Log   ${resp.json()}
@@ -290,9 +299,15 @@ JD-TC-RemoveFamilyMember-UH6
       ${resp}=   ProviderKeywords.Get Queues
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
@@ -300,11 +315,10 @@ JD-TC-RemoveFamilyMember-UH6
       ${resp}=  AddFamilyMemberByProvider    ${cid}   ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  
       Log  ${resp.json()}
       Set Test Variable  ${mem_id1}  ${resp.json()}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${mem_id1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 

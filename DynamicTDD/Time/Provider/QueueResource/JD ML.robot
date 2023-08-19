@@ -26,7 +26,7 @@ JD-TC-ML Test Case-1
     
     [Documentation]  Verification of Get Approximate Waiting Time When calculation mode as ML ,add 8  waitlist and  Start one by one 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 *** comment ***   
     clear_service   ${PUSERNAME135}
@@ -35,33 +35,42 @@ JD-TC-ML Test Case-1
     clear_customer  ${PUSERNAME135}
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}  
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
-    ${sTime1}=  subtract_time  1  00
+    ${sTime1}=  subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   5  30
+    # ${eTime1}=  add_timezone_time  ${tz}   5  30
+    ${eTime1}=  add_timezone_time  ${tz}  5  30  
     Set Suite Variable   ${eTime1}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     Set Suite Variable  ${parking_type}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  6  15
+    ${sTime}=  add_timezone_time  ${tz}  6  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   7  30
+    ${eTime}=  add_timezone_time  ${tz}   7  30
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -92,7 +101,6 @@ JD-TC-ML Test Case-1
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -102,12 +110,10 @@ JD-TC-ML Test Case-1
     Set Suite Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid4}  ${wid[0]}    
     # ${cid}=  get_id  ${CUSERNAME1}
@@ -119,22 +125,18 @@ JD-TC-ML Test Case-1
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid5}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid6}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid7}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid8}  ${wid[0]}
     ${resp}=  Waitlist Action   ${waitlist_actions[1]}   ${wid1}       
@@ -282,7 +284,7 @@ JD-TC-ML Test Case-1
 
 JD-TC-ML Test Case-2
     [Documentation]  check ideal time is taken for ML calculation when queue is empty   
-    ${resp}=  ProviderLogin  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${cid}=  get_id  ${CUSERNAME6}
 
@@ -293,7 +295,6 @@ JD-TC-ML Test Case-2
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -303,13 +304,11 @@ JD-TC-ML Test Case-2
     Set Suite Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}    
     Set Suite Variable  ${wid4}  ${wid[0]}     
     ${resp}=  Waitlist Action   ${waitlist_actions[1]}   ${wid1}       
@@ -351,7 +350,7 @@ JD-TC-ML Test Case-2
 JD-TC-ML Test Case-3
     [Documentation]  check ideal time is taken for ML calculation when queue is not empty   
     
-    ${resp}=  ProviderLogin  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${cid}=  get_id  ${CUSERNAME7}
 
@@ -362,7 +361,6 @@ JD-TC-ML Test Case-3
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -372,12 +370,10 @@ JD-TC-ML Test Case-3
     Set Suite Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}    
     Set Suite Variable  ${wid4}  ${wid[0]}     
     ${resp}=  Waitlist Action   ${waitlist_actions[1]}   ${wid1}       
@@ -386,7 +382,7 @@ JD-TC-ML Test Case-3
     ${resp}=  Get Queue ById  ${q1_l1}
     Verify Response  ${resp}  turnAroundTime=11  queueWaitingTime=33
     change_system_time  2  0 
-    ${resp}=  ProviderLogin  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${cid}=  get_id  ${CUSERNAME5} 
 
@@ -427,40 +423,49 @@ JD-TC-ML Test Case-3
     resetsystem_time  
 JD-TC-ML Test Case-4
     [Documentation]  delay add to the ML waiting time calculation   
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME12}
     clear_location  ${PUSERNAME12}
     clear_queue  ${PUSERNAME12}
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}  ${DAY}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  subtract_time  1  00
+    ${sTime1}=  subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   5  30
+    # ${eTime1}=  add_timezone_time  ${tz}   5  30
+    ${eTime1}=  add_timezone_time  ${tz}  5  30  
     Set Suite Variable   ${eTime1}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     Set Suite Variable  ${parking_type}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  6  15
+    ${sTime}=  add_timezone_time  ${tz}  6  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   7  30
+    ${eTime}=  add_timezone_time  ${tz}   7  30
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -489,7 +494,6 @@ JD-TC-ML Test Case-4
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -499,12 +503,10 @@ JD-TC-ML Test Case-4
     Set Suite Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}    
     Set Suite Variable  ${wid4}  ${wid[0]}     
     ${resp}=  Waitlist Action   ${waitlist_actions[1]}   ${wid1}       
@@ -596,22 +598,22 @@ JD-TC-ML Test Case-4
 
 JD-TC-ML Test Case-5
     [Documentation]   Check queue waiting time when queue has no persons in waitlist status arrived
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME13}
     clear_location  ${PUSERNAME13}
     clear_queue  ${PUSERNAME13}
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}  ${DAY}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  subtract_time  1  00
+    ${sTime1}=  subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -692,7 +694,7 @@ JD-TC-ML Test Case-5
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action  ${waitlist_actions[0]}  ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -760,22 +762,22 @@ JD-TC-ML Test Case-5
 
 JD-TC-ML Test Case-6
     [Documentation]   Check queue waiting time when token1 is arrived after token3
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME14}
     clear_location  ${PUSERNAME14}
     clear_queue  ${PUSERNAME14}
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}  ${DAY}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  subtract_time  1  00
+    ${sTime1}=  subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
@@ -854,7 +856,7 @@ JD-TC-ML Test Case-6
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action  ${waitlist_actions[0]}  ${wid3}
     Should Be Equal As Strings  ${resp.status_code}  200

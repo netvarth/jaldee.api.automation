@@ -121,6 +121,7 @@ Remove tooth details with MR id
    ${resp}=  DELETE On Session  ynw  /provider/mr/dentalchart/${mrId}  data=${data}  expected_status=any
    [Return]  ${resp}
 
+
 *** Test Cases ***
 
 JD-TC-RemoveToothDetailsFromdentalchart-1
@@ -142,18 +143,22 @@ JD-TC-RemoveToothDetailsFromdentalchart-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName}    ${resp.json()['userName']}         
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     ${pid}=  get_acc_id  ${PUSERNAME_C}
     Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_C}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_C}+25566122
@@ -165,18 +170,22 @@ JD-TC-RemoveToothDetailsFromdentalchart-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -228,15 +237,19 @@ JD-TC-RemoveToothDetailsFromdentalchart-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  0  30
-    ${end_time}=    add_time  5  00  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  30
+    ${end_time}=    db.add_timezone_time  ${tz}  5  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -248,9 +261,9 @@ JD-TC-RemoveToothDetailsFromdentalchart-1
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -452,11 +465,11 @@ JD-TC-RemoveToothDetailsFromdentalchart-1
 JD-TC-RemoveToothDetailsFromdentalchart-2
     [Documentation]    Create two dental chart and try to remove both.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${CUR_DAY}=  get_date   
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}   
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -536,7 +549,6 @@ JD-TC-RemoveToothDetailsFromdentalchart-2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
     ${resp}=  Get dental chart with mr id    ${mr_id2}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -544,7 +556,7 @@ JD-TC-RemoveToothDetailsFromdentalchart-2
 JD-TC-RemoveToothDetailsFromdentalchart-3
     [Documentation]    Create a dental chart with patientId and try to remove both.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -566,13 +578,17 @@ JD-TC-RemoveToothDetailsFromdentalchart-3
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${resp}=   Create Sample Service  ${SERVICE6}
     Set Suite Variable    ${ser_id1}    ${resp} 
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -620,7 +636,6 @@ JD-TC-RemoveToothDetailsFromdentalchart-3
     ${teeth}=    Create List    ${dental_Chart}
     ${teeth}=    Create Dictionary    teeth=${teeth}    remarks=${remarks}     attachments=${attachmentList}
 
-
     ${resp}=  Create Dental Chart With patientId    ${cid}  ${bookingType[2]}  ${consultationMode[3]}        dentalChart=${teeth}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -660,7 +675,7 @@ JD-TC-RemoveToothDetailsFromdentalchart-3
 JD-TC-RemoveToothDetailsFromdentalchart-4
     [Documentation]    Create Two dental chart then delete one tooth and create again chart and delete.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -715,7 +730,7 @@ JD-TC-RemoveToothDetailsFromdentalchart-4
 JD-TC-RemoveToothDetailsFromdentalchart-5
     [Documentation]    Create Two dental chart then delete one tooth and create again chart and delete.
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -728,9 +743,12 @@ JD-TC-RemoveToothDetailsFromdentalchart-5
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id2}    ${resp}  
+    Set Suite Variable    ${loc_id2}    ${resp} 
+    ${resp}=   Get Location ById  ${loc_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}   
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id2}    ${resp}  
     ${resp}=   Create Sample Service  ${SERVICE2}
@@ -738,8 +756,9 @@ JD-TC-RemoveToothDetailsFromdentalchart-5
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2}   ${ser_id3}
@@ -748,13 +767,13 @@ JD-TC-RemoveToothDetailsFromdentalchart-5
     Set Suite Variable  ${que_id2}   ${resp.json()}
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${FUT_DAY}=  add_date   3
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}   3
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -762,9 +781,9 @@ JD-TC-RemoveToothDetailsFromdentalchart-5
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id3}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
+    
     ${resp}=  Get Waitlist By Id  ${wid3} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -824,7 +843,7 @@ JD-TC-RemoveToothDetailsFromdentalchart-5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

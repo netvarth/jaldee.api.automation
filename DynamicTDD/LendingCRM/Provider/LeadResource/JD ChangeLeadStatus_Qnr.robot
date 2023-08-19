@@ -131,7 +131,7 @@ JD-TC-LeadStatus-1
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
  
@@ -139,6 +139,7 @@ JD-TC-LeadStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   CrifScore  ${account_id}
 
@@ -154,6 +155,7 @@ JD-TC-LeadStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     enquiryStatus  ${account_id}
@@ -337,7 +339,7 @@ JD-TC-LeadStatus-1
     
     
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -347,8 +349,13 @@ JD-TC-LeadStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME12}  
@@ -984,7 +991,7 @@ JD-TC-LeadStatus-1
 JD-TC-LeadStatus-2
     [Documentation]  kyc updated to Credit Score Generated
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -993,8 +1000,13 @@ JD-TC-LeadStatus-2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${title3}=  FakerLibrary.user name
@@ -1134,7 +1146,7 @@ JD-TC-LeadStatus-2
 JD-TC-LeadStatus-3
     [Documentation]   Credit Score Generated to Sales Verified
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1143,8 +1155,13 @@ JD-TC-LeadStatus-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
      ${resp}=    Change Status Lead   ${status_id7}    ${leUid2} 
@@ -1161,7 +1178,7 @@ JD-TC-LeadStatus-3
 JD-TC-LeadStatus-4
     [Documentation]  Sales Verified to Login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1170,8 +1187,13 @@ JD-TC-LeadStatus-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
       ${resp}=    Change Status Lead   ${status_id8}    ${leUid2} 
@@ -1188,7 +1210,7 @@ JD-TC-LeadStatus-4
 JD-TC-LeadStatus-5
     [Documentation]   Login to  Login Verified
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1197,8 +1219,13 @@ JD-TC-LeadStatus-5
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=    Change Status Lead   ${status_id10}    ${leUid2} 
@@ -1215,7 +1242,7 @@ JD-TC-LeadStatus-5
 JD-TC-LeadStatus-6
     [Documentation]    Login Verified   to Credit Recommendation
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1224,8 +1251,13 @@ JD-TC-LeadStatus-6
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=    Change Status Lead   ${status_id11}    ${leUid2} 
@@ -1243,7 +1275,7 @@ JD-TC-LeadStatus-6
 JD-TC-LeadStatus-7
     [Documentation]      Credit Recommendation to Loan Sanction
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1252,8 +1284,13 @@ JD-TC-LeadStatus-7
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
      ${resp}=    Change Status Lead   ${status_id12}    ${leUid2} 
@@ -1271,7 +1308,7 @@ JD-TC-LeadStatus-7
 JD-TC-LeadStatus-8
     [Documentation]    Loan Sanction to Loan Disbursement
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1280,8 +1317,13 @@ JD-TC-LeadStatus-8
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
   
     ${resp}=    Change Status Lead   ${status_id13}    ${leUid2} 
@@ -1299,7 +1341,7 @@ JD-TC-LeadStatus-8
 JD-TC-LeadStatus-9
     [Documentation]  kyc updated to Credit Score Generated
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1308,8 +1350,13 @@ JD-TC-LeadStatus-9
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${title3}=  FakerLibrary.user name
@@ -1501,7 +1548,7 @@ JD-TC-LeadStatus-9
 JD-TC-LeadStatus-UH1
     [Documentation]   Credit Score Generated  to Login
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1510,8 +1557,13 @@ JD-TC-LeadStatus-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${title3}=  FakerLibrary.user name
@@ -1662,7 +1714,7 @@ JD-TC-LeadStatus-UH1
 JD-TC-LeadStatus-UH2
     [Documentation]    status change sales varified to Login varified
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1671,8 +1723,13 @@ JD-TC-LeadStatus-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=    Change Status Lead   ${status_id8}    ${leUid3} 
@@ -1690,7 +1747,7 @@ JD-TC-LeadStatus-UH2
 JD-TC-LeadStatus-UH3
     [Documentation]   login to Credit Recommendation
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1699,8 +1756,13 @@ JD-TC-LeadStatus-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${resp}=    Change Status Lead   ${status_id10}    ${leUid3} 
     Log  ${resp.content}
@@ -1717,7 +1779,7 @@ JD-TC-LeadStatus-UH3
 JD-TC-LeadStatus-UH4
     [Documentation]    Credit Recommendation  to  loan sanction Loan Disbursement
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1726,8 +1788,13 @@ JD-TC-LeadStatus-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${resp}=    Change Status Lead   ${status_id11}    ${leUid3} 
     Log  ${resp.content}
@@ -1744,7 +1811,7 @@ JD-TC-LeadStatus-UH4
 JD-TC-LeadStatus-UH5
     [Documentation]    Credit Recommendation  to  loan sanction Loan Disbursement
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1753,8 +1820,13 @@ JD-TC-LeadStatus-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${resp}=    Change Status Lead   ${status_id12}    ${leUid3} 
     Log  ${resp.content}
@@ -1771,7 +1843,7 @@ JD-TC-LeadStatus-UH5
 JD-TC-LeadStatus-UH6
     [Documentation]  Without Credit Score Generated  , status change to sales varified
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1780,8 +1852,13 @@ JD-TC-LeadStatus-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${title3}=  FakerLibrary.user name
@@ -1951,7 +2028,7 @@ JD-TC-Leadstatus-UH8
 JD-TC-Leadstatus-UH9
     [Documentation]  status change to login invalid lead id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1960,8 +2037,13 @@ JD-TC-Leadstatus-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
    
@@ -1980,7 +2062,7 @@ JD-TC-Leadstatus-UH9
 JD-TC-Leadstatus-UH10
     [Documentation]  status change to another provider (response false)
     
-    ${resp}=   ProviderLogin  ${PUSERNAME77}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1989,8 +2071,13 @@ JD-TC-Leadstatus-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
    

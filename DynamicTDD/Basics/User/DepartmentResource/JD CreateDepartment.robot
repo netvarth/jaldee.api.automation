@@ -53,7 +53,7 @@ JD-TC-Create Department-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_H}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_H}${\n}
@@ -97,7 +97,7 @@ JD-TC-Create Department-1
 JD-TC-Create Department-2
     [Documentation]  Provider Create department using Service names
 
-    ${resp}=  Provider Login  ${MUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME24}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -115,7 +115,7 @@ JD-TC-Create Department-2
 JD-TC-Create Department-3
     [Documentation]  Provider Create department without service details[Empty department]
 
-    ${resp}=  Provider Login  ${MUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name3}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name3}
@@ -130,7 +130,7 @@ JD-TC-Create Department-3
 JD-TC-Create Department-4
     [Documentation]  Provider Create department with same name as another providers dep. name
 
-    ${resp}=  Provider Login  ${MUSERNAME26}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME26}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -146,7 +146,7 @@ JD-TC-Create Department-4
 JD-TC-Create Department-UH1
     [Documentation]  Provider Create already existing department name
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${resp}=  Create Department With ServiceName  ${dep_name1}  ${dep_code2}  ${dep_desc1}    ${SERVICE4} 
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -155,7 +155,7 @@ JD-TC-Create Department-UH1
 JD-TC-Create Department-UH2
     [Documentation]  Provider Create already existing department code
     
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name4}=  FakerLibrary.bs
     Log  ${dep_code1} 
@@ -166,7 +166,7 @@ JD-TC-Create Department-UH2
 JD-TC-Create Department-UH3
     [Documentation]  Provider Create a department with new service name
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ser_name}=   FakerLibrary.word
     ${dep_name}=  FakerLibrary.bs
@@ -194,7 +194,7 @@ JD-TC-Create Department-UH3
 JD-TC-Create Department-UH4
     [Documentation]  Provider Create a department with another provider's service id
 
-    ${resp}=  Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -229,7 +229,7 @@ JD-TC-Create Department-UH6
 JD-TC-Create Department-UH7
     [Documentation]  Provider Create a department with Invalid service id
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name}=  FakerLibrary.bs
     ${dep_code}=   Random Int  min=100   max=999
@@ -241,7 +241,7 @@ JD-TC-Create Department-UH7
 JD-TC-Create Department-UH8
     [Documentation]  Provider Create department without Department name
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_code}=   Random Int  min=100   max=999
     ${resp}=  Create Department  ${Empty}  ${dep_code}  ${dep_desc1} 
@@ -251,7 +251,7 @@ JD-TC-Create Department-UH8
 JD-TC-Create Department-UH9
     [Documentation]  Provider Create department without Department code
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name}=  FakerLibrary.bs
     ${resp}=  Create Department  ${dep_name}  ${Empty}  ${dep_desc1} 
@@ -261,7 +261,7 @@ JD-TC-Create Department-UH9
 JD-TC-Create Department-UH10
     [Documentation]  Provider adding disabled service to department
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable service  ${sid5} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -273,7 +273,7 @@ JD-TC-Create Department-5
     [Documentation]  Checking for all domains
     Comment  Provider Create department using Service names
 
-    ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Department With ServiceName  ${dep_name2}  ${dep_code2}  ${dep_desc1}   ${SERVICE6}  ${SERVICE7}  ${SERVICE8}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -301,7 +301,7 @@ JD-TC-Create Department-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_I}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_I}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_I}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_I}${\n}
@@ -332,7 +332,7 @@ JD-TC-Create Department-6
 JD-TC-Create Department-7
     [Documentation]  Provider Create department using Service names
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${SERVICE1}=	   FakerLibrary.Word
     ${SERVICE2}=	   FakerLibrary.Word
@@ -363,7 +363,7 @@ JD-TC-Create Department-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_J}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_J}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_J}${\n}
@@ -388,7 +388,7 @@ JD-TC-Create Department-8
 JD-TC-Create Department-9
     [Documentation]  Provider Create department using same Service names and ids
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_J}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${dep_name11}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name11}
@@ -410,7 +410,7 @@ JD-TC-Create Department-9
 JD-TC-Create Department-10
     [Documentation]  Provider Create department 
 
-    ${resp}=  Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -422,12 +422,14 @@ JD-TC-Create Department-10
     
     # ${resp}=  Toggle Department Enable
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${dep_name}=  FakerLibrary.bs
     ${dep_code}=   Random Int  min=100   max=999
@@ -460,7 +462,7 @@ JD-TC-Create Department-10
 JD-TC-Verify Create Department-1
     [Documentation]  Verify Provider Create Department using service id
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  ${depid1}
     Log   ${resp.json()}
@@ -472,7 +474,7 @@ JD-TC-Verify Create Department-1
 JD-TC-Verify Create Department-2
     [Documentation]  Verify Provider Create department using Service names
 
-    ${resp}=  ProviderLogin  ${MUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME24}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=  Get Department ById  ${depid2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -483,7 +485,7 @@ JD-TC-Verify Create Department-2
 JD-TC-Verify Create Department-3
     [Documentation]  Verify Provider Create department without service details[Empty department]
 
-    ${resp}=  ProviderLogin  ${MUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  ${depid3}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -494,7 +496,7 @@ JD-TC-Verify Create Department-5
     [Documentation]  Verify  Checking for all domains
     Comment  Provider Create department using Service names
 
-    ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  ${depidL1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -505,7 +507,7 @@ JD-TC-Verify Create Department-5
 JD-TC-Verify Create Department-6
     [Documentation]  Verify Provider Create department using Service names
 
-    ${resp}=  Provider Login  ${MUSERNAME_I}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_I}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Department ById  ${depid012}
@@ -519,7 +521,7 @@ JD-TC-Verify Create Department-6
 JD-TC-Verify Create Department-7
     [Documentation]  Verify Provider Create department using Service names
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_H}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${resp}=  Get Department ById  ${depidM1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -530,7 +532,7 @@ JD-TC-Verify Create Department-7
 JD-TC-Verify Create Department-8
     [Documentation]  Verify Provider Create department using Service names
 
-    ${resp}=  Provider Login  ${MUSERNAME_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_J}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Department ById  ${depidJ1}
@@ -542,7 +544,7 @@ JD-TC-Verify Create Department-8
 JD-TC-Verify Create Department-9
     [Documentation]  Verify Provider Create department using same Service names and ids
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_J}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     sleep   2s  
     ${resp}=  Get Department ById  ${depidJ2}
@@ -559,7 +561,7 @@ JD-TC-Verify Create Department-9
 JD-TC-Verify Create Department-10
     [Documentation]  Verify Provider Create department 
 
-    ${resp}=  Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Departments 

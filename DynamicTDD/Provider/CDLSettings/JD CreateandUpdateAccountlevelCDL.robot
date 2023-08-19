@@ -26,7 +26,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-1
                                   
     [Documentation]               Create CDL Settings
 
-    ${resp}=   ProviderLogin  ${PUSERNAME36}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -42,7 +42,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-2
                                   
     [Documentation]               Create CDL Settings where auto approval is false
 
-    ${resp}=   ProviderLogin  ${PUSERNAME39}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -54,7 +54,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-3
                                   
     [Documentation]               Create CDL Settings where district Wise Restriction is false
 
-    ${resp}=   ProviderLogin  ${PUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -66,7 +66,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-4
                                   
     [Documentation]               Create CDL Settings where status is disabled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -78,7 +78,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-5
                                   
     [Documentation]               Create CDL Settings and Update it
 
-    ${resp}=   ProviderLogin  ${PUSERNAME52}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -103,7 +103,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-UH1
                                   
     [Documentation]               Create CDL Settings where auto approval amount is empty
 
-    ${resp}=   ProviderLogin  ${PUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

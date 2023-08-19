@@ -43,7 +43,7 @@ JD-TC-UploadQuestionnaire-1
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -51,6 +51,7 @@ JD-TC-UploadQuestionnaire-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     # ${resp}=   Get jaldeeIntegration Settings
     # Log  ${resp.content}
@@ -108,7 +109,7 @@ JD-TC-UploadQuestionnaire-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -140,7 +141,7 @@ JD-TC-UploadQuestionnaire-2
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,6 +149,7 @@ JD-TC-UploadQuestionnaire-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     # ${resp}=   Get jaldeeIntegration Settings
     # Log  ${resp.content}
@@ -233,7 +235,7 @@ JD-TC-UploadQuestionnaire-UH1
 
     ${cookie}=  Create Dictionary
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  ${xlFile}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}  ${SA_SESSION_EXPIRED}
@@ -248,7 +250,7 @@ JD-TC-UploadQuestionnaire-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  ${xlFile}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}  ${SA_SESSION_EXPIRED}
@@ -263,7 +265,7 @@ JD-TC-UploadQuestionnaire-UH3
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  ${xlFile}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}  ${SA_SESSION_EXPIRED}
@@ -279,7 +281,7 @@ JD-TC-UploadQuestionnaire-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  ${xlFile}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}  ${SERVICE_NOT_EXIST}

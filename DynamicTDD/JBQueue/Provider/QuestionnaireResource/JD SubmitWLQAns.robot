@@ -93,13 +93,14 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -137,11 +138,12 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}    ${xlFile}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -198,12 +200,14 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -259,7 +263,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -275,7 +279,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-2
 
     clear_customer   ${PUSERNAME14}
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -288,6 +292,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -302,9 +307,10 @@ JD-TC-SubmitQuestionnaireForWaitlist-2
     clear_queue   ${PUSERNAME14}
     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -417,7 +423,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -432,7 +438,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-3
 
     clear_customer   ${PUSERNAME14}
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -445,6 +451,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -459,9 +466,10 @@ JD-TC-SubmitQuestionnaireForWaitlist-3
     clear_queue   ${PUSERNAME14}
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -590,7 +598,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -605,7 +613,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
     
     clear_customer   ${PUSERNAME14}
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -618,6 +626,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -631,9 +640,9 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
 
     clear_queue   ${PUSERNAME14}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -738,7 +747,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -752,7 +761,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH2
 
     clear_customer   ${PUSERNAME14}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -765,6 +774,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -778,9 +788,9 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH2
 
     clear_queue   ${PUSERNAME14}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -869,7 +879,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -883,7 +893,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
 
     clear_customer   ${PUSERNAME14}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -896,6 +906,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -909,9 +920,9 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
 
     clear_queue   ${PUSERNAME14}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1004,7 +1015,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH3
 JD-TC-SubmitQuestionnaireForWaitlist-4
     [Documentation]  Submit questionnaire for wailtlist(capure time Before)
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1013,6 +1024,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-4
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1050,11 +1062,12 @@ JD-TC-SubmitQuestionnaireForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1104,10 +1117,11 @@ JD-TC-SubmitQuestionnaireForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1188,13 +1202,14 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1236,7 +1251,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1249,6 +1264,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1262,9 +1278,9 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
 
     clear_queue   ${PUSERNAME120}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1423,7 +1439,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
     
     # Check Answers   ${resp}  ${data}
 
-    # ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1527,7 +1543,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
 
     clear_customer   ${PUSERNAME14}
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1540,6 +1556,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1554,9 +1571,10 @@ JD-TC-SubmitQuestionnaireForWaitlist-UH4
     clear_queue   ${PUSERNAME14}
     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40

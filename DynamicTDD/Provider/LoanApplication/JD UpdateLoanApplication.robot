@@ -48,7 +48,7 @@ JD-TC-UpdateLoanApplication-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -281,7 +281,7 @@ JD-TC-UpdateLoanApplication-2
                                   
     [Documentation]               Create and update Loan Application with co-applicant 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -397,7 +397,7 @@ JD-TC-UpdateLoanApplication-3
                                   
     [Documentation]               update Loan Application with already updated loan application
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -512,7 +512,7 @@ JD-TC-UpdateLoanApplication-4
     [Documentation]      update Loan Application -   give maritalStatus different in create loan application
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -673,7 +673,7 @@ JD-TC-UpdateLoanApplication-4
       
 
 
-#      ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+#      ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -822,7 +822,7 @@ JD-TC-UpdateLoanApplication-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME31}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -989,7 +989,7 @@ JD-TC-UpdateLoanApplication-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME32}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1155,7 +1155,7 @@ JD-TC-UpdateLoanApplication-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME33}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1365,7 +1365,7 @@ JD-TC-UpdateLoanApplication-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME35}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1576,7 +1576,7 @@ JD-TC-UpdateLoanApplication-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME64}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1784,7 +1784,7 @@ JD-TC-UpdateLoanApplication-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME34}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1994,7 +1994,7 @@ JD-TC-UpdateLoanApplication-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME36}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2009,9 +2009,14 @@ JD-TC-UpdateLoanApplication-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME9}  
@@ -2258,7 +2263,7 @@ JD-TC-UpdateLoanApplication-UH4
                                   
     [Documentation]      update Loan Application - with anorher provider login
     
-    ${resp}=   ProviderLogin  ${PUSERNAME38}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2383,7 +2388,7 @@ JD-TC-UpdateLoanApplication-UH6
     [Documentation]      update Loan Application - invalid  loan uuid
     
 
-    ${resp}=   ProviderLogin  ${PUSERNAME36}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2398,9 +2403,14 @@ JD-TC-UpdateLoanApplication-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME7}  

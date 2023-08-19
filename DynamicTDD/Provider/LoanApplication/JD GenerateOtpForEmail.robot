@@ -66,7 +66,7 @@ JD-TC-GenerateotpForEmail-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

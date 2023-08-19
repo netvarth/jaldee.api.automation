@@ -25,7 +25,7 @@ ${xlFile1}    ${EXECDIR}/TDD/CDL_BRANCHES1.xlsx
 JD-TC-UploadBranchs-1
     [Documentation]  Upload Branchs data.
 
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -33,6 +33,7 @@ JD-TC-UploadBranchs-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -45,7 +46,7 @@ JD-TC-UploadBranchs-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -70,7 +71,7 @@ JD-TC-UploadBranchs-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

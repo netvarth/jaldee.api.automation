@@ -30,10 +30,14 @@ JD-TC-UpdateOrderForElectronicDelivery-1
     clear_service  ${PUSERNAME133}
     clear_customer   ${PUSERNAME133}
     clear_Item   ${PUSERNAME133}
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME133}
     Set Suite Variable  ${accId} 
@@ -50,6 +54,11 @@ JD-TC-UpdateOrderForElectronicDelivery-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableOrder']}==${bool[0]}   Enable Order Settings
+
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2        
@@ -73,7 +82,7 @@ JD-TC-UpdateOrderForElectronicDelivery-1
     ${itemCode1}=   FakerLibrary.word 
 
     ${promoLabel1}=   FakerLibrary.word 
-    ${exp_date}=   add_date   4
+    ${exp_date}=   db.add_timezone_date  ${tz}   4
 
     ${resp}=  Create Virtual Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}   ${itemType[1]}  ${exp_date}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -91,24 +100,23 @@ JD-TC-UpdateOrderForElectronicDelivery-1
     ${itemCode3}=   FakerLibrary.word 
     ${displayName3}=   FakerLibrary.name
     Set Suite Variable   ${displayName3}
-    ${exp_date1}=   add_date   5
+    ${exp_date1}=   db.add_timezone_date  ${tz}   5
 
     ${resp}=  Create Virtual Order Item    ${displayName3}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName3}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode3}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}    ${itemType[1]}  ${exp_date1}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id3}  ${resp.json()}
 
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
-
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30   
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     Set Suite Variable   ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -225,7 +233,7 @@ JD-TC-UpdateOrderForElectronicDelivery-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -277,7 +285,7 @@ JD-TC-UpdateOrderForElectronicDelivery-2
 
     [Documentation]    update the item quantity of the order.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -301,7 +309,7 @@ JD-TC-UpdateOrderForElectronicDelivery-3
 
     [Documentation]    Try to update the order without email.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -322,7 +330,7 @@ JD-TC-UpdateOrderForElectronicDelivery-4
 
     [Documentation]    Try to update the order without phone number.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -343,7 +351,7 @@ JD-TC-UpdateOrderForElectronicDelivery-UH1
 
     [Documentation]    Try to update the order for another day.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -351,7 +359,7 @@ JD-TC-UpdateOrderForElectronicDelivery-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  add_date   12
+    ${DAY}=  db.add_timezone_date  ${tz}  12  
 
     ${resp}=   Update Order For Electronic Delivery   ${orderid1}  ${DAY}    ${CUSERPH}   ${email1}  ${countryCodes[1]}  
     Log   ${resp.json()}
@@ -363,7 +371,7 @@ JD-TC-UpdateOrderForElectronicDelivery-UH2
 
     [Documentation]    Try to update an electronic order to home delivery.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -381,7 +389,7 @@ JD-TC-UpdateOrderForElectronicDelivery-UH3
 
     [Documentation]    Try to update an electronic order to store pick up.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -399,7 +407,7 @@ JD-TC-UpdateOrderForElectronicDelivery-UH4
 
     [Documentation]    Try to update the order for past day.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -407,7 +415,7 @@ JD-TC-UpdateOrderForElectronicDelivery-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  subtract_date  1
+    ${DAY}=  db.subtract_timezone_date  ${tz}   1
 
     ${resp}=   Update Order For Electronic Delivery   ${orderid1}   ${DAY}    ${CUSERPH}   ${email1}  ${countryCodes[1]}  
     Log   ${resp.json()}
@@ -419,7 +427,7 @@ JD-TC-UpdateOrderForElectronicDelivery-UH5
 
     [Documentation]    create order for a virtual item then update the item to physical.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -479,11 +487,11 @@ JD-TC-UpdateOrderForElectronicDelivery-UH6
 
     [Documentation]    create order for a physical item then update the item to virtual.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Test Variable  ${item_quantity1}
@@ -529,7 +537,7 @@ JD-TC-UpdateOrderForElectronicDelivery-UH6
     ${itemCode1}=   FakerLibrary.word 
 
     ${promoLabel1}=   FakerLibrary.word 
-    ${exp_date}=   add_date   4
+    ${exp_date}=   db.add_timezone_date  ${tz}   4
 
     ${resp}=  Update Virtual Order Item     ${item_id2}  ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}   ${bool[1]}  ${bool[1]}   ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}   ${bool[1]}  ${note1}   ${promotionLabelType[3]}   ${promoLabel1}    ${itemCode1}   ${itemType[1]}  ${exp_date}  
     Log   ${resp.json()}

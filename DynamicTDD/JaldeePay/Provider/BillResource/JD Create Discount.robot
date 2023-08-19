@@ -19,7 +19,7 @@ ${discount2 }  Disc21
 
 JD-TC-Create Discount-1
        [Documentation]   Provider check to Create Discount in Fixed type
-       ${resp}=   ProviderLogin  ${PUSERNAME235}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME235}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -33,7 +33,7 @@ JD-TC-Create Discount-1
 
 JD-TC-Create Discounts-2
        [Documentation]   Provider create Discount of an account with same discount name of another provider
-       ${resp}=   ProviderLogin  ${PUSERNAME236}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME236}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -49,7 +49,7 @@ JD-TC-Create Discounts-2
        
 JD-TC-Create Discounts-3
        [Documentation]   Provider login to create Discount  in Percentage type
-       ${resp}=   ProviderLogin  ${PUSERNAME235}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${desc}=  FakerLibrary.Sentence   nb_words=2
        ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=2  right_digits=1
@@ -84,7 +84,7 @@ JD-TC-Create Discount-UH2
        
 JD-TC-Create Discount-UH3
        [Documentation]   Create Discount with already existing name
-       ${resp}=   ProviderLogin  ${PUSERNAME235}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${desc}=  FakerLibrary.Sentence   nb_words=2
        ${amount}=  Random Int  min=10  max=100

@@ -168,7 +168,7 @@ JD-TC-UpConsumerProf-6
 
 # JD-TC-UpConsumerProf-7
 #     [Documentation]   update consumer profile using provider login
-#     ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${firstname}=  FakerLibrary.first_name
 #     ${lastname}=  FakerLibrary.last_name
@@ -189,7 +189,7 @@ JD-TC-UpConsumerProf-6
 
 JD-TC-UpConsumerProf-UH1
     [Documentation]   update consumer profile using provider login
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

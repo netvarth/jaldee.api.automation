@@ -46,11 +46,16 @@ JD-TC-Update Partner Aadhar-1
                                   
     [Documentation]              Update Partner Aadhar
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -94,6 +99,7 @@ JD-TC-Update Partner Aadhar-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${locname}  ${resp.json()['place']}
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
         Set Suite Variable  ${address1}  ${resp.json()['address']}
         ${address2}    FakerLibrary.Street name
         Set Suite Variable    ${address2}
@@ -102,6 +108,7 @@ JD-TC-Update Partner Aadhar-1
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${locname}  ${resp.json()[0]['place']}
         Set Suite Variable  ${address1}  ${resp.json()[0]['address']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
         ${address2}    FakerLibrary.Street name
         Set Suite Variable    ${address2}
     END
@@ -399,7 +406,7 @@ JD-TC-Update Partner Aadhar-UH1
                                   
     [Documentation]              Update Partner Aadhar where aadhaar is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -413,7 +420,7 @@ JD-TC-Update Partner Aadhar-UH2
                                   
     [Documentation]              Update Partner Aadhar where provider uid is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -427,7 +434,7 @@ JD-TC-Update Partner Aadhar-UH3
                                   
     [Documentation]              Update Partner Aadhar where provider uid is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -443,7 +450,7 @@ JD-TC-Update Partner Aadhar-UH4
                                   
     [Documentation]              Update Partner Aadhar where loan application action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -456,7 +463,7 @@ JD-TC-Update Partner Aadhar-UH5
                                   
     [Documentation]              Update Partner Aadhar where loan application action is update
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -469,7 +476,7 @@ JD-TC-Update Partner Aadhar-UH6
                                   
     [Documentation]              Update Partner Aadhar where owner is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -482,7 +489,7 @@ JD-TC-Update Partner Aadhar-UH7
                                   
     [Documentation]              Update Partner Aadhar where owner is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -497,7 +504,7 @@ JD-TC-Update Partner Aadhar-UH8
                                   
     [Documentation]              Update Partner Aadhar where file name is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -511,7 +518,7 @@ JD-TC-Update Partner Aadhar-UH9
                                   
     [Documentation]              Update Partner Aadhar where file size is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -524,7 +531,7 @@ JD-TC-Update Partner Aadhar-UH10
                                   
     [Documentation]              Update Partner Aadhar where caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -539,7 +546,7 @@ JD-TC-Update Partner Aadhar-UH11
                                   
     [Documentation]              Update Partner Aadhar where file type is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -553,7 +560,7 @@ JD-TC-Update Partner Aadhar-UH12
                                   
     [Documentation]              Update Partner Aadhar where order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

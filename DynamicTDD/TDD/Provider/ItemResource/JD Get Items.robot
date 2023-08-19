@@ -40,7 +40,7 @@ JD-TC-Get Items-UH1
 #     clear_Item  ${PUSERNAME240}
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME240}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${amount1}=   FakerLibrary.pyfloat  left_digits=3   right_digits=2    positive=True
 #     ${resp}=  Create Item   ${item1}  ${des}   ${description}  ${amount1}   ${bool[1]}   

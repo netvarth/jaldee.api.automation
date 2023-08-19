@@ -25,7 +25,7 @@ JD-TC-GetHolidayById-1
     [Documentation]  Provider create appointment schedule and today appointment is enabled then create a holiday
     
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -66,13 +66,19 @@ JD-TC-GetHolidayById-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME181}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   4  00
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  4  00  
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
@@ -95,9 +101,9 @@ JD-TC-GetHolidayById-1
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${cur_time1}=  db.get_time
-    ${DAY}=  add_date  3
-    ${eTime1}=  add_time   2  00
+    ${cur_time1}=  db.get_time_by_timezone  ${tz}
+    ${DAY}=  db.add_timezone_date  ${tz}  3  
+    ${eTime1}=  add_timezone_time  ${tz}  2  00  
     ${desc1}=    FakerLibrary.name
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY}  ${EMPTY}  ${cur_time1}  ${eTime1}  ${desc1}
     Log   ${resp.json()}
@@ -135,7 +141,7 @@ JD-TC-GetHolidayById-UH2
 JD-TC-GetHolidayById-UH3
     [Documentation]  Get holiday details of another provider
 
-    ${resp}=  ProviderLogin  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Id  ${holidayId1}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -144,7 +150,7 @@ JD-TC-GetHolidayById-UH3
 JD-TC-GetHolidayById-UH4
     [Documentation]  Get an invalid holiday details
 
-    ${resp}=  ProviderLogin  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Id   0
     Should Be Equal As Strings  ${resp.status_code}  422

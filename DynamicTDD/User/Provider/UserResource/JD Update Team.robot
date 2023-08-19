@@ -15,7 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-UpdateTeam-1
      [Documentation]  Update team at account level
-     ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -48,17 +48,19 @@ JD-TC-UpdateTeam-1
 
 JD-TC-UpdateTeam-2
      [Documentation]  Update team by user login with user type PROVIDER with admin privilage TRUE
-     ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
      ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
      sleep  2s
      ${resp}=  Get Departments
@@ -76,7 +78,7 @@ JD-TC-UpdateTeam-2
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${desc2}=   FakerLibrary.sentence
@@ -101,7 +103,7 @@ JD-TC-UpdateTeam-2
 
 JD-TC-UpdateTeam-3
      [Documentation]  Update team by user login with user type ADMIN
-     ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330064
@@ -137,7 +139,7 @@ JD-TC-UpdateTeam-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${desc2}=   FakerLibrary.sentence
@@ -162,7 +164,7 @@ JD-TC-UpdateTeam-3
 
 JD-TC-UpdateTeam-UH1
      [Documentation]  Create team by user login with user type PROVIDER with admin privilage FALSE
-     ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330098
@@ -198,7 +200,7 @@ JD-TC-UpdateTeam-UH1
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Update Team For User  ${t_id4}  ${team_name_a}  ${empty}  ${desc_a}
      Log   ${resp.json()}
@@ -207,7 +209,7 @@ JD-TC-UpdateTeam-UH1
 
 JD-TC-UpdateTeam-UH2
      [Documentation]  Update a team with existing team name
-     ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Update Team For User  ${t_id4}  ${team_name_a1}  ${empty}  ${desc_a}
@@ -217,7 +219,7 @@ JD-TC-UpdateTeam-UH2
 
 JD-TC-UpdateTeam-UH4
      [Documentation]  Update a team with empty team name
-     ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc2}=   FakerLibrary.sentence
@@ -245,7 +247,7 @@ JD-TC-UpdateTeam -UH6
 
 JD-TC-UpdateTeam-UH7
      [Documentation]  Upadte a team with invalid team id
-     ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc2}=   FakerLibrary.sentence

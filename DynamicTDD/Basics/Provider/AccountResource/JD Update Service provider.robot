@@ -15,9 +15,14 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get provider Details-1
     [Documentation]   Service Provider of a valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+
+    # Suite Variable  ${id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
     Set Suite Variable  ${firstname}
     ${lastname}=  FakerLibrary.last_name
@@ -39,7 +44,7 @@ JD-TC-Get provider Details-1
 
 JD-TC-Update Service Provider-2
     [Documentation]   Update provider details with email id
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${firstname}${PUSERNAME6}.ynwtest@netvarth.com
@@ -56,7 +61,7 @@ JD-TC-Update Service Provider-2
 
 JD-TC-Update Service Provider-3
     [Documentation]   Update provider details with empty email id
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -71,7 +76,7 @@ JD-TC-Update Service Provider-3
 
 JD-TC-Update Service Provider-4
     [Documentation]   Update provider details with another email id
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.ynwtest@netvarth.com
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -87,7 +92,7 @@ JD-TC-Update Service Provider-4
 
 JD-TC-Update Service Provider-5
     [Documentation]   Update provider details when an email exists
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -108,9 +113,14 @@ JD-TC-Update Service Provider-5
 
 JD-TC-Update Service Provider-UH1
     [Documentation]   Update provider details with already used provider email id
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${id}  ${resp.json()['id']}
     ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.ynwtest@netvarth.com
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${EMAIL_EXISTS}"
@@ -122,7 +132,7 @@ JD-TC-Update Service Provider-UH2
     ${resp}=  Get Consumer By Id  ${CUSERNAME2}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${c_email}  ${resp.json()['userProfile']['email']}
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}   ${c_email}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -131,7 +141,7 @@ JD-TC-Update Service Provider-UH2
 
 JD-TC-Update Service Provider-UH3
     [Documentation]   Update Service Provider details of  another provider id
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Service Provider  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -153,7 +163,7 @@ JD-TC-Update Service Provider-UH5
     
 JD-TC-Update Service Provider-UH6
     [Documentation]   Update invalid service provider details
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Service Provider  0  ${firstname}  ${lastname}  ${gender}  ${dob}
     Should Be Equal As Strings  ${resp.status_code}  401

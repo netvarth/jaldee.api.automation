@@ -44,7 +44,7 @@ JD-TC-Loan_Application_Action_Required-1
     [Documentation]               Loan Application Action Required
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -230,7 +230,7 @@ JD-TC-Loan_Application_Action_Required-UH1
                                   
     [Documentation]               Loan Application Action Required Where note is empty
 
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -243,7 +243,7 @@ JD-TC-Loan_Application_Action_Required-UH2
                                   
     [Documentation]               Loan Application Action Required Where loan uid is empty
 
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -256,7 +256,7 @@ JD-TC-Loan_Application_Action_Required-UH3
                                   
     [Documentation]               Loan Application Action Required Where loan statusid is empty
 
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -268,7 +268,7 @@ JD-TC-Loan_Application_Action_Required-UH4
                                   
     [Documentation]               Loan Application Action Required With invalid launid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -283,7 +283,7 @@ JD-TC-Loan_Application_Action_Required-UH5
                                   
     [Documentation]               Loan Application Action Required With  invalid status id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -307,7 +307,7 @@ JD-TC-Loan_Application_Action_Required-UH7
                                   
     [Documentation]               Loan Application Action Required which is created for another provider
 
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -320,7 +320,7 @@ JD-TC-Loan_Application_Action_Required-UH8
                                   
     [Documentation]               Loan Application Action Required where loan application action is not completed
     
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

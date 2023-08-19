@@ -24,7 +24,7 @@ JD-TC-ChangeTaskStatusTOClosed-1
 
     [Documentation]     add closing details to a task.
 
-    ${resp}=  Provider Login  ${MUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME65}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -37,8 +37,13 @@ JD-TC-ChangeTaskStatusTOClosed-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -91,7 +96,7 @@ JD-TC-ChangeTaskStatusTOClosed-2
 
     [Documentation]     try to add closing details without closing the task.
 
-    ${resp}=  Provider Login  ${MUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME65}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -26,7 +26,7 @@ JD-TC-UpdateBranchMaster-1
 
     [Documentation]   Update Branch Master
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,8 +44,13 @@ JD-TC-UpdateBranchMaster-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${branchCode}=    FakerLibrary.Random Number
@@ -90,7 +95,7 @@ JD-TC-UpdateBranchMaster-UH1
 
     [Documentation]   Update Branch Master where branch id is invalid
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -111,7 +116,7 @@ JD-TC-UpdateBranchMaster-UH2
 
     [Documentation]   Update Branch Master where branch code is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -128,7 +133,7 @@ JD-TC-UpdateBranchMaster-UH3
 
     [Documentation]   Update Branch Master with branch name empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -150,7 +155,7 @@ JD-TC-UpdateBranchMaster-UH4
 
     [Documentation]   Update Branch Master where location is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +166,8 @@ JD-TC-UpdateBranchMaster-UH4
 
     ${resp}=    Update BranchMaster    ${branchId}    ${branchCode3}    ${branchName3}    ${empty}    ${status[0]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${LOCATION_NOT_FOUND}
 
     ${resp}=    Get BranchMaster
     Log  ${resp.content}
@@ -171,7 +177,7 @@ JD-TC-UpdateBranchMaster-UH5
 
     [Documentation]   Update Branch Master where status is inactive
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

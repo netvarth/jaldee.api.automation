@@ -26,10 +26,14 @@ JD-TC-GetHomedeliveryDatesByCatalog-1
     clear_customer   ${PUSERNAME168}
     clear_Item   ${PUSERNAME168}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME168}
 
@@ -73,16 +77,21 @@ JD-TC-GetHomedeliveryDatesByCatalog-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -130,11 +139,11 @@ JD-TC-GetHomedeliveryDatesByCatalog-1
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -160,7 +169,7 @@ JD-TC-GetHomedeliveryDatesByCatalog-1
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${a} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${a} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -183,10 +192,14 @@ JD-TC-GetHomedeliveryDatesByCatalog-2
     clear_customer   ${PUSERNAME160}
     clear_Item   ${PUSERNAME160}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME160}
 
@@ -230,16 +243,16 @@ JD-TC-GetHomedeliveryDatesByCatalog-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  subtract_date   10
-    ${endDate}=  get_date
+    ${startDate}=  db.subtract_timezone_date  ${tz}    10
+    ${endDate}=  db.get_date_by_timezone  ${tz}
 
-    ${startDate1}=  subtract_date    2   
-    ${endDate1}=   get_date  
+    ${startDate1}=  db.subtract_timezone_date  ${tz}     2   
+    ${endDate1}=   db.get_date_by_timezone  ${tz}  
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -313,7 +326,7 @@ JD-TC-GetHomedeliveryDatesByCatalog-2
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -336,10 +349,14 @@ JD-TC-GetHomedeliveryDatesByCatalog-3
     clear_customer   ${PUSERNAME161}
     clear_Item   ${PUSERNAME161}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME161}
 
@@ -383,16 +400,16 @@ JD-TC-GetHomedeliveryDatesByCatalog-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  subtract_date   10
-    ${endDate}=  get_date
+    ${startDate}=  db.subtract_timezone_date  ${tz}    10
+    ${endDate}=  db.get_date_by_timezone  ${tz}
 
-    ${startDate1}=  subtract_date    2   
-    ${endDate1}=   get_date  
+    ${startDate1}=  db.subtract_timezone_date  ${tz}     2   
+    ${endDate1}=   db.get_date_by_timezone  ${tz}  
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -465,7 +482,7 @@ JD-TC-GetHomedeliveryDatesByCatalog-3
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -488,10 +505,14 @@ JD-TC-GetHomedeliveryDatesByCatalog-4
     clear_customer   ${PUSERNAME165}
     clear_Item   ${PUSERNAME165}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME165}
     Set Suite Variable  ${accId} 
@@ -536,16 +557,16 @@ JD-TC-GetHomedeliveryDatesByCatalog-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -593,11 +614,11 @@ JD-TC-GetHomedeliveryDatesByCatalog-4
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=0   max=0
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -623,7 +644,7 @@ JD-TC-GetHomedeliveryDatesByCatalog-4
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -647,10 +668,14 @@ JD-TC-GetHomedeliveryDatesByCatalog-5
     clear_customer   ${PUSERNAME169}
     clear_Item   ${PUSERNAME169}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME169}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId1}=  get_acc_id  ${PUSERNAME169}
     Set Suite Variable  ${accId1}
@@ -695,16 +720,16 @@ JD-TC-GetHomedeliveryDatesByCatalog-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -752,11 +777,11 @@ JD-TC-GetHomedeliveryDatesByCatalog-5
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -778,7 +803,7 @@ JD-TC-GetHomedeliveryDatesByCatalog-5
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${a} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${a} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}

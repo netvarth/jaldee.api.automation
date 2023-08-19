@@ -30,7 +30,7 @@ JD-TC-CreateCatalogForAuthorDemy-1
     [Documentation]  Provider Create order catalog for AuthorDemy with catalog type as submission.
 
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get jaldeeIntegration Settings
@@ -110,18 +110,23 @@ JD-TC-CreateCatalogForAuthorDemy-1
 
     ${resp}=   Get Item By Id  ${item_id2} 
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200    
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -222,7 +227,7 @@ JD-TC-CreateCatalogForAuthorDemy-2
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
@@ -276,7 +281,7 @@ JD-TC-CreateCatalogForAuthorDemy-3
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   1
+    ${DAY1}=  db.add_timezone_date  ${tz}  1
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
@@ -300,7 +305,7 @@ JD-TC-CreateCatalogForAuthorDemy-4
 
     [Documentation]  Provider Create order catalog for AuthorDemy and create order from consumer side and do the payment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -325,7 +330,7 @@ JD-TC-CreateCatalogForAuthorDemy-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -337,7 +342,7 @@ JD-TC-CreateCatalogForAuthorDemy-5
 
     [Documentation]  Provider Create order catalog for AuthorDemy and create order from provider side.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -354,7 +359,7 @@ JD-TC-CreateCatalogForAuthorDemy-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   2
+    ${DAY1}=  db.add_timezone_date  ${tz}   2
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
@@ -378,7 +383,7 @@ JD-TC-CreateCatalogForAuthorDemy-6
 
     [Documentation]  Provider Create order catalog for AuthorDemy and create order from provider side and do the payment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -407,7 +412,7 @@ JD-TC-CreateCatalogForAuthorDemy-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -433,10 +438,10 @@ JD-TC-CreateCatalogForAuthorDemy-7
     Should Be Equal As Strings   ${resp.status_code}    200
     
     
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
@@ -450,7 +455,7 @@ JD-TC-CreateCatalogForAuthorDemy-8
     [Documentation]  Provider Create order catalog for AuthorDemy then update it with catalog type as itemOrder.
 
     clear_Item  ${PUSERNAME31}
-    ${resp}=  ProviderLogin  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${accId1}=  get_acc_id  ${PUSERNAME31}
@@ -494,13 +499,18 @@ JD-TC-CreateCatalogForAuthorDemy-8
 
     ${resp}=   Get Item By Id  ${item_id21} 
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200    
+    Should Be Equal As Strings  ${resp.status_code}  200   
+
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']} 
     
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  30
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${list}=  Create List  1  2  3  4  5  6  7
 
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -581,7 +591,7 @@ JD-TC-CreateCatalogForAuthorDemy-9
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -590,8 +600,8 @@ JD-TC-CreateCatalogForAuthorDemy-9
     Set Test Variable  ${email}  ${firstname}${CUSERNAME23}.ynwtest@netvarth.com
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
 
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city

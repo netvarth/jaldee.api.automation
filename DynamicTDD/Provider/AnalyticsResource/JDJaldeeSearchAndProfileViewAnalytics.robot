@@ -40,8 +40,8 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-1
     ${pid}=  get_acc_id  ${PUSERNAME10}
     Set Suite Variable  ${pid}
     
-    ${DAY1}=  get_date
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -83,8 +83,8 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-2
     ${pid}=  get_acc_id  ${PUSERNAME11}
     Set Test Variable  ${pid}
     
-    ${DAY1}=  get_date
-    ${resp}=  Provider Login  ${PUSERNAME11}  ${PASSWORD}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -127,7 +127,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-3
     ${pid}=  get_acc_id  ${PUSERNAME12}
     Set Test Variable  ${pid}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  App ProviderLogin  ${ios_sp_headers}  ${PUSERNAME12}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -148,7 +148,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME12}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME12}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -179,7 +179,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-4
     ${pid}=  get_acc_id  ${PUSERNAME13}
     Set Test Variable  ${pid}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  App ProviderLogin  ${sp_app_headers}  ${PUSERNAME13}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -200,7 +200,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME13}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME13}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -231,7 +231,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-5
     ${pid}=  get_acc_id  ${PUSERNAME15}
     Set Test Variable  ${pid}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  App ProviderLogin  ${ios_sp_headers}  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -252,7 +252,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME15}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME15}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -283,7 +283,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-6
     ${pid}=  get_acc_id  ${PUSERNAME14}
     Set Test Variable  ${pid}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  App ProviderLogin  ${sp_app_headers}  ${PUSERNAME14}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -304,7 +304,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME14}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME14}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -335,7 +335,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-7
     ${pid}=  get_acc_id  ${PUSERNAME16}
     Set Test Variable  ${pid}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  App ProviderLogin  ${jaldee_link_headers}  ${PUSERNAME16}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -356,7 +356,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME16}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME16}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -386,8 +386,8 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-8
     ${pid}=  get_acc_id  ${PUSERNAME19}
     Set Test Variable  ${pid}
     
-    ${DAY1}=  get_date
-    ${resp}=  ProviderLogin   ${PUSERNAME19}  ${PASSWORD}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -407,7 +407,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME19}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

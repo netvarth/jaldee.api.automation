@@ -39,7 +39,7 @@ JD-TC-AddMultipleAppointmentLabel-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -85,12 +85,16 @@ JD-TC-AddMultipleAppointmentLabel-1
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -276,7 +280,7 @@ JD-TC-AddMultipleAppointmentLabel-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -336,12 +340,16 @@ JD-TC-AddMultipleAppointmentLabel-2
     Verify Response  ${resp}  id=${label_id3}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -573,7 +581,7 @@ JD-TC-AddMultipleAppointmentLabel-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -619,12 +627,16 @@ JD-TC-AddMultipleAppointmentLabel-3
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -704,7 +716,7 @@ JD-TC-AddMultipleAppointmentLabel-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -764,12 +776,16 @@ JD-TC-AddMultipleAppointmentLabel-4
     Verify Response  ${resp}  id=${label_id3}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -884,7 +900,7 @@ JD-TC-AddMultipleAppointmentLabel-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -930,12 +946,16 @@ JD-TC-AddMultipleAppointmentLabel-5
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -954,8 +974,8 @@ JD-TC-AddMultipleAppointmentLabel-5
     Verify Response  ${resp}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${sTime2}=  add_two   ${eTime1}  ${delta/2}
@@ -1085,7 +1105,7 @@ JD-TC-AddMultipleAppointmentLabel-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1131,13 +1151,21 @@ JD-TC-AddMultipleAppointmentLabel-6
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -1156,8 +1184,8 @@ JD-TC-AddMultipleAppointmentLabel-6
     Verify Response  ${resp}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${sTime2}=  add_two   ${eTime1}  ${delta/2}
@@ -1287,7 +1315,7 @@ JD-TC-AddMultipleAppointmentLabel-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1333,6 +1361,10 @@ JD-TC-AddMultipleAppointmentLabel-7
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.Word
@@ -1340,10 +1372,10 @@ JD-TC-AddMultipleAppointmentLabel-7
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1472,7 +1504,7 @@ JD-TC-AddMultipleAppointmentLabel-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1525,12 +1557,16 @@ JD-TC-AddMultipleAppointmentLabel-8
     Verify Response  ${resp}  id=${label_id1}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -1694,7 +1730,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1740,12 +1776,16 @@ JD-TC-AddMultipleAppointmentLabel-9
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -1891,7 +1931,7 @@ JD-TC-AddMultipleAppointmentLabel-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1977,7 +2017,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2023,6 +2063,10 @@ JD-TC-AddMultipleAppointmentLabel-10
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
@@ -2034,10 +2078,10 @@ JD-TC-AddMultipleAppointmentLabel-10
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2131,7 +2175,7 @@ JD-TC-AddMultipleAppointmentLabel-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2192,7 +2236,7 @@ JD-TC-AddMultipleAppointmentLabel-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2238,12 +2282,16 @@ JD-TC-AddMultipleAppointmentLabel-11
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -2385,7 +2433,7 @@ JD-TC-AddMultipleAppointmentLabel-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2431,12 +2479,16 @@ JD-TC-AddMultipleAppointmentLabel-12
     Verify Response  ${resp}  id=${label_id}   
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -2578,7 +2630,7 @@ JD-TC-AddMultipleAppointmentLabel-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2624,16 +2676,20 @@ JD-TC-AddMultipleAppointmentLabel-13
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${DAY1}=  get_date      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=20
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2668,7 +2724,7 @@ JD-TC-AddMultipleAppointmentLabel-13
 
     FOR   ${a}  IN RANGE   15
     
-        ${DAY}=  add_date  ${a}
+        ${DAY}=  db.add_timezone_date  ${tz}  ${a}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY}  ${cnote}  ${apptfor}
         Log  ${resp.json()}
@@ -2723,7 +2779,7 @@ JD-TC-AddMultipleAppointmentLabel-13
 JD-TC-AddMultipleAppointmentLabel-14
     [Documentation]  Add label to 15 appointments of different customers at a time
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2768,14 +2824,18 @@ JD-TC-AddMultipleAppointmentLabel-14
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
     
-    ${DAY1}=  get_date      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=40  max=80
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2829,7 +2889,7 @@ JD-TC-AddMultipleAppointmentLabel-14
         ${apptfor1}=  Create Dictionary  id=${cid${a}}   apptTime=${slot}
         ${apptfor}=   Create List  ${apptfor1}
     
-        ${DAY}=  add_date  ${a}
+        ${DAY}=  db.add_timezone_date  ${tz}  ${a}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Take Appointment For Consumer  ${cid${a}}  ${s_id}  ${sch_id}  ${DAY}  ${cnote}  ${apptfor}
         Log  ${resp.json()}
@@ -2904,7 +2964,7 @@ JD-TC-AddMultipleAppointmentLabel-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2950,12 +3010,16 @@ JD-TC-AddMultipleAppointmentLabel-15
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -3076,7 +3140,7 @@ JD-TC-AddMultipleAppointmentLabel-15
 JD-TC-AddMultipleAppointmentLabel-UH1
     [Documentation]  Add label without provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3116,7 +3180,7 @@ JD-TC-AddMultipleAppointmentLabel-UH1
 JD-TC-AddMultipleAppointmentLabel-UH2
     [Documentation]  Add label by consumer login
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3182,7 +3246,7 @@ JD-TC-AddMultipleAppointmentLabel-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3197,12 +3261,16 @@ JD-TC-AddMultipleAppointmentLabel-UH3
     clear_Label  ${PUSERNAME65}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -3325,7 +3393,7 @@ JD-TC-AddMultipleAppointmentLabel-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3347,12 +3415,16 @@ JD-TC-AddMultipleAppointmentLabel-UH4
     Verify Response  ${resp}  id=${label_id}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -3480,7 +3552,7 @@ JD-TC-AddMultipleAppointmentLabel-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3517,12 +3589,16 @@ JD-TC-AddMultipleAppointmentLabel-UH5
     ...   displayName=${labelname[1]}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -3634,7 +3710,7 @@ JD-TC-AddMultipleAppointmentLabel-UH5
 JD-TC-AddMultipleAppointmentLabel-UH6
     [Documentation]  Add label with non existant appointment
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3712,7 +3788,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3727,12 +3803,16 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     clear_Label  ${PUSERNAME66}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME66}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -3808,7 +3888,7 @@ JD-TC-AddMultipleAppointmentLabel-UH7
     Should Be Equal As Strings    ${resp.status_code}    200
 
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3865,7 +3945,7 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3894,7 +3974,7 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3909,12 +3989,16 @@ JD-TC-AddMultipleAppointmentLabel-UH8
     clear_Label  ${PUSERNAME65}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -4030,7 +4114,7 @@ JD-TC-AddMultipleAppointmentLabel-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -4052,12 +4136,16 @@ JD-TC-AddMultipleAppointmentLabel-UH10
     Verify Response  ${resp}  id=${label_id}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -4181,7 +4269,7 @@ JD-TC-AddMultipleAppointmentLabel-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -4203,12 +4291,16 @@ JD-TC-AddMultipleAppointmentLabel-UH11
     Verify Response  ${resp}  id=${label_id}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -4332,7 +4424,7 @@ JD-TC-AddMultipleAppointmentLabel-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -4354,12 +4446,16 @@ JD-TC-AddMultipleAppointmentLabel-UH12
     Verify Response  ${resp}  id=${label_id}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -4482,7 +4578,7 @@ JD-TC-AddMultipleAppointmentLabel-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -4527,12 +4623,16 @@ JD-TC-AddMultipleAppointmentLabel-UH13
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}
@@ -4673,7 +4773,7 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -4714,14 +4814,18 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -4740,7 +4844,6 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -4763,7 +4866,6 @@ JD-TC-AddMultipleAppointmentLabel-UH14
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 

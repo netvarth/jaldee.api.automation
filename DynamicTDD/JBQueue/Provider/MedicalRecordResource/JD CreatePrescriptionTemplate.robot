@@ -22,10 +22,13 @@ JD-TC-CreateprescriptionTemplate-1
                                   
     [Documentation]               Create prescription Template
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${med_name1}                  FakerLibrary.name
     ${frequency1}                 FakerLibrary.word
     ${duration1}                  FakerLibrary.sentence
@@ -61,10 +64,13 @@ JD-TC-CreateprescriptionTemplate-2
                                   
     [Documentation]               Create prescription Template with multiple prescription
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${templateName2}              FakerLibrary.sentence
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  instructions=${instrn1}  duration=${duration1}  dosage=${dosage1}
     ${pre_list2}=                 Create Dictionary  medicine_name=${med_name2}  frequency=${frequency2}  instructions=${instrn2}  duration=${duration2}  dosage=${dosage2}  imageSize=${imageSize2}
@@ -77,10 +83,13 @@ JD-TC-CreateprescriptionTemplate-3
 
     [Documentation]               Create prescription Template where template name as empty
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
 
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  instructions=${instrn1}  duration=${duration1}  dosage=${dosage1}
 
@@ -92,10 +101,13 @@ JD-TC-CreateprescriptionTemplate-4
 
     [Documentation]               Create prescription Template Where medicine name as empty
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${templateName3}              FakerLibrary.sentence
 
     ${pre_list1}=                 Create Dictionary  medicine_name=${empty}  frequency=${frequency1}  instructions=${instrn1}  duration=${duration1}  dosage=${dosage1}
@@ -108,10 +120,13 @@ JD-TC-CreateprescriptionTemplate-5
 
     [Documentation]               Create prescription Template Where frequency as empty
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${templateName4}              FakerLibrary.sentence
 
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${empty}  instructions=${instrn1}  duration=${duration1}  dosage=${dosage1}
@@ -124,10 +139,13 @@ JD-TC-CreateprescriptionTemplate-6
 
     [Documentation]               Create prescription Template Where instructions as empty
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${templateName5}              FakerLibrary.sentence
 
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  instructions=${empty}  duration=${duration1}  dosage=${dosage1}
@@ -140,10 +158,13 @@ JD-TC-CreateprescriptionTemplate-7
 
     [Documentation]               Create prescription Template Where duration as empty
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${templateName6}              FakerLibrary.sentence
 
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  instructions=${instrn1}  duration=${empty}  dosage=${dosage1}
@@ -156,10 +177,13 @@ JD-TC-CreateprescriptionTemplate-8
 
     [Documentation]               Create prescription Template Where dosage as empty
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${templateName7}              FakerLibrary.sentence
 
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  instructions=${instrn1}  duration=${duration1}  dosage=${empty}
@@ -172,10 +196,13 @@ JD-TC-CreateprescriptionTemplate-9
 
     [Documentation]               Create prescription Template Where everything is empty
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${templateName8}              FakerLibrary.sentence
 
     ${pre_list1}=                 Create Dictionary  medicine_name=${empty}  frequency=${empty}  instructions=${empty}  duration=${empty}  dosage=${empty}
@@ -188,10 +215,13 @@ JD-TC-CreateprescriptionTemplate-UH1
                                   
     [Documentation]               Create prescription Template with existing Template Name
 
-    ${resp}=  Provider Login      ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${templateName2}              FakerLibrary.sentence
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  instructions=${instrn1}  duration=${duration1}  dosage=${dosage1}
 

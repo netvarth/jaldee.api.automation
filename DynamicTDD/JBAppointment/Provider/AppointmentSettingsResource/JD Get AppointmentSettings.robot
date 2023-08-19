@@ -18,7 +18,7 @@ ${accountType}      INDEPENDENT_SP
 JD-TC-Get Appointment Settings-1
     [Documentation]   Get Appointment settings by the Proivder
     
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=   get_acc_id  ${PUSERNAME155}

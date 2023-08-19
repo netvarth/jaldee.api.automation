@@ -19,7 +19,7 @@ ${SERVICE1}     DelayHLev
 
 JD-TC-AddDelay-1
       [Documentation]   Continuesly adding delay on a account
-      # ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+      # ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
       # Should Be Equal As Strings  ${resp.status_code}  200
       # clear_service   ${PUSERNAME10} 
       # ${description}=  FakerLibrary.sentence
@@ -37,11 +37,15 @@ JD-TC-AddDelay-1
       # Should Be Equal As Strings  ${resp.status_code}  200
       # Set Suite Variable  ${qid}  ${resp.json()[0]['id']}
 
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
-      Log  ${resp.json()}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
+      # Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
-      Set Test Variable  ${bname}  ${resp.json()['userName']}
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Suite Variable  ${pid}  ${decrypted_data['id']}
+      Set Suite Variable  ${bname}  ${decrypted_data['userName']}
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
+      # Set Test Variable  ${bname}  ${resp.json()['userName']}
 
       ${resp}=   Get jaldeeIntegration Settings
       Log   ${resp.json()}
@@ -65,8 +69,8 @@ JD-TC-AddDelay-1
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  true  true  true  true  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${DAY1}=  get_date
-      ${DAY2}=  add_date  70      
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      ${DAY2}=  db.add_timezone_date  ${tz}  70      
       ${list}=  Create List  1  2  3  4  5  6  7
       ${city}=   FakerLibrary.state
       ${latti}=  get_latitude
@@ -75,16 +79,16 @@ JD-TC-AddDelay-1
       ${address}=  get_address
       ${parking}    Random Element     ${parkingType}
       ${24hours}    Random Element    ${bool}
-      ${sTime}=  add_time  1  15
-      ${eTime}=  add_time   3  30
+      ${sTime}=  add_timezone_time  ${tz}  1  15  
+      ${eTime}=  add_timezone_time  ${tz}  3  30  
       
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${lid}  ${resp.json()}
 
-      ${sTime1}=  subtract_time  2  00
-      ${eTime1}=  add_time   3  30
+      ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+      ${eTime1}=  add_timezone_time  ${tz}  3  30  
       Set Test Variable  ${qTime}   ${sTime1}-${eTime1}
 
       # ${SERVICE1}=  FakerLibrary.name
@@ -117,11 +121,10 @@ JD-TC-AddDelay-1
       Set Test Variable  ${cId}  ${resp.json()}
 
       # ${cId}=  get_id  ${CUSERNAME1}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cId}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
 
@@ -133,7 +136,6 @@ JD-TC-AddDelay-1
       # ${cid2}=  get_id  ${CUSERNAME2}
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
 
@@ -146,7 +148,6 @@ JD-TC-AddDelay-1
       ${resp}=  Add To Waitlist  ${cid4}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cid4}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id2}  ${wid[0]}
 
@@ -158,7 +159,6 @@ JD-TC-AddDelay-1
       # ${cid2}=  get_id  ${CUSERNAME3}
       ${resp}=  Add To Waitlist  ${cid3}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cid3}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id3}  ${wid[0]}
 
@@ -274,7 +274,6 @@ JD-TC-AddDelay-1
       # ${cid2}=  get_id  ${CUSERNAME5}
       ${resp}=  Add To Waitlist  ${cid5}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cid5}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id4}  ${wid[0]}
 

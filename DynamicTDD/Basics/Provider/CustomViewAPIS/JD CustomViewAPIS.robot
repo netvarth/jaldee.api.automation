@@ -47,10 +47,13 @@ JD-TC-CustomViewAPIS-1
     # Log  ${d1}
     # Log  ${sd1}
     
-    ${resp}=  Provider Login   ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${MUSERNAME0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${subdomain}  ${decrypted_data['subSector']}
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -72,10 +75,10 @@ JD-TC-CustomViewAPIS-1
    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1} 
-  
+   
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     # ${city}=   get_place
     Set Suite Variable  ${city}
     # ${latti}=  get_latitude
@@ -88,10 +91,13 @@ JD-TC-CustomViewAPIS-1
     Set Suite Variable  ${address}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  5  15
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   6  30
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     Set Suite Variable   ${eTime}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
+
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parkingType[0]}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -136,12 +142,12 @@ JD-TC-CustomViewAPIS-1
     Verify Response  ${resp}  departmentName=${dep_name2}  departmentId=${depid02}  departmentCode=${dep_code2}  departmentDescription=${dep_desc}  departmentStatus=${status[0]}
     Should Be Equal As Strings  ${resp.json()['serviceIds'][0]}  ${sid05}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=  add_time  1  00
-    ${end_time}=   add_time  3  00   
+    ${strt_time}=  add_timezone_time  ${tz}  1  00  
+    ${end_time}=   add_timezone_time  ${tz}  3  00     
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=   Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${sid05}
@@ -178,10 +184,10 @@ JD-TC-CustomViewAPIS-1
     # ...  address=${address}  city=${district}  locationName=${city}  state=${state}  
     
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
-    ${sTime1}=  add_time  0  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=30
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -210,7 +216,7 @@ JD-TC-CustomViewAPIS-1
 
 JD-TC-CreateCustomViewApis-H2
     [Documentation]  Trying to Create CustomView With Appointment
-    ${resp}=  Provider Login   ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${MUSERNAME0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=  FakerLibrary.name
@@ -231,7 +237,7 @@ JD-TC-CustomViewAPIS-2
     # Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
     # Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     # Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-    ${resp}=  Provider Login   ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${MUSERNAME0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -255,24 +261,32 @@ JD-TC-CustomViewAPIS-2
    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
   
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  5  15
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   6  30
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parkingType[0]}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.content}
@@ -309,12 +323,12 @@ JD-TC-CustomViewAPIS-2
     Verify Response  ${resp}  departmentName=${dep_name2}  departmentId=${depid02}  departmentCode=${dep_code2}  departmentDescription=${dep_desc}  departmentStatus=${status[0]}
     Should Be Equal As Strings  ${resp.json()['serviceIds'][0]}  ${sid05}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=  add_time  1  00
-    ${end_time}=   add_time  3  00   
+    ${strt_time}=  add_timezone_time  ${tz}  1  00  
+    ${end_time}=   add_timezone_time  ${tz}  3  00     
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=   Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${sid05}

@@ -19,7 +19,7 @@ ${discount2}  Disc21
 
 JD-TC-Disable Discount-1
        [Documentation]   login in a Valid provider create and Disable Discounts
-       ${resp}=   ProviderLogin   ${PUSERNAME239}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME239}   ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME239}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -65,7 +65,7 @@ JD-TC-Disable Discount-UH2
 
 JD-TC-Disable Discount-UH3
        [Documentation]   Provider check to Disable Discount with another provider's discount id
-       ${resp}=   ProviderLogin   ${PUSERNAME120}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME120}   ${PASSWORD} 
        Should Be Equal As Strings  ${resp.status_code}  200       
        ${resp}=   Disable Discount    ${id2}
        Should Be Equal As Strings  ${resp.status_code}  422
@@ -73,7 +73,7 @@ JD-TC-Disable Discount-UH3
 
 JD-TC-Disable Discount-UH4
        [Documentation]   Provider check to Disable Discount with invalid discount id
-       ${resp}=   ProviderLogin   ${PUSERNAME239}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME239}   ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200       
        ${resp}=   Disable Discount   0
        Should Be Equal As Strings  ${resp.status_code}  422 
@@ -82,7 +82,7 @@ JD-TC-Disable Discount-UH4
 JD-TC- Disable Discount-2
        [Documentation]  1 Try to Disable Discount that is on bill
        comment  2 remove disconunt from bill and delet discount
-       ${resp}=   ProviderLogin  ${PUSERNAME120}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME120}
 
@@ -107,12 +107,18 @@ JD-TC- Disable Discount-2
        ${resp} =  Create Sample Queue
        Set Suite Variable  ${s_id}  ${resp['service_id']}
        Set Suite Variable  ${qid}   ${resp['queue_id']}
+       Set Suite Variable   ${lid}   ${resp['location_id']}
+
+       ${resp}=   Get Location ById  ${lid}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+       Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       
        ${resp}=  AddCustomer  ${CUSERNAME4}
        Log   ${resp.json()}
        Should Be Equal As Strings  ${resp.status_code}  200
        Set Test Variable  ${cid}  ${resp.json()}      
-       ${DAY}=  get_date
+       ${DAY}=  db.get_date_by_timezone  ${tz}
        ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId}
        Should Be Equal As Strings  ${resp.status_code}  200
        
@@ -133,7 +139,7 @@ JD-TC- Disable Discount-2
 
 JD-TC- Disable Discount-3
        [Documentation]  Disable Discount that is on setled bill
-       ${resp}=   ProviderLogin  ${PUSERNAME120}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${desc}=  FakerLibrary.Sentence   nb_words=2
        ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=2  right_digits=1
@@ -145,7 +151,7 @@ JD-TC- Disable Discount-3
        Log   ${resp.json()}
        Should Be Equal As Strings  ${resp.status_code}  200
        Set Suite Variable  ${cid}  ${resp.json()}   
-       ${DAY}=  get_date
+       ${DAY}=  db.get_date_by_timezone  ${tz}
        ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  hi  True  ${cid}
        Should Be Equal As Strings  ${resp.status_code}  200
        

@@ -89,7 +89,7 @@ JD-TC-ManageBranchSP-1
     ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -100,14 +100,15 @@ JD-TC-ManageBranchSP-1
     ${ph_nos2}=  ProviderKeywordsforBranchSP.Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  ProviderKeywordsforBranchSP.Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  subtract_time  3  25
-    ${eTime}=  add_time   0  30 
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${sTime}=  subtract_timezone_time  ${tz}  3  25
+    ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -124,8 +125,9 @@ JD-TC-ManageBranchSP-1
     ${parking1}    Random Element     ${parkingType} 
     ${24hours1}    Random Element    ['True','False']
     ${list1}=  Create List  1  2  3  4  5  
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  15
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  15  
     ${url1}=   FakerLibrary.url
     ${resp}=  ProviderKeywordsforBranchSP.Create Location  ${city1}  ${longi1}  ${latti1}  ${url1}  ${postcode1}  ${address1}  ${parking1}  ${24hours1}  ${recurringtype[1]}  ${list1}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${tab_id1}
     Log  ${resp.json()}    
@@ -157,14 +159,15 @@ JD-TC-ManageBranchSP-1
     ${ph_nos2}=  ProviderKeywordsforBranchSP.Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  ProviderKeywordsforBranchSP.Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  subtract_time  3  25
-    ${eTime}=  add_time   0  30 
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${sTime}=  subtract_timezone_time  ${tz}  3  25
+    ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -180,10 +183,10 @@ JD-TC-ManageBranchSP-1
     ${address2}=  get_address
     ${parking2}    Random Element     ${parkingType} 
     ${24hours2}    Random Element    ['True','False']
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
     ${list2}=  Create List  1  2  3  4  5  6  7
-    ${sTime2}=  add_time   1  00
-    ${eTime2}=  add_time   2  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  00  
+    ${eTime2}=  add_timezone_time  ${tz}  2  15  
     ${url2}=   FakerLibrary.url
     ${resp}=  ProviderKeywordsforBranchSP.Create Location  ${city2}  ${longi2}  ${latti2}  ${url2}  ${postcode2}  ${address2}  ${parking2}  ${24hours2}  ${recurringtype[1]}  ${list2}  ${DAY2}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${tab_id2}
     Log  ${resp.json()}
@@ -248,9 +251,9 @@ JD-TC-ManageBranchSP-1
 
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
-    ${strt_time}=   add_time  1  00
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=1
     Set Suite Variable   ${parallel}
@@ -265,7 +268,6 @@ JD-TC-ManageBranchSP-1
     ${resp}=  ProviderKeywordsforBranchSP.Add To Waitlist  ${cons_id}  ${sid1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${tab_id1}  ${cons_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  ProviderKeywordsforBranchSP.Get Waitlist By Id  ${wid}  ${tab_id1}
@@ -279,9 +281,9 @@ JD-TC-ManageBranchSP-1
 
     ${q_name1}=    FakerLibrary.name
     Set Suite Variable    ${q_name1}
-    ${strt_time1}=   add_time  2  00
+    ${strt_time1}=   add_timezone_time  ${tz}  2  00  
     Set Suite Variable    ${strt_time1}
-    ${end_time1}=    add_time  4  00 
+    ${end_time1}=    add_timezone_time  ${tz}  4  00   
     Set Suite Variable    ${end_time1}   
     ${resp}=  ProviderKeywordsforBranchSP.Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time1}  ${parallel}   ${capacity}  ${loc_id2}  ${tab_id2}  ${sid2}  
     Log   ${resp.json()}

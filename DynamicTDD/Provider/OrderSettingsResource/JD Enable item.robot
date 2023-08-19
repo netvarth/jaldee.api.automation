@@ -25,7 +25,7 @@ JD-TC-Enable Item-UH1
 
     [Documentation]   Provider Create item and try for Enable
     clear_Item  ${PUSERNAME5}
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${displayName1}=   FakerLibrary.name 
@@ -84,7 +84,7 @@ JD-TC-Enable Item-UH1
 JD-TC-Enable Item-1
     [Documentation]   Provider Disable item and then try for Enable
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Item  ${id}
@@ -126,7 +126,7 @@ JD-TC-Enable Item-UH3
 JD-TC-Enable Item-UH4
 
     [Documentation]  try to enabled another providers item
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Enable Item  ${id}
     Should Be Equal As Strings  ${resp.status_code}  401

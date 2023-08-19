@@ -90,7 +90,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
                                   
     [Documentation]               Create Loan Using Sales officer Role and view loan and approve loan with BranchCreditOfficer.
 
-   ${resp}=  Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+   ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -569,7 +569,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -823,11 +823,11 @@ JD-TC-BranchCreditOfficerWithRBAC-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${BOHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -859,7 +859,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
 
 # ..... Create Loan application By Sales officer.....
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -943,7 +943,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
 
 # <----------------------------- KYC Details ------------------------------------------>
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1077,7 +1077,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1100,7 +1100,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
     Should Be Equal As Strings     ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
 
-    # ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1133,7 +1133,7 @@ JD-TC-BranchCreditOfficerWithRBAC-2
                                   
     [Documentation]               Create Loan Using Sales officer Role and rejectLoan with BranchCreditOfficer 
 
-    ${resp}=  ProviderLogin  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1154,7 +1154,7 @@ JD-TC-BranchCreditOfficerWithRBAC-3
                                   
     [Documentation]               Create new Partner Using Sales officer Role and partner create a loan then Branch Credit Head verifyPartnerLoanApplication.
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1162,6 +1162,7 @@ JD-TC-BranchCreditOfficerWithRBAC-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Identify Partner    ${phone}    ${account_id}    ${provider_id1}
     Log  ${resp.content}
@@ -1270,7 +1271,7 @@ JD-TC-BranchCreditOfficerWithRBAC-3
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1282,7 +1283,7 @@ JD-TC-BranchCreditOfficerWithRBAC-3
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    ProviderLogin   ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=    Encrypted Provider Login   ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1314,7 +1315,7 @@ JD-TC-BranchCreditOfficerWithRBAC-4
                                   
     [Documentation]               viewPartner with BranchCreditOfficer role.
 
-    ${resp}=  ProviderLogin  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1349,7 +1350,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     ${resp}=  Account Set Credential  ${NBFCMUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -1836,7 +1837,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2081,11 +2082,11 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    # ${resp}=  ProviderLogin  ${BOHUSERNAME1}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2117,7 +2118,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
 
 # .....Create Dealer 2 By Sales Officer.......
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2264,10 +2265,10 @@ JD-TC-BranchCreditOfficerWithRBAC-5
 
 # .....Approve Dealer By Branch Head......
 
-    # ${resp}=  ProviderLogin  ${BOHUSERNAME1}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2299,7 +2300,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
 
 # ..... Create Loan application By Sales officer.....
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2374,7 +2375,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
 
 # <----------------------------- KYC Details ------------------------------------------>
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2508,7 +2509,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${SEUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SEUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2583,7 +2584,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
 
 # <----------------------------- KYC Details ------------------------------------------>
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2718,7 +2719,7 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2741,7 +2742,7 @@ JD-TC-BranchCreditOfficerWithRBAC-6
                                   
     [Documentation]               Create two sales officer then both officer create loan then we passing (all) users in branch scop.
 
-    ${resp}=  Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2772,7 +2773,7 @@ JD-TC-BranchCreditOfficerWithRBAC-6
     Should Be Equal As Strings  ${resp.json()['defaultRoleId']}    ${role_id5}
     Should Be Equal As Strings  ${resp.json()['defaultRoleName']}  ${role_name5}
 
-    ${resp}=  ProviderLogin  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2784,7 +2785,7 @@ JD-TC-BranchCreditOfficerWithRBAC-6
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2796,14 +2797,14 @@ JD-TC-BranchCreditOfficerWithRBAC-7
                                   
     [Documentation]               Branch set a location in scope and try to create loan for another location.
 
-    ${resp}=  Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${locId2}=  Create Sample Location
     Set Suite Variable  ${locId2}
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2823,7 +2824,7 @@ JD-TC-BranchCreditOfficerWithRBAC-8
                                   
     [Documentation]               Create Draft Using Sales officer Role and check that salesofficer can see the draft.another officer can't see the draft.
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2831,7 +2832,7 @@ JD-TC-BranchCreditOfficerWithRBAC-8
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2844,7 +2845,7 @@ JD-TC-BranchCreditOfficerWithRBAC-UH1
                                   
     [Documentation]             BranchCreditOfficer - Create Loan Application.
 
-    ${resp}=  Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2863,7 +2864,7 @@ JD-TC-BranchCreditOfficerWithRBAC-UH2
     [Documentation]             BranchCreditOfficer - Create Dealer.
 
 
-    ${resp}=  Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2891,20 +2892,23 @@ JD-TC-BranchCreditOfficerWithRBAC-UH3
     [Documentation]             BranchCreditOfficer - Create Branch.
 
 
-    ${resp}=  Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Test Variable   ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -2917,7 +2921,7 @@ JD-TC-BranchCreditOfficerWithRBAC-UH5
     [Documentation]             BranchCreditOfficer - Create BranchMaster.
 
 
-    ${resp}=  Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

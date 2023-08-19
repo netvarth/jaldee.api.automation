@@ -77,12 +77,16 @@ Appointment Details
     Should Be Equal As Strings      ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=                         Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule             ${PUSERNAME77}
     
-    ${DAY1}=                        get_date
-    ${DAY2}=                        add_date  10      
+    ${DAY1}=                        db.get_date_by_timezone  ${tz}
+    ${DAY2}=                        db.add_timezone_date  ${tz}  10        
     ${list}=                        Create List  1  2  3  4  5  6  7
-    ${sTime1}=                      db.get_time
+    ${sTime1}=                      db.get_time_by_timezone  ${tz}
     ${delta}=                       FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=                      add_two   ${sTime1}  ${delta}
     ${s_id}=                        Create Sample Service  ${SERVICE6111}

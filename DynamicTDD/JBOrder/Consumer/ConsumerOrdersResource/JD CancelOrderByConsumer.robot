@@ -37,10 +37,14 @@ JD-TC-CancelOrderByConsumer-1
     clear_service  ${PUSERNAME179}
     clear_customer   ${PUSERNAME179}
     clear_Item   ${PUSERNAME179}
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable  ${accId3} 
@@ -122,17 +126,22 @@ JD-TC-CancelOrderByConsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  00 
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime3}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -211,7 +220,7 @@ JD-TC-CancelOrderByConsumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -223,7 +232,7 @@ JD-TC-CancelOrderByConsumer-1
     ${address}=  Create Dictionary   city=${city}  countryCode=${countryCodes[0]}   firstName=${C_firstName}   lastName=${C_lastName}     landMark=${landMark}  phoneNumber=${CUSERPH}  address=${homeDeliveryAddress}   postalCode=${C_num1}   email=${C_email}   
     Set Test Variable  ${address}
 
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
@@ -249,7 +258,7 @@ JD-TC-CancelOrderByConsumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -273,7 +282,7 @@ JD-TC-CancelOrderByConsumer-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['orderStatus']}   Cancelled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -291,7 +300,7 @@ JD-TC-CancelOrderByConsumer-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   12
+    ${DAY2}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -324,7 +333,7 @@ JD-TC-CancelOrderByConsumer-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -435,7 +444,7 @@ JD-TC-CancelOrderByConsumer-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['orderStatus']}   Cancelled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -451,7 +460,7 @@ JD-TC-CancelOrderByConsumer-2
 
 JD-TC-CancelOrderByConsumer-3
     [Documentation]     Cancel Order for home delivery by consumer before advance payment
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -474,7 +483,7 @@ JD-TC-CancelOrderByConsumer-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME28}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -509,7 +518,7 @@ JD-TC-CancelOrderByConsumer-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   12
+    ${DAY2}=  db.add_timezone_date  ${tz}  12  
     
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME8}   ${PASSWORD}
     Log   ${resp.json()}
@@ -542,7 +551,7 @@ JD-TC-CancelOrderByConsumer-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -571,7 +580,7 @@ JD-TC-CancelOrderByConsumer-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['orderStatus']}   Cancelled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -635,7 +644,7 @@ JD-TC-CancelOrderByConsumer-UH4
 
 JD-TC-CancelOrderByConsumer-UH5
     [Documentation]     Cancel Order for home delivery by provider
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

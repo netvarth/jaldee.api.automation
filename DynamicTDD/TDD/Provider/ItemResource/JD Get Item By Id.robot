@@ -37,7 +37,7 @@ JD-TC-Get Item By Id-UH1
 #     clear_Item  ${PUSERNAME251}
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount1}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
     
@@ -66,7 +66,7 @@ JD-TC-Get Item By Id-UH1
 # JD-TC-Get Item By Id-UH3
 
 #     [Documentation]  Provider check to create item with invalid get Item By Id
-#     ${resp}=  ProviderLogin  ${PUSERNAME31}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=	Get Item By Id  0  
 #     Should Be Equal As Strings  ${resp.status_code}  422
@@ -77,7 +77,7 @@ JD-TC-Get Item By Id-UH1
 #     [Documentation]  provider2 using the get Item By Id of provider1
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME251}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME251}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount2}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
     
@@ -88,7 +88,7 @@ JD-TC-Get Item By Id-UH1
     
 #     ${resp}=   Get Item By Id  ${id} 
 #     Verify Response  ${resp}  displayName=${item2}  displayDesc=${description}   shortDesc=${des}   status=${status[0]}   price=${amount2}    taxable=${bool[0]}
-#     ${resp}=  ProviderLogin  ${PUSERNAME31}   ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME31}   ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=   Get Item By Id  ${id} 
 #     Should Be Equal As Strings    ${resp.status_code}    401

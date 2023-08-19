@@ -20,16 +20,21 @@ ${SERVICE3}               SERVICE3
 ${SERVICE4}               SERVICE4
 ${self}                   0
 ${CUSERPH}                ${CUSERNAME}
-${INVALID_SPHONE}         Invalid secondary phone No.
 
 
 ***Test Cases***
 
 JD-TC-AddCustomer-1
      [Documentation]  Add a new valid customer without email
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Suite Variable  ${p_id}  ${decrypted_data['id']}
+
+     # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${ph2}=  Evaluate  ${PUSERNAME23}+73009
@@ -50,9 +55,9 @@ JD-TC-AddCustomer-1
 
 JD-TC-AddCustomer-2
      [Documentation]  Add a new valid customer with email
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
+     # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${firstname1}=  FakerLibrary.first_name
      Set Suite Variable  ${firstname1}
      ${lastname1}=  FakerLibrary.last_name
@@ -97,7 +102,7 @@ JD-TC-AddCustomer-3
 
 JD-TC-AddCustomer-4
      [Documentation]  Provider signup for already added customer with email  
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -123,13 +128,13 @@ JD-TC-AddCustomer-4
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${ph5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${ph5}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-AddCustomer-5
      [Documentation]  Add a customer using already logined provider's phone number then add a family to that customer then add another customer using that family member's ph no
-     ${resp}=  ProviderLogin  ${PUSERNAME231}   ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}   ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -166,7 +171,7 @@ JD-TC-AddCustomer-5
     
 JD-TC-AddCustomer-6
      [Documentation]  Add a customer which is added by another provider
-     ${resp}=  ProviderLogin  ${PUSERNAME232}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME232}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      Set Test Variable  ${firstname}
@@ -185,7 +190,7 @@ JD-TC-AddCustomer-6
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph3}${\n}
      ${resp}=   ProviderLogout
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  ProviderLogin  ${PUSERNAME233}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}   ${gender}  ${dob}  ${ph3}  ${EMPTY}
@@ -199,7 +204,7 @@ JD-TC-AddCustomer-6
 
 JD-TC-AddCustomer-7
      [Documentation]  Add an already existing consumer name
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${ph3}=  Evaluate  ${PUSERNAME230}+72004
      ${dob}=  FakerLibrary.Date
@@ -217,7 +222,7 @@ JD-TC-AddCustomer-7
     
 JD-TC-AddCustomer-8
      [Documentation]  Add a customer using already existing Provider's phone nember
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -240,23 +245,34 @@ JD-TC-AddCustomer-9
      clear_location   ${PUSERNAME231}
      clear_service    ${PUSERNAME231}
      clear waitlist   ${PUSERNAME231}
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+     # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -301,7 +317,7 @@ JD-TC-AddCustomer-9
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
-     ${resp}=  Provider Login  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -328,7 +344,7 @@ JD-TC-AddCustomer-9
      ${resp}=  Consumer Logout
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH0}
@@ -345,23 +361,34 @@ JD-TC-AddCustomer-10
      clear waitlist   ${PUSERNAME231}
      clear_customer   ${PUSERNAME231}
 
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+     # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp} 
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -413,7 +440,7 @@ JD-TC-AddCustomer-10
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
-     ${resp}=  Provider Login  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -440,7 +467,7 @@ JD-TC-AddCustomer-10
      ${resp}=  Consumer Logout
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  GetCustomer  
@@ -456,24 +483,35 @@ JD-TC-AddCustomer-11
      clear_location   ${PUSERNAME231}
      clear_service    ${PUSERNAME231}
      clear waitlist   ${PUSERNAME231}
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+     # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -513,7 +551,7 @@ JD-TC-AddCustomer-11
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
-     ${resp}=  Provider Login  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -539,7 +577,7 @@ JD-TC-AddCustomer-11
      ${resp}=  Consumer Logout
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  GetCustomer ById  ${cid9}
@@ -554,24 +592,36 @@ JD-TC-AddCustomer-12
      clear_location   ${PUSERNAME231}
      clear_service    ${PUSERNAME231}
      clear waitlist   ${PUSERNAME231}
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+     # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -596,7 +646,7 @@ JD-TC-AddCustomer-12
      Should Be Equal As Strings  ${resp.status_code}  200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}                      
 
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${desc}=   FakerLibrary.word
      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -628,23 +678,34 @@ JD-TC-AddCustomer-13
      clear_location   ${PUSERNAME231}
      clear_service    ${PUSERNAME231}
      clear waitlist   ${PUSERNAME231}
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+     # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -689,7 +750,7 @@ JD-TC-AddCustomer-13
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
-     ${resp}=  Provider Login  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -716,7 +777,7 @@ JD-TC-AddCustomer-13
      ${resp}=  Consumer Logout
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH0}
@@ -727,7 +788,7 @@ JD-TC-AddCustomer-13
 
 JD-TC-AddCustomer-14
      [Documentation]  Add an already existing customer's email
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -745,9 +806,14 @@ JD-TC-AddCustomer-14
 
 JD-TC-AddCustomer-15
      [Documentation]  Add a customer with empty  details then add to waitlist
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+     # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${resp}=  AddCustomer without email   ${EMPTY}  ${EMPTY}  ${EMPTY}   ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
      Log  ${resp.json()}
      Set Test Variable  ${cidE}  ${resp.json()}
@@ -762,15 +828,21 @@ JD-TC-AddCustomer-15
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -797,7 +869,7 @@ JD-TC-AddCustomer-15
 
 JD-TC-AddCustomer-UH1
      [Documentation]  Add an already existing customer's phone no
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      clear_customer   ${PUSERNAME230}
 
@@ -835,7 +907,7 @@ JD-TC-AddCustomer-UH3
 
 JD-TC-AddCustomer-UH4
      [Documentation]  Provider add a customer, Then that customer trying to login
-     ${resp}=  ProviderLogin  ${PUSERNAME231}   ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}   ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -847,7 +919,7 @@ JD-TC-AddCustomer-UH4
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid}  ${resp.json()}
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph7}${\n}
-     ${resp}=  Provider Login  ${ph7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${ph7}  ${PASSWORD}
      Should Be Equal As Strings    ${resp.status_code}    401
      Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
      ${resp}=  Consumer Login  ${ph7}  ${PASSWORD}
@@ -866,21 +938,21 @@ JD-TC-AddCustomer-16
      
 
      clear_queue      ${PUSERNAME257}
-     clear_location   ${PUSERNAME257}
+     # clear_location   ${PUSERNAME257}
      clear_service    ${PUSERNAME257}
      clear waitlist   ${PUSERNAME257}
 
      clear_queue      ${PUSERNAME259}
-     clear_location   ${PUSERNAME259}
+     # clear_location   ${PUSERNAME259}
      clear_service    ${PUSERNAME259}
      clear waitlist   ${PUSERNAME259}
      
      clear_queue      ${PUSERNAME213}
-     clear_location   ${PUSERNAME213}
+     # clear_location   ${PUSERNAME213}
      clear_service    ${PUSERNAME213}
      clear waitlist   ${PUSERNAME213}
      
-     ${resp}=  Provider Login  ${PUSERNAME213}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -917,15 +989,21 @@ JD-TC-AddCustomer-16
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -948,7 +1026,7 @@ JD-TC-AddCustomer-16
      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
 
-     ${resp}=  Provider Login  ${PUSERNAME259}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -987,15 +1065,15 @@ JD-TC-AddCustomer-16
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id2}    ${resp}  
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id2}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2}  
@@ -1018,7 +1096,7 @@ JD-TC-AddCustomer-16
      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid2}
      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid2}
 
-     ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1046,15 +1124,15 @@ JD-TC-AddCustomer-16
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id3}    ${resp}  
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id3}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id3}  ${ser_id3}  
@@ -1162,7 +1240,7 @@ JD-TC-AddCustomer-17
 
     [Documentation]    Add a same customer to three different providers and take appointment then after consumer signup get appointment details                 
      ...                (Here first  provider's  jaldee integration is true 2nd provider's jaldee integration is true and 3rd providers jaldee integration is false)
-    ${resp}=  Provider Login  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1174,7 +1252,7 @@ JD-TC-AddCustomer-17
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
     clear_service   ${PUSERNAME213}
-    clear_location  ${PUSERNAME213}
+#     clear_location  ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
     ${resp}=   Get Service
@@ -1197,13 +1275,19 @@ JD-TC-AddCustomer-17
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    ${lid1}=  Create Sample Location  
+    ${lid1}=  Create Sample Location 
+
+    ${resp}=   Get Location ById  ${lid1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+ 
     clear_appt_schedule   ${PUSERNAME213}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -1280,7 +1364,7 @@ JD-TC-AddCustomer-17
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid1}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME259}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1321,10 +1405,10 @@ JD-TC-AddCustomer-17
     ${lid2}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME259}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -1398,7 +1482,7 @@ JD-TC-AddCustomer-17
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid2}
 
-    ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1436,10 +1520,10 @@ JD-TC-AddCustomer-17
     ${lid3}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME257}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id3}=  Create Sample Service  ${SERVICE2}
@@ -1618,7 +1702,7 @@ JD-TC-AddCustomer-17
      Should Be Equal As Strings  ${resp.json()[1]['location']['id']}   ${lid2}
  
 
-     ${resp}=  Provider Login  ${PUSERNAME213}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1648,7 +1732,7 @@ JD-TC-AddCustomer-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME259}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1684,12 +1768,17 @@ JD-TC-AddCustomer-18
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME259}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE2}
@@ -1811,7 +1900,7 @@ JD-TC-AddCustomer-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME259}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1854,12 +1943,17 @@ JD-TC-AddCustomer-19
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME259}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE2}
@@ -1958,7 +2052,7 @@ JD-TC-AddCustomer-20
      clear_service    ${PUSERNAME184}
      clear_customer   ${PUSERNAME184}
      
-     ${resp}=  ProviderLogin  ${PUSERNAME184}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME184}  ${PASSWORD}   
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2000,9 +2094,17 @@ JD-TC-AddCustomer-20
      Set Test Variable   ${jaldeeid1}    ${resp.json()[0]['jaldeeId']}
     
      
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}  
      ${resp}=   Create Sample Service  ${SERVICE2}
@@ -2010,8 +2112,8 @@ JD-TC-AddCustomer-20
       
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  1  00
-     ${end_time}=    add_time  3  00 
+     ${strt_time}=   add_timezone_time  ${tz}  1  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  00   
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  
@@ -2064,7 +2166,7 @@ JD-TC-AddCustomer-21
      clear_service    ${PUSERNAME184}
      clear_customer   ${PUSERNAME184}
      
-     ${resp}=  ProviderLogin  ${PUSERNAME184}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME184}  ${PASSWORD}   
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2074,6 +2176,7 @@ JD-TC-AddCustomer-21
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${loc_id1}  ${resp.json()[0]['id']}
+     Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
 
      ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[0]}  ${boolean[0]}
@@ -2106,7 +2209,7 @@ JD-TC-AddCustomer-21
      Log   ${resp.json()}
      Should Be Equal As Strings      ${resp.status_code}  200
      
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      Set Test Variable  ${CUR_DAY}
      # ${resp}=   Create Sample Location
      # Set Test Variable    ${loc_id1}    ${resp}  
@@ -2117,8 +2220,8 @@ JD-TC-AddCustomer-21
       
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  1  00
-     ${end_time}=    add_time  3  00 
+     ${strt_time}=   add_timezone_time  ${tz}  1  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  00   
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  
@@ -2162,7 +2265,7 @@ JD-TC-AddCustomer-22
      clear_service    ${PUSERNAME162}
      clear_customer   ${PUSERNAME162}
      
-     ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}   
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2171,6 +2274,7 @@ JD-TC-AddCustomer-22
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+     Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
 
      ${resp}=   Get jaldeeIntegration Settings
@@ -2190,7 +2294,7 @@ JD-TC-AddCustomer-22
      Log   ${resp.json()}
      Should Be Equal As Strings      ${resp.status_code}  200
 
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${CUR_DAY}
      # ${resp}=   Create Sample Location
      # Set Suite Variable    ${loc_id1}    ${resp}  
@@ -2201,9 +2305,9 @@ JD-TC-AddCustomer-22
      Set Suite Variable    ${q_name}
      ${list}=  Create List   1  2  3  4  5  6  7
      Set Suite Variable    ${list}
-     ${strt_time}=   add_time  1  00
+     ${strt_time}=   add_timezone_time  ${tz}  1  00  
      Set Suite Variable    ${strt_time}
-     ${end_time}=    add_time  3  00 
+     ${end_time}=    add_timezone_time  ${tz}  3  00   
      Set Suite Variable    ${end_time}   
      ${parallel}=   Random Int  min=1   max=1
      Set Suite Variable   ${parallel}
@@ -2272,10 +2376,15 @@ JD-TC-AddCustomer-23
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Set Suite Variable    ${id}    ${resp.json()['id']}       
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Suite Variable  ${id}   ${decrypted_data['id']}
+
+     # Set Suite Variable    ${id}    ${resp.json()['id']}       
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
      Set Suite Variable  ${PUSERNAME_C}
 
@@ -2283,7 +2392,7 @@ JD-TC-AddCustomer-23
      ${pid}=  get_acc_id  ${PUSERNAME_C}
      Set Suite Variable  ${pid}
 
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      ${list}=  Create List  1  2  3  4  5  6  7
      ${ph1}=  Evaluate  ${PUSERNAME_C}+15566122
      ${ph2}=  Evaluate  ${PUSERNAME_C}+25566122
@@ -2295,18 +2404,21 @@ JD-TC-AddCustomer-23
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
      ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
      ${bs}=  FakerLibrary.bs
-     ${city}=   get_place
-     ${latti}=  get_latitude
-     ${longi}=  get_longitude
      ${companySuffix}=  FakerLibrary.companySuffix
-     ${postcode}=  FakerLibrary.postcode
-     ${address}=  get_address
+     # ${city}=   get_place
+     # ${latti}=  get_latitude
+     # ${longi}=  get_longitude
+     # ${postcode}=  FakerLibrary.postcode
+     # ${address}=  get_address
+     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+     Set Suite Variable  ${tz}
      ${parking}   Random Element   ${parkingType}
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
-     ${eTime}=  add_time   0  45
+     ${sTime}=  add_timezone_time  ${tz}  0  15  
+     ${eTime}=  add_timezone_time  ${tz}  0  45  
      ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
@@ -2367,11 +2479,15 @@ JD-TC-AddCustomer-23
      Set Test Variable  ${pcons_id0}  ${resp.json()[0]['id']}
 
     
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${C_date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
      Set Test Variable   ${C_date}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp} 
      ${resp}=   Create Sample Service  ${SERVICE2}
@@ -2382,9 +2498,9 @@ JD-TC-AddCustomer-23
      Set Test Variable    ${ser_id4}    ${resp}  
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  1  00
+     ${strt_time}=   add_timezone_time  ${tz}  1  00  
      Set Test Variable   ${strt_time}
-     ${end_time}=    add_time  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  00    
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  ${ser_id3}  ${ser_id4} 
@@ -2416,7 +2532,6 @@ JD-TC-AddCustomer-23
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200 
          
-    
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -2445,7 +2560,7 @@ JD-TC-AddCustomer-23
      Should Be Equal As Strings  ${resp.json()[0]['queue']['id']}  ${que_id1}     
 
 
-     ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2551,7 +2666,7 @@ JD-TC-AddCustomer-UH8
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      clear_customer   ${PUSERNAME_C}
@@ -2581,7 +2696,7 @@ JD-TC-AddCustomer-UH5
      [Documentation]   Add a new customer and take provider side waitlist and signup that consumer and take waitlist to the same service and queue 
 
 
-     ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}   
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2641,7 +2756,7 @@ JD-TC-AddCustomer-UH5
 JD-TC-AddCustomer-UH6
      [Documentation]   Take wailist from consumer side and provider Add thats same wailisted consumer 
 
-     ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}   
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2660,7 +2775,7 @@ JD-TC-AddCustomer-UH6
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
-     ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}   
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2683,7 +2798,7 @@ JD-TC-AddCustomer-UH6
      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid1}  
      Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id1}
 
-     ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}   
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2696,7 +2811,7 @@ JD-TC-AddCustomer-UH6
 JD-TC-AddCustomer-UH7
      [Documentation]   Add customer with international phone number
 
-     ${resp}=  Provider Login  ${PUSERNAME38}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2744,7 +2859,7 @@ JD-TC-AddCustomer-UH7
      # Log   ${resp.json()}
      # Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-AddCustomer-UH10
+D-TC-AddCustomer-UH8
      [Documentation]  Add a  customer with invalid secondary number
      ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -2756,12 +2871,11 @@ JD-TC-AddCustomer-UH10
      ${gender}=  Random Element    ${Genderlist}
      ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
      Should Be Equal As Strings  ${resp.status_code}  422
-     Should Be Equal As Strings  ${resp.json()}  ${INVALID_SPHONE}
    
     
 
 
-JD-TC-AddCustomer-24
+JD-TC-AddCustomer-18
      [Documentation]  Add a new valid customer without Secondary phone number
      ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -2796,7 +2910,7 @@ JD-TC-AddCustomer-24
 ***Comment***
 JD-TC-AddCustomer-5
     [Documentation]  Provider signup for already added customer without email  
-    ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  AddCustomer  Ricky  J  ${ph3}   ${dob}  ${gender}  ${EMPTY}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2813,12 +2927,12 @@ JD-TC-AddCustomer-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${email3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${ph3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-AddCustomer-9
      [Documentation]  Add a new valid customer without phone number
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${firstname}=  FakerLibrary.first_name
@@ -2841,7 +2955,7 @@ JD-TC-AddCustomer-91
      clear_location   ${PUSERNAME231}
      clear_service    ${PUSERNAME231}
      clear waitlist   ${PUSERNAME231}
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${pid0}=  get_acc_id  ${PUSERNAME231}
@@ -2849,15 +2963,19 @@ JD-TC-AddCustomer-91
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -2925,7 +3043,7 @@ JD-TC-AddCustomer-91
      ${resp}=  Consumer Logout
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME231}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  GetCustomer  
      Log   ${resp.json()}
@@ -2968,7 +3086,7 @@ JD-TC-AddCustomer-16
      clear_service    ${PUSERNAME213}
      clear waitlist   ${PUSERNAME213}
      
-     ${resp}=  Provider Login  ${PUSERNAME213}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3009,15 +3127,19 @@ JD-TC-AddCustomer-16
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -3040,7 +3162,7 @@ JD-TC-AddCustomer-16
      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid1}
      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid1}
 
-     ${resp}=  Provider Login  ${PUSERNAME259}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3083,15 +3205,15 @@ JD-TC-AddCustomer-16
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id2}    ${resp}  
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id2}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2}  
@@ -3114,7 +3236,7 @@ JD-TC-AddCustomer-16
      Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid2}
      Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid2}
 
-     ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3146,15 +3268,15 @@ JD-TC-AddCustomer-16
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log    ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  get_date
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id3}    ${resp}  
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id3}    ${resp}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_time  3  00
-     ${end_time}=    add_time  3  30    
+     ${strt_time}=   add_timezone_time  ${tz}  3  00  
+     ${end_time}=    add_timezone_time  ${tz}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id3}  ${ser_id3}  
@@ -3242,7 +3364,7 @@ JD-TC-AddCustomer-17
 
     [Documentation]    Add same customer to three different providers and take waitlist. After consumer signup get waitlist details                 
      ...                (Here first  provider's online presence is false and walkinConsumerBecomesJdCons is true, 2nd provider's online presence and walkinConsumerBecomesJdCons is true and 3rd providers walkinConsumerBecomesJdCons is false)
-    ${resp}=  Provider Login  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3280,10 +3402,10 @@ JD-TC-AddCustomer-17
     ${lid1}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME213}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
@@ -3357,7 +3479,7 @@ JD-TC-AddCustomer-17
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid1}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME259}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3398,10 +3520,10 @@ JD-TC-AddCustomer-17
     ${lid2}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME259}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -3472,7 +3594,7 @@ JD-TC-AddCustomer-17
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid2}
 
-    ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3510,10 +3632,10 @@ JD-TC-AddCustomer-17
     ${lid3}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME257}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id3}=  Create Sample Service  ${SERVICE2}
@@ -3650,7 +3772,7 @@ JD-TC-AddCustomer-17
      Should Be Equal As Strings  ${resp.json()[0]['location']['id']}   ${lid2}
  
 
-     ${resp}=  Provider Login  ${PUSERNAME213}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 

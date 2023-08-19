@@ -52,7 +52,7 @@ JD-TC-Get loan Bank Details Aadhaar-1
                                   
     [Documentation]               Create Loan Application and Get loan Bank Details Aadhaar.
     
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -102,9 +102,14 @@ JD-TC-Get loan Bank Details Aadhaar-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     clear Customer  ${PUSERNAME87}
@@ -264,7 +269,7 @@ JD-TC-Get loan Bank Details Aadhaar-2
                                   
     [Documentation]               Create Loan Application and without Requst For Aadhar Validation Get loan Bank Details Aadhaar.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -319,7 +324,7 @@ JD-TC-Get loan Bank Details Aadhaar-3
                                   
     [Documentation]               Create Loan Application and try two time Get loan Bank Details Aadhaar.
     
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +342,7 @@ JD-TC-Get loan Bank Details Aadhaar-UH1
                                   
     [Documentation]               try to Get loan Bank Details Aadhaar with invalid loan id.
     
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -352,7 +357,7 @@ JD-TC-Get loan Bank Details Aadhaar-5
                                   
     [Documentation]               try to Get loan Bank Details Aadhaar with EMPTY loan id.
     
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -62,7 +62,7 @@ JD-TC-Get specializations Sub Domain -1
              
 JD-TC-Get specializations Sub Domain -2
        [Documentation]   Provider check to Get specializations Sub Domain provider login
-       ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Get specializations Sub Domain  healthCare  physiciansSurgeons
        Should Be Equal As Strings    ${resp.status_code}   200

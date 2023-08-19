@@ -38,12 +38,14 @@ JD-TC-Get Next Available Dates-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_P}
     
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -58,19 +60,22 @@ JD-TC-Get Next Available Dates-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_P}.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -131,9 +136,9 @@ JD-TC-Get Next Available Dates-1
     END 
     
 
-    ${DAY}=  add_date  0   
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
     Set Suite Variable  ${DAY} 
-    ${tomorrow}=  add_date  1   
+    ${tomorrow}=  db.add_timezone_date  ${tz}  1     
     Set Suite Variable  ${tomorrow} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
@@ -147,13 +152,17 @@ JD-TC-Get Next Available Dates-1
         Exit For Loop IF   '${keywordstatus}' == 'PASS'
     END
     
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    # ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    # # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -172,13 +181,16 @@ JD-TC-Get Next Available Dates-1
         Run Keyword If  '${keywordstatus}' == 'PASS'  Append To List   ${loc_list}  ${city}
         Exit For Loop IF   '${keywordstatus}' == 'PASS'
     END
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
-    # ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
+    # # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -246,8 +258,8 @@ JD-TC-Get Next Available Dates-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s3}  ${resp.json()}
 
-    ${sTime1}=  add_time  1  00
-    ${eTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  00  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable   ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -273,7 +285,7 @@ JD-TC-Get Next Available Dates-1
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  30
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Should Be Equal As Strings  ${resp.json()[${i}]['date']}            ${DAY}
         Should Be Equal As Strings  ${resp.json()[${i}]['serviceTime']}     ${sTime1}
         Should Be Equal As Strings  ${resp.json()[${i}]['queueStartTime']}  ${sTime1} 
@@ -290,12 +302,12 @@ JD-TC-Get Next Available Dates-1
 
 JD-TC-Get Next Available Dates-2
     [Documentation]  Get next available queues using Queue have start date is tomarrow
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     
-    ${sTime2}=  add_time  1  30
-    ${eTime2}=  add_time  2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  30  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${p1queue2}=    FakerLibrary.word
     Set Suite Variable   ${p1queue2}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -314,7 +326,7 @@ JD-TC-Get Next Available Dates-2
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY}=  add_date   1
+        ${DAY}=  db.add_timezone_date  ${tz}  1
         Run Keyword IF  '${resp.json()[${i}]['date']}' == '${DAY}' 
             ...     Run Keywords 
             ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -334,7 +346,7 @@ JD-TC-Get Next Available Dates-3
     #Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}" 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY}=  add_date   1
+        ${DAY}=  db.add_timezone_date  ${tz}  1
         Run Keyword IF  '${resp.json()[${i}]['date']}' == '${DAY}' 
             ...     Run Keywords 
             ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -348,15 +360,15 @@ JD-TC-Get Next Available Dates-3
  
 JD-TC-Get Next Available Dates-4
     [Documentation]  Get next available queues using Queue have specific end date
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     
-    ${endday}=  add_date  5   
+    ${endday}=  db.add_timezone_date  ${tz}  5     
     Set Suite Variable  ${endday} 
-    ${sTime3}=  add_time  2  00
+    ${sTime3}=  add_timezone_time  ${tz}  2  00  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time  2  30
+    ${eTime3}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime3}
     ${p1queue3}=    FakerLibrary.word
     Set Suite Variable   ${p1queue3}
@@ -376,7 +388,7 @@ JD-TC-Get Next Available Dates-4
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY}=  add_date  ${i}
+        ${DAY}=  db.add_timezone_date  ${tz}  ${i}
         Should Be Equal As Strings  ${resp.json()[${i}]['date']}            ${DAY}
         Should Be Equal As Strings  ${resp.json()[${i}]['serviceTime']}     ${sTime3}
         Should Be Equal As Strings  ${resp.json()[${i}]['queueStartTime']}  ${sTime3} 
@@ -388,12 +400,12 @@ JD-TC-Get Next Available Dates-4
 
 JD-TC-Get Next Available Dates-5
     [Documentation]  Get next available queues create a holiday
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
-    ${sTime4}=  add_time  2  30
-    ${eTime4}=  add_time  3  00
+    ${sTime4}=  add_timezone_time  ${tz}  2  30  
+    ${eTime4}=  add_timezone_time  ${tz}  3  00  
     ${p1queue4}=    FakerLibrary.word
     Set Suite Variable   ${p1queue4}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -403,10 +415,10 @@ JD-TC-Get Next Available Dates-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_q4}  ${resp.json()}
 
-    ${holiday}=  add_date  4   
+    ${holiday}=  db.add_timezone_date  ${tz}  4     
     Set Suite Variable  ${holiday} 
     ${holidayname}=   FakerLibrary.word
-    ${sTime5}=  add_time  2  30
+    ${sTime5}=  add_timezone_time  ${tz}  2  30  
     ${desc}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
     # ${resp}=  Create Holiday  ${holiday}  ${holidayname}  ${sTime5}  ${eTime4}
@@ -424,7 +436,7 @@ JD-TC-Get Next Available Dates-5
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' != '${bool[0]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -442,7 +454,7 @@ JD-TC-Get Next Available Dates-5
                 ...     AND  Should Be Equal As Strings  ${resp.json()[${i}]['queueId']}         ${p1_q4} 
     END
     
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -456,13 +468,13 @@ JD-TC-Get Next Available Dates-5
 JD-TC-Get Next Available Dates-6
 	[Documentation]   Get available queue with same service in diffrent queue
     clear_queue  ${PUSERNAME_P}
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime6}=  add_time  3  30
+    ${sTime6}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable  ${sTime6}
-    ${eTime6}=  add_time  4  30
+    ${eTime6}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${eTime6}
     ${p1queue6}=    FakerLibrary.word
     Set Suite Variable   ${p1queue6}
@@ -473,9 +485,9 @@ JD-TC-Get Next Available Dates-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_q6}  ${resp.json()}
 
-    ${sTime7}=  add_time  4  30
+    ${sTime7}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${sTime7}
-    ${eTime7}=  add_time  5  30
+    ${eTime7}=  add_timezone_time  ${tz}  5  30  
     Set Suite Variable  ${eTime7}
     ${p1queue7}=    FakerLibrary.word
     Set Suite Variable   ${p1queue7}
@@ -504,7 +516,7 @@ JD-TC-Get Next Available Dates-6
     ${flag}=  Set Variable  ${0}
     ${j}=  Set Variable  ${0}
     FOR  ${i}  IN RANGE   ${len0}
-        # ${DAY}=  add_date   ${i}  
+        # ${DAY}=  db.add_timezone_date  ${tz}   ${i}  
         ${flag}=  Evaluate  ${flag}+1
         # ${resp}=   verify6  ${resp}  ${value}  ${len1}  
         Run Keyword IF  '${resp.json()[${i}]['queueId']}' == '${p1_q6}'  
@@ -527,7 +539,7 @@ JD-TC-Get Next Available Dates-6
 
         ${j}=  Run Keyword If  '${flag}' >= '${len2}'  Evaluate  ${j}+1
         ...     ELSE  Set Variable  ${j}
-        ${DAY}=  Run Keyword If  '${flag}' >= '${len2}'  add_date   ${j}
+        ${DAY}=  Run Keyword If  '${flag}' >= '${len2}'  db.add_timezone_date  ${tz}   ${j}
         ...     ELSE  Set Variable  ${DAY}
         ${flag}=  Run Keyword If  '${flag}' >= '${len2}'  Set Variable  ${0}
         ...     ELSE  Set Variable  ${flag}
@@ -538,13 +550,13 @@ JD-TC-Get Next Available Dates-6
 JD-TC-Get Next Available Dates-7
 	[Documentation]  same service in diffrent location
     # clear_queue  ${PUSERNAME_P}
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
-    ${sTime8}=  add_time  2  30
+    ${sTime8}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${sTime8}
-    ${eTime8}=  add_time  3  00
+    ${eTime8}=  add_timezone_time  ${tz}  3  00  
     Set Suite Variable   ${eTime8}
     ${p1queue8}=    FakerLibrary.word
     Set Suite Variable   ${p1queue8}
@@ -554,8 +566,8 @@ JD-TC-Get Next Available Dates-7
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_q8}  ${resp.json()}
-    ${sTime9}=  add_time  3  00
-    ${eTime9}=  add_time  3  30
+    ${sTime9}=  add_timezone_time  ${tz}  3  00  
+    ${eTime9}=  add_timezone_time  ${tz}  3  30  
     ${p1queue9}=    FakerLibrary.word
     Set Suite Variable   ${p1queue9}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -583,7 +595,7 @@ JD-TC-Get Next Available Dates-7
     ${flag}=  Set Variable  ${0}
     ${j}=  Set Variable  ${0}
     FOR  ${i}  IN RANGE   ${len}
-        # ${DAY}=  add_date   ${i}  
+        # ${DAY}=  db.add_timezone_date  ${tz}   ${i}  
         ${flag}=  Evaluate  ${flag}+1
         # ${resp}=   verify6  ${resp}  ${value}  ${len1}  
         Run Keyword IF  '${resp.json()[${i}]['queueId']}' == '${p1_q6}'  
@@ -615,7 +627,7 @@ JD-TC-Get Next Available Dates-7
 
         ${j}=  Run Keyword If  '${flag}' >= '${len1}'  Evaluate  ${j}+1
         ...     ELSE  Set Variable  ${j}
-        ${DAY}=  Run Keyword If  '${flag}' >= '${len1}'  add_date   ${j}
+        ${DAY}=  Run Keyword If  '${flag}' >= '${len1}'  db.add_timezone_date  ${tz}   ${j}
         ...     ELSE  Set Variable  ${DAY}
         ${flag}=  Run Keyword If  '${flag}' >= '${len1}'  Set Variable  ${0}
         ...     ELSE  Set Variable  ${flag}
@@ -642,17 +654,20 @@ JD-TC-Get Next Available Dates-8
     ${resp}=  Account Set Credential  ${MUSERNAME_L}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_L}${\n}
     Set Suite Variable  ${MUSERNAME_L}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_L}${\n}
+    
     ${accid1}=  get_acc_id  ${MUSERNAME_L} 
     Set Suite Variable    ${accid1}
-    Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${DAY2}=  get_date
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -666,19 +681,23 @@ JD-TC-Get Next Available Dates-8
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -729,9 +748,16 @@ JD-TC-Get Next Available Dates-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -766,18 +792,19 @@ JD-TC-Get Next Available Dates-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime_1}=  add_time  0  15
+    ${sTime_1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime_1}
-    ${eTime_1}=  add_time  4  15
+    ${eTime_1}=  add_timezone_time  ${tz}  4  15  
     Set Suite Variable   ${eTime_1}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${ulid}   ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${description}=  FakerLibrary.sentence
@@ -805,7 +832,7 @@ JD-TC-Get Next Available Dates-8
 
     ${len}=  Get Length  ${resp.json()} 
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY1}=  add_date   ${i} 
+        ${DAY1}=  db.add_timezone_date  ${tz}   ${i} 
         Should Be Equal As Strings  ${resp.json()[${i}]['date']}            ${DAY1}
         Should Be Equal As Strings  ${resp.json()[${i}]['serviceTime']}     ${sTime_1}
         Should Be Equal As Strings  ${resp.json()[${i}]['queueStartTime']}  ${sTime_1} 
@@ -817,7 +844,7 @@ JD-TC-Get Next Available Dates-8
     
 JD-TC-Get Next Available Dates-9
 	[Documentation]  create a vacation
-    ${resp}=  Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -825,11 +852,11 @@ JD-TC-Get Next Available Dates-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${start_time}=  add_time  0  15
+    ${start_time}=  add_timezone_time  ${tz}  0  15  
     Set Test Variable   ${start_time}
-    ${end_time}=    add_time   3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Test Variable    ${end_time}
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Test Variable    ${CUR_DAY}
     ${desc}=    FakerLibrary.name
     Set Test Variable      ${desc}
@@ -864,7 +891,7 @@ JD-TC-Get Next Available Dates-9
     ${len}=   Evaluate   ${len}-1  
     Verify Response List   ${resp}   0  date=${CUR_DAY}  serviceTime=${end_time}  queueStartTime=${sTime_1}  queueEndTime=${eTime_1}  isAvailable=${bool[1]}  queueId=${uq_id} 
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY1}=  add_date   1
+        ${DAY1}=  db.add_timezone_date  ${tz}  1
         Run Keyword IF  '${resp.json()[${i}]['date']}' == '${DAY1}' 
             ...     Run Keywords 
             ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY1}
@@ -876,7 +903,7 @@ JD-TC-Get Next Available Dates-9
  
     END
 
-    ${resp}=  Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -891,7 +918,7 @@ JD-TC-Get Next Available Dates-9
 
 JD-TC-Get Next Available Dates-UH1
 	[Documentation]  provider Disable department
-    ${resp}=  Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -921,9 +948,9 @@ JD-TC-Get Next Available Dates-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${us_id1}  ${resp.json()}
 
-    ${sTime_2}=  add_time  0  30
+    ${sTime_2}=  add_timezone_time  ${tz}  0  30  
     Set Test Variable   ${sTime_2}
-    ${eTime_2}=  add_time  4  15
+    ${eTime_2}=  add_timezone_time  ${tz}  4  15  
     Set Test Variable   ${eTime_2}
 
     ${queue_name1}=  FakerLibrary.bs
@@ -941,7 +968,7 @@ JD-TC-Get Next Available Dates-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List   ${resp}   0  date=${DAY1}  serviceTime=${sTime_2}  queueStartTime=${sTime_2}  queueEndTime=${eTime_2}  isAvailable=${bool[1]}  queueId=${uq_id1} 
 
-    ${resp}=  Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -956,7 +983,7 @@ JD-TC-Get Next Available Dates-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_SERVICE}"
 
-    ${resp}=  Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -977,7 +1004,7 @@ JD-TC-Get Next Available Dates-UH1
 JD-TC-Get Next Available Dates-UH2
 	[Documentation]  INPUT Disable SERVICE id
     
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -995,7 +1022,7 @@ JD-TC-Get Next Available Dates-UH2
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_SERVICE}"
 
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1008,7 +1035,7 @@ JD-TC-Get Next Available Dates-UH2
 JD-TC-Get Next Available Dates-UH3
 	[Documentation]  INPUT Disable Location id
   
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1027,7 +1054,7 @@ JD-TC-Get Next Available Dates-UH3
     Should Be Equal As Strings  ${resp.status_code}  422 
     Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_DISABLED}"  
 
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1037,12 +1064,12 @@ JD-TC-Get Next Available Dates-UH3
 JD-TC-Get Next Available Dates-UH4
 	[Documentation]  Queue have no service
   
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${sTime}=  add_time  3  30
-    ${eTime}=  add_time  6  00
+    ${sTime}=  add_timezone_time  ${tz}  3  30  
+    ${eTime}=  add_timezone_time  ${tz}  6  00  
     ${p1queue}=    FakerLibrary.word
     Set Suite Variable   ${p1queue}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -1066,18 +1093,22 @@ JD-TC-Get Next Available Dates-UH4
 JD-TC-Get Next Available Dates-UH5
 	[Documentation]  Location have no queue
   
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_location      ${PUSERNAME_P}
 
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  4  30
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  4  30  
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -1097,12 +1128,12 @@ JD-TC-Get Next Available Dates-UH5
 
 JD-TC-Get Next Available Dates-UH6
 	[Documentation]  provider disable queue and then enable it then check the availabily
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${s_Time}=  add_time  2  30
+    ${s_Time}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${s_Time}
-    ${e_Time}=  add_time  5  00
+    ${e_Time}=  add_timezone_time  ${tz}  5  00  
     Set Suite Variable   ${e_Time}  
     ${p1queue}=    FakerLibrary.word
     Set Suite Variable   ${p1queue}
@@ -1128,7 +1159,7 @@ JD-TC-Get Next Available Dates-UH6
     Should Be Equal As Strings  ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()}   []  
 
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1147,7 +1178,7 @@ JD-TC-Get Next Available Dates-UH6
     Should Be Equal As Strings  ${resp.status_code}   200
     ${len}=  Get Length  ${resp.json()} 
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Should Be Equal As Strings  ${resp.json()[${i}]['date']}            ${DAY}
         Should Be Equal As Strings  ${resp.json()[${i}]['serviceTime']}     ${s_Time}
         Should Be Equal As Strings  ${resp.json()[${i}]['queueStartTime']}  ${s_Time} 
@@ -1159,7 +1190,7 @@ JD-TC-Get Next Available Dates-UH6
 
 JD-TC-Get Next Available Dates-UH7
 	[Documentation]  provider disable waitlist
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1176,7 +1207,7 @@ JD-TC-Get Next Available Dates-UH7
     Should Be Equal As Strings  ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()}   [] 
 
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Enable Waitlist
@@ -1187,13 +1218,13 @@ JD-TC-Get Next Available Dates-UH7
 
 JD-TC-Get Next Available Dates-UH8
 	[Documentation]  Get availabile queue  using another provider service and location
-    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${prov_id}=  get_acc_id  ${PUSERNAME30} 
 
-    ${resp}=  Provider Login  ${PUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1234,7 +1265,7 @@ JD-TC-Get Next Available Dates-UH9
 
 JD-TC-Get Next Available Dates-UH10
 	[Documentation]  provider disable online chekin and try to take waitlist
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1252,10 +1283,10 @@ JD-TC-Get Next Available Dates-UH10
     ${resp}=  Availability Of Queue By Consumer  ${p1_l3}  ${p1_s3}  ${accId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${CR_day}=  add_date   0
+    ${CR_day}=  db.add_timezone_date  ${tz}   0
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-        ${DAY}=  add_date   1
+        ${DAY}=  db.add_timezone_date  ${tz}  1
         Run Keyword IF  '${resp.json()[${i}]['date']}' == '${DAY}' 
             ...     Run Keywords 
             ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -1277,7 +1308,7 @@ JD-TC-Get Next Available Dates-UH10
 
 JD-TC-Get Next Available Dates-UH12
 	[Documentation]  provider disable future chekin
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

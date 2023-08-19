@@ -25,7 +25,7 @@ ${digits}       0123456789
 
 JD-TC-DonationPayment-1
         [Documentation]   Consumer do payment of a donation bill
-        ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME51}
@@ -46,7 +46,12 @@ JD-TC-DonationPayment-1
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -73,7 +78,7 @@ JD-TC-DonationPayment-1
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME51}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         # ${don_amt}=  Evaluate  ${min_don_amt}*${multiples[0]}
         # ${don_amt_float}=  twodigitfloat  ${don_amt}
@@ -171,7 +176,7 @@ JD-TC-DonationPayment-1
 JD-TC-DonationPayment-UH1
         [Documentation]  DonationPayment  using another consumer id with empty donation
 
-        ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME51}
@@ -192,7 +197,12 @@ JD-TC-DonationPayment-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -219,7 +229,7 @@ JD-TC-DonationPayment-UH1
         Set Suite Variable  ${con_id10}
         ${acc_id}=  get_acc_id  ${PUSERNAME51}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         # ${don_amt}=  Evaluate  ${min_don_amt}*${multiples[0]}
         # ${don_amt_float}=  twodigitfloat  ${don_amt}
@@ -260,7 +270,9 @@ JD-TC-DonationPayment-UH2
         
 
 
-        ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+        Log  ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}   200
         ${acc_id12}=  get_acc_id  ${PUSERNAME101}
         clear_service   ${PUSERNAME101}
         clear_queue      ${PUSERNAME101}

@@ -103,7 +103,7 @@ JD-TC-ProviderSubmitServiceOptionForItem-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -172,7 +172,7 @@ JD-TC-ProviderSubmitServiceOptionForItem-1
         Log  ${ttype}
         ${u_ttype}=    Remove Duplicates    ${ttype}
         Log  ${u_ttype}
-        ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[2]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}  ${item_id1}  
+        ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[2]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}  ${item_id1}  
     END
     Set Suite Variable  ${CatalogId1}
 
@@ -196,7 +196,7 @@ JD-TC-ProviderSubmitServiceOptionForItem-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -257,7 +257,7 @@ JD-TC-ProviderSubmitServiceOptionForItem-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}   max_split=1
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
@@ -338,13 +338,14 @@ JD-TC-ProviderSubmitServiceOptionForItem-2
     
     # clear_customer   ${PUSERNAME3}
     
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -373,7 +374,7 @@ JD-TC-ProviderSubmitServiceOptionForItem-2
     Set Test Variable  ${sTime}  ${resp.json()['catalogSchedule']['timeSlots'][0]['sTime']}
     Set Test Variable  ${eTime}  ${resp.json()['catalogSchedule']['timeSlots'][0]['eTime']}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME22}.ynwtest@netvarth.com
@@ -474,13 +475,14 @@ JD-TC-ProviderSubmitServiceOptionForItem-3
     
     # clear_customer   ${PUSERNAME3}
     
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -509,7 +511,7 @@ JD-TC-ProviderSubmitServiceOptionForItem-3
     Set Test Variable  ${sTime}  ${resp.json()['catalogSchedule']['timeSlots'][0]['sTime']}
     Set Test Variable  ${eTime}  ${resp.json()['catalogSchedule']['timeSlots'][0]['eTime']}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME22}.ynwtest@netvarth.com

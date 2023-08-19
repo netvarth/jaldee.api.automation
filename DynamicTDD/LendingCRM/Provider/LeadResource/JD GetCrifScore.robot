@@ -67,7 +67,7 @@ JD-TC_GetCrifScore-1
     # Log  ${unique_lnames}
     # Set Suite Variable   ${unique_lnames}
 
-    # ${resp}=   ProviderLogin  ${PUSERNAME22}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -241,7 +241,7 @@ JD-TC_GetCrifScore-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME62}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -256,8 +256,13 @@ JD-TC_GetCrifScore-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     enquiryStatus  ${account_id}
@@ -670,7 +675,7 @@ JD-TC_GetCrifScore-1
 
 #     [Documentation]  get   crif score with already created crif score
 
-#     ${resp}=   ProviderLogin  ${PUSERNAME62}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -718,7 +723,7 @@ JD-TC_GetCrifScore-UH3
 
     [Documentation]   get   crif score  invalid lead id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -740,7 +745,7 @@ JD-TC_GetCrifScore-UH4
 
     [Documentation]  get   crif score  invalid kyc id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -762,7 +767,7 @@ JD-TC_GetCrifScore-UH5
 
     [Documentation]   another provider login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}

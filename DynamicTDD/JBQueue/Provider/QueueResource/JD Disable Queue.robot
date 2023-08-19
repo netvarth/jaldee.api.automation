@@ -18,11 +18,11 @@ Suite Setup     Run Keywords  clear_queue  ${PUSERNAME5}  AND  clear_location  $
 
 JD-TC-Disable Queue-1
     [Documentation]  Disable  Queue of valid  provider
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_location  ${PUSERNAME5}
     clear_queue  ${PUSERNAME5}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid}   ${resp['queue_id']}
     ${resp}=  Disable Queue  ${qid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -46,7 +46,7 @@ JD-TC-Disable Queue-UH2
     
 JD-TC-Disable Queue-UH3
     [Documentation]  Disable queue by another  provider
-    ${resp}=  ProviderLogin  ${PUSERNAME214}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     clear_queue  ${PUSERNAME214}
     ${resp}=  Get queues
@@ -58,7 +58,7 @@ JD-TC-Disable Queue-UH3
     
 JD-TC-Disable Queue-UH4
     [Documentation]  Disable Queue using Invalid queue id
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Disable Queue  0
     Should Be Equal As Strings  ${resp.status_code}  422   
@@ -66,7 +66,7 @@ JD-TC-Disable Queue-UH4
        
 JD-TC-Disable Queue-UH5
     [Documentation]  Disable a already disabled queue
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get Queue ById  ${qid}
     Should Be Equal As Strings  ${resp.status_code}  200

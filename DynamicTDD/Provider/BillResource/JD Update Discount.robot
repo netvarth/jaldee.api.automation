@@ -18,7 +18,7 @@ ${discount2}  Discup21
 *** Test Cases ***
 JD-TC-Update Discount-1
        [Documentation]   Provider check to Update Discount 
-       ${resp}=   ProviderLogin  ${PUSERNAME247}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME247}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME247}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -41,7 +41,7 @@ JD-TC-Update Discount-1
        
 JD-TC-Update Discount-2
        [Documentation]   Provider login to Update Discount with same discount name of another provider
-       ${resp}=   ProviderLogin  ${PUSERNAME248}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME248}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME248}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -64,7 +64,7 @@ JD-TC-Update Discount-2
        
 JD-TC-Update Discount-3
        [Documentation]   Provider check to Update Discount with same discount name
-       ${resp}=   ProviderLogin  ${PUSERNAME247}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME247}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${desc2}=  FakerLibrary.Sentence   nb_words=2
        ${amount2}=  FakerLibrary.Pyfloat  positive=True  left_digits=2  right_digits=1
@@ -98,7 +98,7 @@ JD-TC-Update Discount -UH2
        
 JD-TC-Update Discount-UH3
        [Documentation]   Provider login to update Discounts with already existing discount name
-       ${resp}=   ProviderLogin  ${PUSERNAME249}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME249}
        ${desc}=  FakerLibrary.Sentence   nb_words=2

@@ -39,7 +39,7 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 
 JD-TC-Update_Report_Criteria-1
     [Documentation]  Update report date category of saved report 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME17}
     Set Suite Variable  ${pid}
@@ -51,6 +51,8 @@ JD-TC-Update_Report_Criteria-1
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}  maxPartySize=1
     
     clear_queue     ${PUSERNAME17}
@@ -58,9 +60,9 @@ JD-TC-Update_Report_Criteria-1
     clear_appt_schedule   ${PUSERNAME17}
 
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  55
+    ${DAY2}=  db.add_timezone_date  ${tz}  55
     Set Suite Variable  ${DAY2}
     ${description}=     FakerLibrary.sentence
     Set Suite Variable   ${description}
@@ -79,7 +81,7 @@ JD-TC-Update_Report_Criteria-1
     Set Suite Variable   ${Total}   ${Total1}
     ${amt_float}=  twodigitfloat  ${Total}
     Set Suite Variable  ${amt_float}  ${amt_float}  
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
 
     ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[1]}  ${status[0]}    ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}
@@ -138,13 +140,14 @@ JD-TC-Update_Report_Criteria-1
     Verify Response  ${resp}  name=${V1SERVICE1}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype}
 
 
-    ${sTime1}=  add_time  0  00
-    ${eTime1}=  add_time  0  45
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${p1queue1}=    FakerLibrary.word
 
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
 
     ${schedule_name}=  FakerLibrary.bs
@@ -233,7 +236,7 @@ JD-TC-Update_Report_Criteria-1
     
     # ------------------------------------------------------------------------------
     
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${TODAY}
     ${Current_Date} =	Convert Date	${TODAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Current_Date}
@@ -311,7 +314,7 @@ JD-TC-Update_Report_Criteria-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid06}  ${apptid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -411,7 +414,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
     ${Date1} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date1}
@@ -435,7 +438,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY2}=  add_date  2
+    ${Add_DAY2}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable  ${Add_DAY2}
     ${Date2} =	Convert Date	${Add_DAY2}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date2}
@@ -458,7 +461,7 @@ JD-TC-Update_Report_Criteria-1
     Set Suite Variable  ${apptid114}  ${apptid[0]}
     # -----------------------------------------------------
 
-    ${Add_DAY3}=  add_date  3
+    ${Add_DAY3}=  db.add_timezone_date  ${tz}  3  
     Set Suite Variable  ${Add_DAY3}
     ${Date3} =	Convert Date	${Add_DAY3}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date3}
@@ -481,7 +484,7 @@ JD-TC-Update_Report_Criteria-1
     Set Suite Variable  ${apptid116}  ${apptid[0]}
     # -----------------------------------------------------
 
-    ${Add_DAY4}=  add_date  4
+    ${Add_DAY4}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable  ${Add_DAY4}
     ${Date4} =	Convert Date	${Add_DAY4}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date4}
@@ -505,7 +508,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY5}=  add_date  5
+    ${Add_DAY5}=  db.add_timezone_date  ${tz}  5  
     Set Suite Variable  ${Add_DAY5}
     ${Date5} =	Convert Date	${Add_DAY5}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date5}
@@ -528,7 +531,7 @@ JD-TC-Update_Report_Criteria-1
     Set Suite Variable  ${apptid120}  ${apptid[0]}
     # -----------------------------------------------------
 
-    ${Add_DAY6}=  add_date  6
+    ${Add_DAY6}=  db.add_timezone_date  ${tz}  6  
     Set Suite Variable  ${Add_DAY6}
     ${Date6} =	Convert Date	${Add_DAY6}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date6}
@@ -552,7 +555,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY7}=  add_date  7
+    ${Add_DAY7}=  db.add_timezone_date  ${tz}  7  
     Set Suite Variable  ${Add_DAY7}
     ${Date7} =	Convert Date	${Add_DAY7}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date7}
@@ -576,7 +579,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY8}=  add_date  8
+    ${Add_DAY8}=  db.add_timezone_date  ${tz}  8  
     Set Suite Variable  ${Add_DAY8}
     ${Date8} =	Convert Date	${Add_DAY8}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date8}
@@ -600,7 +603,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY15}=  add_date  15
+    ${Add_DAY15}=  db.add_timezone_date  ${tz}  15  
     Set Suite Variable  ${Add_DAY15}
     ${Date15} =	Convert Date	${Add_DAY15}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date15}
@@ -624,7 +627,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY20}=  add_date  20
+    ${Add_DAY20}=  db.add_timezone_date  ${tz}  20
     Set Suite Variable  ${Add_DAY20}
     ${Date20} =	Convert Date	${Add_DAY20}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date20}
@@ -648,7 +651,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY25}=  add_date  25
+    ${Add_DAY25}=  db.add_timezone_date  ${tz}  25 
     Set Suite Variable  ${Add_DAY25}
     ${Date25} =	Convert Date	${Add_DAY25}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date25}
@@ -672,7 +675,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY30}=  add_date  30
+    ${Add_DAY30}=  db.add_timezone_date  ${tz}  30
     Set Suite Variable  ${Add_DAY30}
     ${Date30} =	Convert Date	${Add_DAY30}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date30}
@@ -696,7 +699,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY31}=  add_date  31
+    ${Add_DAY31}=  db.add_timezone_date  ${tz}  31
     Set Suite Variable  ${Add_DAY31}
     ${Date31} =	Convert Date	${Add_DAY31}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date31}
@@ -720,7 +723,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY36}=  add_date  36
+    ${Add_DAY36}=  db.add_timezone_date  ${tz}  36
     Set Suite Variable  ${Add_DAY36}
     ${Date36} =	Convert Date	${Add_DAY36}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date36}
@@ -744,7 +747,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY40}=  add_date  40
+    ${Add_DAY40}=  db.add_timezone_date  ${tz}  40
     Set Suite Variable  ${Add_DAY40}
     ${Date40} =	Convert Date	${Add_DAY40}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date40}
@@ -768,7 +771,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY45}=  add_date  45
+    ${Add_DAY45}=  db.add_timezone_date  ${tz}  45
     Set Suite Variable  ${Add_DAY45}
     ${Date45} =	Convert Date	${Add_DAY45}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date45}
@@ -792,7 +795,7 @@ JD-TC-Update_Report_Criteria-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY50}=  add_date  50
+    ${Add_DAY50}=  db.add_timezone_date  ${tz}  50
     Set Suite Variable  ${Add_DAY50}
     ${Date50} =	Convert Date	${Add_DAY50}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date50}
@@ -815,7 +818,7 @@ JD-TC-Update_Report_Criteria-1
     Set Suite Variable  ${apptid244}  ${apptid[0]}
     # -----------------------------------------------------
 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # Set Suite Variable  ${C6_name}   ${cid6_fname} ${cid6_lname}
@@ -987,7 +990,7 @@ JD-TC-Update_Report_Criteria-1
 
 JD-TC-Update_Report_Criteria-2
     [Documentation]   Update report filter of saved report 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${reportType}              APPOINTMENT
@@ -1021,7 +1024,7 @@ JD-TC-Update_Report_Criteria-2
 
 JD-TC-Update_Report_Criteria-UH1
     [Documentation]   Update report type of saved report 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${reportType}              APPOINTMENT
@@ -1075,7 +1078,7 @@ JD-TC-Update_Report_Criteria-UH3
 
 JD-TC-Update_Report_Criteria-UH4
     [Documentation]   A provider try to Update Report without saving any report
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

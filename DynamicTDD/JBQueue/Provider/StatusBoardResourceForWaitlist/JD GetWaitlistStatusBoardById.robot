@@ -21,14 +21,14 @@ ${SERVICE3}     Radio Repdca222
 JD-TC-GetStatusBoardById-1
 
     [Documentation]  Create a StatusBoard and get it by id
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME179}
     clear_location  ${PUSERNAME179}
     clear_queue   ${PUSERNAME179}
     clear_Statusboard  ${PUSERNAME179}
     clear_Addon  ${PUSERNAME179}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -52,7 +52,7 @@ JD-TC-GetStatusBoardById-1
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
     # ${Positions[1]}  ${sbq_id2}
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=   Create Status Board waitlist    ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -87,7 +87,7 @@ JD-TC-GetStatusBoardById -UH2
 
 JD-TC-GetStatusBoardById-UH3
     [Documentation]  Get a Status Board by id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Get WaitlistStatus Board By Id  ${sb_id}
@@ -97,7 +97,7 @@ JD-TC-GetStatusBoardById-UH3
 
 JD-TC-GetStatusBoardById-UH4
     [Documentation]  Get a Status Board by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get WaitlistStatus Board By Id  ${sb_id}
     Should Be Equal As Strings  ${resp.status_code}  422

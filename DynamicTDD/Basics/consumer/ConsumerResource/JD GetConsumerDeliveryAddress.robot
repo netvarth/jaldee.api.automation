@@ -83,7 +83,7 @@ JD-TC-GetConsumerDeliveryAddress-2
 JD-TC-GetConsumerDeliveryAddress-3
     [Documentation]    Get consumer delivery address with provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Consumer Delivery Address   

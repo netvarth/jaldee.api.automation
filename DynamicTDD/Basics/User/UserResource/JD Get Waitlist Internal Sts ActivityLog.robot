@@ -15,7 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-WaitlistGetInternalStsActivityLog-1
      [Documentation]  Apply Internal statuses when user has ADMIN=TRUE
-     ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Set Suite Variable  ${user_name}  ${resp.json()['userName']}
@@ -23,12 +23,14 @@ JD-TC-WaitlistGetInternalStsActivityLog-1
      Set Suite Variable  ${pid}
 
      ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
      sleep  2s
      ${resp}=  Get Departments
@@ -181,17 +183,22 @@ JD-TC-WaitlistGetInternalStsActivityLog-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   Subtract_time     3   00
+    ${strt_time}=   subtract_timezone_time  ${tz}     3   00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  30 
+    ${end_time}=    add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -210,7 +217,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-1
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -237,7 +244,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-2
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  AddCustomer  ${CUSERNAME2}
     Log   ${resp.json()}
@@ -257,7 +264,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-2
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -273,7 +280,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-2
 
 JD-TC-WaitlistGetInternalStsActivityLog-3
      [Documentation]  Apply Internal statuses when user has no permission for internal sts but he is ADMIN=TRUE
-     ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -291,7 +298,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U3}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  AddCustomer  ${CUSERNAME3}
     Log   ${resp.json()}
@@ -314,7 +321,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-3
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -329,7 +336,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-3
 
 JD-TC-WaitlistGetInternalStsActivityLog-4
      [Documentation]  Apply Internal statuses when team has permission
-     ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -360,7 +367,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-4
     Set Suite Variable  ${sts}
     ${internal_sts}=  MultiUser_InternalStatus  ${sts}  ${pid}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  AddCustomer  ${CUSERNAME5}
@@ -381,7 +388,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-4
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 

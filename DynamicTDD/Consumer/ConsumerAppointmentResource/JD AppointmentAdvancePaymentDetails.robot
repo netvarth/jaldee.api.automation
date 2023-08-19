@@ -86,12 +86,11 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_B}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_B}+25566122
@@ -103,18 +102,22 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -156,9 +159,9 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     Set Suite Variable   ${sub_domains}
     ${licenses}=  Jaldee Coupon Target License  ${licid}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.json()}
@@ -185,7 +188,7 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${pid}=  get_acc_id  ${PUSERNAME_B}
@@ -251,15 +254,26 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME_B}
     Set Suite Variable   ${pid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${sTime1}=  add_time  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${lid}=  Create Sample Location
+    # Set Suite Variable   ${lid}
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     clear_appt_schedule   ${PUSERNAME_B}
 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -308,7 +322,7 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}   
 
@@ -476,7 +490,7 @@ JD-TC-AppointmentAdvancePaymentdetails-3
 JD-TC-AppointmentAdvancePaymentdetails-4
     [Documentation]    Get appointment payment details when appoointment needs Advance amount (Advance amount same as service total price).
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${description}=  FakerLibrary.sentence
@@ -491,7 +505,7 @@ JD-TC-AppointmentAdvancePaymentdetails-4
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable    ${s_id4}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -518,10 +532,10 @@ JD-TC-AppointmentAdvancePaymentdetails-4
     ${cupn_code}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -636,7 +650,7 @@ JD-TC-AppointmentAdvancePaymentdetails-5
 JD-TC-AppointmentAdvancePaymentdetails-6
     [Documentation]    Get appointment advance payment details with Enable JDN  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -700,7 +714,7 @@ JD-TC-AppointmentAdvancePaymentdetails-6
 JD-TC-AppointmentAdvancePaymentdetails-7
     [Documentation]     Get appointment advance payment details with disabled JDN
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -821,7 +835,7 @@ JD-TC-AppointmentAdvancePaymentdetails-UH2
 JD-TC-AppointmentAdvancePaymentdetails-UH3
     [Documentation]    Get appointment advance payment details by using provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -876,7 +890,7 @@ JD-TC-AppointmentAdvancePaymentdetails-UH5
 JD-TC-AppointmentAdvancePaymentdetails-UH6
     [Documentation]    Get appointment advance payment details by applying a coupon.(If Coupon start date is a future date)
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -886,10 +900,10 @@ JD-TC-AppointmentAdvancePaymentdetails-UH6
     ${cupn_code1}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  add_date   1
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.add_timezone_date  ${tz}  1
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -948,8 +962,8 @@ JD-TC-AppointmentAdvancePaymentdetails-UH6
 JD-TC-AppointmentAdvancePaymentdetails-UH7
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon rule contain  maxConsumerUseLimitPerProvider is one
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -973,7 +987,7 @@ JD-TC-AppointmentAdvancePaymentdetails-UH7
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1021,7 +1035,7 @@ JD-TC-AppointmentAdvancePaymentdetails-UH7
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid}  ${wid[0]}  
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

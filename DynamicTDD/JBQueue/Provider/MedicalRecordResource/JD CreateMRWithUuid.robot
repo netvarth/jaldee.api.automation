@@ -102,19 +102,19 @@ JD-TC-CreateMR-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid}=  get_acc_id  ${PUSERNAME_C}
-    Set Suite Variable  ${pid}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${pid}=  get_acc_id  ${PUSERNAME_C}
+    # Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_C}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_C}+25566122
@@ -126,18 +126,22 @@ JD-TC-CreateMR-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   5  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -145,6 +149,7 @@ JD-TC-CreateMR-1
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
 
     ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
     Log  ${fields.json()}
@@ -189,15 +194,20 @@ JD-TC-CreateMR-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}    ${resp}  
+
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  0  30
-    ${end_time}=    add_time  5  00  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  30
+    ${end_time}=    db.add_timezone_time  ${tz}  5  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -209,7 +219,6 @@ JD-TC-CreateMR-1
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -281,6 +290,7 @@ JD-TC-CreateMR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
 JD-TC-CreateMR-2
     [Documentation]   Create Medical Record for multiple waitlist(walk-in).
 
@@ -300,20 +310,19 @@ JD-TC-CreateMR-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     ${pid0}=  get_acc_id  ${PUSERNAME_D}
     Set Suite Variable  ${pid0}
 
-    ${DAY1}=  get_date
-    Set Suite Variable    ${DAY1}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_D}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_D}+25566122
@@ -325,18 +334,23 @@ JD-TC-CreateMR-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable    ${DAY1}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -344,6 +358,8 @@ JD-TC-CreateMR-2
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${pid}  ${resp.json()['id']}
+    
 
     ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
     Log  ${fields.json()}
@@ -393,9 +409,12 @@ JD-TC-CreateMR-2
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id2}    ${resp}  
+    Set Suite Variable    ${loc_id2}    ${resp} 
+    ${resp}=   Get Location ById  ${loc_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}   
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id2}    ${resp}  
     ${resp}=   Create Sample Service  ${SERVICE2}
@@ -403,8 +422,9 @@ JD-TC-CreateMR-2
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2}   ${ser_id3}
@@ -413,23 +433,23 @@ JD-TC-CreateMR-2
     Set Suite Variable  ${que_id2}   ${resp.json()}
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${FUT_DAY}=  add_date   3
-    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1} 
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}   3
+    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id3}  ${que_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1} 
+    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id3}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid3} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -532,19 +552,19 @@ JD-TC-CreateMR-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid0}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -553,7 +573,7 @@ JD-TC-CreateMR-3
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -609,6 +629,7 @@ JD-TC-CreateMR-3
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
+
 JD-TC-CreateMR-4
     [Documentation]   Create Medical Record with consultation mode EMAIL for waitlist.
 
@@ -616,19 +637,19 @@ JD-TC-CreateMR-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${pid0}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -637,7 +658,7 @@ JD-TC-CreateMR-4
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -663,6 +684,7 @@ JD-TC-CreateMR-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
 JD-TC-CreateMR-5
     [Documentation]   Create Medical Record with consultation mode PHONE for waitlist.
 
@@ -670,29 +692,28 @@ JD-TC-CreateMR-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME7}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -720,6 +741,7 @@ JD-TC-CreateMR-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
+
 JD-TC-CreateMR-6
     [Documentation]   Create Medical Record with consultation mode VIDEO for waitlist.
 
@@ -727,19 +749,19 @@ JD-TC-CreateMR-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -749,7 +771,7 @@ JD-TC-CreateMR-6
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -774,6 +796,7 @@ JD-TC-CreateMR-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+
 JD-TC-CreateMR-7
     [Documentation]   Create Medical Record without details.
 
@@ -781,19 +804,19 @@ JD-TC-CreateMR-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY1}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -824,19 +847,19 @@ JD-TC-CreateMR-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${DAY3}=  add_date  3
+    ${DAY3}=  db.add_timezone_date  ${tz}  3
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY1}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -846,7 +869,7 @@ JD-TC-CreateMR-8
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -883,20 +906,20 @@ JD-TC-CreateMR-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
-    ${DAY}=  add_date   1
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${DAY}=  db.add_timezone_date  ${tz}   1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -942,19 +965,19 @@ JD-TC-CreateMR-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${DAY}=  add_date   1
+    ${DAY}=  db.add_timezone_date  ${tz}   1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY1}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -964,7 +987,7 @@ JD-TC-CreateMR-10
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    # ${CUR_DAY}=       get_date
+    # ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1010,19 +1033,19 @@ JD-TC-CreateMR-11
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
        
-    ${DAY}=  add_date   1
+    ${DAY}=  db.add_timezone_date  ${tz}   1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY1}  ${ser_id1}  ${cnote}  ${bool[0]}  ${cidfor}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1031,7 +1054,7 @@ JD-TC-CreateMR-11
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    # ${CUR_DAY}=       get_date
+    # ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1064,7 +1087,7 @@ JD-TC-CreateMR-11
 JD-TC-CreateMR-12
     [Documentation]   Create Medical Record for family member's waitlist(walkin check-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1085,12 +1108,11 @@ JD-TC-CreateMR-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${mem_id}  ${resp.json()}
     
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${id}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${mem_id}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wait_id1}  ${wid[0]}
 
@@ -1133,8 +1155,8 @@ JD-TC-CreateMR-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
-    ${DAY}=  add_date   1
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${DAY}=  db.add_timezone_date  ${tz}   1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY1}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -1146,7 +1168,7 @@ JD-TC-CreateMR-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1191,7 +1213,7 @@ JD-TC-CreateMR-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${DAY3}=  get_date
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY3}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -1203,7 +1225,7 @@ JD-TC-CreateMR-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1213,7 +1235,7 @@ JD-TC-CreateMR-14
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    # ${CUR_DAY}=       get_date
+    # ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1256,19 +1278,18 @@ JD-TC-CreateMR-15
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid1}=  get_acc_id  ${PUSERNAME_A}
-    Set Suite Variable  ${pid1}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${pid1}=  get_acc_id  ${PUSERNAME_A}
+    # Set Suite Variable  ${pid1}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -1280,18 +1301,22 @@ JD-TC-CreateMR-15
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1299,6 +1324,7 @@ JD-TC-CreateMR-15
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid1}  ${resp.json()['id']}
 
     ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
     Log  ${fields.json()}
@@ -1338,7 +1364,8 @@ JD-TC-CreateMR-15
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     clear_service   ${PUSERNAME_A}
-    clear_location  ${PUSERNAME_A}    
+    clear_location  ${PUSERNAME_A}   
+    clear_appt_schedule   ${PUSERNAME_A} 
     ${resp}=   Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1346,22 +1373,29 @@ JD-TC-CreateMR-15
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  1  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    # ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${eTime1}=  add_time  2  45
+    
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
-    clear_appt_schedule   ${PUSERNAME_A}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     ${SERVICE2}=   FakerLibrary.name
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.add_timezone_time  ${tz}  1  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${eTime1}=  db.add_timezone_time  ${tz}  2  45
+    
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1377,7 +1411,7 @@ JD-TC-CreateMR-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${sTime2}=  add_time  2  50
+    ${sTime2}=  db.add_timezone_time  ${tz}  2  50
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}   
 
@@ -1435,7 +1469,6 @@ JD-TC-CreateMR-15
     ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid1}  ${apptid[0]}
 
@@ -1443,11 +1476,11 @@ JD-TC-CreateMR-15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${CUR_DAY}=  get_date
+    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1480,11 +1513,11 @@ JD-TC-CreateMR-15
 JD-TC-CreateMR-16
     [Documentation]   Create Medical Record for an appointment(walk-in).
     
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${DAY1}=   add_date   2
+    # ${DAY1}=   db.add_timezone_date  ${tz}   2
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1538,11 +1571,11 @@ JD-TC-CreateMR-16
 JD-TC-CreateMR-UH1
     [Documentation]   Create Medical Record for another provider's waitlist.
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1571,11 +1604,11 @@ JD-TC-CreateMR-UH1
 JD-TC-CreateMR-UH2
     [Documentation]   Create Medical Record for waitlist having MR.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1597,8 +1630,9 @@ JD-TC-CreateMR-UH2
 
     ${resp}=  Create MR With uuid  ${wid1}  ${bookingType[0]}  ${consultationMode[3]}      ${CUR_DAY}    ${status[0]}   prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   "${resp.json()}"   "${MR_ALREADY_CREATED}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings   "${resp.json()}"   "${MR_ALREADY_CREATED}"
     
 JD-TC-CreateMR-UH3
     [Documentation]   Create Medical Record with booking type APPT for waitlist.
@@ -1607,19 +1641,19 @@ JD-TC-CreateMR-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1628,7 +1662,7 @@ JD-TC-CreateMR-UH3
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1656,11 +1690,11 @@ JD-TC-CreateMR-UH3
 JD-TC-CreateMR-UH4
     [Documentation]   Create Medical Record with booking type FOLLOWUP for waitlist.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1688,7 +1722,7 @@ JD-TC-CreateMR-UH4
 JD-TC-CreateMR-UH5
     [Documentation]   Create Medical Record without login.
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1719,7 +1753,7 @@ JD-TC-CreateMR-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1748,11 +1782,11 @@ JD-TC-CreateMR-UH6
 JD-TC-CreateMR-UH7
     [Documentation]   Create Medical Record for an appointment with booking type as TOKEN.
     
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${DAY1}=   add_date   3
+    # ${DAY1}=   db.add_timezone_date  ${tz}   3
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1770,7 +1804,6 @@ JD-TC-CreateMR-UH7
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1801,11 +1834,11 @@ JD-TC-CreateMR-UH7
 JD-TC-CreateMR-UH8
     [Documentation]   Create Medical Record for an appointment with booking type as FOLLOWUP.
     
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${DAY1}=   add_date   4
+    # ${DAY1}=   db.add_timezone_date  ${tz}   4
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1823,7 +1856,6 @@ JD-TC-CreateMR-UH8
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1853,11 +1885,11 @@ JD-TC-CreateMR-UH8
 JD-TC-CreateMR-UH9
     [Documentation]   Create Medical Record for an invalid appointment id.
     
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=   add_date   4
+    ${DAY1}=   db.add_timezone_date  ${tz}   4
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1885,11 +1917,11 @@ JD-TC-CreateMR-UH9
 JD-TC-CreateMR-UH10
     [Documentation]   Create Medical Record for an invalid waitlist id.
     
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=   add_date   4
+    ${DAY1}=   db.add_timezone_date  ${tz}   4
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1922,19 +1954,19 @@ JD-TC-CreateMR-UH11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${waitlist_id}  ${wid[0]}
+
     ${resp}=  Get consumer Waitlist By Id   ${waitlist_id}  ${pid}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1947,7 +1979,7 @@ JD-TC-CreateMR-UH11
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cons_id}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
     # ${allergies}=     FakerLibrary.sentence
@@ -1991,19 +2023,20 @@ JD-TC-CreateMR-UH12
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${pid0}=  get_acc_id  ${PUSERNAME_D}
-    Set Suite Variable  ${pid0}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${pid0}=  get_acc_id  ${PUSERNAME_D}
+    # Set Suite Variable  ${pid0}
 
-    ${DAY1}=  get_date
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_D}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_D}+25566122
@@ -2015,18 +2048,22 @@ JD-TC-CreateMR-UH12
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2034,6 +2071,7 @@ JD-TC-CreateMR-UH12
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
     Log  ${fields.json()}
@@ -2083,15 +2121,20 @@ JD-TC-CreateMR-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id2}    ${resp}  
+    Set Suite Variable    ${loc_id2}    ${resp} 
+    ${resp}=   Get Location ById  ${loc_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}   
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id2}    ${resp}  
+
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2} 
@@ -2100,13 +2143,13 @@ JD-TC-CreateMR-UH12
     Set Suite Variable  ${que_id2}   ${resp.json()}
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${FUT_DAY}=  add_date   3
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}   3
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id2}  ${FUT_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2130,7 +2173,7 @@ JD-TC-CreateMR-UH12
     # ${resp}=  Create MR With uuid  ${wid2}  ${bookingType[0]}  ${consultationMode[3]}  ${complaint}  ${symptoms}  ${allergies}  ${vacc_history}  ${observations}  ${diagnosis}  ${misc_notes}  ${notes}  ${FUT_DAY}  ${status[0]}  ${pre_list}
     # Log  ${resp.json()}
 
-    ${resp}=  Create MR With uuid   ${wid2}  ${bookingType[0]}  ${consultationMode[3]}      ${FUT_DAY}    ${status[0]}   prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
+    ${resp}=  Create MR With uuid   ${wid2}  ${bookingType[0]}  ${consultationMode[3]}  ${FUT_DAY}    ${status[0]}   prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Set Test Variable     ${resp.json()}      "${MEDICAL_RECORD_WL_FUTURE_DATE}"

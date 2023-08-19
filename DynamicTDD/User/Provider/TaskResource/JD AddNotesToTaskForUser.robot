@@ -25,7 +25,7 @@ JD-TC-AddNotesToTaskForUser-1
 
     [Documentation]  Create a task for a branch and add notes to task.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -37,8 +37,13 @@ JD-TC-AddNotesToTaskForUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -89,7 +94,7 @@ JD-TC-AddNotesToTaskForUser-2
 
     [Documentation]  Create a task for a consumer and add notes to task.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -125,7 +130,7 @@ JD-TC-AddNotesToTaskForUser-3
 
     [Documentation]  Add same notes to a task multiple times.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -136,8 +141,13 @@ JD-TC-AddNotesToTaskForUser-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -190,7 +200,7 @@ JD-TC-AddNotesToTaskForUser-4
 
     [Documentation]  Add different notes to a task multiple times.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -213,7 +223,7 @@ JD-TC-AddNotesToTaskForUser-5
 
     [Documentation]  Add numbers as notes to a task.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -243,7 +253,7 @@ JD-TC-AddNotesToTaskForUser-6
     clear_location  ${HLMUSERNAME4}
     clear_appt_schedule   ${HLMUSERNAME4}
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -256,8 +266,13 @@ JD-TC-AddNotesToTaskForUser-6
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
         Set Suite Variable  ${locId1}
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id1}
@@ -288,9 +303,12 @@ JD-TC-AddNotesToTaskForUser-6
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -317,7 +335,7 @@ JD-TC-AddNotesToTaskForUser-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -337,7 +355,7 @@ JD-TC-AddNotesToTaskForUser-UH1
 
     [Documentation]  Add notes to a task without giving notes.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -376,7 +394,7 @@ JD-TC-AddNotesToTaskForUser-UH4
 
     [Documentation]  Add notes to a task with another providers task id.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -391,7 +409,7 @@ JD-TC-AddNotesToTaskForUser-UH5
 
     [Documentation]  Create a task for a branch and user try to add notes for that task.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -411,7 +429,7 @@ JD-TC-AddNotesToTaskForUser-UH5
     Should Be Equal As Strings    []       ${resp.json()}[notes]
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -429,7 +447,7 @@ JD-TC-AddNotesToTaskForUser-UH6
 
     [Documentation]  Create a task for a user and branch try to add notes for that task.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -460,7 +478,7 @@ JD-TC-AddNotesToTaskForUser-UH6
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
 
-    ${resp}=  ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -480,7 +498,7 @@ JD-TC-AddNotesToTaskForUser-UH7
 
     [Documentation]  Create a task for a user try to add notes for that task after closing the task.
 
-    ${resp}=  ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

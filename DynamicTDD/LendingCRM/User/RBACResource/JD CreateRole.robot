@@ -25,7 +25,7 @@ JD-TC-CreateRole-1
 
     [Documentation]  Create  Roles for an existing provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -99,7 +99,7 @@ JD-TC-CreateRole-2
 
     [Documentation]  Create  Roles with id  zero.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -146,7 +146,7 @@ JD-TC-CreateRole-3
 
     [Documentation]  Create  Roles with id  3.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

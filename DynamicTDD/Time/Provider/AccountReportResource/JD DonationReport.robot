@@ -33,6 +33,11 @@ JD-TC-Donation_Report-1
         ${resp}=   Billable
         ${resp}=   Create Sample Location
         Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${min_don_amt}=   Random Int   min=10   max=50
@@ -61,7 +66,7 @@ JD-TC-Donation_Report-1
         Set Suite Variable   ${Donor_name}    ${d_fname} ${d_lname}
         ${con_id}=  get_id  ${CUSERNAME22}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${TODAY} =	Convert Date	${CUR_DAY}	result_format=%d/%m/%Y
         Set Suite Variable  ${TODAY}
@@ -104,7 +109,7 @@ JD-TC-Donation_Report-1
 
         Log  ${PUSERNAME}
 
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -165,14 +170,14 @@ JD-TC-Donation_Report-1
         Should Be Equal As Strings  ${Donation_amt}      ${resp.json()['reportContent']['data'][0]['6']}  # Donation_Amount 
         Set Suite Variable  ${DonationRef_id101}     ${resp.json()['reportContent']['data'][0]['5']}  # ConfirmationId
         
-        ${LAST_WEEK_DAY1}=  get_date
+        ${LAST_WEEK_DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${LAST_WEEK_DAY1} 
-        ${LAST_WEEK_DAY7}=  add_date  6
+        ${LAST_WEEK_DAY7}=  db.add_timezone_date  ${tz}  6  
         Set Suite Variable  ${LAST_WEEK_DAY7}
 
         change_system_date   7
 
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -202,14 +207,14 @@ JD-TC-Donation_Report-2
         [Documentation]   Generate Last_Thirty_days DONATION report using Donation amount
         resetsystem_time
 
-        ${LAST_Month_DAY1}=  subtract_date  10
+        ${LAST_Month_DAY1}=  db.subtract_timezone_date  ${tz}   10
         Set Suite Variable  ${LAST_Month_DAY1} 
-        ${LAST_Month_DAY30}=  add_date  19
+        ${LAST_Month_DAY30}=  db.add_timezone_date  ${tz}  19
         Set Suite Variable  ${LAST_Month_DAY30}
 
         change_system_date   20
 
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -239,12 +244,12 @@ JD-TC-Donation_Report-3
         [Documentation]   Generate DATE_RANGE DONATION report using service id
         resetsystem_time
 
-        ${StartDate}=  subtract_date  10
-        ${EndDate}=  add_date  50 
+        ${StartDate}=  db.subtract_timezone_date  ${tz}   10
+        ${EndDate}=  db.add_timezone_date  ${tz}  50 
 
         change_system_date   50
 
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -273,7 +278,7 @@ JD-TC-Donation_Report-3
 JD-TC-Donation_Report-4
         [Documentation]   Generate Last_Week DONATION report using service id
         resetsystem_time
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -303,7 +308,7 @@ JD-TC-Donation_Report-5
 
         change_system_date   20
 
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -333,14 +338,14 @@ JD-TC-Donation_Report-5
 
 JD-TC-Donation_Report-6
         [Documentation]   Generate DATE_RANGE DONATION report using service id
-        ${DAY1}=  subtract_date  10
+        ${DAY1}=  db.subtract_timezone_date  ${tz}   10
         Set Suite Variable  ${DAY1} 
-        ${DAY60}=  add_date  50 
+        ${DAY60}=  db.add_timezone_date  ${tz}  50 
         Set Suite Variable  ${DAY60}
 
         change_system_date   50
 
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -376,9 +381,12 @@ Billable
      
     FOR   ${a}  IN RANGE  ${start}   ${length}
             
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Suite Variable  ${PUSERNAME_PH}  ${decrypted_data['primaryPhoneNumber']}
+        # Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
         clear_location   ${PUSERNAME${a}}
         clear_service    ${PUSERNAME${a}}
         ${acc_id}=  get_acc_id  ${PUSERNAME${a}}
@@ -448,7 +456,7 @@ JD-TC-Donation_Report-3
         Should Be Equal As Strings  ${resp.json()['donor']['lastName']}   ${d_lname}
         Should Be Equal As Strings  ${resp.json()['service']['id']}       ${sid1}
         
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 

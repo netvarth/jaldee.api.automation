@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-UpdateGroup-1
     [Documentation]  Update a customer group 
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -53,7 +53,7 @@ JD-TC-UpdateGroup-1
 JD-TC-UpdateGroup-2
     [Documentation]  Update multiple groups details 
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-UpdateGroup-2
 JD-TC-UpdateGroup-3
     [Documentation]  Update 2nd group with 1st group's old name after changing the name of 1st group
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -172,7 +172,7 @@ JD-TC-UpdateGroup-3
 JD-TC-UpdateGroup-4
     [Documentation]  Update group name after adding customers.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -273,7 +273,7 @@ JD-TC-UpdateGroup-4
 JD-TC-UpdateGroup-5
     [Documentation]  Update group name with existing name.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -307,7 +307,7 @@ JD-TC-UpdateGroup-5
 JD-TC-UpdateGroup-6
     [Documentation]  Update group description with empty
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -341,7 +341,7 @@ JD-TC-UpdateGroup-6
 JD-TC-UpdateGroup-UH1
     [Documentation]  Update 2nd group with name of 1st group 
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -383,7 +383,7 @@ JD-TC-UpdateGroup-UH1
 JD-TC-UpdateGroup-UH2
     [Documentation]  Update 2nd group with name of 1st group after adding customers.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -465,7 +465,7 @@ JD-TC-UpdateGroup-UH2
 JD-TC-UpdateGroup-UH3
     [Documentation]  Update 2 groups with same name
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -518,7 +518,7 @@ JD-TC-UpdateGroup-UH3
 JD-TC-UpdateGroup-UH4
     [Documentation]  Update group name with empty
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -555,7 +555,7 @@ JD-TC-UpdateGroup-UH4
 JD-TC-UpdateGroup-UH5
     [Documentation]  Update group by consumer login
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -593,7 +593,7 @@ JD-TC-UpdateGroup-UH5
 JD-TC-UpdateGroup-UH6
     [Documentation]  Update group without login
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -627,7 +627,7 @@ JD-TC-UpdateGroup-UH6
 JD-TC-UpdateGroup-7
     [Documentation]  Disable a group and update it.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -672,7 +672,7 @@ JD-TC-UpdateGroup-7
 JD-TC-UpdateGroup-UH8
     [Documentation]  update group of another provider
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -696,7 +696,7 @@ JD-TC-UpdateGroup-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -712,7 +712,7 @@ JD-TC-UpdateGroup-UH8
 JD-TC-UpdateGroup-8
     [Documentation]  Update a customer group with    generateGrpMemId true
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -748,7 +748,7 @@ JD-TC-UpdateGroup-8
 JD-TC-UpdateGroup-9
     [Documentation]  Update a customer group with    generateGrpMemId false
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

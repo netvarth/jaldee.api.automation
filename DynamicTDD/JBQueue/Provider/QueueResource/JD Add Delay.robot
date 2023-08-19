@@ -20,16 +20,21 @@ ${start}    150
 
 JD-TC-AddDelay-1
       [Documentation]   Add delay by enabling sendMessage and verifying notification sent to consumer
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
-      Log  ${resp.json()}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
+      # Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
-      Set Test Variable  ${bname}  ${resp.json()['userName']}
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Suite Variable  ${pid}  ${decrypted_data['id']}
+      Set Suite Variable  ${bname}  ${decrypted_data['userName']}
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
+      # Set Test Variable  ${bname}  ${resp.json()['userName']}
     
       ${resp}=   Get Business Profile
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${buss_name}  ${resp.json()['businessName']}
+      Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
       ${resp}=   Get jaldeeIntegration Settings
       Log   ${resp.json()}
@@ -51,37 +56,46 @@ JD-TC-AddDelay-1
       clear_customer   ${PUSERNAME136}
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  true  true  true  true  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY1}=  get_date
-      Set Suite Variable  ${DAY1} 
-      ${DAY2}=  add_date  70      
-      Set Suite Variable  ${DAY2}
+      
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}  ${list}
-      ${city}=   FakerLibrary.state
+      # ${city}=   FakerLibrary.state
+      # Set Suite Variable  ${city}
+      # ${latti}=  get_latitude
+      # Set Suite Variable  ${latti}
+      # ${longi}=  get_longitude
+      # Set Suite Variable  ${longi}
+      # ${postcode}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode}
+      # ${address}=  get_address
+      # Set Suite Variable  ${address}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       Set Suite Variable  ${city}
-      ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
       Set Suite Variable  ${address}
       ${parking}    Random Element     ${parkingType}
       Set Suite Variable  ${parking}
       ${24hours}    Random Element    ${bool}
       Set Suite Variable  ${24hours}
-      ${sTime}=  add_time  5  15
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${DAY1} 
+      ${DAY2}=  db.add_timezone_date  ${tz}  70      
+      Set Suite Variable  ${DAY2}
+      ${sTime}=  add_timezone_time  ${tz}  5  15  
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time   6  30
+      ${eTime}=  add_timezone_time  ${tz}  6  30  
       Set Suite Variable   ${eTime}
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid}  ${resp.json()}
-      ${sTime1}=  subtract_time  2  00
+      ${sTime1}=  subtract_timezone_time  ${tz}  2  00
       Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_time   3  30
+      ${eTime1}=  add_timezone_time  ${tz}  3  30  
       Set Suite Variable   ${eTime1}
       Set Test Variable  ${qTime}   ${sTime1}-${eTime1}
       ${SERVICE1}=  FakerLibrary.name
@@ -114,7 +128,6 @@ JD-TC-AddDelay-1
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -138,7 +151,6 @@ JD-TC-AddDelay-1
 
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid[0]}
 
@@ -179,7 +191,6 @@ JD-TC-AddDelay-1
 
       ${resp}=  Add To Waitlist  ${cid3}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid3}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id3}  ${wid[0]}
 
@@ -197,9 +208,10 @@ JD-TC-AddDelay-1
       ${resp}=  Get Delay  ${qid}
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  delayDuration=${delay_time}
-      ${resp}=  Get Business Profile
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Suite Variable  ${bname1}  ${resp.json()['businessName']}
+      
+      # ${resp}=  Get Business Profile
+      # Should Be Equal As Strings  ${resp.status_code}  200
+      # Set Suite Variable  ${bname1}  ${resp.json()['businessName']}
 
       ${resp}=  Get Appointment Messages
       Log  ${resp.json()}
@@ -318,11 +330,11 @@ JD-TC-AddDelay-2
       ${resp}=  Consumer Logout
       Should Be Equal As Strings    ${resp.status_code}    200 
       
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
+
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid[0]}
 
@@ -343,8 +355,9 @@ JD-TC-AddDelay-2
       ${resp}=  Consumer Logout
       Should Be Equal As Strings    ${resp.status_code}    200 
 
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
+
       ${delay_time}=   Random Int  min=5   max=15
       Set Suite Variable  ${delay_time2}  ${delay_time}
       ${resp}=  Add Delay  ${qid}  ${delay_time}  ${desc}  ${bool[0]} 
@@ -362,7 +375,8 @@ JD-TC-AddDelay-2
       Should Be Equal As Strings  ${resp.json()}  []
       ${resp}=  Consumer Logout
       Should Be Equal As Strings    ${resp.status_code}    200     
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200    
       ${resp}=  Waitlist Action Cancel  ${waitlist_id2}  ${waitlist_cancl_reasn[3]}  ${desc}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -375,10 +389,14 @@ JD-TC-AddDelay-3
       Set Suite Variable  ${C24_fname}  ${resp.json()['firstName']}
       Set Suite Variable  ${C24_lname}  ${resp.json()['lastName']}
       
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
-      Set Test Variable  ${bname}  ${resp.json()['userName']}
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Suite Variable  ${pid}  ${decrypted_data['id']}
+      Set Suite Variable  ${bname}  ${decrypted_data['userName']}
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
+      # Set Test Variable  ${bname}  ${resp.json()['userName']}
       ${pid1}=  get_acc_id  ${PUSERNAME136}
 
       ${resp}=  AddCustomer  ${CUSERNAME24}  firstName=${C24_fname}   lastName=${C24_lname}
@@ -388,7 +406,6 @@ JD-TC-AddDelay-3
 
       ${resp}=  Add To Waitlist  ${cid4}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid4}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
 
@@ -452,7 +469,7 @@ JD-TC-AddDelay-3
 
 JD-TC-AddDelay-4
       [Documentation]   Set delay to 0
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Add Delay  ${qid}  0  ${desc}  ${bool[1]} 
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -470,7 +487,7 @@ JD-TC-AddDelay-UH1
       
 JD-TC-AddDelay-UH2
       [Documentation]    Add delay using delay time greater than business time(assume business time is 8hrs)
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${delay_time}=   Random Int  min=400   max=500
       ${resp}=  Add Delay  ${qid}  ${delay_time}  ${desc}  ${bool[1]}
@@ -479,12 +496,12 @@ JD-TC-AddDelay-UH2
       
 JD-TC-AddDelay-UH3
       [Documentation]    Add delay after disabling Queue
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${sTime2}=  subtract_time  5  00
+      ${sTime2}=  subtract_timezone_time  ${tz}  5  00
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  subtract_time   4  30
+      ${eTime2}=  subtract_timezone_time  ${tz}   4  30
       Set Suite Variable   ${eTime2}
       ${queue2}=  FakerLibrary.bs
       ${resp}=  Create Queue  ${queue2}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  15  ${lid}  ${s_id1}
@@ -516,7 +533,7 @@ JD-TC-AddDelay-UH4
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME}
@@ -552,7 +569,7 @@ JD-TC-AddDelay-UH5
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME0}
@@ -575,10 +592,11 @@ JD-TC-AddDelay-UH5
       ${address}=  get_address
       ${parking}    Random Element     ${parkingType} 
       ${24hours}    Random Element    ['True','False']
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${list}=  Create List  1  2  3  4  5  6  7
-      ${sTime}=  db.get_time
-      ${eTime}=  add_time   0  15
+      # ${sTime}=  db.get_time_by_timezone   ${tz}
+      ${sTime}=  db.get_time_by_timezone  ${tz}
+      ${eTime}=  add_timezone_time  ${tz}  0  15  
       ${url}=   FakerLibrary.url
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.json()}
@@ -588,9 +606,9 @@ JD-TC-AddDelay-UH5
       ${s_id5}=  Create Sample Service  ${SERVICE1}
       Set Suite Variable  ${s_id5}
       ${queue2}=  FakerLibrary.bs
-      ${sTime2}=  add_time  7  00
+      ${sTime2}=  add_timezone_time  ${tz}  7  00
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  add_time   7  05
+      ${eTime2}=  add_timezone_time  ${tz}   7  05
       Set Suite Variable   ${eTime2}
       ${resp}=  Create Queue  ${queue2}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  15  ${lid3}  ${s_id5}
       Log  ${resp.json()}
@@ -618,7 +636,7 @@ JD-TC-AddDelay-UH6
 
 JD-TC-AddDelay-UH7
       [Documentation]   Add delay to another provider's queue
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Add Delay  ${qid}  ${delay_time}  tech problem  false 
       Should Be Equal As Strings  ${resp.status_code}  401
@@ -626,14 +644,14 @@ JD-TC-AddDelay-UH7
 
 JD-TC-AddDelay-UH8
       [Documentation]    Add Delay performing after business hours
-      ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${list}=  Create List  1  2  3  4  5  6  7
-      ${date}=  get_date
+      # ${date}=  db.get_date_by_timezone  ${tz}
       ${queue2}=  FakerLibrary.bs
-      ${sTime2}=  subtract_time  4   00
+      ${sTime2}=  subtract_timezone_time  ${tz}  4   00
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  subtract_time   3  05
+      ${eTime2}=  subtract_timezone_time  ${tz}   3  05
       Set Suite Variable   ${eTime2}
       ${resp}=  Create Queue  ${queue2}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  15  ${lid}  ${s_id1}
       Log  ${resp.json()}
@@ -665,10 +683,14 @@ JD-TC-AddDelay-5
       Set Suite Variable  ${C14_fname}  ${resp.json()['firstName']}
       Set Suite Variable  ${C14_lname}  ${resp.json()['lastName']}
       
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
-      Set Test Variable  ${bname}  ${resp.json()['userName']}
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Suite Variable  ${pid}  ${decrypted_data['id']}
+      Set Suite Variable  ${bname}  ${decrypted_data['userName']}
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
+      # Set Test Variable  ${bname}  ${resp.json()['userName']}
     
       ${resp}=   Get Business Profile
       Log   ${resp.json()}
@@ -702,7 +724,7 @@ JD-TC-AddDelay-5
       Set Suite Variable   ${duration}
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${duration}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[1]}   ${Empty}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY1}=  get_date
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY1}  ${DAY1}
       ${resp}=  Create Sample Queue
       Set Suite Variable  ${qid}   ${resp['queue_id']}
@@ -724,7 +746,6 @@ JD-TC-AddDelay-5
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -741,7 +762,6 @@ JD-TC-AddDelay-5
 
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid[0]}
 
@@ -759,7 +779,6 @@ JD-TC-AddDelay-5
       sleep  02s
       ${resp}=  Add To Waitlist  ${cid3}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid3}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id3}  ${wid[0]}
 
@@ -776,7 +795,6 @@ JD-TC-AddDelay-5
 
       ${resp}=  Add To Waitlist  ${cid4}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid4}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id4}  ${wid[0]}
       sleep  02s
@@ -798,9 +816,9 @@ JD-TC-AddDelay-5
       Should Be Equal As Strings  ${resp.json()[3]['ynwUuid']}  ${waitlist_id4}
       Should Be Equal As Strings  ${resp.json()[3]['appxWaitingTime']}  6
       
-      ${resp}=  Get Business Profile
-      Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${bname2}  ${resp.json()['businessName']}
+      # ${resp}=  Get Business Profile
+      # Should Be Equal As Strings  ${resp.status_code}  200
+      # Set Test Variable  ${bname2}  ${resp.json()['businessName']}
 
       ${delay_time}=   Random Int  min=1   max=5
       ${prov_msg}=   FakerLibrary.word
@@ -981,7 +999,7 @@ JD-TC-AddDelay-5
       clear_Consumermsg  ${CUSERNAME4}
       clear_Consumermsg  ${CUSERNAME14}
 
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
     
       ${prov_msg}=   FakerLibrary.word
@@ -1149,7 +1167,7 @@ JD-TC-AddDelay-5
 
 JD-TC-AddDelay-6
       [Documentation]   Add delay by provider ,take a waitlist for future. Then check future waitlist does not get delay value
-      ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${pid}=  get_acc_id  ${PUSERNAME1} 
       clear_service   ${PUSERNAME1}
@@ -1161,17 +1179,24 @@ JD-TC-AddDelay-6
       Set Suite Variable   ${duration}
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${duration}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[1]}   ${Empty}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY1}=  get_date
-      Set Suite Variable  ${DAY1}  ${DAY1}
+      
       ${resp}=  Create Sample Queue
       Set Suite Variable  ${qid}   ${resp['queue_id']}
       Set Suite Variable  ${s_id1}   ${resp['service_id']}
       Set Suite Variable  ${Service_name}   ${resp['service_name']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
       ${resp}=  Get Queue ById  ${qid}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${sTime}  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}
       Set Test Variable  ${eTime}  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
+
       clear_Providermsg  ${PUSERNAME1}
       clear_Consumermsg  ${CUSERNAME1}
       ${delay_time}=   Random Int  min=1   max=5
@@ -1181,17 +1206,20 @@ JD-TC-AddDelay-6
       ${resp}=  Get Delay  ${qid}
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  delayDuration=${delay_time}
-      ${DAY2}=  add_date  2
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${DAY1}  ${DAY1}
+      ${DAY2}=  db.add_timezone_date  ${tz}  2  
       
       ${resp}=  AddCustomer  ${CUSERNAME1}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid}  ${resp.json()}
+
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY2}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
+      
       ${resp}=  Get Waitlist By Id  ${waitlist_id}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200

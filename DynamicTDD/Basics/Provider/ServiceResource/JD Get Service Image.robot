@@ -28,7 +28,7 @@ ${SERVICE1}  SERVICE1
 JD-TC-Get Service Image-1
 
     [Documentation]  Provider check to Get Gallery Image
-    ${resp}=  Provider Login  ${PUSERNAME215}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service       ${PUSERNAME215}
     ${description}=  FakerLibrary.sentence
@@ -69,7 +69,7 @@ JD-TC-Get Service Image-1
 JD-TC-Get Service Image-UH1
 
     [Documentation]  Provider check to Get Gallery Image with another provider service id
-    ${resp}=  providerlogin  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME91}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get ServiceImage    ${id}  
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -78,7 +78,7 @@ JD-TC-Get Service Image-UH1
 JD-TC-Get Service Image-UH2
 
     [Documentation]  Provider check to Get Gallery Image with invalid service id
-    ${resp}=  Provider Login  ${PUSERNAME215}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get ServiceImage   0  
     Should Be Equal As Strings  "${resp.json()}"  "${NO_SERVICE_FOUND}" 

@@ -18,13 +18,13 @@ ${service_duration}   5
 
 
 *** Test Cases ***
-JD-TC- Delete Waitlist Consumer-1  
+JD-TC- Cancel Waitlist-1  
 	[Documentation]  Delete Waitlist By Consumer
     [Setup]  Run Keywords  clear_queue  ${PUSERNAME103}  AND  clear_service  ${PUSERNAME103}
     ${cid}=  get_id  ${CUSERNAME3} 
     ${pid}=  get_acc_id  ${PUSERNAME103}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
@@ -39,9 +39,9 @@ JD-TC- Delete Waitlist Consumer-1
     ${resp}=  Change License Package  ${pkgid[0]}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY}=  get_date 
+    ${DAY}=  db.get_date_by_timezone  ${tz} 
     Set Suite Variable  ${DAY}  
-    ${TOMORROW}=  add_date  1
+    ${TOMORROW}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${TOMORROW}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
@@ -49,6 +49,7 @@ JD-TC- Delete Waitlist Consumer-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_l1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${P1SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -65,8 +66,9 @@ JD-TC- Delete Waitlist Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s2}  ${resp.json()}
 
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  1  30
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -115,10 +117,10 @@ JD-TC- Delete Waitlist Consumer-1
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistStatus']}  ${wl_status[0]}
 
-    ${resp}=  Delete Waitlist Consumer  ${uuid1}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid1}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Delete Waitlist Consumer  ${uuid2}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid2}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get consumer Waitlist By Id  ${uuid1}  ${pid}
@@ -129,29 +131,29 @@ JD-TC- Delete Waitlist Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['waitlistStatus']}  ${wl_status[4]} 
 
-JD-TC- Delete Waitlist Consumer-UH1  
+JD-TC- Cancel Waitlist-UH1  
 	[Documentation]  try to delete  already deleted  waitlist
     ${pid}=  get_acc_id  ${PUSERNAME103}
     ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Delete Waitlist Consumer  ${uuid1}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid1}  ${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}"
 
-    ${resp}=  Delete Waitlist Consumer  ${uuid2}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid2}  ${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}"
 
-JD-TC- Delete Waitlist Consumer-2  
+JD-TC- Cancel Waitlist-2  
 	[Documentation]  consumer delete provider added Waitlist 
     ${pid}=  get_acc_id  ${PUSERNAME103}
     # ${cid}=  get_id  ${CUSERNAME2}
     clear_customer   ${PUSERNAME103}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME2}
@@ -162,7 +164,6 @@ JD-TC- Delete Waitlist Consumer-2
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -172,14 +173,14 @@ JD-TC- Delete Waitlist Consumer-2
     ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Delete Waitlist Consumer  ${wid}  ${pid}
+    ${resp}=  Cancel Waitlist  ${wid}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get consumer Waitlist By Id  ${wid}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['waitlistStatus']}  ${wl_status[4]}
 
-JD-TC- Delete Waitlist Consumer-UH2
+JD-TC- Cancel Waitlist-UH2
 	[Documentation]  try to delete waitlist but uuid and provider id is different
     ${pid}=  get_acc_id  ${PUSERNAME103}
     ${cid}=  get_id  ${CUSERNAME3}
@@ -194,22 +195,22 @@ JD-TC- Delete Waitlist Consumer-UH2
     Set Suite Variable  ${uuid3}  ${wid[0]}
 
     ${pid1}=  get_acc_id  ${PUSERNAME1}
-    ${resp}=  Delete Waitlist Consumer  ${uuid3}  ${pid1}
+    ${resp}=  Cancel Waitlist  ${uuid3}  ${pid1}
     Should Be Equal As Strings  ${resp.status_code}  401 
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}" 
 
 
-JD-TC- Delete Waitlist Consumer-UH3
+JD-TC- Cancel Waitlist-UH3
 	[Documentation]  try to delete waitlist  without login 
     ${pid}=  get_acc_id  ${PUSERNAME103}
-    ${resp}=  Delete Waitlist Consumer  ${uuid3}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid3}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
 
-JD-TC- Delete Waitlist Consumer-UH4  
+JD-TC- Cancel Waitlist-UH4  
 	[Documentation]  try to delete  Started  waitlist
     ${pid}=  get_acc_id  ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Waitlist Action  STARTED  ${uuid3}
@@ -222,14 +223,14 @@ JD-TC- Delete Waitlist Consumer-UH4
     ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Delete Waitlist Consumer  ${uuid3}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid3}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}"    
 
-JD-TC- Delete Waitlist Consumer-UH5  
+JD-TC- Cancel Waitlist-UH5  
 	[Documentation]  try to delete  Done  waitlist
     ${pid}=  get_acc_id  ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Waitlist Action  DONE  ${uuid3}
@@ -242,7 +243,7 @@ JD-TC- Delete Waitlist Consumer-UH5
     ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${resp}=  Delete Waitlist Consumer  ${uuid3}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid3}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CANCEL_STATUS}"    
             

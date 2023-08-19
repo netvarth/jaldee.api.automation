@@ -27,22 +27,33 @@ JD-TC-Get_Member-1
 
     [Documentation]  Get Member
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     ${accountId}=    get_acc_id       ${PUSERNAME49}
 
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=    add_date  10 
-    ${description2}=    FakerLibrary.bs
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
     ${name2}=           FakerLibrary.firstName
     ${displayname2}=    FakerLibrary.firstName
-    ${effectiveFrom2}=  get_date
-    ${effectiveTo2}=    add_date  12
+    ${effectiveFrom2}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo2}=    db.add_timezone_date  ${tz}  12
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -107,7 +118,7 @@ JD-TC-Get_Member-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -130,7 +141,7 @@ JD-TC-Get_Member-UH1
 
     [Documentation]  Get Member with provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

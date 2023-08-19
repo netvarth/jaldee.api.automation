@@ -122,7 +122,7 @@ JD-TC-ResetPassword-UH5
     # Should Be Equal As Strings  ${resp[1].status_code}  200
     # ${resp}=  Consumer Login  ${PUSERNAME0}  ${NewPASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=  Provider Login  ${PUSERNAME0}  ${NewPASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${NewPASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-ResetPassword-4
@@ -372,7 +372,7 @@ JD-TC-ResetPassword-7
 
 JD-TC-ResetPassword-4
     [Documentation]   Reset password of Provider using email
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${PUSEREMAIL6}=  Set Variable  ${P_Email}206.ynwtest@netvarth.com
@@ -385,7 +385,7 @@ JD-TC-ResetPassword-4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Provider Login  ${PUSEREMAIL6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSEREMAIL6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Provider Logout
@@ -400,7 +400,7 @@ JD-TC-ResetPassword-4
     ${resp}=  Consumer Login  ${PUSEREMAIL6}  ${NewPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Provider Login  ${PUSEREMAIL6}  ${NewPASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSEREMAIL6}  ${NewPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -19,29 +19,37 @@ Suite Setup       Run Keyword  clear_location  ${PUSERNAME7}
 
 JD-TC-GetLocationById-1
       [Documentation]  Get a Location by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${city}=   get_place
+      # ${city}=   get_place
+      # Set Suite Variable  ${city}
+      # ${latti}=  get_latitude
+      # Set Suite Variable  ${latti}
+      # ${longi}=  get_longitude
+      # Set Suite Variable  ${longi}
+      # ${postcode}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode}
+      # ${address}=  get_address
+      # Set Suite Variable  ${address}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       Set Suite Variable  ${city}
-      ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
       Set Suite Variable  ${address}
       ${park_type}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${park_type}
       ${24hours}    Random Element    ['True','False']
       Set Suite Variable  ${24hours}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     	Set Suite Variable  ${list}
-      ${sTime}=  add_time  0  15
+      ${sTime}=  add_timezone_time  ${tz}  0  15  
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time   0  30
+      ${eTime}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime}
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${park_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.content}
@@ -65,31 +73,38 @@ JD-TC-GetLocationById-2
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Log  ${resp.content}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
       Set Suite Variable  ${MUSERNAME_E}
       ${uid}=  get_uid  ${MUSERNAME_E}
-      ${city8}=   get_place
+      # ${city8}=   get_place
+      # Set Suite Variable  ${city8}
+      # ${latti8}=  get_latitude
+      # Set Suite Variable  ${latti8}
+      # ${longi8}=  get_longitude
+      # Set Suite Variable  ${longi8}
+      # ${postcode8}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode8}
+      ${latti8}  ${longi8}  ${city8}  ${postcode8}=  get_lat_long_city_pin
+      ${tz8}=   db.get_Timezone_by_lat_long   ${latti8}  ${longi8}
+      Set Suite Variable  ${tz8}
       Set Suite Variable  ${city8}
-      ${latti8}=  get_latitude
       Set Suite Variable  ${latti8}
-      ${longi8}=  get_longitude
       Set Suite Variable  ${longi8}
-      ${postcode8}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode8}
       ${24hours8}    Random Element    ${bool}
       Set Suite Variable  ${24hours8}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY}
-      ${DAY2}=  add_date  10
+      ${DAY2}=  db.add_timezone_date  ${tz}  10  
       Set Suite Variable  ${DAY2}
 	${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}
-      ${sTime2}=  add_time  0  35
+      ${sTime2}=  add_timezone_time  ${tz}  0  35  
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  add_time   0  60
+      ${eTime2}=  add_timezone_time  ${tz}  0  60  
       Set Suite Variable   ${eTime2}
 
       ${lid8}=  Create Sample Location
@@ -105,7 +120,7 @@ JD-TC-GetLocationById-2
 
 JD-TC-GetLocationById-UH1
       [Documentation]  Get a Location by id by another provider
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  401
@@ -128,7 +143,7 @@ JD-TC-GetLocationById -UH3
       sleep  01s                                  
 JD-TC-VerifyGetLocationById-1
 	[Documentation]  Verify location details by provider login ${PUSERNAME5}
-      ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid}
       Log  ${resp.content}
@@ -142,7 +157,7 @@ JD-TC-VerifyGetLocationById-1
 
 JD-TC-VerifyGetLocationById-2
 	[Documentation]  Verify location details by provider login ${PUSERNAME5}
-      ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid8}
       Log  ${resp.content}

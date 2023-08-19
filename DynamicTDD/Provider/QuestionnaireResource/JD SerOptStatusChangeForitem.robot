@@ -114,7 +114,7 @@ JD-TC-ProviderStatusChangeForServiceOptionForItem-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,7 +183,7 @@ JD-TC-ProviderStatusChangeForServiceOptionForItem-1
         Log  ${ttype}
         ${u_ttype}=    Remove Duplicates    ${ttype}
         Log  ${u_ttype}
-        ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[2]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}  ${item_id1}  
+        ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[2]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}  ${item_id1}  
     END
     Set Suite Variable  ${CatalogId1}
 
@@ -207,7 +207,7 @@ JD-TC-ProviderStatusChangeForServiceOptionForItem-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -250,7 +250,7 @@ JD-TC-ProviderStatusChangeForServiceOptionForItem-1
         Set Suite Variable  ${proconid}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}   max_split=1
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
@@ -415,7 +415,7 @@ JD-TC-ProviderServiceOptionForOrder-2
 #     Log  ${unique_cnames}
 #     Set Suite Variable   ${unique_cnames}
 
-#     ${resp}=  Provider Login  ${PUSERNAME125}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -462,7 +462,7 @@ JD-TC-ProviderServiceOptionForOrder-2
 #         Log  ${ttype}
 #         ${u_ttype}=    Remove Duplicates    ${ttype}
 #         Log  ${u_ttype}
-#         ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}  ${item_id2}  
+#         ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}  ${item_id2}  
 #     END
 #     Set Suite Variable  ${CatalogId1}
 
@@ -486,7 +486,7 @@ JD-TC-ProviderServiceOptionForOrder-2
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -528,7 +528,7 @@ JD-TC-ProviderServiceOptionForOrder-2
 #         Set Suite Variable  ${proconid}  ${resp.json()[0]['id']}
 #     END
 
-#     ${DAY1}=  add_date   12
+#     ${DAY1}=  db.add_timezone_date  ${tz}  12  
 #     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 #     ${first}= 	Split String 	${fname}
 #     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME20}.ynwtest@netvarth.com

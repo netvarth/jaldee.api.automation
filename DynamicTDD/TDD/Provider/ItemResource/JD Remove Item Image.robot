@@ -29,7 +29,7 @@ ${item1}  ITEM1
 JD-TC-Remove item Image-1
 
     [Documentation]  Provider check to remove item image
-    ${resp}=  ProviderLogin  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -38,7 +38,7 @@ JD-TC-Remove item Image-1
 #     [Documentation]  Provider check to remove item image
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME19}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${amount1}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     ${resp}=  Create Item   ${item1}  ${des}   ${description}  ${amount1}   ${bool[0]}    

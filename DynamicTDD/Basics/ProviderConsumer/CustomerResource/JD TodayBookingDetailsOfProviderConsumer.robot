@@ -29,7 +29,7 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-1
 
     [Documentation]   Get Booking History of Provider Consumer
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -55,6 +55,11 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-1
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -93,12 +98,14 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -161,7 +168,7 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-1
 JD-TC-BookingHistoryDetailsOfProviderConsumer-2
     [Documentation]   Get Booking History of Provider Consumer for future waitlist
 
-    ${resp}=  ProviderLogin  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -187,6 +194,11 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-2
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -225,12 +237,14 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -293,7 +307,7 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-2
 JD-TC-BookingHistoryDetailsOfProviderConsumer-3
     [Documentation]   Get Booking History of Provider Consumer where waitlist is canceled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -319,6 +333,11 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-3
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -357,12 +376,14 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40

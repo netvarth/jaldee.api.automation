@@ -37,7 +37,7 @@ JD-TC-Share consumer location-1
     # ${pid0}=  get_acc_id  ${PUSERNAME174}
     # ${cid}=  get_id  ${CUSERNAME14}
     # # clear_service    ${PUSERNAME85}
-    ${resp}=  ProviderLogin  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -75,10 +75,10 @@ JD-TC-Share consumer location-1
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+100100302
@@ -97,14 +97,17 @@ JD-TC-Share consumer location-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  30 
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -159,17 +162,21 @@ JD-TC-Share consumer location-1
     ${pid0}=  get_acc_id  ${PUSERPH0}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${city}=   db.get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   db.get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -211,10 +218,10 @@ JD-TC-Share consumer location-1
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
     ${p1queue1}=    FakerLibrary.word
-    ${sTime1}=  add_time  4  15
-    ${eTime1}=  add_time   6  30
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
+    ${eTime1}=  add_timezone_time  ${tz}  6  30  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1} 
     Log  ${resp.json()} 
@@ -248,7 +255,7 @@ JD-TC-Share consumer location-1
 
 #*** Comment ***
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -266,7 +273,7 @@ JD-TC-Share consumer location-2
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME14}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -282,10 +289,10 @@ JD-TC-Share consumer location-2
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
     ${p1queue1}=    FakerLibrary.word
-    ${sTime1}=  add_time  4  15
-    ${eTime1}=  add_time   6  30
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
+    ${eTime1}=  add_timezone_time  ${tz}  6  30  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1}
     Log  ${resp.json()} 
@@ -318,7 +325,7 @@ JD-TC-Share consumer location-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -341,7 +348,7 @@ JD-TC-Share consumer location-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -358,7 +365,7 @@ JD-TC-Share consumer location-3
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME14}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -374,10 +381,10 @@ JD-TC-Share consumer location-3
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
     ${p1queue1}=    FakerLibrary.word
-    ${sTime1}=  add_time  4  15
-    ${eTime1}=  add_time   6  30
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
+    ${eTime1}=  add_timezone_time  ${tz}  6  30  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1}
     Log  ${resp.json()} 
@@ -408,7 +415,7 @@ JD-TC-Share consumer location-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -433,7 +440,7 @@ JD-TC-Share consumer location-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -451,7 +458,7 @@ JD-TC-Share consumer location-4
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME14}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -467,10 +474,10 @@ JD-TC-Share consumer location-4
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
     ${p1queue1}=    FakerLibrary.word
-    ${sTime1}=  add_time  4  15
-    ${eTime1}=  add_time   6  30
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
+    ${eTime1}=  add_timezone_time  ${tz}  6  30  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1}
     Log  ${resp.json()} 
@@ -501,7 +508,7 @@ JD-TC-Share consumer location-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -517,7 +524,7 @@ JD-TC-Share consumer location-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   update consumer tavelmode  ${pid0}  ${wid1}   ${travelMode[1]}
+    ${resp}=   update consumer travelmode  ${pid0}  ${wid1}   ${travelMode[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -525,7 +532,7 @@ JD-TC-Share consumer location-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -543,7 +550,7 @@ JD-TC-Share consumer location-UH1
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME14}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -559,10 +566,10 @@ JD-TC-Share consumer location-UH1
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
     ${p1queue1}=    FakerLibrary.word
-    ${sTime1}=  add_time  4  15
-    ${eTime1}=  add_time   6  30
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
+    ${eTime1}=  add_timezone_time  ${tz}  6  30  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1} 
     Log  ${resp.json()} 
@@ -599,7 +606,7 @@ JD-TC-Share consumer location-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -617,7 +624,7 @@ JD-TC-Share consumer location-UH2
     ${pid0}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME14}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -633,10 +640,10 @@ JD-TC-Share consumer location-UH2
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
     ${p1queue1}=    FakerLibrary.word
-    ${sTime1}=  add_time  4  15
-    ${eTime1}=  add_time   6  30
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
+    ${eTime1}=  add_timezone_time  ${tz}  6  30  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1} 
     Log  ${resp.json()} 
@@ -668,7 +675,7 @@ JD-TC-Share consumer location-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -694,7 +701,7 @@ JD-TC-Share consumer location-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

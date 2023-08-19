@@ -105,13 +105,14 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -153,7 +154,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -166,6 +167,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -179,9 +181,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
 
     clear_queue   ${PUSERNAME101}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -300,13 +302,14 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME106}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -348,7 +351,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME106}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -361,6 +364,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -374,9 +378,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
 
     clear_queue   ${PUSERNAME106}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -509,13 +513,14 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[2]}  ${GST_num}
@@ -586,7 +591,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -599,6 +604,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -612,9 +618,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
 
     clear_queue   ${PUSERNAME108}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id1}
+    ${resp}=  Sample Queue  ${lid}   ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -717,7 +723,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-3
     Set Suite Variable  ${fullAmt}   ${resp.json()['fullAmt']}
     Should Be Equal As Strings      ${fullAmt}   ${ActualAmount}
 
-    ${resp}=  Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -752,15 +758,20 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME109}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME109}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${domain}  ${decrypted_data['sector']}
+    Set Suite Variable  ${subDomain}  ${decrypted_data['subSector']}
+    # Set Suite Variable   ${domain}    ${resp.json()['sector']}
+    # Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -773,9 +784,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -793,8 +804,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${cupn_codeG} 
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  45
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
 
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
@@ -879,7 +891,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME109}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME109}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -899,6 +911,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -912,9 +925,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
 
     clear_queue   ${PUSERNAME109}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id2}
+    ${resp}=  Sample Queue  ${lid}   ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1017,7 +1030,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Set Suite Variable  ${fullAmt}   ${resp.json()['fullAmt']}
     Should Be Equal As Strings      ${fullAmt}   ${ActualAmount}
 
-    ${resp}=  Provider Login  ${PUSERNAME109}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME109}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1060,15 +1073,20 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${domain}  ${decrypted_data['sector']}
+    Set Suite Variable  ${subDomain}  ${decrypted_data['subSector']}
+    # Set Suite Variable   ${domain}    ${resp.json()['sector']}
+    # Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1081,9 +1099,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1101,8 +1119,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Log  ${cupn_codeG} 
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  45
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
 
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
@@ -1187,7 +1206,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1207,6 +1226,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1220,9 +1240,9 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
 
     clear_queue   ${PUSERNAME110}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id3}
+    ${resp}=  Sample Queue  ${lid}   ${s_id3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1325,7 +1345,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-5
     Set Suite Variable  ${fullAmt}   ${resp.json()['fullAmt']}
     Should Be Equal As Strings      ${fullAmt}   ${ActualAmount}
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -21,14 +21,14 @@ ${SERVICE3}     Radio Repdca227
 
 JD-TC-UpdateWaitlistStatusBoardById-1
 	[Documentation]  Create a StatusBoard
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME132}
     clear_location  ${PUSERNAME132}
     clear_queue   ${PUSERNAME132}
     clear_Statusboard  ${PUSERNAME132}
     clear_Addon  ${PUSERNAME132}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -74,7 +74,7 @@ JD-TC-UpdateWaitlistStatusBoardById-1
     Set Suite Variable  ${sbq_id2}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}  ${Positions[1]}  ${sbq_id2}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}  ${Positions[1]}  ${sbq_id2}
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -83,7 +83,7 @@ JD-TC-UpdateWaitlistStatusBoardById-1
     Set Suite Variable  ${sb_id}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list1}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id2}
+    ${matric_list1}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id2}
     Set Suite Variable  ${matric_list1}
     Log  ${matric_list1}
     ${Data1}=  FakerLibrary.Words  	nb=3
@@ -121,7 +121,7 @@ JD-TC-UpdateWaitlistStatusBoardById -UH2
 
 JD-TC-UpdateWaitlistStatusBoardById-UH3
     [Documentation]  Upadte a Status Board which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Update Status Board Waitlist  ${invalid_id}  ${Data1[0]}  ${Data1[1]}  ${Data1[2]}  ${matric_list1}
@@ -130,7 +130,7 @@ JD-TC-UpdateWaitlistStatusBoardById-UH3
 
 JD-TC-UpdateWaitlistStatusBoardById-UH4
     [Documentation]  Upadte a Status Board by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Status Board Waitlist  ${sb_id}  ${Data1[0]}  ${Data1[1]}  ${Data1[2]}  ${matric_list1}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -138,7 +138,7 @@ JD-TC-UpdateWaitlistStatusBoardById-UH4
 
 JD-TC-UpdateWaitlistStatusBoardById-UH5
     [Documentation]  After deletion of a status board, provider trying to Upadte it
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Delete Waitlist Status Board By Id  ${sb_id}
     Log  ${resp.json()}

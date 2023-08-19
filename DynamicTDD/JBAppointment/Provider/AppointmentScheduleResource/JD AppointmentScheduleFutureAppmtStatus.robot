@@ -26,7 +26,7 @@ ${suffix}       serving
 JD-TC-Appointment Schedule FutureAppmt Status-1
     [Documentation]   Future Appointment schedule Status is True
     
-    ${resp}=  Provider Login  ${PUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -45,10 +45,10 @@ JD-TC-Appointment Schedule FutureAppmt Status-1
     Set Suite Variable   ${s_id}
 
     clear_appt_schedule   ${PUSERNAME52}
-    ${DAY1}=  add_date  4
+    ${DAY1}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable   ${DAY1}    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -80,7 +80,7 @@ JD-TC-Appointment Schedule FutureAppmt Status-1
 JD-TC-Appointment Schedule FutureAppmt Status-2
     [Documentation]   Set Future Appointment Schedule status is False
     
-    ${resp}=  Provider Login  ${PUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -97,7 +97,7 @@ JD-TC-Appointment Schedule FutureAppmt Status-2
 JD-TC-Appointment Schedule FutureAppmt Status-UH1
     [Documentation]   Future Appmt is Disable and trying Future Appointment Schedule status is False,
     
-    ${resp}=  Provider Login  ${PUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -121,7 +121,7 @@ JD-TC-Appointment Schedule FutureAppmt Status-UH1
 JD-TC-Appointment Schedule FutureAppmt Status-UH2
     [Documentation]   Another Provider Login and Another Schedule
     
-    ${resp}=  Provider Login  ${PUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -133,7 +133,7 @@ JD-TC-Appointment Schedule FutureAppmt Status-UH2
 JD-TC-Appointment Schedule FutureAppmt Status-UH3
     [Documentation]   With Provider Another Login
     
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

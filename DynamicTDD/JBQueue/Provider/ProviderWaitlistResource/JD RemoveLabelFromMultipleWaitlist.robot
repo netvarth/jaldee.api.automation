@@ -40,7 +40,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -79,14 +79,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -131,7 +135,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -149,7 +152,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${mem_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -167,7 +169,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
 
@@ -185,7 +186,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-1
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${mem_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}
 
@@ -283,7 +283,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -343,14 +343,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-2
     Verify Response  ${resp}  id=${label_id1} 
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -369,7 +373,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-2
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -392,7 +395,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-2
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -505,7 +507,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -544,14 +546,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-3
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -570,7 +576,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-3
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -593,7 +598,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-3
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -667,7 +671,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -720,14 +724,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-4
     Verify Response  ${resp}  id=${label_id3}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -746,7 +754,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-4
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -769,7 +776,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-4
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -893,7 +899,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -946,14 +952,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-5
     Verify Response  ${resp}  id=${label_id3}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -972,7 +982,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-5
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -995,7 +1004,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-5
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -1125,7 +1133,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1164,12 +1172,16 @@ JD-TC-RemoveLabelFromMultipleWaitlist-6
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1180,8 +1192,8 @@ JD-TC-RemoveLabelFromMultipleWaitlist-6
     Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
     Set Test Variable  ${eTime1}  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${sTime2}=  add_two   ${eTime1}  ${delta/5}
@@ -1208,7 +1220,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-6
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -1231,7 +1242,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-6
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -1311,7 +1321,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1350,15 +1360,23 @@ JD-TC-RemoveLabelFromMultipleWaitlist-7
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1368,7 +1386,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   queueState=${Qstate[0]}
 
-    ${resp}=  Sample Queue   ${lid1}   ${s_id}
+    ${resp}=  Sample Queue  ${lid1}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -1387,7 +1405,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-7
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -1410,7 +1427,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-7
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -1490,7 +1506,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1529,6 +1545,10 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${SERVICE2}=    FakerLibrary.Word
@@ -1536,11 +1556,11 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
@@ -1564,7 +1584,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -1587,7 +1606,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -1645,7 +1663,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-8
 JD-TC-RemoveLabelFromMultipleWaitlist-9
     [Documentation]  Remove label from waitlists taken from consumer side
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1684,14 +1702,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-9
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1753,7 +1775,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1823,7 +1845,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1862,14 +1884,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-10
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY3}=  add_date  5
+    ${DAY3}=  db.add_timezone_date  ${tz}  5
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1888,7 +1914,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-10
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY3}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -1911,7 +1936,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-10
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY3}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -1969,7 +1993,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-10
 JD-TC-RemoveLabelFromMultipleWaitlist-11
     [Documentation]  Remove label from 15 waitlists
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2008,20 +2032,24 @@ JD-TC-RemoveLabelFromMultipleWaitlist-11
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    # ${resp}=  Sample Queue   ${lid}   ${s_id}
+    # ${resp}=  Sample Queue  ${lid}   ${s_id}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${Time}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10 
+    ${Time}=  db.get_time_by_timezone   ${tz}
     ${delta}=  FakerLibrary.Random Int  min=50  max=80
     ${QsTime}=  add_two   ${Time}  ${delta}
     ${QeTime}=  add_two   ${QsTime}  ${delta}
@@ -2062,7 +2090,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-11
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -2139,7 +2166,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2185,14 +2212,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH1
     Verify Response  ${resp}  id=${label_id1} 
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -2211,7 +2242,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH1
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2234,7 +2264,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH1
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -2341,7 +2370,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2387,14 +2416,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH2
     Verify Response  ${resp}  id=${label_id1} 
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -2413,7 +2446,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH2
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2436,7 +2468,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH2
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -2525,7 +2556,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2564,14 +2595,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH3
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -2590,7 +2625,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH3
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2613,7 +2647,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH3
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -2677,7 +2710,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2716,14 +2749,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH4
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -2742,7 +2779,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH4
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2765,7 +2801,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH4
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -2851,7 +2886,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2890,14 +2925,18 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_queue    ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -2916,7 +2955,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2939,7 +2977,6 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -2982,7 +3019,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2996,7 +3033,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH5
 JD-TC-RemoveLabelFromMultipleWaitlist-UH6
     [Documentation]  Remove label without login
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3044,7 +3081,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH6
 JD-TC-RemoveLabelFromMultipleWaitlist-UH7
     [Documentation]  Remove label by consumer login
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3100,7 +3137,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH7
 JD-TC-RemoveLabelFromMultipleWaitlist-UH8
     [Documentation]  Remove label without waitlist id
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3144,7 +3181,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH8
 JD-TC-RemoveLabelFromMultipleWaitlist-UH9
     [Documentation]  Remove label without label name
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3188,7 +3225,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH9
 # JD-TC-RemoveLabelFromMultipleWaitlist-UH10
 #     [Documentation]  Remove label without label value
 
-#     ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3231,7 +3268,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH9
 JD-TC-RemoveLabelFromMultipleWaitlist-UH11
     [Documentation]  Remove label from invalid waitlist
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3272,7 +3309,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH11
 JD-TC-RemoveLabelFromMultipleWaitlist-UH12
     [Documentation]  Remove non existant label from waitlist
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3349,7 +3386,7 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -3388,12 +3425,16 @@ JD-TC-RemoveLabelFromMultipleWaitlist-UH13
     Verify Response  ${resp}  id=${label_id}  
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME86}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.json()}

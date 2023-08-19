@@ -43,7 +43,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
 
     [Documentation]  Login to a multi account provider,then create a guarantor then verify it.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -372,7 +372,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -606,7 +606,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -619,7 +619,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
 
 # ...... Update sales officer and credit officer for dealer1 & activate dealer1 by branch operation head....
 
-    ${resp}=  ProviderLogin  ${BOHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -645,7 +645,7 @@ JD-TC-VerifyOtpForGuarantorPhone-1
 
 # ..... Create Loan application By Sales officer.....
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -753,7 +753,7 @@ JD-TC-VerifyOtpForGuarantorPhone-UH1
 
     [Documentation]  verify guarantor number without giving the number
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -767,7 +767,7 @@ JD-TC-VerifyOtpForGuarantorPhone-UH2
 
     [Documentation]  verify guarantor number without giving loan id
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -781,7 +781,7 @@ JD-TC-VerifyOtpForGuarantorPhone-UH3
 
     [Documentation]  verify guarantor number without giving guarantor first name
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -795,7 +795,7 @@ JD-TC-VerifyOtpForGuarantorPhone-UH4
 
     [Documentation]  verify guarantor number without giving guarantor last name
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

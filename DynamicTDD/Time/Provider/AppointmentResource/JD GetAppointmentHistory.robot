@@ -29,7 +29,7 @@ JD-TC-GetAppointmentHistory-1
 
     [Documentation]   Get Appointment History  and History count
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME140}
@@ -49,19 +49,19 @@ JD-TC-GetAppointmentHistory-1
     ${lid1}=  Create Sample Location  
     Set Suite Variable    ${lid1}
     
-    ${today}=   get_date
+    ${today}=   db.get_date_by_timezone  ${tz}
     
     ${cur_date}=   change_system_date   -5
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
 
-    ${DAY2}=  add_date  2   
+    ${DAY2}=  db.add_timezone_date  ${tz}  2     
     Set Suite Variable  ${DAY2} 
         
        
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  2  00
+    ${sTime1}=  add_timezone_time  ${tz}  2  00  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -130,9 +130,9 @@ JD-TC-GetAppointmentHistory-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${cur_date}=   change_system_date   5
-    ${resp}=  get_date
+    ${resp}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment By Id   ${apptid1}
@@ -192,7 +192,7 @@ JD-TC-GetAppointmentHistory-1
 JD-TC-GetAppointmentHistory-2
     [Documentation]    Get provider's appointments history with appointment status conform
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History  apptStatus-eq=${apptStatus[1]}
@@ -232,7 +232,7 @@ JD-TC-GetAppointmentHistory-3
 
     [Documentation]    Get provider's appointments history for service  ${SERVICE1} 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History  service-eq=${s_id1}
@@ -270,7 +270,7 @@ JD-TC-GetAppointmentHistory-3
 JD-TC-GetAppointmentHistory-4
     
     [Documentation]  Get provider's appointments history for consumers with firstname  ${cname1}
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History  firstName-eq=${cname1}
@@ -308,7 +308,7 @@ JD-TC-GetAppointmentHistory-4
 JD-TC-GetAppointmentHistory-5
 
     [Documentation]   Get provider's appointments history for consumers with lastname  ${cname2}
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History  lastName-eq=${cname2}
@@ -347,7 +347,7 @@ JD-TC-GetAppointmentHistory-5
 JD-TC-GetAppointmentHistory-6
 
     [Documentation]    Get provider's appointments history in schedule ${sch_id1}
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History  schedule-eq=${sch_id}
@@ -386,7 +386,7 @@ JD-TC-GetAppointmentHistory-6
 JD-TC-GetAppointmentHistory-7
 
     [Documentation]   Get provider's appointments history   appointment taken by consumer(apptBy)
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History   apptBy-eq=CONSUMER
@@ -424,7 +424,7 @@ JD-TC-GetAppointmentHistory-7
 JD-TC-GetAppointmentHistory-8
 
     [Documentation]   Get provider's appointments history   where appointment slot is ${slot1} (apptTime)
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History  apptTime-eq=${slot1}
@@ -463,7 +463,7 @@ JD-TC-GetAppointmentHistory-8
 JD-TC-GetAppointmentHistory-9
 
     [Documentation]   Get provider's appointments history   where paymentStatus is NotPaid
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History  paymentStatus-eq=${paymentStatus[0]}
@@ -502,7 +502,7 @@ JD-TC-GetAppointmentHistory-9
 JD-TC-GetAppointmentHistory-10
 
     [Documentation]   Get provider's appointments history   where location is  ${lid1}
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointments History  location-eq=${lid1}
@@ -540,7 +540,7 @@ JD-TC-GetAppointmentHistory-10
 # JD-TC-GetAppointmentHistory-11
 
 #     [Documentation]   Get provider's appointments history   for time apptstartTime
-#     ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
 #     ${resp}=   Get Appointments History  apptstartTime-eq=${sTime1}
@@ -595,7 +595,7 @@ JD-TC-GetAppointmentHistory-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${count_male}=  Get Match Count  ${gens}  ${Genderlist[1]}
@@ -674,9 +674,9 @@ JD-TC-GetAppointmentHistory-13
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${cur_date}=   change_system_date   5
-    ${resp}=  get_date
+    ${resp}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment History Count
@@ -695,7 +695,7 @@ JD-TC-GetAppointmentHistory-14
 
     [Documentation]  Get provider's appointments history with appointment status cancelled
     ${cur_date}=   change_system_date   -5
-    ${resp}=  get_date
+    ${resp}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -735,7 +735,7 @@ JD-TC-GetAppointmentHistory-14
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -768,9 +768,9 @@ JD-TC-GetAppointmentHistory-14
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${cur_date}=   change_system_date   5
-    ${resp}=  get_date
+    ${resp}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment By Id   ${apptid2}
@@ -801,7 +801,7 @@ JD-TC-GetAppointmentHistory-15
     [Documentation]   Get provider's appointments history with appointment status Rejected
 
     ${cur_date}=   change_system_date   -5
-    ${resp}=  get_date
+    ${resp}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -842,7 +842,7 @@ JD-TC-GetAppointmentHistory-15
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -873,9 +873,9 @@ JD-TC-GetAppointmentHistory-15
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${cur_date}=   change_system_date   5
-    ${resp}=  get_date
+    ${resp}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Status   ${apptid3}

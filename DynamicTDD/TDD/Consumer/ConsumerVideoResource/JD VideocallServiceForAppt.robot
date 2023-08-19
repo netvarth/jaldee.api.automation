@@ -30,10 +30,13 @@ JD-TC-VideoServiceAppoinment-1
 
     [Documentation]  Get and verify Virtual service calling modes for video call.
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Test Variable  ${prov_id1}  ${resp.json()['id']}
 
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}   ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -162,12 +165,18 @@ JD-TC-VideoServiceAppoinment-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME15}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -213,7 +222,7 @@ JD-TC-VideoServiceAppoinment-1
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Virtual Service Appointment For Consumer  ${cid}  ${vser_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${CallingModes[9]}  ${video_call_id1}  ${apptfor}
     Log  ${resp.json()}
@@ -263,7 +272,7 @@ JD-TC-VideoServiceAppoinment-1
 
 #............... Create a virtual service for jaldee video call and take a waitlist for this service then send message to consumer...
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -291,7 +300,7 @@ JD-TC-VideoServiceAppoinment-1
 
 # ---------------- then create a video call meeting request by provider.----------------------
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -317,7 +326,7 @@ JD-TC-VideoServiceAppoinment-1
 
 # -----------------then create a video call meeting request by provider, then get the link status of the video call.--------------------
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

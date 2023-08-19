@@ -123,7 +123,7 @@ JD-TC-DonationServiceOptionsPayment-1
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,6 +135,7 @@ JD-TC-DonationServiceOptionsPayment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -176,7 +177,7 @@ JD-TC-DonationServiceOptionsPayment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -294,7 +295,7 @@ JD-TC-DonationServiceOptionsPayment-2
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -306,6 +307,7 @@ JD-TC-DonationServiceOptionsPayment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -347,7 +349,7 @@ JD-TC-DonationServiceOptionsPayment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -60,7 +60,7 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -73,7 +73,6 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -85,18 +84,22 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -174,16 +177,16 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -277,7 +280,7 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -330,7 +333,7 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
     ${online_order_len}=   Evaluate  len($order_ids)
     Set Test Variable   ${online_order_len}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -388,7 +391,7 @@ JD-TC-BRAND_NEW_ORDERS-2
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -401,7 +404,6 @@ JD-TC-BRAND_NEW_ORDERS-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -413,18 +415,22 @@ JD-TC-BRAND_NEW_ORDERS-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -502,16 +508,16 @@ JD-TC-BRAND_NEW_ORDERS-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -605,7 +611,7 @@ JD-TC-BRAND_NEW_ORDERS-2
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -658,7 +664,7 @@ JD-TC-BRAND_NEW_ORDERS-2
     ${online_order_len}=   Evaluate  len($order_ids)
     Set Test Variable   ${online_order_len}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -707,7 +713,7 @@ JD-TC-PHONE_IN_ORDER-3
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -720,7 +726,6 @@ JD-TC-PHONE_IN_ORDER-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -732,18 +737,22 @@ JD-TC-PHONE_IN_ORDER-3
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -821,16 +830,16 @@ JD-TC-PHONE_IN_ORDER-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -914,7 +923,7 @@ JD-TC-PHONE_IN_ORDER-3
     ${order_ids}=  Create List
     Set Test Variable   ${order_ids}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -925,7 +934,7 @@ JD-TC-PHONE_IN_ORDER-3
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()}
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -964,7 +973,7 @@ JD-TC-PHONE_IN_ORDER-3
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -983,7 +992,7 @@ JD-TC-PHONE_IN_ORDER-3
     ${phonein_order_len1}=   Evaluate   len($order_ids) 
     Set Suite Variable   ${phonein_order_len1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1040,7 +1049,7 @@ JD-TC-WALK_IN_ORDER-4
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -1053,7 +1062,6 @@ JD-TC-WALK_IN_ORDER-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -1065,18 +1073,22 @@ JD-TC-WALK_IN_ORDER-4
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1154,16 +1166,16 @@ JD-TC-WALK_IN_ORDER-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -1247,7 +1259,7 @@ JD-TC-WALK_IN_ORDER-4
     ${order_ids}=  Create List
     Set Test Variable   ${order_ids}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1258,7 +1270,7 @@ JD-TC-WALK_IN_ORDER-4
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()}
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -1295,7 +1307,7 @@ JD-TC-WALK_IN_ORDER-4
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1314,7 +1326,7 @@ JD-TC-WALK_IN_ORDER-4
     ${walkin_order_len}=   Evaluate   len($order_ids) 
     Set Test Variable   ${walkin_order_len}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1372,7 +1384,7 @@ JD-TC-ACKNOWLEDGED_ORDER-5
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -1385,7 +1397,6 @@ JD-TC-ACKNOWLEDGED_ORDER-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -1397,18 +1408,22 @@ JD-TC-ACKNOWLEDGED_ORDER-5
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1486,16 +1501,16 @@ JD-TC-ACKNOWLEDGED_ORDER-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -1589,7 +1604,7 @@ JD-TC-ACKNOWLEDGED_ORDER-5
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -1644,7 +1659,7 @@ JD-TC-ACKNOWLEDGED_ORDER-5
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1669,7 +1684,7 @@ JD-TC-ACKNOWLEDGED_ORDER-5
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1728,7 +1743,7 @@ JD-TC-CONFIRMED_ORDER-6
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -1741,7 +1756,6 @@ JD-TC-CONFIRMED_ORDER-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -1753,18 +1767,22 @@ JD-TC-CONFIRMED_ORDER-6
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1842,16 +1860,16 @@ JD-TC-CONFIRMED_ORDER-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -1945,7 +1963,7 @@ JD-TC-CONFIRMED_ORDER-6
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2000,7 +2018,7 @@ JD-TC-CONFIRMED_ORDER-6
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2025,7 +2043,7 @@ JD-TC-CONFIRMED_ORDER-6
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2083,7 +2101,7 @@ JD-TC-PREPARING_ORDER-7
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -2096,7 +2114,6 @@ JD-TC-PREPARING_ORDER-7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -2108,18 +2125,22 @@ JD-TC-PREPARING_ORDER-7
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2197,16 +2218,16 @@ JD-TC-PREPARING_ORDER-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -2300,7 +2321,7 @@ JD-TC-PREPARING_ORDER-7
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2355,7 +2376,7 @@ JD-TC-PREPARING_ORDER-7
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2380,7 +2401,7 @@ JD-TC-PREPARING_ORDER-7
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2437,7 +2458,7 @@ JD-TC-PACKING_ORDER-8
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -2450,7 +2471,6 @@ JD-TC-PACKING_ORDER-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -2462,18 +2482,22 @@ JD-TC-PACKING_ORDER-8
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2551,16 +2575,16 @@ JD-TC-PACKING_ORDER-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -2654,7 +2678,7 @@ JD-TC-PACKING_ORDER-8
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2709,7 +2733,7 @@ JD-TC-PACKING_ORDER-8
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2734,7 +2758,7 @@ JD-TC-PACKING_ORDER-8
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2791,7 +2815,7 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -2804,7 +2828,6 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -2816,18 +2839,22 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2905,16 +2932,16 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -3008,7 +3035,7 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
         ${firstname}=  FakerLibrary.first_name
         Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
@@ -3052,7 +3079,7 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -3077,7 +3104,7 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3135,7 +3162,7 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -3148,7 +3175,6 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -3160,18 +3186,22 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3249,16 +3279,16 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -3352,7 +3382,7 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -3407,7 +3437,7 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -3432,7 +3462,7 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3491,7 +3521,7 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -3504,7 +3534,6 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -3516,18 +3545,22 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3605,16 +3638,16 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -3708,7 +3741,7 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -3763,7 +3796,7 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -3788,7 +3821,7 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3845,7 +3878,7 @@ JD-TC-COMPLETED_ORDER-12
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -3858,7 +3891,6 @@ JD-TC-COMPLETED_ORDER-12
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -3870,18 +3902,22 @@ JD-TC-COMPLETED_ORDER-12
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3959,16 +3995,16 @@ JD-TC-COMPLETED_ORDER-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -4062,7 +4098,7 @@ JD-TC-COMPLETED_ORDER-12
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -4117,7 +4153,7 @@ JD-TC-COMPLETED_ORDER-12
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -4142,7 +4178,7 @@ JD-TC-COMPLETED_ORDER-12
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4199,7 +4235,7 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -4212,7 +4248,6 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -4224,18 +4259,22 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4313,16 +4352,16 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -4416,7 +4455,7 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -4471,7 +4510,7 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -4496,7 +4535,7 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4553,7 +4592,7 @@ JD-TC-IN_TRANSIT_ORDER-14
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -4566,7 +4605,6 @@ JD-TC-IN_TRANSIT_ORDER-14
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -4578,18 +4616,22 @@ JD-TC-IN_TRANSIT_ORDER-14
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4667,16 +4709,16 @@ JD-TC-IN_TRANSIT_ORDER-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -4770,7 +4812,7 @@ JD-TC-IN_TRANSIT_ORDER-14
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -4825,7 +4867,7 @@ JD-TC-IN_TRANSIT_ORDER-14
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -4850,7 +4892,7 @@ JD-TC-IN_TRANSIT_ORDER-14
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4908,7 +4950,7 @@ JD-TC-SHIPPED_ORDER-15
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -4921,7 +4963,6 @@ JD-TC-SHIPPED_ORDER-15
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -4933,18 +4974,22 @@ JD-TC-SHIPPED_ORDER-15
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -5022,16 +5067,16 @@ JD-TC-SHIPPED_ORDER-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -5125,7 +5170,7 @@ JD-TC-SHIPPED_ORDER-15
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -5180,7 +5225,7 @@ JD-TC-SHIPPED_ORDER-15
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -5205,7 +5250,7 @@ JD-TC-SHIPPED_ORDER-15
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5263,7 +5308,7 @@ JD-TC-ORDERS_FOR_BILLING-17
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -5276,7 +5321,6 @@ JD-TC-ORDERS_FOR_BILLING-17
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -5288,18 +5332,22 @@ JD-TC-ORDERS_FOR_BILLING-17
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -5377,16 +5425,16 @@ JD-TC-ORDERS_FOR_BILLING-17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -5480,7 +5528,7 @@ JD-TC-ORDERS_FOR_BILLING-17
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -5535,7 +5583,7 @@ JD-TC-ORDERS_FOR_BILLING-17
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -5560,7 +5608,7 @@ JD-TC-ORDERS_FOR_BILLING-17
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5618,7 +5666,7 @@ JD-TC-CANCEL_ORDER-16
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -5631,7 +5679,6 @@ JD-TC-CANCEL_ORDER-16
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -5643,18 +5690,22 @@ JD-TC-CANCEL_ORDER-16
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -5732,16 +5783,16 @@ JD-TC-CANCEL_ORDER-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -5835,7 +5886,7 @@ JD-TC-CANCEL_ORDER-16
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -5885,7 +5936,7 @@ JD-TC-CANCEL_ORDER-16
 
     Log List   ${order_ids}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

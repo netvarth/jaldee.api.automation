@@ -29,7 +29,7 @@ JD-TC-CreateUserToken-1
 
     [Documentation]   Create User Token For a branch with his own number.
 
-    ${resp}=  Provider Login  ${MUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -61,7 +61,7 @@ JD-TC-CreateUserToken-2
 
     [Documentation]   Create User Token For a branch with his user number(admin).
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -157,7 +157,7 @@ JD-TC-CreateUserToken-UH1
 
     [Documentation]   Create User Token For a branch with his user number(not admin).
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -207,7 +207,7 @@ JD-TC-CreateUserToken-UH4
 
     [Documentation]   Create User Token For a branch with another providers number.
 
-    ${resp}=  Provider Login  ${MUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -241,7 +241,7 @@ JD-TC-CreateUserToken-UH5
 
     [Documentation]   Create User Token For a branch with different country code.
 
-    ${resp}=  Provider Login  ${MUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -297,7 +297,7 @@ JD-TC-CreateUserToken-UH8
 
     [Documentation]   a user try to create a user token with another branch sp token.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -366,7 +366,7 @@ JD-TC-CreateUserToken-UH9
 
     [Documentation]   Create User Token For a branch with invalid password.
 
-    ${resp}=  Provider Login  ${MUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -410,7 +410,7 @@ JD-TC-CreateUserToken-UH11
 
     [Documentation]   Create User Token For a branch without password.
 
-    ${resp}=  Provider Login  ${MUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -445,7 +445,7 @@ JD-TC-CreateUserToken-UH12
 
     [Documentation]   Create User Token For a branch without enable API Gateway.
 
-    ${resp}=  Provider Login  ${MUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

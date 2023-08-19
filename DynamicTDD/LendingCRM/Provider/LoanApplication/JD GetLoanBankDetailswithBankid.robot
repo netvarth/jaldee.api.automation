@@ -53,7 +53,7 @@ JD-TC-GetBankDetailswithId-1
                                   
     [Documentation]              Get Bank Details with Id
 
-    ${resp}=  Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -103,9 +103,14 @@ JD-TC-GetBankDetailswithId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     clear Customer  ${PUSERNAME87}
@@ -481,7 +486,7 @@ JD-TC-GetBankDetailswithId-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -739,7 +744,7 @@ JD-TC-GetBankDetailswithId-UH4
                                   
     [Documentation]              Get Bank Details with Id invalid id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -753,7 +758,7 @@ JD-TC-GetBankDetailswithId-UH5
                                   
     [Documentation]              Get Bank Details with Id empty id
    
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

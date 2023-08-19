@@ -34,7 +34,7 @@ JD-TC-Get Payment by UUId -1
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME103}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -47,7 +47,7 @@ JD-TC-Get Payment by UUId -1
 
     # ${cid}=  get_id  ${CUSERNAME0}
     # Set Suite Variable  ${cid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
 
     ${SERVICE1}=    FakerLibrary.word
@@ -83,8 +83,8 @@ JD-TC-Get Payment by UUId -1
 
     ${list}=  Create List   1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  30
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  ${capacity}  ${lid}  ${s_id1}  ${s_id2}  ${s_id3}
     Log  ${resp.json()}
@@ -100,7 +100,6 @@ JD-TC-Get Payment by UUId -1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${msg}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 

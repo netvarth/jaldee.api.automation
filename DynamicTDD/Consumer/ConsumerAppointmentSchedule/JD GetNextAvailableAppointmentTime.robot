@@ -26,7 +26,7 @@ ${self}         0
 JD-TC-GetNextAvailableAppointmentTime-1
 
     [Documentation]  Get next available appointment Time
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
 *** comment ***
@@ -42,14 +42,19 @@ JD-TC-GetNextAvailableAppointmentTime-1
     Set Suite Variable  ${s_id2}
 
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -66,13 +71,13 @@ JD-TC-GetNextAvailableAppointmentTime-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  2  30
+    ${sTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -104,7 +109,7 @@ JD-TC-GetNextAvailableAppointmentTime-1
 JD-TC-GetNextAvailableAppointmentTime-UH1
 
     [Documentation]   Provider try to Get Next Available Appointment
-    ${resp}=  ProviderLogin  ${PUSERNAME138}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME138}
     Set Test Variable   ${accId}  

@@ -26,7 +26,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-1
 
     [Documentation]  Create an item and add that item to 2 item groups.
 
-    ${resp}=  Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -137,7 +137,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-2
 
     [Documentation]  Add items to group by passing empty set of group ids.
 
-    ${resp}=  Provider Login  ${MUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME111}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -197,7 +197,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-3
 
     [Documentation]  Add items to multiple item groups by user.
 
-    ${resp}=  Provider Login  ${MUSERNAME115}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME115}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -278,7 +278,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -396,7 +396,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-UH3
 
     [Documentation]  Add items to another providers item group.
 
-    ${resp}=  Provider Login  ${MUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME112}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -445,7 +445,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME113}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -500,7 +500,7 @@ JD-TC-AddItemsToMultipleItemGroupsforUser-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME112}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

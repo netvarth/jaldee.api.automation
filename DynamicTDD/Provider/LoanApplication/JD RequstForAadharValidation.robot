@@ -61,7 +61,7 @@ JD-TC-RequstForAadharValidation-1
                                   
     [Documentation]               requst for aadhar validation by varify phone number
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -277,7 +277,7 @@ JD-TC-RequstForAadharValidation-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -531,7 +531,7 @@ JD-TC-RequstForAadharValidation-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -673,7 +673,7 @@ JD-TC-RequstForAadharValidation-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -817,7 +817,7 @@ JD-TC-RequstForAadharValidation-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -963,7 +963,7 @@ JD-TC-RequstForAadharValidation-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1108,7 +1108,7 @@ JD-TC-RequstForAadharValidation-Uh3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1254,7 +1254,7 @@ JD-TC-RequstForAadharValidation-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1399,7 +1399,7 @@ JD-TC-RequstForAadharValidation-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1545,7 +1545,7 @@ JD-TC-RequstForAadharValidation-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1689,7 +1689,7 @@ JD-TC-RequstForAadharValidation-UH7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1834,7 +1834,7 @@ JD-TC-RequstForAadharValidation-UH8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1980,7 +1980,7 @@ JD-TC-RequstForAadharValidation-UH9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2134,7 +2134,7 @@ JD-TC-RequstForAadharValidation-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME26}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

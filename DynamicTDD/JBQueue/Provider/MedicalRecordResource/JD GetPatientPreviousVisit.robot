@@ -34,7 +34,7 @@ JD-TC-GetPatientPreviousVisit-1
     clear_service    ${PUSERNAME111}
     clear_customer   ${PUSERNAME111}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME111}
@@ -58,15 +58,21 @@ JD-TC-GetPatientPreviousVisit-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${jaldeeid1}  ${resp.json()[0]['jaldeeId']}
 
-    ${CUR_DAY}=  get_date
-    Set Suite Variable    ${CUR_DAY}  
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1} 
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable    ${CUR_DAY}  
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -79,9 +85,9 @@ JD-TC-GetPatientPreviousVisit-1
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -111,11 +117,10 @@ JD-TC-GetPatientPreviousVisit-2
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -146,7 +151,7 @@ JD-TC-GetPatientPreviousVisit-3
     clear_service    ${PUSERNAME112}
     clear_customer   ${PUSERNAME112}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME112}
@@ -170,14 +175,19 @@ JD-TC-GetPatientPreviousVisit-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${jaldeeid1}  ${resp.json()[0]['jaldeeId']}
 
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -187,13 +197,13 @@ JD-TC-GetPatientPreviousVisit-3
 
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${FUT_DAY}=  add_date   2
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}   2
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${FUT_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -201,7 +211,6 @@ JD-TC-GetPatientPreviousVisit-3
     ${resp}=  Get Patient Previous Visit  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     Should Be Equal As Strings  ${resp.json()}           []
    
 JD-TC-GetPatientPreviousVisit-4
@@ -212,7 +221,7 @@ JD-TC-GetPatientPreviousVisit-4
     clear_service    ${PUSERNAME112}
     clear_customer   ${PUSERNAME112}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME112}
@@ -226,14 +235,20 @@ JD-TC-GetPatientPreviousVisit-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -246,15 +261,14 @@ JD-TC-GetPatientPreviousVisit-4
     Should Be Equal As Strings  ${resp.status_code}  200     
     
     ${cnote}=   FakerLibrary.word
-    ${FUT_DAY}=  add_date   2
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}   2
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${FUT_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -267,7 +281,6 @@ JD-TC-GetPatientPreviousVisit-4
     ${resp}=  Get Patient Previous Visit  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-  
     Should Be Equal As Strings  ${resp.json()}           []
 
 JD-TC-GetPatientPreviousVisit-5
@@ -278,7 +291,7 @@ JD-TC-GetPatientPreviousVisit-5
     clear_service    ${PUSERNAME144}
     clear_customer   ${PUSERNAME144}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME144}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME144}
@@ -302,16 +315,21 @@ JD-TC-GetPatientPreviousVisit-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${jaldeeid1}  ${resp.json()[0]['jaldeeId']}
 
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
     ${ser_id2}=   Create Sample Service  ${SERVICE2}
     Set Test Variable    ${ser_id2} 
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2} 
@@ -323,7 +341,6 @@ JD-TC-GetPatientPreviousVisit-5
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -335,7 +352,6 @@ JD-TC-GetPatientPreviousVisit-5
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     
@@ -377,7 +393,7 @@ JD-TC-GetPatientPreviousVisit-6
     clear_service    ${PUSERNAME153}
     clear_customer   ${PUSERNAME153}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME153}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME153}
@@ -391,16 +407,21 @@ JD-TC-GetPatientPreviousVisit-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
     ${ser_id2}=   Create Sample Service  ${SERVICE2}
     Set Test Variable    ${ser_id2}
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2}
@@ -416,7 +437,6 @@ JD-TC-GetPatientPreviousVisit-6
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -424,11 +444,10 @@ JD-TC-GetPatientPreviousVisit-6
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME153}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -472,7 +491,7 @@ JD-TC-GetPatientPreviousVisit-7
     clear_service    ${PUSERNAME154}
     clear_customer   ${PUSERNAME154}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME154}
@@ -486,16 +505,21 @@ JD-TC-GetPatientPreviousVisit-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
     ${ser_id2}=   Create Sample Service  ${SERVICE2}
     Set Test Variable    ${ser_id2}
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2}
@@ -517,7 +541,6 @@ JD-TC-GetPatientPreviousVisit-7
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -533,11 +556,10 @@ JD-TC-GetPatientPreviousVisit-7
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -579,7 +601,7 @@ JD-TC-GetPatientPreviousVisit-8
     clear_service    ${PUSERNAME170}
     clear_customer   ${PUSERNAME170}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME170}
@@ -593,16 +615,21 @@ JD-TC-GetPatientPreviousVisit-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]} 
 
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
     ${ser_id2}=   Create Sample Service  ${SERVICE2}
     Set Test Variable    ${ser_id2}
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2}
@@ -624,7 +651,6 @@ JD-TC-GetPatientPreviousVisit-8
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -646,7 +672,6 @@ JD-TC-GetPatientPreviousVisit-8
     ${resp}=  Add To Waitlist  ${cid2}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -668,7 +693,6 @@ JD-TC-GetPatientPreviousVisit-8
     ${resp}=  Add To Waitlist  ${cid3}  ${ser_id2}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid3} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
 
@@ -721,7 +745,7 @@ JD-TC-GetPatientPreviousVisit-9
     clear_service    ${PUSERNAME116}
     clear_customer   ${PUSERNAME116}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME116}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME116}
@@ -731,16 +755,21 @@ JD-TC-GetPatientPreviousVisit-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
     ${ser_id2}=   Create Sample Service  ${SERVICE2}
     Set Test Variable    ${ser_id2}
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2}
@@ -760,6 +789,7 @@ JD-TC-GetPatientPreviousVisit-9
     ${gender0}=  Random Element    ${Genderlist}
     ${resp}=  AddFamilyMemberByProvider  ${cid1}  ${firstname0}  ${lastname0}  ${dob0}  ${gender0}  
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id0}  ${resp.json()}
 
     ${resp}=  ListFamilyMemberByProvider  ${cid1}
@@ -771,7 +801,6 @@ JD-TC-GetPatientPreviousVisit-9
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${mem_id0} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -805,7 +834,7 @@ JD-TC-GetPatientPreviousVisit-10
     clear_service    ${PUSERNAME116}
     clear_customer   ${PUSERNAME116}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME116}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME116}
@@ -815,16 +844,21 @@ JD-TC-GetPatientPreviousVisit-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
     ${ser_id2}=   Create Sample Service  ${SERVICE2}
     Set Test Variable    ${ser_id2}
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2}
@@ -849,6 +883,7 @@ JD-TC-GetPatientPreviousVisit-10
     ${gender0}=  Random Element    ${Genderlist}
     ${resp}=  AddFamilyMemberByProvider  ${cid1}  ${firstname0}  ${lastname0}  ${dob0}  ${gender0}  
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id0}  ${resp.json()}
 
     ${resp}=  ListFamilyMemberByProvider  ${cid1}
@@ -860,7 +895,6 @@ JD-TC-GetPatientPreviousVisit-10
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${mem_id0}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -868,7 +902,6 @@ JD-TC-GetPatientPreviousVisit-10
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}   ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -913,7 +946,7 @@ JD-TC-GetPatientPreviousVisit-11
     clear_service    ${PUSERNAME116}
     clear_customer   ${PUSERNAME116}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME116}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME116}
@@ -923,16 +956,21 @@ JD-TC-GetPatientPreviousVisit-11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
     ${ser_id2}=   Create Sample Service  ${SERVICE2}
     Set Test Variable    ${ser_id2}
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2}
@@ -949,7 +987,6 @@ JD-TC-GetPatientPreviousVisit-11
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}   ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
    
@@ -975,7 +1012,7 @@ JD-TC-GetPatientPreviousVisit-12
     clear_service    ${PUSERNAME116}
     clear_customer   ${PUSERNAME116}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME116}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME116}
@@ -985,16 +1022,21 @@ JD-TC-GetPatientPreviousVisit-12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1} 
     ${ser_id2}=   Create Sample Service  ${SERVICE2}
     Set Test Variable    ${ser_id2}
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2}
@@ -1019,13 +1061,13 @@ JD-TC-GetPatientPreviousVisit-12
     ${gender0}=  Random Element    ${Genderlist}
     ${resp}=  AddFamilyMemberByProvider  ${cid1}  ${firstname0}  ${lastname0}  ${dob0}  ${gender0}  
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id0}  ${resp.json()}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${mem_id0}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -1033,7 +1075,6 @@ JD-TC-GetPatientPreviousVisit-12
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}   ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -1075,7 +1116,7 @@ JD-TC-GetPatientPreviousVisit-13
     clear_service    ${PUSERNAME116}
     clear_customer   ${PUSERNAME116}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME116}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -1097,7 +1138,7 @@ JD-TC-GetPatientPreviousVisit-14
     clear_service    ${PUSERNAME111}
     clear_customer   ${PUSERNAME111}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid0}=  get_acc_id  ${PUSERNAME111}
@@ -1117,13 +1158,19 @@ JD-TC-GetPatientPreviousVisit-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${jaldeeid1}  ${resp.json()[0]['jaldeeId']}
 
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
+    
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -1135,8 +1182,9 @@ JD-TC-GetPatientPreviousVisit-14
     # ${ser_id1}=   Create Sample Service  ${SERVICE1}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  2  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  2  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -1148,7 +1196,6 @@ JD-TC-GetPatientPreviousVisit-14
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -1161,7 +1208,6 @@ JD-TC-GetPatientPreviousVisit-14
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     
@@ -1204,7 +1250,7 @@ JD-TC-GetPatientPreviousVisit-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1252,16 +1298,21 @@ JD-TC-GetPatientPreviousVisit-15
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    ${lid}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME103}
+
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1300,7 +1351,6 @@ JD-TC-GetPatientPreviousVisit-15
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1329,7 +1379,7 @@ JD-TC-GetPatientPreviousVisit-15
 JD-TC-GetPatientPreviousVisit-16
     [Documentation]   Get patient previous visit for an online appointment.
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME186}
@@ -1373,16 +1423,22 @@ JD-TC-GetPatientPreviousVisit-16
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    ${lid}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME186}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1434,7 +1490,6 @@ JD-TC-GetPatientPreviousVisit-16
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1442,7 +1497,7 @@ JD-TC-GetPatientPreviousVisit-16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1468,7 +1523,7 @@ JD-TC-GetPatientPreviousVisit-16
 JD-TC-GetPatientPreviousVisit-17
     [Documentation]   Get patient previous visit for a future date walk in appointment.
 
-    ${resp}=  Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1511,16 +1566,21 @@ JD-TC-GetPatientPreviousVisit-17
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    ${lid}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME103}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1555,12 +1615,11 @@ JD-TC-GetPatientPreviousVisit-17
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY}=  add_date   4  
+    ${DAY}=  db.add_timezone_date  ${tz}   4  
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1577,14 +1636,13 @@ JD-TC-GetPatientPreviousVisit-17
     ${resp}=  Get Patient Previous Visit  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
     Should Be Equal As Strings  ${resp.json()}           []
 
 
 JD-TC-GetPatientPreviousVisit-18
     [Documentation]   Get patient previous visit for future date online appointment.
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME186}
@@ -1628,16 +1686,21 @@ JD-TC-GetPatientPreviousVisit-18
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    ${lid}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME186}
+
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1683,14 +1746,13 @@ JD-TC-GetPatientPreviousVisit-18
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY}=  add_date  5  
+    ${DAY}=  db.add_timezone_date  ${tz}  5  
     # ${cid}=  get_id  ${CUSERNAME7}   
     # Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1698,7 +1760,7 @@ JD-TC-GetPatientPreviousVisit-18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1712,13 +1774,13 @@ JD-TC-GetPatientPreviousVisit-18
     ${resp}=  Get Patient Previous Visit  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     Should Be Equal As Strings  ${resp.json()}           []
+
 
 JD-TC-GetPatientPreviousVisit-19
     [Documentation]   Get patient previous visit having multiple walk in appointments.
 
-    ${resp}=  Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1762,17 +1824,22 @@ JD-TC-GetPatientPreviousVisit-19
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     clear_appt_schedule   ${PUSERNAME103}
-    
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    # ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${eTime1}=  add_time   4  00
+
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${eTime1}=  db.add_timezone_time  ${tz}   4  00
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1811,7 +1878,6 @@ JD-TC-GetPatientPreviousVisit-19
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
     
@@ -1828,7 +1894,6 @@ JD-TC-GetPatientPreviousVisit-19
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -1875,7 +1940,7 @@ JD-TC-GetPatientPreviousVisit-19
 JD-TC-GetPatientPreviousVisit-20
     [Documentation]   Get patient previous visit having multiple online appointments.
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME186}
@@ -1919,17 +1984,22 @@ JD-TC-GetPatientPreviousVisit-20
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    ${lid}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME186}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1981,7 +2051,6 @@ JD-TC-GetPatientPreviousVisit-20
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -2008,7 +2077,6 @@ JD-TC-GetPatientPreviousVisit-20
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -2016,7 +2084,7 @@ JD-TC-GetPatientPreviousVisit-20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2056,7 +2124,7 @@ JD-TC-GetPatientPreviousVisit-20
 JD-TC-GetPatientPreviousVisit-21
     [Documentation]   Get patient previous visit having both online apointment and walkin appointment.
 
-    ${resp}=  Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME103}
@@ -2100,17 +2168,23 @@ JD-TC-GetPatientPreviousVisit-21
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
-    ${lid}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME103}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -2149,7 +2223,6 @@ JD-TC-GetPatientPreviousVisit-21
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -2198,7 +2271,6 @@ JD-TC-GetPatientPreviousVisit-21
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -2206,7 +2278,7 @@ JD-TC-GetPatientPreviousVisit-21
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2251,7 +2323,7 @@ JD-TC-GetPatientPreviousVisit-22
     clear_service    ${PUSERNAME150}
     clear_customer   ${PUSERNAME150}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME150}
@@ -2287,13 +2359,19 @@ JD-TC-GetPatientPreviousVisit-22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${jaldeeid1}  ${resp.json()[0]['jaldeeId']}
 
-    ${CUR_DAY}=  get_date
     ${loc_id1}=   Create Sample Location
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_id1}=   Create Sample Service  ${SERVICE1}
+    
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -2301,16 +2379,21 @@ JD-TC-GetPatientPreviousVisit-22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${que_id1}   ${resp.json()}
 
-    ${lid}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME150}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE2}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${s_id}=  Create Sample Service  ${SERVICE2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -2337,7 +2420,6 @@ JD-TC-GetPatientPreviousVisit-22
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2352,7 +2434,6 @@ JD-TC-GetPatientPreviousVisit-22
     ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -2410,7 +2491,7 @@ JD-TC-GetPatientPreviousVisit-UH2
 JD-TC-GetPatientPreviousVisit-UH3
     [Documentation]   Get Patient previous visit with invalid consumer id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2422,7 +2503,7 @@ JD-TC-GetPatientPreviousVisit-UH3
 JD-TC-GetPatientPreviousVisit-UH4
     [Documentation]   Get Patient previous visit for another provider's consumer.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     clear_customer   ${PUSERNAME150}

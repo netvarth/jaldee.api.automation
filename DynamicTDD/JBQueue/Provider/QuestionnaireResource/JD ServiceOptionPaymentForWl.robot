@@ -99,15 +99,20 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Account Payment Settings 
     Log   ${resp.json()}
@@ -175,7 +180,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -211,7 +216,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -247,12 +252,14 @@ JD-TC-ServiceOptionsPaymentForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -336,15 +343,20 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[2]}  ${GST_num}
@@ -421,7 +433,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -457,7 +469,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -493,12 +505,14 @@ JD-TC-ServiceOptionsPaymentForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -586,17 +600,24 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${domain}  ${decrypted_data['sector']}
+    Set Suite Variable  ${subDomain}  ${decrypted_data['subSector']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Suite Variable   ${domain}    ${resp.json()['sector']}
+    # Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -609,9 +630,9 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -629,8 +650,9 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log  ${cupn_codeG} 
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  45
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
 
 
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
@@ -718,7 +740,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -754,7 +776,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -790,12 +812,14 @@ JD-TC-ServiceOptionPaymentForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -902,15 +926,20 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -970,7 +999,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1006,7 +1035,7 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1042,12 +1071,14 @@ JD-TC-ServiceOptionsPaymentForWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -1155,17 +1186,24 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${domain}  ${decrypted_data['sector']}
+    Set Suite Variable  ${subDomain}  ${decrypted_data['subSector']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Suite Variable   ${domain}    ${resp.json()['sector']}
+    # Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1178,9 +1216,9 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1198,8 +1236,9 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log  ${cupn_codeG} 
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  45
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
 
 
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
@@ -1287,7 +1326,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1323,7 +1362,7 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1359,12 +1398,14 @@ JD-TC-ServiceOptionPaymentForWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40

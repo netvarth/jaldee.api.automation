@@ -134,7 +134,7 @@ JD-TC-Get Global Filters -1
 
 JD-TC-Get Global Filters -2
        [Documentation]   Provider check to Get Global Filters provider login
-       ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Get Global Filters
        Should Be Equal As Strings    ${resp.status_code}   200

@@ -24,7 +24,7 @@ JD-TC-AddNotes-1
 
     [Documentation]  Create a task for a provider and add notes to task.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -36,8 +36,13 @@ JD-TC-AddNotes-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -87,7 +92,7 @@ JD-TC-AddNotes-2
 
     [Documentation]  Create a task for a consumer and add notes to task.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -122,7 +127,7 @@ JD-TC-AddNotes-3
 
     [Documentation]  Add same notes to a task multiple times.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -133,8 +138,13 @@ JD-TC-AddNotes-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -187,7 +197,7 @@ JD-TC-AddNotes-4
 
     [Documentation]  Add different notes to a task multiple times.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -209,7 +219,7 @@ JD-TC-AddNotes-5
 
     [Documentation]  Add numbers as notes to a task.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -235,7 +245,7 @@ JD-TC-AddNotes-UH1
 
     [Documentation]  Add notes to a task without giving notes.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -274,7 +284,7 @@ JD-TC-AddNotes-UH4
 
     [Documentation]  Add notes to a task with another providers task id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME90}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

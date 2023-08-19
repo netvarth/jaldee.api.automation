@@ -58,7 +58,7 @@ JD-TC-DonationPaymentViaLink-1
 
         [Documentation]  Consumer genersting the payment link and making the doation payment using the generated payment link. 
 
-        ${resp}=  Provider Login  ${PUSERNAME115}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME115}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -82,7 +82,12 @@ JD-TC-DonationPaymentViaLink-1
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
         ${description}=  FakerLibrary.sentence
         Set Suite Variable  ${description}
@@ -126,7 +131,7 @@ JD-TC-DonationPaymentViaLink-1
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt1}=   Random Int   min=1000   max=4000
@@ -213,7 +218,7 @@ JD-TC-DonationPaymentViaLink-2
         Set Test Variable  ${In_con_id}
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -241,7 +246,7 @@ JD-TC-DonationPaymentViaLink-3
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -269,7 +274,7 @@ JD-TC-DonationPaymentViaLink-UH1
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -297,7 +302,7 @@ JD-TC-DonationPaymentViaLink-UH2
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -325,7 +330,7 @@ JD-TC-DonationPaymentViaLink-UH3
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -353,7 +358,7 @@ JD-TC-DonationPaymentViaLink-UH4
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -379,7 +384,7 @@ JD-TC-DonationPaymentViaLink-UH5
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -405,7 +410,7 @@ JD-TC-DonationPaymentViaLink-UH6
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -431,7 +436,7 @@ JD-TC-DonationPaymentViaLink-UH7
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -457,7 +462,7 @@ JD-TC-DonationPaymentViaLink-UH8
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -483,7 +488,7 @@ JD-TC-DonationPaymentViaLink-UH9
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000
@@ -509,7 +514,7 @@ JD-TC-DonationPaymentViaLink-UH10
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=500   max=1000

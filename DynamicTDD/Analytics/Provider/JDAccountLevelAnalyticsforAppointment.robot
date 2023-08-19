@@ -82,11 +82,11 @@ JD-TC-AccountLevelAnalytics-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -101,19 +101,22 @@ JD-TC-AccountLevelAnalytics-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   1  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -150,6 +153,7 @@ JD-TC-AccountLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -353,7 +357,7 @@ JD-TC-AccountLevelAnalytics-2
 
     [Documentation]   take walk-in appointments for a prepayment service for a provider and check account level analytics for WALK_IN_APPMT and ARRIVED_APPMT
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -473,7 +477,7 @@ JD-TC-AccountLevelAnalytics-3
 
     [Documentation]   take walk-in appointments for a virtual service for a provider and check account level analytics for WALK_IN_APPMT and CONFIRMED_APPMT
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -606,7 +610,7 @@ JD-TC-AccountLevelAnalytics-4
 
     [Documentation]   take online appointments for a provider and check account level analytics for ONLINE_APPMT and CONFIRMED_APPMT
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -706,7 +710,7 @@ JD-TC-AccountLevelAnalytics-4
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -749,7 +753,7 @@ JD-TC-AccountLevelAnalytics-5
 
     [Documentation]   take online appointments for prepayment service for a provider and check account level analytics for ONLINE_APPMT and CONFIRMED_APPMT 
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -842,7 +846,7 @@ JD-TC-AccountLevelAnalytics-5
 
     Log List   ${online_prepay_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -884,7 +888,7 @@ JD-TC-AccountLevelAnalytics-6
 
     [Documentation]   take online appointments for virtual service for a provider and check account level analytics for ONLINE_APPMT and CONFIRMED_APPMT 
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -988,7 +992,7 @@ JD-TC-AccountLevelAnalytics-6
 
     Log List   ${online_vs_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1029,7 +1033,7 @@ JD-TC-AccountLevelAnalytics-7
 
     [Documentation]   take phone in appointments for a provider and check account level analytics for PHONE_APPMT and CONFIRMED_APPMT
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1132,7 +1136,7 @@ JD-TC-AccountLevelAnalytics-7
 
     Log List   ${cons_phonein_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1187,7 +1191,7 @@ JD-TC-AccountLevelAnalytics-8
 
     [Documentation]   consumer takes phone in appointment for prepayment service for a provider and check account level analytics for PHONE_APPMT and CONFIRMED_APPMT 
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1276,7 +1280,7 @@ JD-TC-AccountLevelAnalytics-8
 
     Log List   ${phonein_prepay_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1331,7 +1335,7 @@ JD-TC-AccountLevelAnalytics-9
 
     [Documentation]   take phone in appointments for virtual service for a provider and check account level analytics for PHONE_APPMT and CONFIRMED_APPMT 
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1435,7 +1439,7 @@ JD-TC-AccountLevelAnalytics-9
 
     Log List   ${cons_phonein_vs_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1489,7 +1493,7 @@ JD-TC-AccountLevelAnalytics-10
 
     [Documentation]   provider takes phone in appointments for a consumer and check account level analytics for PHONE_APPMT and CONFIRMED_APPMT
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1626,7 +1630,7 @@ JD-TC-AccountLevelAnalytics-11
 
     [Documentation]   provider takes phone in appointments for a consumer for a service with prepayment and check account level analytics for PHONE_APPMT and CONFIRMED_APPMT
     
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1762,7 +1766,7 @@ JD-TC-AccountLevelAnalytics-12
 
     [Documentation]   provider takes phone in appointments for a virtual service for a consumer and check account level analytics for PHONE_APPMT and CONFIRMED_APPMT
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1970,7 +1974,7 @@ JD-TC-AccountLevelAnalytics-13
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2042,7 +2046,7 @@ JD-TC-AccountLevelAnalytics-14
 
     [Documentation]   change status from confirmed to arrived and check CONFIRMED_APPMT and ARRIVED_APPMT metrics
     
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -2130,7 +2134,7 @@ JD-TC-AccountLevelAnalytics-14
 JD-TC-AccountLevelAnalytics-15
     [Documentation]   change status from arrived to started and check CONFIRMED_APPMT, ARRIVED_APPMT and STARTED_APPMT metrics
     
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -2209,7 +2213,7 @@ JD-TC-AccountLevelAnalytics-15
 JD-TC-AccountLevelAnalytics-16
     [Documentation]   change status from started to Completed and check STARTED_APPMT and COMPLETETED_APPMT metrics
     
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -2294,7 +2298,7 @@ JD-TC-AccountLevelAnalytics-16
 JD-TC-AccountLevelAnalytics-17
     [Documentation]   consumer cancels confirmed appointment and check CONFIRMED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2395,7 +2399,7 @@ JD-TC-AccountLevelAnalytics-17
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2474,7 +2478,7 @@ JD-TC-AccountLevelAnalytics-17
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2540,7 +2544,7 @@ JD-TC-AccountLevelAnalytics-18
 
     [Documentation]   consumer cancels appointment in prepayment pending state and check ONLINE_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2618,7 +2622,7 @@ JD-TC-AccountLevelAnalytics-18
 
     Log List   ${online_prepay_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2696,7 +2700,7 @@ JD-TC-AccountLevelAnalytics-18
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2762,7 +2766,7 @@ JD-TC-AccountLevelAnalytics-19
 
     [Documentation]   provider cancel's an confirmed appointment and check CONFIRMED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2838,7 +2842,7 @@ JD-TC-AccountLevelAnalytics-19
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2915,7 +2919,7 @@ JD-TC-AccountLevelAnalytics-19
 
     END
 
-    # ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2983,7 +2987,7 @@ JD-TC-AccountLevelAnalytics-20
 
     [Documentation]   change status of online appt from arrived to cancelled and check ARRIVED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3059,7 +3063,7 @@ JD-TC-AccountLevelAnalytics-20
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3224,7 +3228,7 @@ JD-TC-AccountLevelAnalytics-20
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3292,7 +3296,7 @@ JD-TC-AccountLevelAnalytics-20
 JD-TC-AccountLevelAnalytics-21
     [Documentation]   cancel walkin checkins and check ARRIVED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3510,7 +3514,7 @@ JD-TC-AccountLevelAnalytics-22
 
     [Documentation]   change status from confirmed to rejected and check CONFIRMED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3585,7 +3589,7 @@ JD-TC-AccountLevelAnalytics-22
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3732,7 +3736,7 @@ JD-TC-AccountLevelAnalytics-22
 JD-TC-AccountLevelAnalytics-23
     [Documentation]   change status from arrived to rejected and check ARRIVED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3928,6 +3932,9 @@ JD-TC-AccountLevelAnalytics-23
 
 # JD-TC-AccountLevelAnalytics-24
 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 #     [Documentation]   change status from completed to rejected and check COMPLETETED_APPMT and CANCELLED_APPMT metrics
         # Cannot change appointment status from Completed to Rejected.
 #     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
@@ -4199,7 +4206,7 @@ JD-TC-AccountLevelAnalytics-23
 JD-TC-AccountLevelAnalytics-25
     [Documentation]   change status from cancelled to confirmed and check CONFIRMED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4267,7 +4274,7 @@ JD-TC-AccountLevelAnalytics-25
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4479,7 +4486,7 @@ JD-TC-AccountLevelAnalytics-25
 JD-TC-AccountLevelAnalytics-26
     [Documentation]   change status from cancelled to arrived and check ARRIVED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4782,7 +4789,7 @@ JD-TC-AccountLevelAnalytics-26
 JD-TC-AccountLevelAnalytics-27
     [Documentation]   change status from cancelled to started and check STARTED_APPMT and CANCELLED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5082,7 +5089,7 @@ JD-TC-AccountLevelAnalytics-27
 JD-TC-AccountLevelAnalytics-28
     [Documentation]   change status from rejected to confirmed and check CONFIRMED_APPMT and REJECTED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5164,7 +5171,7 @@ JD-TC-AccountLevelAnalytics-28
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5401,7 +5408,7 @@ JD-TC-AccountLevelAnalytics-28
 JD-TC-AccountLevelAnalytics-29
     [Documentation]   consumer reschedules an appointment taken from consumer side (online appointment) to another slot on the same day and check CONFIRMED_APPMT and RESCHEDULED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5489,7 +5496,7 @@ JD-TC-AccountLevelAnalytics-29
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5593,7 +5600,7 @@ JD-TC-AccountLevelAnalytics-29
 
     Log List   ${rescheduled_online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5645,7 +5652,7 @@ JD-TC-AccountLevelAnalytics-29
 JD-TC-AccountLevelAnalytics-30
     [Documentation]   consumer reschedules an appointment taken from consumer side (online appointment) to another slot on the same day in a different schedule and check CONFIRMED_APPMT and RESCHEDULED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5749,7 +5756,7 @@ JD-TC-AccountLevelAnalytics-30
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5853,7 +5860,7 @@ JD-TC-AccountLevelAnalytics-30
 
     Log List   ${rescheduled_online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5906,7 +5913,7 @@ JD-TC-AccountLevelAnalytics-30
 JD-TC-AccountLevelAnalytics-31
     [Documentation]   consumer reschedules an appointment taken from consumer side (online appointment) to another day and check CONFIRMED_APPMT and RESCHEDULED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5915,7 +5922,7 @@ JD-TC-AccountLevelAnalytics-31
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     ${SERVICE20}=    Set Variable  ${ser_names[19]}
     ${s_id20}=  Create Sample Service  ${SERVICE20}  maxBookingsAllowed=10
@@ -6004,7 +6011,7 @@ JD-TC-AccountLevelAnalytics-31
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6108,7 +6115,7 @@ JD-TC-AccountLevelAnalytics-31
 
     Log List   ${rescheduled_online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6170,7 +6177,7 @@ JD-TC-AccountLevelAnalytics-31
 JD-TC-AccountLevelAnalytics-32
     [Documentation]   provider reschedules an appointment taken from consumer side (online appointment) to another day and check CONFIRMED_APPMT and RESCHEDULED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6179,7 +6186,7 @@ JD-TC-AccountLevelAnalytics-32
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     ${SERVICE21}=    Set Variable  ${ser_names[20]}
     ${s_id21}=  Create Sample Service  ${SERVICE21}  maxBookingsAllowed=10
@@ -6252,7 +6259,7 @@ JD-TC-AccountLevelAnalytics-32
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6341,7 +6348,7 @@ JD-TC-AccountLevelAnalytics-32
 
     Log List   ${rescheduled_online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6417,7 +6424,7 @@ JD-TC-AccountLevelAnalytics-33
 
     END
     
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6426,7 +6433,7 @@ JD-TC-AccountLevelAnalytics-33
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     ${SERVICE22}=    Set Variable  ${ser_names[21]}
     # ${s_id22}=  Create Sample Service  ${SERVICE22}  maxBookingsAllowed=10
@@ -6498,7 +6505,7 @@ JD-TC-AccountLevelAnalytics-33
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6587,7 +6594,7 @@ JD-TC-AccountLevelAnalytics-33
 
     Log List   ${rescheduled_online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6649,7 +6656,7 @@ JD-TC-AccountLevelAnalytics-33
 JD-TC-AccountLevelAnalytics-34
     [Documentation]   Consumer Reschedules a started appointment taken from consumer side (online appointment) and check ONLINE_APPMT, CONFIRMED_APPMT, STARTED_APPMT and RESCHEDULED_APPMT metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6658,7 +6665,7 @@ JD-TC-AccountLevelAnalytics-34
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     # ${SERVICE22}=    Set Variable  ${ser_names[21]}
     # ${s_id22}=  Create Sample Service  ${SERVICE22}  maxBookingsAllowed=10
@@ -6747,7 +6754,7 @@ JD-TC-AccountLevelAnalytics-34
 
     Log List   ${online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -6913,7 +6920,7 @@ JD-TC-AccountLevelAnalytics-34
 
     Log List   ${rescheduled_online_appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -7068,7 +7075,7 @@ JD-TC-AccountLevelAnalytics-44
 # JD-TC-AccountLevelAnalytics-22
 #     [Documentation]   change status from started to cancelled and check STARTED_APPMT and CANCELLED_APPMT metrics
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -7328,7 +7335,7 @@ JD-TC-AccountLevelAnalytics-44
 # JD-TC-AccountLevelAnalytics-25
 #     [Documentation]   change status from started to rejected and check STARTED_APPMT and CANCELLED_APPMT metrics
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 

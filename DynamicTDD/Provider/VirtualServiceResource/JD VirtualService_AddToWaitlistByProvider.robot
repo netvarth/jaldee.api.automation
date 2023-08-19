@@ -101,11 +101,11 @@ JD-TC-VirtualService_Add To WaitlistByProvider-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -119,19 +119,23 @@ JD-TC-VirtualService_Add To WaitlistByProvider-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -256,9 +260,10 @@ JD-TC-VirtualService_Add To WaitlistByProvider-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    ${DAY}=  get_date
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  25
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  25  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -321,7 +326,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-1
     ${resp}=  Provider Add To WL With Virtual Service  ${cid}  ${p2_s1}  ${P1queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -389,14 +393,14 @@ JD-TC-VirtualService_Add To WaitlistByProvider-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${PUSERPH0_id}  user_${PUSERPH0}_skype
     Log  ${PUSERPH0_id}
     ${accId}=  get_acc_id  ${PUSERPH0}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -410,19 +414,23 @@ JD-TC-VirtualService_Add To WaitlistByProvider-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -472,6 +480,8 @@ JD-TC-VirtualService_Add To WaitlistByProvider-2
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
 
@@ -573,9 +583,9 @@ JD-TC-VirtualService_Add To WaitlistByProvider-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    ${DAY}=  get_date
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time   0  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -603,7 +613,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-2
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -626,7 +635,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-2
 JD-TC-VirtualService_Add To WaitlistByProvider-3
 	[Documentation]  Provider removes consumer waitlisted for a service and again add to the waitlist of same service and another service from same queue
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -643,13 +652,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-3
     Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -673,7 +681,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-3
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId}  ${DAY}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -691,7 +698,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-3
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc3}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -724,7 +730,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-4
 	[Documentation]  consumer cancels the waitlist then provider add him again into that waitlist for the same service
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -741,13 +747,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-4
     Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -767,7 +772,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-4
     Should Be Equal As Strings  ${resp.status_code}  200
        
         
-    ${resp}=  Delete Waitlist Consumer  ${wid1}  ${accId}
+    ${resp}=  Cancel Waitlist  ${wid1}  ${accId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -776,7 +781,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -785,7 +790,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-4
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId}  ${DAY}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -803,7 +807,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-4
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc3}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -832,15 +835,15 @@ JD-TC-VirtualService_Add To WaitlistByProvider-4
 JD-TC-VirtualService_Add To WaitlistByProvider-5
 	[Documentation]  A Consumer Added To Waitlist for same service in diffrent queue
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${p1queue2}=    FakerLibrary.word
-    ${sTime2}=  add_time   1  00
-    ${eTime2}=  add_time   1  30
+    ${sTime2}=  add_timezone_time  ${tz}  1  00  
+    ${eTime2}=  add_timezone_time  ${tz}  1  30  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity2}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue2}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  ${capacity2}  ${p1_l1}  ${p1_s1}  ${p1_s2} 
@@ -850,13 +853,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-5
 
 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -873,7 +875,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-5
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId2}  ${DAY}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -906,17 +907,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-5
 JD-TC-VirtualService_Add To WaitlistByProvider-6
 	[Documentation]  A Consumer Added To Waitlist for different services of different queue
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -934,7 +934,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-6
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId2}  ${DAY}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -965,18 +964,17 @@ JD-TC-VirtualService_Add To WaitlistByProvider-6
 JD-TC-VirtualService_Add To WaitlistByProvider-7
     [Documentation]  Add Consumer To future waitlist (Virtual service Without Prepayment)
       
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${FUTURE_DATE}=  add_date  3
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  3  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -998,18 +996,17 @@ JD-TC-VirtualService_Add To WaitlistByProvider-7
 JD-TC-VirtualService_Add To WaitlistByProvider-8
     [Documentation]  Add Consumer to Future waitlist of different queues for same service
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
 
-    ${FUTURE_DATE}=  add_date  5
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  5  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1026,7 +1023,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-8
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId2}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1056,17 +1052,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-8
 JD-TC-VirtualService_Add To WaitlistByProvider-9
     [Documentation]   future waitlist consumer waitlisted in diffrent service in diffrent queue
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${FUTURE_DATE}=  add_date  8
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  8  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1083,7 +1078,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-9
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId2}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1112,7 +1106,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-9
 JD-TC-VirtualService_Add To WaitlistByProvider-10
     [Documentation]  provider have two location. Add same consumer to waitlist (same service in different Location)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERPH0}
@@ -1178,9 +1172,10 @@ JD-TC-VirtualService_Add To WaitlistByProvider-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    ${DAY}=  get_date
-    ${sTime1}=  add_time   0  30
-    ${eTime1}=  add_time   0  45
+    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${p1queue3}=    FakerLibrary.word
     ${capacity1}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1190,17 +1185,15 @@ JD-TC-VirtualService_Add To WaitlistByProvider-10
     Set Suite Variable  ${queueId3}  ${resp.json()}
     
 
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time   1  45
-    ${eTime}=  add_time   4  15
+    ${sTime}=  add_timezone_time  ${tz}  0  45  
+    ${eTime}=  add_timezone_time  ${tz}  4  15  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -1208,8 +1201,8 @@ JD-TC-VirtualService_Add To WaitlistByProvider-10
     Set Suite Variable   ${p1_l2}   ${resp.json()}
 
     ${p1queue4}=    FakerLibrary.word
-    ${sTime2}=  add_time   0  50
-    ${eTime2}=  add_time   1  05
+    ${sTime2}=  add_timezone_time  ${tz}  0  50  
+    ${eTime2}=  add_timezone_time  ${tz}  1  05  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity2}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue4}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  ${capacity2}  ${p1_l2}  ${p1_s5}  ${p1_s6} 
@@ -1222,7 +1215,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-10
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s6}  ${queueId3}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1239,7 +1231,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-10
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s6}  ${queueId4}  ${DAY}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1280,7 +1271,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-11
     Set Suite Variable  ${C_fid2}   ${resp.json()}
 
     comment   Add same family member in Provider_consumer table
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${note}=  FakerLibrary.word
@@ -1289,13 +1280,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cidfor2}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1312,7 +1302,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-11
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1353,17 +1342,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-12
     # Should Be Equal As Strings  ${resp.status_code}  200  
     # Set Suite Variable  ${cidfor}   ${resp.json()}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${FUTURE_DATE}=  add_date  4
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  4  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1380,7 +1368,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-12
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1408,17 +1395,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-12
 JD-TC-VirtualService_Add To WaitlistByProvider-13
     [Documentation]  same family member added to waitlist  (diffrent service,  same queue)
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${FUTURE_DATE}=  add_date  8
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  8  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1435,7 +1421,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-13
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1463,17 +1448,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-13
 
 JD-TC-VirtualService_Add To WaitlistByProvider-14
     [Documentation]  same family member added to waitlist  (same service,  diffrent queue)
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${FUTURE_DATE}=  add_date  5
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  5  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1490,7 +1474,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-14
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId2}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1518,7 +1501,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-14
 JD-TC-VirtualService_Add To WaitlistByProvider-15
     [Documentation]  Add Consumer to future waitlist  (diffrent location , same service ,same provider)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERPH0}
@@ -1537,9 +1520,9 @@ JD-TC-VirtualService_Add To WaitlistByProvider-15
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    # ${DAY}=  get_date
-    # ${sTime1}=  add_time   2  10
-    # ${eTime1}=  add_time   2  25
+    # ${DAY}=  db.get_date_by_timezone  ${tz}
+    # ${sTime1}=  add_timezone_time  ${tz}   2  10
+    # ${eTime1}=  add_timezone_time  ${tz}   2  25
     # ${p1queue3}=    FakerLibrary.word
     # ${capacity1}=  FakerLibrary.Numerify  %%
     # ${list}=  Create List  1  2  3  4  5  6  7
@@ -1556,10 +1539,10 @@ JD-TC-VirtualService_Add To WaitlistByProvider-15
     # ${address}=  get_address
     # ${parking}    Random Element     ${parkingType} 
     # ${24hours}    Random Element    ['True','False']
-    # ${DAY}=  get_date
+    # ${DAY}=  db.get_date_by_timezone  ${tz}
     # ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime}=  add_time   0  10
-    # ${eTime}=  add_time   3  45
+    # ${sTime}=  add_timezone_time  ${tz}   0  10
+    # ${eTime}=  add_timezone_time  ${tz}  3  45  
     # ${url}=   FakerLibrary.url
     # ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     # Log  ${resp.json()}
@@ -1567,8 +1550,8 @@ JD-TC-VirtualService_Add To WaitlistByProvider-15
     # Set Suite Variable   ${p1_l2}   ${resp.json()}
 
     # ${p1queue4}=    FakerLibrary.word
-    # ${sTime2}=  add_time   2  30
-    # ${eTime2}=  add_time   2  45
+    # ${sTime2}=  add_timezone_time  ${tz}  2  30  
+    # ${eTime2}=  add_timezone_time  ${tz}  2  45  
     # ${list}=  Create List  1  2  3  4  5  6  7
     # ${capacity2}=  FakerLibrary.Numerify  %%
     # ${resp}=  Create Queue  ${p1queue4}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  ${capacity2}  ${p1_l2}  ${p1_s1}  ${p1_s1} 
@@ -1576,13 +1559,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-15
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${queueId_4}  ${resp.json()}
 
-    ${FUTURE_DATE}=  add_date  8
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  8  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId3}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1599,7 +1581,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-15
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId4}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1627,7 +1608,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-15
 JD-TC-VirtualService_Add To WaitlistByProvider-16
     [Documentation]  Consumer remove his own  future checkin from waitlist and again add for same service
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -1642,13 +1623,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-16
     # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${FUTURE_DATE}=  add_date  5
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  5  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1668,7 +1648,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-16
     Should Be Equal As Strings  ${resp.status_code}  200
        
         
-    ${resp}=  Delete Waitlist Consumer  ${wid1}  ${accId}
+    ${resp}=  Cancel Waitlist  ${wid1}  ${accId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1677,7 +1657,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-16
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1686,7 +1666,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-16
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1703,7 +1682,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-16
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc3}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -1730,7 +1708,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-16
  
 JD-TC-VirtualService_Add To WaitlistByProvider-17
     [Documentation]  Provider removes future checkin of a Consumer from waitlist after that provider add same consumer again in same service
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -1745,13 +1723,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-17
     # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${FUTURE_DATE}=  add_date  5
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  5  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1773,7 +1750,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-17
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1790,7 +1766,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-17
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc3}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -1818,7 +1793,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-17
 
 JD-TC-VirtualService_Add To WaitlistByProvider-18
     [Documentation]  Consumer remove his family members  future checkin from waitlist and again add for same service
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -1833,13 +1808,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-18
     # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${FUTURE_DATE}=  add_date  5
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  5  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1859,7 +1833,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-18
     Should Be Equal As Strings  ${resp.status_code}  200
        
         
-    ${resp}=  Delete Waitlist Consumer  ${wid1}  ${accId}
+    ${resp}=  Cancel Waitlist  ${wid1}  ${accId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1868,7 +1842,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-18
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1877,7 +1851,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-18
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1895,7 +1868,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-18
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc3}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -1924,7 +1896,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-18
 
 JD-TC-VirtualService_Add To WaitlistByProvider-19
     [Documentation]  Provider removes future checkin of a Consumer (FAMILY MEMBER) from waitlist and again consumer add again in same service
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -1939,13 +1911,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-19
     # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${FUTURE_DATE}=  add_date  5
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  5  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1968,7 +1939,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-19
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s2}  ${queueId}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -1986,7 +1956,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-19
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc3}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -2014,7 +1983,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-19
 
 JD-TC-VirtualService_Add To WaitlistByProvider-20
     [Documentation]  Provider add a consumer, after that consumer try to take checkin for that same service again for his family member
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -2029,13 +1998,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-20
     # Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     # Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${FUTURE_DATE}=  add_date  5
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  5  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid10}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid10} 
@@ -2058,7 +2026,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-20
     ${resp}=  Consumer Add To WL With Virtual Service  ${accId}  ${queueId}  ${FUTURE_DATE}  ${p1_s1}  ${consumerNote1}  ${bool[0]}  ${virtualService1}   ${C_fid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid11}  ${wid[0]}
     ${resp}=  Get consumer Waitlist By Id   ${wid11}  ${accId}   
@@ -2072,11 +2039,11 @@ JD-TC-VirtualService_Add To WaitlistByProvider-20
     # Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['jaldeeId']}  ${C_fid2}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-    ${resp}=  Delete Waitlist Consumer  ${wid10}  ${accId}
+    ${resp}=  Cancel Waitlist  ${wid10}  ${accId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Delete Waitlist Consumer  ${wid11}  ${accId}
+    ${resp}=  Cancel Waitlist  ${wid11}  ${accId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2086,16 +2053,15 @@ JD-TC-VirtualService_Add To WaitlistByProvider-21
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
      
-    ${FUTURE_DATE}=  add_date  7
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  7  
     ${consumerNote1}=   FakerLibrary.word
     ${resp}=  Consumer Add To WL With Virtual Service  ${accId}  ${queueId}  ${FUTURE_DATE}  ${p1_s1}  ${consumerNote1}  ${bool[0]}  ${virtualService1}   0
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2118,7 +2084,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-21
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2126,7 +2092,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-21
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -2155,7 +2120,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-21
 JD-TC-VirtualService_Add To WaitlistByProvider-UH1
     [Documentation]  Add to waitlist for a Virtual_service without login
     
-    ${FUTURE_DATE}=  add_date  6
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  6  
     ${desc1}=   FakerLibrary.word
     ${resp}=  Provider Add To WL With Virtual Service  ${cid}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor}
     Log   ${resp.json()}
@@ -2165,7 +2130,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH1
 JD-TC-VirtualService_Add To WaitlistByProvider-UH2
     [Documentation]  the consumer get added to waitlist for a Virtual_service  , try to change Checkin status to STARTED  
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accId}=  get_acc_id  ${PUSERPH0}
@@ -2228,9 +2193,10 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH2
     
 
 
-    ${DAY}=  get_date
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${p1queue5}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2270,7 +2236,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH2
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s7}  ${queueId_5}  ${DAY}  ${desc1}  ${bool[0]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -2325,7 +2290,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH3
     [Documentation]  the consumer get added to waitlist for a Virtual_service  , try to change Checkin status to arrived  
     clear_queue    ${PUSERPH0}
     clear_service  ${PUSERPH0}
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accId}=  get_acc_id  ${PUSERPH0}
@@ -2385,9 +2350,10 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH3
     Set Suite Variable   ${p1_s8}   ${resp.json()[0]['id']}
     Set Suite Variable   ${P1SERVICE8}   ${resp.json()[0]['name']}
 
-    ${DAY}=  get_date
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${p1queue5}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2400,7 +2366,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH3
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s7}  ${queueId_5}  ${DAY}  ${desc1}  ${bool[0]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -2456,17 +2421,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH3
 *** comment ***
 JD-TC-VirtualService_Add To WaitlistByProvider-UH4
 	[Documentation]  Add Comsumer To Waitlist for the Same Services Two Times
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
 
-    ${FUTURE_DATE}=  add_date  4
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  4  
     ${desc1}=   FakerLibrary.word
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -2494,12 +2458,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH4
     
 JD-TC-VirtualService_Add To WaitlistByProvider-UH5
     [Documentation]  Reaches the waitlist  maximum capacity and check it
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
 
-    ${DAY}=  get_date
-    ${sTime1}=  add_time  1  00
-    ${eTime1}=  add_time   1  15
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime1}=  add_timezone_time  ${tz}  1  00  
+    ${eTime1}=  add_timezone_time  ${tz}  1  15  
     ${p1queue6}=    FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
     ${resp}=  Create Queue  ${p1queue6}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  1  ${p1_l1}  ${p1_s7}  ${p1_s8}
@@ -2507,12 +2471,11 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${queueId_6}  ${resp.json()}
     
-    ${FUTURE_DATE}=  add_date  4
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  4  
     ${desc1}=   FakerLibrary.word
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s8}  ${queueId_6}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -2541,14 +2504,14 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH5
 JD-TC-VirtualService_Add To WaitlistByProvider-UH6
 	[Documentation]  Add Consumer To Future Waitlist ,provider in holiday
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERPH0}
 
-    ${DAY}=  get_date
-    ${sTime1}=  add_time  1  30
-    ${eTime1}=  add_time   2  00
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
+    ${eTime1}=  add_timezone_time  ${tz}  2  00  
     ${P0Queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2557,7 +2520,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${P0QueueId}  ${resp.json()}
 
-    ${FUTURE_DATE}=  add_date  4
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  4  
     ${description}=   FakerLibrary.word
     # ${resp}=  Create Holiday  ${FUTURE_DATE}  ${holidayname}  ${sTime1}  ${eTime1}
     # Log  ${resp.json()}
@@ -2586,12 +2549,12 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH6
 JD-TC-VirtualService_Add To WaitlistByProvider-UH7
 	[Documentation]  invalid provider
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
     ${INVALID_Consumer_ID}=  get_acc_id  ${Invalid_CUSER}
-    ${FUTURE_DATE}=  add_date  4
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  4  
     ${desc1}=   FakerLibrary.word
     ${resp}=  Provider Add To WL With Virtual Service  ${INVALID_Consumer_ID}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid2}
     Log   ${resp.json()}
@@ -2601,11 +2564,11 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH7
 JD-TC-VirtualService_Add To WaitlistByProvider-UH8 
     [Documentation]   Add to waitlist After Business time
    
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERPH0}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Update Waitlist Settings  ${calc_mode [0]}  0  true  true  true  true  ${Empty}  
     Log  ${resp.json()}
@@ -2617,9 +2580,10 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    ${DAY}=  get_date
-    ${sTime1}=  subtract_time  0  30
-    ${eTime1}=  subtract_time   0  20
+    Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime1}=  subtract_timezone_time  ${tz}  0  30
+    ${eTime1}=  subtract_timezone_time  ${tz}   0  20
 
     ${p1queue8}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
@@ -2629,12 +2593,11 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${queueId_8}  ${resp.json()}
 
-    ${FUTURE_DATE}=  add_date  4
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  4  
     ${desc1}=   FakerLibrary.word
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId_8}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -2668,17 +2631,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH9
     Comment  step 2:add to waitlist w2  same service again
     Comment  step 3:change waitlist status  from cancell to checkin
    
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -2699,7 +2661,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH9
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${DAY}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -2725,17 +2686,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH10
     Comment  step 2:add to future waitlist w2  same service again
     Comment  step 3:change waitlist status  from cancell to checkin
    
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
 
-    ${FUTURE_DATE}=  add_date  4
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  4  
     ${desc1}=   FakerLibrary.word
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -2757,7 +2717,6 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH10
     ${resp}=  Provider Add To WL With Virtual Service  ${cid2}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc2}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cidfor2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -2779,17 +2738,16 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH10
 
 JD-TC-VirtualService_Add To WaitlistByProvider-UH11
     [Documentation]  Provider add a consumer, after that consumer try to take checkin for that same service again
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${FUTURE_DATE}=  add_date  7
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  7  
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid6}  ${p1_s1}  ${queueId}  ${FUTURE_DATE}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid6}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -2814,7 +2772,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH11
     Should Be Equal As Strings  ${resp.status_code}  422 
     Should Be Equal As Strings  "${resp.json()}"  "${WAITLIST_CUSTOMER_ALREADY_IN}"
 
-    ${resp}=  Delete Waitlist Consumer  ${wid1}  ${accId}
+    ${resp}=  Cancel Waitlist  ${wid1}  ${accId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2824,7 +2782,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
      
-    ${FUTURE_DATE}=  add_date  8
+    ${FUTURE_DATE}=  db.add_timezone_date  ${tz}  8  
     ${consumerNote1}=   FakerLibrary.word
     ${resp}=  Consumer Add To WL With Virtual Service  ${accId}  ${queueId}  ${FUTURE_DATE}  ${p1_s1}  ${consumerNote1}  ${bool[0]}  ${virtualService1}   0
     Log  ${resp.json()}
@@ -2834,7 +2792,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH12
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2857,7 +2815,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH12
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2879,7 +2837,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH12
 JD-TC-VirtualService_Add To WaitlistByProvider-UH13
     [Documentation]  Add consumer to waitlist with an invalid Zoom url.
     
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_customer   ${PUSERPH2}
@@ -2905,7 +2863,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH13
    
     Set Test Variable   ${INVALID_ZOOM_id2}   ${PUSERPH2}
     ${Invalid_VS}=  Create Dictionary   ${CallingModes[0]}=${INVALID_ZOOM_id2}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${cid4}  ${p2_s1}  ${P1queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${Invalid_VS}   ${cid4}
@@ -2915,7 +2873,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH13
 
 # JD-TC-Add To WaitlistByConsumer-CLEAR
 #     [Documentation]  Clear location, Queue, Waitlist
-#     ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -22,7 +22,7 @@ ${SERVICE3}   Painting
 
 JD-TC-DonationBill-1
         [Documentation]   Consumer Get Bill of a Donation (No Tax Enabled)
-        ${resp}=  Provider Login  ${PUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME25}
@@ -40,7 +40,12 @@ JD-TC-DonationBill-1
         Should Be Equal As Strings    ${resp.status_code}   200
         
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -67,7 +72,7 @@ JD-TC-DonationBill-1
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME25}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${don_amt}=   Random Int   min=1000   max=4000
         ${mod}=  Evaluate  ${don_amt}%${multiples[0]}
@@ -89,7 +94,7 @@ JD-TC-DonationBill-1
         Should Be Equal As Strings  ${resp.json()['donor']['firstName']}  ${fname1}
         Should Be Equal As Strings  ${resp.json()['donor']['lastName']}  ${lname1}
 
-        ${resp}=  Provider Login  ${PUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -117,7 +122,7 @@ JD-TC-DonationBill-1
 
 JD-TC-DonationBill-2
         [Documentation]   Consumer Get Bill of a Donation where donation service has tax
-        ${resp}=  Provider Login  ${PUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME25}
@@ -125,7 +130,12 @@ JD-TC-DonationBill-2
         clear_queue      ${PUSERNAME25}
         clear_location   ${PUSERNAME25}
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${gstper}=  Random Element  ${gstpercentage}
         ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
         ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
@@ -163,7 +173,7 @@ JD-TC-DonationBill-2
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME25}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${don_amt}=   Random Int   min=1000   max=4000
         ${mod}=  Evaluate  ${don_amt}%${multiples[0]}
@@ -215,7 +225,7 @@ JD-TC-DonationBill-UH1
 
 JD-TC-DonationBill-UH2
         [Documentation]   get bill by provider
-        ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
         Should Be Equal As Strings    ${resp.status_code}   200 
         ${resp}=  Get Bill By consumer  ${don_id}  ${acc_id}  
         Log  ${resp.content}

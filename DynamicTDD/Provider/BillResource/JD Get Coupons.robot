@@ -20,7 +20,7 @@ ${coupon3}   wheatbyid3
 JD-TC-Get coupons-1
     [Documentation]   Provider check to get Coupons
 
-    ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME125}
     clear_service       ${PUSERNAME125}
@@ -70,10 +70,10 @@ JD-TC-Get coupons-1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -91,10 +91,10 @@ JD-TC-Get coupons-1
     ${amount2}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=10   max=100
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -112,10 +112,10 @@ JD-TC-Get coupons-1
     ${amount3}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=10   max=100
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20

@@ -22,7 +22,7 @@ JD-TC-UpdateItemGroup-1
 
     [Documentation]  Create Item Group for a provider then update the item group name.
 
-    ${resp}=  Provider Login  ${PUSERNAME78}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,7 +72,7 @@ JD-TC-UpdateItemGroup-2
 
     [Documentation]  Create Item Group for a provider then update the item group description.
 
-    ${resp}=  Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -122,7 +122,7 @@ JD-TC-UpdateItemGroup-3
 
     [Documentation]  update item group without Group ame.
 
-    ${resp}=  Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -157,7 +157,7 @@ JD-TC-UpdateItemGroup-4
 
     [Documentation]  update item group without Group description.
 
-    ${resp}=  Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -206,7 +206,7 @@ JD-TC-UpdateItemGroup-UH1
 
     [Documentation]  update item group with another providers item group id.
 
-    ${resp}=  Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -228,7 +228,7 @@ JD-TC-UpdateItemGroup-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

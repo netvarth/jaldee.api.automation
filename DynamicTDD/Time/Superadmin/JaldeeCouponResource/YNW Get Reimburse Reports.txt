@@ -26,7 +26,7 @@ ${longi}        89.524764
 ${latti}        86.524764
 *** Test Cases ***
 
-YNW-TC-Get Reimburse reports-1
+JD-TC-Get Reimburse reports-1
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME7}
     Comment  Get reimbursement report   
@@ -228,7 +228,7 @@ YNW-TC-Get Reimburse reports-1
     Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
 
-YNW-TC-Get Reimburse reports-2
+JD-TC-Get Reimburse reports-2
     Comment     Reimburse payment of same jaldee coupon and same provider and Get reimbursement report 
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -351,7 +351,7 @@ YNW-TC-Get Reimburse reports-2
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
 
 
-YNW-TC-Get Reimburse reports-3
+JD-TC-Get Reimburse reports-3
     Comment  SA do reimuburse payment of 2 jaldeee coupon and same provider
     change_system_time  0  1  
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
@@ -537,13 +537,13 @@ YNW-TC-Get Reimburse reports-3
     Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  100.0
 
-YNW-TC-Get Reimburse reports -UH1
+JD-TC-Get Reimburse reports -UH1
     Comment  Reimburse payment without login  
     ${resp}=  Get Reimburse Reports
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-Get Reimburse reports -UH2
+JD-TC-Get Reimburse reports -UH2
     Comment   Consumer do Reimburse payment
     ${resp}=   Consumer Login  ${CUSERNAME}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -551,7 +551,7 @@ YNW-TC-Get Reimburse reports -UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-Get Reimburse reports -UH3
+JD-TC-Get Reimburse reports -UH3
     Comment   Provider do Reimburse payment
     ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200

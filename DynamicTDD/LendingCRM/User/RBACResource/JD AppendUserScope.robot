@@ -29,7 +29,7 @@ JD-TC-AppendUserScope-1
 
     [Documentation]  append user role(Bussiness head) and scope to an existing user without any scope.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -183,7 +183,7 @@ JD-TC-AppendUserScope-2
 
     [Documentation]  append user scope to an existing user with another location in scope.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -232,7 +232,7 @@ JD-TC-AppendUserScope-3
 
     [Documentation]   append user role('Sales head').
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +266,7 @@ JD-TC-AppendUserScope-4
 
     [Documentation]   append user role(Branch Manager and Branch Operation Head(default role)).
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -312,7 +312,7 @@ JD-TC-AppendUserScope-5
 
     [Documentation]   append user role(Branch Credit Head, Sales Executive Sales Officer).
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -374,7 +374,7 @@ JD-TC-AppendUserScope-6
 
     [Documentation]  append user role without role name.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -408,7 +408,7 @@ JD-TC-AppendUserScope-7
 
     [Documentation]  append user role with extra capability.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -447,7 +447,7 @@ JD-TC-AppendUserScope-8
 
     [Documentation]  append user role without setting default role ,then check the default role.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
 
@@ -459,7 +459,7 @@ JD-TC-AppendUserScope-9
     ...  create partner .then append bussiness head role to the same user, 
     ...  then try to disable partner.
 
-    ${resp}=  Provider Login  ${MUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME125}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -551,8 +551,13 @@ JD-TC-AppendUserScope-9
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  Get User
@@ -634,7 +639,7 @@ JD-TC-AppendUserScope-9
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -705,7 +710,7 @@ JD-TC-AppendUserScope-10
     [Documentation]  create a user without any role, then append sales officer role and 
     ...  create loan .then append reject loan capability to sales officer.
 
-    ${resp}=  Provider Login  ${MUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -802,8 +807,13 @@ JD-TC-AppendUserScope-10
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  Get User
@@ -903,7 +913,7 @@ JD-TC-AppendUserScope-10
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -982,7 +992,7 @@ JD-TC-AppendUserScope-10
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -993,7 +1003,7 @@ JD-TC-AppendUserScope-10
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1094,7 +1104,7 @@ JD-TC-AppendUserScope-11
     ...   sales offciers scope, then try to create loan in that loaction and 
     ...   verify the branch in which the loan created.
 
-    ${resp}=  Provider Login  ${MUSERNAME129}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -1190,8 +1200,13 @@ JD-TC-AppendUserScope-11
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  Get User
@@ -1303,7 +1318,7 @@ JD-TC-AppendUserScope-11
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1382,7 +1397,7 @@ JD-TC-AppendUserScope-11
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1393,7 +1408,7 @@ JD-TC-AppendUserScope-11
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1450,7 +1465,7 @@ JD-TC-AppendUserScope-12
     ...   sales offciers scope, then try to create loan in another branch loaction and 
     ...   verify the branch in which the loan created.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1461,7 +1476,7 @@ JD-TC-AppendUserScope-13
     [Documentation]  create a branch in one location and append another location in 
     ...   sales officers scope, then try to create loan with location in sales officers scope.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1470,7 +1485,7 @@ JD-TC-AppendUserScope-14
     [Documentation]  create a branch in one location and append another location in 
     ...   sales officers scope, then try to create loan with location in branch.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1478,7 +1493,7 @@ JD-TC-AppendUserScope-UH1
 
     [Documentation]  append same role again.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1497,7 +1512,7 @@ JD-TC-AppendUserScope-UH2
 
     [Documentation]  append user role with invalid role id.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1518,7 +1533,7 @@ JD-TC-AppendUserScope-UH3
 
     [Documentation]  append user role with another providers user id.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -1577,7 +1592,7 @@ JD-TC-AppendUserScope-UH3
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1598,7 +1613,7 @@ JD-TC-AppendUserScope-UH4
 
     [Documentation]  append user role with another providers user id.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1619,7 +1634,7 @@ JD-TC-AppendUserScope-UH5
 
     [Documentation]  append user role with another providers location id in the scope.
 
-    ${resp}=  Provider Login  ${MUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME64}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1628,7 +1643,7 @@ JD-TC-AppendUserScope-UH5
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -1684,7 +1699,7 @@ JD-TC-AppendUserScope-UH8
     [Documentation]  create a user without any role, then append sales officer role and 
     ...  create partner then try to activate partner.
 
-    ${resp}=  Provider Login  ${MUSERNAME126}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME126}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -1744,8 +1759,13 @@ JD-TC-AppendUserScope-UH8
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  Get User
@@ -1819,7 +1839,7 @@ JD-TC-AppendUserScope-UH8
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

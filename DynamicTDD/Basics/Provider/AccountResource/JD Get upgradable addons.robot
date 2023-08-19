@@ -33,7 +33,7 @@ JD-TC-Get Upgradableaddons -1
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
@@ -64,7 +64,7 @@ JD-TC-Get Upgradableaddons -1
             
 JD-TC-Get Upgradableaddons -6
        [Documentation]   Provider with addonid 6 check to get upgradable addons
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${addons_len}=  Evaluate  ${addons_len}-1
        ${resp}=  Add addon   ${addonslist[${addons_len}]}
@@ -110,7 +110,7 @@ UpgradeAddons Metadata
 
 Upgradable Addons
        [Arguments]  ${len}  ${list}  ${j}
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${upgradable_addons}=   Get upgradable addons
        Should Be Equal As Strings    ${resp.status_code}   200

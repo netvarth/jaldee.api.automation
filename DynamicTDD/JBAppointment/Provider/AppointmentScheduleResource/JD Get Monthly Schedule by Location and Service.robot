@@ -20,7 +20,7 @@ ${digits}       0123456789
 JD-TC-MonthlySchedule-1
     [Documentation]  Provider checks monthly schedule availability
     
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -32,6 +32,7 @@ JD-TC-MonthlySchedule-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -64,12 +65,16 @@ JD-TC-MonthlySchedule-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     # ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=    FakerLibrary.Word
@@ -117,7 +122,7 @@ JD-TC-MonthlySchedule-1
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         Verify Response List  ${resp}  ${i}  scheduleId=${sch_id}   scheduleName=${schedule_name}  date=${DAY2}
         ${slot_Len}=  Get Length   ${resp.json()[${i}]['availableSlots']}
         Should Be Equal As Integers  ${slot_Len}  ${sch_length}
@@ -126,7 +131,7 @@ JD-TC-MonthlySchedule-1
 JD-TC-MonthlySchedule-2
     [Documentation]  Provider checks monthly schedule availability when today's schedule time is over
     
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -139,16 +144,21 @@ JD-TC-MonthlySchedule-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
   
     # ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    # ${sTime1}=  add_time  0  15
-    ${sTime1}=  subtract_time  0  ${delta+15}
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${sTime1}=  subtract_timezone_time  ${tz}  0  ${delta+15}
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=    FakerLibrary.Word
@@ -190,7 +200,7 @@ JD-TC-MonthlySchedule-2
 
     Log   ${slots}
 
-    ${now}=  db.get_time
+    ${now}=  db.get_time_by_timezone  ${tz}
 
     ${resp}=  Get Monthly Schedule Availability by Location and Service  ${lid}  ${s_id}
     Log  ${resp.json()}
@@ -199,13 +209,13 @@ JD-TC-MonthlySchedule-2
     ${len}=  Get Length   ${resp.json()}
 
     # FOR  ${i}  IN RANGE  ${len}
-    #     ${DAY2}=  add_date  ${i+1}
+    #     ${DAY2}=  db.add_timezone_date  ${tz}  ${i+1}
     #     Verify Response List  ${resp}  ${i}  scheduleId=${sch_id}   scheduleName=${schedule_name}  date=${DAY2}
     #     ${slot_Len}=  Get Length   ${resp.json()[${i}]['availableSlots']}
     #     Should Be Equal As Integers  ${slot_Len}  ${sch_length}
     # END
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         ${slot_Len}=  Run Keyword If  "${DAY2}" != "${DAY1}"   Get Length   ${resp.json()[${i}]['availableSlots']}
         Run Keyword If  "${DAY2}" != "${DAY1}"   
         ...    Run Keywords
@@ -220,7 +230,7 @@ JD-TC-MonthlySchedule-2
 JD-TC-MonthlySchedule-3
     [Documentation]  Provider checks monthly schedule availability when weekends are non working days
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -233,14 +243,15 @@ JD-TC-MonthlySchedule-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${today}=  get_weekday
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${today}=  get_timezone_weekday  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=    FakerLibrary.Word
@@ -289,7 +300,7 @@ JD-TC-MonthlySchedule-3
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         ${weekday}=   get_weekday_by_date   ${DAY2}
         # Verify Response List  ${resp}  ${i}   date=${DAY2}  reason=${reason[0]}
         
@@ -306,7 +317,7 @@ JD-TC-MonthlySchedule-3
 JD-TC-MonthlySchedule-4
     [Documentation]  Provider checks monthly schedule availability when there are Holidays
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -319,14 +330,15 @@ JD-TC-MonthlySchedule-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${today}=  get_weekday
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${today}=  get_timezone_weekday  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=    FakerLibrary.Word
@@ -370,7 +382,7 @@ JD-TC-MonthlySchedule-4
 
     ${holidayname}=   FakerLibrary.word
     ${rand}=  FakerLibrary.Random Int  min=1  max=28
-    ${holiday_date}=  add_date  ${rand}
+    ${holiday_date}=  db.add_timezone_date  ${tz}  ${rand}
     # ${resp}=  Create Holiday  ${holiday_date}  ${holidayname}  ${sTime1}  ${eTime1}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -394,7 +406,7 @@ JD-TC-MonthlySchedule-4
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         ${weekday}=   get_weekday_by_date   ${DAY2}
         # Verify Response List  ${resp}  ${i}   date=${DAY2}  reason=${reason[0]}
         
@@ -427,13 +439,16 @@ JD-TC-MonthlySchedule-5
     ${length}=  Get Length    ${len}    
     FOR   ${a}  IN RANGE   0    ${length}    
 
-        ${resp}=  ProviderLogin  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' == '${pkgId}'
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Exit For Loop If  '${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' == '${pkgId}'
                 
     END
-    # ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME${a}}
@@ -458,13 +473,18 @@ JD-TC-MonthlySchedule-5
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
     END
 
+    ${resp}=    Get Location By Id   ${lid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME${a}}
     
-    ${today}=  get_weekday
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${today}=  get_timezone_weekday  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${SERVICE1}=    FakerLibrary.Word
@@ -557,10 +577,10 @@ JD-TC-MonthlySchedule-5
 
     ${flag}=  Set Variable  ${0}
     ${j}=  Set Variable  ${0}
-    ${DAY2}=  get_date
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
 
     FOR  ${i}  IN RANGE  ${len}
-        # ${DAY2}=  add_date  ${i}
+        # ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         ${flag}=  Evaluate  ${flag}+1
         ${slot_Len}=  Run Keyword If  '${resp.json()[${i}]['scheduleId']}' == '${sch_id1}'   Get Length   ${resp.json()[${i}]['availableSlots']}
         ...     ELSE IF   '${resp.json()[${i}]['scheduleId']}' == '${sch_id2}'   Get Length   ${resp.json()[${i}]['availableSlots']}
@@ -576,7 +596,7 @@ JD-TC-MonthlySchedule-5
 
         ${j}=  Run Keyword If  '${flag}' >= '${len1}'  Evaluate  ${j}+1
         ...     ELSE  Set Variable  ${j}
-        ${DAY2}=  Run Keyword If  '${flag}' >= '${len1}'  add_date   ${j}
+        ${DAY2}=  Run Keyword If  '${flag}' >= '${len1}'  db.add_timezone_date  ${tz}   ${j}
         ...     ELSE  Set Variable  ${DAY2}
         ${flag}=  Run Keyword If  '${flag}' >= '${len1}'  Set Variable  ${0}
         ...     ELSE  Set Variable  ${flag}
@@ -603,7 +623,7 @@ JD-TC-MonthlySchedule-6
     Set Suite Variable   ${billable_providers}
     Set Suite Variable   ${multilocPro}
 
-     ${resp}=  Provider Login  ${multilocPro[5]}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200    
     
     
@@ -614,7 +634,7 @@ JD-TC-MonthlySchedule-6
    # FOR   ${a}  IN RANGE   0    ${mlp_length}    
 
     #    ${ml_pro}=  Evaluate  random.choice($multilocPro)  random
-     #   ${resp}=  ProviderLogin  ${ml_pro}  ${PASSWORD}
+     #   ${resp}=  Encrypted Provider Login  ${ml_pro}  ${PASSWORD}
      #   Log   ${resp.json()}
      #   Should Be Equal As Strings  ${resp.status_code}  200
      #   Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' == '${pkgId}'
@@ -649,11 +669,11 @@ JD-TC-MonthlySchedule-6
 
     clear_appt_schedule   ${multilocPro[5]}
     
-    ${today}=  get_weekday
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${today}=  get_timezone_weekday  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${SERVICE1}=    FakerLibrary.Word
@@ -745,7 +765,7 @@ JD-TC-MonthlySchedule-6
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         Verify Response List  ${resp}  ${i}  scheduleId=${sch_id1}   scheduleName=${schedule_name1}  date=${DAY2}
         ${slot_Len}=  Get Length   ${resp.json()[${i}]['availableSlots']}
         Should Be Equal As Integers  ${slot_Len}  ${sch_length1}
@@ -758,7 +778,7 @@ JD-TC-MonthlySchedule-6
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         Verify Response List  ${resp}  ${i}  scheduleId=${sch_id2}   scheduleName=${schedule_name2}  date=${DAY2}
         ${slot_Len}=  Get Length   ${resp.json()[${i}]['availableSlots']}
         Should Be Equal As Integers  ${slot_Len}  ${sch_length2}
@@ -780,7 +800,7 @@ JD-TC-MonthlySchedule-7
     FOR   ${a}  IN RANGE   0    ${mlp_length}    
 
         ${ml_pro}=  Evaluate  random.choice($multilocPro)  random
-        ${resp}=  ProviderLogin  ${ml_pro}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${ml_pro}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' == '${pkgId}'
@@ -811,11 +831,11 @@ JD-TC-MonthlySchedule-7
 
     clear_appt_schedule   ${PUSERNAME${a}}
     
-    ${today}=  get_weekday
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${today}=  get_timezone_weekday  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${SERVICE1}=    FakerLibrary.Word
@@ -907,7 +927,7 @@ JD-TC-MonthlySchedule-7
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         Verify Response List  ${resp}  ${i}  scheduleId=${sch_id1}   scheduleName=${schedule_name1}  date=${DAY2}
         ${slot_Len}=  Get Length   ${resp.json()[${i}]['availableSlots']}
         Should Be Equal As Integers  ${slot_Len}  ${sch_length1}
@@ -920,7 +940,7 @@ JD-TC-MonthlySchedule-7
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         Verify Response List  ${resp}  ${i}  scheduleId=${sch_id2}   scheduleName=${schedule_name2}  date=${DAY2}
         ${slot_Len}=  Get Length   ${resp.json()[${i}]['availableSlots']}
         Should Be Equal As Integers  ${slot_Len}  ${sch_length2}
@@ -929,14 +949,11 @@ JD-TC-MonthlySchedule-7
 JD-TC-MonthlySchedule-8
     [Documentation]  Provider checks monthly schedule availability when another provider has holiday
     
-    ${sTime1}=  add_time  0  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
-
+    
     clear_appt_schedule   ${PUSERNAME30}
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -949,8 +966,13 @@ JD-TC-MonthlySchedule-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date     
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name1}=  FakerLibrary.bs
     ${parallel1}=  FakerLibrary.Random Int  min=1  max=10
@@ -969,7 +991,7 @@ JD-TC-MonthlySchedule-8
 
     ${desc}=   FakerLibrary.word
     ${rand}=  FakerLibrary.Random Int  min=1  max=28
-    ${holiday_date}=  add_date  ${rand}
+    ${holiday_date}=  db.add_timezone_date  ${tz}  ${rand}
     # ${resp}=  Create Holiday  ${holiday_date}  ${holidayname}  ${sTime1}  ${eTime1}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -993,7 +1015,7 @@ JD-TC-MonthlySchedule-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1006,8 +1028,9 @@ JD-TC-MonthlySchedule-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date     
+    ${DAY1}=  db.get_date_by_timezone  ${tz}     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1052,7 +1075,7 @@ JD-TC-MonthlySchedule-8
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         Verify Response List  ${resp}  ${i}  scheduleId=${sch_id}   scheduleName=${schedule_name}  date=${DAY2}
         ${slot_Len}=  Get Length   ${resp.json()[${i}]['availableSlots']}
         Should Be Equal As Integers  ${slot_Len}  ${sch_length}
@@ -1061,7 +1084,7 @@ JD-TC-MonthlySchedule-8
 JD-TC-MonthlySchedule-UH1
     [Documentation]  Provider checks monthly schedule availability another provider's location
 
-    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1074,12 +1097,13 @@ JD-TC-MonthlySchedule-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
-
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+   
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1092,13 +1116,14 @@ JD-TC-MonthlySchedule-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${SERVICE1}=    FakerLibrary.Word
@@ -1148,7 +1173,7 @@ JD-TC-MonthlySchedule-UH1
 JD-TC-MonthlySchedule-UH2
     [Documentation]  Provider checks monthly schedule availability for another provider's service
 
-    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1161,12 +1186,13 @@ JD-TC-MonthlySchedule-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1179,13 +1205,14 @@ JD-TC-MonthlySchedule-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${SERVICE1}=    FakerLibrary.Word
@@ -1235,7 +1262,7 @@ JD-TC-MonthlySchedule-UH2
 JD-TC-MonthlySchedule-UH3
     [Documentation]  Provider checks monthly schedule availability without login
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1248,13 +1275,14 @@ JD-TC-MonthlySchedule-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=    FakerLibrary.Word
@@ -1308,7 +1336,7 @@ JD-TC-MonthlySchedule-UH3
 JD-TC-MonthlySchedule-UH4
     [Documentation]  Provider checks monthly schedule availability when there are no schedules in an existing location
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1333,7 +1361,7 @@ JD-TC-MonthlySchedule-UH4
 JD-TC-MonthlySchedule-UH5
     [Documentation]  Provider checks monthly schedule availability when there are no schedules for a service
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1358,7 +1386,7 @@ JD-TC-MonthlySchedule-UH5
 JD-TC-MonthlySchedule-UH6
     [Documentation]  Provider checks monthly schedule availability by consumer login
     
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1371,13 +1399,14 @@ JD-TC-MonthlySchedule-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=    FakerLibrary.Word
@@ -1435,7 +1464,7 @@ JD-TC-MonthlySchedule-UH6
 JD-TC-MonthlySchedule-UH7
     [Documentation]  Provider checks monthly schedule availability by another provider's login
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1448,6 +1477,7 @@ JD-TC-MonthlySchedule-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Monthly Schedule Availability by Location and Service  ${lid}  ${s_id}
     Log  ${resp.json()}
@@ -1457,7 +1487,7 @@ JD-TC-MonthlySchedule-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1470,7 +1500,7 @@ JD-TC-MonthlySchedule-UH7
 JD-TC-MonthlySchedule-UH8
     [Documentation]  Provider checks monthly schedule availability with invalid service id
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1497,7 +1527,7 @@ JD-TC-MonthlySchedule-UH8
 JD-TC-MonthlySchedule-UH9
     [Documentation]  Provider checks monthly schedule availability with invalid location id
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1534,7 +1564,7 @@ JD-TC-MonthlySchedule-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1547,13 +1577,14 @@ JD-TC-MonthlySchedule-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME31}
     
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=    FakerLibrary.Word
@@ -1632,7 +1663,7 @@ JD-TC-MonthlySchedule-UH10
     ${len}=  Get Length   ${resp.json()}
 
     FOR  ${i}  IN RANGE  ${len}
-        ${DAY2}=  add_date  ${i}
+        ${DAY2}=  db.add_timezone_date  ${tz}  ${i}
         ${slot_Len}=  Run Keyword If  "${DAY2}" != "${DAY3}"   Get Length   ${resp.json()[${i}]['availableSlots']}
         Run Keyword If  "${DAY2}" != "${DAY3}"   
         ...    Run Keywords

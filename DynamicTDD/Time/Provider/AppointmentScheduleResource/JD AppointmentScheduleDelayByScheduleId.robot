@@ -71,7 +71,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${accountId}   ${resp.json()['id']}
@@ -100,12 +100,13 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME60}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  90
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}   0  90
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=3  max=10
@@ -359,7 +360,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     change_system_time  0  5

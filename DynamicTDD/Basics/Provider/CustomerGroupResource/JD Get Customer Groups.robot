@@ -18,7 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-GetGroups-1
     [Documentation]  Get customer groups of a provider
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -73,7 +73,7 @@ JD-TC-GetGroups-1
 JD-TC-GetGroups-2
     [Documentation]  Get customer groups of a provider without creating groups 
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,7 +89,7 @@ JD-TC-GetGroups-2
 JD-TC-GetGroups-UH1
     [Documentation]  Get customer groups of another provider
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -125,7 +125,7 @@ JD-TC-GetGroups-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME92}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME92}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

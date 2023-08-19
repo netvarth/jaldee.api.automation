@@ -78,13 +78,14 @@ JD-TC-AppmtEnableEditToConsumer-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -126,7 +127,7 @@ JD-TC-AppmtEnableEditToConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -164,6 +165,7 @@ JD-TC-AppmtEnableEditToConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -177,7 +179,7 @@ JD-TC-AppmtEnableEditToConsumer-1
 
     clear_appt_schedule   ${PUSERNAME2}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -283,7 +285,7 @@ JD-TC-AppmtEnableEditToConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -322,7 +324,7 @@ JD-TC-AppmtEnableEditToConsumer-1
 JD-TC-AppmtEnableEditToConsumer-UH1
     [Documentation]  Appmt Enable Edit To Consumer where release status is unreleased
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -359,7 +361,7 @@ JD-TC-AppmtEnableEditToConsumer-UH1
 JD-TC-AppmtEnableEditToConsumer-UH2
     [Documentation]  Appmt Enable Edit To Consumer Where status is false
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -396,7 +398,7 @@ JD-TC-AppmtEnableEditToConsumer-UH2
 JD-TC-AppmtEnableEditToConsumer-UH3
     [Documentation]  Resubmiting QNS Without Enables Edit for consumer
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -429,7 +431,7 @@ JD-TC-AppmtEnableEditToConsumer-UH3
 JD-TC-AppmtEnableEditToConsumer-UH4
     [Documentation]  Appmt Enable Edit To Consumer With invalid gnr id
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -463,7 +465,7 @@ JD-TC-AppmtEnableEditToConsumer-UH4
 JD-TC-AppmtEnableEditToConsumer-UH5
     [Documentation]  Appmt Enable Edit To Consumer With invalid appmt id
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -498,7 +500,7 @@ JD-TC-AppmtEnableEditToConsumer-UH5
 JD-TC-AppmtEnableEditToConsumer-UH6
     [Documentation]  Appmt Enable Edit To Consumer Without qnr id
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -526,7 +528,7 @@ JD-TC-AppmtEnableEditToConsumer-UH6
 JD-TC-AppmtEnableEditToConsumer-UH7
     [Documentation]  Appmt Enable Edit To Consumer Without appmt id
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

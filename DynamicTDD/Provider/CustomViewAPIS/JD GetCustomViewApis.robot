@@ -45,7 +45,7 @@ JD-TC-GetCustomViewApis-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_C}${\n}
@@ -54,9 +54,16 @@ JD-TC-GetCustomViewApis-1
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -79,17 +86,22 @@ JD-TC-GetCustomViewApis-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -149,7 +161,7 @@ JD-TC-GetCustomViewApis-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_C}${\n}
@@ -158,9 +170,16 @@ JD-TC-GetCustomViewApis-2
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
      ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
@@ -198,17 +217,22 @@ JD-TC-GetCustomViewApis-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id01}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -246,9 +270,9 @@ JD-TC-GetCustomViewApis-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id01}  ${resp.json()}
 
-    ${sTime1}=  add_time  1  45
+    ${sTime1}=  add_timezone_time  ${tz}  1  45  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  50
+    ${eTime1}=  add_timezone_time  ${tz}  2  50  
     Set Suite Variable   ${eTime1}
     ${q_name2}=  FakerLibrary.name
     ${resp}=  Create Queue For User  ${q_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id02}  ${s_id02}
@@ -323,7 +347,7 @@ JD-TC-GetCustomViewApis-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_Z}${\n}

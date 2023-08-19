@@ -42,7 +42,7 @@ JD-TC-UpdateQueueForUser-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -59,6 +59,7 @@ JD-TC-UpdateQueueForUser-1
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+886445
      clear_users  ${PUSERNAME_U1}
      Set Suite Variable  ${PUSERNAME_U1}
@@ -75,18 +76,24 @@ JD-TC-UpdateQueueForUser-1
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
 
-     ${DAY1}=  get_date
+     ${lid}=  Create Sample Location
+     Set Suite Variable  ${lid}
+     ${resp}=   Get Location ById  ${lid}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}
-     ${DAY2}=  add_date  10      
+     ${DAY2}=  db.add_timezone_date  ${tz}  10        
      Set Suite Variable  ${DAY2}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}
-     ${sTime1}=  add_time  0  15
+     ${sTime1}=  add_timezone_time  ${tz}  0  15  
      Set Suite Variable   ${sTime1}
-     ${eTime1}=  add_time   0  30
+     ${eTime1}=  add_timezone_time  ${tz}  0  30  
      Set Suite Variable   ${eTime1}
-     ${lid}=  Create Sample Location
-     Set Suite Variable  ${lid}
+     
      ${description}=  FakerLibrary.sentence
      Set Suite Variable  ${description}
      ${dur}=  FakerLibrary.Random Int  min=05  max=10
@@ -140,7 +147,7 @@ JD-TC-UpdateQueueForUser-1
 
 JD-TC-UpdateQueueForUser-2
      [Documentation]  Update  a  user queue with more service
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Create Service For User  ${SERVICE5}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
@@ -151,8 +158,8 @@ JD-TC-UpdateQueueForUser-2
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${s_id6}  ${resp.json()}
-     ${sTime3}=  add_time  0  50
-     ${eTime3}=  add_time   1  15
+     ${sTime3}=  add_timezone_time  ${tz}  0  50
+     ${eTime3}=  add_timezone_time  ${tz}  1  15  
      ${queue_name}=  FakerLibrary.bs
      ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  1  5  ${lid}  ${u_id}  ${s_id5}
      Log  ${resp.json()}
@@ -190,7 +197,7 @@ JD-TC-UpdateQueueForUser-2
 
 JD-TC-UpdateQueueForUser-UH1
     [Documentation]    Create a queue and update that queue with  same details of another user queue
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+3236646
     clear_users  ${PUSERNAME_U2}
@@ -232,7 +239,7 @@ JD-TC-UpdateQueueForUser-UH1
 
 JD-TC-UpdateQueueForUser-UH2
      [Documentation]  Create a queue for a user with branch's service id
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc}=   FakerLibrary.sentence

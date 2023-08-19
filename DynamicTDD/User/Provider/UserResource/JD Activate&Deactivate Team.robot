@@ -15,7 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Activate&DeactivateTeam-1
      [Documentation]  Deactivate a ACTIVE team at account level
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -39,7 +39,7 @@ JD-TC-Activate&DeactivateTeam-1
 
 JD-TC-Activate&DeactivateTeam-2
      [Documentation]  Activate a INACTIVE team at account level
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Activate&Deactivate Team  ${t_id1}  ${status[0]}
@@ -54,17 +54,19 @@ JD-TC-Activate&DeactivateTeam-2
 JD-TC-Activate&DeactivateTeam-3
      [Documentation]  Deactivate  and activate a team by user login with user type PROVIDER with admin privilage TRUE
 
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
      ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
      sleep  2s
      ${resp}=  Get Departments
@@ -82,7 +84,7 @@ JD-TC-Activate&DeactivateTeam-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${desc2}=   FakerLibrary.sentence
@@ -108,7 +110,7 @@ JD-TC-Activate&DeactivateTeam-3
 
 JD-TC-Activate&DeactivateTeam-4
      [Documentation]  Deactivate  and activate a team by user login with user type ADMIN
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330099
@@ -145,7 +147,7 @@ JD-TC-Activate&DeactivateTeam-4
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${desc2}=   FakerLibrary.sentence
@@ -170,7 +172,7 @@ JD-TC-Activate&DeactivateTeam-4
 
 JD-TC-Activate&DeactivateTeam-UH1
      [Documentation]  Deactivate  and activate a team by user login with user type PROVIDER with admin privilage FALSE
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330098
@@ -207,7 +209,7 @@ JD-TC-Activate&DeactivateTeam-UH1
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Activate&Deactivate Team  ${t_id4}  ${status[1]}
      Log   ${resp.json()}
@@ -220,7 +222,7 @@ JD-TC-Activate&DeactivateTeam-UH1
 
 JD-TC-Activate&DeactivateTeam-UH2
      [Documentation]  Activate a ACTIVE team
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Activate&Deactivate Team  ${t_id3}  ${status[0]}
@@ -230,7 +232,7 @@ JD-TC-Activate&DeactivateTeam-UH2
 
 JD-TC-Activate&DeactivateTeam-UH3
      [Documentation]  Deactivate a INACTIVE a team
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Activate&Deactivate Team  ${t_id3}  ${status[1]}

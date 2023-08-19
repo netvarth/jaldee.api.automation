@@ -22,7 +22,7 @@ ${countryCode}   +91
 JD-TC-GetOrderSettingsByAccountid-1
     [Documentation]   Get Order Settings after signup
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid222}  ${resp.json()['id']}
     Set Suite Variable  ${P222_fName}  ${resp.json()['firstName']}
@@ -47,7 +47,7 @@ JD-TC-GetOrderSettingsByAccountid-1
 JD-TC-GetOrderSettingsByAccountid-2
     [Documentation]   Get Order Settings after Enable order settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${firstname2}=  FakerLibrary.first_name
@@ -80,7 +80,7 @@ JD-TC-GetOrderSettingsByAccountid-2
 JD-TC-GetOrderSettingsByAccountid-3
     [Documentation]   Get Order Settings after Disable order settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Order Settings
@@ -101,7 +101,7 @@ JD-TC-GetOrderSettingsByAccountid-3
 JD-TC-GetOrderSettingsByAccountid-4
     [Documentation]   Enable order settings through Updation, after that Get Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fName}=    FakerLibrary.word
@@ -144,7 +144,7 @@ JD-TC-GetOrderSettingsByAccountid-4
 JD-TC-GetOrderSettingsByAccountid-5
     [Documentation]   Disable order settings through Updation, after that Get Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -188,7 +188,7 @@ JD-TC-GetOrderSettingsByAccountid-5
 JD-TC-GetOrderSettingsByAccountid-6
     [Documentation]   Update Email again and Get Order Settings 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid32}  ${resp.json()['id']}
     Set Suite Variable  ${P32_fName}  ${resp.json()['firstName']}

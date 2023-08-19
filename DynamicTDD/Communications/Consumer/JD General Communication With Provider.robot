@@ -31,10 +31,15 @@ JD-TC-General Communication with Provider-1
     [Documentation]  General Communication with a valid provider with attachment as jpg file.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     # ${resp}=   Get jaldeeIntegration Settings
@@ -106,7 +111,7 @@ JD-TC-General Communication with Provider-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -130,10 +135,14 @@ JD-TC-General Communication with Provider-2
     [Documentation]  General Communication with a valid provider with attachment as png file.
     
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -177,7 +186,7 @@ JD-TC-General Communication with Provider-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -201,10 +210,14 @@ JD-TC-General Communication with Provider-3
     [Documentation]  General Communication with a valid provider with attachment as pdf file.
     
     clear_Providermsg  ${PUSERNAME214}
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -247,7 +260,7 @@ JD-TC-General Communication with Provider-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -271,10 +284,14 @@ JD-TC-General Communication with Provider-4
     [Documentation]  General Communication with a valid provider with attachment as jpeg file.
     
     clear_Providermsg  ${PUSERNAME214}
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -317,7 +334,7 @@ JD-TC-General Communication with Provider-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -341,10 +358,14 @@ JD-TC-General Communication with Provider-5
     [Documentation]  General Communication with a valid provider without message.
     
     clear_Providermsg  ${PUSERNAME214}
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -385,7 +406,7 @@ JD-TC-General Communication with Provider-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -409,10 +430,14 @@ JD-TC-General Communication with Provider-6
     [Documentation]  General Communication with a valid provider without caption.
     
     clear_Providermsg  ${PUSERNAME214}
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -453,7 +478,7 @@ JD-TC-General Communication with Provider-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -477,10 +502,14 @@ JD-TC-General Communication with Provider-7
     [Documentation]  General Communication with a valid provider with attachment as gif file.
     
     clear_Providermsg  ${PUSERNAME214}
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -522,7 +551,7 @@ JD-TC-General Communication with Provider-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -576,10 +605,14 @@ JD-TC-General Communication with Provider-UH4
     [Documentation]  General Communication with a valid provider with attachment as doc file.
     
     clear_Providermsg  ${PUSERNAME214}
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -621,7 +654,7 @@ JD-TC-General Communication with Provider-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -646,10 +679,14 @@ JD-TC-General Communication with Provider-UH5
     [Documentation]  General Communication with a valid provider with attachment as sh file.
     
     clear_Providermsg  ${PUSERNAME214}
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -679,10 +716,14 @@ JD-TC-General Communication with Provider-UH6
     [Documentation]  General Communication with a valid provider with attachment as txt file.
     
     clear_Providermsg  ${PUSERNAME214}
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -724,7 +765,7 @@ JD-TC-General Communication with Provider-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -749,10 +790,14 @@ JD-TC-General Communication with Provider-8
     [Documentation]  consumer communicate with provider with massage type enquiry and  that consumer  becomes provider consumer 
     
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
 
     ${resp}=   ProviderLogout
@@ -796,7 +841,7 @@ JD-TC-General Communication with Provider-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -827,7 +872,7 @@ JD-TC-General Communication with Provider-8
 
 # JD-TC-General Communication with Provider-2
 #     Comment  General Communication done by provider as a consumer with consumer login
-#     ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${p_id}  ${resp.json()['id']}

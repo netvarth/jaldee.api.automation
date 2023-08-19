@@ -232,13 +232,14 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -281,7 +282,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -303,6 +304,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -316,7 +318,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-1
 
     clear_queue   ${PUSERNAME157}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -357,11 +359,12 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -426,7 +429,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-2
 
     clear_customer   ${PUSERNAME157}
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -448,6 +451,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -461,7 +465,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-2
 
     clear_queue   ${PUSERNAME157}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -491,11 +495,12 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-2
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -535,7 +540,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-2
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
-    ${resp}=  Delete Waitlist Consumer  ${wid}  ${account_id}
+    ${resp}=  Cancel Waitlist  ${wid}  ${account_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -544,7 +549,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}   waitlistStatus=${wl_status[4]}   
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -573,7 +578,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-3
 
     clear_customer   ${PUSERNAME157}
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -595,6 +600,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -608,7 +614,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-3
 
     clear_queue   ${PUSERNAME157}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -637,11 +643,12 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-3
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -681,7 +688,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-3
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -708,7 +715,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-3
 JD-TC-GetConsumerQuestionnaireByUuidForWaitlist-UH1
     [Documentation]  Get questionnaire by provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

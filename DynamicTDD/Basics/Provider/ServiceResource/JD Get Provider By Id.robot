@@ -20,12 +20,17 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Get Provider By Id-1
 
         [Documentation]  Get Provider By Id
-        ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
-        Should Be Equal As Strings    ${resp.status_code}    200
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
         Log  ${resp.json()}
-        Set Suite Variable   ${firstname}   ${resp.json()['firstName']}
-        Set Suite Variable   ${lastname}   ${resp.json()['lastName']}
-        Set Suite Variable   ${primaryPhoneNumber}   ${resp.json()['primaryPhoneNumber']}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Suite Variable   ${firstname}   ${decrypted_data['firstName']}
+        Set Suite Variable   ${lastname}   ${decrypted_data['lastName']}
+        Set Suite Variable   ${primaryPhoneNumber}   ${decrypted_data['primaryPhoneNumber']}
+        
         ${resp}=  Get Provider By Id  ${PUSERNAME111}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['basicInfo']['firstName']}   ${firstname}
@@ -51,7 +56,7 @@ JD-TC-Get Provider By Id-UH2
 JD-TC-Get Provider By Id-UH3
 
         [Documentation]  Get Provider details using id of another provider 
-        ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Provider By Id  ${PUSERNAME111}
         Should Be Equal As Strings  ${resp.status_code}  401

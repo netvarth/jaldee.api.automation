@@ -23,15 +23,19 @@ JD-TC-GetReminders-1
 
     [Documentation]    Provider create a reminder for his consumer and verify it.
 
-    ${resp}=  Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -45,15 +49,15 @@ JD-TC-GetReminders-1
         Set Suite Variable  ${pcid18}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable  ${sTime1}  
-    ${eTime1}=  add_time  3  15
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     Set Suite Variable  ${eTime1}
     ${msg}=  FakerLibrary.word
     Set Suite Variable  ${msg}
@@ -83,7 +87,7 @@ JD-TC-GetReminders-2
 
     [Documentation]    Provider create more than one reminder for his consumer and verify it(with same schedule).
 
-    ${resp}=  Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -118,15 +122,15 @@ JD-TC-GetReminders-3
 
     [Documentation]    Provider create more than one reminder for his consumer and verify it(with different schedule).
 
-    ${resp}=  Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY3}=  add_date   2
-    ${DAY4}=  add_date  12    
+    ${DAY3}=  db.add_timezone_date  ${tz}   2
+    ${DAY4}=  db.add_timezone_date  ${tz}  12    
     ${list1}=  Create List  1  2  3  4 
-    ${sTime2}=  db.get_time  
-    ${eTime2}=  add_time  1  15
+    ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${eTime2}=  db.add_timezone_time  ${tz}  1  15
     ${msg1}=  FakerLibrary.word
 
     Set Suite Variable  ${DAY3}
@@ -176,7 +180,7 @@ JD-TC-GetReminders-4
 
     [Documentation]    Provider create more than one reminder for his consumers and verify it(with same schedule).
 
-    ${resp}=  Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -241,15 +245,15 @@ JD-TC-GetReminders-5
 
     [Documentation]    Provider create more than one reminder for his consumers and verify it(with different schedule).
 
-    ${resp}=  Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY5}=  add_date   3
-    ${DAY6}=  add_date  10   
+    ${DAY5}=  db.add_timezone_date  ${tz}   3
+    ${DAY6}=  db.add_timezone_date  ${tz}  10   
     ${list2}=  Create List  1  2  3  
-    ${sTime3}=  add_time  0  45  
-    ${eTime3}=  add_time  2  15
+    ${sTime3}=  db.add_timezone_time  ${tz}  0  45  
+    ${eTime3}=  db.add_timezone_time  ${tz}  2  15
     ${msg2}=  FakerLibrary.word
 
     Set Suite Variable  ${DAY5}
@@ -317,7 +321,7 @@ JD-TC-GetReminders-6
 
     [Documentation]    Get reminder with filter id.
 
-    ${resp}=  Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -338,7 +342,7 @@ JD-TC-GetReminders-7
 
     [Documentation]    Get reminder with filter id.
 
-    ${resp}=  Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

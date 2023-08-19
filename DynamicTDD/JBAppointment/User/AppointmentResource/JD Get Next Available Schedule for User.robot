@@ -26,11 +26,21 @@ JD-TC-NextAvailableSchedule for User-1
 
     [Documentation]   Get next available schedule for user when there is only one schedule
 
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    
+
+    # ${resp}=   Enable Today Appointment
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}    ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
+     
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
@@ -52,12 +62,14 @@ JD-TC-NextAvailableSchedule for User-1
     # Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -131,7 +143,7 @@ JD-TC-NextAvailableSchedule for User-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  02s
@@ -150,7 +162,7 @@ JD-TC-NextAvailableSchedule for User-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -158,17 +170,18 @@ JD-TC-NextAvailableSchedule for User-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${eTime1}=  add_time  3  15
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
@@ -225,7 +238,7 @@ JD-TC-NextAvailableSchedule for User-1
 JD-TC-NextAvailableSchedule for User-2
     [Documentation]   Get next available schedule for user when there are more than 1 schedule
 
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME57}
@@ -245,6 +258,7 @@ JD-TC-NextAvailableSchedule for User-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
     Log  ${resp.json()}
@@ -253,11 +267,11 @@ JD-TC-NextAvailableSchedule for User-2
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  5
-    # ${sTime1}=  db.get_time
+    ${sTime1}=  add_timezone_time  ${tz}  0  5  
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -270,8 +284,8 @@ JD-TC-NextAvailableSchedule for User-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime2}=  add_two  ${eTime1}  5
     ${delta2}=  FakerLibrary.Random Int  min=40  max=80
@@ -347,7 +361,7 @@ JD-TC-NextAvailableSchedule for User-2
 JD-TC-NextAvailableSchedule for User-3
     [Documentation]   Get next available schedule for user when there are more than 1 schedule and one schedule timings are over
 
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME57}
@@ -367,6 +381,7 @@ JD-TC-NextAvailableSchedule for User-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
     Log  ${resp.json()}
@@ -375,11 +390,11 @@ JD-TC-NextAvailableSchedule for User-3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
-    ${time_now}=   db.get_time
+    ${time_now}=   db.get_time_by_timezone  ${tz}
     ${sTime1}=  sub_two  ${time_now}   ${delta1+5}
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -392,11 +407,11 @@ JD-TC-NextAvailableSchedule for User-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta2}=  FakerLibrary.Random Int  min=40  max=80
-    ${sTime2}=  add_time  0  5
+    ${sTime2}=  add_timezone_time  ${tz}  0  5  
     ${eTime2}=  add_two   ${sTime2}  ${delta2}
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel2}=  FakerLibrary.Random Int  min=1  max=10
@@ -468,7 +483,7 @@ JD-TC-NextAvailableSchedule for User-3
 JD-TC-NextAvailableSchedule for User-4
     [Documentation]   Get next available schedule for multiple users.
 
-    ${resp}=  Provider Login  ${MUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${MUSERNAME53}
@@ -494,12 +509,14 @@ JD-TC-NextAvailableSchedule for User-4
     Set Test Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -562,14 +579,15 @@ JD-TC-NextAvailableSchedule for User-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  5
+    ${sTime}=  add_timezone_time  ${tz}  0  5  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -603,7 +621,7 @@ JD-TC-NextAvailableSchedule for User-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME59}
@@ -628,9 +646,12 @@ JD-TC-NextAvailableSchedule for User-4
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
 
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -707,6 +728,7 @@ JD-TC-NextAvailableSchedule for User-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Appointment Schedules  provider-eq=${u_id1}
     Log  ${resp.json()}
@@ -715,12 +737,12 @@ JD-TC-NextAvailableSchedule for User-4
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service For User  ${SERVICE2}  ${dep_id1}  ${u_id1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
-    ${time_now}=   db.get_time
+    ${time_now}=   db.get_time_by_timezone  ${tz}
     ${sTime1}=  add_two  ${time_now}   ${delta1+5}
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${schedule_name1}=  FakerLibrary.bs
@@ -799,7 +821,7 @@ JD-TC-NextAvailableSchedule for User-4
 JD-TC-NextAvailableSchedule for User-5
     [Documentation]   Get next available schedule without login
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -807,6 +829,7 @@ JD-TC-NextAvailableSchedule for User-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -839,7 +862,7 @@ JD-TC-NextAvailableSchedule for User-5
 JD-TC-NextAvailableSchedule for User-6
     [Documentation]   Get next available schedule with consumer login
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -847,6 +870,7 @@ JD-TC-NextAvailableSchedule for User-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -887,7 +911,7 @@ JD-TC-NextAvailableSchedule for User-6
 JD-TC-NextAvailableSchedule for User-UH1
     [Documentation]   Get next available schedule for user with invalid account id
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -895,6 +919,7 @@ JD-TC-NextAvailableSchedule for User-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -928,7 +953,7 @@ JD-TC-NextAvailableSchedule for User-UH1
 JD-TC-NextAvailableSchedule for User-UH2
     [Documentation]   Get next available schedule for user with invalid location id
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -936,6 +961,7 @@ JD-TC-NextAvailableSchedule for User-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -969,7 +995,7 @@ JD-TC-NextAvailableSchedule for User-UH2
 JD-TC-NextAvailableSchedule for User-UH3
     [Documentation]   Get next available schedule for user with invalid user id
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -977,6 +1003,7 @@ JD-TC-NextAvailableSchedule for User-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1010,7 +1037,7 @@ JD-TC-NextAvailableSchedule for User-UH3
 JD-TC-NextAvailableSchedule for User-UH4
     [Documentation]   Get next available schedule for user with Empty user id
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1018,6 +1045,7 @@ JD-TC-NextAvailableSchedule for User-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1047,7 +1075,7 @@ JD-TC-NextAvailableSchedule for User-UH4
 JD-TC-NextAvailableSchedule for User-UH5
     [Documentation]   Get next available schedule for user with Empty location id
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1055,6 +1083,7 @@ JD-TC-NextAvailableSchedule for User-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1083,7 +1112,7 @@ JD-TC-NextAvailableSchedule for User-UH5
 JD-TC-NextAvailableSchedule for User-UH6
     [Documentation]   Get next available schedule for user with Empty account id
     ${pid}=  get_acc_id  ${MUSERNAME57}
-    ${resp}=  Provider Login  ${MUSERNAME57}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME57}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1091,6 +1120,7 @@ JD-TC-NextAvailableSchedule for User-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}

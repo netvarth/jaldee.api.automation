@@ -47,7 +47,7 @@ JD-TC-SendMessage-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -73,7 +73,7 @@ JD-TC-SendMessage-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
@@ -104,7 +104,7 @@ JD-TC-SendMessage-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id3}  ${resp.json()['id']}
@@ -132,7 +132,7 @@ JD-TC-SendMessage-4
     [Documentation]   Provider send a message to a provider consumer with one attachment.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -169,7 +169,7 @@ JD-TC-SendMessage-5
 
     [Documentation]   Provider send a message to a partner with one attachment.
 
-    ${resp}=  Provider Login  ${MUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -264,7 +264,7 @@ JD-TC-SendMessage-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME95}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -331,7 +331,7 @@ JD-TC-SendMessage-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -361,7 +361,7 @@ JD-TC-SendMessage-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -378,7 +378,7 @@ JD-TC-SendMessage-UH1
 
     [Documentation]   Provider send a message to another provider with one attachment.
 
-    ${resp}=  Provider Login  ${MUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider1}  ${resp.json()['id']}
@@ -387,7 +387,7 @@ JD-TC-SendMessage-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME26}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME26}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -419,7 +419,7 @@ JD-TC-SendMessage-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=  Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -442,7 +442,7 @@ JD-TC-SendMessage-UH3
     [Documentation]   Provider send a message to another providers provider consumer.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME45}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -466,7 +466,7 @@ JD-TC-SendMessage-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${MUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME68}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -491,7 +491,7 @@ JD-TC-SendMessage-UH4
     [Documentation]   create a user in one location and partner in another location , then user try to send message to that partner.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -626,7 +626,7 @@ JD-TC-SendMessage-UH4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -657,7 +657,7 @@ JD-TC-SendMessage-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -686,7 +686,7 @@ JD-TC-SendMessage-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}

@@ -24,7 +24,7 @@ JD-TC-DeleteAppointmentQueueSet-1
 
     [Documentation]   Delete a Appointment QueueSet by provider
 
-    ${resp}=  ProviderLogin  ${PUSERNAME148}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME148}
     clear_location  ${PUSERNAME148}
@@ -32,14 +32,19 @@ JD-TC-DeleteAppointmentQueueSet-1
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -112,7 +117,7 @@ JD-TC-DeleteAppointmentQueueSet-UH2
 JD-TC-DeleteAppointmentQueueSet-UH3
 
     [Documentation]    Delete a Appoinment QueueSet by id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Delete AppointmentQueue By id  ${invalid_id}
@@ -125,7 +130,7 @@ JD-TC-DeleteAppointmentQueueSet-UH4
 
     [Documentation]  Delete a Appointment QueueSet by id of another provider
     
-    ${resp}=  ProviderLogin  ${PUSERNAME148}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${order1}=   Random Int   min=0   max=1
     ${Values}=  FakerLibrary.Words  	nb=3
@@ -149,7 +154,7 @@ JD-TC-DeleteAppointmentQueueSet-UH4
     Set Test Variable  ${sba_id}  ${resp.json()}
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Delete AppointmentQueue By id   ${sba_id1}
     Should Be Equal As Strings  ${resp.status_code}  422

@@ -15,6 +15,11 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
+
+*** Variables ***
+${tz}   Asia/Kolkata
+
+
 *** Test Cases ***
 
 JD-TC-GetJcashOffer-1
@@ -33,11 +38,11 @@ JD-TC-GetJcashOffer-1
     ${name}=  FakerLibrary.name
     Set Suite Variable   ${name}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -88,11 +93,11 @@ JD-TC-GetJcashOffer-2
     ${name1}=  FakerLibrary.name
     Set Suite Variable   ${name1}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -130,11 +135,11 @@ JD-TC-GetJcashOffer-3
     ${name2}=  FakerLibrary.name
     Set Suite Variable   ${name2}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -159,7 +164,7 @@ JD-TC-GetJcashOffer-4
 
     [Documentation]    Create Jcash offer with scope as SP.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pid}=  get_acc_id  ${PUSERNAME99}
@@ -173,11 +178,11 @@ JD-TC-GetJcashOffer-4
     ${name3}=  FakerLibrary.name
     Set Suite Variable   ${name3}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -210,11 +215,11 @@ JD-TC-GetJcashOffer-5
     ${name4}=  FakerLibrary.name
     Set Suite Variable   ${name4}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -246,11 +251,11 @@ JD-TC-GetJcashOffer-6
     ${name5}=  FakerLibrary.name
     Set Suite Variable   ${name5}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100  
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -289,11 +294,11 @@ JD-TC-GetJcashOffer-6
     ${name6}=  FakerLibrary.name
     Set Suite Variable   ${name6}
     ${EMPTY_List}=  Create List
-    ${start_date1}=  get_date  
-    ${end_date1}=  add_date   12  
+    ${start_date1}=  db.get_date_by_timezone  ${tz}  
+    ${end_date1}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt1}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil1}=  add_date   26  
+    ${maxValidUntil1}=  db.add_timezone_date  ${tz}   26  
     ${validForDays1}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit1}=  Convert To Number  ${maxSpendLimit}  1
@@ -340,11 +345,11 @@ JD-TC-GetJcashOffer-7
     ${name7}=  FakerLibrary.name
     Set Suite Variable   ${name7}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -394,11 +399,11 @@ JD-TC-GetJcashOffer-7
     
 #     ${name}=  FakerLibrary.name
 #     ${EMPTY_List}=  Create List
-#     ${start_date}=  get_date  
-#     ${end_date}=  add_date   12  
+#     ${start_date}=  db.get_date_by_timezone  ${tz}  
+#     ${end_date}=  db.add_timezone_date  ${tz}  12    
 #     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
 #     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-#     ${maxValidUntil}=  add_date   26  
+#     ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
 #     ${validForDays}=  Random Int  min=5   max=10   
 #     ${maxSpendLimit}=  Random Int  min=30   max=100 
 #     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -474,11 +479,11 @@ JD-TC-GetJcashOffer-UH3
     
     ${name}=  FakerLibrary.name
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -497,7 +502,7 @@ JD-TC-GetJcashOffer-UH4
 
     [Documentation]    Get jaldee cash offer by provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     

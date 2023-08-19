@@ -162,7 +162,7 @@ JD-TC-SubmitQuestionnaireForOrder-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -170,6 +170,7 @@ JD-TC-SubmitQuestionnaireForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -242,7 +243,7 @@ JD-TC-SubmitQuestionnaireForOrder-1
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${catalogid}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}   ${item_id2}
+            ${catalogid}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}   ${item_id2}
         END
     END
 
@@ -270,7 +271,7 @@ JD-TC-SubmitQuestionnaireForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -323,7 +324,7 @@ JD-TC-SubmitQuestionnaireForOrder-1
     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -384,7 +385,7 @@ JD-TC-SubmitQuestionnaireForOrder-1
 JD-TC-SubmitQuestionnaireForOrder-2
     [Documentation]    Place an order By Consumer for family member.
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -434,7 +435,7 @@ JD-TC-SubmitQuestionnaireForOrder-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id}  ${resp.json()}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -490,7 +491,7 @@ JD-TC-SubmitQuestionnaireForOrder-2
 JD-TC-SubmitQuestionnaireForOrder-3
     [Documentation]    A consumer place multiple orders for the same item.
     
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -531,7 +532,7 @@ JD-TC-SubmitQuestionnaireForOrder-3
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -604,7 +605,7 @@ JD-TC-SubmitQuestionnaireForOrder-3
 JD-TC-SubmitQuestionnaireForOrder-4
     [Documentation]    Place an order By Consumer for pickup.
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -645,7 +646,7 @@ JD-TC-SubmitQuestionnaireForOrder-4
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -715,7 +716,7 @@ JD-TC-SubmitQuestionnaireForOrder-5
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -785,7 +786,7 @@ JD-TC-SubmitQuestionnaireForOrder-6
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -855,7 +856,7 @@ JD-TC-SubmitQuestionnaireForOrder-7
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -911,7 +912,7 @@ JD-TC-SubmitQuestionnaireForOrder-7
 JD-TC-SubmitQuestionnaireForOrder-8
     [Documentation]  Submit questionnaire for Oder taken from provider side
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -955,7 +956,7 @@ JD-TC-SubmitQuestionnaireForOrder-8
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -1019,7 +1020,7 @@ JD-TC-SubmitQuestionnaireForOrder-8
 JD-TC-SubmitQuestionnaireForOrder-9
     [Documentation]  Submit questionnaire for Order after starting Order
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1060,7 +1061,7 @@ JD-TC-SubmitQuestionnaireForOrder-9
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -1085,7 +1086,7 @@ JD-TC-SubmitQuestionnaireForOrder-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1143,7 +1144,7 @@ JD-TC-SubmitQuestionnaireForOrder-9
 JD-TC-SubmitQuestionnaireForOrder-10
     [Documentation]  Submit questionnaire for Order after starting Order
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1184,7 +1185,7 @@ JD-TC-SubmitQuestionnaireForOrder-10
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -1209,7 +1210,7 @@ JD-TC-SubmitQuestionnaireForOrder-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1281,14 +1282,15 @@ JD-TC-SubmitQuestionnaireForOrder-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']} 
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']} 
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -1356,7 +1358,7 @@ JD-TC-SubmitQuestionnaireForOrder-UH1
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -1385,7 +1387,7 @@ JD-TC-SubmitQuestionnaireForOrder-UH1
     Should Be Equal As Strings  ${resp.json()['storePickup']}   ${bool[0]} 
     Should Be Equal As Strings  ${resp.json()['orderStatus']}   ${orderStatuses[0]}
 
-    # ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1422,7 +1424,7 @@ JD-TC-SubmitQuestionnaireForOrder-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME165}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME165}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

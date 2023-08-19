@@ -20,7 +20,7 @@ JD-TC-UpdateRole-1
 
     [Documentation]  Update  Roles with default role id (0).
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -72,7 +72,7 @@ JD-TC-UpdateRole-2
 
     [Documentation]  Update  Roles with default role id to 1.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -111,7 +111,7 @@ JD-TC-UpdateRole-3
 
     [Documentation]  Update  Roles with  role id 6 to 1.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -152,7 +152,7 @@ JD-TC-UpdateRole-4
 
     [Documentation]  Update same Roles two times.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -201,7 +201,7 @@ JD-TC-UpdateRole-UH3
 
     [Documentation]  Update Roles with invalid  id.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -217,7 +217,7 @@ JD-TC-UpdateRole-UH4
 
     [Documentation]  Update Roles with empty role_name.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -232,7 +232,7 @@ JD-TC-UpdateRole-UH5
 
     [Documentation]  Update Roles with empty description.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -247,7 +247,7 @@ JD-TC-UpdateRole-UH6
 
     [Documentation]  Update Roles with empty featureName.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

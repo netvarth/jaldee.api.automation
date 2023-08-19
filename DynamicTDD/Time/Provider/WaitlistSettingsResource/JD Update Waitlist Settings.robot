@@ -32,7 +32,7 @@ ${self}            0
 
 JD-TC-UpdateWaitlistSettings-1
     [Documentation]  Update wailist settings using calculationMode as Fixed
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${duration}=   Random Int  min=2  max=2
@@ -43,6 +43,8 @@ JD-TC-UpdateWaitlistSettings-1
    
     
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}   maxPartySize=1
     
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${duration}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}   ${Empty}
@@ -50,12 +52,14 @@ JD-TC-UpdateWaitlistSettings-1
    
     
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[0]}  trnArndTime=0   futureDateWaitlist=${bool[1]}  showTokenId=${bool[0]}  onlineCheckIns=${bool[1]}  maxPartySize=1
     
     
 JD-TC-UpdateWaitlistSettings-8
     [Documentation]  Update wailist settings using calculationMode as ML
-    ${resp}=  ProviderLogin  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_queue     ${PUSERNAME23}
     clear_service   ${PUSERNAME23}
@@ -65,6 +69,8 @@ JD-TC-UpdateWaitlistSettings-8
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  30   ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[0]}  trnArndTime=0  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]} 
     # ${cid}=  get_id  ${CUSERNAME5}
     # Set Suite Variable  ${cid}  
@@ -74,7 +80,7 @@ JD-TC-UpdateWaitlistSettings-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${description}=     FakerLibrary.sentence
     Set Suite Variable   ${description}
@@ -105,9 +111,10 @@ JD-TC-UpdateWaitlistSettings-8
     # Set Suite Variable  ${lid5}  ${resp.json()[0]['id']}
     
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sTime}=  db.get_time
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime}
-    ${eTime}=   add_time  0  30
+    ${eTime}=   add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime}
 
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[0]}   ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  8  ${lid5}  ${s_id5}  ${s_id6}
@@ -126,7 +133,6 @@ JD-TC-UpdateWaitlistSettings-8
 
     ${resp}=  Add To Waitlist  ${cid}  ${s_id5}  ${qid5}  ${DAY1}  ${description}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id}  ${wid[0]}
     #  ${cid1}=  get_id  ${CUSERNAME1}
@@ -134,7 +140,6 @@ JD-TC-UpdateWaitlistSettings-8
 
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id5}  ${qid5}  ${DAY1}  ${description}  ${bool[1]}  ${cid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id1}  ${wid[0]}
     #  ${cid2}=  get_id  ${CUSERNAME2}
@@ -147,7 +152,6 @@ JD-TC-UpdateWaitlistSettings-8
 
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id5}  ${qid5}  ${DAY1}  ${description}  ${bool[1]}  ${cid2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id2}  ${wid[0]}
     # ${cid3}=  get_id  ${CUSERNAME3}
@@ -160,7 +164,6 @@ JD-TC-UpdateWaitlistSettings-8
 
     ${resp}=  Add To Waitlist  ${cid3}  ${s_id5}  ${qid5}  ${DAY1}  ${description}  ${bool[1]}  ${cid3}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id3}  ${wid[0]}
     ${resp}=  Get Queue ById  ${qid5}
@@ -193,10 +196,11 @@ JD-TC-UpdateWaitlistSettings-8
     ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  ${duration}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}   ${Empty}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}  
     ${resp}=  Add To Waitlist  ${cid}  ${s_id6}  ${qid5}  ${DAY1}  ${description}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id4}  ${wid[0]}
     ${resp}=  Get Queue ById  ${qid5}
@@ -207,6 +211,8 @@ JD-TC-UpdateWaitlistSettings-8
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  2s
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[0]}  trnArndTime=0  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}  
 
     

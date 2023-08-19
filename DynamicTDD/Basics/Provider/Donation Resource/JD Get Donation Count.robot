@@ -22,7 +22,7 @@ ${SERVICE3}   Painting
 
 JD-TC-GetDonationsCount-1
         [Documentation]   Consumer Get Donations Count
-        ${resp}=  Provider Login  ${PUSERNAME56}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME56}
@@ -30,7 +30,12 @@ JD-TC-GetDonationsCount-1
         clear_queue      ${PUSERNAME56}
         clear_location   ${PUSERNAME56}
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
         ${resp}=  Get Account Payment Settings
         Log  ${resp.json()}
@@ -71,7 +76,7 @@ JD-TC-GetDonationsCount-1
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME56}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${don_amt1}=   Random Int   min=1000   max=4000
         ${mod}=  Evaluate  ${don_amt1}%${multiples[0]}
@@ -144,7 +149,7 @@ JD-TC-GetDonationsCount-1
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=  Provider Login  ${PUSERNAME56}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation Count
         Log  ${resp.json()}
@@ -153,7 +158,7 @@ JD-TC-GetDonationsCount-1
 
 JD-TC-GetDonationsCount-2
         [Documentation]   Consumer Get Donations Count
-        ${resp}=  Provider Login  ${PUSERNAME56}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation Count  date-eq=${CUR_DAY}
         Log  ${resp.json()}
@@ -162,7 +167,7 @@ JD-TC-GetDonationsCount-2
 
 JD-TC-GetDonationsCount-3
         [Documentation]   Consumer Get Donations Count
-        ${resp}=  Provider Login  ${PUSERNAME56}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation Count  service-eq=${sid2}
         Log  ${resp.json()}
@@ -171,7 +176,7 @@ JD-TC-GetDonationsCount-3
 
 JD-TC-GetDonationsCount-4
         [Documentation]   Consumer Get Donations Count
-        ${resp}=  Provider Login  ${PUSERNAME56}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation Count  location-eq=${loc_id1}
         Log  ${resp.json()}
@@ -180,7 +185,7 @@ JD-TC-GetDonationsCount-4
 
 JD-TC-GetDonationsCount-5
         [Documentation]   Consumer Get Donations Count
-        ${resp}=  Provider Login  ${PUSERNAME56}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation Count  donationAmount-eq=${don_amt1}
         Log  ${resp.json()}
@@ -189,7 +194,7 @@ JD-TC-GetDonationsCount-5
 
 JD-TC-GetDonationsCount-6
         [Documentation]   Consumer Get Donations Count
-        ${resp}=  Provider Login  ${PUSERNAME56}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation Count  billPaymentStatus-eq=${paymentStatus[0]}
         Log  ${resp.json()}
@@ -198,7 +203,7 @@ JD-TC-GetDonationsCount-6
 
 JD-TC-GetDonationsCount-7
         [Documentation]   Consumer Get Donations Count
-        ${resp}=  Provider Login  ${PUSERNAME56}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation Count  billPaymentStatus-eq=${paymentStatus[2]}
         Log  ${resp.json()}

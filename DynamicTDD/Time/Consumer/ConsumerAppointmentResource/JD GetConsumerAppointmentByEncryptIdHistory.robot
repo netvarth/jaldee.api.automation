@@ -32,18 +32,18 @@ JD-TC-GetApptByEncryptedIDconsumerHistory-1
     clear_service   ${PUSERNAME170}
     clear_location  ${PUSERNAME170}
 
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${pid}=  get_acc_id  ${PUSERNAME170}
     Set Suite Variable   ${pid}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -106,7 +106,7 @@ JD-TC-GetApptByEncryptedIDconsumerHistory-1
     Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment EncodedID    ${apptid1}

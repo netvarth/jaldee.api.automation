@@ -252,7 +252,7 @@ JD-TC-GetQuestionnaireforConsumer-1
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -300,7 +300,7 @@ JD-TC-GetQuestionnaireforConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -356,7 +356,7 @@ JD-TC-GetQuestionnaireforConsumer-1
 JD-TC-GetQuestionnaireforConsumer-2
     [Documentation]  Get donation questionnaire after enabling it.
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -422,7 +422,7 @@ JD-TC-GetQuestionnaireforConsumer-2
 JD-TC-GetQuestionnaireforConsumer-3
     [Documentation]  Get service questionnaire for consumer family member
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -516,7 +516,7 @@ JD-TC-GetQuestionnaireforConsumer-3
 JD-TC-GetQuestionnaireforConsumer-UH1
     [Documentation]  Get consumer creation questionnaire after enabling it.
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -595,7 +595,7 @@ JD-TC-GetQuestionnaireforConsumer-UH1
 JD-TC-GetQuestionnaireforConsumer-UH2
     [Documentation]  Get service questionnaire without enabling it.
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -660,7 +660,7 @@ JD-TC-GetQuestionnaireforConsumer-UH2
 JD-TC-GetQuestionnaireforConsumer-UH3
     [Documentation]  Get service questionnaire with wrong service id
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -739,7 +739,7 @@ JD-TC-GetQuestionnaireforConsumer-UH3
 JD-TC-GetQuestionnaireforConsumer-UH4
     [Documentation]  Get service questionnaire with invalid service id
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -768,7 +768,7 @@ JD-TC-GetQuestionnaireforConsumer-UH4
 JD-TC-GetQuestionnaireforConsumer-UH5
     [Documentation]  view questionnaire without consumer login
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -803,7 +803,7 @@ JD-TC-GetQuestionnaireforConsumer-UH5
 JD-TC-GetQuestionnaireforConsumer-UH6
     [Documentation]  view questionnaire by provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -842,7 +842,7 @@ JD-TC-GetQuestionnaireforConsumer-4
     [Documentation]  Get service questionnaire with answers. (only questions with scope as consumer will have answers available)
     comment   answers are not available in this url
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -870,6 +870,7 @@ JD-TC-GetQuestionnaireforConsumer-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -883,7 +884,7 @@ JD-TC-GetQuestionnaireforConsumer-4
 
     clear_appt_schedule   ${PUSERNAME12}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}

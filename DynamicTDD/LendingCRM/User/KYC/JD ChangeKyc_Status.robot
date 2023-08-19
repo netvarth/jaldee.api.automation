@@ -30,7 +30,7 @@ Multiple Users branches
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -105,7 +105,7 @@ ${en_temp_name}   EnquiryName
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${resp}=   ProviderLogin  ${PUSERNAME26}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -403,7 +403,7 @@ JD-TC-ChangeKyc_Status-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
      Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -420,6 +420,7 @@ JD-TC-ChangeKyc_Status-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=   CrifScore  ${account_id}
@@ -490,7 +491,7 @@ JD-TC-ChangeKyc_Status-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -500,8 +501,13 @@ JD-TC-ChangeKyc_Status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
@@ -707,7 +713,7 @@ JD-TC-ChangeKyc_Status-1
 JD-TC-ChangeKyc_Status-2
     [Documentation]  Create a  Kyc with Co-Applicant and Change it Status.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_customer   ${HLMUSERNAME9}
@@ -887,7 +893,7 @@ JD-TC-ChangeKyc_Status-2
 JD-TC-ChangeKyc_Status-3
     [Documentation]  Create a  Kyc two times and Change it status.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1078,7 +1084,7 @@ JD-TC-ChangeKyc_Status-3
 JD-TC-ChangeKyc_Status-4
     [Documentation]  Create Kyc With three Attachment then change it's status.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1303,7 +1309,7 @@ JD-TC-ChangeKyc_Status-4
 JD-TC-ChangeKyc_Status-UH1
     [Documentation]  Create a  Kyc With Empty Attachment  and Check it status and Update.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1545,7 +1551,7 @@ JD-TC-ChangeKyc_Status-UH1
 JD-TC-ChangeKyc_Status-UH2
     [Documentation]  Create a  Kyc With Co-applicant and Check it status and Update permanentPhone to Empty.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1803,7 +1809,7 @@ JD-TC-ChangeKyc_Status-UH2
 JD-TC-ChangeKyc_Status-UH3
     [Documentation]  Create a  Kyc  and Check it status then Updatekyc with empty attachment .again check status.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_customer   ${HLMUSERNAME9}
@@ -2079,7 +2085,7 @@ JD-TC-ChangeKyc_Status-UH3
 JD-TC-ChangeKyc_Status-UH4
     [Documentation]  Create a  Kyc  with attachment it's idvalue is empty.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

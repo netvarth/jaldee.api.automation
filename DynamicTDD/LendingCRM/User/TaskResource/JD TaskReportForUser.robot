@@ -27,7 +27,7 @@ JD-TC-TaskReport-1
 
     [Documentation]  Generate Task Report For Location Filter
 
-    ${resp}=  Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -40,8 +40,13 @@ JD-TC-TaskReport-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype          ${p_id}
@@ -118,7 +123,7 @@ JD-TC-TaskReport-1
     ${assigneduser}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduser}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${resp}=    Create Task         ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}  dueDate=${DAY}  assignee=${assigneduser}
@@ -162,7 +167,7 @@ JD-TC-TaskReport-2
 
     [Documentation]  Generate Task Report For Title Filter
 
-    ${resp}=  Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -212,7 +217,7 @@ JD-TC-TaskReport-3
 
     [Documentation]  Generate Task Report For Assignee Filter
 
-    ${resp}=  Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -239,7 +244,7 @@ JD-TC-TaskReport-3
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${title2}    ${resp.json()['title']}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${Date} =	Convert Date	    ${DAY}	result_format=%d/%m/%Y
 
@@ -282,7 +287,7 @@ JD-TC-TaskReport-4
 
     [Documentation]     Generate Task Report For Users Having Multiple Location
 
-    ${resp}=  Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -307,9 +312,25 @@ JD-TC-TaskReport-4
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${locId1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId3}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -371,7 +392,7 @@ JD-TC-TaskReport-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -395,7 +416,7 @@ JD-TC-TaskReport-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -419,7 +440,7 @@ JD-TC-TaskReport-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -443,7 +464,7 @@ JD-TC-TaskReport-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[3]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -467,7 +488,7 @@ JD-TC-TaskReport-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -484,11 +505,11 @@ JD-TC-TaskReport-4
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${Date} =	Convert Date	    ${DAY}	result_format=%d/%m/%Y
 
@@ -587,7 +608,7 @@ JD-TC-TaskReport-5
 
     [Documentation]     Generate Task Report  By multiple Title
 
-    ${resp}=  Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -675,7 +696,7 @@ JD-TC-TaskReport-5
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -707,7 +728,7 @@ JD-TC-TaskReport-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -731,7 +752,7 @@ JD-TC-TaskReport-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -755,7 +776,7 @@ JD-TC-TaskReport-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -779,7 +800,7 @@ JD-TC-TaskReport-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[3]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -796,7 +817,7 @@ JD-TC-TaskReport-5
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -885,7 +906,7 @@ JD-TC-TaskReport-6
 
     [Documentation]     Generate Task Report multiple Assignee
 
-    ${resp}=  Provider Login        ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -953,7 +974,7 @@ JD-TC-TaskReport-6
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -985,7 +1006,7 @@ JD-TC-TaskReport-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -1022,7 +1043,7 @@ JD-TC-TaskReport-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -1058,7 +1079,7 @@ JD-TC-TaskReport-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable      ${u_idC}     ${resp.json()['id']}
@@ -1087,7 +1108,7 @@ JD-TC-TaskReport-6
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -1181,7 +1202,7 @@ JD-TC-TaskReport-7
 
     [Documentation]  Generate Task Report For Account Level With EMPTY
 
-    ${resp}=  Provider Login        ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -1205,8 +1226,13 @@ JD-TC-TaskReport-7
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype          ${p_id}
@@ -1264,7 +1290,7 @@ JD-TC-TaskReport-7
     ${assigneduser}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduser}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${resp}=    Create Task         ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}  dueDate=${DAY}  assignee=${assigneduser}
@@ -1308,7 +1334,7 @@ JD-TC-TaskReport-8
 
     [Documentation]  Generate Task Report For Account Level With EMPTY For Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -1321,8 +1347,13 @@ JD-TC-TaskReport-8
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype          ${p_id}
@@ -1386,7 +1417,7 @@ JD-TC-TaskReport-8
     ${assigneduser}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduser}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${resp}=    Create Task         ${titleABC}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}  dueDate=${DAY}  assignee=${assigneduser}
@@ -1408,8 +1439,8 @@ JD-TC-TaskReport-8
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
@@ -1433,7 +1464,7 @@ JD-TC-TaskReport-9
 
     [Documentation]  Generate Task Report For Account Level With Location Filter In Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -1456,8 +1487,8 @@ JD-TC-TaskReport-9
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   location-eq=${locId}   dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
@@ -1481,7 +1512,7 @@ JD-TC-TaskReport-10
 
     [Documentation]  Generate Task Report For Account Level With Title Filter In Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -1509,8 +1540,8 @@ JD-TC-TaskReport-10
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   title-eq=${title1}        dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
@@ -1534,7 +1565,7 @@ JD-TC-TaskReport-11
 
     [Documentation]  Generate Task Report For Account Level With Assignee Filter In Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -1561,15 +1592,15 @@ JD-TC-TaskReport-11
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${title2}    ${resp.json()['title']}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${Date} =	Convert Date	    ${DAY}	result_format=%d/%m/%Y
 
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   assignee-eq=${uid}     dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
@@ -1614,7 +1645,7 @@ JD-TC-TaskReport-12
 
     [Documentation]     Generate Task Report For User Using Location In Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -1639,9 +1670,25 @@ JD-TC-TaskReport-12
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${locId1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId3}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -1703,7 +1750,7 @@ JD-TC-TaskReport-12
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1727,7 +1774,7 @@ JD-TC-TaskReport-12
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1751,7 +1798,7 @@ JD-TC-TaskReport-12
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1775,7 +1822,7 @@ JD-TC-TaskReport-12
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[3]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -1799,7 +1846,7 @@ JD-TC-TaskReport-12
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1816,19 +1863,19 @@ JD-TC-TaskReport-12
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${Date} =	Convert Date	    ${DAY}	result_format=%d/%m/%Y
 
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   location-eq=${locId1},${locId2},${locId3},${locId4}    dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
@@ -1923,7 +1970,7 @@ JD-TC-TaskReport-13
 
     [Documentation]     Generate Task Report For User Using title In Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2013,7 +2060,7 @@ JD-TC-TaskReport-13
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -2045,7 +2092,7 @@ JD-TC-TaskReport-13
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2069,7 +2116,7 @@ JD-TC-TaskReport-13
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2093,7 +2140,7 @@ JD-TC-TaskReport-13
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2117,7 +2164,7 @@ JD-TC-TaskReport-13
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[3]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2134,7 +2181,7 @@ JD-TC-TaskReport-13
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2143,8 +2190,8 @@ JD-TC-TaskReport-13
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   title-eq=${titleA},${titleB},${titleC}   dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
@@ -2225,7 +2272,7 @@ JD-TC-TaskReport-14
 
     [Documentation]     Generate Task Report For User Using Assignee
 
-    ${resp}=  Provider Login        ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2293,7 +2340,7 @@ JD-TC-TaskReport-14
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -2325,7 +2372,7 @@ JD-TC-TaskReport-14
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -2362,7 +2409,7 @@ JD-TC-TaskReport-14
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -2398,7 +2445,7 @@ JD-TC-TaskReport-14
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable      ${u_idC}     ${resp.json()['id']}
@@ -2427,7 +2474,7 @@ JD-TC-TaskReport-14
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2436,8 +2483,8 @@ JD-TC-TaskReport-14
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${uidA} =  Convert To String  ${u_idA} 
     ${uidB} =  Convert To String  ${u_idB} 
@@ -2524,7 +2571,7 @@ JD-TC-TaskReport-15
 
     [Documentation]     Generate Task Report For User with loc and title where datecategory in TODAY
 
-    ${resp}=  Provider Login        ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2559,9 +2606,25 @@ JD-TC-TaskReport-15
     Set Suite Variable      ${desc}
 
     ${locId1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId3}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -2619,7 +2682,7 @@ JD-TC-TaskReport-15
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -2651,7 +2714,7 @@ JD-TC-TaskReport-15
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2675,7 +2738,7 @@ JD-TC-TaskReport-15
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2699,7 +2762,7 @@ JD-TC-TaskReport-15
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2723,7 +2786,7 @@ JD-TC-TaskReport-15
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[3]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2740,7 +2803,7 @@ JD-TC-TaskReport-15
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2789,7 +2852,7 @@ JD-TC-TaskReport-16
 
     [Documentation]     Generate Task Report For User with loc and assignee where datecategory in TODAY
 
-    ${resp}=  Provider Login        ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -2814,9 +2877,25 @@ JD-TC-TaskReport-16
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${locId1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId3}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -2864,7 +2943,7 @@ JD-TC-TaskReport-16
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -2896,7 +2975,7 @@ JD-TC-TaskReport-16
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -2933,7 +3012,7 @@ JD-TC-TaskReport-16
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -2969,7 +3048,7 @@ JD-TC-TaskReport-16
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable      ${u_idC}     ${resp.json()['id']}
@@ -2998,7 +3077,7 @@ JD-TC-TaskReport-16
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3052,7 +3131,7 @@ JD-TC-TaskReport-17
 
     [Documentation]     Generate Task Report For User using title and assignee where datecategory in TODAY
 
-    ${resp}=  Provider Login        ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3120,7 +3199,7 @@ JD-TC-TaskReport-17
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -3152,7 +3231,7 @@ JD-TC-TaskReport-17
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -3189,7 +3268,7 @@ JD-TC-TaskReport-17
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -3225,7 +3304,7 @@ JD-TC-TaskReport-17
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable      ${u_idC}     ${resp.json()['id']}
@@ -3254,7 +3333,7 @@ JD-TC-TaskReport-17
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3307,7 +3386,7 @@ JD-TC-TaskReport-18
 
     [Documentation]     Generate Task Report For User by location id, item and assignee where datecategory in TODAY
 
-    ${resp}=  Provider Login        ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3332,9 +3411,25 @@ JD-TC-TaskReport-18
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${locId1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId3}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -3389,7 +3484,7 @@ JD-TC-TaskReport-18
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -3421,7 +3516,7 @@ JD-TC-TaskReport-18
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -3458,7 +3553,7 @@ JD-TC-TaskReport-18
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -3494,7 +3589,7 @@ JD-TC-TaskReport-18
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable      ${u_idC}     ${resp.json()['id']}
@@ -3523,7 +3618,7 @@ JD-TC-TaskReport-18
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3577,7 +3672,7 @@ JD-TC-TaskReport-19
 
     [Documentation]     Generate Task Report For User with loc and title where datecategory in Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3612,9 +3707,25 @@ JD-TC-TaskReport-19
     Set Suite Variable      ${desc}
 
     ${locId1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId3}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -3672,7 +3783,7 @@ JD-TC-TaskReport-19
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -3704,7 +3815,7 @@ JD-TC-TaskReport-19
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3728,7 +3839,7 @@ JD-TC-TaskReport-19
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3752,7 +3863,7 @@ JD-TC-TaskReport-19
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3776,7 +3887,7 @@ JD-TC-TaskReport-19
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[3]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3793,7 +3904,7 @@ JD-TC-TaskReport-19
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3802,8 +3913,8 @@ JD-TC-TaskReport-19
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   title-eq=${titleB}     location-eq=${locId1}      dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
@@ -3846,7 +3957,7 @@ JD-TC-TaskReport-20
 
     [Documentation]     Generate Task Report For User with loc and assignee where datecategory in Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -3871,9 +3982,25 @@ JD-TC-TaskReport-20
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${locId1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId3}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -3921,7 +4048,7 @@ JD-TC-TaskReport-20
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -3953,7 +4080,7 @@ JD-TC-TaskReport-20
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -3990,7 +4117,7 @@ JD-TC-TaskReport-20
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -4026,7 +4153,7 @@ JD-TC-TaskReport-20
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable      ${u_idC}     ${resp.json()['id']}
@@ -4055,7 +4182,7 @@ JD-TC-TaskReport-20
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -4064,8 +4191,8 @@ JD-TC-TaskReport-20
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${uidA} =  Convert To String  ${u_idA} 
     ${uidB} =  Convert To String  ${u_idB} 
@@ -4113,7 +4240,7 @@ JD-TC-TaskReport-21
 
     [Documentation]     Generate Task Report For User using title and assignee where datecategory in Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -4181,7 +4308,7 @@ JD-TC-TaskReport-21
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -4213,7 +4340,7 @@ JD-TC-TaskReport-21
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -4250,7 +4377,7 @@ JD-TC-TaskReport-21
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -4286,7 +4413,7 @@ JD-TC-TaskReport-21
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable      ${u_idC}     ${resp.json()['id']}
@@ -4315,7 +4442,7 @@ JD-TC-TaskReport-21
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -4328,8 +4455,8 @@ JD-TC-TaskReport-21
     ${uidB} =  Convert To String  ${u_idB} 
     ${uidC} =  Convert To String  ${u_idC} 
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date    
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}    
 
     ${filter}=  Create Dictionary   assignee-eq=${uidC}      title-eq=${titleB}    dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
@@ -4371,7 +4498,7 @@ JD-TC-TaskReport-22
 
     [Documentation]     Generate Task Report For User by location id, item and assignee where datecategory in Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -4396,9 +4523,25 @@ JD-TC-TaskReport-22
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${locId1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId3}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${locId4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${locId1}=  Convert To String  ${locId1}
     ${locId2}=  Convert To String  ${locId2}
     ${locId3}=  Convert To String  ${locId3}
@@ -4453,7 +4596,7 @@ JD-TC-TaskReport-22
     ${assigneduserA}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduserA}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -4485,7 +4628,7 @@ JD-TC-TaskReport-22
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -4522,7 +4665,7 @@ JD-TC-TaskReport-22
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -4558,7 +4701,7 @@ JD-TC-TaskReport-22
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable      ${u_idC}     ${resp.json()['id']}
@@ -4587,7 +4730,7 @@ JD-TC-TaskReport-22
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
 
-    ${resp}=  Provider Login        ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
 
@@ -4596,8 +4739,8 @@ JD-TC-TaskReport-22
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${uidA} =  Convert To String  ${u_idA} 
     ${uidB} =  Convert To String  ${u_idB} 
@@ -4644,7 +4787,7 @@ JD-TC-TaskReport-23
 
     [Documentation]  Generate Task Report with Location Area
 
-    ${resp}=  Provider Login        ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -4657,8 +4800,13 @@ JD-TC-TaskReport-23
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${area}=     FakerLibrary.City
@@ -4726,7 +4874,7 @@ JD-TC-TaskReport-23
     ${assigneduser}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduser}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${resp}=    Create Task         ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}    locationArea=${area}    dueDate=${DAY}  assignee=${assigneduser}
@@ -4771,7 +4919,7 @@ JD-TC-TaskReport-24
 
     [Documentation]  Generate Task Report with Location Area in Date Range
 
-    ${resp}=  Provider Login        ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
@@ -4784,8 +4932,13 @@ JD-TC-TaskReport-24
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable          ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${area}=     FakerLibrary.City
@@ -4853,7 +5006,7 @@ JD-TC-TaskReport-24
     ${assigneduser}=  Create Dictionary  id=${uid}
     Set Suite Variable      ${assigneduser}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${resp}=    Create Task         ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}    locationArea=${area}    dueDate=${DAY}  assignee=${assigneduser}
@@ -4875,8 +5028,8 @@ JD-TC-TaskReport-24
     Set Test Variable               ${reportType}                CRM_TASK
     Set Test Variable               ${reportDateCategory}        DATE_RANGE
 
-    ${d1} =  subtract_date  10
-    ${d2} =  get_date
+    ${d1} =  db.subtract_timezone_date  ${tz}   10
+    ${d2} =  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   location-eq=${locId}   dueDate-ge=${d1}  dueDate-le=${d2}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}

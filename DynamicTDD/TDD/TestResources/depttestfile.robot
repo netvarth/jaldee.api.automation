@@ -38,11 +38,15 @@ JD-TC-CheckDepartment-2
         # delete_virtual_service  ${pro_num}
         # clear_service  ${pro_num}
 
-        ${resp}=  Provider Login  ${pro_num}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${pro_num}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=  Set Variable  ${resp.json()['sector']}
-        ${subdomain}=  Set Variable  ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=  Set Variable  ${decrypted_data['sector']}
+        ${subdomain}=  Set Variable  ${decrypted_data['subSector']}
+        # ${domain}=  Set Variable  ${resp.json()['sector']}
+        # ${subdomain}=  Set Variable  ${resp.json()['subSector']}
 
         ${resp}=   Get License UsageInfo 
         Log  ${resp.content}
@@ -84,11 +88,15 @@ JD-TC-CheckDepartment-2
         clear_service  ${pro_num}
         clear_Department    ${pro_num}
         
-        ${resp}=  Provider Login  ${pro_num}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${pro_num}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=  Set Variable  ${resp.json()['sector']}
-        ${subdomain}=  Set Variable  ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=  Set Variable  ${decrypted_data['sector']}
+        ${subdomain}=  Set Variable  ${decrypted_data['subSector']}
+        # ${domain}=  Set Variable  ${resp.json()['sector']}
+        # ${subdomain}=  Set Variable  ${resp.json()['subSector']}
 
         ${resp}=   Get License UsageInfo 
         Log  ${resp.content}
@@ -132,7 +140,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     clear_service  ${MUSERNAME27}
     # clear_Department    ${MUSERNAME27}
 
-    ${resp}=   ProviderLogin  ${MUSERNAME27}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -191,7 +199,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USER_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     # ${PUSERPH1}=  Evaluate  ${PUSERPH0}+110
@@ -275,7 +283,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-17
     [Documentation]   create virtual service for a user
-    ${resp}=   ProviderLogin  ${PUSERNAME26}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     # delete_virtual_service  ${PUSERNAME26}

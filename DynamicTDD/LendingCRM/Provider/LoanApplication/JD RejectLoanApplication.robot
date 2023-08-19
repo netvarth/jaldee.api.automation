@@ -45,7 +45,7 @@ JD-TC-RejectLoanApplication-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -264,7 +264,7 @@ JD-TC-RejectLoanApplication-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -424,7 +424,7 @@ JD-TC-RejectLoanApplication-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME51}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -589,7 +589,7 @@ JD-TC-RejectLoanApplication-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME52}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -744,7 +744,7 @@ JD-TC-RejectLoanApplication-UH1
 
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -790,7 +790,7 @@ JD-TC-RejectLoanApplication-UH4
 
    
     
-    ${resp}=   ProviderLogin  ${PUSERNAME38}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

@@ -38,52 +38,58 @@ JD-TC-Get Queue By Location Id-1
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME}
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
-    Set Suite Variable  ${DAY2}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  1  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY2}
+    ${sTime}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable  ${sTime}
-    ${eTime}=  add_time   1  30
+    ${eTime}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable  ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  add_time  2  15
+
+    ${sTime1}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable  ${eTime1}
     ${queue_name1}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name1}
     ${resp}=  Create Queue  ${queue_name1}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid1}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id1}  ${resp.json()}
-    ${sTime2}=  add_time  3  15
+
+    
+    # ${city1}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city1}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz1}
+    ${sTime2}=  add_timezone_time  ${tz1}  3  15  
     Set Suite Variable  ${sTime2}
-    ${eTime2}=  add_time   3  30
+    ${eTime2}=  add_timezone_time  ${tz1}  3  30  
     Set Suite Variable  ${eTime2}
-    ${city1}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
     ${resp}=  Create Location  ${city1}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}
@@ -107,7 +113,7 @@ JD-TC-Get Queue By Location Id-UH2
     
 JD-TC-Get Queue By Location Id-UH3
 	[Documentation]  Get Queues by Location Id using another  provider's id
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get Queue Location  ${lid2}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -115,7 +121,7 @@ JD-TC-Get Queue By Location Id-UH3
    
 JD-TC-Get Queue By Location Id-UH4
 	[Documentation]  Get Queues by Location Id using invalid id
-    ${resp}=  ProviderLogin  ${PUSERNAME147}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME147}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${resp}=  Get Queue Location  0
     Should Be Equal As Strings  ${resp.status_code}  422 
@@ -125,10 +131,10 @@ JD-TC-Get Queue By Location Id-UH4
 
 JD-TC-Verify Get Queue By Location Id-1
 	[Documentation]  Verification of Get Queues by Location Id and Date by valid  provider
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${sTime3}=  add_time  4  15
-    ${eTime3}=  add_time   4  30
+    ${sTime3}=  add_timezone_time  ${tz1}  4  15  
+    ${eTime3}=  add_timezone_time  ${tz1}  4  30  
     ${queue_name2}=  FakerLibrary.bs
     ${resp}=  Get Queues
     Log  ${resp.json()}

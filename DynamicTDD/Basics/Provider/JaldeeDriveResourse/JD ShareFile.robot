@@ -63,7 +63,7 @@ JD-TC-ShareFiles-1
 
     [Documentation]  share pdf file multiple consumer
     
-    ${resp}=  Provider Login  ${PUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -202,7 +202,7 @@ JD-TC-ShareFiles-2
     clear_Consumermsg  ${CUSERNAME5}
   
 
-    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME48}
     Set Test Variable    ${acc_id}
@@ -289,7 +289,7 @@ JD-TC-ShareFiles-3
     ${jc_id1}=  get_id  ${CUSERNAME15}
     clear_Consumermsg  ${CUSERNAME15}
   
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME88}
     Set Test Variable  ${providerId}   ${acc_id}
@@ -391,7 +391,7 @@ JD-TC-ShareFiles-4
     # clear_Consumermsg   ${CUSERNAME3}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME88}
     Set Test Variable  ${providerId}   ${acc_id}
@@ -541,7 +541,7 @@ JD-TC-ShareFiles-5
     clear_Consumermsg   ${CUSERNAME3}
   
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${HLMUSERNAME0}
@@ -549,6 +549,7 @@ JD-TC-ShareFiles-5
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=    Get Locations
@@ -556,8 +557,13 @@ JD-TC-ShareFiles-5
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${bs}=  FakerLibrary.bs
@@ -565,10 +571,12 @@ JD-TC-ShareFiles-5
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
        sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -605,7 +613,7 @@ JD-TC-ShareFiles-5
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
     
-    ${resp}=   ProviderLogin  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -621,7 +629,7 @@ JD-TC-ShareFiles-5
     Set Test Variable  ${pcons_id3}  ${resp.json()[0]['id']}
     Set Test Variable  ${jaldeeId}  ${resp.json()[0]['jaldeeId']}
   
-    ${resp}=   ProviderLogin   ${PUSERNAME_U1}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME_U1}   ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -673,7 +681,7 @@ JD-TC-ShareFiles-6
 
     [Documentation]  user  upload file to drive  and  that file  share  by branch to a consumer
     
-    ${resp}=   ProviderLogin   ${PUSERNAME_U1}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME_U1}   ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -697,7 +705,7 @@ JD-TC-ShareFiles-6
     Log                                     ${resp.content}
     Set Suite Variable     ${fileid22}      ${resp.json()['${u_id}']['files'][0]['id']} 
    
-    ${resp}=   ProviderLogin  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -727,7 +735,7 @@ JD-TC-ShareFiles-7
 
     [Documentation]   branch  upload file to drive  and  that file  share  by user to a consumer
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${HLMUSERNAME0}
@@ -755,7 +763,7 @@ JD-TC-ShareFiles-7
     Log                                     ${resp.content}
     Set Suite Variable     ${fileid33}      ${resp.json()['${u_id}']['files'][0]['id']} 
 
-    ${resp}=   ProviderLogin   ${PUSERNAME_U1}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME_U1}   ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    
@@ -788,7 +796,7 @@ JD-TC-ShareFiles-UH1
 
     [Documentation]  share file to another provider
   
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME88} ${PUSERNAME88} 
     Set Test Variable  ${providerId}   ${acc_id}
@@ -918,7 +926,7 @@ JD-TC-ShareFiles-UH5
     
     [Documentation]   empty  communication feild
 
-    ${resp}=   ProviderLogin  ${PUSERNAME88}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # ${p_id}=  get_acc_id  ${PUSERNAME213}
@@ -950,7 +958,7 @@ JD-TC-ShareFiles-8
     [Documentation]  share file user to user
 
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${HLMUSERNAME0}
@@ -963,7 +971,7 @@ JD-TC-ShareFiles-8
 
  
      
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -995,7 +1003,7 @@ JD-TC-ShareFiles-8
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}
@@ -1012,7 +1020,7 @@ JD-TC-ShareFiles-8
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -1074,7 +1082,7 @@ JD-TC-ShareFiles-9
 
     [Documentation]   more files share more than 10 consumers
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id123}=  get_acc_id  ${PUSERNAME88}
     Set Test Variable    ${acc_id123}

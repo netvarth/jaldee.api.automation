@@ -18,7 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-GetGroupById-1
     [Documentation]  Get customer group by id 
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -41,7 +41,7 @@ JD-TC-GetGroupById-1
 JD-TC-GetGroupById-2
     [Documentation]  Get customer group by id when there are more than one group
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -83,7 +83,7 @@ JD-TC-GetGroupById-2
 JD-TC-GetGroupById-3
     [Documentation]  Get customer group by id when the group is disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -110,7 +110,7 @@ JD-TC-GetGroupById-3
 JD-TC-GetGroupById-UH1
     [Documentation]  Get customer group by id when there are no groups
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -134,7 +134,7 @@ JD-TC-GetGroupById-UH1
 JD-TC-GetGroupById-UH2
     [Documentation]  Get customer group by id with a non existant group id
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,7 +148,7 @@ JD-TC-GetGroupById-UH2
 JD-TC-GetGroupById-UH3
     [Documentation]  Get customer group using another provider's group id 
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -171,7 +171,7 @@ JD-TC-GetGroupById-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -184,7 +184,7 @@ JD-TC-GetGroupById-UH3
 # JD-TC-GetGroupById-UH4
 #     [Documentation]  Get customer group when group id is empty 
 
-#     ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -205,7 +205,7 @@ JD-TC-GetGroupById-UH3
 # JD-TC-GetGroupById-UH5
 #     [Documentation]  Get customer group when group id is null 
 
-#     ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -226,7 +226,7 @@ JD-TC-GetGroupById-UH3
 JD-TC-GetGroupById-UH6
     [Documentation]  Get customer group by id without login
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -258,7 +258,7 @@ JD-TC-GetGroupById-UH6
 JD-TC-GetGroupById-UH7
     [Documentation]  Get customer group by id by consumer login
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

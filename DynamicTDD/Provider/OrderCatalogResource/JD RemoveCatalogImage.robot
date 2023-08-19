@@ -26,7 +26,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Remove_Catalog_Image-1
     [Documentation]  Provider check to remove remove image
     clear_Item  ${PUSERNAME43}
-    ${resp}=  ProviderLogin  ${PUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${displayName1}=   FakerLibrary.name 
@@ -70,9 +70,9 @@ JD-TC-Remove_Catalog_Image-1
     Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[1]}   status=${status[0]}    itemName=${itemName1}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
     Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode1}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
 
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     # ${noOfOccurance}=  Random Int  min=0   max=10
@@ -80,9 +80,9 @@ JD-TC-Remove_Catalog_Image-1
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -173,7 +173,7 @@ JD-TC-Remove_Catalog_Image-1
     ${resp}=   uploadCatalogImages   ${CatalogId1}   ${boolean[1]}   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
 
     ${resp}=  Get Order Catalog    ${CatalogId1}  
     Log   ${resp.json()}
@@ -191,7 +191,7 @@ JD-TC-Remove_Catalog_Image-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     ${resp}=  Get Order Catalog    ${CatalogId1}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -44,12 +44,12 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
@@ -63,19 +63,22 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-1
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
      ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
      ${bs}=  FakerLibrary.bs
-     ${city}=   get_place
-     ${latti}=  get_latitude
-     ${longi}=  get_longitude
      ${companySuffix}=  FakerLibrary.companySuffix
-     ${postcode}=  FakerLibrary.postcode
-     ${address}=  get_address
+     # ${city}=   get_place
+     # ${latti}=  get_latitude
+     # ${longi}=  get_longitude
+     # ${postcode}=  FakerLibrary.postcode
+     # ${address}=  get_address
+     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+     Set Suite Variable  ${tz}
      ${parking}   Random Element   ${parkingType}
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
+     ${sTime}=  add_timezone_time  ${tz}  0  15  
      Set Suite Variable   ${sTime}
-     ${eTime}=  add_time   0  45
+     ${eTime}=  add_timezone_time  ${tz}  0  45  
      Set Suite Variable   ${eTime}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
@@ -185,25 +188,26 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime1}
 
     ${resp}=  Get Locations
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     Set Suite Variable  ${description}
@@ -247,7 +251,6 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-1
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -282,12 +285,12 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-1
 JD-TC-WaitlistByUserLoginAndBillGenarate-2
      [Documentation]  User taking a waitlist for current day and generate bill and consumer do the prepayment(Tax is disable).
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      clear Customer  ${MUSERNAME_E}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -313,7 +316,6 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-2
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -348,12 +350,12 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-2
 JD-TC-WaitlistByUserLoginAndBillGenarate-3
      [Documentation]  User taking a waitlist for current day and generate bill and consumer do the prepayment and bill payment (Tax is disable).
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      clear Customer  ${MUSERNAME_E}
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -379,7 +381,6 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-3
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -426,7 +427,7 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-3
 JD-TC-WaitlistByUserLoginAndBillGenarate-4
      [Documentation]  User taking a waitlist for current day and generate bill and consumer do the bill payment(prepayment disable and Tax Enable).
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     clear Customer  ${MUSERNAME_E}
@@ -448,7 +449,7 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -484,7 +485,6 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-4
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -520,12 +520,12 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-4
 JD-TC-WaitlistByUserLoginAndBillGenarate-5
      [Documentation]  User taking a waitlist for current day and generate bill and consumer do the prepayment (Tax is Enable).
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     clear Customer  ${MUSERNAME_E}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -551,7 +551,6 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-5
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -587,12 +586,12 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-5
 JD-TC-WaitlistByUserLoginAndBillGenarate-6
      [Documentation]  User taking a waitlist for current day and generate bill and consumer do the prepayment and bill payment (Tax is Enable).
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      clear Customer  ${MUSERNAME_E}
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -613,7 +612,6 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-6
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -661,7 +659,7 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-6
 JD-TC-WaitlistByUserLoginAndBillGenarate-7
      [Documentation]  Add family members to the waitlist and generate bill (Tax is Enable).
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -683,7 +681,6 @@ JD-TC-WaitlistByUserLoginAndBillGenarate-7
       ${resp}=  Add To Waitlist By User  ${pcid}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${mem_id}  ${mem_id1}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${wid4}  ${wid[0]}
       Set Suite Variable  ${wid5}  ${wid[1]}

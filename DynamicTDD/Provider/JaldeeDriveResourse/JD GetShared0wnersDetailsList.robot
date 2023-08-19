@@ -60,7 +60,7 @@ JD-TC-GetSharedOnwnersDetailsList-1
     
     clear_customer      ${PUSERNAME14}
  
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME14}
@@ -101,7 +101,7 @@ JD-TC-GetSharedOnwnersDetailsList-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME14}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME14}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
@@ -131,7 +131,7 @@ JD-TC-GetSharedOnwnersDetailsList-2
 
     clear_Providermsg  ${PUSERNAME14}
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME14}
@@ -169,7 +169,7 @@ JD-TC-GetSharedOnwnersDetailsList-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME14}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME14}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
@@ -193,7 +193,7 @@ JD-TC-GetSharedOnwnersDetailsList-3
 
     [Documentation]  Get png file details list
     
-    ${resp}=  Provider Login   ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      #Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME14}${\n}
@@ -231,7 +231,7 @@ JD-TC-GetSharedOnwnersDetailsList-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME30}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME30}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
@@ -257,7 +257,7 @@ JD-TC-GetSharedOnwnersDetailsList-4
 
     clear_Providermsg  ${PUSERNAME177}
     
-    ${resp}=  Provider Login  ${PUSERNAME177}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME177}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME177}
@@ -291,7 +291,7 @@ JD-TC-GetSharedOnwnersDetailsList-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
-    ${resp}=   ProviderLogin     ${PUSERNAME177}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME177}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME9}
@@ -315,7 +315,7 @@ JD-TC-GetSharedOnwnersDetailsList-5
 
     [Documentation]  Get gif file details list
 
-    ${resp}=   ProviderLogin     ${PUSERNAME187}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME187}   ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME187}
@@ -350,7 +350,7 @@ JD-TC-GetSharedOnwnersDetailsList-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME187}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME187}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -376,7 +376,7 @@ JD-TC-GetSharedOnwnersDetailsList-6
 
     clear_Providermsg  ${PUSERNAME102}
     
-    ${resp}=  Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME102}
@@ -411,7 +411,7 @@ JD-TC-GetSharedOnwnersDetailsList-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME102}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME102}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}
@@ -434,7 +434,7 @@ JD-TC-GetSharedOnwnersDetailsList-7
 
     clear_Providermsg  ${PUSERNAME167}
     
-    ${resp}=  Provider Login  ${PUSERNAME167}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME167}
@@ -480,7 +480,7 @@ JD-TC-GetSharedOnwnersDetailsList-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME167}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME167}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -514,7 +514,7 @@ JD-TC-GetSharedOnwnersDetailsList-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME110}
@@ -559,6 +559,11 @@ JD-TC-GetSharedOnwnersDetailsList-8
 
     ${lid}=  Create Sample Location 
     Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -573,7 +578,7 @@ JD-TC-GetSharedOnwnersDetailsList-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
   
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
@@ -632,7 +637,7 @@ JD-TC-GetSharedOnwnersDetailsList-9
 
     [Documentation]   Get appointment attachment as pdf file.
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME181}
@@ -650,6 +655,11 @@ JD-TC-GetSharedOnwnersDetailsList-9
 
     ${lid}=  Create Sample Location 
     Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -730,7 +740,7 @@ JD-TC-GetSharedOnwnersDetailsList-10
 
     [Documentation]   Get appointment attachment as png file.
 
-    ${resp}=  Provider Login  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -749,6 +759,11 @@ JD-TC-GetSharedOnwnersDetailsList-10
 
     ${lid}=  Create Sample Location 
     Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -835,7 +850,7 @@ JD-TC-GetSharedOnwnersDetailsList-11
 
     [Documentation]   get appointment attachment as jpeg file.
 
-    ${resp}=  Provider Login  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -858,6 +873,11 @@ JD-TC-GetSharedOnwnersDetailsList-11
 
     ${lid}=  Create Sample Location 
     Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -941,7 +961,7 @@ JD-TC-GetSharedOnwnersDetailsList-12
 
     [Documentation]   get appointment attachment as gif file.
 
-    ${resp}=  Provider Login  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -960,6 +980,11 @@ JD-TC-GetSharedOnwnersDetailsList-12
 
     ${lid}=  Create Sample Location 
     Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -1045,7 +1070,7 @@ JD-TC-GetSharedOnwnersDetailsList-13
     [Documentation]   Provider get to upload Catalog image details
 
     clear_Item  ${PUSERNAME42}
-    ${resp}=  ProviderLogin  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${acc_id}=  get_acc_id  ${PUSERNAME42}
     Set Test Variable   ${acc_id}
@@ -1088,9 +1113,9 @@ JD-TC-GetSharedOnwnersDetailsList-13
     Set Test Variable  ${Pid1}  ${resp.json()}
 
     
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Test Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     # ${noOfOccurance}=  Random Int  min=0   max=10
@@ -1098,9 +1123,9 @@ JD-TC-GetSharedOnwnersDetailsList-13
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Test Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Test Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1188,7 +1213,7 @@ JD-TC-GetSharedOnwnersDetailsList-13
     ${resp}=   uploadCatalogImages   ${CatalogId1}   ${boolean[1]}   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
 
     ${resp}=  Get Order Catalog    ${CatalogId1}  
     Log   ${resp.json()}
@@ -1212,7 +1237,7 @@ JD-TC-GetSharedOnwnersDetailsList-14
     [Documentation]   Provider get to upload item image when displayImage is true
 
     clear_Item  ${PUSERNAME73}
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${acc_id}=  get_acc_id  ${PUSERNAME73}
     Set Test Variable   ${acc_id}
@@ -1263,7 +1288,7 @@ JD-TC-GetSharedOnwnersDetailsList-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     ${resp}=   Get Item By Id   ${id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1303,7 +1328,7 @@ JD-TC-GetSharedOnwnersDetailsList-15
     clear_customer   ${PUSERNAME127}
     clear_Item   ${PUSERNAME127}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -1402,22 +1427,22 @@ JD-TC-GetSharedOnwnersDetailsList-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Test Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00 
+    ${eTime1}=  add_timezone_time  ${tz}  1  00   
     Set Test Variable    ${eTime1}
 
-    ${sTime2}=  add_time  1  05
+    ${sTime2}=  add_timezone_time  ${tz}  1  05  
     Set Test Variable   ${sTime2}
-    ${eTime2}=  add_time   2  15 
+    ${eTime2}=  add_timezone_time  ${tz}  2  15   
     Set Test Variable    ${eTime2}
 
 
@@ -1530,7 +1555,7 @@ JD-TC-GetSharedOnwnersDetailsList-15
     Should Be Equal As Strings      ${resp.status_code}  200
 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Test Variable  ${DAY1}
     ${DATE12}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
     Set Test Variable  ${DATE12}
@@ -1584,7 +1609,7 @@ JD-TC-GetSharedOnwnersDetailsList-15
 
     # --------------------------------------------------------------------------
 
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1639,7 +1664,7 @@ JD-TC-GetSharedOnwnersDetailsList-16
     clear_service  ${PUSERNAME73}
     clear_customer   ${PUSERNAME73}
     clear_Item   ${PUSERNAME73}
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -1734,22 +1759,22 @@ JD-TC-GetSharedOnwnersDetailsList-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Test Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00 
+    ${eTime1}=  add_timezone_time  ${tz}  1  00   
     Set Test Variable    ${eTime1}
 
-    ${sTime2}=  add_time  1  05
+    ${sTime2}=  add_timezone_time  ${tz}  1  05  
     Set Test Variable   ${sTime2}
-    ${eTime2}=  add_time   2  15 
+    ${eTime2}=  add_timezone_time  ${tz}  2  15   
     Set Test Variable    ${eTime2}
 
 
@@ -1859,7 +1884,7 @@ JD-TC-GetSharedOnwnersDetailsList-16
     Should Be Equal As Strings      ${resp.status_code}  200
 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERNAME32}.ynwtest@netvarth.com
 
@@ -1877,7 +1902,7 @@ JD-TC-GetSharedOnwnersDetailsList-16
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1900,7 +1925,7 @@ JD-TC-GetSharedOnwnersDetailsList-17
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable   ${PUSERNAME79}
@@ -1926,16 +1951,22 @@ JD-TC-GetSharedOnwnersDetailsList-17
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -1947,7 +1978,6 @@ JD-TC-GetSharedOnwnersDetailsList-17
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2002,7 +2032,7 @@ JD-TC-GetSharedOnwnersDetailsList-18
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -2028,16 +2058,22 @@ JD-TC-GetSharedOnwnersDetailsList-18
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -2049,7 +2085,6 @@ JD-TC-GetSharedOnwnersDetailsList-18
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2089,7 +2124,7 @@ JD-TC-GetSharedOnwnersDetailsList-19
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -2113,16 +2148,22 @@ JD-TC-GetSharedOnwnersDetailsList-19
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -2134,7 +2175,6 @@ JD-TC-GetSharedOnwnersDetailsList-19
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2185,7 +2225,7 @@ JD-TC-GetSharedOnwnersDetailsList-20
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2209,16 +2249,22 @@ JD-TC-GetSharedOnwnersDetailsList-20
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -2230,7 +2276,6 @@ JD-TC-GetSharedOnwnersDetailsList-20
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2278,7 +2323,7 @@ JD-TC-GetSharedOnwnersDetailsList-21
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${acc_id}=  get_acc_id  ${PUSERNAME79}
@@ -2301,16 +2346,22 @@ JD-TC-GetSharedOnwnersDetailsList-21
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -2322,7 +2373,6 @@ JD-TC-GetSharedOnwnersDetailsList-21
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -2392,7 +2442,7 @@ JD-TC-GetSharedOnwnersDetailsList-22
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id3}=  get_acc_id  ${PUSERNAME113}
@@ -2402,6 +2452,7 @@ JD-TC-GetSharedOnwnersDetailsList-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -2467,7 +2518,7 @@ JD-TC-GetSharedOnwnersDetailsList-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2492,7 +2543,7 @@ JD-TC-GetSharedOnwnersDetailsList-22
 
     clear_appt_schedule   ${PUSERNAME113}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id12}
     Log  ${resp.content}
@@ -2618,7 +2669,7 @@ JD-TC-GetSharedOnwnersDetailsList-23
     clear_service    ${PUSERNAME178}
     clear_customer   ${PUSERNAME178}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${acc_id}=  get_acc_id  ${PUSERNAME178}
@@ -2633,9 +2684,13 @@ JD-TC-GetSharedOnwnersDetailsList-23
     Should Be Equal As Strings      ${resp.status_code}  200
    
    
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -2648,9 +2703,10 @@ JD-TC-GetSharedOnwnersDetailsList-23
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -2703,7 +2759,7 @@ JD-TC-GetSharedOnwnersDetailsList-23
     Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2729,7 +2785,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH2
 
     
     
-    ${resp}=   ProviderLogin     ${PUSERNAME13}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME13}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2746,7 +2802,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH3
 
     clear_Providermsg  ${PUSERNAME107}
     
-    ${resp}=  Provider Login  ${PUSERNAME107}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      #Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME14}${\n}
@@ -2782,7 +2838,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME107}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME107}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2813,7 +2869,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH5
 
     clear_Providermsg  ${PUSERNAME167}
     
-    ${resp}=  Provider Login  ${PUSERNAME167}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      #Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME14}${\n}
@@ -2835,7 +2891,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH6
 
     clear_Providermsg  ${PUSERNAME167}
     
-    ${resp}=  Provider Login  ${PUSERNAME167}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      #Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME14}${\n}
@@ -2867,7 +2923,7 @@ JD-TC-GetSharedOnwnersDetailsList-24
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME167}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2883,8 +2939,13 @@ JD-TC-GetSharedOnwnersDetailsList-24
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     ${lid}=   Create Sample Location
     Set Suite Variable    ${lid} 
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${id}=  get_id  ${PUSERNAME167}
     Set Suite Variable  ${id}
   
@@ -2939,7 +3000,7 @@ JD-TC-GetSharedOnwnersDetailsList-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME167}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2952,6 +3013,7 @@ JD-TC-GetSharedOnwnersDetailsList-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -3059,7 +3121,7 @@ JD-TC-GetSharedOnwnersDetailsList-24
     ${resp}=   Consumer Logout         
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin   ${PUSERNAME167}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME167}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

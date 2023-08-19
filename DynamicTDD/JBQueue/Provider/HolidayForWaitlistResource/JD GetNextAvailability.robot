@@ -20,43 +20,48 @@ JD-TC-GetNextAvailability-1
     clear_service    ${PUSERNAME50}
     clear_location   ${PUSERNAME50}
     clear_queue      ${PUSERNAME50}
-    ${resp}=  ProviderLogin     ${PUSERNAME50}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME50}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ACC_ID35}=  get_acc_id    ${PUSERNAME50}
     Set Suite Variable          ${ACC_ID35}  
     ${resp}=  Create Sample Location
     Set Suite Variable    ${loc_id}   ${resp}
+    ${resp}=   Get Location ById  ${loc_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_name}=    FakerLibrary.name
     Set Test Variable     ${ser_name}
     ${resp}=  Create Sample Service   ${ser_name}
     Set Suite Variable    ${ser_id}   ${resp}   
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${CUR_DAY}
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  4  00 
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     Set Suite Variable    ${end_time}  
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     Set Suite Variable   ${parallel}
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     Set Suite Variable   ${capacity}
-    ${endday}=  add_date  15
+    ${endday}=  db.add_timezone_date  ${tz}  15  
     Set Suite Variable   ${endday}
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id}  ${ser_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id}   ${resp.json()}
-    ${cur_time}=  add_time   1  30
+
+    ${cur_time}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${cur_time}
     ${desc}=    FakerLibrary.name
     Set Test Variable      ${desc}
-    ${Last_Day}=  add_date   3
+    ${Last_Day}=  db.add_timezone_date  ${tz}   3
     Set Suite Variable   ${Last_Day}
-
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${cur_time}  ${end_time}  ${desc}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -76,7 +81,7 @@ JD-TC-GetNextAvailability-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200     
 
-    # ${availableDate}=   add_date   4
+    # ${availableDate}=   db.add_timezone_date  ${tz}   4
     ${resp}=  Get Next Availability    ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${cur_time}  ${end_time}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -89,30 +94,34 @@ JD-TC-GetNextAvailability-2
     clear_service    ${PUSERNAME50}
     clear_location   ${PUSERNAME50}
     clear_queue      ${PUSERNAME50}
-    ${resp}=  ProviderLogin     ${PUSERNAME50}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME50}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ACC_ID35}=  get_acc_id    ${PUSERNAME50}
     Set Test Variable          ${ACC_ID35}  
     ${resp}=  Create Sample Location
     Set Test Variable    ${loc_id}   ${resp}
+    ${resp}=   Get Location ById  ${loc_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_name}=    FakerLibrary.name
     Set Test Variable     ${ser_name}
     ${resp}=  Create Sample Service   ${ser_name}
     Set Test Variable    ${ser_id}   ${resp}   
-    ${CUR_DAY}=  get_date
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  4  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id}  ${ser_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}   ${resp.json()}
-    ${cur_time}=  add_time   1  30
+    ${cur_time}=  add_timezone_time  ${tz}  1  30  
     ${desc}=    FakerLibrary.name
-    ${Last_Day}=  add_date   3
+    ${Last_Day}=  db.add_timezone_date  ${tz}   3
 
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${cur_time}  ${end_time}  ${desc}
     Log   ${resp.json()}
@@ -133,7 +142,7 @@ JD-TC-GetNextAvailability-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200     
 
-    # ${availableDate}=   add_date   4
+    # ${availableDate}=   db.add_timezone_date  ${tz}   4
     ${resp}=  Get Next Availability    ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${cur_time}  ${end_time}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -145,7 +154,7 @@ JD-TC-GetNextAvailability-3
     clear_service    ${PUSERNAME36}
     clear_location   ${PUSERNAME36}
     clear_queue      ${PUSERNAME36}
-    ${resp}=  ProviderLogin     ${PUSERNAME36}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME36}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ACC_ID36}=  get_acc_id    ${PUSERNAME36}
     ${resp}=  Create Sample Location
@@ -154,11 +163,11 @@ JD-TC-GetNextAvailability-3
     Set Test Variable     ${ser_name}
     ${resp}=  Create Sample Service   ${ser_name}
     Set Test Variable    ${ser_id1}   ${resp}   
-    ${CUR_DAY}=  get_date
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  4  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}
@@ -166,7 +175,7 @@ JD-TC-GetNextAvailability-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}   ${resp.json()}
     ${desc}=    FakerLibrary.name
-    ${Last_Day}=  add_date   3
+    ${Last_Day}=  db.add_timezone_date  ${tz}   3
 
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${strt_time}  ${end_time}  ${desc}
     Log   ${resp.json()}
@@ -187,7 +196,7 @@ JD-TC-GetNextAvailability-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200     
 
-    ${availableDate}=   add_date   4
+    ${availableDate}=   db.add_timezone_date  ${tz}   4
     ${resp}=  Get Next Availability    ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${strt_time}  ${end_time}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -196,6 +205,7 @@ JD-TC-GetNextAvailability-3
     ${resp}=   Delete Holiday  ${holidayId2}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Account
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Not Contain   ${resp.json()}  "id":"${holidayId2}"
 
 
@@ -208,7 +218,6 @@ JD-TC-GetNextAvailability-3
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${q_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -238,7 +247,7 @@ JD-TC-GetNextAvailability-UH3
     clear_service    ${PUSERNAME36}
     clear_location   ${PUSERNAME36}
     clear_queue      ${PUSERNAME36}
-    ${resp}=  ProviderLogin     ${PUSERNAME36}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME36}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ACC_ID36}=  get_acc_id    ${PUSERNAME36}
     ${resp}=  Create Sample Location
@@ -246,11 +255,11 @@ JD-TC-GetNextAvailability-UH3
     ${ser_name}=    FakerLibrary.name
     ${resp}=  Create Sample Service   ${ser_name}
     Set Test Variable    ${ser_id1}   ${resp}   
-    ${CUR_DAY}=  get_date
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  4  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}
@@ -258,7 +267,7 @@ JD-TC-GetNextAvailability-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}   ${resp.json()}
     ${desc}=    FakerLibrary.name
-    ${Last_Day}=  add_date   3
+    ${Last_Day}=  db.add_timezone_date  ${tz}   3
    
 
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${strt_time}  ${end_time}  ${desc}
@@ -280,7 +289,7 @@ JD-TC-GetNextAvailability-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200     
 
-    ${availableDate}=   add_date   4
+    ${availableDate}=   db.add_timezone_date  ${tz}   4
     ${resp}=  Get Next Availability    ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${strt_time}  ${end_time}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   

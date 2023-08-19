@@ -47,7 +47,7 @@ JD-TC-AddOrderRating-1
     clear_service  ${PUSERNAME250}
     clear_customer   ${PUSERNAME250}
     clear_Item   ${PUSERNAME250}
-    ${resp}=  ProviderLogin  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -100,22 +100,22 @@ JD-TC-AddOrderRating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  6  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -200,7 +200,7 @@ JD-TC-AddOrderRating-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -255,7 +255,7 @@ JD-TC-AddOrderRating-1
     Should Be Equal As Strings  ${resp.json()[0]['stars']}              ${rating1}
     Should Be Equal As Strings  ${resp.json()[0]['feedback'][0]['comments']}  ${comment}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${rating1} =  roundval  ${rating1}  2
@@ -282,7 +282,7 @@ JD-TC-AddOrderRating-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -334,7 +334,7 @@ JD-TC-AddOrderRating-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   11
+    ${DAY1}=  db.add_timezone_date  ${tz}  11  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -408,7 +408,7 @@ JD-TC-AddOrderRating-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -465,7 +465,7 @@ JD-TC-AddOrderRating-4
     clear_service  ${PUSERNAME250}
     clear_customer   ${PUSERNAME250}
     clear_Item   ${PUSERNAME250}
-    ${resp}=  ProviderLogin  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -512,22 +512,22 @@ JD-TC-AddOrderRating-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -610,7 +610,7 @@ JD-TC-AddOrderRating-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -679,7 +679,7 @@ JD-TC-AddOrderRating-5
     clear_service  ${PUSERNAME117}
     clear_customer   ${PUSERNAME117}
     clear_Item   ${PUSERNAME117}
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -756,21 +756,21 @@ JD-TC-AddOrderRating-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
    
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  00 
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime3}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -876,7 +876,7 @@ JD-TC-AddOrderRating-5
 
     # ${cid20}=  get_id  ${CUSERNAME20}
     # Set Suite Variable   ${cid20}
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${address}=  get_address
     Set Suite Variable  ${address}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
@@ -933,7 +933,7 @@ JD-TC-AddOrderRating-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -977,7 +977,7 @@ JD-TC-AddOrderRating-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   11
+    ${DAY1}=  db.add_timezone_date  ${tz}  11  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -1034,7 +1034,7 @@ JD-TC-AddOrderRating-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -1091,7 +1091,7 @@ JD-TC-AddOrderRating-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -1186,7 +1186,7 @@ JD-TC-AddOrderRating-UH8
 
 	[Documentation]   Rating Added By Consumer by another provider's account id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid1}=  get_acc_id  ${PUSERNAME99}
     
@@ -1205,7 +1205,7 @@ JD-TC-AddOrderRating-UH9
 
 	[Documentation]    Rate already rated order by provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${rating}=  Random Int  min=1   max=5

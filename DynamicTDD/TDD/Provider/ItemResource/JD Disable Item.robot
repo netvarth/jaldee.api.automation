@@ -31,7 +31,7 @@ ${queue1}  queue1
 JD-TC-Disable Item-UH1
 
     [Documentation]   Disable already disabled item
-    ${resp}=  ProviderLogin  ${PUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 # JD-TC-Disable Item-1
@@ -41,7 +41,7 @@ JD-TC-Disable Item-UH1
 #     clear_service   ${PUSERNAME18}
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME18}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount1}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     Set Suite Variable    ${amount1}
@@ -62,7 +62,7 @@ JD-TC-Disable Item-UH1
 # JD-TC-Disable Item-UH1
 
 #     [Documentation]   Disable already disabled item
-#     ${resp}=  ProviderLogin  ${PUSERNAME18}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Disable Item  ${id}
 #     Should Be Equal As Strings  ${resp.status_code}  422
@@ -87,7 +87,7 @@ JD-TC-Disable Item-UH1
 # JD-TC-Disable Item-UH4
 
 #     [Documentation]  try to Disabled another providers item
-#     ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Disable Item  ${id}
 #     Should Be Equal As Strings  ${resp.status_code}  401
@@ -101,7 +101,7 @@ JD-TC-Disable Item-UH1
 #     ${description}=  FakerLibrary.sentence
 #     ${min_pre}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
 #     ${Total}=   FakerLibrary.pyfloat   left_digits=3   right_digits=2   positive=True
-#     ${resp}=  ProviderLogin  ${PUSERNAME18}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount5}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
     
@@ -127,7 +127,7 @@ JD-TC-Disable Item-UH1
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
    
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${resp}=  Create Service  ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200     
@@ -175,7 +175,7 @@ JD-TC-Disable Item-UH1
 #     ${description}=  FakerLibrary.sentence
 #     ${notifytype}    Random Element     ['none','pushMsg','email']
 #     ${notify}    Random Element     ['True','False']
-#     ${resp}=  ProviderLogin  ${PUSERNAME18}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount2}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
    
@@ -183,7 +183,7 @@ JD-TC-Disable Item-UH1
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${id}  ${resp.json()}
     
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${resp}=  Add To Waitlist  ${cid}  ${sid2}  ${qid1}  ${DAY1}  hi  True  ${cid}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200

@@ -36,7 +36,7 @@ JD-TC-AddonAndAdwords -1
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}    200
        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}  
        ${resp}=   Get Adword Count   
@@ -98,7 +98,7 @@ JD-TC-AddonAndAdwords -2
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAMEA}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAMEA}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}    200
        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAMEA}${\n}  
        ${resp}=  Get upgradable license 

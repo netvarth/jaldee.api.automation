@@ -33,6 +33,11 @@ JD-TC-Donation_Report-1
 
         ${resp}=   Create Sample Location
         Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
         ${description}=  FakerLibrary.sentence
         ${min_pre}=   Random Int   min=10   max=50
         ${min_don_amt}=   Random Int   min=10   max=50
@@ -61,7 +66,7 @@ JD-TC-Donation_Report-1
         Set Suite Variable   ${Donor_name}    ${d_fname} ${d_lname}
         ${con_id}=  get_id  ${CUSERNAME22}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${don_amt}=  Evaluate  ${min_don_amt}*${multiples[0]}
         Set Suite Variable  ${don_amt}
@@ -98,7 +103,7 @@ JD-TC-Donation_Report-1
         
         Log  ${PUSERNAME}
 
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -187,7 +192,7 @@ JD-TC-Donation_Report-1
 
 JD-TC-Donation_Report-2
         [Documentation]   Generate DONATION report using service id
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -247,7 +252,7 @@ JD-TC-Donation_Report-UH2
     
 JD-TC-Donation_Report-UH3
     [Documentation]  Generate DONATION report of a provider using service as EMPTY
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -261,7 +266,7 @@ JD-TC-Donation_Report-UH3
 
 JD-TC-Donation_Report-UH4
     [Documentation]  Generate DONATION report of a provider using donation_Amount as EMPTY
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -275,7 +280,7 @@ JD-TC-Donation_Report-UH4
 
 JD-TC-Donation_Report-UH5
     [Documentation]  Generate DONATION report of a provider using FirstName of Donor as EMPTY
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -290,7 +295,7 @@ JD-TC-Donation_Report-UH5
 JD-TC-Donation_Report-UH6
     [Documentation]  Generate DONATION report of a provider when DATE_RANGE is invalid format
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -320,15 +325,15 @@ JD-TC-Donation_Report-UH6
 JD-TC-Donation_Report-UH7
     [Documentation]  Generate DONATION report of a provider when start and end of DATE_RANGE is Future
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
     Set Test Variable  ${reportType}              DONATION
     Set Test Variable  ${reportDateCategory1}     DATE_RANGE
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
-    ${Add_DAY36}=  add_date  36
+    ${Add_DAY36}=  db.add_timezone_date  ${tz}  36
     Set Suite Variable  ${Add_DAY36}
     ${filter}=  Create Dictionary   date-ge=${Add_DAY1}   date-le=${Add_DAY36}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory1}  ${filter}
@@ -340,7 +345,7 @@ JD-TC-Donation_Report-UH7
 JD-TC-Donation_Report-UH8
     [Documentation]  Generate DONATION report of a provider when DATE_RANGE is From current_date to Future_date
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -357,13 +362,13 @@ JD-TC-Donation_Report-UH8
 JD-TC-Donation_Report-UH9
     [Documentation]  Generate DONATION report of a provider when DATE_RANGE is From Past_date to Future_date
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
     Set Test Variable  ${reportType}              DONATION
     Set Test Variable  ${reportDateCategory1}     DATE_RANGE
-    ${YESTERDAY}=  subtract_date  1
+    ${YESTERDAY}=  db.subtract_timezone_date  ${tz}   1
     Set Suite Variable  ${YESTERDAY}
     ${filter}=  Create Dictionary   date-ge=${YESTERDAY}   date-le=${Add_DAY1}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory1}  ${filter}
@@ -375,13 +380,13 @@ JD-TC-Donation_Report-UH9
 JD-TC-Donation_Report-UH10
     [Documentation]  Generate DONATION report of a provider when DATE_RANGE is greater than 90_days
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
     Set Test Variable  ${reportType}              DONATION
     Set Test Variable  ${reportDateCategory1}     DATE_RANGE
-    ${Add_DAY92}=  add_date  92
+    ${Add_DAY92}=  db.add_timezone_date  ${tz}  92
     Set Suite Variable  ${Add_DAY92}
     ${filter}=  Create Dictionary   date-ge=${CUR_DAY}   date-le=${Add_DAY92}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory1}  ${filter}
@@ -389,7 +394,7 @@ JD-TC-Donation_Report-UH10
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_DATE_RANGE}
 
-    ${Sub_Date92}=  subtract_date  92
+    ${Sub_Date92}=  db.subtract_timezone_date  ${tz}   92
     Set Suite Variable  ${Sub_Date92}
     ${filter}=  Create Dictionary   date-ge=${Sub_Date92}   date-le=${YESTERDAY}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory1}  ${filter}
@@ -401,7 +406,7 @@ JD-TC-Donation_Report-UH10
 JD-TC-Donation_Report-UH11
     [Documentation]  Generate DONATION report for a provider when start_date is greater than end_date of DATE_RANGE 
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -413,10 +418,10 @@ JD-TC-Donation_Report-UH11
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}    ${DATE_MISMATCH}
 
-    ${Sub_Date10}=  subtract_date  10
+    ${Sub_Date10}=  db.subtract_timezone_date  ${tz}   10
     Set Suite Variable  ${Sub_Date10}
 
-    ${Sub_Date20}=  subtract_date  20
+    ${Sub_Date20}=  db.subtract_timezone_date  ${tz}   20
     Set Suite Variable  ${Sub_Date20}
 
     ${filter}=  Create Dictionary   date-ge=${Sub_Date10}   date-le=${Sub_Date20}
@@ -429,7 +434,7 @@ JD-TC-Donation_Report-UH11
 JD-TC-Donation_Report-UH12
     [Documentation]  Generate DONATION report of a provider when start_date is FUTURE and end_date is PAST for DATE_RANGE
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -445,7 +450,7 @@ JD-TC-Donation_Report-UH12
 JD-TC-Donation_Report-UH13
     [Documentation]  Generate DONATION report of a provider when start_date is FUTURE and end_date is Current_Day for DATE_RANGE
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -462,7 +467,7 @@ JD-TC-Donation_Report-UH13
 JD-TC-Donation_Report-UH14
     [Documentation]  Generate DONATION report of a provider when start_date is greater than end_date, and DATE_RANGE is FUTURE
     
-    ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -486,9 +491,12 @@ Billable Domain Providers
      
     FOR   ${a}  IN RANGE   ${min}   ${max}
             
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Suite Variable  ${PUSERNAME_PH}  ${decrypted_data['primaryPhoneNumber']}
+        # Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
         clear_location   ${PUSERNAME${a}}
         clear_service    ${PUSERNAME${a}}
         ${acc_id}=  get_acc_id  ${PUSERNAME${a}}
@@ -552,7 +560,7 @@ JD-TC-Donation_Report-3
         Should Be Equal As Strings  ${resp.json()['donor']['lastName']}   ${d_lname}
         Should Be Equal As Strings  ${resp.json()['service']['id']}       ${sid1}
         
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -30,7 +30,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     clear_service  ${PUSERNAME160}
     clear_customer   ${PUSERNAME160}
     clear_Item   ${PUSERNAME160}
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -75,7 +75,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     ${itemCode1}=   FakerLibrary.word 
 
     ${promoLabel1}=   FakerLibrary.word 
-    ${exp_date}=   add_date   4
+    ${exp_date}=   db.add_timezone_date  ${tz}   4
 
     ${resp}=  Create Virtual Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}   ${itemType[1]}  ${exp_date}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -93,7 +93,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     
     ${itemName3}=   FakerLibrary.firstname  
     ${itemCode3}=   FakerLibrary.lastname 
-    ${exp_date1}=   add_date   5
+    ${exp_date1}=   db.add_timezone_date  ${tz}   5
     ${displayName3}=   FakerLibrary.lastname 
     Set Suite Variable   ${displayName3}
 
@@ -103,7 +103,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     
     ${itemName4}=   FakerLibrary.firstname  
     ${itemCode4}=   FakerLibrary.lastname 
-    ${exp_date2}=   add_date   2
+    ${exp_date2}=   db.add_timezone_date  ${tz}   2
     ${displayName4}=   FakerLibrary.lastname 
     Set Suite Variable   ${displayName4}
 
@@ -113,7 +113,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     
     ${itemName5}=   FakerLibrary.firstname  
     ${itemCode5}=   FakerLibrary.lastname 
-    ${exp_date3}=   add_date   6
+    ${exp_date3}=   db.add_timezone_date  ${tz}   6
     ${displayName5}=   FakerLibrary.lastname 
     Set Suite Variable   ${displayName5}
 
@@ -121,17 +121,17 @@ JD-TC-CreateOrderForElectronicDelivery-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30   
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     Set Suite Variable   ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -254,7 +254,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -296,7 +296,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH1
     [Documentation]    Place an order for electronic Delivery with expired virtual items.
     
     change_system_date   6
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -304,7 +304,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Test Variable  ${item_quantity1}
@@ -332,7 +332,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH2
     
     change_system_date   -6
     
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -359,14 +359,14 @@ JD-TC-CreateOrderForElectronicDelivery-UH2
     ${itemCode1}=   FakerLibrary.word 
 
     ${promoLabel1}=   FakerLibrary.word 
-    ${exp_date}=   add_date   4
+    ${exp_date}=   db.add_timezone_date  ${tz}   4
 
     ${resp}=  Create Virtual Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName11}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}   ${itemType[1]}  ${exp_date}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${exp_item_id1}  ${resp.json()}
     resetsystem_time
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -389,7 +389,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH3
 
     [Documentation]   try to remove an expired item from catalog.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -404,7 +404,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH4
     [Documentation]    create an order for virtual items in which one item is expired.
 
     change_system_date   4
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -412,7 +412,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Test Variable  ${item_quantity1}
@@ -437,7 +437,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH5
 
     [Documentation]    try to update an order in which the item is expired after taking the order.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -469,7 +469,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH5
     
     # change_system_date   6
     
-    # ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 

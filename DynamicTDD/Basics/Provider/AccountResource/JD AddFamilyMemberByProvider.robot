@@ -15,11 +15,15 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-AddFamilyMemberByProvider-1
       [Documentation]    Add a familymember by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       clear_customer   ${PUSERNAME0}
 
-      Set Test Variable  ${pid}  ${resp.json()['id']}
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
       ${id}=  get_id  ${CUSERNAME9}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -49,7 +53,7 @@ JD-TC-AddFamilyMemberByProvider-1
 
 JD-TC-AddFamilyMemberByProvider-2
       [Documentation]    Adding more family members
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -70,7 +74,7 @@ JD-TC-AddFamilyMemberByProvider-2
 JD-TC-AddFamilyMemberByProvider-3
       [Documentation]    Adding a family member with  same phone number 
       ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+200000
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${id}=  get_id  ${PUSERNAME0}
       ${firstname}=  FakerLibrary.first_name
@@ -111,7 +115,7 @@ JD-TC-AddFamilyMemberByProvider-3
 JD-TC-AddFamilyMemberByProvider-4
       [Documentation]   One familymember added by two providers
       ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+200001
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${id}=  get_id  ${PUSERNAME0}
       # clear_FamilyMember  ${id}
@@ -125,7 +129,7 @@ JD-TC-AddFamilyMemberByProvider-4
       Set Test Variable  ${gender}
       ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${pcid1}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${Familymember_ph}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${id}=  get_id  ${PUSERNAME0}
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${PUSERNAME0}  ${EMPTY}
@@ -140,7 +144,7 @@ JD-TC-AddFamilyMemberByProvider-4
 JD-TC-AddFamilyMemberByProvider-5
       [Documentation]   One familymember added by one provider and consumer
       ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+200002
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${id}=  get_id  ${CUSERNAME0}
       # clear_FamilyMember  ${id}
@@ -170,9 +174,14 @@ JD-TC-AddFamilyMemberByProvider-5
 
 JD-TC-AddFamilyMemberByProvider-6
       [Documentation]    Add customer and add familymembers  after consumer signup of that customer the familymembers are not list there.
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${p_id}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
@@ -228,9 +237,14 @@ JD-TC-AddFamilyMemberByProvider-6
 
 JD-TC-AddFamilyMemberByProvider-7
       [Documentation]    Adding a customer and add two family members with two different providers ,in this case one family member is common and if the consumer sign up,then  the list of family members should not be duplicated.
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${p_id}  ${decrypted_data['id']}
+      
+      # Set Test Variable  ${p_id}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
@@ -268,7 +282,7 @@ JD-TC-AddFamilyMemberByProvider-7
       Set Test Variable  ${mem_id2}  ${resp.json()}
       ${resp}=  ProviderLogout
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email4}  ${gender}  ${dob}  ${ph4}  ${EMPTY}
       Log  ${resp.json()}
@@ -322,7 +336,7 @@ JD-TC-AddFamilyMemberByProvider-UH1
 
 JD-TC-AddFamilyMemberByProvider-UH2
       [Documentation]    Adding a family member with  same name 
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -351,7 +365,7 @@ JD-TC-AddFamilyMemberByProvider-UH2
 
 # JD-TC-AddFamilyMemberByProvider-3
 #       [Documentation]    Add a Familymember by provider switched to a consumer
-#       ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+#       ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
 #       Should Be Equal As Strings  ${resp.status_code}  200
 #       ${id1}=  get_id  ${PUSERNAME0}
 #       ${firstname}=  FakerLibrary.first_name
@@ -383,7 +397,7 @@ JD-TC-AddFamilyMemberByProvider-UH2
 
 # JD-TC-AddFamilyMemberByProvider-UH1
 #       [Documentation]    Adding a family member with existing family member details
-#       ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+#       ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
 #       Should Be Equal As Strings  ${resp.status_code}  200
 #       ${firstname}=  FakerLibrary.first_name
 #       Set Test Variable  ${firstname}

@@ -34,7 +34,7 @@ JD-TC-Update read count-1
 
     [Documentation]    Update read count
 
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
     Set Suite Variable    ${pid}        ${resp.json()['id']}
@@ -381,7 +381,7 @@ JD-TC-Update read count-UH12
 
     [Documentation]    Update read count with provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

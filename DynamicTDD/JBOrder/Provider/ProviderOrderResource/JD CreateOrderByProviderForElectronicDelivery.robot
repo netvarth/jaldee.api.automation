@@ -30,10 +30,14 @@ JD-TC-CreateOrderForElectronicDelivery-1
     clear_service  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
     clear_Item   ${PUSERNAME130}
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME130}
     Set Suite Variable  ${accId} 
@@ -58,6 +62,11 @@ JD-TC-CreateOrderForElectronicDelivery-1
     ${price1}=  Random Int  min=50   max=300 
     ${price1float}=  twodigitfloat  ${price1}
 
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+
     ${itemName1}=   FakerLibrary.name  
 
     ${itemNameInLocal1}=  FakerLibrary.Sentence   nb_words=2  
@@ -74,7 +83,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     ${itemCode1}=   FakerLibrary.word 
 
     ${promoLabel1}=   FakerLibrary.word 
-    ${exp_date}=   add_date   4
+    ${exp_date}=   db.add_timezone_date  ${tz}   4
 
     ${resp}=  Create Virtual Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}   ${itemType[1]}  ${exp_date}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -90,7 +99,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     
     ${itemName3}=   FakerLibrary.firstname  
     ${itemCode3}=   FakerLibrary.lastname 
-    ${exp_date1}=   add_date   4
+    ${exp_date1}=   db.add_timezone_date  ${tz}   4
 
     ${resp}=  Create Virtual Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName3}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode3}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}     ${itemType[1]}  ${exp_date1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -98,7 +107,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     
     ${itemName4}=   FakerLibrary.firstname  
     ${itemCode4}=   FakerLibrary.lastname 
-    ${exp_date2}=   add_date   2
+    ${exp_date2}=   db.add_timezone_date  ${tz}   2
 
     ${resp}=  Create Virtual Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName4}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode4}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}     ${itemType[1]}  ${exp_date2}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -106,23 +115,23 @@ JD-TC-CreateOrderForElectronicDelivery-1
     
     ${itemName5}=   FakerLibrary.firstname  
     ${itemCode5}=   FakerLibrary.lastname 
-    ${exp_date3}=   add_date   5
+    ${exp_date3}=   db.add_timezone_date  ${tz}   5
 
     ${resp}=  Create Virtual Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName5}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode5}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}    ${itemType[1]}  ${exp_date3}    
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30   
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     Set Suite Variable   ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -245,7 +254,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -286,7 +295,7 @@ JD-TC-CreateOrderForElectronicDelivery-2
 
     [Documentation]    Place an order for home Delivery with virtual items and physical items(walk-in).
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -294,7 +303,7 @@ JD-TC-CreateOrderForElectronicDelivery-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
@@ -318,7 +327,7 @@ JD-TC-CreateOrderForElectronicDelivery-3
     [Documentation]   create a catalog with physical and virtual items, then remove physical items from the catalog
     ...  and place the order for virtual item.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -357,7 +366,7 @@ JD-TC-CreateOrderForElectronicDelivery-4
 
     [Documentation]    Place an order By Provider for Electronic Delivery without order date.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -388,7 +397,7 @@ JD-TC-CreateOrderForElectronicDelivery-5
 
     [Documentation]    Place an order for Electronic Delivery with virtual items and physical items(walk-in) for virtual item only.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -418,7 +427,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH1
 
     [Documentation]    Place an order By Provider for Electronic Delivery for another day.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -426,7 +435,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   16
+    ${DAY1}=  db.add_timezone_date  ${tz}   16
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
@@ -443,7 +452,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH2
 
     [Documentation]    Place an order By Provider for Electronic Delivery for past day.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -451,7 +460,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  subtract_date   1
+    ${DAY1}=  db.subtract_timezone_date  ${tz}    1
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
@@ -468,7 +477,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH3
 
     [Documentation]    Place an order By Provider for Electronic Delivery without item.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -492,7 +501,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH4
 
     [Documentation]    create catalog for a virtual item by giving home delivery details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -508,7 +517,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH5
 
     [Documentation]    create catalog for a virtual item by giving store pickup details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${re sp.status_code}  200
 
@@ -526,7 +535,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH6
     [Documentation]   create a catalog with physical and virtual items, then remove physical items from the catalog
     ...  and place the order for the removed item.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -554,7 +563,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH7
 
     [Documentation]    Place an order for Electronic Delivery with virtual items and physical items(walk-in).
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -578,7 +587,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH8
 
     [Documentation]    Place an order for Electronic Delivery with virtual items and physical items(walk-in) for physical item only.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -603,7 +612,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH9
 
     [Documentation]    create a catalog with a virtual items then inactive one item and try to place the order for that item.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

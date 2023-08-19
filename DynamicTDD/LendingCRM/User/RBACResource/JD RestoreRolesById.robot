@@ -27,7 +27,7 @@ JD-TC-RestoreRolesById-1
 
     [Documentation]  Create  Roles with empty Capabilities and update role then disable the role then restore the role by id.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -84,7 +84,7 @@ JD-TC-RestoreRolesById-2
 
     [Documentation]   Create two Roles with  Capabilities and restore only 1 role by id.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

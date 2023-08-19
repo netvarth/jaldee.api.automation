@@ -243,7 +243,7 @@ JD-TC-GetServiceId-UH2
 JD-TC-GetServiceId-UH3
     [Documentation]  Get details of another provider's service
     clear_service       ${PUSERNAME168}
-    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${description}=  FakerLibrary.sentence
     ${notifytype}    Random Element     ['none','pushMsg','email']
@@ -253,7 +253,7 @@ JD-TC-GetServiceId-UH3
     Set Suite Variable  ${id1}    ${resp.json()}
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service By Id  ${id1}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -262,7 +262,7 @@ JD-TC-GetServiceId-UH3
 
 JD-TC-GetServiceId-UH4
     [Documentation]    Get service by invalid id
-    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service By Id  0
     Should Be Equal As Strings  ${resp.status_code}  404
@@ -279,7 +279,7 @@ Billable
     FOR   ${a}  IN RANGE   ${length}
             
         clear_service       ${PUSERNAME${a}}
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -303,7 +303,7 @@ Non Billable
 
      FOR    ${a}   IN RANGE    ${length}
         clear_service       ${MUSERNAME${a}}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}

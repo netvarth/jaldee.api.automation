@@ -35,7 +35,7 @@ JD-TC-UpdateBusinessProfileByUserLogin-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -95,14 +95,14 @@ JD-TC-UpdateBusinessProfileByUserLogin-1
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-UpdateBusinessProfileByUserLogin-2
 
     [Documentation]  Upadte User profile with some details
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${emp_list}=  Create List 
@@ -134,7 +134,7 @@ JD-TC-UpdateBusinessProfileByUserLogin-2
 ***Comment***
 JD-TC-UpdateBusinessProfileByUserLogin-2
     [Documentation]  Update a user profile with all details
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -168,7 +168,7 @@ JD-TC-UpdateBusinessProfileByUserLogin-2
 
 JD-TC-UpdateBusinessProfileByUserLogin-3
     [Documentation]  Update businessName and businessDesc of user profile with other details
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Should Be Equal As Strings    ${resp.status_code}    200
     
     ${bs1}=  FakerLibrary.bs
@@ -186,7 +186,7 @@ JD-TC-UpdateBusinessProfileByUserLogin-3
 
 JD-TC-UpdateBusinessProfileByUserLogin-UH1
      [Documentation]  Update a user profile with another sub domain id
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Set Suite Variable  ${sud_domain_id1}   ${iscorp_subdomains[1]['subdomainId']}
@@ -198,7 +198,7 @@ JD-TC-UpdateBusinessProfileByUserLogin-UH1
 
 JD-TC-UpdateBusinessProfileByUserLogin-UH2
      [Documentation]  Update a user profile with invalid user id
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -209,7 +209,7 @@ JD-TC-UpdateBusinessProfileByUserLogin-UH2
 
 JD-TC-UpdateBusinessProfileByUserLogin-UH3
      [Documentation]  Update a user profile with invalid sub domain id
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -220,7 +220,7 @@ JD-TC-UpdateBusinessProfileByUserLogin-UH3
 
 JD-TC-UpdateBusinessProfileByUserLogin-UH4
      [Documentation]  Update a user profile for INACTIVE user
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+3836855

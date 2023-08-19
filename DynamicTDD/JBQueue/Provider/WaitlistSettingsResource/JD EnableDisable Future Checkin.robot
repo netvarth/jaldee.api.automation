@@ -18,22 +18,26 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-EnableDisableFutureCheckin-1
     [Documentation]  Disable future checkin by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Future Checkin
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  futureDateWaitlist=False
 
 JD-TC-EnableDisableFutureCheckin-2
     [Documentation]  Enable future checkin by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Enable Future Checkin
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  futureDateWaitlist=True
 
 
@@ -67,7 +71,7 @@ JD-TC-EnableDisableFutureCheckin-UH4
 
 JD-TC-EnableDisableFutureCheckin-UH5
     [Documentation]  Disable a already disabled future checkin
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Future Checkin
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -77,7 +81,7 @@ JD-TC-EnableDisableFutureCheckin-UH5
      
 JD-TC-EnableDisableFutureCheckin-UH6
     [Documentation]  Enable a already enabled future checkin
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   View Waitlist Settings
     Log  ${resp.json()}

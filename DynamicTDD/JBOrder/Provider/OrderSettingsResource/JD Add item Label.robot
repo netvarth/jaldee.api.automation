@@ -24,8 +24,18 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Add_Item_Label-1
 	[Documentation]   Add label for a valid item
     clear_Item  ${PUSERNAME29}
-    ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     ${displayName1}=   FakerLibrary.name 
     Set Suite Variable  ${displayName1}  
@@ -111,7 +121,7 @@ JD-TC-Add_Item_Label-1
 
 JD-TC-Add_Item_Label-UH1
     [Documentation]  Add a label which is already added
-    ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${LABEL_ALREADY_ADDED_HERE}=   Format String  ${LABEL_ALREADY_ADDED}    ${l_name[0]}
     ${resp}=   Add Item Label   ${id}    ${l_name[0]}=${Values[0]} 
@@ -141,7 +151,7 @@ JD-TC-Add_Item_Label -UH3
 
 JD-TC-Add_Item_Label-UH4
     [Documentation]  Add an invalid label 
-    ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Add Item Label   ${id}    id-eq=${id} 
     Log   ${resp.json()}
@@ -152,7 +162,7 @@ JD-TC-Add_Item_Label-UH4
 JD-TC-Add_Item_Label-UH5
     [Documentation]  Add a label without create label
     clear_Label  ${PUSERNAME34}
-    ${resp}=  ProviderLogin  ${PUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      

@@ -60,7 +60,7 @@ JD-TC-AccountLevelAnalyticsforOrder-1
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -77,7 +77,6 @@ JD-TC-AccountLevelAnalyticsforOrder-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -89,18 +88,22 @@ JD-TC-AccountLevelAnalyticsforOrder-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -178,17 +181,17 @@ JD-TC-AccountLevelAnalyticsforOrder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   3  30 
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable  ${eTime1}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -286,7 +289,7 @@ JD-TC-AccountLevelAnalyticsforOrder-1
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         Set Suite Variable  ${DAY1}
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
@@ -341,7 +344,7 @@ JD-TC-AccountLevelAnalyticsforOrder-1
     ${online_order_len}=   Evaluate  len($order_ids)
     Set Suite Variable   ${online_order_len}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -387,7 +390,7 @@ JD-TC-AccountLevelAnalyticsforOrder-2
         Set Suite Variable   ${days}
 
         FOR   ${x}  IN RANGE   ${start}   ${count1}
-            ${DAY}=  add_date   ${x}
+            ${DAY}=  db.add_timezone_date  ${tz}   ${x}
             Append To List   ${days}  ${DAY}
         END
         Log   ${days}
@@ -445,7 +448,7 @@ JD-TC-AccountLevelAnalyticsforOrder-2
     ${online_order_len1}=   Evaluate  len($order_ids) + len($order_ids1) - 3
     Set Suite Variable   ${online_order_len1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -507,7 +510,7 @@ JD-TC-AccountLevelAnalyticsforOrder-3
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
         ${firstname}=  FakerLibrary.first_name
         Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
@@ -548,7 +551,7 @@ JD-TC-AccountLevelAnalyticsforOrder-3
     ${online_order_len2}=   Evaluate  ${online_order_len1} + len($order_ids2) 
     Set Suite Variable   ${online_order_len2}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -582,7 +585,7 @@ JD-TC-AccountLevelAnalyticsforOrder-4
     ${order_ids3}=  Create List
     Set Suite Variable   ${order_ids3}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -593,7 +596,7 @@ JD-TC-AccountLevelAnalyticsforOrder-4
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()[0]['id']}
       
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -630,7 +633,7 @@ JD-TC-AccountLevelAnalyticsforOrder-4
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -649,7 +652,7 @@ JD-TC-AccountLevelAnalyticsforOrder-4
     ${walkin_order_len}=   Evaluate   len($order_ids3) 
     Set Suite Variable   ${walkin_order_len}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -684,7 +687,7 @@ JD-TC-AccountLevelAnalyticsforOrder-5
     ${order_ids4}=  Create List
     Set Suite Variable   ${order_ids4}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -695,7 +698,7 @@ JD-TC-AccountLevelAnalyticsforOrder-5
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()[0]['id']}
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
         ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
         Set Test Variable  ${item_quantity1}
@@ -721,7 +724,7 @@ JD-TC-AccountLevelAnalyticsforOrder-5
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -740,7 +743,7 @@ JD-TC-AccountLevelAnalyticsforOrder-5
     ${walkin_order_len1}=   Evaluate   $walkin_order_len + len($order_ids4) 
     Set Suite Variable   ${walkin_order_len1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -774,7 +777,7 @@ JD-TC-AccountLevelAnalyticsforOrder-6
     ${order_ids5}=  Create List
     Set Suite Variable   ${order_ids5}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -823,7 +826,7 @@ JD-TC-AccountLevelAnalyticsforOrder-6
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -842,7 +845,7 @@ JD-TC-AccountLevelAnalyticsforOrder-6
     ${phonein_order_len1}=   Evaluate   len($order_ids5) 
     Set Suite Variable   ${phonein_order_len1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -877,7 +880,7 @@ JD-TC-AccountLevelAnalyticsforOrder-7
     ${order_ids6}=  Create List
     Set Suite Variable   ${order_ids6}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -888,7 +891,7 @@ JD-TC-AccountLevelAnalyticsforOrder-7
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()[0]['id']}
 
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
         ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
         Set Test Variable  ${item_quantity1}
@@ -914,7 +917,7 @@ JD-TC-AccountLevelAnalyticsforOrder-7
 
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -933,7 +936,7 @@ JD-TC-AccountLevelAnalyticsforOrder-7
     ${phonein_order_len2}=   Evaluate   len($order_ids6) 
     Set Suite Variable   ${phonein_order_len2}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -969,7 +972,7 @@ JD-TC-AccountLevelAnalyticsforOrder-8
 
     [Documentation]   take order for a provider by consumers for the same date and check account level analytics for TOTAL_ORDER and BRAND_NEW_ORDERS matrix.
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1014,7 +1017,7 @@ JD-TC-AccountLevelAnalyticsforOrder-9
 
     [Documentation]   take order for a provider by consumers for the same date and check account level analytics for ORDERS_FOR_BILLING matrix.
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1054,7 +1057,7 @@ JD-TC-AccountLevelAnalyticsforOrder-10
 
     [Documentation]   take order for a provider by consumers for the same date and check account level analytics for WEB_ORDER matrix.
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1092,7 +1095,7 @@ JD-TC-AccountLevelAnalyticsforOrder-11
     Set Test Variable   ${order_ids}
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
-    ${DAY1}=  get_date  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}  
    
     FOR   ${a}  IN RANGE   ${count}
     
@@ -1151,7 +1154,7 @@ JD-TC-AccountLevelAnalyticsforOrder-11
 
     Log Many   ${order_ids}  
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1186,7 +1189,7 @@ JD-TC-AccountLevelAnalyticsforOrder-12
 
     [Documentation]    take order for a provider by consumers for the same date and check account level analytics for RECEIVED_ORDER matrix.
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1219,7 +1222,7 @@ JD-TC-AccountLevelAnalyticsforOrder-13
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1244,7 +1247,7 @@ JD-TC-AccountLevelAnalyticsforOrder-13
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1278,7 +1281,7 @@ JD-TC-AccountLevelAnalyticsforOrder-14
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1303,7 +1306,7 @@ JD-TC-AccountLevelAnalyticsforOrder-14
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1336,7 +1339,7 @@ JD-TC-AccountLevelAnalyticsforOrder-15
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1361,7 +1364,7 @@ JD-TC-AccountLevelAnalyticsforOrder-15
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1390,7 +1393,7 @@ JD-TC-AccountLevelAnalyticsforOrder-15
     
     FOR   ${a}  IN RANGE   ${count2}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1415,7 +1418,7 @@ JD-TC-AccountLevelAnalyticsforOrder-15
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1451,7 +1454,7 @@ JD-TC-AccountLevelAnalyticsforOrder-16
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1476,7 +1479,7 @@ JD-TC-AccountLevelAnalyticsforOrder-16
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1511,7 +1514,7 @@ JD-TC-AccountLevelAnalyticsforOrder-17
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1536,7 +1539,7 @@ JD-TC-AccountLevelAnalyticsforOrder-17
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1569,7 +1572,7 @@ JD-TC-AccountLevelAnalyticsforOrder-18
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1594,7 +1597,7 @@ JD-TC-AccountLevelAnalyticsforOrder-18
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1628,7 +1631,7 @@ JD-TC-AccountLevelAnalyticsforOrder-19
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1653,7 +1656,7 @@ JD-TC-AccountLevelAnalyticsforOrder-19
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1687,7 +1690,7 @@ JD-TC-AccountLevelAnalyticsforOrder-20
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1712,7 +1715,7 @@ JD-TC-AccountLevelAnalyticsforOrder-20
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1746,7 +1749,7 @@ JD-TC-AccountLevelAnalyticsforOrder-21
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1771,7 +1774,7 @@ JD-TC-AccountLevelAnalyticsforOrder-21
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1805,7 +1808,7 @@ JD-TC-AccountLevelAnalyticsforOrder-22
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1830,7 +1833,7 @@ JD-TC-AccountLevelAnalyticsforOrder-22
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1864,7 +1867,7 @@ JD-TC-AccountLevelAnalyticsforOrder-23
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1889,7 +1892,7 @@ JD-TC-AccountLevelAnalyticsforOrder-23
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1931,7 +1934,7 @@ JD-TC-AccountLevelAnalyticsforOrder-24
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -1956,7 +1959,7 @@ JD-TC-AccountLevelAnalyticsforOrder-24
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1990,7 +1993,7 @@ JD-TC-AccountLevelAnalyticsforOrder-25
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2015,7 +2018,7 @@ JD-TC-AccountLevelAnalyticsforOrder-25
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2049,7 +2052,7 @@ JD-TC-AccountLevelAnalyticsforOrder-26
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2074,7 +2077,7 @@ JD-TC-AccountLevelAnalyticsforOrder-26
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2108,7 +2111,7 @@ JD-TC-AccountLevelAnalyticsforOrder-27
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2133,7 +2136,7 @@ JD-TC-AccountLevelAnalyticsforOrder-27
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2167,7 +2170,7 @@ JD-TC-AccountLevelAnalyticsforOrder-28
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2192,7 +2195,7 @@ JD-TC-AccountLevelAnalyticsforOrder-28
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2226,7 +2229,7 @@ JD-TC-AccountLevelAnalyticsforOrder-29
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2251,7 +2254,7 @@ JD-TC-AccountLevelAnalyticsforOrder-29
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2285,7 +2288,7 @@ JD-TC-AccountLevelAnalyticsforOrder-30
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2310,7 +2313,7 @@ JD-TC-AccountLevelAnalyticsforOrder-30
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2344,7 +2347,7 @@ JD-TC-AccountLevelAnalyticsforOrder-31
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2369,7 +2372,7 @@ JD-TC-AccountLevelAnalyticsforOrder-31
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2403,7 +2406,7 @@ JD-TC-AccountLevelAnalyticsforOrder-32
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2428,7 +2431,7 @@ JD-TC-AccountLevelAnalyticsforOrder-32
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2462,7 +2465,7 @@ JD-TC-AccountLevelAnalyticsforOrder-33
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2487,7 +2490,7 @@ JD-TC-AccountLevelAnalyticsforOrder-33
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2521,7 +2524,7 @@ JD-TC-AccountLevelAnalyticsforOrder-34
     
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
             
@@ -2546,7 +2549,7 @@ JD-TC-AccountLevelAnalyticsforOrder-34
     END
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

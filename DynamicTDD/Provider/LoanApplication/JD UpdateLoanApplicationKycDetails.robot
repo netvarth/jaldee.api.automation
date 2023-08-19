@@ -52,7 +52,7 @@ JD-TC-Update loan Application Kyc Details-1
                                   
     [Documentation]               Create Loan Application and Update loan Application Kyc Details.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -102,9 +102,14 @@ JD-TC-Update loan Application Kyc Details-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     clear Customer  ${PUSERNAME87}
@@ -306,7 +311,7 @@ JD-TC-Update loan Application Kyc Details-2
                                   
     [Documentation]              Update loan Application Kyc Details again with same details.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -359,7 +364,7 @@ JD-TC-Update loan Application Kyc Details-2
 #     [Documentation]             Try to Update loan Application Kyc Details with another provider loan id.
 
     
-#     ${resp}=   ProviderLogin  ${PUSERNAME86}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -383,7 +388,7 @@ JD-TC-Update loan Application Kyc Details-4
     [Documentation]             Try to Update loan Application Kyc Details with another provider loan uid.
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -420,7 +425,7 @@ JD-TC-Update loan Application Kyc Details-5
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY phoneNo.
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -445,7 +450,7 @@ JD-TC-Update loan Application Kyc Details-6
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY aadhaar.
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -470,7 +475,7 @@ JD-TC-Update loan Application Kyc Details-7
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY pan.
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -495,7 +500,7 @@ JD-TC-Update loan Application Kyc Details-8
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY aadhaarAttachments.
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -520,7 +525,7 @@ JD-TC-Update loan Application Kyc Details-9
     [Documentation]             Try to Update loan Application Kyc Details with EMPTY panAttachments.
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -545,7 +550,7 @@ JD-TC-Update loan Application Kyc Details-10
     [Documentation]             Try to Update loan Application Kyc Details with two panAttachments.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME86}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -573,7 +578,7 @@ JD-TC-Update loan Application Kyc Details-11
     [Documentation]             Try to Update loan Application Kyc Details with two aadhaarAttachments.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME86}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -601,7 +606,7 @@ JD-TC-Update loan Application Kyc Details-12
     [Documentation]             Try to Update loan Application Kyc Details with another provider ower id for aadhaarAttachments .
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME86}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

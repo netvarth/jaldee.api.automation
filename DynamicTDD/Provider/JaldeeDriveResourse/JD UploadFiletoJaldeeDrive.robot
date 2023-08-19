@@ -46,7 +46,7 @@ JD-TC-Uploadfiletojaldeedrive-1
     [Documentation]  file upload to private folder
 
     clear_drive   ${PUSERNAME199}
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     Set Test Variable  ${providerId}   ${acc_id}
@@ -74,7 +74,7 @@ JD-TC-Uploadfiletojaldeedrive-1
     Should Be Equal As Strings                 ${resp.status_code}                200
   
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
   
     ${resp}=   Get List Of Shared 0wners    ${ownerType[0]}       ${id}
@@ -91,7 +91,7 @@ JD-TC-Uploadfiletojaldeedrive-2
  
     [Documentation]  more than one file upload to folder
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
 
@@ -141,7 +141,7 @@ JD-TC-Uploadfiletojaldeedrive-3
 
     [Documentation]   pdf file upload to jaldeedrive folder
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     # Set Test Variable  ${providerId}   ${acc_id}
@@ -177,7 +177,7 @@ JD-TC-Uploadfiletojaldeedrive-4
 
     [Documentation]   png file upload to jaldeedrive folder
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     # Set Test Variable  ${providerId}   ${acc_id}
@@ -209,7 +209,7 @@ JD-TC-Uploadfiletojaldeedrive-5
 
     [Documentation]   jpeg file upload to jaldeedrive folder
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     Set Test Variable    ${acc_id}
@@ -244,7 +244,7 @@ JD-TC-Uploadfiletojaldeedrive-6
 
     [Documentation]   gif file upload to jaldeedrive folder
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     Set Suite Variable  ${providerId}   ${acc_id}
@@ -277,7 +277,7 @@ JD-TC-Uploadfiletojaldeedrive-7
 
     [Documentation]   DOC file upload to jaldeedrive folder
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     # Set Test Variable  ${providerId}   ${acc_id}
@@ -311,7 +311,7 @@ JD-TC-Uploadfiletojaldeedrive-8
 
     [Documentation]   txt file upload to jaldeedrive folder
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     # Set Test Variable  ${providerId}   ${acc_id}
@@ -342,7 +342,7 @@ JD-TC-Uploadfiletojaldeedrive-9
 
 	[Documentation]    upload pdf file to user by branch login
 
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME11}
@@ -358,9 +358,12 @@ JD-TC-Uploadfiletojaldeedrive-9
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -433,7 +436,7 @@ JD-TC-Uploadfiletojaldeedrive-10
 
 	[Documentation]    upload pdf file by  user 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME12}
@@ -450,9 +453,12 @@ JD-TC-Uploadfiletojaldeedrive-10
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
 
     # ${resp}=  Toggle Department Enable
@@ -511,7 +517,7 @@ JD-TC-Uploadfiletojaldeedrive-10
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -547,7 +553,7 @@ JD-TC-Uploadfiletojaldeedrive-11
     
     [Documentation]    upload  public folder to jaldeedrive 
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     ${id1}=  get_id  ${PUSERNAME199}
@@ -594,7 +600,7 @@ JD-TC-Uploadfiletojaldeedrive-UH2
 
     [Documentation]   file upload to jaldeedrive folder  another providerid
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME185}
     Set Test Variable     ${acc_id}
@@ -602,7 +608,7 @@ JD-TC-Uploadfiletojaldeedrive-UH2
     Set Suite Variable  ${Pid12}
      
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
    
@@ -620,7 +626,7 @@ JD-TC-Uploadfiletojaldeedrive-UH3
 
     [Documentation]  empty file upload to jaldeedrive folder
 
-    ${resp}=  Provider Login  ${PUSERNAME199}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME199}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME199}
     

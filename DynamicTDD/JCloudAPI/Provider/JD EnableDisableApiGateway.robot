@@ -28,7 +28,7 @@ JD-TC-EnableDisableApiGateway-1
 
     [Documentation]   Enable Api Gateway for a service provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -49,7 +49,7 @@ JD-TC-EnableDisableApiGateway-2
 
     [Documentation]   Disable Api Gateway for a service provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -80,7 +80,7 @@ JD-TC-EnableDisableApiGateway-UH1
 
     [Documentation]   Enable Api Gateway for a service provider which is already enabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -107,7 +107,7 @@ JD-TC-EnableDisableApiGateway-UH2
 
     [Documentation]   Disable Api Gateway for a service provider which is already disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

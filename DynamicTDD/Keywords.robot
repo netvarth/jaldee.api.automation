@@ -234,9 +234,11 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{categoryType}                     Vendor  Expense  PaymentsOut  PaymentsIn  Invoice
 @{MembershipApprovalType}           Manual  Automatic
 @{MembershipServiceStatus}          Enabled  Disabled
+@{emptylist}
 @{MemberApprovalStatus}             Hold  Approved  Inactive  Passed  Rejected
 @{finance_payment_modes}            Cash   CC    EMI    Offline    PAYLATER    Mock    UPI    Other    NB    STORE_CREDIT    WALLET    JCASH    DC    PayLater    PAYTM_PostPaid    BANK_TRANSFER
-
+@{CDLRelationType}                  CareOf  DaughterOf  SonOf  HusbandOf  WifeOf
+@{CDLTypeCibil}                     cibil
 
 *** Keywords ***
 Login
@@ -346,5 +348,33 @@ Generate Random Phone Number
             Return From Keyword  ${PH_Number}
         END
     END
+
+
+# Set TZ Header
+#     [Arguments]  &{kwargs}
+#     ${tzheaders}=    Create Dictionary  
+#     ${locparam}=    Create Dictionary 
+#     Log  ${kwargs}
+#     ${x} =    Get Variable Value    ${kwargs}  
+#     IF  ${x}=={} or '${kwargs.get("timeZone")}'=='${None}' or '${kwargs.get("location")}'=='${None}'
+#         Set To Dictionary 	${tzheaders} 	timeZone=Asia/Kolkata
+#         Log  ${tzheaders}
+#     ELSE
+#         FOR    ${key}    ${value}    IN    &{kwargs}
+#             IF  "${key}".lower()=="timezone"
+#                 Set To Dictionary 	${tzheaders} 	timeZone=${value}
+#                 Remove From Dictionary 	&{kwargs} 	${key}
+#                 Log  ${tzheaders}
+#             ELSE IF  '${key}' == 'location'
+#                 Set To Dictionary 	${locparam}   ${key}=${value}
+#                 Remove From Dictionary 	&{kwargs} 	${key}
+#                 Log  ${locparam}
+#             END
+#         END
+#     END
+#     # Log  ${params}
+#     # Log  ${cons_headers}
+#     Log  ${kwargs}
+#     [Return]  ${tzheaders}  ${kwargs}  ${locparam}
     
     

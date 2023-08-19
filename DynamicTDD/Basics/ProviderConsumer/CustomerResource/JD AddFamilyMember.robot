@@ -27,7 +27,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-1
     
     [Documentation]  Add Family Member for Provider Consumer 
     
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=    get_acc_id       ${PUSERNAME21}

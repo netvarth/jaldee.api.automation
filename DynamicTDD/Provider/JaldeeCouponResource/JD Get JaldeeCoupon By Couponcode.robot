@@ -26,7 +26,7 @@ ${latti1}       88.259874
 
 JD-TC-GetJaldeecouponsBycode-1
     [Documentation]    Get jaldee coupon by coupon code(ACTIVE coupon)
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -47,9 +47,9 @@ JD-TC-GetJaldeecouponsBycode-1
     ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
     ${locations}=  Create List  ${loc1}  ${loc2}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -78,7 +78,7 @@ JD-TC-GetJaldeecouponsBycode-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code2018}
@@ -122,9 +122,9 @@ JD-TC-GetJaldeecouponsBycode-UH1
     ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
     ${locations}=  Create List  ${loc1}  ${loc2}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -139,7 +139,7 @@ JD-TC-GetJaldeecouponsBycode-UH1
     Should Be Equal As Strings  ${resp.json()['couponStatus']}  ${couponStatus[0]}
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code121}
@@ -148,7 +148,7 @@ JD-TC-GetJaldeecouponsBycode-UH1
 
 JD-TC-GetJaldeecouponsBycode-2
     [Documentation]    Provider enable a jaldeee coupon and Get jaldee coupon by code
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -179,7 +179,7 @@ JD-TC-GetJaldeecouponsBycode-2
 
 JD-TC-GetJaldeecouponsBycode-3
     [Documentation]    Provider disable a jaldeee coupon and Get jaldee coupon by code
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Disable Jaldee Coupon By Provider  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -219,7 +219,7 @@ JD-TC-GetJaldeecouponsBycode-4
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code001}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -274,7 +274,7 @@ JD-TC-GetJaldeecouponsBycode-5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code03}
@@ -331,7 +331,7 @@ JD-TC-GetJaldeecouponsBycode-6
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code04}
@@ -372,9 +372,9 @@ JD-TC-GetJaldeecouponsBycode-UH2
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  1
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -388,7 +388,7 @@ JD-TC-GetJaldeecouponsBycode-UH2
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code551}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -410,7 +410,7 @@ JD-TC-GetJaldeecouponsBycode -UH4
 
 JD-TC-GetJaldeecouponsBycode -UH5
     [Documentation]  provider get  a invlid jaldee coupon by code
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cupn_code044}=   FakerLibrary.word
     Set Suite Variable   ${cupn_code044}

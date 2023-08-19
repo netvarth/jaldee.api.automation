@@ -23,7 +23,7 @@ JD-TC-GetItemGroup-1
 
     [Documentation]  Create Item Group for an existing provider and get the details.
 
-    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -62,7 +62,7 @@ JD-TC-GetItemGroup-2
 
     [Documentation]  Create multiple Item Group for an existing provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -87,7 +87,7 @@ JD-TC-GetItemGroup-3
 
     [Documentation]  Create multiple Item Group with same name for an existing provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -140,7 +140,7 @@ JD-TC-GetItemGroup-4
 
     [Documentation]  Create Item Group for a provider without group decscription.
 
-    ${resp}=  Provider Login  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -177,7 +177,7 @@ JD-TC-GetItemGroup-5
 
     [Documentation]  Get Item Group without creating item group.
 
-    ${resp}=  Provider Login  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

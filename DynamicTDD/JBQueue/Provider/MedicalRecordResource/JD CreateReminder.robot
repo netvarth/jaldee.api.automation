@@ -23,15 +23,19 @@ JD-TC-CreateReminder-1
 
     [Documentation]    Provider create a reminder for his provider consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -45,11 +49,11 @@ JD-TC-CreateReminder-1
         Set Suite Variable  ${pcid18}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -69,7 +73,7 @@ JD-TC-CreateReminder-2
 
     [Documentation]    Provider create a reminder for his provider consumer but not a jaldee consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -80,11 +84,11 @@ JD-TC-CreateReminder-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pcid}   ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -96,7 +100,7 @@ JD-TC-CreateReminder-3
 
     [Documentation]    Provider create a reminder for one day.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -114,10 +118,10 @@ JD-TC-CreateReminder-3
         Set Test Variable  ${pcid18}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -129,26 +133,26 @@ JD-TC-CreateReminder-4
 
     [Documentation]    Provider create a reminder without mentioning the end date.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
-    ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${EMPTY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${rem_id}  ${resp.content}
-
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   "${REM_END_DATE_REQUIRED}"
+    
 JD-TC-CreateReminder-5
 
     [Documentation]    Provider create a reminder for his provider consumers family member.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -162,11 +166,11 @@ JD-TC-CreateReminder-5
     Log  ${resp.json()}
     Set Suite Variable  ${mem_id0}  ${resp.json()}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${mem_id0}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -174,27 +178,20 @@ JD-TC-CreateReminder-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
 
+
 JD-TC-CreateReminder-6
-
-    [Documentation]    Provider create a reminder for a jaldee consumers family member.
-
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-CreateReminder-7
 
     [Documentation]    Provider create a reminder with more than one number of occurance.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     ${noo}=   Random Int  min=2   max=5 
 
@@ -203,11 +200,11 @@ JD-TC-CreateReminder-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
 
-JD-TC-CreateReminder-8
+JD-TC-CreateReminder-7
 
     [Documentation]    Provider create a reminder for more than one provider consumer with same schedule.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -223,11 +220,11 @@ JD-TC-CreateReminder-8
         Set Suite Variable  ${pcid19}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -235,11 +232,11 @@ JD-TC-CreateReminder-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id1}  ${resp.content}
 
-JD-TC-CreateReminder-9
+JD-TC-CreateReminder-8
 
     [Documentation]    Provider create a reminder for more than one provider consumer with different schedule.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -255,11 +252,11 @@ JD-TC-CreateReminder-9
         Set Suite Variable  ${pcid20}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  add_date   3
-    ${DAY2}=  add_date  11   
+    ${DAY1}=  db.add_timezone_date  ${tz}   3
+    ${DAY2}=  db.add_timezone_date  ${tz}  11   
     ${list}=  Create List  1  2  3  4
-    ${sTime1}=  add_time  1  15
-    ${eTime1}=  add_time  4  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  1  15
+    ${eTime1}=  db.add_timezone_time  ${tz}  4  15
     ${msg}=  FakerLibrary.word
     
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -267,19 +264,19 @@ JD-TC-CreateReminder-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id1}  ${resp.content}
 
-JD-TC-CreateReminder-10
+JD-TC-CreateReminder-9
 
     [Documentation]    Provider create a reminder with same start and end dates.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  add_date  1
-    ${DAY2}=  add_date  1
+    ${DAY1}=  db.add_timezone_date  ${tz}  1
+    ${DAY2}=  db.add_timezone_date  ${tz}  1
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -287,19 +284,19 @@ JD-TC-CreateReminder-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id1}  ${resp.content}
 
-JD-TC-CreateReminder-11
+JD-TC-CreateReminder-10
 
     [Documentation]    Provider create a reminder with same start and end time.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  add_date  1
-    ${DAY2}=  add_date  4
+    ${DAY1}=  db.add_timezone_date  ${tz}  1
+    ${DAY2}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.get_time_by_timezone   ${tz}
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -311,7 +308,7 @@ JD-TC-CreateReminder-UH1
 
     [Documentation]    Provider create a reminder for another providers provider consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -331,15 +328,15 @@ JD-TC-CreateReminder-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid14}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -351,15 +348,15 @@ JD-TC-CreateReminder-UH2
 
     [Documentation]    Provider create a reminder with another providers id.
 
-    ${resp}=  Provider Login  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid14}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -371,14 +368,14 @@ JD-TC-CreateReminder-UH3
 
     [Documentation]    Provider create a reminder without mentioning the end date.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -390,14 +387,14 @@ JD-TC-CreateReminder-UH4
 
     [Documentation]    Provider create a reminder without mentioning the start time.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${eTime1}=  add_time  3  15
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${EMPTY}  ${eTime1} 
@@ -409,14 +406,14 @@ JD-TC-CreateReminder-UH5
 
     [Documentation]    Provider create a reminder without mentioning the end time.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${EMPTY} 
@@ -428,15 +425,15 @@ JD-TC-CreateReminder-UH6
 
     [Documentation]    Provider create a reminder without any msg.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
     Log  ${resp.content}
@@ -447,11 +444,11 @@ JD-TC-CreateReminder-UH7
 
     [Documentation]    Provider create a reminder without login.
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -467,11 +464,11 @@ JD-TC-CreateReminder-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -483,15 +480,15 @@ JD-TC-CreateReminder-UH9
 
     [Documentation]    create a reminder with invalid provider id.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     ${invalid_prov}=   Random Int  min=0000   max=0000
     
@@ -504,15 +501,15 @@ JD-TC-CreateReminder-UH10
 
     [Documentation]    create a reminder with invalid provider consumer id.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     ${invalid_provcons}=   Random Int  min=0000   max=0000
     
@@ -525,15 +522,15 @@ JD-TC-CreateReminder-UH11
 
     [Documentation]    create a reminder without provider id.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     
     ${resp}=  Create Reminder    ${EMPTY}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -544,15 +541,15 @@ JD-TC-CreateReminder-UH12
 
     [Documentation]    create a reminder without provider consumer id.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     
     ${resp}=  Create Reminder    ${prov_id1}  ${EMPTY}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -563,15 +560,15 @@ JD-TC-CreateReminder-UH13
 
     [Documentation]    Provider create a reminder with start date as the past date.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${DAY1}=  subtract_date  1
-    ${DAY2}=  add_date  10    
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -583,15 +580,15 @@ JD-TC-CreateReminder-UH14
 
     [Documentation]    Provider create a reminder with start date as the past date.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  subtract_date  1    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -603,15 +600,15 @@ JD-TC-CreateReminder-UH15
 
     [Documentation]    Provider create a reminder with start date as the past date.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  add_date  9
-    ${DAY2}=  add_date  4
+    ${DAY1}=  db.add_timezone_date  ${tz}  9
+    ${DAY2}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -636,6 +633,40 @@ JD-TC-CreateReminder-24
 
 
  
+JD-TC-CreateReminder-6
+
+    [Documentation]    Provider create a reminder for a jaldee consumers family member.
+
+    ${resp}=  Consumer Login  ${CUSERNAME37}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ${Genderlist}
+    ${resp}=  AddFamilyMember  ${firstname}  ${lastname}  ${dob}  ${gender}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${mem_id}  ${resp.json()}
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
+    ${msg}=  FakerLibrary.word
+
+    ${resp}=  Create Reminder    ${prov_id1}  ${mem_id}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id}  ${resp.content}
+
  
  
  

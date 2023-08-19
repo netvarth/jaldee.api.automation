@@ -39,7 +39,7 @@ JD-TC-JD-TC-GetServicePaymentModes
 
     [Documentation]  Get Bill payment modes by consumer for bill payment purpose.(Jaldee Bank)
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -53,6 +53,11 @@ JD-TC-JD-TC-GetServicePaymentModes
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -71,12 +76,13 @@ JD-TC-JD-TC-GetServicePaymentModes
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -103,7 +109,7 @@ JD-TC-JD-TC-GetServicePaymentModes
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -126,7 +132,7 @@ JD-TC-JD-TC-GetServicePaymentModes
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -140,11 +146,12 @@ JD-TC-JD-TC-GetServicePaymentModes
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -173,7 +180,7 @@ JD-TC-GetBillPaymentModes-1
     
     clear_queue    ${PUSERNAME123}
     clear_service  ${PUSERNAME123}
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -281,7 +288,7 @@ JD-TC-GetBillPaymentModes-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -311,7 +318,7 @@ JD-TC-GetBillPaymentModes-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -321,6 +328,11 @@ JD-TC-GetBillPaymentModes-1
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -339,12 +351,13 @@ JD-TC-GetBillPaymentModes-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -385,11 +398,11 @@ JD-TC-GetBillPaymentModes-1
     # Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     # Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid1}    profileId=customizedJBProfile    paymentGateway=RAZORPAY    paymentSettingsId=1
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid1}    profileId=${paymentprofileid[0]}    paymentGateway=RAZORPAY    paymentSettingsId=1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -418,7 +431,7 @@ JD-TC-GetBillPaymentModes-2
     [Documentation]  Get Bill payment modes by consumer for bill payment purpose.
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -430,7 +443,7 @@ JD-TC-GetBillPaymentModes-2
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
     
-    # ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -461,7 +474,7 @@ JD-TC-GetBillPaymentModes-2
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -471,6 +484,11 @@ JD-TC-GetBillPaymentModes-2
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -489,12 +507,13 @@ JD-TC-GetBillPaymentModes-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -539,7 +558,7 @@ JD-TC-GetBillPaymentModes-2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -569,7 +588,7 @@ JD-TC-GetBillPaymentModes-UH1
     
     clear_queue    ${PUSERNAME124}
     clear_service  ${PUSERNAME124}
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -606,7 +625,7 @@ JD-TC-GetBillPaymentModes-UH3
 
     [Documentation]  Get payment modes by consumer with provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

@@ -33,9 +33,9 @@ Enable Disable bill
 
 *** Test Cases ***
 
-JD-TC-GetBillSettings-1
+JD-TC-LoginDetails-1
 
-    [Documentation]  Get Bill settings for Indivial SP
+    [Documentation]  Get Login Details for Indivial SP
 
     ${providers}=   Get File    /ebs/TDD/varfiles/providers.py
     ${pro_list}=   Split to lines  ${providers}
@@ -44,16 +44,27 @@ JD-TC-GetBillSettings-1
     FOR  ${pro}  IN  @{pro_list}
         ${pro}=  Remove String    ${pro}    ${SPACE}
         ${pro} 	${pro_num}=   Split String    ${pro}  =
-        ${resp}=  Provider Login  ${pro_num}  ${PASSWORD}
+
+        ${resp}=  Encrypted Provider Login  ${pro_num}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}    200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${lic_id}=  Run Keyword And Continue On Failure  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        ${lic_name}=  Run Keyword And Continue On Failure  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+        ${domain}=  Run Keyword And Continue On Failure  Set Variable  ${decrypted_data['sector']}
+        ${subdomain}=  Run Keyword And Continue On Failure  Set Variable  ${decrypted_data['subSector']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${pkgId}=   Run Keyword And Continue On Failure  Set Variable  ${resp.json()['licensePkgID']}
+        
         # ${resp}=  Get Business Profile
         # Log  ${resp.content}
         # Should Be Equal As Strings  ${resp.status_code}  200
         # Set Suite Variable  ${account_id}  ${resp.json()['id']}
         # Append To File  ${EXECDIR}/TDD/providers.txt  ${pro_num},${account_id}${\n}
-        ${domain}=  Run Keyword And Continue On Failure  Set Variable  ${resp.json()['sector']}
-        ${subdomain}=  Run Keyword And Continue On Failure  Set Variable  ${resp.json()['subSector']}
 
         # ${resp}=  Get Bill Settings 
         # Log   ${resp.content}
@@ -65,9 +76,10 @@ JD-TC-GetBillSettings-1
         # Log  '${resp.json()['serviceBillable']}'
     END
 
-JD-TC-GetBillSettings-2
 
-    [Documentation]  Get Bill settings for Multi-User Account
+JD-TC-LoginDetails-2
+
+    [Documentation]  Get Login Details for Multi-User Account
 
     ${providers}=   Get File    /ebs/TDD/varfiles/musers.py
     ${pro_list}=   Split to lines  ${providers}
@@ -76,16 +88,27 @@ JD-TC-GetBillSettings-2
     FOR  ${pro}  IN  @{pro_list}
         ${pro}=  Remove String    ${pro}    ${SPACE}
         ${pro} 	${pro_num}=   Split String    ${pro}  =
-        ${resp}=  Provider Login  ${pro_num}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${pro_num}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${lic_id}=  Run Keyword And Continue On Failure  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        ${lic_name}=  Run Keyword And Continue On Failure  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+        ${domain}=  Run Keyword And Continue On Failure  Set Variable  ${decrypted_data['sector']}
+        ${subdomain}=  Run Keyword And Continue On Failure  Set Variable  ${decrypted_data['subSector']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${pkgId}=   Run Keyword And Continue On Failure  Set Variable  ${resp.json()['licensePkgID']}
+
+        
         # ${resp}=  Get Business Profile
         # Log  ${resp.content}
         # Should Be Equal As Strings  ${resp.status_code}  200
         # Set Suite Variable  ${account_id}  ${resp.json()['id']}
         # Append To File  ${EXECDIR}/TDD/providers.txt  ${pro_num},${account_id}${\n}
-        ${domain}=  Run Keyword And Continue On Failure  Set Variable  ${resp.json()['sector']}
-        ${subdomain}=  Run Keyword And Continue On Failure  Set Variable  ${resp.json()['subSector']}
 
         # ${resp}=  Get Bill Settings 
         # Log   ${resp.content}

@@ -40,7 +40,7 @@ JD-TC-GetConsumerApptSchedulesByConsumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME210}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accId}=  get_acc_id  ${PUSERNAME210}
@@ -72,18 +72,22 @@ JD-TC-GetConsumerApptSchedulesByConsumer-1
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
     
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
 
     ${lid}=  Create Sample Location
+
+    ${resp}=  Get Location By Id   ${lid} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     
     ${resp}=  ProviderLogout
     Log   ${resp.json()}
@@ -107,7 +111,7 @@ JD-TC-GetConsumerApptSchedulesByConsumer-2
 
     [Documentation]   When provider create appointment schedules
        
-    ${resp}=  Provider Login  ${PUSERNAME210}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accId}=  get_acc_id  ${PUSERNAME210}
@@ -126,10 +130,10 @@ JD-TC-GetConsumerApptSchedulesByConsumer-2
     Set Suite Variable   ${p1_s2}   ${resp.json()[0]['id']}
     Set Suite Variable   ${P1SERVICE2}   ${resp.json()[0]['name']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
    
@@ -238,7 +242,7 @@ JD-TC-GetConsumerApptSchedulesByConsumer-3
 
     [Documentation]   When prodider Disable appointment schedules
 
-    ${resp}=  Provider Login  ${PUSERNAME210}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accId}=  get_acc_id  ${PUSERNAME210}
@@ -291,7 +295,7 @@ JD-TC-GetConsumerApptSchedulesByConsumer-4
 
     [Documentation]   When prodider Enable Disabled appointment schedules
 
-    ${resp}=  Provider Login  ${PUSERNAME210}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accId}=  get_acc_id  ${PUSERNAME210}
@@ -340,7 +344,7 @@ JD-TC-GetConsumerApptSchedulesByConsumer-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME210}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -365,7 +369,7 @@ JD-TC-GetConsumerApptSchedulesByConsumer-UH2
 
     [Documentation]   A provider try to get Appointment Schedules of another provider
     
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -378,7 +382,7 @@ JD-TC-GetConsumerApptSchedulesByConsumer-UH3
 
     [Documentation]   When same provider try to get his own Appointment Schedules
 
-    ${resp}=  Provider Login  ${PUSERNAME210}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -24,7 +24,7 @@ JD-TC-GetTaskDetails-1
 
     [Documentation]  Create a task for a provider and Get Task By Id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -36,8 +36,13 @@ JD-TC-GetTaskDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -82,7 +87,7 @@ JD-TC-GetTaskDetails-2
 
     [Documentation]  Create multiple provider task and Get Task By Id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -126,7 +131,7 @@ JD-TC-GetTaskDetails-3
 
     [Documentation]  Create provider task for different location and Get Task By Id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME56}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -137,8 +142,13 @@ JD-TC-GetTaskDetails-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${locId1}=  Create Sample Location
@@ -208,7 +218,7 @@ JD-TC-GetTaskDetails-4
 
     [Documentation]  Get Task By Id by giving different status and priority.
 
-     ${resp}=   ProviderLogin  ${PUSERNAME57}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -219,8 +229,13 @@ JD-TC-GetTaskDetails-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -277,7 +292,7 @@ JD-TC-GetTaskDetails-UH1
 
     [Documentation]  Get Task By Id by giving another providers task uid.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME90}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -313,7 +328,7 @@ JD-TC-GetTaskDetails-UH4
 
     [Documentation]  Get Task By Id without task uid.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -64,7 +64,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}    IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
         Set Test Variable  ${Dom}   ${resp.json()['sector']}
@@ -98,7 +98,7 @@ JD-TC-GetLoanApplications-1
     Log  ${NBFCMUSERNAME1}
     Set Suite Variable  ${NBFCMUSERNAME1}
 
-    ${resp}=  Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -490,7 +490,7 @@ JD-TC-GetLoanApplications-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -664,7 +664,7 @@ JD-TC-GetLoanApplications-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${BOHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -774,7 +774,7 @@ JD-TC-GetLoanApplications-1
 
 # ..... Create Loan application By Sales officer.....
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -834,7 +834,7 @@ JD-TC-GetLoanApplications-1
 
 # <----------------------------- KYC Details ------------------------------------------>
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -970,7 +970,7 @@ JD-TC-GetLoanApplications-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${BCOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1026,7 +1026,7 @@ JD-TC-GetLoanApplications-2
     ...   branch1 and dealer2(credit approved)
     ...   and check get loan applications with user token 
   
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1215,7 +1215,7 @@ JD-TC-GetLoanApplications-2
 
 # ....... Loan approval by Branch credit head.......
 
-    ${resp}=  ProviderLogin  ${BCOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1283,7 +1283,7 @@ JD-TC-GetLoanApplications-3
 
 # ..... Create Loan application By Sales officer.....
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1467,7 +1467,7 @@ JD-TC-GetLoanApplications-3
 
 # ....... Loan approval by Branch credit head.......
 
-    ${resp}=  ProviderLogin  ${BCOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1552,7 +1552,7 @@ JD-TC-GetLoanApplications-4
 
 # ..... Create Loan application By Sales officer.....
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1700,7 +1700,7 @@ JD-TC-GetLoanApplications-4
 
 # ....... Loan approval by Branch credit head.......
 
-    ${resp}=  ProviderLogin  ${BCOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2605,7 +2605,7 @@ JD-TC-GetLoanApplications-17
 
     [Documentation]   check get loan applications with user token and rejected filter
 
-    ${resp}=  ProviderLogin  ${BCOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2691,7 +2691,7 @@ JD-TC-GetLoanApplications-18
 
 # ..... Create Loan application By Sales officer.....
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

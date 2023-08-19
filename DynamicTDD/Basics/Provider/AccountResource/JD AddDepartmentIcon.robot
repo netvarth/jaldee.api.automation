@@ -36,10 +36,15 @@ JD-TC-Add_Department_Icon-1
 
     [Documentation]   Add Department Icon
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -109,7 +114,7 @@ JD-TC-Add_Department_Icon-UH1
 
     [Documentation]   Add Department Icon with invalid department id
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,7 +129,7 @@ JD-TC-Add_Department_Icon-UH2
 
     [Documentation]   Add Department Icon with invalid provider id
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -139,7 +144,7 @@ JD-TC-Add_Department_Icon-UH3
 
     [Documentation]   Add Department Icon where provider id is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -152,7 +157,7 @@ JD-TC-Add_Department_Icon-UH4
 
     [Documentation]   Add Department Icon where file name is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -165,7 +170,7 @@ JD-TC-Add_Department_Icon-UH5
 
     [Documentation]   Add Department Icon where file size is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -179,7 +184,7 @@ JD-TC-Add_Department_Icon-UH6
 
     [Documentation]   Add Department Icon where action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -192,7 +197,7 @@ JD-TC-Add_Department_Icon-UH7
 
     [Documentation]   Add Department Icon where action is remove
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -205,7 +210,7 @@ JD-TC-Add_Department_Icon-UH8
 
     [Documentation]   Add Department Icon where caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -218,7 +223,7 @@ JD-TC-Add_Department_Icon-UH9
 
     [Documentation]   Add Department Icon where file type is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -231,7 +236,7 @@ JD-TC-Add_Department_Icon-UH10
 
     [Documentation]   Add Department Icon where order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

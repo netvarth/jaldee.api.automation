@@ -20,7 +20,7 @@ Jaldee-TC-CreateIQ-1
     [Documentation]  Create an instant queue for a valid provider with multiple services
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}  AND  clear_location  ${PUSERPH0}   AND   clear_service  ${PUSERPH0}
     # 185
-    # ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100987
@@ -61,7 +61,7 @@ Jaldee-TC-CreateIQ-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -70,23 +70,31 @@ Jaldee-TC-CreateIQ-1
     clear_location  ${PUSERPH0}
     clear_service  ${PUSERPH0}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element     ${parkingType} 
     Set Suite Variable  ${parking}
@@ -122,9 +130,9 @@ Jaldee-TC-CreateIQ-1
     ${ri}=  Create List  @{EMPTY}
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable  ${p1queue1}
-    ${stime1}=  add_time  0  45
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${stime1}  ${stime1}
-    ${etime1}=  add_time  1  0
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${etime1}  ${etime1}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -133,7 +141,7 @@ Jaldee-TC-CreateIQ-1
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_q1}  ${resp.json()}
 
-    ${today}=   get_weekday
+    ${today}=   get_timezone_weekday  ${tz}
     ${today}=   Convert To String  ${today}
     ${ri_today}=  Create List  ${today}
     ${resp}=  Get Queue ById  ${p1_q1}
@@ -158,13 +166,13 @@ Jaldee-TC-CreateIQ-1
 Jaldee-TC-CreateIQ-2
     [Documentation]     Create Instant queue with repeat intervals
     [Setup]  clear_queue  ${PUSERPH0} 
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable  ${p1queue1}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -192,16 +200,16 @@ Jaldee-TC-CreateIQ-2
 Jaldee-TC-CreateIQ-3
     [Documentation]     Create Instant queue with future Start date
     [Setup]  clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${ri}=  Create List  @{EMPTY}
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable  ${p1queue1}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -227,17 +235,17 @@ Jaldee-TC-CreateIQ-3
 Jaldee-TC-CreateIQ-4
     [Documentation]     Create Instant queue with future end date
     [Setup]  clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${ri}=  Create List  @{EMPTY}
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable  ${p1queue1}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -266,25 +274,33 @@ Jaldee-TC-CreateIQ-5
     [Documentation]  Create an instant queue with details same as that of another provider
     [Setup]   Run Keywords  clear_service  ${PUSERNAME112}  AND  clear_queue  ${PUSERNAME112}  AND  clear_location  ${PUSERNAME112}  AND  clear_queue  ${PUSERPH0}
     
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element     ${parkingType} 
     Set Suite Variable  ${parking}
@@ -322,9 +338,9 @@ Jaldee-TC-CreateIQ-5
     ${ri}=  Create List  @{EMPTY}
     ${queue5}=    FakerLibrary.word
     Set Suite Variable  ${queue5}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -350,7 +366,7 @@ Jaldee-TC-CreateIQ-5
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
     ${resp}=  Provider Logout
 
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Instant Queue  ${queue5}  ${recurringtype[4]}  ${ri}  ${DAY1}  ${EMPTY}  ${stime1}  ${etime1}  ${parallel}  ${capacity}  ${p1_l1}  ${p1_s1}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -373,26 +389,34 @@ Jaldee-TC-CreateIQ-5
 Jaldee-TC-CreateIQ-6
     [Documentation]  Create a second instant queue to the same location with more services
     [Setup]  Run Keywords  clear_queue  ${PUSERPH0}  AND  clear_location  ${PUSERPH0}   AND   clear_service  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element     ${parkingType} 
     Set Suite Variable  ${parking}
@@ -440,9 +464,9 @@ Jaldee-TC-CreateIQ-6
     ${ri}=  Create List  @{EMPTY}
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable  ${p1queue1}
-    ${stime1}=  add_time  0  45
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${stime1}  ${stime1}
-    ${etime1}=  add_time  1  0
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${etime1}  ${etime1}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -468,9 +492,9 @@ Jaldee-TC-CreateIQ-6
 
     ${p1queue2}=    FakerLibrary.word
     Set Suite Variable  ${p1queue2}
-    ${stime2}=  add_time  1  15
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${stime2}  ${stime2}
-    ${etime2}=  add_time  1  30
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${etime2}  ${etime2}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -498,7 +522,7 @@ Jaldee-TC-CreateIQ-6
 Jaldee-TC-CreateIQ-7
     [Documentation]  Create an instant queue in different location with already existing name
     [Setup]  Run Keywords  clear_queue  ${PUSERPH0}  AND  clear_location  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -506,19 +530,27 @@ Jaldee-TC-CreateIQ-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${stime5}=  add_time  2  45
+    ${stime5}=  add_timezone_time  ${tz}  2  45  
     Set Suite Variable   ${stime5}  ${stime5}
-    ${etime5}=  add_time    3  0
+    ${etime5}=  add_timezone_time  ${tz}    3  0
     Set Suite Variable   ${etime5}  ${etime5}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti1}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi1}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti1}  ${longi1}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti1}=  get_latitude
-    Set Suite Variable  ${latti}
-    ${longi1}=  get_longitude
-    Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
+    Set Suite Variable  ${latti1}
+    Set Suite Variable  ${longi1}
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element     ${parkingType} 
     Set Suite Variable  ${parking}
@@ -535,19 +567,27 @@ Jaldee-TC-CreateIQ-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${stime5}=  add_time  2  45
+    ${stime5}=  add_timezone_time  ${tz}  2  45  
     Set Suite Variable   ${stime5}  ${stime5}
-    ${etime5}=  add_time    3  0
+    ${etime5}=  add_timezone_time  ${tz}    3  0
     Set Suite Variable   ${etime5}  ${etime5}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti1}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi1}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti1}  ${longi1}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti1}=  get_latitude
-    Set Suite Variable  ${latti}
-    ${longi1}=  get_longitude
-    Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
+    Set Suite Variable  ${latti1}
+    Set Suite Variable  ${longi1}
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element     ${parkingType} 
     Set Suite Variable  ${parking}
@@ -565,8 +605,8 @@ Jaldee-TC-CreateIQ-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${ri}=  Create List  @{EMPTY}
-    ${stime3}=  add_time  1  45
-    ${etime3}=  add_time    2  0
+    ${stime3}=  add_timezone_time  ${tz}  1  45  
+    ${etime3}=  add_timezone_time  ${tz}    2  0
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable  ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -629,14 +669,14 @@ Jaldee-TC-CreateIQ-7
 Jaldee-TC-CreateIQ-8
     [Documentation]     Instant Queue with same time schedule as another DISABLED queue
     clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
 
     ${ri}=  Create List  @{EMPTY}
-    ${stime3}=  add_time  1  45
-    ${etime3}=  add_time    2  0
+    ${stime3}=  add_timezone_time  ${tz}  1  45  
+    ${etime3}=  add_timezone_time  ${tz}    2  0
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable  ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -706,9 +746,9 @@ Jaldee-TC-CreateIQ-8
 Jaldee-TC-CreateIQ-9
     [Documentation]     create an instant queue whose time overlaps with two other queues
     
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${ri}=  Create List  @{EMPTY}
     ${resp}=  ProviderKeywords.Get Queues
@@ -729,9 +769,9 @@ Jaldee-TC-CreateIQ-9
 
     ${p2queue3}=    FakerLibrary.word
     Set Suite Variable  ${p2queue3}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime1}=  add_time  1  0
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${etime1}  ${etime1}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -758,15 +798,15 @@ Jaldee-TC-CreateIQ-9
 Jaldee-TC-CreateIQ-10
     [Documentation]    Create an instant queue with multiple services of same service id
     clear_queue  ${PUSERNAME112}
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
     ${p2queue1}=    FakerLibrary.word
     Set Suite Variable  ${p2queue1}
-    ${stime4}=  add_time  2  15
+    ${stime4}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable   ${stime4}
-    ${etime4}=  add_time    2  30
+    ${etime4}=  add_timezone_time  ${tz}    2  30
     Set Suite Variable   ${etime4}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -799,13 +839,13 @@ Jaldee-TC-CreateIQ-10
 Jaldee-TC-CreateIQ-11
     [Documentation]     Create an instant queue in a location with same queue name and different time
     clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${ri}=  Create List  @{EMPTY}
 
-    ${stime1}=  add_time  0  45
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${stime1}  ${stime1}
-    ${etime1}=  add_time  1  0
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${etime1}  ${etime1}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -832,9 +872,9 @@ Jaldee-TC-CreateIQ-11
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}   ${p1_s1}
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
 
-    ${stime3}=  add_time  1  45
+    ${stime3}=  add_timezone_time  ${tz}  1  45  
     Set Suite Variable   ${stime3}
-    ${etime3}=  add_time    2  0
+    ${etime3}=  add_timezone_time  ${tz}    2  0
     Set Suite Variable   ${etime3}
 
     ${resp}=  Create Instant Queue  ${p1queue1}  ${recurringtype[4]}  ${ri}  ${DAY1}  ${EMPTY}   ${stime3}  ${etime3}  ${parallel}  ${capacity}  ${p1_l1}  ${p1_s1}
@@ -861,18 +901,19 @@ Jaldee-TC-CreateIQ-11
 
 Jaldee-TC-CreateIQ-UH-1
     [Documentation]     Create an instant queue in a past time window
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     Log  ${time_now}
     ${ri}=  Create List  @{EMPTY}
     ${queue11}=    FakerLibrary.word
     Set Suite Variable  ${queue11}
-    ${old_stime}=  subtract_time   0  30
+    ${old_stime}=  subtract_timezone_time  ${tz}   0  30
     Set Suite Variable   ${old_stime}  
-    ${old_etime}=  subtract_time   0  15
+    ${old_etime}=  subtract_timezone_time  ${tz}   0  15
     Set Suite Variable   ${old_etime}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -884,7 +925,7 @@ Jaldee-TC-CreateIQ-UH-1
     
 Jaldee-TC-CreateIQ-UH-2
     [Documentation]     Create an instant queue to the same location with overlapping time
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Queue Location   ${p1_l1}
     Log   ${resp.json()}
@@ -903,21 +944,29 @@ Jaldee-TC-CreateIQ-UH-2
 Jaldee-TC-CreateIQ-12
     [Documentation]    Create an instant queue in different location with overlapping time
     [Setup]  Run Keywords  clear_queue  ${PUSERPH0}  AND  clear_location  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${stime4}=  add_time  2  15
+    ${stime4}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable   ${stime4}
-    ${etime4}=  add_time    2  30
+    ${etime4}=  add_timezone_time  ${tz}    2  30
     Set Suite Variable   ${etime4}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti2}=  get_latitude
+    # Set Suite Variable  ${latti2}
+    # ${longi2}=  get_longitude
+    # Set Suite Variable  ${longi2}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti2}  ${longi2}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti2}=  get_latitude
-    Set Suite Variable  ${latti}
-    ${longi2}=  get_longitude
-    Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
+    Set Suite Variable  ${latti2}
+    Set Suite Variable  ${longi2}
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element     ${parkingType} 
     Set Suite Variable  ${parking}
@@ -931,8 +980,8 @@ Jaldee-TC-CreateIQ-12
     Set Suite Variable  ${p1_l1}  ${loc_result}
 
     ${ri}=  Create List  @{EMPTY}
-    ${stime3}=  add_time  1  45
-    ${etime3}=  add_time    2  0
+    ${stime3}=  add_timezone_time  ${tz}  1  45  
+    ${etime3}=  add_timezone_time  ${tz}    2  0
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable  ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -948,19 +997,27 @@ Jaldee-TC-CreateIQ-12
     Set Suite Variable  ${s_time}   ${resp.json()[0]['queueSchedule']['timeSlots'][0]['sTime']}
     Set Suite Variable  ${e_time}   ${resp.json()[0]['queueSchedule']['timeSlots'][0]['eTime']}
 
-    ${stime5}=  add_time  2  45
+    ${stime5}=  add_timezone_time  ${tz}  2  45  
     Set Suite Variable   ${stime5}  ${stime5}
-    ${etime5}=  add_time    3  0
+    ${etime5}=  add_timezone_time  ${tz}    3  0
     Set Suite Variable   ${etime5}  ${etime5}
-    ${city}=   FakerLibrary.state
+    # ${city}=   FakerLibrary.state
+    # Set Suite Variable  ${city}
+    # ${latti2}=  get_latitude
+    # Set Suite Variable  ${latti2}
+    # ${longi2}=  get_longitude
+    # Set Suite Variable  ${longi2}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti2}  ${longi2}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti2}=  get_latitude
-    Set Suite Variable  ${latti}
-    ${longi2}=  get_longitude
-    Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
+    Set Suite Variable  ${latti2}
+    Set Suite Variable  ${longi2}
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element     ${parkingType} 
     Set Suite Variable  ${parking}
@@ -1006,14 +1063,14 @@ Jaldee-TC-CreateIQ-12
 
 Jaldee-TC-CreateIQ-UH-4
     [Documentation]    Create an instant queue in a location without service details
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${ri}=  Create List  @{EMPTY}
     ${queue14}=    FakerLibrary.word
     Set Suite Variable  ${queue14}
-    ${stime3}=  add_time  1  45
+    ${stime3}=  add_timezone_time  ${tz}  1  45  
     Set Suite Variable   ${stime3}
-    ${etime3}=  add_time    2  0
+    ${etime3}=  add_timezone_time  ${tz}    2  0
     Set Suite Variable   ${etime3}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1024,14 +1081,14 @@ Jaldee-TC-CreateIQ-UH-4
 
 Jaldee-TC-CreateIQ-UH-5
     [Documentation]    Create an instant queue in a location without location details
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${ri}=  Create List  @{EMPTY}
     ${queue15}=    FakerLibrary.word
     Set Suite Variable  ${queue15}
-    ${stime1}=  add_time  0  45
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${stime1}  ${stime1}
-    ${etime1}=  add_time  1  0
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${etime1}  ${etime1}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1043,25 +1100,33 @@ Jaldee-TC-CreateIQ-UH-5
 Jaldee-TC-CreateIQ-UH-6
     [Documentation]    Create an instant queue with another providers location details
     [Setup]     Run Keywords   clear_service   ${PUSERNAME189}   AND  clear_location  ${PUSERNAME189}
-    ${resp}=  Provider Login  ${PUSERNAME189}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6
     Set Suite Variable  ${list}  ${list}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti2}=  get_latitude
+    # Set Suite Variable  ${latti2}
+    # ${longi2}=  get_longitude
+    # Set Suite Variable  ${longi2}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti2}  ${longi2}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti2}=  get_latitude
-    Set Suite Variable  ${latti}
-    ${longi2}=  get_longitude
-    Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
+    Set Suite Variable  ${latti2}
+    Set Suite Variable  ${longi2}
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element     ${parkingType} 
     Set Suite Variable  ${parking}
@@ -1075,7 +1140,7 @@ Jaldee-TC-CreateIQ-UH-6
     Set Suite Variable  ${p3_l1}  ${loc_result}
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${P3SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${P3SERVICE1}
@@ -1090,9 +1155,9 @@ Jaldee-TC-CreateIQ-UH-6
     ${ri}=  Create List  @{EMPTY}
     ${queue16}=    FakerLibrary.word
     Set Suite Variable  ${queue16}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1104,7 +1169,7 @@ Jaldee-TC-CreateIQ-UH-6
 Jaldee-TC-CreateIQ-UH-7
     [Documentation]    Create an instant queue with another providers service  details
     
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1113,7 +1178,7 @@ Jaldee-TC-CreateIQ-UH-7
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME189}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -1122,9 +1187,9 @@ Jaldee-TC-CreateIQ-UH-7
     ${ri}=  Create List  @{EMPTY}
     ${queue17}=    FakerLibrary.word
     Set Suite Variable  ${queue17}
-    ${stime}=  add_time  0  15
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1136,15 +1201,15 @@ Jaldee-TC-CreateIQ-UH-7
     
 Jaldee-TC-CreateIQ-UH-8
     [Documentation]    Create an instant queue with end time less than start time
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${ri}=  Create List  @{EMPTY}
     
     ${queue18}=    FakerLibrary.word
     Set Suite Variable  ${queue18}
-    ${stime4}=  add_time  2  15
+    ${stime4}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable   ${stime4}
-    ${etime4}=  add_time    2  30
+    ${etime4}=  add_timezone_time  ${tz}    2  30
     Set Suite Variable   ${etime4}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1155,9 +1220,9 @@ Jaldee-TC-CreateIQ-UH-8
 
 Jaldee-TC-CreateIQ-UH-9
     [Documentation]    Create an instant queue with time different from service time
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     ${SERVICE11}=    FakerLibrary.word
@@ -1173,9 +1238,9 @@ Jaldee-TC-CreateIQ-UH-9
     ${ri}=  Create List  @{EMPTY}
     ${queue19}=    FakerLibrary.word
     Set Suite Variable  ${queue19}
-    ${stime5}=  add_time  2  45
+    ${stime5}=  add_timezone_time  ${tz}  2  45  
     Set Suite Variable   ${stime5}  ${stime5}
-    ${etime5}=  add_time    3   0
+    ${etime5}=  add_timezone_time  ${tz}    3   0
     Set Suite Variable   ${etime5}  ${etime5}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1186,17 +1251,17 @@ Jaldee-TC-CreateIQ-UH-9
 
 Jaldee-TC-CreateIQ-UH-10
     [Documentation]    Create an instant queue with non existant service id
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Service
     Log   ${resp.json()}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
     ${queue20}=    FakerLibrary.word
     Set Suite Variable  ${queue20}
-    ${stime5}=  add_time  2  45
+    ${stime5}=  add_timezone_time  ${tz}  2  45  
     Set Suite Variable   ${stime5}  ${stime5}
-    ${etime5}=  add_time    3  0
+    ${etime5}=  add_timezone_time  ${tz}    3  0
     Set Suite Variable   ${etime5}  ${etime5}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1210,47 +1275,48 @@ Jaldee-TC-CreateIQ-UH-10
 Jaldee-TC-CreateIQ-12
     [Documentation]  Create Instant Queue for Branch
 
-    ${resp}=  Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
 Jaldee-TC-CreateIQ-13
     [Documentation]  Create Instant Queue for User
     
-    ${resp}=  Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 *** comment ***
 
     Set Time
     [Documentation]  Create dynamic time variables.
-    ${Time}=  db.get_time
-    ${stime}=  add_time  0  15
+    # ${Time}=  db.get_time_by_timezone  ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
-    ${stime1}=  add_time  0  45
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${stime1}  ${stime1}
-    ${etime1}=  add_time  1  0
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${etime1}  ${etime1}
-    ${stime2}=  add_time  1  15
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${stime2}  ${stime2}
-    ${etime2}=  add_time  1  30
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${etime2}  ${etime2}
-    ${stime3}=  add_time  1  45
+    ${stime3}=  add_timezone_time  ${tz}  1  45  
     Set Suite Variable   ${stime3}  ${stime3}
-    ${etime3}=  add_time    2  0
+    ${etime3}=  add_timezone_time  ${tz}    2  0
     Set Suite Variable   ${etime3}  ${etime3}
-    ${stime4}=  add_time  2  15
+    ${stime4}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable   ${stime4}  ${stime4}
-    ${etime4}=  add_time    2  30
+    ${etime4}=  add_timezone_time  ${tz}    2  30
     Set Suite Variable   ${etime4}  ${etime4}
-    ${stime5}=  add_time  2  45
+    ${stime5}=  add_timezone_time  ${tz}  2  45  
     Set Suite Variable   ${stime5}  ${stime5}
-    ${etime5}=  add_time    3  0
+    ${etime5}=  add_timezone_time  ${tz}    3  0
     Set Suite Variable   ${etime5}  ${etime5}
-    ${stime6}=  add_time  0  47
+    ${stime6}=  add_timezone_time  ${tz}  0  47
     Set Suite Variable   ${stime6}  ${stime6}
-    ${etime6}=  add_time  1  0
+    ${etime6}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${etime6}  ${etime6}
 
 

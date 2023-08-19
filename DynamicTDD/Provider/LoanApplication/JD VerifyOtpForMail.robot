@@ -66,7 +66,7 @@ JD-TC-VerifyOtpForEmail-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -255,7 +255,7 @@ JD-TC-VerifyOtpForEmail-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -370,7 +370,7 @@ JD-TC-VerifyOtpForEmail-UH
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -484,7 +484,7 @@ JD-TC-VerifyOtpForEmail-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -522,7 +522,7 @@ JD-TC-VerifyOtpForEmail-UH2
     [Documentation]               varify otp for mail   invalid loan id
 
      
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -538,7 +538,7 @@ JD-TC-VerifyOtpForEmail-UH3
     [Documentation]               varify otp for mail   invalid password
 
      
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -579,7 +579,7 @@ JD-TC-VerifyOtpForEmail-UH6
                                   
     [Documentation]               varify otp for mail   another provider  login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

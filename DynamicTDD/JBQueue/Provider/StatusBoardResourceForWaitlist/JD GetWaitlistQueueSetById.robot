@@ -40,7 +40,7 @@ JD-TC-GetQueueSetById-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_M}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_M}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_M}${\n}
@@ -48,7 +48,7 @@ JD-TC-GetQueueSetById-1
     
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']} 
     ${resp}=  Toggle Department Enable
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -127,7 +127,7 @@ JD-TC-GetQueueSetById -UH2
 
 JD-TC-GetQueueSetById-UH3
     [Documentation]  Get a Waitlist QueueSet by id which is not exist
-    ${resp}=  ProviderLogin  ${MUSERNAME_M}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_M}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Get WaitlistQueueSet By Id  ${invalid_id}
@@ -137,7 +137,7 @@ JD-TC-GetQueueSetById-UH3
 
 JD-TC-GetQueueSetById-UH4
     [Documentation]  Get a QueueSet by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get WaitlistQueueSet By Id  ${sbq_id1}
     Log  ${resp.json()}

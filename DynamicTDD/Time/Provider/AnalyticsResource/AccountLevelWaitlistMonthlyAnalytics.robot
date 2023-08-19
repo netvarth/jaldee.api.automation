@@ -103,7 +103,7 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
 
     change_system_date  -50
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -125,18 +125,21 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -224,7 +227,7 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -233,7 +236,8 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -260,7 +264,6 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
         ${resp}=  Add To Waitlist with mode  ${waitlistMode[2]}  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -275,7 +278,7 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
 
     change_system_date   32
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${Day2}=    Get Current Date    
@@ -296,7 +299,6 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
         ${resp}=  Add To Waitlist with mode  ${waitlistMode[2]}  ${cid${a}}  ${s_id}  ${q_id1}  ${Day2}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -311,10 +313,10 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
 
     change_system_date   50
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${Day3}=    get_date
+    ${Day3}=    db.get_date_by_timezone  ${tz}
     ${D3} =	Convert Date  ${Day3}  datetime
     Log  ${D3.year}	
     Log	 ${D3.month}
@@ -332,7 +334,6 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
         ${resp}=  Add To Waitlist with mode  ${waitlistMode[2]}  ${cid${a}}  ${s_id}  ${q_id1}  ${Day3}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -356,11 +357,11 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
     # END
 
     change_system_date   20
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # ${LAST_WEEK_DAY1}=  subtract_date  7 
-    # ${LAST_WEEK_DAY7}=  subtract_date  1
+    # ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    # ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
 
     FOR   ${a}  IN RANGE   15
        
@@ -373,7 +374,7 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
     END
 
     # ${Day_end}=    db.Add Date  70
-    ${Day_end2}=    get_date
+    ${Day_end2}=    db.get_date_by_timezone  ${tz}
     sleep  08s
     ${resp}=  Get Account Level Analytics  ${tokenAnalyticsMetrics['PHONE_TOKEN']}  ${Day1}  ${Day_end2}  ${analyticsFrequency[2]}
     Log  ${resp.content}
@@ -456,11 +457,11 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${Days_1} =	Convert Date  ${Day1}  datetime
     Log  ${Days_1.year}	
@@ -478,18 +479,21 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -577,7 +581,7 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -586,7 +590,8 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -621,7 +626,6 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -642,7 +646,7 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
 
     change_system_date   -40
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -659,7 +663,7 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     Set Test Variable  ${s_id}
 
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -668,7 +672,8 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -681,7 +686,7 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${Day2}=    get_date
+    ${Day2}=    db.get_date_by_timezone  ${tz}
 
     ${Days_2} =	Convert Date  ${Day2}  datetime
     Log  ${Days_2.year}	
@@ -700,7 +705,6 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${Day2}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -715,10 +719,10 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
 
     change_system_date   80
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${Day3}=    get_date
+    ${Day3}=    db.get_date_by_timezone  ${tz}
 
     ${Days_3} =	Convert Date  ${Day3}  datetime
     Log  ${Days_3.year}	
@@ -737,7 +741,6 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY3}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -852,11 +855,11 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${Days_1} =	Convert Date  ${Day1}  datetime
     Log  ${Days_1.year}	
@@ -874,18 +877,21 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -973,7 +979,7 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -982,7 +988,8 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1011,7 +1018,7 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        # ${DAY}=  get_date
+        # ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id1}  ${DAY1}  ${s_id}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -1035,11 +1042,11 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
 
     change_system_date   80
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # ${Day1}=    get_date
-    ${DAY2}=  get_date
+    # ${Day1}=    db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
 
     ${Days_2} =	Convert Date  ${Day2}  datetime
     Log  ${Days_2.year}	
@@ -1080,10 +1087,10 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
 
     change_system_date   90
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${DAY3}=  get_date
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
 
     FOR   ${a}  IN RANGE   15
        
@@ -1185,12 +1192,12 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
 
     change_system_date   -120
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${Days_1} =	Convert Date  ${Day1}  datetime
     Log  ${Days_1.year}	
@@ -1208,18 +1215,21 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1342,7 +1352,7 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${v_s1} 
+    ${resp}=  Sample Queue  ${lid}   ${v_s1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -1351,7 +1361,8 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1394,11 +1405,11 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
     Log List   ${vs_waitlist_ids}
 
     Resetsystem Time
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DayToday}    get_date
+    ${DayToday}    db.get_date_by_timezone  ${tz}
 
     ${Days_2} =	Convert Date  ${DayToday}  datetime
     Log  ${Days_2.year}	
@@ -1455,7 +1466,7 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${v_s1} 
+    ${resp}=  Sample Queue  ${lid}   ${v_s1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -1464,7 +1475,8 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1587,11 +1599,11 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${Days_1} =	Convert Date  ${DAY1}  datetime
     Log  ${Days_1.year}	
@@ -1609,18 +1621,21 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   5  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  5  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1709,7 +1724,7 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -1718,7 +1733,8 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1737,7 +1753,7 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id2} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id2} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id2}  ${resp.json()}
@@ -1746,7 +1762,8 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id2}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1791,11 +1808,11 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
 
     change_system_date   120
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DayToday}    get_date
+    ${DayToday}    db.get_date_by_timezone  ${tz}
 
     ${Days_2} =	Convert Date  ${DayToday}  datetime
     Log  ${Days_2.year}	
@@ -1829,7 +1846,7 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
     ${web_token_len}=  Evaluate  len($waitlist_ids) 
     ${web_token_len1}=  Evaluate  len($waitlist_ids1)
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1933,11 +1950,11 @@ JD-TC-MONTHLY STARTED_TOKEN-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${Days_1} =	Convert Date  ${DAY1}  datetime
     Log  ${Days_1.year}	
@@ -1955,18 +1972,21 @@ JD-TC-MONTHLY STARTED_TOKEN-6
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2054,7 +2074,7 @@ JD-TC-MONTHLY STARTED_TOKEN-6
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -2063,7 +2083,8 @@ JD-TC-MONTHLY STARTED_TOKEN-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -2098,7 +2119,6 @@ JD-TC-MONTHLY STARTED_TOKEN-6
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -2148,12 +2168,12 @@ JD-TC-MONTHLY STARTED_TOKEN-6
 
     # ------------------- Take checkin for past date  -------------------
     change_system_date   -130
-    ${DAY_Past}=  get_date
+    ${DAY_Past}=  db.get_date_by_timezone  ${tz}
     ${Days_2} =	Convert Date  ${DAY_Past}  datetime
     Log  ${Days_2.year}	
     Log	 ${Days_2.month}
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2173,7 +2193,7 @@ JD-TC-MONTHLY STARTED_TOKEN-6
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -2182,7 +2202,8 @@ JD-TC-MONTHLY STARTED_TOKEN-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -2214,7 +2235,6 @@ JD-TC-MONTHLY STARTED_TOKEN-6
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY_Past}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -2350,11 +2370,11 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${datetime} =  Convert Date  ${DAY1}  datetime
     Log  ${datetime.year}  
     Log   ${datetime.month}
@@ -2370,18 +2390,21 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2469,7 +2492,7 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -2478,7 +2501,8 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -2513,7 +2537,6 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -2568,11 +2591,11 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
 
     change_system_date  30
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY2}=  get_date
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
 
     # ------------------- Create service and queue  -------------------
 
@@ -2590,7 +2613,7 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -2599,7 +2622,8 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -2630,7 +2654,6 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -2650,11 +2673,11 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
 
     change_system_date  60
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${Day3}=  get_date
+    ${Day3}=  db.get_date_by_timezone  ${tz}
  
     FOR   ${a}  IN RANGE   15
        
@@ -2739,11 +2762,11 @@ JD-TC-MONTHLY DONE_TOKEN-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${datetime} =  Convert Date  ${DAY1}  datetime
     Log  ${datetime.year}  
@@ -2761,18 +2784,21 @@ JD-TC-MONTHLY DONE_TOKEN-8
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2860,7 +2886,7 @@ JD-TC-MONTHLY DONE_TOKEN-8
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -2869,7 +2895,8 @@ JD-TC-MONTHLY DONE_TOKEN-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -2904,7 +2931,6 @@ JD-TC-MONTHLY DONE_TOKEN-8
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -2946,11 +2972,11 @@ JD-TC-MONTHLY DONE_TOKEN-8
 
     change_system_date   -140
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY2}=  get_date
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
 
     ${Days_2} =	Convert Date  ${DAY2}  datetime
     Log  ${Days_2.year}	
@@ -2972,7 +2998,7 @@ JD-TC-MONTHLY DONE_TOKEN-8
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -2981,7 +3007,8 @@ JD-TC-MONTHLY DONE_TOKEN-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -3016,7 +3043,6 @@ JD-TC-MONTHLY DONE_TOKEN-8
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -3027,11 +3053,11 @@ JD-TC-MONTHLY DONE_TOKEN-8
     Resetsystem Time
     change_system_date   160
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY3}=  get_date
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
 
     FOR   ${a}  IN RANGE   15
        
@@ -3116,11 +3142,11 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     @{Views}=  Create List  self  all  customersOnly
     ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
@@ -3133,18 +3159,21 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3232,7 +3261,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
@@ -3241,7 +3270,8 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -3270,7 +3300,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id1}  ${DAY}  ${s_id}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -3291,7 +3321,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
     ${token_len}=   Evaluate  len($waitlist_ids)
     Set Test Variable   ${token_len}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3332,7 +3362,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${DAY3}=  add_date  4
+        ${DAY3}=  db.add_timezone_date  ${tz}  4  
         ${resp}=  Reschedule Waitlist  ${pid}  ${cwid${a}}  ${DAY3}  ${q_id1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -3357,11 +3387,11 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
 
     change_system_date   40
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY2}=  get_date
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
 
     ${Days_2} =	Convert Date  ${DAY2}  datetime
     Log  ${Days_2.year}	
@@ -3380,7 +3410,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        # ${DAY}=  get_date
+        # ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id1}  ${DAY2}  ${s_id}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -3401,7 +3431,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
     ${token_len1}=   Evaluate  len($waitlist_ids1)
     Set Test Variable   ${token_len1}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3445,7 +3475,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${DAY4}=  add_date  4
+        ${DAY4}=  db.add_timezone_date  ${tz}  4  
         ${resp}=  Reschedule Waitlist  ${pid}  ${cwid${a}}  ${DAY4}  ${q_id1}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -3468,9 +3498,9 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
 
     change_system_date   60
 
-    ${DAY5}=  get_date
+    ${DAY5}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

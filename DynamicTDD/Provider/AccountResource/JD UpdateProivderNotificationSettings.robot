@@ -73,7 +73,7 @@ JD-TC-UpdateProviderNotificationSettings-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -144,10 +144,13 @@ JD-TC-UpdateProviderNotificationSettings-1
 JD-TC-UpdateProviderNotificationSettings-2
     [Documentation]  Update Provider Notification  Settings For WAITLISTADD using SMS number as EMPTY 
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -199,7 +202,7 @@ JD-TC-UpdateProviderNotificationSettings-2
 JD-TC-UpdateProviderNotificationSettings-3
      
     [Documentation]  Update Provider Notification  Settings For WAITLISTADD using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -235,7 +238,7 @@ JD-TC-UpdateProviderNotificationSettings-3
 
 JD-TC-UpdateProviderNotificationSettings-4
     [Documentation]  Update Provider Notification  Settings For WAITLISTADD using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -274,7 +277,7 @@ JD-TC-UpdateProviderNotificationSettings-4
 
 JD-TC-UpdateProviderNotificationSettings-5
     [Documentation]  Update Provider Notification  Settings For WAITLISTADD  using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -313,7 +316,7 @@ JD-TC-UpdateProviderNotificationSettings-5
 
 JD-TC-UpdateProviderNotificationSettings-6
     [Documentation]  Update Provider Notification  Settings For WAITLISTADD when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -356,7 +359,7 @@ JD-TC-UpdateProviderNotificationSettings-6
 JD-TC-UpdateProviderNotificationSettings-7
     [Documentation]  Update Provider Notification  Settings For WAITLISTCANCEL using SMS number as EMPTY 
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -395,7 +398,7 @@ JD-TC-UpdateProviderNotificationSettings-7
 JD-TC-UpdateProviderNotificationSettings-8
      
     [Documentation]  Update Provider Notification  Settings For WAITLISTCANCEL using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -431,7 +434,7 @@ JD-TC-UpdateProviderNotificationSettings-8
 
 JD-TC-UpdateProviderNotificationSettings-9
     [Documentation]  Update Provider Notification  Settings For WAITLISTCANCEL using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -469,7 +472,7 @@ JD-TC-UpdateProviderNotificationSettings-9
 
 JD-TC-UpdateProviderNotificationSettings-10
     [Documentation]  Update Provider Notification  Settings For WAITLISTCANCEL  using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -506,7 +509,7 @@ JD-TC-UpdateProviderNotificationSettings-10
 
 JD-TC-UpdateProviderNotificationSettings-11
     [Documentation]  Update Provider Notification  Settings For WAITLISTCANCEL when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -548,7 +551,7 @@ JD-TC-UpdateProviderNotificationSettings-11
 JD-TC-UpdateProviderNotificationSettings-12
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTADD using SMS number as EMPTY  
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -586,7 +589,7 @@ JD-TC-UpdateProviderNotificationSettings-12
 JD-TC-UpdateProviderNotificationSettings-13
      
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTADD using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -621,7 +624,7 @@ JD-TC-UpdateProviderNotificationSettings-13
 
 JD-TC-UpdateProviderNotificationSettings-14
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTADD using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -659,7 +662,7 @@ JD-TC-UpdateProviderNotificationSettings-14
 
 JD-TC-UpdateProviderNotificationSettings-15
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTADD  using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -697,7 +700,7 @@ JD-TC-UpdateProviderNotificationSettings-15
 
 JD-TC-UpdateProviderNotificationSettings-16
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTADD when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -738,7 +741,7 @@ JD-TC-UpdateProviderNotificationSettings-16
 JD-TC-UpdateProviderNotificationSettings-17
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTCANCEL using SMS number as EMPTY  
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -776,7 +779,7 @@ JD-TC-UpdateProviderNotificationSettings-17
 JD-TC-UpdateProviderNotificationSettings-18
      
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTCANCEL using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -812,7 +815,7 @@ JD-TC-UpdateProviderNotificationSettings-18
 
 JD-TC-UpdateProviderNotificationSettings-19
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTCANCEL using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -849,7 +852,7 @@ JD-TC-UpdateProviderNotificationSettings-19
 
 JD-TC-UpdateProviderNotificationSettings-20
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTCANCEL  using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -887,7 +890,7 @@ JD-TC-UpdateProviderNotificationSettings-20
 
 JD-TC-UpdateProviderNotificationSettings-21
     [Documentation]  Update Provider Notification  Settings For APPOINTMENTCANCEL when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
    
@@ -927,7 +930,7 @@ JD-TC-UpdateProviderNotificationSettings-21
 
 JD-TC-UpdateProviderNotificationSettings-22
     [Documentation]  Update Provider Notification  Settings For 'WAITLISTADD', when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -989,7 +992,7 @@ JD-TC-UpdateProviderNotificationSettings-22
 
 JD-TC-UpdateProviderNotificationSettings-23
     [Documentation]  Update Provider Notification  Settings For 'WAITLISTCANCEL', when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1033,7 +1036,7 @@ JD-TC-UpdateProviderNotificationSettings-23
 
 JD-TC-UpdateProviderNotificationSettings-24
     [Documentation]  Update Provider Notification  Settings For 'APPOINTMENTADD', when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1075,7 +1078,7 @@ JD-TC-UpdateProviderNotificationSettings-24
 
 JD-TC-UpdateProviderNotificationSettings-25
     [Documentation]  Update Provider Notification  Settings For 'APPOINTMENTCANCEL', when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1119,7 +1122,7 @@ JD-TC-UpdateProviderNotificationSettings-25
 
 JD-TC-UpdateProviderNotificationSettings-UH1
     [Documentation]  Update Provider Notification  Settings For 'WAITLISTADD', when we have TWO 'PushMsg' Numbers (one number is valid, another numbr is invalid) 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1151,7 +1154,7 @@ JD-TC-UpdateProviderNotificationSettings-UH1
 
 JD-TC-UpdateProviderNotificationSettings-UH2
     [Documentation]  Update Provider Notification  Settings For 'WAITLISTADD', when we have TWO 'PushMsg' Numbers (Two numbers are invalid)  
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1186,7 +1189,7 @@ JD-TC-UpdateProviderNotificationSettings-UH2
 
 JD-TC-UpdateProviderNotificationSettings-UH3
     [Documentation]  Update Provider Notification  Settings For 'WAITLISTADD', when we have TWO 'PushMsg' Numbers (Two numbers are Duplicate entry of valid number)
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1216,7 +1219,7 @@ JD-TC-UpdateProviderNotificationSettings-UH3
 
 JD-TC-UpdateProviderNotificationSettings-UH4
     [Documentation]  Update Provider Notification  Settings For 'WAITLISTADD', when we have TWO same 'Email id' 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1233,7 +1236,7 @@ JD-TC-UpdateProviderNotificationSettings-UH4
 
 JD-TC-UpdateProviderNotificationSettings-UH5
     [Documentation]  Update Provider Notification  Settings For 'WAITLISTADD', when we have TWO same 'SMS' Numbers 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1290,7 +1293,7 @@ JD-TC-UpdateProviderNotificationSettings-UH7
 
 JD-TC-UpdateProviderNotificationSettings-UH8
     [Documentation]  Update Provider PUSH MESSAGE Related Notification Settings using provider number which is not registered of that account 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1314,7 +1317,7 @@ JD-TC-UpdateProviderNotificationSettings-UH8
 
 JD-TC-UpdateProviderNotificationSettings-UH9
     [Documentation]  Update Provider PUSH MESSAGE Related Notification Settings using Country code as EMPTY. 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1329,7 +1332,7 @@ JD-TC-UpdateProviderNotificationSettings-UH9
 
 JD-TC-UpdateProviderNotificationSettings-UH10
     [Documentation]  Update Provider PUSH MESSAGE Related Notification Settings using Phone Number as EMPTY. 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     

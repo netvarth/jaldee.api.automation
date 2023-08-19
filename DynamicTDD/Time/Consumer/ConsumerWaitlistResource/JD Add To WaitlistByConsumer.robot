@@ -27,24 +27,23 @@ JD-TC-Add To WaitlistByConsumer-1
 
     change_system_date  -3
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${pid0}=  get_acc_id  ${PUSERNAME1}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -68,8 +67,8 @@ JD-TC-Add To WaitlistByConsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_s2}  ${resp.json()}
 
-    ${sTime1}=  add_time  4  15
-    ${eTime1}=  add_time   6  30
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
+    ${eTime1}=  add_timezone_time  ${tz}  6  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2} 
@@ -77,8 +76,8 @@ JD-TC-Add To WaitlistByConsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_q1}  ${resp.json()}
     
-    ${sTime2}=  add_time  2  30
-    ${eTime2}=  add_time   3  45
+    ${sTime2}=  add_timezone_time  ${tz}  2  30  
+    ${eTime2}=  add_timezone_time  ${tz}  3  45  
     ${p1queue2}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${p1queue2}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2} 
@@ -102,7 +101,7 @@ JD-TC-Add To WaitlistByConsumer-1
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -113,7 +112,7 @@ JD-TC-Add To WaitlistByConsumer-1
 
     resetsystem_time
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Consumer Login  ${CUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -134,22 +133,25 @@ JD-TC-Add To WaitlistByConsumer-2
 
 	[Documentation]  checking the waitlistStatus of a consumer prepaymentPending to cancelled then again adding a consumer to waitlist and checking personsAhead   
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
     ${pid1}=  get_acc_id  ${PUSERNAME2}
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType}
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  30
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[4]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -180,8 +182,8 @@ JD-TC-Add To WaitlistByConsumer-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time   1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${p2queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${p2queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p2_l1}  ${p2_s1}  ${p2_s2}
@@ -209,7 +211,7 @@ JD-TC-Add To WaitlistByConsumer-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -238,8 +240,9 @@ JD-TC-Add To WaitlistByConsumer-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     change_system_time   0  20
-    ${sT}=  db.get_time
-    ${DAY2}=  get_date
+    # ${sT}=  db.get_time_by_timezone  ${tz}
+    ${sT}=  db.get_time_by_timezone  ${tz}
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
     # sleep  15m
     
     ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
@@ -286,9 +289,9 @@ JD-TC-Add To WaitlistByConsumer-3
 
     ${pid0}=  get_acc_id  ${PUSERNAME1}
     ${cid}=  get_id  ${CUSERNAME4}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -300,7 +303,7 @@ JD-TC-Add To WaitlistByConsumer-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_s1}  ${resp.json()}
     
-    ${TOMORROW}=  add_date  2
+    ${TOMORROW}=  db.add_timezone_date  ${tz}  2  
     ${city}=   get_place
     ${latti1}=  get_latitude
     ${longi1}=  get_longitude
@@ -309,16 +312,18 @@ JD-TC-Add To WaitlistByConsumer-3
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sLTime}=  db.get_time
-    ${eLTime}=  add_time   0  30
+    # ${sLTime}=  db.get_time_by_timezone  ${tz}
+    ${sLTime}=  db.get_time_by_timezone  ${tz}
+    ${eLTime}=  add_timezone_time  ${tz}  0  30  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi1}  ${latti1}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[4]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sLTime}  ${eLTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_l3}  ${resp.json()}
 
-    ${sTime3}=  db.get_time
-    ${eTime3}=  add_time   0  30
+    # ${sTime3}=  db.get_time_by_timezone  ${tz}
+    ${sTime3}=  db.get_time_by_timezone  ${tz}
+    ${eTime3}=  add_timezone_time  ${tz}  0  30  
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${queue1}   ${recurringtype[1]}  ${list}  ${TOMORROW}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  1  ${capacity}  ${p1_l3}  ${p1_s1}  
@@ -351,7 +356,7 @@ JD-TC-Add To WaitlistByConsumer-3
 
     change_system_date  2
     
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200    
     
@@ -386,26 +391,29 @@ JD-TC-Add To WaitlistByConsumer-UH1
     clear_service  ${PUSERNAME2}
     clear_customer   ${PUSERNAME2}
     clear_Item   ${PUSERNAME2}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pid1}=  get_acc_id  ${PUSERNAME2}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType}
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  30
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[4]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -436,8 +444,8 @@ JD-TC-Add To WaitlistByConsumer-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  30
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p2_l1}  ${p1_s1}  ${p1_s2}
@@ -461,7 +469,7 @@ JD-TC-Add To WaitlistByConsumer-UH1
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -496,7 +504,7 @@ JD-TC-Add To WaitlistByConsumer-UH1
     Should Be Equal As Strings  ${resp.json()['service']['name']}           ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}             ${p1_s1}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -510,14 +518,14 @@ JD-TC-Add To WaitlistByConsumer-UH1
 JD-TC-Add To WaitlistByConsumer-UH2
 
 	[Documentation]  the consumer add to waitlist for a service with prepayment  
-    ${DAY}=  get_date  
+    ${DAY}=  db.get_date_by_timezone  ${tz}  
     
     ${resp}=   Run Keywords   clear_queue  ${PUSERNAME1}  AND  clear waitlist   ${PUSERNAME1}
     ${cid}=  get_id  ${CUSERNAME1} 
     ${pid0}=  get_acc_id  ${PUSERNAME1}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -536,8 +544,8 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Set Test Variable   ${p1_l2}   ${resp.json()[1]['id']}
 
     ${p1queue1}=    FakerLibrary.word
-    ${sTime1}=  add_time  4  15
-    ${eTime1}=  add_time   6  30
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
+    ${eTime1}=  add_timezone_time  ${tz}  6  30  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  ${capacity}  ${p1_l1}  ${p1_s1}  
@@ -546,8 +554,8 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Set Test Variable   ${p1_q1}  ${resp.json()}
 
     ${p1queue2}=    FakerLibrary.word
-    ${sTime2}=  add_time  2  30
-    ${eTime2}=  add_time   3  45
+    ${sTime2}=  add_timezone_time  ${tz}  2  30  
+    ${eTime2}=  add_timezone_time  ${tz}  3  45  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${p1queue2}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  ${capacity}  ${p1_l1}  ${p1_s1} 
@@ -568,7 +576,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -596,7 +604,7 @@ JD-TC-Add To WaitlistByConsumer-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Bill By UUId  ${wid}

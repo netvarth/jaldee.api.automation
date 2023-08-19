@@ -60,7 +60,7 @@ JD-TC-GetOrderSettingsStoreContactinfo-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     Set Suite Variable  ${pid226}  ${resp.json()['id']}
@@ -84,7 +84,7 @@ JD-TC-GetOrderSettingsStoreContactinfo-1
 JD-TC-GetOrderSettingsStoreContactinfo-2
     [Documentation]   Update order settings and get Store_Contact_info
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fName}=    FakerLibrary.name
@@ -125,7 +125,7 @@ JD-TC-GetOrderSettingsStoreContactinfo-2
 JD-TC-GetOrderSettingsStoreContactinfo-3
     [Documentation]   Update Store_Contact_info and get Store_Contact_info
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -166,7 +166,7 @@ JD-TC-GetOrderSettingsStoreContactinfo-3
 JD-TC-GetOrderSettingsStoreContactinfo-4
     [Documentation]   Update Email again and Get Store_Contact_info 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid38}  ${resp.json()['id']}
     Set Suite Variable  ${P38_fName}  ${resp.json()['firstName']}

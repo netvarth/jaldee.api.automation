@@ -94,13 +94,14 @@ JD-TC-WlEnableEditToConsumer-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -162,7 +163,7 @@ JD-TC-WlEnableEditToConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -175,6 +176,7 @@ JD-TC-WlEnableEditToConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -188,9 +190,9 @@ JD-TC-WlEnableEditToConsumer-1
 
     clear_queue   ${PUSERNAME12}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -276,7 +278,7 @@ JD-TC-WlEnableEditToConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -314,7 +316,7 @@ JD-TC-WlEnableEditToConsumer-1
 JD-TC-WlEnableEditToConsumer-UH1
     [Documentation]  Order Wl Edit To Consumer where release status is unreleased
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -352,7 +354,7 @@ JD-TC-WlEnableEditToConsumer-UH1
 JD-TC-WlEnableEditToConsumer-UH2
     [Documentation]  Wl Enable Edit To Consumer Where status is false
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -389,7 +391,7 @@ JD-TC-WlEnableEditToConsumer-UH2
 JD-TC-WlEnableEditToConsumer-UH3
     [Documentation]  Resubmiting QNS Without Enables Edit for consumer
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -427,7 +429,7 @@ JD-TC-WlEnableEditToConsumer-UH3
 JD-TC-WlEnableEditToConsumer-UH4
     [Documentation]  Wl Enable Edit To Consumer With invalid gnr id
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -461,7 +463,7 @@ JD-TC-WlEnableEditToConsumer-UH4
 JD-TC-WlEnableEditToConsumer-UH5
     [Documentation]  Wl Enable Edit To Consumer With invalid Order id
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -492,7 +494,7 @@ JD-TC-WlEnableEditToConsumer-UH5
 JD-TC-WlEnableEditToConsumer-UH6
     [Documentation]  Wl Enable Edit To Consumer Without qnr id
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -520,7 +522,7 @@ JD-TC-WlEnableEditToConsumer-UH6
 JD-TC-WlEnableEditToConsumer-UH7
     [Documentation]  Wl Enable Edit To Consumer Without Order id
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

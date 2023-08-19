@@ -66,4 +66,5 @@ USER user
 #RUN chmod a+x /ebs/conf/runrobot.sh
 
 # CMD ["chmod", "a+x", "/ebs/conf/runrobot.sh", ";", "sh", "-c", "/ebs/conf/runrobot.sh"]
-CMD ["/bin/bash", "-c", "chmod a+x /ebs/conf/runrobot.sh; /ebs/conf/runrobot.sh"]
+# CMD ["/bin/bash", "-c", "chmod a+x /ebs/conf/runrobot.sh; /ebs/conf/runrobot.sh"]
+CMD ["/bin/bash", "-c", "/ebs/conf/runrobot.sh"]

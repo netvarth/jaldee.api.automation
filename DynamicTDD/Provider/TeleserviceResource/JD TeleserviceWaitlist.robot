@@ -61,7 +61,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${resp}=   Consumer Login  ${CUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  get_date    
+    ${DAY}=  db.get_date_by_timezone  ${tz}    
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -116,13 +116,13 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${accId}=  get_acc_id  ${PUSERPH0}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -136,19 +136,23 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  subtract_time  1  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  subtract_timezone_time  ${tz}  1  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   5  45
+    ${eTime}=  add_timezone_time  ${tz}  5  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -198,6 +202,8 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
     # ${resp}=  Enable Disable Virtual Service  Enable
@@ -342,9 +348,9 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    ${DAY}=  get_date
-    ${sTime1}=  subtract_time  1  30
-    ${eTime1}=  add_time   3  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime1}=  subtract_timezone_time  ${tz}  1  30
+    ${eTime1}=  add_timezone_time  ${tz}  3  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -373,7 +379,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid1}  ${p1_s1}  ${queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -407,7 +412,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
     [Documentation]  Create Teleservice meeting request for waitlist in Zoom (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -418,13 +423,12 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid1}  ${p1_s2}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid2} 
@@ -458,7 +462,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     [Documentation]  Create Teleservice meeting request for waitlist in Phone (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -469,13 +473,12 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${virtualService}=  Create Dictionary   ${CallingModes[2]}=${PUSERPH0}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid1}  ${p1_s3}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${pwid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${pwid2} 
@@ -509,7 +512,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     [Documentation]  Create Teleservice meeting request for waitlist in Googlemeet (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -521,13 +524,12 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     ${virtualService}=  Create Dictionary   ${CallingModes[3]}=${GoogleMeet_url}
 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid1}  ${p1_s4}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid2}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${cwid2} 
@@ -560,7 +562,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     [Documentation]  Create Teleservice meeting request for waitlist (VirtualService callingmode is Whatsapp) in WhatsApp,Zoom,phone and Googlemeet (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -574,13 +576,12 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
 
     # ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc1}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid1}  ${p1_s1}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}  ${pcid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -644,7 +645,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME2}    
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumerNote1}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[1]}=${WHATSAPP_id2}
     
@@ -666,7 +667,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -696,7 +697,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME0}    
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumerNote1}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
 
@@ -707,7 +708,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -731,7 +732,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -762,7 +763,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME0}    
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumerNote1}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
 
@@ -783,7 +784,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -840,7 +841,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-7
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME0}    
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumerNote1}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
 
@@ -861,7 +862,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-7
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -901,7 +902,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-8
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME0}    
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumerNote1}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[1]}=${WHATSAPP_id2}
 
@@ -922,7 +923,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-8
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -975,7 +976,7 @@ JD-TC-TeleserviceWaitlist-UH4
 
 JD-TC-TeleserviceWaitlist-UH5
     [Documentation]    Create waitlist teleservice meeting request  with invalid  waitlist id 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -989,7 +990,7 @@ JD-TC-TeleserviceWaitlist-UH5
 
 # JD-TC-TeleserviceWaitlist-UH4
 #     [Documentation]    Create waitlist teleservice meeting request  with invalid  Calling mode 
-#     ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1001,10 +1002,10 @@ JD-TC-TeleserviceWaitlist-UH5
 
 JD-TC-TeleserviceWaitlist-UH6
     [Documentation]    Create waitlist teleservice meeting request  for a cancelled waitlist 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Get Waitlist By Id  ${wid6} 
     Log  ${resp.json()}
@@ -1061,11 +1062,11 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accId2}=  get_acc_id  ${PUSERPH2}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1079,19 +1080,23 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-9
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -1137,6 +1142,8 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-9
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
     # ${resp}=  Enable Disable Virtual Service  Enable
     # Log  ${resp.json()}
@@ -1210,9 +1217,10 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    ${DAY}=  get_date
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  25
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}   1  25
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1230,7 +1238,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-9
     # Should Be Equal As Strings  ${resp.status_code}  200
     # ${cid22}=  get_id  ${CUSERNAME22}    
     # ${accId2}=  get_acc_id  ${PUSERPH2}
-    # ${DAY}=  get_date
+    # ${DAY}=  db.get_date_by_timezone  ${tz}
     # ${consumerNote1}=   FakerLibrary.word
     #  # ${resp}=  Provider Add To WL With Virtual Service  ${cid}  ${p2_s1}  ${P1queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   0
     # ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
@@ -1271,7 +1279,6 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-9
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid0}  ${p2_s1}  ${P1queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid9}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid9} 
@@ -1335,7 +1342,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-10
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid22}=  get_id  ${CUSERNAME22}    
     ${accId2}=  get_acc_id  ${PUSERPH2}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumerNote1}=   FakerLibrary.word
      # ${resp}=  Provider Add To WL With Virtual Service  ${cid}  ${p2_s1}  ${P1queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   0
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
@@ -1346,7 +1353,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-10
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid10}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1370,10 +1377,10 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-10
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${P1queueId}
 
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # ${DAY}=  get_date
+    # ${DAY}=  db.get_date_by_timezone  ${tz}
     # ${desc}=   FakerLibrary.word
     # Set Suite Variable  ${desc}
     # ${virtualService}=  Create Dictionary   ${CallingModes[1]}=${WHATSAPP_id2}  ${CallingModes[0]}=${ZOOM_id2}
@@ -1424,7 +1431,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-10
 JD-TC-TeleserviceWaitlist-11
     [Documentation]  Create Teleservice meeting request for a started waitlist in Zoom (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1434,7 +1441,7 @@ JD-TC-TeleserviceWaitlist-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
 
@@ -1443,7 +1450,6 @@ JD-TC-TeleserviceWaitlist-11
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid1}  ${p1_s2}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1477,7 +1483,7 @@ JD-TC-TeleserviceWaitlist-11
 JD-TC-TeleserviceWaitlist-12
     [Documentation]  Create Teleservice meeting request for a started waitlist in Whats-app (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1487,7 +1493,7 @@ JD-TC-TeleserviceWaitlist-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${virtualService}=  Create Dictionary   ${CallingModes[1]}=${WHATSAPP_id2}
 
@@ -1496,7 +1502,6 @@ JD-TC-TeleserviceWaitlist-12
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid1}  ${p1_s1}  ${queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -1531,7 +1536,7 @@ JD-TC-TeleserviceWaitlist-12
 JD-TC-TeleserviceWaitlist-13
     [Documentation]  Create Teleservice meeting request for two waitlist(one is started) in Whats-app (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1548,7 +1553,7 @@ JD-TC-TeleserviceWaitlist-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${virtualService}=  Create Dictionary   ${CallingModes[1]}=${WHATSAPP_id2}
 
@@ -1557,7 +1562,6 @@ JD-TC-TeleserviceWaitlist-13
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid1}  ${p1_s1}  ${queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -1573,7 +1577,6 @@ JD-TC-TeleserviceWaitlist-13
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid3}  ${p1_s1}  ${queueId}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -1615,7 +1618,7 @@ JD-TC-TeleserviceWaitlist-13
 JD-TC-TeleserviceWaitlist-14
     [Documentation]  Create Teleservice meeting request for a done waitlist in Zoom (WALK-IN CHECKIN)   done
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1623,7 +1626,7 @@ JD-TC-TeleserviceWaitlist-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id2}
 
@@ -1632,7 +1635,6 @@ JD-TC-TeleserviceWaitlist-14
     ${resp}=  Provider Add To WL With Virtual Service  ${pcid3}  ${p1_s2}  ${queueId}  ${DAY}  ${desc1}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pcid3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1703,14 +1705,14 @@ JD-TC-TeleserviceWaitlist-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${accId0}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId0}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1724,19 +1726,23 @@ JD-TC-TeleserviceWaitlist-15
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  subtract_time  1  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  subtract_timezone_time  ${tz}  1  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   5  45
+    ${eTime}=  add_timezone_time  ${tz}  5  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -1785,6 +1791,8 @@ JD-TC-TeleserviceWaitlist-15
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
     # ${resp}=  Enable Disable Virtual Service  Enable
@@ -1822,9 +1830,9 @@ JD-TC-TeleserviceWaitlist-15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
-    ${DAY}=  get_date
-    ${sTime1}=  subtract_time  1  30
-    ${eTime1}=  add_time   3  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime1}=  subtract_timezone_time  ${tz}  1  30
+    ${eTime1}=  add_timezone_time  ${tz}  3  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1842,7 +1850,7 @@ JD-TC-TeleserviceWaitlist-15
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME0} 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumerNote1}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[3]}=${GoogleMeet_url}
     Set Suite Variable    ${virtualService}
@@ -1853,7 +1861,7 @@ JD-TC-TeleserviceWaitlist-15
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1876,7 +1884,7 @@ JD-TC-TeleserviceWaitlist-15
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pc_id}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1901,7 +1909,7 @@ JD-TC-TeleserviceWaitlist-15
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1920,7 +1928,7 @@ JD-TC-TeleserviceWaitlist-15
 JD-TC-TeleserviceWaitlist-16
     [Documentation]  Create Teleservice meeting request for a  waitlisted consumer and before starting the service and taken waitlist for the same service with same consumer
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1943,7 +1951,6 @@ JD-TC-TeleserviceWaitlist-16
     ${resp}=  Provider Add To WL With Virtual Service  ${pc_id5}  ${p1_s4}  ${queueId}  ${DAY1}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${pc_id5}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -1973,7 +1980,7 @@ JD-TC-TeleserviceWaitlist-16
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME5} 
        
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumerNote1}=   FakerLibrary.word
     ${virtualService}=  Create Dictionary   ${CallingModes[3]}=${GoogleMeet_url}
     ${resp}=  Consumer Add To WL With Virtual Service  ${accId0}  ${queueId}  ${DAY1}  ${p1_s4}  ${consumerNote1}  ${bool[0]}  ${virtualService}   0

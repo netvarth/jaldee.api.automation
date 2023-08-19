@@ -57,14 +57,14 @@ JD-TC-JDN Highlevel-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -81,14 +81,18 @@ JD-TC-JDN Highlevel-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1  45
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -170,7 +174,7 @@ JD-TC-JDN Highlevel-1
     Log    ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -239,10 +243,10 @@ JD-TC-JDN Highlevel-1
     ${cupn_code1}=   FakerLibrary.word
     Set Suite Variable    ${cupn_code1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -305,8 +309,8 @@ JD-TC-JDN Highlevel-1
 
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   4  00
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  4  00  
     ${queue1}=   FakerLibrary.word
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${sid1}  ${sid2}   ${sid3}
     Log   ${resp.json()} 
@@ -326,7 +330,6 @@ JD-TC-JDN Highlevel-1
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -401,7 +404,7 @@ JD-TC-JDN Highlevel-1
 JD-TC-JDN Highlevel-2
 	[Documentation]  Enable JDN and check bill after applying provider discount, provider coupon, Jaldee Coupon and item to taxable services.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${GST_num}   ${PAN_num}=  Generate_gst_number  ${Container_id}
@@ -513,7 +516,7 @@ JD-TC-JDN Highlevel-2
 JD-TC-JDN Highlevel-3
 	[Documentation]  Enable JDN and check bill after adding taxable service, provider discount, provider coupon, Jaldee Coupon and item to non taxable service bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     # ${cid2}=  get_id  ${CUSERNAME4}
@@ -521,7 +524,6 @@ JD-TC-JDN Highlevel-3
     ${resp}=  Add To Waitlist  ${cid1}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -644,7 +646,7 @@ JD-TC-JDN Highlevel-4
     ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Y}
-    ${resp}=  Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -662,14 +664,18 @@ JD-TC-JDN Highlevel-4
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -722,8 +728,8 @@ JD-TC-JDN Highlevel-4
 
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     ${queue1}=   FakerLibrary.word
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid11}  ${sid11}   ${sid12}
     Log   ${resp.json()} 
@@ -799,7 +805,6 @@ JD-TC-JDN Highlevel-4
     ${resp}=  Add To Waitlist  ${cid}  ${sid12}  ${qid11}  ${DAY}  ${c_note}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -817,7 +822,7 @@ JD-TC-JDN Highlevel-4
 JD-TC-JDN Highlevel-5
 	[Documentation]  Enable JDN and check bill for family member.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -838,7 +843,6 @@ JD-TC-JDN Highlevel-5
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${mem_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -864,7 +868,7 @@ JD-TC-JDN Highlevel-5
 JD-TC-JDN Highlevel-6
 	[Documentation]  Enable JDN and check bill after removing provider discount, provider coupon, Jaldee Coupon and item from taxable services.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -884,10 +888,10 @@ JD-TC-JDN Highlevel-6
     ${coupon_amount}=  Set Variable    10.0
     ${cupn_code2}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   1  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -904,7 +908,6 @@ JD-TC-JDN Highlevel-6
     ${resp}=  Add To Waitlist  ${cid1}  ${sid3}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -1046,7 +1049,7 @@ JD-TC-JDN Highlevel-6
 JD-TC-JDN Highlevel-7
 	[Documentation]  Update JDN and check bill after applying provider discount, provider coupon, Jaldee Coupon and item to non taxable services.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1060,7 +1063,6 @@ JD-TC-JDN Highlevel-7
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -1167,7 +1169,7 @@ JD-TC-JDN Highlevel-7
 JD-TC-JDN Highlevel-8
 	[Documentation]  Update JDN and check bill after applying provider discount, provider coupon, Jaldee Coupon and item to taxable services.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1183,7 +1185,6 @@ JD-TC-JDN Highlevel-8
     ${resp}=  Add To Waitlist  ${cid2}  ${sid3}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid8}  ${wid[0]}
 
@@ -1286,7 +1287,7 @@ JD-TC-JDN Highlevel-8
 JD-TC-JDN Highlevel-9
 	[Documentation]  Update JDN and check bill after adding taxable service, provider discount, provider coupon, Jaldee Coupon and item to non taxable service bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1302,7 +1303,6 @@ JD-TC-JDN Highlevel-9
     ${resp}=  Add To Waitlist  ${cid2}  ${sid3}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid9}  ${wid[0]}
     
@@ -1430,7 +1430,7 @@ JD-TC-JDN Highlevel-9
 JD-TC-JDN Highlevel-10
 	[Documentation]  Enable JDN and  apply provider discount, provider coupon, Jaldee Coupon and item to taxable services and update JDN, check bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1446,7 +1446,6 @@ JD-TC-JDN Highlevel-10
     ${resp}=  Add To Waitlist  ${cid2}  ${sid3}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid10}  ${wid[0]}
     
@@ -1546,7 +1545,7 @@ JD-TC-JDN Highlevel-10
 JD-TC-JDN Highlevel-11
 	[Documentation]  Enable JDN and apply provider discount, provider coupon, Jaldee Coupon and item to non taxable services and update JDN, check bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1562,7 +1561,6 @@ JD-TC-JDN Highlevel-11
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid11}  ${wid[0]}
     
@@ -1661,7 +1659,7 @@ JD-TC-JDN Highlevel-11
 JD-TC-JDN Highlevel-12
 	[Documentation]  Enable JDN and add taxable service, provider discount, provider coupon, Jaldee Coupon and item to non taxable service bill and update JDN, check bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1677,7 +1675,6 @@ JD-TC-JDN Highlevel-12
     ${resp}=  Add To Waitlist  ${cid2}  ${sid2}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid12}  ${wid[0]}
     
@@ -1870,14 +1867,13 @@ JD-TC-JDN Highlevel-12
 JD-TC-JDN Highlevel-7
 	[Documentation]  Update JDN and check bill after applying provider discount, provider coupon, Jaldee Coupon and item to non taxable services.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -1975,7 +1971,7 @@ JD-TC-JDN Highlevel-7
 JD-TC-JDN Highlevel-8
 	[Documentation]  Update JDN and check bill after applying provider discount, provider coupon, Jaldee Coupon and item to taxable services.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1991,7 +1987,6 @@ JD-TC-JDN Highlevel-8
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -2087,7 +2082,7 @@ JD-TC-JDN Highlevel-8
 JD-TC-JDN Highlevel-9
 	[Documentation]  Update JDN and check bill after adding taxable service, provider discount, provider coupon, Jaldee Coupon and item to non taxable service bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2098,7 +2093,6 @@ JD-TC-JDN Highlevel-9
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -2193,7 +2187,7 @@ JD-TC-JDN Highlevel-9
 JD-TC-JDN Highlevel-10
 	[Documentation]  Enable JDN and  apply provider discount, provider coupon, Jaldee Coupon and item to non taxable services and update JDN, check bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2204,7 +2198,6 @@ JD-TC-JDN Highlevel-10
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -2299,7 +2292,7 @@ JD-TC-JDN Highlevel-10
 JD-TC-JDN Highlevel-11
 	[Documentation]  Enable JDN and apply provider discount, provider coupon, Jaldee Coupon and item to taxable services and update JDN, check bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2310,7 +2303,6 @@ JD-TC-JDN Highlevel-11
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -2405,7 +2397,7 @@ JD-TC-JDN Highlevel-11
 JD-TC-JDN Highlevel-12
 	[Documentation]  Enable JDN and add taxable service, provider discount, provider coupon, Jaldee Coupon and item to non taxable service bill and update JDN, check bill.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -2416,7 +2408,6 @@ JD-TC-JDN Highlevel-12
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     

@@ -35,7 +35,7 @@ JD-TC-GetUsersByDepartment-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -129,7 +129,7 @@ JD-TC-GetUsersByDepartment-1
      
 JD-TC-GetUsersByDepartment-2
      [Documentation]  Get user for a different department
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=   Get Service
@@ -192,7 +192,7 @@ JD-TC-GetUsersByDepartment-2
 
 JD-TC-GetUsersByDepartment-3
      [Documentation]  Create a user for a different subdomain in same domain then get users by department
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -243,7 +243,7 @@ JD-TC-GetUsersByDepartment-3
 
 JD-TC-GetUsersByDepartment-4
      [Documentation]  Create a user for a different subdomain in same domain then get users by department
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  EnableDisable User  ${u_id4}  ${toggle[1]}
@@ -280,7 +280,7 @@ JD-TC-GetUsersByDepartment -UH2
 
 JD-TC-GetUsersByDepartment-UH3
      [Documentation]  Get a users by department with invalid dep id by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get Users By Department  000

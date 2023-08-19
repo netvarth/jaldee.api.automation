@@ -15,7 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get Subscription -1
        [Documentation]   Provider check to get Subscription MONTHLY
-       ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200       
        ${resp}=   Get Subscription
        Should Be Equal As Strings   ${resp.status_code}   200
@@ -23,7 +23,7 @@ JD-TC-Get Subscription -1
     
 JD-TC-Get Subscription -2
        [Documentation]   Provider check to get subscription,an account  default subscription is MONTHLY
-       ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200       
        ${resp}=   Get Subscription
        Should Be Equal As Strings   ${resp.status_code}   200

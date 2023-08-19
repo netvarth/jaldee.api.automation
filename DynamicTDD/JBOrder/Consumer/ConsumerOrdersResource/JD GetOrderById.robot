@@ -41,10 +41,14 @@ JD-TC-GetOrderById-1
     clear_customer   ${PUSERNAME150}
     clear_Item   ${PUSERNAME150}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME150}
     Set Suite Variable  ${accId}
@@ -89,16 +93,21 @@ JD-TC-GetOrderById-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -146,11 +155,11 @@ JD-TC-GetOrderById-1
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -177,7 +186,7 @@ JD-TC-GetOrderById-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -202,7 +211,7 @@ JD-TC-GetOrderById-1
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -264,10 +273,14 @@ JD-TC-GetOrderById-2
     clear_customer   ${PUSERNAME151}
     clear_Item   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable  ${accId}
@@ -312,16 +325,16 @@ JD-TC-GetOrderById-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -369,11 +382,11 @@ JD-TC-GetOrderById-2
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -400,7 +413,7 @@ JD-TC-GetOrderById-2
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -423,7 +436,7 @@ JD-TC-GetOrderById-2
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -484,10 +497,14 @@ JD-TC-GetOrderById-3
     clear_service  ${PUSERNAME152}
     clear_customer   ${PUSERNAME152}
     clear_Item   ${PUSERNAME152}
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME152}
 
@@ -540,22 +557,22 @@ JD-TC-GetOrderById-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -607,11 +624,11 @@ JD-TC-GetOrderById-3
    
     ${far}=  Random Int  min=14  max=14
    
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -642,7 +659,7 @@ JD-TC-GetOrderById-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -654,7 +671,7 @@ JD-TC-GetOrderById-3
     Set Test Variable   ${sTime1}   ${stime[0]}
     Set Test Variable   ${eTime1}   ${etime[0]}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -679,7 +696,7 @@ JD-TC-GetOrderById-3
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -740,10 +757,14 @@ JD-TC-GetOrderById-4
     clear_service  ${PUSERNAME134}
     clear_customer   ${PUSERNAME134}
     clear_Item   ${PUSERNAME134}
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME134}
 
@@ -796,22 +817,22 @@ JD-TC-GetOrderById-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -894,7 +915,7 @@ JD-TC-GetOrderById-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -906,7 +927,7 @@ JD-TC-GetOrderById-4
     Set Test Variable   ${sTime1}   ${stime[0]}
     Set Test Variable   ${eTime1}   ${etime[0]}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -931,7 +952,7 @@ JD-TC-GetOrderById-4
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -980,10 +1001,14 @@ JD-TC-GetOrderById-5
     clear_service  ${PUSERNAME155}
     clear_customer   ${PUSERNAME155}
     clear_Item   ${PUSERNAME155}
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME155}
 
@@ -1036,22 +1061,22 @@ JD-TC-GetOrderById-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -1134,7 +1159,7 @@ JD-TC-GetOrderById-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -1146,7 +1171,7 @@ JD-TC-GetOrderById-5
     Set Test Variable   ${sTime1}   ${stime[0]}
     Set Test Variable   ${eTime1}   ${etime[0]}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1171,7 +1196,7 @@ JD-TC-GetOrderById-5
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1221,10 +1246,14 @@ JD-TC-GetOrderById-6
     clear_service  ${PUSERNAME160}
     clear_customer   ${PUSERNAME160}
     clear_Item   ${PUSERNAME160}
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME160}
 
@@ -1277,22 +1306,22 @@ JD-TC-GetOrderById-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -1344,11 +1373,11 @@ JD-TC-GetOrderById-6
    
     ${far}=  Random Int  min=14  max=14
    
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -1379,7 +1408,7 @@ JD-TC-GetOrderById-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -1390,7 +1419,7 @@ JD-TC-GetOrderById-6
     Set Test Variable   ${sTime1}   ${stime[0]}
     Set Test Variable   ${eTime1}   ${etime[0]}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1415,7 +1444,7 @@ JD-TC-GetOrderById-6
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1477,10 +1506,14 @@ JD-TC-GetOrderById-UH1
     clear_service  ${PUSERNAME156}
     clear_customer   ${PUSERNAME156}
     clear_Item   ${PUSERNAME156}
-    ${resp}=  ProviderLogin  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME156}
 
@@ -1533,22 +1566,22 @@ JD-TC-GetOrderById-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -1631,7 +1664,7 @@ JD-TC-GetOrderById-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -1643,7 +1676,7 @@ JD-TC-GetOrderById-UH1
     Set Test Variable   ${sTime1}   ${stime[0]}
     Set Test Variable   ${eTime1}   ${etime[0]}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1668,7 +1701,7 @@ JD-TC-GetOrderById-UH1
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1716,7 +1749,7 @@ JD-TC-GetOrderById-UH1
 JD-TC-GetOrderById-UH2
     [Documentation]    Get Order by provider login.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1752,10 +1785,14 @@ JD-TC-GetOrderById-UH5
     clear_service  ${PUSERNAME156}
     clear_customer   ${PUSERNAME156}
     clear_Item   ${PUSERNAME156}
-    ${resp}=  ProviderLogin  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME156}
 
@@ -1808,22 +1845,22 @@ JD-TC-GetOrderById-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   1  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30     
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time   3  30   
+    ${sTime2}=  add_timezone_time  ${tz}  2  00  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30     
 
-    ${sTime3}=  add_time  4  00
-    ${eTime3}=  add_time   5  00   
+    ${sTime3}=  add_timezone_time  ${tz}  4  00  
+    ${eTime3}=  add_timezone_time  ${tz}  5  00     
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -1906,7 +1943,7 @@ JD-TC-GetOrderById-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
 
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE  0    ${len}
@@ -1918,7 +1955,7 @@ JD-TC-GetOrderById-UH5
     Set Test Variable   ${sTime1}   ${stime[0]}
     Set Test Variable   ${eTime1}   ${etime[0]}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1943,7 +1980,7 @@ JD-TC-GetOrderById-UH5
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

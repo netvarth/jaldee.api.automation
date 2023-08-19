@@ -35,7 +35,7 @@ JD-TC-Update Account Contact information-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id}  ${resp.json()['id']}
@@ -187,10 +187,11 @@ JD-TC-Update Account Contact information-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pro_id0}  ${resp.json()['id']}
+    Set Suite Variable  ${pro_id0}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id0}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME0}
@@ -371,7 +372,7 @@ JD-TC-Update Account Contact information-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_00}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_00}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_00}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id00}  ${resp.json()['id']}
@@ -559,7 +560,7 @@ JD-TC-Update Account Contact information-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${e-mail}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id1}  ${resp.json()['id']}
@@ -707,7 +708,7 @@ JD-TC-Update Account Contact information-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_K}${\n}
@@ -764,7 +765,7 @@ JD-TC-Update Account Contact information-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_L}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -801,9 +802,16 @@ JD-TC-Update Account Contact information-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -927,7 +935,7 @@ JD-TC-Update Account Contact information-6
 
 JD-TC-Update Account Contact information-7
     [Documentation]  Update account contact information of a existing provider with already used email
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${first-name}    ${resp.json()['firstName']}  
@@ -968,7 +976,7 @@ JD-TC-Update Account Contact information-7
 JD-TC-Update Account Contact information-8
 	[Documentation]  Update Account Contact information using email of another provider(verified email)
     
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${first-name}    ${resp.json()['firstName']}  
@@ -1005,7 +1013,7 @@ JD-TC-Update Account Contact information-8
 JD-TC-Update Account Contact information-9
 	[Documentation]  Update Account Contact information using whatsapp number of another provider
     
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${first-name}    ${resp.json()['firstName']}  
@@ -1044,7 +1052,7 @@ JD-TC-Update Account Contact information-9
 
 JD-TC-Update Account Contact information-10
 	[Documentation]  Update Account Contact information using secondary phone number of another provider
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${first-name}    ${resp.json()['firstName']}  
@@ -1082,7 +1090,7 @@ JD-TC-Update Account Contact information-10
 
 JD-TC-Update Account Contact information-11
 	[Documentation]  Update Account Contact information using secondary email of another provider
-    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${first-name}    ${resp.json()['firstName']}  
@@ -1119,7 +1127,7 @@ JD-TC-Update Account Contact information-11
 
 JD-TC-Update Account Contact information-12
 	[Documentation]  Update Account Contact information using firstname and lastname of another provider
-    ${resp}=  Provider Login  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${first-name1}    ${resp.json()['firstName']}  
@@ -1172,7 +1180,7 @@ JD-TC-Update Account Contact information-13
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_N}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_N}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_N}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_idN}  ${resp.json()['id']}
@@ -1229,7 +1237,7 @@ JD-TC-Update Account Contact information-13
     ${resp}=  Get Consumer By Id  ${newNo}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_N}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_N}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid5}=  get_acc_id  ${PUSERNAME_N} 
@@ -1266,10 +1274,11 @@ JD-TC-Update Account Contact information-14
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${e-mail}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    Set Suite Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
     Set Test Variable  ${PUSERNAME_C}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME_C}
@@ -1355,10 +1364,11 @@ JD-TC-Update Account Contact information-15
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pro_id0}  ${resp.json()['id']}
+    Set Suite Variable  ${pro_id0}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id0}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME0}
@@ -1485,7 +1495,7 @@ JD-TC-Update Account Contact information-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME5}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME5}
@@ -1529,7 +1539,7 @@ JD-TC-Update Account Contact information-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
@@ -1558,7 +1568,7 @@ JD-TC-Update Account Contact information-UH4
 JD-TC-Update Account Contact information-UH5
 	[Documentation]  Update Account Contact information using invalid whatsapp number
     
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${first-name}    ${resp.json()['firstName']}  
@@ -1587,7 +1597,7 @@ JD-TC-Update Account Contact information-UH5
 JD-TC-Update Account Contact information-UH6
 	[Documentation]  Update Account Contact information using without firstname
     
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${first-name}    ${resp.json()['firstName']}  
@@ -1642,10 +1652,11 @@ JD-TC-Update Account Contact information-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pro_id0}  ${resp.json()['id']}
+    Set Suite Variable  ${pro_id0}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id0}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME0}
@@ -1789,10 +1800,11 @@ JD-TC-Update Account Contact information-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pro_id0}  ${resp.json()['id']}
+    Set Suite Variable  ${pro_id0}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id0}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME0}

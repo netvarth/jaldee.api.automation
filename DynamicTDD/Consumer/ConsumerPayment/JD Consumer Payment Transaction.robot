@@ -67,12 +67,15 @@ JD-TC-Consumer-Payment-Transaction-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
@@ -87,19 +90,22 @@ JD-TC-Consumer-Payment-Transaction-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -136,6 +142,7 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${accId}=  get_acc_id  ${PUSERPH0}
 
@@ -211,8 +218,8 @@ JD-TC-Consumer-Payment-Transaction-1
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  add_time  2   00
-    ${eTime}=  add_time   2   15
+    ${sTime}=  add_timezone_time  ${tz}  2  00  
+    ${eTime}=  add_timezone_time  ${tz}  2  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${p1_lid}  ${p1_sid1}  ${p1_sid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -270,7 +277,7 @@ JD-TC-Consumer-Payment-Transaction-1
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -301,7 +308,7 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -318,7 +325,7 @@ JD-TC-Consumer-Payment-Transaction-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}   billPaymentStatus=${paymentStatus[2]}
 
-    ${resp}=   ProviderLogin   ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
    
     ${resp}=  Get Waitlist By Id  ${cwid}
@@ -356,7 +363,7 @@ JD-TC-Consumer-Payment-Transaction-2
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -389,7 +396,7 @@ JD-TC-Consumer-Payment-Transaction-2
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
 
     # sleep   02s
-    ${resp}=   ProviderLogin   ${PUSERPH0}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERPH0}   ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     sleep  2s   
@@ -434,7 +441,7 @@ JD-TC-Consumer-Payment-Transaction-3
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -466,7 +473,7 @@ JD-TC-Consumer-Payment-Transaction-3
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
 
     # sleep   02s
-    ${resp}=   ProviderLogin   ${PUSERPH0}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERPH0}   ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
    
     sleep   02s
@@ -507,7 +514,7 @@ JD-TC-Consumer-Payment-Transaction-4
     # Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     # Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    # ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -539,7 +546,7 @@ JD-TC-Consumer-Payment-Transaction-4
     
 
     # sleep   02s
-    # ${resp}=   ProviderLogin   ${PUSERPH0}   ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login   ${PUSERPH0}   ${PASSWORD} 
     # Should Be Equal As Strings    ${resp.status_code}   200
    
     # ${resp}=  Get Waitlist By Id  ${wid1}
@@ -550,7 +557,7 @@ JD-TC-Consumer-Payment-Transaction-4
 JD-TC-Consumer-Payment-Transaction-5
     [Documentation]  Taking waitlist from provider side and the consumer doing the billpayment
 
-    ${resp}=  Provider Login   ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -571,7 +578,6 @@ JD-TC-Consumer-Payment-Transaction-5
     ${resp}=  Add To Waitlist  ${cid2}  ${p1_sid2}  ${p1_qid}  ${DAY}  ${msg}  ${bool[1]}  ${cid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid2}  ${wid[0]}
 
@@ -623,10 +629,10 @@ JD-TC-Consumer-Payment-Transaction-5
 JD-TC-Consumer-Payment-Transaction-6
     [Documentation]   provider takes waitlist and accept payment then consumer get details
     
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     
@@ -644,7 +650,6 @@ JD-TC-Consumer-Payment-Transaction-6
     ${resp}=  Add To Waitlist  ${cid}  ${p1_sid2}  ${p1_qid}  ${DAY}  ${msg}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -699,7 +704,7 @@ JD-TC-Consumer-Payment-Transaction-6
 JD-TC-Consumer-Payment-Transaction-7
 
     [Documentation]  Provider try to check payment detailss
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Payment Details  account-eq=${pid}

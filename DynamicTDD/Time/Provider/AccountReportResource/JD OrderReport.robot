@@ -73,7 +73,7 @@ JD-TC-OrderReport-1
     clear_customer   ${PUSERNAME179}
     clear_Item   ${PUSERNAME179}
     clear_Catalog   ${PUSERNAME179}
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -264,18 +264,19 @@ JD-TC-OrderReport-1
 
 
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=   subtract_time  2  00
-    ${eTime1}=   subtract_time  0  10
-    ${sTime2}=  db.get_time
-    ${eTime2}=  add_time   0  20 
-    ${sTime3}=  add_time  0  25
+    ${sTime1}=   subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=   subtract_timezone_time  ${tz}  0  10
+    # ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${eTime2}=  add_timezone_time  ${tz}  0  20   
+    ${sTime3}=  add_timezone_time  ${tz}  0  25  
     Set Suite Variable  ${sTime3}
-    ${eTime3}=  add_time   0  40
+    ${eTime3}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable  ${eTime3} 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -362,8 +363,8 @@ JD-TC-OrderReport-1
     Set Suite Variable  ${c19_Uname}   ${resp.json()['userName']}
     
 
-    # ${DAY1}=  add_date   12
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -429,8 +430,8 @@ JD-TC-OrderReport-1
     Set Suite Variable  ${c17_Uname}   ${resp.json()['userName']}
     
 
-    # ${DAY1}=  add_date   12
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName2}=   FakerLibrary.first_name 
     ${C_lastName2}=   FakerLibrary.name 
     ${C_num2}    Random Int  min=123456   max=999999
@@ -478,8 +479,8 @@ JD-TC-OrderReport-1
     Set Suite Variable  ${c15_Uname}   ${resp.json()['userName']}
     
 
-    # ${DAY1}=  add_date   12
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName3}=   FakerLibrary.first_name 
     ${C_lastName3}=   FakerLibrary.name 
     ${C_num3}    Random Int  min=123456   max=999999
@@ -517,7 +518,7 @@ JD-TC-OrderReport-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no3}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -549,7 +550,7 @@ JD-TC-OrderReport-1
     Set Suite Variable  ${c15_dob}   ${resp.json()[0]['dob']}
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -725,9 +726,9 @@ JD-TC-OrderReport-1
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['12']}   ${orderMode[0]}       # Mode
 
     change_system_date   1
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -926,7 +927,7 @@ JD-TC-OrderReport-2
     Set Suite Variable  ${c25_Uname}   ${resp.json()['userName']}
 
     clear_customer   ${PUSERNAME179}
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId3}=  get_acc_id  ${PUSERNAME179}
@@ -983,7 +984,7 @@ JD-TC-OrderReport-2
     Set Suite Variable  ${c22_F2_Uname}  ${resp.json()[0]['firstName']} ${resp.json()[0]['lastName']}
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1149,7 +1150,7 @@ JD-TC-OrderReport-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${order_no26}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1259,9 +1260,9 @@ JD-TC-OrderReport-2
 
 
     change_system_date   2
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1416,7 +1417,7 @@ JD-TC-OrderReport-3
     Set Suite Variable  ${c25_Uname}   ${resp.json()['userName']}
 
     clear_customer   ${PUSERNAME179}
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId3}=  get_acc_id  ${PUSERNAME179}
@@ -1473,7 +1474,7 @@ JD-TC-OrderReport-3
     Set Suite Variable  ${c22_F2_Uname}  ${resp.json()[0]['firstName']} ${resp.json()[0]['lastName']}
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1614,7 +1615,7 @@ JD-TC-OrderReport-3
     Set Test Variable  ${order_no34}  ${resp.json()['orderNumber']}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1699,9 +1700,9 @@ JD-TC-OrderReport-3
            
 
     change_system_date   3
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1812,7 +1813,7 @@ JD-TC-OrderReport-4
     clear_customer   ${PUSERNAME179}
     clear_Item   ${PUSERNAME179}
     clear_Catalog   ${PUSERNAME179}
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -1934,18 +1935,19 @@ JD-TC-OrderReport-4
 
 
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=   subtract_time  2  00
-    ${eTime1}=   subtract_time  0  10
-    ${sTime2}=  db.get_time
-    ${eTime2}=  add_time   0  20 
-    ${sTime3}=  add_time  0  25
+    ${sTime1}=   subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=   subtract_timezone_time  ${tz}  0  10
+    # ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${eTime2}=  add_timezone_time  ${tz}  0  20   
+    ${sTime3}=  add_timezone_time  ${tz}  0  25  
     Set Suite Variable  ${sTime3}
-    ${eTime3}=  add_time   0  40
+    ${eTime3}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable  ${eTime3} 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -2023,8 +2025,8 @@ JD-TC-OrderReport-4
     Set Suite Variable  ${c19_Uname}   ${resp.json()['userName']}
     
 
-    # ${DAY1}=  add_date   12
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -2075,8 +2077,8 @@ JD-TC-OrderReport-4
     Set Suite Variable  ${c17_Uname}   ${resp.json()['userName']}
     
 
-    # ${DAY1}=  add_date   12
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName2}=   FakerLibrary.first_name 
     ${C_lastName2}=   FakerLibrary.name 
     ${C_num2}    Random Int  min=123456   max=999999
@@ -2124,8 +2126,8 @@ JD-TC-OrderReport-4
     Set Suite Variable  ${c15_Uname}   ${resp.json()['userName']}
     
 
-    # ${DAY1}=  add_date   12
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName3}=   FakerLibrary.first_name 
     ${C_lastName3}=   FakerLibrary.name 
     ${C_num3}    Random Int  min=123456   max=999999
@@ -2163,7 +2165,7 @@ JD-TC-OrderReport-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no3}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2195,7 +2197,7 @@ JD-TC-OrderReport-4
     Set Suite Variable  ${c15_dob}   ${resp.json()[0]['dob']}
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2514,9 +2516,9 @@ JD-TC-OrderReport-4
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][2]['12']}   ${orderMode[0]}       # Mode
 
     change_system_date   3
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2681,12 +2683,12 @@ JD-TC-OrderReport-4
 JD-TC-OrderReport-5
     [Documentation]     Consumers Create Order using SHOPPINGLIST. Add items to the bill and completes bill payment. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
     ${accId3}=  get_acc_id  ${PUSERNAME179}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -2764,7 +2766,7 @@ JD-TC-OrderReport-5
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2896,12 +2898,12 @@ JD-TC-OrderReport-5
 
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3066,12 +3068,12 @@ JD-TC-OrderReport-5
 JD-TC-OrderReport-6
     [Documentation]     Consumers Create Order using SHOPPINGLIST. Add items to the bill and completes bill payment.After bill payment provider again add more items to the bill and Generate order report
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
     ${accId3}=  get_acc_id  ${PUSERNAME179}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -3163,7 +3165,7 @@ JD-TC-OrderReport-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3205,10 +3207,10 @@ JD-TC-OrderReport-6
            
 
     change_system_date   5
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3259,12 +3261,12 @@ JD-TC-OrderReport-6
 JD-TC-OrderReport-7
     [Documentation]     Consumers Create Order using SHOPPINGLIST. Add items to the bill and completes bill payment.After bill payment provider remove few items from bill and Generate order report
     
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
     ${accId3}=  get_acc_id  ${PUSERNAME179}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -3327,9 +3329,9 @@ JD-TC-OrderReport-7
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['12']}   ${orderMode[0]}       # Mode
            
     change_system_date   6
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3386,7 +3388,7 @@ JD-TC-OrderReport-8
     clear_customer   ${PUSERNAME179}
     clear_Item   ${PUSERNAME179}
     clear_Catalog   ${PUSERNAME179}
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -3461,18 +3463,19 @@ JD-TC-OrderReport-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=   subtract_time  2  00
-    ${eTime1}=   subtract_time  0  10
-    ${sTime2}=  db.get_time
-    ${eTime2}=  add_time   0  20 
-    ${sTime3}=  add_time  0  25
+    ${sTime1}=   subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=   subtract_timezone_time  ${tz}  0  10
+    # ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${eTime2}=  add_timezone_time  ${tz}  0  20   
+    ${sTime3}=  add_timezone_time  ${tz}  0  25  
     Set Suite Variable  ${sTime3}
-    ${eTime3}=  add_time   0  40
+    ${eTime3}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable  ${eTime3} 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -3552,8 +3555,8 @@ JD-TC-OrderReport-8
     Set Suite Variable  ${c19_Uname}   ${resp.json()['userName']}
     
 
-    # ${DAY1}=  add_date   12
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -3614,8 +3617,8 @@ JD-TC-OrderReport-8
     Set Suite Variable  ${c17_Uname}   ${resp.json()['userName']}
     
 
-    # ${DAY1}=  add_date   12
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${C_firstName2}=   FakerLibrary.first_name 
     ${C_lastName2}=   FakerLibrary.name 
     ${C_num2}    Random Int  min=123456   max=999999
@@ -3666,7 +3669,7 @@ JD-TC-OrderReport-8
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no84}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3689,7 +3692,7 @@ JD-TC-OrderReport-8
     Set Suite Variable  ${c17_dob}   ${resp.json()[0]['dob']}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3777,9 +3780,9 @@ JD-TC-OrderReport-8
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   5
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -3881,7 +3884,7 @@ JD-TC-OrderReport-8
 JD-TC-OrderReport-9
     [Documentation]     Change order status from Order_Confirmed to Order_Received when autoConfirm is TRUE. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -3907,7 +3910,7 @@ JD-TC-OrderReport-9
     Should Be Equal As Strings  ${resp.json()[0]['orderStatus']}         ${orderStatuses[2]}
     Should Be Equal As Strings  ${resp.json()[1]['orderStatus']}         ${orderStatuses[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -3992,9 +3995,9 @@ JD-TC-OrderReport-9
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -4095,7 +4098,7 @@ JD-TC-OrderReport-9
 JD-TC-OrderReport-10
     [Documentation]     Change order status into Order_Acknowledged. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -4123,7 +4126,7 @@ JD-TC-OrderReport-10
     Should Be Equal As Strings  ${resp.json()[1]['orderStatus']}         ${orderStatuses[0]}
     Should Be Equal As Strings  ${resp.json()[2]['orderStatus']}         ${orderStatuses[1]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -4208,9 +4211,9 @@ JD-TC-OrderReport-10
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   3
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -4312,7 +4315,7 @@ JD-TC-OrderReport-10
 JD-TC-OrderReport-11
     [Documentation]     Change order status into Order_Confirmed. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -4342,7 +4345,7 @@ JD-TC-OrderReport-11
     Should Be Equal As Strings  ${resp.json()[2]['orderStatus']}         ${orderStatuses[1]}
     Should Be Equal As Strings  ${resp.json()[3]['orderStatus']}         ${orderStatuses[2]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -4427,9 +4430,9 @@ JD-TC-OrderReport-11
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   2
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -4531,7 +4534,7 @@ JD-TC-OrderReport-11
 JD-TC-OrderReport-12
     [Documentation]     Change order status into Preparing. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -4583,7 +4586,7 @@ JD-TC-OrderReport-12
     Should Be Equal As Strings  ${resp.json()[3]['orderStatus']}         ${orderStatuses[2]}
     Should Be Equal As Strings  ${resp.json()[4]['orderStatus']}         ${orderStatuses[3]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -4668,9 +4671,9 @@ JD-TC-OrderReport-12
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   3
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -4771,7 +4774,7 @@ JD-TC-OrderReport-12
 JD-TC-OrderReport-13
     [Documentation]     Change order status into Packing. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -4827,7 +4830,7 @@ JD-TC-OrderReport-13
     Should Be Equal As Strings  ${resp.json()[4]['orderStatus']}         ${orderStatuses[3]}
     Should Be Equal As Strings  ${resp.json()[5]['orderStatus']}         ${orderStatuses[4]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -4912,9 +4915,9 @@ JD-TC-OrderReport-13
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -5016,7 +5019,7 @@ JD-TC-OrderReport-13
 JD-TC-OrderReport-14
     [Documentation]     Change order status into Payment_Required. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -5076,7 +5079,7 @@ JD-TC-OrderReport-14
     Should Be Equal As Strings  ${resp.json()[5]['orderStatus']}         ${orderStatuses[4]}
     Should Be Equal As Strings  ${resp.json()[6]['orderStatus']}         ${orderStatuses[5]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -5161,9 +5164,9 @@ JD-TC-OrderReport-14
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   5
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -5264,7 +5267,7 @@ JD-TC-OrderReport-14
 JD-TC-OrderReport-15
     [Documentation]     Change order status into Ready_For_Pickup. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -5328,7 +5331,7 @@ JD-TC-OrderReport-15
     Should Be Equal As Strings  ${resp.json()[6]['orderStatus']}         ${orderStatuses[5]}
     Should Be Equal As Strings  ${resp.json()[7]['orderStatus']}         ${orderStatuses[6]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -5413,9 +5416,9 @@ JD-TC-OrderReport-15
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -5516,7 +5519,7 @@ JD-TC-OrderReport-15
 JD-TC-OrderReport-16
     [Documentation]     Change order status into Ready_For_Shipment. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -5584,7 +5587,7 @@ JD-TC-OrderReport-16
     Should Be Equal As Strings  ${resp.json()[7]['orderStatus']}         ${orderStatuses[6]}
     Should Be Equal As Strings  ${resp.json()[8]['orderStatus']}         ${orderStatuses[7]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -5669,9 +5672,9 @@ JD-TC-OrderReport-16
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -5773,7 +5776,7 @@ JD-TC-OrderReport-16
 JD-TC-OrderReport-17
     [Documentation]     Change order status into Ready_For_Delivery. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -5845,7 +5848,7 @@ JD-TC-OrderReport-17
     Should Be Equal As Strings  ${resp.json()[8]['orderStatus']}         ${orderStatuses[7]}
     Should Be Equal As Strings  ${resp.json()[9]['orderStatus']}         ${orderStatuses[8]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -5930,9 +5933,9 @@ JD-TC-OrderReport-17
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -6034,7 +6037,7 @@ JD-TC-OrderReport-17
 JD-TC-OrderReport-18
     [Documentation]     Change order status into Completed. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -6110,7 +6113,7 @@ JD-TC-OrderReport-18
     Should Be Equal As Strings  ${resp.json()[9]['orderStatus']}         ${orderStatuses[8]}
     Should Be Equal As Strings  ${resp.json()[10]['orderStatus']}         ${orderStatuses[9]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -6195,9 +6198,9 @@ JD-TC-OrderReport-18
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -6299,7 +6302,7 @@ JD-TC-OrderReport-18
 JD-TC-OrderReport-19
     [Documentation]     Change order status into In_Transit. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -6379,7 +6382,7 @@ JD-TC-OrderReport-19
     Should Be Equal As Strings  ${resp.json()[10]['orderStatus']}         ${orderStatuses[9]}
     Should Be Equal As Strings  ${resp.json()[11]['orderStatus']}         ${orderStatuses[10]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -6464,9 +6467,9 @@ JD-TC-OrderReport-19
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -6568,7 +6571,7 @@ JD-TC-OrderReport-19
 JD-TC-OrderReport-20
     [Documentation]     Change order status into Shipped. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -6652,7 +6655,7 @@ JD-TC-OrderReport-20
     Should Be Equal As Strings  ${resp.json()[11]['orderStatus']}         ${orderStatuses[10]}
     Should Be Equal As Strings  ${resp.json()[12]['orderStatus']}         ${orderStatuses[11]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -6737,9 +6740,9 @@ JD-TC-OrderReport-20
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -6841,7 +6844,7 @@ JD-TC-OrderReport-20
 JD-TC-OrderReport-21
     [Documentation]     Change order status into Cancelled. Generate order report after that
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -6929,7 +6932,7 @@ JD-TC-OrderReport-21
     Should Be Equal As Strings  ${resp.json()[12]['orderStatus']}         ${orderStatuses[11]}
     Should Be Equal As Strings  ${resp.json()[13]['orderStatus']}         ${orderStatuses[12]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Test Variable   ${Order_Date1}    ${TODAY} [${sTime3} To ${eTime3}]
 
@@ -7014,9 +7017,9 @@ JD-TC-OrderReport-21
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][3]['12']}   ${orderMode[0]}        # Mode
 
     change_system_date   4
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}   
@@ -7123,7 +7126,7 @@ JD-TC-OrderReport-22
     clear_customer   ${PUSERNAME179}
     clear_Item   ${PUSERNAME179}
     clear_Catalog   ${PUSERNAME179}
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -7245,18 +7248,19 @@ JD-TC-OrderReport-22
 
 
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  35      
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  35      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  35      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  35      
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=   subtract_time  2  00
-    ${eTime1}=   subtract_time  0  10
-    ${sTime2}=  db.get_time
-    ${eTime2}=  add_time   0  20 
-    ${sTime3}=  add_time  0  25
+    ${sTime1}=   subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=   subtract_timezone_time  ${tz}  0  10
+    # ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${eTime2}=  add_timezone_time  ${tz}  0  20   
+    ${sTime3}=  add_timezone_time  ${tz}  0  25  
     Set Suite Variable  ${sTime3}
-    ${eTime3}=  add_time   0  40
+    ${eTime3}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable  ${eTime3} 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -7389,7 +7393,7 @@ JD-TC-OrderReport-22
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${Add_DAY1}=  add_date   1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1
     ${resp}=   Upload ShoppingList Image for HomeDelivery    ${cookie}  ${accId3}   ${caption}    ${self}    ${CatalogId1}     ${bool[1]}    ${address1}   ${Add_DAY1}    ${sTime3}    ${eTime3}    ${CUSERNAME19}    ${email}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7403,7 +7407,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${order_no221}  ${resp.json()['orderNumber']}
     Set Suite Variable  ${order221_Advance}  ${resp.json()['advanceAmountToPay']}
 
-    ${Add_DAY2}=  add_date   2
+    ${Add_DAY2}=  db.add_timezone_date  ${tz}   2
     ${resp}=   Create Order For HomeDelivery    ${cookie}  ${accId3}    ${self}    ${CatalogId2}     ${bool[1]}    ${address1}    ${sTime3}    ${eTime3}   ${Add_DAY2}    ${CUSERNAME19}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}  ${item_quantity1}  ${item_id2}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7417,7 +7421,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${order_no222}  ${resp.json()['orderNumber']}
     Set Suite Variable  ${order222_Advance}  ${resp.json()['advanceAmountToPay']}
 
-    ${Add_DAY3}=  add_date   3
+    ${Add_DAY3}=  db.add_timezone_date  ${tz}   3
     ${resp}=   Upload ShoppingList Image for HomeDelivery    ${cookie}  ${accId3}   ${caption}    ${self}    ${CatalogId3}     ${bool[1]}    ${address1}   ${Add_DAY3}    ${sTime3}    ${eTime3}    ${CUSERNAME19}    ${email}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7446,7 +7450,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${Add_DAY4}=  add_date   4
+    ${Add_DAY4}=  db.add_timezone_date  ${tz}   4
     ${resp}=   Create Order For HomeDelivery    ${cookie}  ${accId3}    ${self}    ${CatalogId4}     ${bool[1]}    ${address1}    ${sTime3}    ${eTime3}   ${Add_DAY4}    ${CUSERNAME19}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id3}  ${item_quantity1}  ${item_id4}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7475,7 +7479,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY5}=  add_date   5
+    ${Add_DAY5}=  db.add_timezone_date  ${tz}   5
     ${resp}=   Create Order For HomeDelivery    ${cookie}  ${accId3}    ${self}    ${CatalogId5}     ${bool[1]}    ${address1}    ${sTime3}    ${eTime3}   ${Add_DAY5}    ${CUSERNAME19}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}  ${item_quantity1}  ${item_id2}  ${item_quantity1}  ${item_id3}  ${item_quantity1}  ${item_id4}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7504,7 +7508,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY11}=  add_date   11
+    ${Add_DAY11}=  db.add_timezone_date  ${tz}  11  
     ${resp}=   Upload ShoppingList Image for Pickup    ${cookie}  ${accId3}   ${caption}    ${self}    ${CatalogId1}     ${bool[1]}    ${Add_DAY11}    ${sTime3}    ${eTime3}    ${CUSERNAME19}    ${email}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7518,7 +7522,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${order_no226}  ${resp.json()['orderNumber']}
     Set Suite Variable  ${order226_Advance}  ${resp.json()['advanceAmountToPay']}
 
-    ${Add_DAY12}=  add_date   12
+    ${Add_DAY12}=  db.add_timezone_date  ${tz}  12  
     ${resp}=   Create Order For Pickup    ${cookie}  ${accId3}    ${self}    ${CatalogId2}     ${bool[1]}    ${sTime3}    ${eTime3}   ${Add_DAY12}    ${CUSERNAME19}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}  ${item_quantity1}  ${item_id2}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7532,7 +7536,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${order_no227}  ${resp.json()['orderNumber']}
     Set Suite Variable  ${order227_Advance}  ${resp.json()['advanceAmountToPay']}
 
-    ${Add_DAY13}=  add_date   13
+    ${Add_DAY13}=  db.add_timezone_date  ${tz}  13  
     ${resp}=   Upload ShoppingList Image for Pickup    ${cookie}  ${accId3}   ${caption}    ${self}    ${CatalogId3}     ${bool[1]}    ${Add_DAY13}    ${sTime3}    ${eTime3}    ${CUSERNAME19}    ${email}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7561,7 +7565,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY14}=  add_date   14
+    ${Add_DAY14}=  db.add_timezone_date  ${tz}   14
     ${resp}=   Create Order For Pickup    ${cookie}  ${accId3}    ${self}    ${CatalogId4}     ${bool[1]}    ${sTime3}    ${eTime3}   ${Add_DAY14}    ${CUSERNAME19}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id3}  ${item_quantity1}  ${item_id4}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7590,7 +7594,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY15}=  add_date   15
+    ${Add_DAY15}=  db.add_timezone_date  ${tz}   15
     ${resp}=   Create Order For Pickup    ${cookie}  ${accId3}    ${self}    ${CatalogId5}    ${bool[1]}    ${sTime3}    ${eTime3}   ${Add_DAY15}    ${CUSERNAME19}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}  ${item_quantity1}  ${item_id2}  ${item_quantity1}  ${item_id3}  ${item_quantity1}  ${item_id4}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7651,7 +7655,7 @@ JD-TC-OrderReport-22
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${Add_DAY1}=  add_date   1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1
     ${resp}=   Upload ShoppingList Image for Pickup    ${cookie}  ${accId3}   ${caption}    ${self}    ${CatalogId1}     ${bool[1]}    ${Add_DAY1}    ${sTime3}    ${eTime3}    ${CUSERNAME17}    ${email}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7665,7 +7669,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${order_no231}  ${resp.json()['orderNumber']}
     Set Suite Variable  ${order231_Advance}  ${resp.json()['advanceAmountToPay']}
 
-    ${Add_DAY2}=  add_date   2
+    ${Add_DAY2}=  db.add_timezone_date  ${tz}   2
     ${resp}=   Create Order For Pickup    ${cookie}  ${accId3}    ${self}    ${CatalogId2}     ${bool[1]}    ${sTime3}    ${eTime3}   ${Add_DAY2}    ${CUSERNAME17}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}  ${item_quantity1}  ${item_id2}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7679,7 +7683,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${order_no232}  ${resp.json()['orderNumber']}
     Set Suite Variable  ${order232_Advance}  ${resp.json()['advanceAmountToPay']}
 
-    ${Add_DAY3}=  add_date   3
+    ${Add_DAY3}=  db.add_timezone_date  ${tz}   3
     ${resp}=   Upload ShoppingList Image for Pickup    ${cookie}  ${accId3}   ${caption}    ${self}    ${CatalogId3}     ${bool[1]}    ${Add_DAY3}    ${sTime3}    ${eTime3}    ${CUSERNAME17}    ${email}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7708,7 +7712,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY4}=  add_date   4
+    ${Add_DAY4}=  db.add_timezone_date  ${tz}   4
     ${resp}=   Create Order For Pickup    ${cookie}  ${accId3}    ${self}    ${CatalogId4}     ${bool[1]}    ${sTime3}    ${eTime3}   ${Add_DAY4}    ${CUSERNAME17}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id3}  ${item_quantity1}  ${item_id4}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7737,7 +7741,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY5}=  add_date   5
+    ${Add_DAY5}=  db.add_timezone_date  ${tz}   5
     ${resp}=   Create Order For Pickup    ${cookie}  ${accId3}    ${self}    ${CatalogId5}     ${bool[1]}    ${sTime3}    ${eTime3}   ${Add_DAY5}    ${CUSERNAME17}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}  ${item_quantity1}  ${item_id2}  ${item_quantity1}  ${item_id3}  ${item_quantity1}  ${item_id4}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7766,7 +7770,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY21}=  add_date   21
+    ${Add_DAY21}=  db.add_timezone_date  ${tz}   21
     ${resp}=   Upload ShoppingList Image for HomeDelivery    ${cookie}  ${accId3}   ${caption}    ${self}    ${CatalogId1}     ${bool[1]}    ${address1}   ${Add_DAY21}    ${sTime3}    ${eTime3}    ${CUSERNAME17}    ${email}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7780,7 +7784,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${order_no236}  ${resp.json()['orderNumber']}
     Set Suite Variable  ${order236_Advance}  ${resp.json()['advanceAmountToPay']}
 
-    ${Add_DAY22}=  add_date   22
+    ${Add_DAY22}=  db.add_timezone_date  ${tz}   22
     ${resp}=   Create Order For HomeDelivery    ${cookie}  ${accId3}    ${self}    ${CatalogId2}     ${bool[1]}    ${address1}    ${sTime3}    ${eTime3}   ${Add_DAY22}    ${CUSERNAME17}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}  ${item_quantity1}  ${item_id2}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7794,7 +7798,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${order_no237}  ${resp.json()['orderNumber']}
     Set Suite Variable  ${order237_Advance}  ${resp.json()['advanceAmountToPay']}
 
-    ${Add_DAY23}=  add_date   23
+    ${Add_DAY23}=  db.add_timezone_date  ${tz}   23
     ${resp}=   Upload ShoppingList Image for HomeDelivery    ${cookie}  ${accId3}   ${caption}    ${self}    ${CatalogId3}     ${bool[1]}    ${address1}   ${Add_DAY23}    ${sTime3}    ${eTime3}    ${CUSERNAME17}    ${email}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7823,7 +7827,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY24}=  add_date   24
+    ${Add_DAY24}=  db.add_timezone_date  ${tz}   24
     ${resp}=   Create Order For HomeDelivery    ${cookie}  ${accId3}    ${self}    ${CatalogId4}     ${bool[1]}    ${address1}    ${sTime3}    ${eTime3}   ${Add_DAY24}    ${CUSERNAME17}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id3}  ${item_quantity1}  ${item_id4}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7852,7 +7856,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${Add_DAY25}=  add_date   25
+    ${Add_DAY25}=  db.add_timezone_date  ${tz}   25
     ${resp}=   Create Order For HomeDelivery    ${cookie}  ${accId3}    ${self}    ${CatalogId5}     ${bool[1]}    ${address1}    ${sTime3}    ${eTime3}   ${Add_DAY25}    ${CUSERNAME17}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}  ${item_quantity1}  ${item_id2}  ${item_quantity1}  ${item_id3}  ${item_quantity1}  ${item_id4}  ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -7881,7 +7885,7 @@ JD-TC-OrderReport-22
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -7904,7 +7908,7 @@ JD-TC-OrderReport-22
     Set Suite Variable  ${c17_dob}   ${resp.json()[0]['dob']}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -7953,13 +7957,13 @@ JD-TC-OrderReport-22
     ${Add_DAY25} =	Convert Date	${Add_DAY25}	result_format=%d/%m/%Y
     Set Suite Variable   ${Order_DAY25}    ${Add_DAY25} [${sTime3} To ${eTime3}]
 
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${TODAY}
-    ${DATE1}=  add_date    1
+    ${DATE1}=  db.add_timezone_date  ${tz}    1
     Set Suite Variable   ${DATE1}
-    ${DATE7}=  add_date    7
+    ${DATE7}=  db.add_timezone_date  ${tz}    7
     Set Suite Variable   ${DATE7}
-    ${DATE30}=  add_date   30
+    ${DATE30}=  db.add_timezone_date  ${tz}   30
     Set Suite Variable   ${DATE30}
 
     ${filter}=  Create Dictionary   ${OrderTypeFilters[0]}=${bool[1]}
@@ -8222,7 +8226,7 @@ JD-TC-OrderReport-22
 JD-TC-OrderReport-23
     [Documentation]     Generate report of Store Pickup orders
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -8467,10 +8471,10 @@ JD-TC-OrderReport-23
     Should Be Equal As Strings  ${resp.json()['reportContent']['columns']['12']}  Mode                  # Mode
     
     change_system_date   7
-    ${LAST_WEEK_DAY1}=  subtract_date  7
-    ${LAST_WEEK_DAY7}=  subtract_date  1
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -8555,7 +8559,7 @@ JD-TC-OrderReport-23
 JD-TC-OrderReport-24
     [Documentation]     Generate order report using order number as filter
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -8642,8 +8646,8 @@ JD-TC-OrderReport-24
     Should Be Equal As Strings  ${resp.json()['reportContent']['to']}       ${DATE7}
 
     change_system_date   1
-    ${ORDER_DATE}=  get_date
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${ORDER_DATE}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -8680,10 +8684,10 @@ JD-TC-OrderReport-24
 
     
     change_system_date   1
-    ${LAST_WEEK_DAY1}=  subtract_date  7
-    ${LAST_WEEK_DAY7}=  subtract_date  1
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -8715,7 +8719,7 @@ JD-TC-OrderReport-24
 JD-TC-OrderReport-25
     [Documentation]     Generate order report using order status as filter
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -9002,10 +9006,10 @@ JD-TC-OrderReport-25
     Should Be Equal As Strings  ${resp.json()['reportContent']['data'][19]['12']}   ${orderMode[0]}
 
     change_system_date   6
-    ${LAST_WEEK_DAY1}=  subtract_date  7
-    ${LAST_WEEK_DAY7}=  subtract_date  1
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -9226,8 +9230,8 @@ JD-TC-OrderReport-25
     
    
 
-    ${NEXT_MONTH_DAY1}=   add_date   1
-    ${NEXT_MONTH_DAY30}=  add_date  30
+    ${NEXT_MONTH_DAY1}=   db.add_timezone_date  ${tz}  1
+    ${NEXT_MONTH_DAY30}=  db.add_timezone_date  ${tz}  30
     ${filter}=  Create Dictionary   orderStatus-eq=Order Confirmed
     ${resp}=  Generate Report REST details  ${ReportType}   ${DateCategory[4]}   ${filter}
     Log  ${resp.json()}
@@ -9375,12 +9379,12 @@ JD-TC-OrderReport-25
 JD-TC-OrderReport-26
     [Documentation]     Change order ststus and Generate order report using order status as filter
     change_system_date   5
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
     ${accId3}=  get_acc_id  ${PUSERNAME179}
-    ${ORDER_DATE}=  get_date
+    ${ORDER_DATE}=  db.get_date_by_timezone  ${tz}
 
     ${filter}=  Create Dictionary   orderStatus-eq=Order Received
     ${resp}=  Generate Report REST details  ${ReportType}   ${DateCategory[0]}   ${filter}
@@ -9492,12 +9496,12 @@ JD-TC-OrderReport-26
 
 
     change_system_date   3
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${LAST_WEEK_DAY1}=  subtract_date  7 
-    ${LAST_WEEK_DAY7}=  subtract_date  1
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   7 
+    ${LAST_WEEK_DAY7}=  db.subtract_timezone_date  ${tz}   1
     ${filter}=  Create Dictionary   orderStatus-eq=Completed
     ${resp}=  Generate Report REST details  ${ReportType}   ${DateCategory[1]}   ${filter}
     Log  ${resp.json()}
@@ -9526,7 +9530,7 @@ JD-TC-OrderReport-26
 JD-TC-OrderReport-27
     [Documentation]     Generate order report using order mode as filter
 
-    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}

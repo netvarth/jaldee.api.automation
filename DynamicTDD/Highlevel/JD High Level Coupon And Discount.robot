@@ -30,10 +30,14 @@ JD-TC-High Level Test Case-1
     ${length}=  Get Length   ${len}
     
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${check}  ${resp2.json()['serviceBillable']}
@@ -50,6 +54,12 @@ JD-TC-High Level Test Case-1
     ${resp} =  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME4}
     Log   ${resp.json()}
@@ -62,13 +72,13 @@ JD-TC-High Level Test Case-1
     # Set Test Variable  ${cId}  ${resp.json()[0]['id']}
 
     # ${cId}=  get_id  ${CUSERNAME4}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Bill By UUId  ${wid} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${service}=  Service Bill  ${desc}  ${s_id}  1  ${discountId}
@@ -98,7 +108,7 @@ JD-TC-High Level Test Case-1
 JD-TC-High Level Test Case-2  
     [Documentation]  try to delete  discount that appled to the item of the bill
     comment  setle the bill and remove coupon discount
-    ${resp}=   ProviderLogin   ${PUSERNAME${a}}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME${a}}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${des}=  FakerLibrary.Word
     ${description}=  FakerLibrary.sentence
@@ -118,12 +128,12 @@ JD-TC-High Level Test Case-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cId}  ${resp.json()}
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}   
+
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${item}=  Item Bill  ${des}  ${itemId}   1
@@ -177,10 +187,14 @@ JD-TC-High Level Test Case-3
     ${length}=  Get Length   ${len}
     
     FOR   ${a}  IN RANGE   ${start1}  ${length}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${check}  ${resp2.json()['serviceBillable']}
@@ -216,6 +230,12 @@ JD-TC-High Level Test Case-3
     ${resp} =  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     
     ${resp}=  AddCustomer  ${CUSERNAME4}
@@ -230,10 +250,10 @@ JD-TC-High Level Test Case-3
     ${cupn_code}=   FakerLibrary.word
     Set Suite Variable   ${cupn_code}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -247,13 +267,13 @@ JD-TC-High Level Test Case-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${couponId}  ${resp.json()}
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+    
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${bid}  ${resp.json()['id']}

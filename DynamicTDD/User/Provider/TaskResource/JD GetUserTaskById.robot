@@ -26,7 +26,7 @@ JD-TC-GetUserTaskById-1
     [Documentation]  Create a task for a  branch and get  task by id
 
 
-    ${resp}=  Provider Login  ${MUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -37,8 +37,13 @@ JD-TC-GetUserTaskById-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -75,7 +80,7 @@ JD-TC-GetUserTaskById-2
 
     [Documentation]   Create  Task for  user  and get  task by id
     
-    ${resp}=  Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME11} 
@@ -97,12 +102,14 @@ JD-TC-GetUserTaskById-2
     Log  ${resp2.json()}
     Should Be Equal As Strings    ${resp2.status_code}    200
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -172,7 +179,7 @@ JD-TC-GetUserTaskById-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -211,7 +218,7 @@ JD-TC-GetUserTaskById-3
 
     [Documentation]  Create another  task  same user  and get  task by id
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -244,7 +251,7 @@ JD-TC-GetUserTaskById-4
 
     [Documentation]  Create   task  for user  and get  task by id  by branch login
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -261,7 +268,7 @@ JD-TC-GetUserTaskById-4
     Set Suite Variable  ${task_uid3}   ${resp.json()['uid']}
     Set Test Variable  ${task_id3}  ${resp.json()['id']}
     
-    ${resp}=  Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME11} 
@@ -283,7 +290,7 @@ JD-TC-GetUserTaskById-5
 
     [Documentation]  Create   task  for user  and get  task by id  by another user
 
-    ${resp}=  Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME11} 
@@ -323,7 +330,7 @@ JD-TC-GetUserTaskById-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -337,7 +344,7 @@ JD-TC-GetUserTaskById-5
     Set Test Variable  ${task_uid4}   ${resp.json()['uid']}
     Set Test Variable  ${task_id4}  ${resp.json()['id']}
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -360,7 +367,7 @@ JD-TC-GetUserTaskById-6
 
     [Documentation]  Create   task  for user  and change assingnee  get  task by id  by  another user
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -421,7 +428,7 @@ JD-TC-GetUserTaskById-UH3
 
     [Documentation]  Create   task  for user  and get  task by id  by another branch
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -435,7 +442,7 @@ JD-TC-GetUserTaskById-UH3
     Set Test Variable  ${task_uid5}   ${resp.json()['uid']}
     Set Test Variable  ${task_id5}  ${resp.json()['id']}
     
-     ${resp}=  ProviderLogin  ${HLMUSERNAME15}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

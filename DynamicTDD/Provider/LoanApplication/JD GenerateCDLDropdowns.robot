@@ -23,7 +23,7 @@ JD-TC-Generate CDL Dropdowns-1
     [Documentation]               Generate CDL Dropdowns.
 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

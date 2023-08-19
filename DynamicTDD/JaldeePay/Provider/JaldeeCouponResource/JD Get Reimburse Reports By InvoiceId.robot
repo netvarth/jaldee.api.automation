@@ -41,7 +41,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
     clear_waitlist  ${PUSERNAME1}    
     #clear_payment_invoice  ${PUSERNAME1}    
     clear_service  ${PUSERNAME1}    
-    clear_location  ${PUSERNAME1}
+    # clear_location  ${PUSERNAME1}
     clear_customer   ${PUSERNAME1}     
     
     #clear_jaldeecoupon  Coupon01    
@@ -49,11 +49,14 @@ JD-TC-GetReimburseReportByInvoiceId-1
     #clear_jaldeecoupon  Coupon03
     #clear_jaldeecoupon  Coupon04
     #clear_jaldeecoupon  Coupon05         
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
-    Log   ${resp.json()}
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
+    Log   ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable   ${domain}    ${decrypted_data['sector']}
+    Set Suite Variable   ${subDomain}    ${decrypted_data['subSector']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
     Log   ${resp.json()}
@@ -72,18 +75,20 @@ JD-TC-GetReimburseReportByInvoiceId-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${d1}    ${resp.json()['serviceSector']['domain']}  
-    Set Suite Variable    ${sd1}   ${resp.json()['serviceSubSector']['subDomain']}   
+    Set Suite Variable    ${sd1}   ${resp.json()['serviceSubSector']['subDomain']}  
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${domains}=  Jaldee Coupon Target Domains   ${d1}    
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${d1}_${sd1}  
     
-    
-    ProviderLogout
+    ${resp}=  ProviderLogout
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -109,7 +114,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
 
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -125,16 +130,31 @@ JD-TC-GetReimburseReportByInvoiceId-1
     # ${cid}=  get_id  ${CUSERNAME1}
     # Set Suite Variable  ${cid}
 
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # ${postcode}=  FakerLibrary.postcode
     ${description}=  FakerLibrary.sentence
     Set Suite Variable   ${description}
-    ${address}=  get_address
+    # ${address}=  get_address
     
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${resp}=  Create Location  ABCDE  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}  ${address}  free  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${LsTime}  ${LeTime}
-    Should Be Equal As Strings  ${resp.status_code}   200
-    Set Suite Variable  ${lid}  ${resp.json()} 
+    # ${resp}=  Create Location  ABCDE  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}  ${address}  free  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${LsTime}  ${LeTime}
+    # Should Be Equal As Strings  ${resp.status_code}   200
+    # Set Suite Variable  ${lid}  ${resp.json()}
+
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz}
+
+    ${24hours}    Random Element    ['True','False']
+    Set Suite Variable  ${24hours}
+    ${sTime}=  db.add_timezone_time  ${tz}  1  15
+    Set Suite Variable   ${sTime}
+    ${eTime}=  db.add_timezone_time  ${tz}   3  30
+    Set Suite Variable   ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parkingType[0]}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${lid}    ${resp.json()}  
 
     ${resp}=  Create Service  ${SERVICE1}  ${description}   2  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  50  500  ${bool[1]}  ${bool[1]}
     Set Suite Variable  ${s_id1}  ${resp.json()}
@@ -165,7 +185,6 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${description}  ${bool[1]}  ${cid}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]} 
     
@@ -222,8 +241,8 @@ JD-TC-GetReimburseReportByInvoiceId-1
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]}
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
     Log   ${resp.json()} 
@@ -265,7 +284,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
 
 JD-TC-GetReimburseReportByInvoiceId-UH1
     [Documentation]  Provider get reimburse report of  invalid  invoice_id
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200  
     ${resp}=  Get Reimburse Reports By Provider By InvoiceId  0
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -287,7 +306,7 @@ JD-TC-GetReimburseReportByInvoiceId -UH3
 
 JD-TC-GetReimburseReportByInvoiceId -UH4
     [Documentation]   Another Provider request reimburse payment
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimburse Reports By Provider By InvoiceId  ${invoice_id}
     Should Be Equal As Strings    ${resp.status_code}   422
@@ -296,13 +315,13 @@ JD-TC-GetReimburseReportByInvoiceId -UH4
 *** comment***
 JD-TC-Verify GetReimburseReportByInvoiceId-1
     [Documentation]  Provider apply a coupon after waitlist ,done payment and settil bill,create report then get reprt by invoice_id
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
     Log   ${resp.json()} 
@@ -341,12 +360,12 @@ JD-TC-Verify GetReimburseReportByInvoiceId-1
 
 JD-TC-Verify GetReimburseReportByInvoiceId-2
     [Documentation]  Provider agian apply a same coupon then create report and report by InvoiceId
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
 
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Log    ${resp.json()}

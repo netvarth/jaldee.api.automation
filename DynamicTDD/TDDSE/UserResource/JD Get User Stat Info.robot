@@ -60,12 +60,12 @@ JD-TC-UserStatInfo-1
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  
@@ -79,19 +79,22 @@ JD-TC-UserStatInfo-1
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
      ${emails1}=  Emails  ${name3}  Email  ${P_Email}189.ynwtest@netvarth.com  ${views}
      ${bs}=  FakerLibrary.bs
-     ${city}=   get_place
-     ${latti}=  get_latitude
-     ${longi}=  get_longitude
      ${companySuffix}=  FakerLibrary.companySuffix
-     ${postcode}=  FakerLibrary.postcode
-     ${address}=  get_address
+     # ${city}=   get_place
+     # ${latti}=  get_latitude
+     # ${longi}=  get_longitude
+     # ${postcode}=  FakerLibrary.postcode
+     # ${address}=  get_address
+     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+     Set Suite Variable  ${tz}
      ${parking}   Random Element   ${parkingType}
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
+     ${sTime}=  add_timezone_time  ${tz}  0  15  
      Set Suite Variable   ${sTime}
-     ${eTime}=  add_time   0  45
+     ${eTime}=  add_timezone_time  ${tz}  0  45  
      Set Suite Variable   ${eTime}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
@@ -154,8 +157,9 @@ JD-TC-UserStatInfo-1
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=10   max=20 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -193,12 +197,14 @@ JD-TC-UserStatInfo-1
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -250,9 +256,9 @@ JD-TC-UserStatInfo-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
     ${description}=  FakerLibrary.sentence
@@ -263,9 +269,9 @@ JD-TC-UserStatInfo-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id1}  ${resp.json()}
-    ${sTime1}=  add_time   0  0
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.name
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id1}  ${s_id1}
@@ -291,8 +297,8 @@ JD-TC-UserStatInfo-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -323,8 +329,8 @@ JD-TC-UserStatInfo-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id3}  ${resp.json()}
-    ${sTime2}=  add_time   0  15
-    ${eTime2}=  add_time   1  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
+    ${eTime2}=  add_timezone_time  ${tz}  1  15  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -352,7 +358,7 @@ JD-TC-UserStatInfo-1
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get User Stat Details
@@ -367,7 +373,7 @@ JD-TC-UserStatInfo-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -387,7 +393,7 @@ JD-TC-UserStatInfo-1
 JD-TC-UserStatInfo-2
     [Documentation]  Assingn waitlist to more users and check user stat count
     
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -501,7 +507,7 @@ JD-TC-UserStatInfo-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -558,10 +564,10 @@ JD-TC-UserStatInfo-4
     @{resp}=  ResetProviderPassword  ${ph2}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${eTime1}=  add_time   00  30
+    ${eTime1}=  add_timezone_time  ${tz}  00  30  
     Set Suite Variable   ${eTime1}
     ${queue}=    FakerLibrary.word
     ${resp}=  Make Available   ${queue}2   ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1}  ${lid}  ${u_id2}

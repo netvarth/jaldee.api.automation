@@ -19,7 +19,7 @@ JD-TC-GetCustomerCountinGroup-1
 
     [Documentation]  Get customer count in a group of a provider
     
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -94,7 +94,7 @@ JD-TC-GetCustomerCountinGroup-2
 
     [Documentation]  Get customer count in a group of a provider without addding customers to group.
     
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -122,7 +122,7 @@ JD-TC-GetCustomerCountinGroup-3
     
     [Documentation]  Get customer count in a group of a provider after removing one customer from group.
 
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,7 +183,7 @@ JD-TC-GetCustomerCountinGroup-4
 
     [Documentation]  Get customer count in a group of a provider after removing all customers from group.
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -243,7 +243,7 @@ JD-TC-GetCustomerCountinGroup-5
 
     [Documentation]  Get customer count in a group after Add customers to group, remove these customers and add them again. 
 
-    ${resp}=  Provider Login  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -312,7 +312,7 @@ JD-TC-GetCustomerCountinGroup-UH1
 
     [Documentation]  Get customer count in a group of a provider by consumer login.
     
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -391,7 +391,7 @@ JD-TC-GetCustomerCountinGroup-UH2
 
     [Documentation]  Get customer count in a group of a provider without login.
     
-    ${resp}=  Provider Login  ${PUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -470,7 +470,7 @@ JD-TC-GetCustomerCountinGroup-UH3
 
     [Documentation]  Get customer count in a group of a provider with another provider's group id.
     
-    ${resp}=  Provider Login  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -536,7 +536,7 @@ JD-TC-GetCustomerCountinGroup-UH3
 
     END
     
-    ${resp}=  Provider Login  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -550,7 +550,7 @@ JD-TC-GetCustomerCountinGroup-UH4
 
     [Documentation]  Get customer count in a group of a provider with invalid group id.
     
-    ${resp}=  Provider Login  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -32,7 +32,7 @@ JD-TC-UpdateDestinationBank-
 
     [Documentation]  Update destination bank as jaldee bank.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -103,7 +103,7 @@ JD-TC-UpdateDestinationBank-
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -138,7 +138,7 @@ JD-TC-UpdateDestinationBank-1
 
     [Documentation]  Update destination bank as my own bank.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -224,7 +224,7 @@ JD-TC-UpdateDestinationBank-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -258,7 +258,7 @@ JD-TC-UpdateDestinationBank-2
 
     [Documentation]  Update destination bank from my own bank to jaldee bank.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -270,7 +270,7 @@ JD-TC-UpdateDestinationBank-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -286,7 +286,7 @@ JD-TC-UpdateDestinationBank-3
 
     [Documentation]  Update destination bank as jaldee bank then get payment profile.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -299,7 +299,7 @@ JD-TC-UpdateDestinationBank-4
 
     [Documentation]  Update destination bank as my own bank then get payment profile.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -327,7 +327,7 @@ JD-TC-UpdateDestinationBank-5
 
     [Documentation]  update destination bank as jaldee bank itself.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get payment profiles 
@@ -376,7 +376,7 @@ JD-TC-UpdateDestinationBank-UH4
 
     [Documentation]  update destination bank by invalid bank id.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -390,7 +390,7 @@ JD-TC-UpdateDestinationBank-UH5
 
     [Documentation]  update destination bank without passing bank id.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -404,7 +404,7 @@ JD-TC-UpdateDestinationBank-UH6
 
     [Documentation]  update destination bank by passing another providers bank id.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

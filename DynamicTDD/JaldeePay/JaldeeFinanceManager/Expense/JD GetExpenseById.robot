@@ -32,7 +32,7 @@ JD-TC-GetExpenseById-1
 
     [Documentation]  Create Expense for an SP and Get that Expense By id.
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -40,6 +40,7 @@ JD-TC-GetExpenseById-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -151,7 +152,7 @@ JD-TC-GetExpenseById-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word

@@ -35,7 +35,7 @@ JD-TC-GetWaitlistAttachment-1
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -55,16 +55,20 @@ JD-TC-GetWaitlistAttachment-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -76,7 +80,6 @@ JD-TC-GetWaitlistAttachment-1
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
 
@@ -118,7 +121,7 @@ JD-TC-GetWaitlistAttachment-2
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -138,16 +141,20 @@ JD-TC-GetWaitlistAttachment-2
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -159,7 +166,6 @@ JD-TC-GetWaitlistAttachment-2
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -201,7 +207,7 @@ JD-TC-GetWaitlistAttachment-3
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -221,16 +227,20 @@ JD-TC-GetWaitlistAttachment-3
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -242,7 +252,6 @@ JD-TC-GetWaitlistAttachment-3
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -285,7 +294,7 @@ JD-TC-GetWaitlistAttachment-4
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -305,16 +314,20 @@ JD-TC-GetWaitlistAttachment-4
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -326,7 +339,6 @@ JD-TC-GetWaitlistAttachment-4
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -369,7 +381,7 @@ JD-TC-GetWaitlistAttachment-5
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -389,16 +401,20 @@ JD-TC-GetWaitlistAttachment-5
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -410,7 +426,6 @@ JD-TC-GetWaitlistAttachment-5
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -452,7 +467,7 @@ JD-TC-GetWaitlistAttachment-6
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -472,16 +487,20 @@ JD-TC-GetWaitlistAttachment-6
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -493,7 +512,6 @@ JD-TC-GetWaitlistAttachment-6
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -536,7 +554,7 @@ JD-TC-GetWaitlistAttachment-7
     clear_service    ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${resp}=  View Waitlist Settings
@@ -556,16 +574,20 @@ JD-TC-GetWaitlistAttachment-7
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.word
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.word
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -577,7 +599,6 @@ JD-TC-GetWaitlistAttachment-7
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -620,7 +641,7 @@ JD-TC-GetWaitlistAttachment-UH1
 
     [Documentation]   Get waitlist attachment with another provider's waitlist id.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME80}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -646,7 +667,7 @@ JD-TC-GetWaitlistAttachment-UH3
 
     [Documentation]   Get waitlist attachment with invalid waitlist id.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 

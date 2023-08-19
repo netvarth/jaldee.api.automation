@@ -23,11 +23,11 @@ JD-TC-High Level Test Case-1
 	[Documentation]  Checking the appxWaitingTime when calculation mode as Fixed
     
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
 
     clear_queue  ${PUSERNAME156}
     clear_customer   ${PUSERNAME156}
-    ${resp}=  ProviderLogin  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -52,34 +52,42 @@ JD-TC-High Level Test Case-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_2}  ${resp.json()}
     clear_location  ${PUSERNAME156}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element   ${parkingType}
     Set Suite Variable  ${parking}
     ${24hours}    Random Element    ${bool}
     Set Suite Variable  ${24hours}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime}=  subtract_time  3  00
+    ${sTime}=  subtract_timezone_time  ${tz}  3  00
     Set Suite Variable   ${sTime}
-    ${eTime}=  subtract_time   2  00  
+    ${eTime}=  subtract_timezone_time  ${tz}   2  00  
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
-    ${sTime}=  subtract_time  1  00
-    ${eTime}=  add_time  2  00
+    ${sTime}=  subtract_timezone_time  ${tz}  1  00
+    ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${q_name}=   FakerLibrary.word
     ${parallel}=   Random Int   min=1    max=1
     ${capacity}=   Random Int   min=10   max=20
@@ -88,7 +96,7 @@ JD-TC-High Level Test Case-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${word}=  FakerLibrary.word
     
     ${resp}=  AddCustomer  ${CUSERNAME1}
@@ -99,14 +107,12 @@ JD-TC-High Level Test Case-1
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -118,14 +124,12 @@ JD-TC-High Level Test Case-1
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}
    
@@ -137,14 +141,12 @@ JD-TC-High Level Test Case-1
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid6}  ${wid[0]}
     Sleep  2s
@@ -242,7 +244,7 @@ JD-TC-High Level Test Case-1
     # ${length}=  Get Length   ${len}
     # # ${start}  
     # FOR  ${a}  IN RANGE   ${length}
-    #     ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    #     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     #     Log   ${resp.json()}
     #     Should Be Equal As Strings    ${resp.status_code}    200
     #     ${domain}=   Set Variable    ${resp.json()['sector']}
@@ -293,11 +295,13 @@ JD-TC-High Level Test Case-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
-    ${DAY}=  get_date
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
@@ -313,14 +317,18 @@ JD-TC-High Level Test Case-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   4  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  4  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -355,33 +363,41 @@ JD-TC-High Level Test Case-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_2}  ${resp.json()}
     clear_location   ${PUSERPH2}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element   ${parkingType}
     Set Suite Variable  ${parking}
     ${24hours}    Random Element    ${bool}
     Set Suite Variable  ${24hours}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime}=  subtract_time  4  00
+    ${sTime}=  subtract_timezone_time  ${tz}  4  00
     Set Suite Variable   ${sTime}
-    ${eTime}=  subtract_time   3  00
+    ${eTime}=  subtract_timezone_time  ${tz}   3  00
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
-    ${sTime}=  subtract_time  2  00
-    ${eTime}=  add_time  5  00
+    ${sTime}=  subtract_timezone_time  ${tz}  2  00
+    ${eTime}=  add_timezone_time  ${tz}  5  00  
     ${q_name}=   FakerLibrary.word
     ${parallel}=   Random Int   min=1    max=1
     ${capacity}=   Random Int   min=10   max=20
@@ -398,7 +414,7 @@ JD-TC-High Level Test Case-2
     # sleep  5s
 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${word}=  FakerLibrary.word
     # ${cid}=  get_id  ${CUSERNAME1}
 
@@ -432,7 +448,6 @@ JD-TC-High Level Test Case-2
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${mem_id1}  ${mem_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -440,7 +455,6 @@ JD-TC-High Level Test Case-2
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${mem_id1}  ${mem_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     Set Test Variable  ${wid4}  ${wid[1]}
@@ -468,7 +482,6 @@ JD-TC-High Level Test Case-2
     Set Test Variable  ${mem_id4}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${mem_id3}  ${mem_id4}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
     Set Test Variable  ${wid6}  ${wid[1]}

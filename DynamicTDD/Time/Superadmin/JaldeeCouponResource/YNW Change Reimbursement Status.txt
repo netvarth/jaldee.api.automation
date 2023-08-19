@@ -26,7 +26,7 @@ ${longi}        89.524764
 ${latti}        86.524764
 *** Test Cases ***
 
-YNW-TC-Change reimbursement status-1
+JD-TC-Change reimbursement status-1
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME7}
     Comment  Get reimbursement report    
@@ -223,7 +223,7 @@ YNW-TC-Change reimbursement status-1
     Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
 
-YNW-TC-Change reimbursement status-2
+JD-TC-Change reimbursement status-2
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME7}
     Comment  Get reimbursement report    
@@ -380,13 +380,13 @@ YNW-TC-Change reimbursement status-2
     Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
 
-YNW-TC-Change reimbursement status-UH1
+JD-TC-Change reimbursement status-UH1
     Comment  Change reimbursement status without login  
     ${resp}=  Change Reimbursement Status  ${invoice_id}  NOTPAID
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-Change reimbursement status -UH2
+JD-TC-Change reimbursement status -UH2
     Comment   Consumer do Change reimbursement status
     ${resp}=   Consumer Login  ${CUSERNAME}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -394,7 +394,7 @@ YNW-TC-Change reimbursement status -UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-Change reimbursement status -UH3
+JD-TC-Change reimbursement status -UH3
     Comment   Provider do Change reimbursement status
     ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -403,7 +403,7 @@ YNW-TC-Change reimbursement status -UH3
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
 *** Comment ***
-YNW-TC-Change reimbursement status-2
+JD-TC-Change reimbursement status-2
     Comment     Reimburse payment of same jaldee coupon and same provider and Get reimbursement report 
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -493,7 +493,7 @@ YNW-TC-Change reimbursement status-2
 
 
 
-YNW-TC-Change reimbursement status-3
+JD-TC-Change reimbursement status-3
     Comment  SA do reimuburse payment of 2 jaldeee coupon and same provider
     change_system_time  0  1  
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 

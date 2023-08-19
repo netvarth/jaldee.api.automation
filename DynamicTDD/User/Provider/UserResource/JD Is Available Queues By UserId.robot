@@ -41,7 +41,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -51,7 +51,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -65,20 +65,23 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
 
-    ${sTime}=  subtract_time  3  00
+    ${sTime}=  subtract_timezone_time  ${tz}  3  00
     Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_time   4  30
+    ${eTime}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -108,12 +111,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}
+        ${resp}=  Enable Waitlist
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep   01s
 
     ${resp}=  Get jaldeeIntegration Settings
@@ -129,9 +134,16 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -159,16 +171,17 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
 
     Set Suite Variable  ${list}
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  00
+    ${eTime1}=  add_timezone_time  ${tz}  3  00  
     Set Suite Variable   ${eTime1}
     # ${lid}=  Create Sample Location
     # Set Suite Variable  ${lid}
@@ -215,7 +228,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
 JD-TC-Is AvailableQueueNow ByProviderId-2
     [Documentation]    AvailableNow is False, when vacation create
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -272,11 +285,12 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
        
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -295,7 +309,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
     Verify Response    ${resp}   availableNow=${bool[1]}
 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${CUR_DAY}
     ${desc}=    FakerLibrary.name
     Set Test Variable      ${desc}
@@ -327,7 +341,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
 JD-TC-Is AvailableQueueNow ByProviderId-3
     [Documentation]    AvailableNow is False, when queue is Future timeslot
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -378,11 +392,11 @@ JD-TC-Is AvailableQueueNow ByProviderId-3
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
        
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -406,7 +420,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-3
 JD-TC-Is AvailableQueueNow ByProviderId-4
     [Documentation]    AvailableNow is False, when queue is a Non working day
     
-    ${resp}=  Provider Login  ${MUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -415,9 +429,16 @@ JD-TC-Is AvailableQueueNow ByProviderId-4
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
-    ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    IF  '${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     # ${resp}=   Change License Package  ${highest_package[0]}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
@@ -433,12 +454,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-4
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     # sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -482,14 +505,19 @@ JD-TC-Is AvailableQueueNow ByProviderId-4
     # Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${userSubDomain}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
 
-    ${curr_weekday}=  get_weekday
+    ${curr_weekday}=  get_timezone_weekday  ${tz}
     ${daygap}=  Evaluate  7-${curr_weekday}
-    ${DAY1}=  add_date  ${daygap}
+    ${DAY1}=  db.add_timezone_date  ${tz}  ${daygap}
 
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60    
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60      
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id2}  ${u_id1}
     ${queue_name}=  FakerLibrary.name
      ${queue_name}=  FakerLibrary.name
@@ -507,7 +535,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-4
    
 JD-TC-Is AvailableQueueNow ByProviderId-5
     [Documentation]    check Queue is AvailableNow By ProviderId with location disable
-    ${resp}=  Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -531,9 +559,16 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
-    ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    IF  '${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -546,12 +581,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     # Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     # sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -601,10 +638,15 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
        
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
 
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60    
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60      
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id3}  ${u_id1}
     ${queue_name}=  FakerLibrary.name
     ${queue_name}=  FakerLibrary.name
@@ -639,7 +681,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
 
 JD-TC-Is AvailableQueueNow ByProviderId-6
     [Documentation]   check  Queue is AvailableNow By ProviderId with queue disable
-    ${resp}=  Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -662,9 +704,16 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
-    ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    IF  '${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -721,10 +770,15 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
     Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
        
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
 
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60    
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60      
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id4}  ${u_id1}
     ${queue_name}=  FakerLibrary.name
     ${queue_name}=  FakerLibrary.name
@@ -754,7 +808,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
   
 JD-TC-Is AvailableQueueNow ByProviderId-7
     [Documentation]    check Queue is AvailableNow By ProviderId with multile queues and one queue is disabled
-    ${resp}=  Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -763,9 +817,16 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
-    ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    IF  '${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
    
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -823,10 +884,15 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
     Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
        
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
 
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60    
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60      
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id3}  ${u_id1}
     ${queue_name}=  FakerLibrary.name
     ${queue_name}=  FakerLibrary.name
@@ -835,8 +901,9 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id2}  ${resp.json()}
 
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  60    
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}   1  60    
     ${s_id}=  Create Sample Service For User  ${SERVICE2}  ${dep_id3}  ${u_id1}
     ${queue_name}=  FakerLibrary.name
     ${queue_name}=  FakerLibrary.name
@@ -862,7 +929,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
 
 JD-TC-Is AvailableQueueNow ByProviderId-8
     [Documentation]    check Queue is AvailableNow By ProviderId with no queues are there 
-    ${resp}=  Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -872,9 +939,16 @@ JD-TC-Is AvailableQueueNow ByProviderId-8
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
-    ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    IF  '${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
    
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -931,6 +1005,10 @@ JD-TC-Is AvailableQueueNow ByProviderId-8
     Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
        
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${list}=  Create List    1  2  3  4  5  6
     
     ${resp}=    Is Available Queue Now ByProviderId    ${u_id1}
@@ -953,7 +1031,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-UH1
 JD-TC-Is AvailableQueueNow ByProviderId-UH2
     [Documentation]   Another  Provider login 
 
-    ${resp}=  Provider Login  ${MUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

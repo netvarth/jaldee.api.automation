@@ -20,7 +20,7 @@ ${self}                   0
 JD-TC-CreateGroup-1
     [Documentation]  Create a customer group 
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -47,7 +47,7 @@ JD-TC-CreateGroup-1
 JD-TC-CreateGroup-2
     [Documentation]  Create more than one customer group
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -102,7 +102,7 @@ JD-TC-CreateGroup-2
 JD-TC-CreateGroup-3
     [Documentation]  Create a group without description
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -131,7 +131,7 @@ JD-TC-CreateGroup-3
 # JD-TC-CreateGroup-4
 #     [Documentation]  Create a group without display name
 
-#     ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -160,7 +160,7 @@ JD-TC-CreateGroup-3
 JD-TC-CreateGroup-5
     [Documentation]  Create a group, update its name, and create another group with 1st group's old name.
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -205,7 +205,7 @@ JD-TC-CreateGroup-5
 JD-TC-CreateGroup-UH1
     [Documentation]  Create 2 groups with same name
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +266,7 @@ JD-TC-CreateGroup-UH3
 JD-TC-CreateGroup-UH4
     [Documentation]  Create a group without group name
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -283,7 +283,7 @@ JD-TC-CreateGroup-UH4
 JD-TC-CreateGroup-UH5
     [Documentation]  Create a group, update its name, and create another group with this new name.
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -320,7 +320,7 @@ JD-TC-CreateGroup-UH5
 JD-TC-CreateGroup-6
     [Documentation]  Create a customer group with  generateGrpMemId true
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -342,7 +342,7 @@ JD-TC-CreateGroup-6
 JD-TC-CreateGroup-7
     [Documentation]  Create a group  generateGrpMemId false
     
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

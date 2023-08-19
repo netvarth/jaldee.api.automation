@@ -71,12 +71,15 @@ JD-TC-Communication Between Consumer and Provider-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
-    Log   ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    # Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+100100602
@@ -95,14 +98,18 @@ JD-TC-Communication Between Consumer and Provider-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -179,18 +186,16 @@ JD-TC-Communication Between Consumer and Provider-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  30
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
     Log  ${resp.json()}
@@ -213,8 +218,8 @@ JD-TC-Communication Between Consumer and Provider-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_s2}  ${resp.json()}
 
-    ${sTime2}=  add_time  0  30
-    ${eTime2}=  add_time   0  45
+    ${sTime2}=  add_timezone_time  ${tz}  0  30  
+    ${eTime2}=  add_timezone_time  ${tz}  0  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}   ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2} 
@@ -262,7 +267,7 @@ JD-TC-Communication Between Consumer and Provider-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get provider communications
@@ -281,10 +286,12 @@ JD-TC-Communication Between Consumer and Provider-2
     clear_consumer_msgs  ${CUSERNAME3}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -305,6 +312,8 @@ JD-TC-Communication Between Consumer and Provider-2
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -332,7 +341,7 @@ JD-TC-Communication Between Consumer and Provider-2
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
  
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
@@ -357,7 +366,7 @@ JD-TC-Communication Between Consumer and Provider-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -378,10 +387,12 @@ JD-TC-Communication Between Consumer and Provider-3
     clear_consumer_msgs  ${CUSERNAME3}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=  Get Consumer Notification Settings
     Log  ${resp.json()}
@@ -417,6 +428,8 @@ JD-TC-Communication Between Consumer and Provider-3
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
 
@@ -431,7 +444,7 @@ JD-TC-Communication Between Consumer and Provider-3
     ${cid1}=  get_id  ${CUSERNAME28}
 
     ${cnote}=   FakerLibrary.word
-    ${DAY1}=   add_date   2
+    ${DAY1}=   db.add_timezone_date  ${tz}   2
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${p1_q1}  ${DAY1}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -439,7 +452,7 @@ JD-TC-Communication Between Consumer and Provider-3
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
-    ${resp}=  Delete Waitlist Consumer  ${wid1}  ${pid0}
+    ${resp}=  Cancel Waitlist  ${wid1}  ${pid0}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # sleep   3s
@@ -464,7 +477,7 @@ JD-TC-Communication Between Consumer and Provider-3
     # # ${defaultmsg}=  Replace String  ${defaultmsg}  [service]  ${P1SERVICE1}
     # ${defaultmsg}=  Replace String  ${defaultmsg}  [date]  ${date}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
  
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME28}
@@ -474,8 +487,8 @@ JD-TC-Communication Between Consumer and Provider-3
 
     ${resp}=   Get Waitlist EncodedId    ${wid1}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid1}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${W_uuid1}   ${resp.json()}
     
     Set Suite Variable  ${W_encId}  ${resp.json()}
 
@@ -514,7 +527,7 @@ JD-TC-Communication Between Consumer and Provider-3
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -534,10 +547,12 @@ JD-TC-Communication Between Consumer and Provider-4
     clear_consumer_msgs  ${CUSERNAME28}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -562,6 +577,8 @@ JD-TC-Communication Between Consumer and Provider-4
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -600,7 +617,7 @@ JD-TC-Communication Between Consumer and Provider-4
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -620,10 +637,12 @@ JD-TC-Communication Between Consumer and Provider-5
     clear_consumer_msgs  ${CUSERNAME28}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -644,6 +663,8 @@ JD-TC-Communication Between Consumer and Provider-5
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -682,7 +703,7 @@ JD-TC-Communication Between Consumer and Provider-5
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -702,10 +723,12 @@ JD-TC-Communication Between Consumer and Provider-6
     clear_consumer_msgs  ${CUSERNAME28}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -726,6 +749,8 @@ JD-TC-Communication Between Consumer and Provider-6
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -764,7 +789,7 @@ JD-TC-Communication Between Consumer and Provider-6
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -784,10 +809,12 @@ JD-TC-Communication Between Consumer and Provider-7
     clear_consumer_msgs  ${CUSERNAME28}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -808,6 +835,8 @@ JD-TC-Communication Between Consumer and Provider-7
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -846,7 +875,7 @@ JD-TC-Communication Between Consumer and Provider-7
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -867,10 +896,12 @@ JD-TC-Communication Between Consumer and Provider-8
     clear_consumer_msgs  ${CUSERNAME3}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -891,6 +922,8 @@ JD-TC-Communication Between Consumer and Provider-8
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -934,7 +967,7 @@ JD-TC-Communication Between Consumer and Provider-8
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -954,10 +987,12 @@ JD-TC-Communication Between Consumer and Provider-9
     clear_consumer_msgs  ${CUSERNAME3}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -978,6 +1013,8 @@ JD-TC-Communication Between Consumer and Provider-9
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -1018,7 +1055,7 @@ JD-TC-Communication Between Consumer and Provider-9
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -1038,10 +1075,12 @@ JD-TC-Communication Between Consumer and Provider-10
     clear_consumer_msgs  ${CUSERNAME28}
     clear_provider_msgs  ${PUSERPH0}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1062,6 +1101,8 @@ JD-TC-Communication Between Consumer and Provider-10
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -1100,7 +1141,7 @@ JD-TC-Communication Between Consumer and Provider-10
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get provider communications
@@ -1133,7 +1174,7 @@ JD-TC-Communication Between Consumer and Provider-UH2
     ${cid}=  get_id  ${CUSERNAME28}
     
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1156,6 +1197,8 @@ JD-TC-Communication Between Consumer and Provider-UH2
     Set Test Variable   ${p1_q1}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
 
     ${resp}=  ProviderLogout
@@ -1193,7 +1236,7 @@ JD-TC-Communication Between Consumer and Provider-UH2
 
 JD-TC-Communication Between Consumer and Provider-UH2
 	[Documentation]  Communication Between Consumer and Provider by provider login
-	${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  CommunicationBetweenConsumerAndProvider  ${pid0}  ${wid}  Thank you for your message
     Should Be Equal As Strings  ${resp.status_code}  401 

@@ -27,7 +27,7 @@ JD-TC-ProviderrejectApptRequest-1
 
     [Documentation]   Reject an appt request by provider..
 
-    ${resp}=  Provider Login  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -39,7 +39,7 @@ JD-TC-ProviderrejectApptRequest-1
 
     clear_appt_schedule   ${PUSERNAME11}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${SERVICE1}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10

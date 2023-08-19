@@ -95,13 +95,14 @@ JD-TC-ReleaseWlQnrForConsumer-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -162,7 +163,7 @@ JD-TC-ReleaseWlQnrForConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -175,6 +176,7 @@ JD-TC-ReleaseWlQnrForConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -188,9 +190,9 @@ JD-TC-ReleaseWlQnrForConsumer-1
 
     clear_queue   ${PUSERNAME17}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -275,7 +277,7 @@ JD-TC-ReleaseWlQnrForConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -308,7 +310,7 @@ JD-TC-ReleaseWlQnrForConsumer-1
 JD-TC-ReleaseWlQnrForConsumer-2
     [Documentation]  Release Wl for Consumer where release status is unreleased
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -340,7 +342,7 @@ JD-TC-ReleaseWlQnrForConsumer-2
 
 JD-TC-ReleaseWlQnrForConsumer-3
     [Documentation]  Release Wl for Consumer to the same status again
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -360,7 +362,7 @@ JD-TC-ReleaseWlQnrForConsumer-3
 JD-TC-ReleaseWlQnrForConsumer-UH1
     [Documentation]  Release Wl for Consumer where release status is released and check with another consumer
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -393,7 +395,7 @@ JD-TC-ReleaseWlQnrForConsumer-UH1
 JD-TC-ReleaseWlQnrForConsumer-UH2
     [Documentation]  Release Wl for Consumer with empty questionnaire id
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -409,7 +411,7 @@ JD-TC-ReleaseWlQnrForConsumer-UH2
 JD-TC-ReleaseWlQnrForConsumer-UH3
     [Documentation]  Release Wl for Consumer with empty order id
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -425,7 +427,7 @@ JD-TC-ReleaseWlQnrForConsumer-UH3
 JD-TC-ReleaseWlQnrForConsumer-UH4
     [Documentation]  Release Wl for Consumer with empty relese status
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -441,7 +443,7 @@ JD-TC-ReleaseWlQnrForConsumer-UH4
 JD-TC-ReleaseWlQnrForConsumer-UH5
     [Documentation]  Release Wl for Consumer with invalid questionnaire id
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -459,7 +461,7 @@ JD-TC-ReleaseWlQnrForConsumer-UH5
 
 JD-TC-ReleaseWlQnrForConsumer-UH6
     [Documentation]  Release Wl for Consumer with invalid Appmt Id
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -478,7 +480,7 @@ JD-TC-ReleaseWlQnrForConsumer-UH6
 JD-TC-ReleaseWlQnrForConsumer-4
     [Documentation]  Release Wl for Provider Consumer where release status is released
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -541,7 +543,7 @@ JD-TC-ReleaseWlQnrForConsumer-4
 JD-TC-ReleaseOrderQnrForConsumer-5
     [Documentation]  Release Order for Provider Consumer where release status is unreleased
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

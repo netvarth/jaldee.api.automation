@@ -15,7 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-GetTeamById-1
      [Documentation]  Get Team by id at account level
-     ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -36,17 +36,19 @@ JD-TC-GetTeamById-1
 
 JD-TC-GetTeamById-2
      [Documentation]  Get team by id by user who has usertype PROVIDER and admin privilage TRUE
-     ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
      ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
      
      sleep  2s
      ${resp}=  Get Departments
@@ -68,7 +70,7 @@ JD-TC-GetTeamById-2
      @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get Team By Id  ${t_id1}
      Log   ${resp.json()}
@@ -77,7 +79,7 @@ JD-TC-GetTeamById-2
 
 JD-TC-GetTeamById-3
      [Documentation]  Get team by id by  user login with user type ADMIN
-     ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330062
@@ -113,7 +115,7 @@ JD-TC-GetTeamById-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get Team By Id  ${t_id1}
      Log   ${resp.json()}
@@ -123,7 +125,7 @@ JD-TC-GetTeamById-3
 
 JD-TC-GetTeamById-4
      [Documentation]  Get team by id by user who has usertype PROVIDER and admin privilage FALSE(Evaery user can see teams)
-     ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+338097
@@ -159,7 +161,7 @@ JD-TC-GetTeamById-4
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${team_size2}=  Random Int  min=10  max=50

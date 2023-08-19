@@ -24,7 +24,7 @@ JD-TC-GetQueueWaitingTime-1
 
       [Documentation]   Get queue waiting time after ${waitlist_actions[1]} when calulation mode as ML
       
-      ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       clear_service   ${PUSERNAME171}
       clear_location  ${PUSERNAME171}
@@ -33,15 +33,15 @@ JD-TC-GetQueueWaitingTime-1
 
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY1}=  get_date
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY1}  ${DAY1}
-      ${DAY2}=  add_date  10      
+      ${DAY2}=  db.add_timezone_date  ${tz}  10        
       Set Suite Variable  ${DAY2}  ${DAY2}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}  ${list}
-      ${sTime1}=  subtract_time  1  00
+      ${sTime1}=  subtract_timezone_time  ${tz}  1  00
       Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_time   0  30
+      ${eTime1}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime1}
       ${lid}=  Create Sample Location
       Set Suite Variable  ${lid}
@@ -66,7 +66,6 @@ JD-TC-GetQueueWaitingTime-1
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
      
@@ -78,7 +77,6 @@ JD-TC-GetQueueWaitingTime-1
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${WaitingTime}=  Evaluate  ${service_durtn}*2
@@ -101,13 +99,12 @@ JD-TC-GetQueueWaitingTime-1
 
 JD-TC-GetQueueWaitingTime-2
       [Documentation]   Get Queue waiting time after CANCEL when calulation mode as ML
-      ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
      
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id2}  ${wid[0]}
      
@@ -119,7 +116,6 @@ JD-TC-GetQueueWaitingTime-2
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id3}  ${wid[0]}
       ${resp}=  Get Queue Waiting Time  ${qid1}  ${DAY1}
@@ -138,7 +134,7 @@ JD-TC-GetQueueWaitingTime-2
       
 JD-TC-GetQueueWaitingTime-3
       [Documentation]   Get Queue waiting time after ${waitlist_actions[3]} when calulation mode as ML
-      ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
      
       ${resp}=  AddCustomer  ${CUSERNAME5}
@@ -148,7 +144,6 @@ JD-TC-GetQueueWaitingTime-3
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}   ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
      
@@ -159,7 +154,6 @@ JD-TC-GetQueueWaitingTime-3
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}   ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Get Queue Waiting Time  ${qid1}  ${DAY1}
@@ -188,9 +182,9 @@ JD-TC-GetQueueWaitingTime-3
 
 JD-TC-GetQueueWaitingTime-4
       [Documentation]   Get future queue waiting time  when calulation mode as ML
-      ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY2}=  add_date  1
+      ${DAY2}=  db.add_timezone_date  ${tz}  1  
       Set Suite Variable  ${DAY2}  ${DAY2}
       
       ${resp}=  AddCustomer  ${CUSERNAME6}
@@ -200,7 +194,6 @@ JD-TC-GetQueueWaitingTime-4
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}   ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
       ${resp}=  Get Queue Waiting Time  ${qid1}  ${DAY2}
@@ -215,7 +208,7 @@ JD-TC-GetQueueWaitingTime-4
 
 JD-TC-GetQueueWaitingTime-5
       [Documentation]   Get future queue waiting time after CANCEL when calulation mode as ML
-      ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
      
       ${resp}=  AddCustomer  ${CUSERNAME7}
@@ -225,7 +218,6 @@ JD-TC-GetQueueWaitingTime-5
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}   ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
     
@@ -236,7 +228,6 @@ JD-TC-GetQueueWaitingTime-5
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}   ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Get Queue Waiting Time  ${qid1}  ${DAY2}
@@ -255,7 +246,7 @@ JD-TC-GetQueueWaitingTime-5
       
 JD-TC-GetQueueWaitingTime-6
       [Documentation]   Get future queue waiting time after ${waitlist_actions[3]} when calulation mode as ML
-      ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  AddCustomer  ${CUSERNAME8}
@@ -265,7 +256,6 @@ JD-TC-GetQueueWaitingTime-6
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}   ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id}  ${wid[0]}
      
@@ -276,7 +266,6 @@ JD-TC-GetQueueWaitingTime-6
 
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}   ${qid1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Get Queue Waiting Time  ${qid1}  ${DAY2}

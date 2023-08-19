@@ -30,7 +30,7 @@ JD-TC-GetAppointmentNote-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME255}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME255}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -63,10 +63,10 @@ JD-TC-GetAppointmentNote-1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -169,7 +169,7 @@ JD-TC-GetAppointmentNote-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME254}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME254}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -201,10 +201,10 @@ JD-TC-GetAppointmentNote-2
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -275,7 +275,7 @@ JD-TC-GetAppointmentNote-UH2
 
     [Documentation]  Provider gets note for non existant appointment id
 
-    ${resp}=  Provider Login  ${PUSERNAME255}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME255}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -311,7 +311,7 @@ JD-TC-GetAppointmentNote-UH5
 
     [Documentation]  Provider gets note for an appointment using another provider's appointment id
 
-    ${resp}=  Provider Login  ${PUSERNAME254}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME254}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

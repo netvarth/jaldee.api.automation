@@ -56,7 +56,7 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-1
                                   
     [Documentation]              Verify Otp for Consumer Acceptance Phone
 
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -106,9 +106,14 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
   
@@ -677,7 +682,7 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-2
                                   
     [Documentation]              Verify Otp for Consumer Acceptance Phone  without otp generation
 
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -909,7 +914,7 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-3
                                   
     [Documentation]              Verify Otp for Consumer Acceptance Phone  with invalid phone num
 
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -938,7 +943,7 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-6
     [Documentation]              Verify Otp for Consumer Acceptance Phone  with invalid loan uid
 
      
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -975,7 +980,7 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-9
                                   
     [Documentation]              Verify Otp for Consumer Acceptance Phone  another provider login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME23}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -988,7 +993,7 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-10
                                   
     [Documentation]              Verify Otp for Consumer Acceptance Phone   with empty loan uid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME75}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     

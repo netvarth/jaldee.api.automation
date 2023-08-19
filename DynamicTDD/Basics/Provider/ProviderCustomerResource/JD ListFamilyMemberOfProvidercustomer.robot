@@ -17,10 +17,15 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
       
 JD-TC-ListFamilyMemberOfProvidercustomer-1
       [Documentation]    List a family member details by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME23}+73003
@@ -55,7 +60,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-1
 
 JD-TC-ListFamilyMemberOfProvidercustomer-2
       [Documentation]    List more family members details by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -88,9 +93,14 @@ JD-TC-ListFamilyMemberOfProvidercustomer-2
 
 JD-TC-ListFamilyMemberOfProvidercustomer-3
       [Documentation]    Add a family member by provider own his family memeber then list family memeber details
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
       clear_FamilyMember  ${pid}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -124,9 +134,14 @@ JD-TC-ListFamilyMemberOfProvidercustomer-3
 
 JD-TC-ListFamilyMemberOfProvidercustomer-4
       [Documentation]    Adding customer and add 2 familymembers , after if the consumer signup ,familymembers are list there.
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${p_id}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME23}+73099
@@ -195,9 +210,14 @@ JD-TC-ListFamilyMemberOfProvidercustomer-4
 
 JD-TC-ListFamilyMemberOfProvidercustomer-5
       [Documentation]    Adding a customer and add two family members with two different providers ,in this case one family member is common and if the consumer sign up,then  the list of family members should not be duplicated.
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${p_id}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
@@ -240,7 +260,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-5
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${mem_id2}  ${resp.json()}
       ${resp}=  ProviderLogout
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -313,7 +333,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH1
 
 JD-TC-ListFamilyMemberOfProvidercustomer-UH2
       [Documentation]    invalid id using in ListFamilyMemberByProvider
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  ListFamilyMemberByProvider   0
       Log  ${resp.json()}
@@ -322,7 +342,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH2
 
 JD-TC-ListFamilyMemberOfProvidercustomer-UH3
       [Documentation]    Adding a customer and add two family members  and another provider trying to list these family member
-      ${resp}=  ProviderLogin  ${PUSERNAME176}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME176}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       clear_location  ${PUSERNAME176}
@@ -332,9 +352,15 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH3
       ${resp}=   ProviderKeywords.Get Queues
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
       # Log   ${resp.json()}
       # Should Be Equal As Strings  ${resp.status_code}  200
@@ -357,12 +383,11 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH3
       ${resp}=  AddFamilyMemberByProvider    ${c_id}   ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  
       Log  ${resp.json()}
       Set Test Variable  ${mem_id1}  ${resp.json()}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${c_id}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${mem_id0}   
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -384,7 +409,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH3
       Should Be Equal As Strings  ${resp.json()[1]['gender']}  ${gender1}
 
       ${resp}=  ProviderLogout
-      ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       clear_location  ${PUSERNAME1}
@@ -393,9 +418,15 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH3
       ${resp}=   ProviderKeywords.Get Queues
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
       # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
       # Log   ${resp.json()}
@@ -409,7 +440,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH3
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Should Be Equal As Strings   ${resp.json()}   []
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${c_id1}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${mem_id0}
       Log  ${resp.json()}
@@ -420,7 +451,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH3
 
 JD-TC-ListFamilyMemberOfProvidercustomer-UH4
       [Documentation]    Adding a customer and add one family members with one provider and add to waitlist  and list family member then delete that family member
-      ${resp}=  ProviderLogin  ${PUSERNAME176}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME176}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       clear_location  ${PUSERNAME176}
@@ -429,9 +460,15 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH4
       ${resp}=   ProviderKeywords.Get Queues
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
       # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME4}
       # Log   ${resp.json()}
@@ -449,11 +486,10 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH4
       ${resp}=  AddFamilyMemberByProvider  ${cid}  ${firstname}  ${lastname}  ${dob}  ${gender}  
       Log  ${resp.json()}
       Set Test Variable  ${mem_id0}  ${resp.json()}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${mem_id0}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -480,7 +516,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH4
 ***comment***
 JD-TC-AddFamilyMemberByProvider-3
       [Documentation]    Add a Familymember by provider switched to a consumer
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${id1}=  get_id  ${PUSERNAME0}
       ${firstname}=  FakerLibrary.first_name
@@ -514,7 +550,7 @@ JD-TC-AddFamilyMemberByProvider-3
 ***comment***
 JD-TC-ListFamilyMemberByProvider-3
       [Documentation]    List Familymember details by provider as a consumer
-      ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${pid}  ${resp.json()['id']}
       clear_FamilyMember  ${pid}

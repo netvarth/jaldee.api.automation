@@ -24,7 +24,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Remove_Item_Label-1
 	[Documentation]   Remove label from a valid item
     clear_Item  ${PUSERNAME19}
-    ${resp}=  ProviderLogin  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${displayName1}=   FakerLibrary.name 
@@ -127,7 +127,7 @@ JD-TC-Remove_Item_Label-1
 
 JD-TC-Remove_Item_Label-UH1
     [Documentation]  Remove a label which is already Removed
-    ${resp}=  ProviderLogin  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Remove Item Label   ${id}    ${l_name[0]}
     Log   ${resp.json()}
@@ -156,7 +156,7 @@ JD-TC-Remove_Item_Label -UH3
 
 JD-TC-Remove_Item_Label-UH4
     [Documentation]  Remove an invalid label 
-    ${resp}=  ProviderLogin  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Remove Item Label   ${id}    INVALID_LABEL_NAME
     Log   ${resp.json()}
@@ -166,7 +166,7 @@ JD-TC-Remove_Item_Label-UH4
 
 JD-TC-Remove_Item_Label-UH5
     [Documentation]  Remove a Label by item_id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=   Remove Item Label   ${invalid_id}    ${l_name[0]}
@@ -177,7 +177,7 @@ JD-TC-Remove_Item_Label-UH5
 
 JD-TC-Remove_Item_Label-UH6
     [Documentation]  Remove a Label by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Remove Item Label   ${id}    ${l_name[0]}
     Log   ${resp.json()}

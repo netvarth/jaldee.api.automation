@@ -21,38 +21,32 @@ ${service_duration}   5
 JD-TC-Get Future Waitlist Count-1
 	[Documentation]  Add To Waitlist By Consumer valid  provider
     [Setup]  Run Keywords  clear_queue  ${PUSERNAME205}  AND  clear_location  ${PUSERNAME205}
-    ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
 
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Change License Package  ${pkgid[0]}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${pid}=  get_acc_id  ${PUSERNAME205}
-    Set Suite Variable  ${pid}  
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${DAY}=  get_date
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
-    ${TOMORROW}=  add_date  2 
+    ${TOMORROW}=  db.add_timezone_date  ${tz}  2   
     Set Suite Variable  ${TOMORROW}
-    ${TOMORROW1}=  add_date  4
+    ${TOMORROW1}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable  ${TOMORROW1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-
-
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -79,8 +73,8 @@ JD-TC-Get Future Waitlist Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s2}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -89,8 +83,8 @@ JD-TC-Get Future Waitlist Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_q1}  ${resp.json()}
 
-    ${sTime2}=  add_time  1  00
-    ${eTime2}=  add_time  1  30
+    ${sTime2}=  add_timezone_time  ${tz}  1  00  
+    ${eTime2}=  add_timezone_time  ${tz}  1  30  
     ${p1queue2}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -128,14 +122,12 @@ JD-TC-Get Future Waitlist Count-1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TOMORROW}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid2}  ${wid[0]}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q2}  ${TOMORROW}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid3}  ${wid[0]}
 
@@ -284,7 +276,7 @@ JD-TC-Get Future Waitlist Count-15
     [Documentation]  Get Future Waitlist By service-eq=${p1_s2}  waitlistStatus-eq=CANCEL
     ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Delete Waitlist Consumer  ${uuid2}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid2}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Future Waitlist Count   service-eq=${p1_s2}  waitlistStatus-eq=${wl_status[4]}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -22,7 +22,7 @@ JD-TC-DisableJaldeeCoupon-1
 
     [Documentation]   Disable a jaldee coupon by provider
 
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -40,10 +40,10 @@ JD-TC-DisableJaldeeCoupon-1
 
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
     
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2} 
     
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -80,7 +80,7 @@ JD-TC-DisableJaldeeCoupon-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -120,8 +120,8 @@ JD-TC-DisableJaldeeCoupon-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  1
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  1  
 
     ${cupn_codeDes}=    FakerLibrary.word
     Set Suite Variable   ${cupn_codeDes}
@@ -140,7 +140,7 @@ JD-TC-DisableJaldeeCoupon-UH1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -149,7 +149,7 @@ JD-TC-DisableJaldeeCoupon-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     change_system_date  2
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -180,8 +180,8 @@ JD-TC-DisableJaldeeCoupon-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  1
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  1  
     ${cupn_code01}=    FakerLibrary.word
     Set Suite Variable   ${cupn_code01}
 
@@ -199,7 +199,7 @@ JD-TC-DisableJaldeeCoupon-UH2
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -231,7 +231,7 @@ JD-TC-DisableJaldeeCoupon-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
     
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     Set Suite Variable  ${s_id2}   ${resp['service_id']}
     Set Suite Variable  ${lid}   ${resp['location_id']}
@@ -248,7 +248,6 @@ JD-TC-DisableJaldeeCoupon-UH2
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${des}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}  
 

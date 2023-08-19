@@ -46,7 +46,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-1
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -70,7 +70,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-1
 JD-TC-CreateSPwithPseudoCorpandBranch-2
 	[Documentation]  create Multiple SPs 
 
-	${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -107,7 +107,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -167,7 +167,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-UH1
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_A}
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 

@@ -37,11 +37,11 @@ JD-TC-Payment By Consumer-1
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME110}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
@@ -63,7 +63,8 @@ JD-TC-Payment By Consumer-1
     ${resp}=  Get Locations
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${lid}  ${resp.json()[0]['id']} 
+    Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']} 
    
     ${min_pre1}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=500
@@ -91,8 +92,8 @@ JD-TC-Payment By Consumer-1
     
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  add_time  2   00
-    ${eTime}=  add_time   2   15
+    ${sTime}=  add_timezone_time  ${tz}  2  00  
+    ${eTime}=  add_timezone_time  ${tz}  2  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id1}  ${s_id2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -102,7 +103,6 @@ JD-TC-Payment By Consumer-1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY}  ${msg}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     
@@ -135,14 +135,13 @@ JD-TC-Payment By Consumer-2
 
     [Documentation]  prepay partial amount and pay full amount in bill
 
-    ${resp}=   ProviderLogin  ${PUSERNAME110}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${msg}=  FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY}  ${msg}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}    
     

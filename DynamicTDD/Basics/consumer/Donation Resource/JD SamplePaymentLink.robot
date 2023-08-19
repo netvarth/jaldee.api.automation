@@ -36,7 +36,7 @@ JD-TC-GetDonationPaymentViaLink-1
 
         [Documentation]   Consumer Get Donation Payment Via Link
 
-        ${resp}=  Provider Login  ${PUSERNAME150}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -58,7 +58,12 @@ JD-TC-GetDonationPaymentViaLink-1
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
@@ -105,7 +110,7 @@ JD-TC-GetDonationPaymentViaLink-1
         # Set Suite Variable  ${c_acc_id}
         # ${acc_id}=  get_acc_id  ${PUSERNAME150}
         # Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         # log  ${con_id}

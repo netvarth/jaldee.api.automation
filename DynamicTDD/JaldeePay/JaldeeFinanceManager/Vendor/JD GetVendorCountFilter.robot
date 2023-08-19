@@ -30,7 +30,7 @@ JD-TC-GetVendorListWithFilter-1
 
     [Documentation]  Create a Vendor for an SP and get without filter parameter.
 
-    ${resp}=  Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -157,7 +157,7 @@ JD-TC-GetVendorListWithFilter-2
 
     [Documentation]  Create a Vendor for an SP and get count with filter-vendorUid.
 
-    ${resp}=  Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

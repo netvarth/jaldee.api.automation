@@ -18,7 +18,7 @@ Variables         /ebs/TDD/varfiles/musers.py
 JD-TC-BranchEnableDisableWaitlist-1
 
     [Documentation]   Disable  waitlist by login as a  valid Branch
-    ${resp}=  ProviderLogin  ${MUSERNAME10}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
@@ -36,7 +36,7 @@ JD-TC-BranchEnableDisableWaitlist-1
 JD-TC-BranchEnableDisableWaitlist-2
 
     [Documentation]  Enable waitlist by login as a  valid provider
-    ${resp}=  ProviderLogin  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
@@ -54,7 +54,7 @@ JD-TC-BranchEnableDisableWaitlist-2
 JD-TC-BranchEnableDisableWaitlist-UH1
 
     [Documentation]  Enable a waitlist when already enabled waitlist
-    ${resp}=  ProviderLogin  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Enable Waitlist
     Log  ${resp.json()}
@@ -64,7 +64,7 @@ JD-TC-BranchEnableDisableWaitlist-UH1
 JD-TC-BranchEnableDisableWaitlist-UH2
 
     [Documentation]  Disable a waitlist when already disabled waitlist
-    ${resp}=  ProviderLogin  ${MUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Waitlist
     Should Be Equal As Strings  ${resp.status_code}  200

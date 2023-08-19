@@ -14,7 +14,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get provider Details-1
     [Documentation]   Service Provider of a valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id}  ${resp.json()['id']}
     Set Suite Variable  ${f_name}  ${resp.json()['firstName']}
@@ -29,7 +29,7 @@ JD-TC-Get provider Details-1
 
 JD-TC-Get provider Detail-UH1
     [Documentation]   Get provider Detail usin another provider id
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Details  ${id}  
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -45,7 +45,7 @@ JD-TC-Get provider Detail-UH2
     
 NW-TC-Get provider Detail-UH3
     [Documentation]   Get provider Detail with invalid id
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Details  0
     Should Be Equal As Strings  ${resp.status_code}  422 

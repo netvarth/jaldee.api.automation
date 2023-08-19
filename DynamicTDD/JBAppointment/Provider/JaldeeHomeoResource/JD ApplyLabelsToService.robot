@@ -36,10 +36,14 @@ JD-TC-ApplyLabelToService-1
     ...    then apply channel label to a service.
 
     
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id}  ${decrypted_data['id']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
     clear_Label  ${PUSERNAME110}  
 
@@ -54,8 +58,13 @@ JD-TC-ApplyLabelToService-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  ProviderLogout
@@ -109,7 +118,7 @@ JD-TC-ApplyLabelToService-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -169,15 +178,15 @@ JD-TC-ApplyLabelToService-2
     [Documentation]   Enable Channel for a provider by super admin(web_jaldee_homeo),
     ...    then apply channel label to a service, then a jaldee consumer try to view that service..
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -236,10 +245,14 @@ JD-TC-ApplyLabelToService-4
     [Documentation]   Enable Channel for a provider by super admin
     ...   (web_jaldee_homeo,android_jaldee_homeo,ios_jaldee_homeo), then apply label to a service
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Test Variable  ${prov_id1}  ${resp.json()['id']}
 
     clear_Label  ${PUSERNAME160}  
 
@@ -283,7 +296,7 @@ JD-TC-ApplyLabelToService-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -310,10 +323,10 @@ JD-TC-ApplyLabelToService-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -447,10 +460,14 @@ JD-TC-ApplyLabelToService-8
     
     [Documentation]   Apply multiple labels to a service including jaldee homeo.
 
-    ${resp}=  Provider Login  ${PUSERNAME162}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Test Variable  ${prov_id1}  ${resp.json()['id']}
 
     clear_Label  ${PUSERNAME162}  
 
@@ -494,7 +511,7 @@ JD-TC-ApplyLabelToService-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME162}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -542,10 +559,10 @@ JD-TC-ApplyLabelToService-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -585,7 +602,7 @@ JD-TC-ApplyLabelToService-9
     ...    then apply channel label to a service in account level.
 
     
-    ${resp}=  Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -602,8 +619,13 @@ JD-TC-ApplyLabelToService-9
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  ProviderLogout
@@ -629,7 +651,7 @@ JD-TC-ApplyLabelToService-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -676,7 +698,7 @@ JD-TC-ApplyLabelToService-10
     ...    then apply channel label to a service in user level.
 
     
-    ${resp}=  Provider Login  ${MUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME111}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -694,8 +716,13 @@ JD-TC-ApplyLabelToService-10
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  ProviderLogout
@@ -721,7 +748,7 @@ JD-TC-ApplyLabelToService-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME111}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -790,7 +817,7 @@ JD-TC-ApplyLabelToService-10
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -828,7 +855,7 @@ JD-TC-ApplyLabelToService-11
     [Documentation]   Try to filter service with label-eq.
 
     
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -843,14 +870,14 @@ JD-TC-ApplyLabelToService-12
     
     [Documentation]   Try to take appointment for that servies.
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     # ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  add_time  0  30
+    # ${sTime1}=  add_timezone_time  ${tz}  0  30  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${schedule_name}=  FakerLibrary.bs
@@ -913,7 +940,7 @@ JD-TC-ApplyLabelToService-13
     
     [Documentation]   Try to take appointment for that servies.
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -924,9 +951,9 @@ JD-TC-ApplyLabelToService-13
          
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
-    ${strt_time}=   subtract_time  1  00
+    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  30 
+    ${end_time}=    add_timezone_time  ${tz}  2  30   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}

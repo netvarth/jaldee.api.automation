@@ -51,12 +51,14 @@ JD-TC-JaldeeCouponAndProviderCoupon-1
 	clear_location  ${PUSERNAME134}
     clear_Coupon   ${PUSERNAME134}
 	clear_jaldeecoupon  ${jcoupon1}
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
-    Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable   ${domain}    ${decrypted_data['sector']}
+    Set Suite Variable   ${subDomain}    ${decrypted_data['subSector']}
+   
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -102,10 +104,7 @@ JD-TC-JaldeeCouponAndProviderCoupon-1
     ${resp}=  SetMerchantId  ${pid}  4825051
     ${pid}=  get_acc_id  ${PUSERNAME134}
     Set Suite Variable  ${pid}
-    ${DAY}=  get_date   
-    Set Suite Variable  ${DAY} 
-
-
+    
     ${gstper}=  Random Element  ${gstpercentage}
     Set Suite Variable    ${gstper}
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -138,17 +137,23 @@ JD-TC-JaldeeCouponAndProviderCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_2}  ${resp.json()}
 
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${description}=  FakerLibrary.sentence
     ${snote}=  FakerLibrary.Word
     ${dis}=  FakerLibrary.Word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
+    Set Suite Variable  ${DAY} 
 
     ${resp}=  Create Location  ${loc}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}   ${address}  free  True  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -158,8 +163,8 @@ JD-TC-JaldeeCouponAndProviderCoupon-1
 
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
 
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${parallel}  ${capacity}  ${lid1}  ${sId_1}  ${sId_2}
     Log  ${resp.json()}
@@ -186,10 +191,10 @@ JD-TC-JaldeeCouponAndProviderCoupon-1
     ${cou_amount}=   Convert To Number   ${cou_amount}
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -225,12 +230,11 @@ JD-TC-JaldeeCouponAndProviderCoupon-1
     Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob}
     Should Be Equal As Strings  ${resp.json()[0]['gender']}  ${gender}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${id}   ${sId_1}  ${q1_l1}  ${DAY}  ${desc}  ${bool[1]}  ${mem_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -243,9 +247,9 @@ JD-TC-JaldeeCouponAndProviderCoupon-1
     Set Suite Variable   ${cupn_name}
     ${cupn_des}=   FakerLibrary.sentence
     Set Suite Variable     ${cupn_des}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${c_des}=   FakerLibrary.sentence
     Set Suite Variable     ${c_des}
@@ -263,7 +267,7 @@ JD-TC-JaldeeCouponAndProviderCoupon-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -337,11 +341,16 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
-    ${DAY}=  get_date
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+   
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+100100302
@@ -360,14 +369,17 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  30 
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -430,10 +442,10 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     ${address}=  get_address
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${loc}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -451,7 +463,7 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
 
     ${pid}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${pid}
-    ${DAY}=  get_date   
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
     Set Suite Variable  ${DAY} 
 
     ${gstper}=  Random Element  ${gstpercentage}
@@ -496,10 +508,10 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     ${cou_amount}=   Convert To Number   ${cou_amount}
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -524,13 +536,13 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     # # Log   ${result.json()}
     # Should Be Equal As Strings  ${result.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -583,9 +595,9 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     Set Suite Variable   ${cupn_name}
     ${cupn_des}=   FakerLibrary.sentence
     Set Suite Variable     ${cupn_des}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${c_des}=   FakerLibrary.sentence
     Set Suite Variable     ${c_des}
@@ -603,7 +615,7 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${tax}=               Evaluate   (${ser_amount1}*${gstper})/100

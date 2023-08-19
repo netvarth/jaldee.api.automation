@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Get Customer count-1
     [Documentation]  Add Customer-1
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${pid}=  get_acc_id  ${PUSERNAME6}
     # Set Suite Variable  ${pid}  ${pid}
@@ -115,7 +115,7 @@ JD-TC-Get Customer count-1
 JD-TC-Get Customer count-2
     [Documentation]  count customer by status
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount   status-eq=ACTIVE  
     Log  ${resp.json()}
@@ -125,7 +125,7 @@ JD-TC-Get Customer count-2
 JD-TC-Get Customer count-3
     [Documentation]  count customer consumer by account
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount   account-eq=${c2}
     Log  ${resp.json()}
@@ -136,7 +136,7 @@ JD-TC-Get Customer count-3
 JD-TC-Get Customer count-4
     [Documentation]  count customer consumer  by Phone number
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount  phoneNo-eq=${phone2}
     Log  ${resp.json()}
@@ -146,7 +146,7 @@ JD-TC-Get Customer count-4
 JD-TC-Get Customer count-5
     [Documentation]  count customer consumer by email id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount  email-eq=${email}
     Log  ${resp.json()}
@@ -158,7 +158,7 @@ JD-TC-Get Customer count-5
 JD-TC-Get Customer count-6
     [Documentation]  count customer consumer by phone number 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount   phoneNo-eq=${phone3}
     Log  ${resp.json()}
@@ -168,7 +168,7 @@ JD-TC-Get Customer count-6
 JD-TC-Get Customer count-7
     [Documentation]  count customer by Genderlist
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount    gender-eq=${Genderlist[1]}
     Log  ${resp.json()}
@@ -177,7 +177,7 @@ JD-TC-Get Customer count-7
 JD-TC-Get Customer count-8
     [Documentation]  count customer   by name  and email
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount     firstName-eq=${f_name1}  email-eq=${email}
     Log  ${resp.json()}
@@ -187,7 +187,7 @@ JD-TC-Get Customer count-8
 JD-TC-Get Customer count-9
     [Documentation]  count customer consumer  by dob
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount   dob-eq=${dob}
     Log  ${resp.json()}
@@ -198,7 +198,7 @@ JD-TC-Get Customer count-9
 JD-TC-Get Customer count-10
     [Documentation]  count customer consumer by lastname
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}    
     ${resp}=  Get consumercount   lastName-eq=${l_name1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -207,7 +207,7 @@ JD-TC-Get Customer count-10
 JD-TC-Get Customer count-11
     [Documentation]  count addcustomer customer by jaldeeid
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount   jaldeeId-eq=${jid1}
     Log  ${resp.json()}
@@ -218,7 +218,7 @@ JD-TC-Get Customer count-11
 JD-TC-Get Customer count-12
     [Documentation]  count addcustomer customer by without input 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount  phoneNo-eq=${phone}
     Log  ${resp.json()}
@@ -228,7 +228,7 @@ JD-TC-Get Customer count-12
 JD-TC-Get Customer count-13
     [Documentation]  count customer by status
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get consumercount   status-eq=INACTIVE 
     Log  ${resp.json()}

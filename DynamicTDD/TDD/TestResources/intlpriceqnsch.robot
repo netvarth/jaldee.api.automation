@@ -25,12 +25,13 @@ JD-TC-CreateService-28
 
     [Documentation]   Create service with supportInternationalConsumer and prePaymentType as percentage
 
-    ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     clear_service   ${PUSERNAME27}
     
@@ -42,6 +43,7 @@ JD-TC-CreateService-28
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=  FakerLibrary.Job
     ${desc}=   FakerLibrary.sentence
@@ -59,10 +61,10 @@ JD-TC-CreateService-28
     Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}   totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[1]}  supportInternationalConsumer=${bool[1]}  internationalAmount=${intlamt}
 
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10     
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  30
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10       
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1

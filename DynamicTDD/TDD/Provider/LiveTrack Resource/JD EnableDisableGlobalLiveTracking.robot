@@ -29,7 +29,7 @@ Get provider by license
     FOR   ${a}  IN RANGE  ${length}
             
         ${Provider_PH}=  Set Variable  ${PUSERNAME${a}}
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -86,11 +86,11 @@ JD-TC-EnableDisableGlobalLiveTrack-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -105,19 +105,22 @@ JD-TC-EnableDisableGlobalLiveTrack-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}081.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -140,7 +143,7 @@ JD-TC-EnableDisableGlobalLiveTrack-1
 JD-TC-EnableDisableGlobalLiveTrack-2
     [Documentation]  Disable Global live tracking
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -161,7 +164,7 @@ JD-TC-EnableDisableGlobalLiveTrack-2
 
 JD-TC-EnableDisableGlobalLiveTrack-3
     [Documentation]  Disable Global live tracking when service live tracking is enabled
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -218,7 +221,7 @@ JD-TC-EnableDisableGlobalLiveTrack-4
 
     comment   Checking with 1st license
     Log   ${licresp.json()[0]['displayName']}
-    ${resp}=   ProviderLogin  ${puser_list[0]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${puser_list[0]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -234,7 +237,7 @@ JD-TC-EnableDisableGlobalLiveTrack-4
 
     comment   Checking with 2nd license  
     Log   ${licresp.json()[1]['displayName']}
-    ${resp}=   ProviderLogin  ${puser_list[1]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${puser_list[1]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -249,7 +252,7 @@ JD-TC-EnableDisableGlobalLiveTrack-4
 
     comment   Checking with 3rd license  
     Log   ${licresp.json()[2]['displayName']}
-    ${resp}=   ProviderLogin  ${puser_list[1]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${puser_list[1]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -266,7 +269,7 @@ JD-TC-EnableDisableGlobalLiveTrack-4
 
         comment   Checking with license  
         Log   ${licresp.json()[${i}]['displayName']}
-        ${resp}=   ProviderLogin  ${puser_list[${i}]}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login  ${puser_list[${i}]}  ${PASSWORD} 
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -314,7 +317,7 @@ JD-TC-EnableDisableGlobalLiveTrack-UH2
 JD-TC-EnableDisableGlobalLiveTrack-UH3
     [Documentation]  Disable global live tracking without Enabling it
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -335,7 +338,7 @@ JD-TC-EnableDisableGlobalLiveTrack-UH3
 JD-TC-EnableDisableGlobalLiveTrack-UH4
     [Documentation]  Enable already enabled global live tracking
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

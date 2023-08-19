@@ -49,7 +49,7 @@ JD-TC-CreateCustomViewApis-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_A}${\n}
@@ -58,9 +58,16 @@ JD-TC-CreateCustomViewApis-1
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -82,18 +89,24 @@ JD-TC-CreateCustomViewApis-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-
+   
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=1  max=5
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -143,7 +156,7 @@ JD-TC-CreateCustomViewApis-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_B}${\n}
@@ -152,9 +165,16 @@ JD-TC-CreateCustomViewApis-2
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
 
     ${dep_name1}=  FakerLibrary.bs
@@ -193,18 +213,24 @@ JD-TC-CreateCustomViewApis-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id01}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-
+    
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=1  max=5
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -227,10 +253,10 @@ JD-TC-CreateCustomViewApis-2
     Set Suite Variable  ${s_id04}  ${resp.json()}
     
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
-    ${sTime1}=  add_time  0  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=30
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -251,9 +277,9 @@ JD-TC-CreateCustomViewApis-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id01}  ${resp.json()}
     
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  45
+    ${eTime1}=  add_timezone_time  ${tz}  2  45  
     Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.name
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id01}  ${s_id02}
@@ -261,9 +287,9 @@ JD-TC-CreateCustomViewApis-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id02}  ${resp.json()}
 
-    ${sTime1}=  add_time  1  40
+    ${sTime1}=  add_timezone_time  ${tz}  1  40  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  40
+    ${eTime1}=  add_timezone_time  ${tz}  2  40  
     Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.name
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id01}  ${s_id03}
@@ -271,9 +297,9 @@ JD-TC-CreateCustomViewApis-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id03}  ${resp.json()}
 
-    ${sTime1}=  add_time  1  50
+    ${sTime1}=  add_timezone_time  ${tz}  1  50  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  50
+    ${eTime1}=  add_timezone_time  ${tz}  2  50  
     Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.name
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id01}  ${s_id04}
@@ -314,7 +340,7 @@ JD-TC-CreateCustomViewApis-2
  
 JD-TC-CreateCustomViewApis-H3
     [Documentation]  Trying to Create CustomView With Appointment
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=  FakerLibrary.name
@@ -325,7 +351,7 @@ JD-TC-CreateCustomViewApis-H3
 
 JD-TC-CreateCustomViewApis-UH0
     [Documentation]  Trying to Create CustomView With invalid Type
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=  FakerLibrary.name
@@ -337,7 +363,7 @@ JD-TC-CreateCustomViewApis-UH0
 
 JD-TC-CreateCustomViewApis-UH1
     [Documentation]  Checking CustomView name with Existing same name
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Create CustomeView   ${name}  ${bool[1]}  ${dept_id}  ${ser_id}  ${q_id}  ${user_id}  ${type}
@@ -347,7 +373,7 @@ JD-TC-CreateCustomViewApis-UH1
 
 JD-TC-CreateCustomViewApis-UH2
     [Documentation]  Checking CustomView name is Empty
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Create CustomeView   ${Empty}  ${bool[1]}  ${dept_id}  ${ser_id}  ${q_id}  ${user_id}  ${type}
@@ -357,7 +383,7 @@ JD-TC-CreateCustomViewApis-UH2
 
 JD-TC-CreateCustomViewApis-UH3
     [Documentation]  Trying to Create CustomView With Department with different Existing Branch Provider
-    ${resp}=  Provider Login  ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Create CustomeView   ${name}  ${bool[1]}  ${dept_id}  ${ser_id}  ${q_id}  ${user_id}  ${type}
@@ -375,7 +401,7 @@ JD-TC-UpdateCustomViewApis-UH4
 
 JD-TC-CreateCustomViewApis-UH5
     [Documentation]  Trying to Create CustomView With Empty CustomeView Conditions
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name1}=  FakerLibrary.name
@@ -389,7 +415,7 @@ JD-TC-CreateCustomViewApis-UH5
 
 JD-TC-CreateCustomViewApis-UH7
     [Documentation]  Trying to Create CustomView With QueueId is Empty
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name3}=  FakerLibrary.name
@@ -401,7 +427,7 @@ JD-TC-CreateCustomViewApis-UH7
 *** comments ***
 JD-TC-CreateCustomViewApis-UH6
     [Documentation]  Trying to Create CustomView With ServiceId is Empty
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name2}=  FakerLibrary.name
@@ -413,7 +439,7 @@ JD-TC-CreateCustomViewApis-UH6
 
 JD-TC-CreateCustomViewApis-UH8
     [Documentation]  Trying to Create CustomView With Userid is Empty
-    ${resp}=  Provider Login  ${MUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${name4}=  FakerLibrary.name

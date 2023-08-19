@@ -16,9 +16,9 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-JD S3-1
     [Documentation]   s3 json after creating business profile
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
     ${list}=  Create List  1  2  3 
     Set Suite Variable   ${list}
@@ -56,9 +56,9 @@ JD-TC-JD S3-1
     Set Suite Variable   ${postcode}
     ${address}=  get_address
     Set Suite Variable   ${address}
-    ${sTime}=  subtract_time  1  00
+    ${sTime}=  subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time  0  25
+    ${eTime}=  add_timezone_time  ${tz}  0  25  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs_name}  ${bs_desc} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  free  ${bool[0]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -67,7 +67,7 @@ JD-TC-JD S3-1
 JD-TC-JD S3-2
     [Documentation]   s3 json after updating business profile
 
-    ${resp}=  Provider Login  ${PUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${bs2}=  FakerLibrary.word
     Set Suite Variable   ${bs2}
@@ -116,7 +116,7 @@ JD-TC-JD S3-3
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW}   ${PUSERNAME}
-    ${resp}=  Provider Login  ${PUSERNAME_NEW}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Create Sample Location 
@@ -142,7 +142,7 @@ JD-TC-JD S3-4
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW1}   ${PUSERNAME}
-    ${resp}=  Provider Login  ${PUSERNAME_NEW1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Create Sample Location 
@@ -183,13 +183,24 @@ JD-TC-JD S3-5
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW2}   ${PUSERNAME}
-    ${resp}=  Provider Login  ${PUSERNAME_NEW2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Create Sample Location 
     Set Suite Variable  ${locatid1}  ${resp}
+
+    ${resp}=   Get Location ById  ${locatid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${resp}=   Create Sample Location 
     Set Suite Variable  ${locationid1}  ${resp}
+
+    ${resp}=   Get Location ById  ${locationid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${resp}=  Disable Location  ${locationid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -214,20 +225,23 @@ JD-TC-JD S3-6
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW3}   ${PUSERNAME}
-    ${resp}=  Provider Login  ${PUSERNAME_NEW3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  30
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -267,7 +281,7 @@ JD-TC-JD S3-7
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW4}   ${PUSERNAME}
-    ${resp}=  Provider Login  ${PUSERNAME_NEW4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Sample Queue
@@ -295,7 +309,7 @@ JD-TC-JD S3-8
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW5}   ${PUSERNAME}
-    ${resp}=  Provider Login  ${PUSERNAME_NEW5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Sample Queue
@@ -325,7 +339,7 @@ JD-TC-JD S3-9
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSERNAME_NEW6}   ${PUSERNAME}
-    ${resp}=  Provider Login  ${PUSERNAME_NEW6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Sample Queue
@@ -344,7 +358,7 @@ JD-TC-JD S3-10
     clear_queue      ${PUSERNAME100}
     clear_location   ${PUSERNAME100}
     clear_service    ${PUSERNAME100}
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Sample Queue
     Set Suite Variable   ${loc_id4}   ${resp['location_id']}
@@ -362,7 +376,7 @@ JD-TC-JD S3-10
 JD-TC-JD S3-11
     [Documentation]   s3 json after updating Waitlist Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${turn_around_time}=   Random Int  min=10   max=30
     Set Suite Variable   ${turn_around_time}
@@ -390,7 +404,7 @@ JD-TC-JD S3-12
 JD-TC-VerifyJD S3-1
     [Documentation]  Verification of get business profile of ${PUSERNAME80}
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -435,7 +449,7 @@ JD-TC-VerifyJD S3-1
 JD-TC-VerifyJDJD S3-2
     [Documentation]  Verification of get business profile of ${PUSERNAME81}
 
-    ${resp}=  Provider Login  ${PUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -455,7 +469,7 @@ JD-TC-VerifyJDJD S3-2
 JD-TC-VerifyJDJD S3-3
     [Documentation]  Verification of get business profile of ${PUSERNAME_NEW}
 
-    ${resp}=  Provider Login  ${PUSERNAME_NEW}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Location ById  ${loc_id}
     Log   ${resp.json()}  
@@ -492,7 +506,7 @@ JD-TC-VerifyJDJD S3-3
 JD-TC-VerifyJDJD S3-4
     [Documentation]  Verification of get business profile of ${PUSERNAME_NEW1}   
 
-    ${resp}=  Provider Login  ${PUSERNAME_NEW1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Location ById  ${base_loc_id}
     Log   ${resp.json()}    
@@ -519,7 +533,7 @@ JD-TC-VerifyJDJD S3-4
 JD-TC-VerifyJDJD S3-5
     [Documentation]  Verification of get business profile of ${PUSERNAME_NEW2}  
 
-    ${resp}=  Provider Login  ${PUSERNAME_NEW2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Business Profile
     Log   ${resp.json()}
@@ -551,7 +565,7 @@ JD-TC-VerifyJDJD S3-5
 JD-TC-VerifyJDJD S3-6
     [Documentation]  Verification of get business profile of ${PUSERNAME_NEW3}  
 
-    ${resp}=  Provider Login  ${PUSERNAME_NEW3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -609,7 +623,7 @@ JD-TC-VerifyJDJD S3-6
 JD-TC-VerifyJDJD S3-7
     [Documentation]  Verification of get business profile of ${PUSERNAME_NEW4}  
 
-    ${resp}=  Provider Login  ${PUSERNAME_NEW4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -642,7 +656,7 @@ JD-TC-VerifyJDJD S3-7
 JD-TC-VerifyJDJD S3-8
     [Documentation]  Verification of get business profile of ${PUSERNAME_NEW5}  
 
-    ${resp}=  Provider Login  ${PUSERNAME_NEW5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -672,7 +686,7 @@ JD-TC-VerifyJDJD S3-8
 JD-TC-VerifyJDJD S3-9
     [Documentation]  Verification of get business profile of ${PUSERNAME_NEW6}  
 
-    ${resp}=  Provider Login  ${PUSERNAME_NEW6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_NEW6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -703,7 +717,7 @@ JD-TC-VerifyJDJD S3-9
 JD-TC-VerifyJDJD S3-10
     [Documentation]  Verification of get business profile of ${PUSERNAME100}  
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -740,7 +754,7 @@ JD-TC-VerifyJDJD S3-10
 JD-TC-VerifyJDJD S3-11
     [Documentation]  Verification of get business profile of ${PUSERNAME2}  
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -753,7 +767,7 @@ JD-TC-VerifyJDJD S3-11
 JD-TC-VerifyJDJD S3-12
     [Documentation]  Verification of get business profile of ${PUSERNAME3}  
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -770,9 +784,9 @@ JD-TC-VerifyJDJD S3-12
     Verify Response List  ${resp}  0  caption=firstImage  prefix=gallery  type=.jpg
 
 ***Comment*** 
-YNW-TC-YNW S3-7
+JD-TC-YNW S3-7
     Comment   s3 json after creating services
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Service  ${SERVICE1}  Description   30  ${status[0]}  Waitlist  ${bool[1]}  email  45  500  ${bool[1]}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -788,9 +802,9 @@ YNW-TC-YNW S3-7
     Verify Response List  ${resp}  0  name=${SERVICE1}  description=Description  serviceDuration=30  notificationType=email   minPrePaymentAmount=45.0  totalAmount=500.0  status=${status[0]}  bType=Waitlist  taxable=${bool[1]}
     Verify Response List  ${resp}  1  name=${SERVICE2}  description=Description  serviceDuration=30  notificationType=email  minPrePaymentAmount=45.0  totalAmount=500.0  bType=Waitlist  status=${status[0]}  taxable=${bool[1]} 
 
-YNW-TC-YNW S3-8
+JD-TC-YNW S3-8
     Comment   s3 json after updating services
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Service  ${s_id}  ${SERVICE3}  Desc   10  ${status[0]}  Waitlist  ${bool[1]}  none  40  300  ${bool[0]}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -802,9 +816,9 @@ YNW-TC-YNW S3-8
     Verify Response List  ${resp}  0  name=${SERVICE3}  description=Desc  serviceDuration=10  notificationType=none   minPrePaymentAmount=40.0  totalAmount=300.0  status=${status[0]}  bType=Waitlist  taxable=${bool[0]}
     Verify Response List  ${resp}  1  name=${SERVICE2}  description=Description  serviceDuration=30  notificationType=email  minPrePaymentAmount=45.0  totalAmount=500.0  bType=Waitlist  status=${status[0]}  taxable=${bool[1]} 
 
-YNW-TC-YNW S3-9
+JD-TC-YNW S3-9
     Comment   s3 json after disabling service
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable service  ${s_id1}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -815,9 +829,9 @@ YNW-TC-YNW S3-9
     Should Be Equal As Integers  ${len}  1
     Verify Response List  ${resp}  0  name=${SERVICE3}  description=Desc  serviceDuration=10  notificationType=none   minPrePaymentAmount=40.0  totalAmount=300.0  status=${status[0]}  bType=Waitlist  taxable=${bool[0]}
 
-YNW-TC-YNW S3-10
+JD-TC-YNW S3-10
     Comment   s3 json after enabling service
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Enable service  ${s_id1}  
     Should Be Equal As Strings  ${resp.status_code}  200

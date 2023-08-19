@@ -15,7 +15,7 @@ Library           /ebs/TDD/db.py
 
 JD-TC-Get Active License -1
        [Documentation]   Provider Get Active License
-       ${resp}=   ProviderLogin  ${PUSERNAME16}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Get upgradable license
        Log  ${resp.json()}
@@ -26,7 +26,7 @@ JD-TC-Get Active License -1
        Set Test Variable  ${price}  ${resp.json()[0]['price']}
        Set Test Variable  ${period}  ${resp.json()[0]['trialPeriod']}
        Set Test Variable  ${display}  ${resp.json()[0]['displayName']}
-       ${date}=  get_date
+       ${date}=  db.get_date_by_timezone  ${tz}
        ${resp}=   Change License Package  ${pkg_id}
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}   200

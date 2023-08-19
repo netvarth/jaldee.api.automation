@@ -22,29 +22,27 @@ ${SERVICE2}  boots104
 ${SERVICE3}  pen104
 ${SERVICE4}  ABCD104
 ${queue1}  morning
-${LsTime}   08:00 AM
-${LeTime}   09:00 AM
 
-${sTime}    09:00 PM
-${eTime}    11:00 PM
-${longi}        89.524764
-${latti}        86.524764
 ${self}        0
 
 *** Test Cases ***
 
 JD-TC-GetReimburseReportByInvoiceId-1
+
     [Documentation]  Provider apply a coupon after waitlist ,done payment and settil bill,create report then get reprt by invoice_id     
     
     clear_queue  ${PUSERNAME1}      
     clear_service  ${PUSERNAME1}    
     clear_location  ${PUSERNAME1}          
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable   ${domain}    ${decrypted_data['sector']}
+    Set Suite Variable   ${subDomain}    ${decrypted_data['subSector']}
+    
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -56,12 +54,29 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # ${postcode}=  FakerLibrary.postcode
+    ${description}=  FakerLibrary.sentence
+    Set Suite Variable   ${description}
+    # ${address}=  get_address
+    
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${lid}=  Create Sample Location  
+    
+    ${resp}=   Get Location By Id   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${lid}  ${resp.json()['id']} 
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
+
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${cupn_codeG}=   FakerLibrary.word
     Set Suite Variable    ${cupn_codeG}
     ${cupn_name}=    FakerLibrary.name
@@ -80,10 +95,11 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ${resp}=  Push Jaldee Coupon   ${cupn_codeG}   ${cupn_des}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -108,17 +124,6 @@ JD-TC-GetReimburseReportByInvoiceId-1
     #${cid}=  get_id  ${CUSERNAME1}
     #Set Suite Variable  ${cid}
 
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${description}=  FakerLibrary.sentence
-    Set Suite Variable   ${description}
-    ${address}=  get_address
-    
-    ${list}=  Create List   1  2  3  4  5  6  7
-    ${resp}=  Create Location  ABCDE  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}  ${address}  free  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${LsTime}  ${LeTime}
-    Should Be Equal As Strings  ${resp.status_code}   200
-    Set Suite Variable  ${lid}  ${resp.json()} 
-
     ${resp}=  Create Service  ${SERVICE1}  ${description}   2  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  50  500  ${bool[1]}  ${bool[1]}
     Set Suite Variable  ${s_id1}  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -136,7 +141,9 @@ JD-TC-GetReimburseReportByInvoiceId-1
     Set Suite Variable  ${s_id4}  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200     
     
-    
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  2  30  
+
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  100  ${lid}  ${s_id1}  ${s_id2}  ${s_id3}  ${s_id4}
     Set Suite Variable  ${qid1}  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -145,7 +152,6 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${description}  ${bool[1]}  ${cid}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]} 
     
@@ -202,8 +208,8 @@ JD-TC-GetReimburseReportByInvoiceId-1
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]}
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
  
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
     Log   ${resp.json()} 
@@ -242,7 +248,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
     
 JD-TC-GetReimburseReportByInvoiceId-UH1
     [Documentation]  Provider get reimburse report of  invalid  invoice_id
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200  
     ${resp}=  Get Reimburse Reports By Provider By InvoiceId  0
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -264,7 +270,7 @@ JD-TC-GetReimburseReportByInvoiceId -UH3
 
 JD-TC-GetReimburseReportByInvoiceId -UH4
     [Documentation]   Another Provider request reimburse payment
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimburse Reports By Provider By InvoiceId  ${invoice_id}
     Should Be Equal As Strings    ${resp.status_code}   422

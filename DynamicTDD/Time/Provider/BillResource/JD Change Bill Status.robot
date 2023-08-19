@@ -44,7 +44,7 @@ JD-TC-Change Bill Status -1
     Should Be Equal As Strings    ${resp.status_code}   200 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${GST_num}   ${PAN_NUM}=  db.Generate_gst_number  ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[2]}   ${GST_num} 
@@ -66,7 +66,7 @@ JD-TC-Change Bill Status -1
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${itemId}  ${resp.json()}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${service_duration}=   Random Int   min=5   max=10
     Set Suite Variable    ${service_duration}
@@ -80,8 +80,8 @@ JD-TC-Change Bill Status -1
     ${list}=  Create List   1  2  3  4  5  6  7
     ${longi}=  db.Get Latitude
     ${latti}=  db.Get Longitude
-    ${LsTime}=  db.get_time
-    ${LeTime}=  add_time   2  00
+    ${LsTime}=  db.get_time_by_timezone  ${tz}
+    ${LeTime}=  add_timezone_time  ${tz}  2  00  
     ${address}=  get_address
     Set Suite Variable  ${address}
     ${postcode}=  FakerLibrary.postcode
@@ -93,8 +93,9 @@ JD-TC-Change Bill Status -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   2  00
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  100  ${lid}  ${sid1}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
@@ -104,7 +105,6 @@ JD-TC-Change Bill Status -1
     Set Suite Variable  ${cid}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY1}  hi  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -120,7 +120,7 @@ JD-TC-Change Bill Status -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid}  billStatus=${billStatus[0]}
     change_system_date  1
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Accept Payment  ${wid}  ${payment_modes[0]}  ${totalamt}
     Should Be Equal As Strings  ${resp.status_code}  200

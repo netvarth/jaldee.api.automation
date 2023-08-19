@@ -26,9 +26,12 @@ JD-TC-GetUpgradable -1
        END
        Log  ${pkgid_list}
        Set Suite Variable  ${pkgid_list}
-       ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
-       Set Suite Variable  ${old_pkgid}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
+       ${decrypted_data}=  db.decrypt_data  ${resp.content}
+       Log  ${decrypted_data}
+       Set Suite Variable  ${old_pkgid}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+       # Set Suite Variable  ${old_pkgid}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
        Remove Values From List  ${pkgid_list}  ${old_pkgid}
        ${resp}=   Get upgradable license
        Should Be Equal As Strings    ${resp.status_code}   200
@@ -44,7 +47,7 @@ JD-TC-GetUpgradable -1
    
 JD-TC-GetUpgradable -2
        [Documentation]   Provider changing license package to next then check the upgradable licenses
-       ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        Set Test Variable  ${next_pkgId}  ${pkgid_list[0]}
        ${resp}=  Change License Package   ${next_pkgId}
@@ -63,7 +66,7 @@ JD-TC-GetUpgradable -2
        END
 JD-TC-GetUpgradable -3
        [Documentation]   Provider changing license package to next then check the upgradable licenses
-       ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        Set Test Variable  ${next_pkgId}  ${pkgid_list[0]}
        ${resp}=  Change License Package   ${next_pkgId}
@@ -83,7 +86,7 @@ JD-TC-GetUpgradable -3
        
 JD-TC-GetUpgradable -4
        [Documentation]   Provider changing license package to next then check the upgradable licenses
-       ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        Set Test Variable  ${next_pkgId}  ${pkgid_list[0]}
        ${resp}=  Change License Package   ${next_pkgId}
@@ -103,7 +106,7 @@ JD-TC-GetUpgradable -4
 
 JD-TC-GetUpgradable -5
        [Documentation]   Provider changing license package to next then check the upgradable licenses
-       ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        Set Test Variable  ${next_pkgId}  ${pkgid_list[0]}
        ${resp}=  Change License Package   ${next_pkgId}
@@ -123,7 +126,7 @@ JD-TC-GetUpgradable -5
 
 JD-TC-GetUpgradable -6
        [Documentation]   Provider changing license package to next then check the upgradable licenses
-       ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        Set Test Variable  ${next_pkgId}  ${pkgid_list[0]}
        ${resp}=  Change License Package   ${next_pkgId}

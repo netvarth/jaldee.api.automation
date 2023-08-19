@@ -27,7 +27,7 @@ JD-TC-ProviderGetApptRequest-1
 
     [Documentation]   Provider get an appt request for today and verify it.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -39,7 +39,7 @@ JD-TC-ProviderGetApptRequest-1
 
     clear_appt_schedule   ${PUSERNAME6}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${SERVICE1}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10
@@ -87,15 +87,20 @@ JD-TC-ProviderGetApptRequest-1
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${resp}=  Create Sample Schedule   ${lid}   ${sid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
@@ -148,7 +153,7 @@ JD-TC-ProviderGetApptRequest-2
 
     [Documentation]   Provider get multiple appt request and verify it.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -208,7 +213,7 @@ JD-TC-ProviderGetApptRequest-3
 
     [Documentation]   Provider create appt request for a provider consumers family member and verify it.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -276,7 +281,7 @@ JD-TC-ProviderGetApptRequest-4
 
     [Documentation]   Provider get an appt request without create it.
 
-    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -290,7 +295,7 @@ JD-TC-ProviderGetApptRequest-5
 
     [Documentation]   Provider get an appt request with location filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -372,7 +377,7 @@ JD-TC-ProviderGetApptRequest-6
 
     [Documentation]   Provider get an appt request with schedule filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -437,7 +442,7 @@ JD-TC-ProviderGetApptRequest-7
 
     [Documentation]   Provider get an appt request with location and schedule filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

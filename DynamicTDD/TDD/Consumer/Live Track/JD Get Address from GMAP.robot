@@ -18,7 +18,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get location using lattitde and longitude
     [Documentation]  Get location from google map using lattitude and longitude
-    ${resp}=  ProviderLogin  ${PUSERNAME189}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 *** Comment ***
 
@@ -30,7 +30,7 @@ JD-TC-Get location using lattitde and longitude
 
 JD-TC-Get location using postal code
     [Documentation]  Get location from google map using postal code
-    ${resp}=  ProviderLogin  ${PUSERNAME189}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pin}=  get_pincode
@@ -41,7 +41,7 @@ JD-TC-Get location using postal code
 
 JD-TC-Get location from city
     [Documentation]  Get location from google map from part of address like city
-    ${resp}=  ProviderLogin  ${PUSERNAME189}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${latti}  ${longi}  ${city}=  get_lat_long_city

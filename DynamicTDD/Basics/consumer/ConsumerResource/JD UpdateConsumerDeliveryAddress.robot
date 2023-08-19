@@ -152,7 +152,7 @@ JD-TC-UpdateConsumerDeliveryAddress-7
 JD-TC-UpdateConsumerDeliveryAddress-8
       [Documentation]    Update consumer delivery address with provider login.
     
-      ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}   200
 
       ${firstname}=  FakerLibrary.first_name

@@ -35,7 +35,7 @@ JD-TC-ChangeEnqStatusToPending-1
     
 *** COMMENT ***
 
-    ${resp}=   ProviderLogin  ${PUSERNAME66}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -50,8 +50,13 @@ JD-TC-ChangeEnqStatusToPending-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}  
@@ -240,7 +245,7 @@ JD-TC-ChangeEnqStatusToPending-1
 JD-TC-ChangeEnqStatusToPending-UH1
     [Documentation]   Change Enquiry Status new to Pending with invalid enquiry id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME62}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -254,7 +259,7 @@ JD-TC-ChangeEnqStatusToPending-UH1
 JD-TC-ChangeEnqStatusToPending-UH2
     [Documentation]   Change Enquiry Status new to Pending with another provider login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME67}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -287,7 +292,7 @@ JD-TC-ChangeEnqStatusToPending-UH4
 JD-TC-ChangeEnqStatusToPending-UH5
     [Documentation]   Change Enquiry Status new to Pending without enquiry id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME62}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

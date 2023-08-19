@@ -26,7 +26,7 @@ JD-TC-Update Waitist rating-1
     clear_service    ${PUSERNAME15}
     clear_customer    ${PUSERNAME15}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME4}
@@ -34,10 +34,13 @@ JD-TC-Update Waitist rating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
 
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}
+    
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     Set Test Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -50,9 +53,12 @@ JD-TC-Update Waitist rating-1
     Set Test Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     Set Suite Variable    ${end_time}  
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -67,7 +73,6 @@ JD-TC-Update Waitist rating-1
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}    
     ${resp}=  Get provider communications
@@ -88,7 +93,6 @@ JD-TC-Update Waitist rating-1
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][1]['comments']}   ${rating[4]}
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}     
     ${resp}=  Get provider communications

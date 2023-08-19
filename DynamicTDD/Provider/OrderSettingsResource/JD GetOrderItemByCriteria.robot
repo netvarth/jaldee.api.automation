@@ -47,7 +47,7 @@ JD-TC-Get_Item_By_Criteria-1
 
     [Documentation]  Provider Get item 
     clear_Item  ${PUSERNAME44}
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${displayName1}=   FakerLibrary.name 
@@ -102,7 +102,7 @@ JD-TC-Get_Item_By_Criteria-1
 
 
     clear_Item  ${PUSERNAME44}
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
@@ -221,7 +221,7 @@ JD-TC-Get_Item_By_Criteria-1
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Get Item By Criteria   createdDate-eq=${TODAY}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -235,7 +235,7 @@ JD-TC-Get_Item_By_Criteria-2
     [Documentation]  Provider Create item, another provider also uses same details to create item
 
     clear_Item  ${PUSERNAME45}
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=   Get Items 
@@ -243,7 +243,7 @@ JD-TC-Get_Item_By_Criteria-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      
@@ -277,7 +277,7 @@ JD-TC-Get_Item_By_Criteria-2
 JD-TC-Get_Item_By_Criteria-3
 
     [Documentation]  Provider Get item
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=   Get Items 
@@ -322,7 +322,7 @@ JD-TC-Get_Item_By_Criteria-UH2
 JD-TC-Get_Item_By_Criteria-UH3
     [Documentation]  Diable item and Get item
     
-    ${resp}=  ProviderLogin  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Items 
@@ -346,7 +346,7 @@ JD-TC-Get_Item_By_Criteria-UH3
 JD-TC-Get_Item_By_Criteria-UH4
     [Documentation]  Get item using invalid item_id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -368,7 +368,7 @@ JD-TC-Get_Item_By_Criteria-UH4
 # JD-TC-Get_Item_By_Criteria-UH5
 #     [Documentation]  Get item using invalid item_display_Name
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -382,7 +382,7 @@ JD-TC-Get_Item_By_Criteria-UH4
 # JD-TC-Get_Item_By_Criteria-UH6
 #     [Documentation]  Get item using invalid item_description
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -395,7 +395,7 @@ JD-TC-Get_Item_By_Criteria-UH4
 JD-TC-Get_Item_By_Criteria-UH7
     [Documentation]  Get item using invalid item_Price
 
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -409,7 +409,7 @@ JD-TC-Get_Item_By_Criteria-UH7
 JD-TC-Get_Item_By_Criteria-UH8
     [Documentation]  Get item using invalid item_Name
 
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -422,7 +422,7 @@ JD-TC-Get_Item_By_Criteria-UH8
 JD-TC-Get_Item_By_Criteria-UH9
     [Documentation]  Get item using invalid item_local_name
 
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -435,7 +435,7 @@ JD-TC-Get_Item_By_Criteria-UH9
 JD-TC-Get_Item_By_Criteria-UH10
     [Documentation]  Get item using invalid promotionalPrcnt
 
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -449,7 +449,7 @@ JD-TC-Get_Item_By_Criteria-UH10
 # JD-TC-Get_Item_By_Criteria-UH11
 #     [Documentation]  Get item using invalid itemCode
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -462,7 +462,7 @@ JD-TC-Get_Item_By_Criteria-UH10
 # JD-TC-Get_Item_By_Criteria-UH12
 #     [Documentation]  Get item using invalid promotionLabel
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -475,7 +475,7 @@ JD-TC-Get_Item_By_Criteria-UH10
 # JD-TC-Get_Item_By_Criteria-UH13
 #     [Documentation]  Get item using invalid id
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -515,7 +515,7 @@ JD-TC-Get_Item_By_Criteria-UH10
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${TODAY}=  get_date
+    # ${TODAY}=  db.get_date_by_timezone  ${tz}
     # ${resp}=   Get Item By Criteria   createdDate-eq=${TODAY}  
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200

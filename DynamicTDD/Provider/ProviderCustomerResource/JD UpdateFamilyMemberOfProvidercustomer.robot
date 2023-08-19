@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-UpdateFamilyMemberOfProvidercustomer-1
     [Documentation]    Update a familymember by provider login
     clear_customer   ${PUSERNAME1}
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
     
@@ -56,7 +56,7 @@ JD-TC-UpdateFamilyMemberOfProvidercustomer-1
 
 JD-TC-UpdateFamilyMemberOfProvidercustomer-2
     [Documentation]    Adding more family members and update
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -96,7 +96,7 @@ JD-TC-UpdateFamilyMemberOfProvidercustomer-3
     [Documentation]  Update a  familymember using name of another provider customer familymember
     
     clear_customer   ${PUSERNAME2}
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME2}
@@ -147,7 +147,7 @@ JD-TC-UpdateFamilyMemberOfProvidercustomer-UH2
 
 JD-TC-UpdateFamilyMemberOfProvidercustomer-UH3
 	[Documentation]  A non parent updates a familymember
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname1}=  FakerLibrary.first_name
@@ -159,7 +159,7 @@ JD-TC-UpdateFamilyMemberOfProvidercustomer-UH3
     Set Test Variable  ${mem_id3}  ${resp.json()}
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update FamilymemberByprovidercustomer  ${cid1}  ${mem_id3}  ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  
     Log  ${resp.json()}

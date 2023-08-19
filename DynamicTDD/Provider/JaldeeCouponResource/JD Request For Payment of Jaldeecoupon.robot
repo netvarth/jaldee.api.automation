@@ -91,11 +91,11 @@ JD-TC-Request for payment-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -117,8 +117,8 @@ JD-TC-Request for payment-1
     ${postcode}=  FakerLibrary.postcode
     ${parking}   Random Element   ${parkingType}
     ${address}=  get_address
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${url}=   FakerLibrary.url
     ${desc}=   FakerLibrary.sentence
     # ${resp}=  Create Business Profile  ${bs}  ${bs} ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}
@@ -193,9 +193,9 @@ JD-TC-Request for payment-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${licenses}=  Jaldee Coupon Target License  ${licid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -224,23 +224,21 @@ JD-TC-Request for payment-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Enable Waitlist
     # ${cid}=  get_id  ${CUSERNAME5}
     # Set Suite Variable  ${cid}
     #clear_reimburseReport
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['${bool[1]}','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${LsTime}=  db.get_time
-    ${LeTime}=  add_time   0  15
+    ${LsTime}=  db.get_time_by_timezone  ${tz}
+    ${LeTime}=  add_timezone_time  ${tz}  0  15  
     ${url}=   FakerLibrary.url
     clear_location   ${PUSERPH0}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${LsTime}  ${LeTime}
@@ -274,8 +272,8 @@ JD-TC-Request for payment-1
     Should Be Equal As Strings  ${resp.status_code}  200     
     Set Suite Variable  ${p1_s4}  ${resp.json()}
     
-    ${sTime}=  add_time  0  45
-    ${eTime}=  add_time   2  45
+    ${sTime}=  add_timezone_time  ${tz}  0  45  
+    ${eTime}=  add_timezone_time  ${tz}  2  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2}  ${p1_s3}  ${p1_s4} 
@@ -285,7 +283,6 @@ JD-TC-Request for payment-1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s2}  ${p1_q1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     
@@ -349,10 +346,10 @@ JD-TC-Request for payment-1
 
    
     sleep  05s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
-    # ${end}=  add_time_sec  0  0  0
-    # ${start}=  add_time_sec  0  -5  0
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
+    # ${end}=  db.add_tz_time_sec  ${tz}   0  0  0
+    # ${start}=  db.add_tz_time_sec  ${tz}   0  -5  0
 
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
     Log   ${resp.json()} 
@@ -391,7 +388,7 @@ JD-TC-Request for payment-2
     [Documentation]  Provider agian apply a same coupon then request for reimburse 
     clear_payment_invoice  ${PUSERPH0} 
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200  
 
     ${resp}=  AddCustomer  ${CUSERNAME9}
@@ -403,7 +400,6 @@ JD-TC-Request for payment-2
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid2}  ${p1_s1}  ${p1_q1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     
@@ -458,8 +454,8 @@ JD-TC-Request for payment-2
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
 
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -494,7 +490,7 @@ JD-TC-Request for payment-3
     [Documentation]  In provider side in generate bill of token showing glitch when 
     ...    try to apply coupon /add qty/remove item from 3 dots
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -525,8 +521,8 @@ JD-TC-Request for payment-3
     ${p_des}=    FakerLibrary.sentence
     Set Suite Variable     ${p_des}
     
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  45
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
     ${terminator}=  Create Dictionary  endDate=${DAY2}  noOfOccurance=0
@@ -548,7 +544,7 @@ JD-TC-Request for payment-3
     clear_service    ${PUSERNAME112}
     clear_customer   ${PUSERNAME112}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -579,7 +575,7 @@ JD-TC-Request for payment-3
         Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
     END
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
 
     ${resp}=    Get Locations
@@ -607,9 +603,10 @@ JD-TC-Request for payment-3
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=1
     Set Suite Variable   ${parallel}
@@ -643,7 +640,7 @@ JD-TC-Request for payment-3
 
 JD-TC-Request for payment-UH1
     [Documentation]  Provider request reimburse of  already requested invoice_id
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200  
     ${resp}=  Request For Payment of Jaldeecoupon  ${invoice_id}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -651,7 +648,7 @@ JD-TC-Request for payment-UH1
 
 JD-TC-Request for payment-UH2
     [Documentation]  Provider request reimburse of  invalid  invoice_id
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200  
     ${resp}=  Request For Payment of Jaldeecoupon  0
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -673,7 +670,7 @@ JD-TC-Request for paymen -UH4
 
 JD-TC-Request for paymen -UH5
     [Documentation]   Another Provider request reimburse payment
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Request For Payment of Jaldeecoupon  ${invoice_id}
     Should Be Equal As Strings    ${resp.status_code}   422

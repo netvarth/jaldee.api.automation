@@ -31,7 +31,7 @@ JD-TC-Get_Cart_Details-1
     clear_customer   ${PUSERNAME59}
     clear_Item   ${PUSERNAME59}
     clear_Coupon   ${PUSERNAME59}
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -130,27 +130,28 @@ JD-TC-Get_Cart_Details-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate} 
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate} 
 
-    ${startDate1}=  get_date
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate1} 
-    ${endDate1}=  add_date  15      
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
     Set Suite Variable  ${endDate1} 
 
     ${noOfOccurance}=  Random Int  min=0   max=0
     Set Suite Variable  ${noOfOccurance} 
 
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  15 
+    ${eTime1}=  add_timezone_time  ${tz}  0  15   
     Set Suite Variable    ${eTime1}
 
-    ${sTime2}=  add_time  0  17
+    ${sTime2}=  add_timezone_time  ${tz}  0  17
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   0  30
+    ${eTime2}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable    ${eTime2}
 
 
@@ -255,7 +256,7 @@ JD-TC-Get_Cart_Details-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity1}   max=${maxQuantity1}
     # ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity1}
@@ -317,7 +318,7 @@ JD-TC-Get_Cart_Details-1
 JD-TC-Get_Cart_Details-2
     [Documentation]    Get order details when order needs Advance amount (Advance amount less than item total price).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -370,8 +371,8 @@ JD-TC-Get_Cart_Details-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate2}=  get_date
-    ${endDate2}=  add_date  13      
+    ${startDate2}=  db.get_date_by_timezone  ${tz}
+    ${endDate2}=  db.add_timezone_date  ${tz}  13      
   
     ${Del_Charge2}=  Random Int  min=50   max=100
     Set Suite Variable    ${Del_Charge2}
@@ -429,7 +430,7 @@ JD-TC-Get_Cart_Details-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity2}=  FakerLibrary.Random Int  min=${minQuantity2}   max=${maxQuantity2}
     Set Suite Variable  ${item_quantity2}
     ${EMPTY_List}=  Create List
@@ -489,7 +490,7 @@ JD-TC-Get_Cart_Details-2
 JD-TC-Get_Cart_Details-3
     [Documentation]    Get order details when order needs Advance amount (Advance amount greater than item total price).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -502,7 +503,7 @@ JD-TC-Get_Cart_Details-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity3}   1
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
@@ -565,7 +566,7 @@ JD-TC-Get_Cart_Details-3
 
 JD-TC-Get_Cart_Details-4
     [Documentation]    Get order details by applying a coupon.(Coupon type with amount and percentage applied)
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
@@ -578,9 +579,9 @@ JD-TC-Get_Cart_Details-4
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  17
+    ${DAY2}=  db.add_timezone_date  ${tz}  17
     Set Suite Variable  ${DAY2}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -628,7 +629,7 @@ JD-TC-Get_Cart_Details-4
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -650,7 +651,7 @@ JD-TC-Get_Cart_Details-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity3}   1
     ${Coupon1_list}=  Create List   ${cupn_code2018}   ${cupn_code2018_2}
     Set Suite Variable  ${EMPTY_List}
@@ -685,7 +686,7 @@ JD-TC-Get_Cart_Details-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity3}   1
     ${Coupon2_list}=  Create List   ${cupn_code2018_2}  ${cupn_code2018}   
 
@@ -699,7 +700,7 @@ JD-TC-Get_Cart_Details-4
 
 JD-TC-Get_Cart_Details-UH1
     [Documentation]    Get order details by applying a coupon.(Coupon type with amount and percentage applied when combineWithOtherCoupon is false)
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
@@ -712,9 +713,9 @@ JD-TC-Get_Cart_Details-UH1
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  17
+    ${DAY2}=  db.add_timezone_date  ${tz}  17
     Set Suite Variable  ${DAY2}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -762,7 +763,7 @@ JD-TC-Get_Cart_Details-UH1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -784,7 +785,7 @@ JD-TC-Get_Cart_Details-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity3}   3
     ${item3_total}=  Evaluate  ${item_quantity3} * ${promoPrice2}
     ${item3_total}=  Convert To twodigitfloat  ${item3_total}
@@ -809,7 +810,7 @@ JD-TC-Get_Cart_Details-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity3}   5
     ${item3_total}=  Evaluate  ${item_quantity3} * ${promoPrice2}
     ${item3_total}=  Convert To twodigitfloat  ${item3_total}
@@ -836,7 +837,7 @@ JD-TC-Get_Cart_Details-UH1
 
 JD-TC-Get_Cart_Details-UH2
     [Documentation]    Get cart details by applying a coupon.(If Coupon start date is a future date)
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
@@ -849,11 +850,11 @@ JD-TC-Get_Cart_Details-UH2
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  18
+    ${DAY2}=  db.add_timezone_date  ${tz}  18
     Set Suite Variable  ${DAY2}
-    ${DAY3}=  add_date  1
+    ${DAY3}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${DAY3}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -895,7 +896,7 @@ JD-TC-Get_Cart_Details-UH2
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -917,7 +918,7 @@ JD-TC-Get_Cart_Details-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity3}   3
     ${Coupon3_list}=  Create List   ${cupn_code2018_7}   ${cupn_code2018_8}
 
@@ -931,7 +932,7 @@ JD-TC-Get_Cart_Details-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity3}   5
     ${Coupon4_list}=  Create List   ${cupn_code2018_8}  ${cupn_code2018_7}   
 
@@ -945,7 +946,7 @@ JD-TC-Get_Cart_Details-UH2
 
 JD-TC-Get_Cart_Details-5
     [Documentation]    Enable JDN and Get cart details 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -965,7 +966,7 @@ JD-TC-Get_Cart_Details-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity3}=  Random Int  min=${minQuantity2}   max=${maxQuantity2}
     Set Suite Variable  ${item_quantity3}  
 
@@ -978,7 +979,7 @@ JD-TC-Get_Cart_Details-5
 
 JD-TC-Get_Cart_Details-6
     [Documentation]    Get cart details by applying a coupon and JDN
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -990,7 +991,7 @@ JD-TC-Get_Cart_Details-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity3}=  Random Int  min=${minQuantity2}   max=${maxQuantity2}
     Set Suite Variable  ${item_quantity3}  
     ${Coupon9_list}=  Create List   ${cupn_code2018_7} 
@@ -1005,7 +1006,7 @@ JD-TC-Get_Cart_Details-6
 
 JD-TC-Get_Cart_Details-7
     [Documentation]    Update JDN percentage to change delivery charge and Get cart details after that
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1025,7 +1026,7 @@ JD-TC-Get_Cart_Details-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity3}=  Random Int  min=${minQuantity2}   max=${maxQuantity2}
     Set Suite Variable  ${item_quantity3}  
     ${Coupon9_list}=  Create List   ${cupn_code2018_7} 
@@ -1038,7 +1039,7 @@ JD-TC-Get_Cart_Details-7
 
 JD-TC-Get_Cart_Details-8
     [Documentation]    Update catalog to change delivery charge and Get cart details after that
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1063,7 +1064,7 @@ JD-TC-Get_Cart_Details-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity3}=  Random Int  min=${minQuantity2}   max=${maxQuantity2}
     Set Suite Variable  ${item_quantity3}  
     ${Coupon9_list}=  Create List   ${cupn_code2018_7} 
@@ -1077,7 +1078,7 @@ JD-TC-Get_Cart_Details-8
 
 JD-TC-Get_Cart_Details-9
     [Documentation]    Get cart details when disabled JDN
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1097,7 +1098,7 @@ JD-TC-Get_Cart_Details-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity3}=  Random Int  min=${minQuantity2}   max=${maxQuantity2}
     Set Suite Variable  ${item_quantity3} 
     ${Coupon9_list}=  Create List   ${cupn_code2018_7} 
@@ -1111,7 +1112,7 @@ JD-TC-Get_Cart_Details-9
 
 JD-TC-Get_Cart_Details-10
     [Documentation]    Get cart details when payment type is FULLAMOUNT
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1144,7 +1145,7 @@ JD-TC-Get_Cart_Details-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity3}=  Random Int  min=${minQuantity2}   max=${maxQuantity2}
     Set Suite Variable  ${item_quantity3}  
     ${Coupon9_list}=  Create List   ${cupn_code2018_7} 
@@ -1158,7 +1159,7 @@ JD-TC-Get_Cart_Details-10
 
 JD-TC-Get_Cart_Details-11
     [Documentation]    Get order details and Order items when advance_payment_type is FULLAMOUNT.(JDN Enabled and Jaldee coupon applied by consumer)
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
@@ -1171,9 +1172,9 @@ JD-TC-Get_Cart_Details-11
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  20
+    ${DAY2}=  db.add_timezone_date  ${tz}  20
     Set Suite Variable  ${DAY2}
 
 
@@ -1222,7 +1223,7 @@ JD-TC-Get_Cart_Details-11
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1255,7 +1256,7 @@ JD-TC-Get_Cart_Details-11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity5}   5
     ${Coupon1_list}=  Create List   ${cupn_code1}   ${cupn_code2}
     
@@ -1264,7 +1265,7 @@ JD-TC-Get_Cart_Details-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY2}=  add_date   12
+    ${DAY2}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1341,7 +1342,7 @@ JD-TC-Get_Cart_Details-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${INVALID_Coupon}=  Create List   0
     ${resp}=   Get Cart Details    ${accId3}   ${CatalogId2}   ${boolean[1]}   ${DAY1}    ${INVALID_Coupon}    ${item_id3}   ${item_quantity1}  ${item_id4}   ${item_quantity1}
     Log   ${resp.json()}
@@ -1352,7 +1353,7 @@ JD-TC-Get_Cart_Details-UH3
 JD-TC-Get_Cart_Details-UH4
     [Documentation]    Get order details without login.
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${resp}=   Get Cart Details    ${accId3}   ${CatalogId2}   ${boolean[1]}   ${DAY1}    ${EMPTY_List}    ${item_id3}   ${item_quantity1}  ${item_id4}   ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    419
@@ -1362,17 +1363,17 @@ JD-TC-Get_Cart_Details-UH4
 JD-TC-Get_Cart_Details-UH5
     [Documentation]    Get order details by using provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${resp}=   Get Cart Details    ${accId3}   ${CatalogId2}   ${boolean[1]}   ${DAY1}    ${EMPTY_List}    ${item_id3}   ${item_quantity1}  ${item_id4}   ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  "${resp.json()}"  "${NO_ACCESS_TO_URL}"
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1390,7 +1391,7 @@ JD-TC-Get_Cart_Details-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY12}=  add_date   12
+    ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${resp}=   Get Cart Details    ${accId3}   ${CatalogId1}   ${boolean[1]}   ${DAY12}    ${EMPTY_List}    0    3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1405,7 +1406,7 @@ JD-TC-Get_Cart_Details-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY12}=  add_date   12
+    ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${resp}=   Get Cart Details    ${accId3}   0   ${boolean[1]}   ${DAY12}    ${EMPTY_List}    ${item_id3}   ${item_quantity1} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -1422,7 +1423,7 @@ JD-TC-Get_Cart_Details-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY12}=  add_date   12
+    ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${resp}=   Get Cart Details    ${accId3}   ${CatalogId2}   ${boolean[1]}   ${DAY12}    ${EMPTY_List}    0   3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -1438,7 +1439,7 @@ JD-TC-Get_Cart_Details-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY12}=  add_date   12
+    ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${resp}=   Get Cart Details    0   ${CatalogId2}   ${boolean[1]}   ${DAY12}    ${EMPTY_List}    ${item_id3}   ${item_quantity1}  ${item_id4}   ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    404

@@ -23,7 +23,7 @@ ${countryCode}   +91
 JD-TC-EnableOrderSettings-1
     [Documentation]   Enable Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid71}  ${resp.json()['id']}
@@ -83,7 +83,7 @@ JD-TC-EnableOrderSettings-1
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${Ph71}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['email']}        ${email_id71}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -92,7 +92,7 @@ JD-TC-EnableOrderSettings-1
 JD-TC-EnableOrderSettings-2
     [Documentation]   Enable Order Settings after disable order settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid29}  ${resp.json()['id']}
     Set Suite Variable  ${P29_fName}  ${resp.json()['firstName']}
@@ -162,7 +162,7 @@ JD-TC-EnableOrderSettings-2
 JD-TC-EnableOrderSettings-3
     [Documentation]   Disable order settings using Updation, after that Enable Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${p_id}  ${resp.json()['id']}
     
@@ -225,7 +225,7 @@ JD-TC-EnableOrderSettings-3
 JD-TC-EnableOrderSettings-4
     [Documentation]   Add Email using Updation, after that Enable Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid34}  ${resp.json()['id']}
     Set Suite Variable  ${P34_fName}  ${resp.json()['firstName']}
@@ -306,7 +306,7 @@ JD-TC-EnableOrderSettings-UH2
 JD-TC-EnableOrderSettings-UH3
     [Documentation]   Enable Order Settings again
 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid13}  ${resp.json()['id']}
     Set Suite Variable  ${P13_fName}  ${resp.json()['firstName']}
@@ -354,7 +354,7 @@ JD-TC-EnableOrderSettings-UH3
 JD-TC-EnableOrderSettings-5
     [Documentation]   Enable Order Settings without adding Email
 
-    ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid33}  ${resp.json()['id']}
     Set Suite Variable  ${P33_fName}  ${resp.json()['firstName']}

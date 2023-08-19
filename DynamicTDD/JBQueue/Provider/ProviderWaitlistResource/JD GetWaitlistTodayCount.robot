@@ -21,16 +21,19 @@ JD-TC-GetWaitlistCountToday-1
       clear_service    ${PUSERNAME126}
       clear_customer    ${PUSERNAME126}
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${duration}=  Random Int  min=2   max=10
       ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  ${duration}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY1}=  get_date
-      Set Suite Variable  ${DAY1} 
+      
       ${resp}=   Create Sample Location
       Set Suite Variable    ${loc_id1}    ${resp}  
+      ${resp}=   Get Location ById  ${loc_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name1}=   FakerLibrary.word
       Set Suite Variable    ${ser_name1} 
       ${resp}=   Create Sample Service  ${ser_name1}
@@ -43,9 +46,11 @@ JD-TC-GetWaitlistCountToday-1
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   subtract_time   3  00
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${DAY1} 
+      ${strt_time}=   subtract_timezone_time   ${tz}   3  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time        0  20 
+      ${end_time}=    db.add_timezone_time  ${tz}  0  20 
       Set Suite Variable    ${end_time} 
       ${parallel}=   Random Int  min=1   max=2
       Set Suite Variable   ${parallel}
@@ -55,8 +60,7 @@ JD-TC-GetWaitlistCountToday-1
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${que_id1}   ${resp.json()}
-      ${desc}=   FakerLibrary.word
-      Set Suite Variable    ${desc}
+
 
       ${resp}=  Get Consumer By Id  ${CUSERNAME0}
       Log  ${resp.json()}
@@ -69,9 +73,10 @@ JD-TC-GetWaitlistCountToday-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid}  ${resp.json()}
 
+      ${desc}=   FakerLibrary.word
+      Set Suite Variable    ${desc}
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -90,7 +95,6 @@ JD-TC-GetWaitlistCountToday-1
 
       ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id1}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -110,7 +114,6 @@ JD-TC-GetWaitlistCountToday-1
       ${resp}=  Add To Waitlist  ${cid2}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -130,7 +133,6 @@ JD-TC-GetWaitlistCountToday-1
       ${resp}=  Add To Waitlist  ${cid3}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid3}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id3}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -151,7 +153,7 @@ JD-TC-GetWaitlistCountToday-1
 JD-TC-GetWaitlistCountToday-2
       [Documentation]   View Waitlist after cancel
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action Cancel    ${waitlist_id}  ${waitlist_cancl_reasn[4]}   ${desc}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -168,7 +170,7 @@ JD-TC-GetWaitlistCountToday-2
 JD-TC-GetWaitlistCountToday-3
       [Documentation]   Get waitlist waitlistStatus-eq=${wl_status[2]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  waitlistStatus-eq=${wl_status[2]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -177,7 +179,7 @@ JD-TC-GetWaitlistCountToday-3
 JD-TC-GetWaitlistCountToday-4
       [Documentation]   Get waitlist waitlistStatus-eq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -186,7 +188,7 @@ JD-TC-GetWaitlistCountToday-4
 JD-TC-GetWaitlistCountToday-5
       [Documentation]   Get waitlist waitlistStatus-neq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -195,7 +197,7 @@ JD-TC-GetWaitlistCountToday-5
 JD-TC-GetWaitlistCountToday-6
       [Documentation]   Get waitlist waitlistStatus-neq=${wl_status[0]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  waitlistStatus-neq=${wl_status[0]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -204,7 +206,7 @@ JD-TC-GetWaitlistCountToday-6
 JD-TC-GetWaitlistCountToday-7
       [Documentation]   Get waitlist waitlistStatus-neq=${wl_status[4]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -213,7 +215,7 @@ JD-TC-GetWaitlistCountToday-7
 JD-TC-GetWaitlistCountToday-8
       [Documentation]   Get waitlist firstName-eq=${cname0} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname0}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -222,7 +224,7 @@ JD-TC-GetWaitlistCountToday-8
 JD-TC-GetWaitlistCountToday-10
       [Documentation]   Get waitlist firstName-neq=${cname0} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname0}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -231,7 +233,7 @@ JD-TC-GetWaitlistCountToday-10
 JD-TC-GetWaitlistCountToday-11
       [Documentation]   Get waitlist firstName-eq=${cname1}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -240,7 +242,7 @@ JD-TC-GetWaitlistCountToday-11
 JD-TC-GetWaitlistCountToday-12
       [Documentation]   Get waitlist firstName-neq=${cname1}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -250,7 +252,7 @@ JD-TC-GetWaitlistCountToday-12
 JD-TC-GetWaitlistCountToday-13
       [Documentation]   Get waitlist service-eq=${ser_id1}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -259,7 +261,7 @@ JD-TC-GetWaitlistCountToday-13
 JD-TC-GetWaitlistCountToday-14
       [Documentation]   Get waitlist waitlistStatus-eq=${wl_status[5]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  DONE  ${waitlist_id1}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -270,7 +272,7 @@ JD-TC-GetWaitlistCountToday-14
 JD-TC-GetWaitlistCountToday-15
       [Documentation]   Get waitlist waitlistStatus-neq=${wl_status[5]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist Count Today  waitlistStatus-neq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -279,7 +281,7 @@ JD-TC-GetWaitlistCountToday-15
 JD-TC-GetWaitlistCountToday-16
       [Documentation]   Get waitlist service-neq=${ser_id1}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
 
       
@@ -295,7 +297,6 @@ JD-TC-GetWaitlistCountToday-16
 
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id4}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -313,7 +314,6 @@ JD-TC-GetWaitlistCountToday-16
 
       ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id5}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -325,7 +325,7 @@ JD-TC-GetWaitlistCountToday-16
 JD-TC-GetWaitlistCountToday-17
       [Documentation]   Get waitlist firstName-eq=${cname0}  waitlistStatus-eq=${wl_status[5]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname0}  waitlistStatus-eq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -334,7 +334,7 @@ JD-TC-GetWaitlistCountToday-17
 JD-TC-GetWaitlistCountToday-18
       [Documentation]   Get waitlist firstName-neq=${cname0}  waitlistStatus-neq=${wl_status[5]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname0}  waitlistStatus-neq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -343,7 +343,7 @@ JD-TC-GetWaitlistCountToday-18
 JD-TC-GetWaitlistCountToday-19
       [Documentation]   Get waitlist firstName-eq=${cname0}  waitlistStatus-eq=${wl_status[4]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname0}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -352,7 +352,7 @@ JD-TC-GetWaitlistCountToday-19
 JD-TC-GetWaitlistCountToday-20
       [Documentation]   Get waitlist firstName-neq=${cname0}  waitlistStatus-neq=${wl_status[4]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname0}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -361,7 +361,7 @@ JD-TC-GetWaitlistCountToday-20
 JD-TC-GetWaitlistCountToday-21
       [Documentation]   Get waitlist firstName-eq=${cname0}  waitlistStatus-eq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname0}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -370,7 +370,7 @@ JD-TC-GetWaitlistCountToday-21
 JD-TC-GetWaitlistCountToday-22
       [Documentation]   Get waitlist firstName-neq=${cname0}  waitlistStatus-neq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname0}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -379,7 +379,7 @@ JD-TC-GetWaitlistCountToday-22
 JD-TC-GetWaitlistCountToday-23
       [Documentation]   Get waitlist firstName-eq=${cname0}  waitlistStatus-eq=${wl_status[0]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname0}  waitlistStatus-eq=${wl_status[0]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -389,7 +389,7 @@ JD-TC-GetWaitlistCountToday-23
 JD-TC-GetWaitlistCountToday-24
       [Documentation]   Get waitlist firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[5]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -398,7 +398,7 @@ JD-TC-GetWaitlistCountToday-24
 JD-TC-GetWaitlistCountToday-25
       [Documentation]   Get waitlist firstName-neq=${cname1}  waitlistStatus-neq=${wl_status[5]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname1}  waitlistStatus-neq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -407,7 +407,7 @@ JD-TC-GetWaitlistCountToday-25
 JD-TC-GetWaitlistCountToday-26
       [Documentation]   Get waitlist firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[4]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -416,7 +416,7 @@ JD-TC-GetWaitlistCountToday-26
 JD-TC-GetWaitlistCountToday-27
       [Documentation]   Get waitlist firstName-neq=${cname1}  waitlistStatus-neq=${wl_status[4]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname1}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -425,7 +425,7 @@ JD-TC-GetWaitlistCountToday-27
 JD-TC-GetWaitlistCountToday-28
       [Documentation]   Get waitlist firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -434,7 +434,7 @@ JD-TC-GetWaitlistCountToday-28
 JD-TC-GetWaitlistCountToday-29
       [Documentation]   Get waitlist firstName-neq=${cname1}  waitlistStatus-neq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname1}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -443,7 +443,7 @@ JD-TC-GetWaitlistCountToday-29
 JD-TC-GetWaitlistCountToday-30
       [Documentation]   Get waitlist firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[0]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[0]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -452,7 +452,7 @@ JD-TC-GetWaitlistCountToday-30
 JD-TC-GetWaitlistCountToday-31
       [Documentation]   Get waitlist firstName-eq=${cname0}  service-eq=${ser_id1} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname0}  service-eq=${ser_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -461,7 +461,7 @@ JD-TC-GetWaitlistCountToday-31
 JD-TC-GetWaitlistCountToday-32
       [Documentation]   Get waitlist firstName-neq=${cname0}  service-neq=${ser_id1} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname0}  service-neq=${ser_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -470,7 +470,7 @@ JD-TC-GetWaitlistCountToday-32
 JD-TC-GetWaitlistCountToday-33
       [Documentation]   Get waitlist firstName-eq=${cname1}  service-eq=${ser_id1} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname1}  service-eq=${ser_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -479,7 +479,7 @@ JD-TC-GetWaitlistCountToday-33
 JD-TC-GetWaitlistCountToday-34
       [Documentation]   Get waitlist firstName-neq=${cname1}  service-neq=${ser_id1} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname1}  service-neq=${ser_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -488,7 +488,7 @@ JD-TC-GetWaitlistCountToday-34
 JD-TC-GetWaitlistCountToday-35
       [Documentation]   Get waitlist firstName-eq=${cname0}  service-eq=${ser_id2} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname0}  service-eq=${ser_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -497,7 +497,7 @@ JD-TC-GetWaitlistCountToday-35
 JD-TC-GetWaitlistCountToday-36
       [Documentation]   Get waitlist firstName-neq=${cname0}  service-neq=${ser_id2} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname0}  service-neq=${ser_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -506,7 +506,7 @@ JD-TC-GetWaitlistCountToday-36
 JD-TC-GetWaitlistCountToday-37
       [Documentation]   Get waitlist firstName-eq=${cname1}  service-eq=${ser_id2} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-eq=${cname1}  service-eq=${ser_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -515,7 +515,7 @@ JD-TC-GetWaitlistCountToday-37
 JD-TC-GetWaitlistCountToday-38
       [Documentation]   Get waitlist firstName-neq=${cname1}  service-neq=${ser_id2} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  firstName-neq=${cname1}  service-neq=${ser_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -524,7 +524,7 @@ JD-TC-GetWaitlistCountToday-38
 JD-TC-GetWaitlistCountToday-39
       [Documentation]   Get waitlist service-eq=${ser_id1}   waitlistStatus=${wl_status[4]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id1}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -533,7 +533,7 @@ JD-TC-GetWaitlistCountToday-39
 JD-TC-GetWaitlistCountToday-40
       [Documentation]   Get waitlist service-neq=${ser_id1}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
       ${resp}=  Get Waitlist Count Today  service-neq=${ser_id1}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -542,7 +542,7 @@ JD-TC-GetWaitlistCountToday-40
 JD-TC-GetWaitlistCountToday-41
       [Documentation]   Get waitlist service-eq=${ser_id1}   waitlistStatus-eq=${wl_status[5]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id1}  waitlistStatus-eq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -551,7 +551,7 @@ JD-TC-GetWaitlistCountToday-41
 JD-TC-GetWaitlistCountToday-42
       [Documentation]   Get waitlist service-neq=${ser_id1}  waitlistStatus-neq=${wl_status[5]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
       ${resp}=  Get Waitlist Count Today  service-neq=${ser_id1}  waitlistStatus-neq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -560,7 +560,7 @@ JD-TC-GetWaitlistCountToday-42
 JD-TC-GetWaitlistCountToday-43
       [Documentation]   Get waitlist service-eq=${ser_id1}   waitlistStatus-eq=${wl_status[1]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id1}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -569,7 +569,7 @@ JD-TC-GetWaitlistCountToday-43
 JD-TC-GetWaitlistCountToday-44
       [Documentation]   Get waitlist service-neq=${ser_id1}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
       ${resp}=  Get Waitlist Count Today  service-neq=${ser_id1}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -578,7 +578,7 @@ JD-TC-GetWaitlistCountToday-44
 JD-TC-GetWaitlistCountToday-45
       [Documentation]   Get waitlist service-eq=${ser_id1}   waitlistStatus-eq=${wl_status[0]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id1}  waitlistStatus-eq=${wl_status[0]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -587,7 +587,7 @@ JD-TC-GetWaitlistCountToday-45
 JD-TC-GetWaitlistCountToday-46
       [Documentation]   Get waitlist service-eq=${ser_id2}   waitlistStatus-eq=${wl_status[0]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id2}  waitlistStatus-eq=${wl_status[0]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -596,7 +596,7 @@ JD-TC-GetWaitlistCountToday-46
 JD-TC-GetWaitlistCountToday-47
       [Documentation]   Get waitlist service-eq=${ser_id2}   waitlistStatus-eq=${wl_status[4]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id2}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -605,7 +605,7 @@ JD-TC-GetWaitlistCountToday-47
 JD-TC-GetWaitlistCountToday-48
       [Documentation]   Get waitlist service-neq=${ser_id2}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
       ${resp}=  Get Waitlist Count Today  service-neq=${ser_id2}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -614,7 +614,7 @@ JD-TC-GetWaitlistCountToday-48
 JD-TC-GetWaitlistCountToday-49
       [Documentation]   Get waitlist service-eq=${ser_id2}   waitlistStatus-eq=${wl_status[5]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id2}  waitlistStatus-eq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -623,7 +623,7 @@ JD-TC-GetWaitlistCountToday-49
 JD-TC-GetWaitlistCountToday-50
       [Documentation]   Get waitlist service-neq=${ser_id2}  waitlistStatus-neq=${wl_status[5]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
       ${resp}=  Get Waitlist Count Today  service-neq=${ser_id2}  waitlistStatus-neq=${wl_status[5]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -632,7 +632,7 @@ JD-TC-GetWaitlistCountToday-50
 JD-TC-GetWaitlistCountToday-51
       [Documentation]   Get waitlist service-eq=${ser_id2}   waitlistStatus-eq=${wl_status[1]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  service-eq=${ser_id2}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -641,7 +641,7 @@ JD-TC-GetWaitlistCountToday-51
 JD-TC-GetWaitlistCountToday-52
       [Documentation]   Get waitlist service-neq=${ser_id2}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
       ${resp}=  Get Waitlist Count Today  service-neq=${ser_id2}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -650,7 +650,7 @@ JD-TC-GetWaitlistCountToday-52
 JD-TC-GetWaitlistCountToday-53
       [Documentation]   Get waitlist token-eq=${token_id}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  token-eq=${token_id}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -659,7 +659,7 @@ JD-TC-GetWaitlistCountToday-53
 JD-TC-GetWaitlistCountToday-54
       [Documentation]   Get waitlist token-neq=${token_id}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  token-neq=${token_id}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -668,7 +668,7 @@ JD-TC-GetWaitlistCountToday-54
 JD-TC-GetWaitlistCountToday-55
       [Documentation]   Get waitlist token-eq=${token_id}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  token-eq=${token_id}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -677,7 +677,7 @@ JD-TC-GetWaitlistCountToday-55
 JD-TC-GetWaitlistCountToday-56
       [Documentation]   Get waitlist token-eq=${token_id}  service-eq=${ser_id1}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  token-eq=${token_id}  service-eq=${ser_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -686,7 +686,7 @@ JD-TC-GetWaitlistCountToday-56
 JD-TC-GetWaitlistCountToday-57
       [Documentation]   Get waitlist token-neq=${token_id}  service-neq=${ser_id2}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
       ${resp}=  Get Waitlist Count Today  token-neq=${token_id}  service-neq=${ser_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -695,7 +695,7 @@ JD-TC-GetWaitlistCountToday-57
 JD-TC-GetWaitlistCountToday-58
       [Documentation]   Get waitlist count today location-eq=${lid1} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  AddCustomer  ${CUSERNAME3}
@@ -721,7 +721,6 @@ JD-TC-GetWaitlistCountToday-58
       Set Suite Variable  ${qid2}   ${resp.json()} 
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id4}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id5}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -734,7 +733,6 @@ JD-TC-GetWaitlistCountToday-58
 
       ${resp}=  Add To Waitlist  ${cid1}  ${ser_id5}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id6}  ${wid[0]}
 
@@ -745,7 +743,6 @@ JD-TC-GetWaitlistCountToday-58
 
       ${resp}=  Add To Waitlist  ${cid2}  ${ser_id5}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id7}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -757,7 +754,7 @@ JD-TC-GetWaitlistCountToday-58
 JD-TC-GetWaitlistCountToday-59
       [Documentation]   Get waitlist count todaylocation-eq=${lid1} service-eq=${ser_id5} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200   
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}   service-eq=${ser_id5}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200 
@@ -767,7 +764,7 @@ JD-TC-GetWaitlistCountToday-59
 JD-TC-GetWaitlistCountToday-60
       [Documentation]   Get waitlist count today location-eq=${lid1}  queue-eq=${qid2} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  queue-eq=${qid2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -776,7 +773,7 @@ JD-TC-GetWaitlistCountToday-60
 JD-TC-GetWaitlistCountToday-61
       [Documentation]   Get waitlist count today location-eq=${lid1}  waitlistStatus-eq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Waitlist Action  ${waitlist_actions[1]}  ${waitlist_id6}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -787,7 +784,7 @@ JD-TC-GetWaitlistCountToday-61
 JD-TC-GetWaitlistCountToday-62
       [Documentation]   Get waitlist count today location-eq=${lid1}  waitlistStatus-eq=${wl_status[2]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  waitlistStatus-eq=${wl_status[2]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -796,7 +793,7 @@ JD-TC-GetWaitlistCountToday-62
 JD-TC-GetWaitlistCountToday-63
       [Documentation]   Get waitlist count today location-eq=${lid1}  waitlistStatus-eq=${wl_status[4]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Waitlist Action Cancel    ${waitlist_id5}   ${waitlist_cancl_reasn[3]}   ${desc}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -808,7 +805,7 @@ JD-TC-GetWaitlistCountToday-63
 JD-TC-GetWaitlistCountToday-64
       [Documentation]   Get waitlist count today location-eq=${lid1}  token-eq=${token_id5}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  token-eq=${token_id5}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -817,7 +814,7 @@ JD-TC-GetWaitlistCountToday-64
 JD-TC-GetWaitlistCountToday-65
       [Documentation]   Get waitlist count today location-eq=${lid1}  queue-eq=${qid2} service-eq=${ser_id4} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  queue-eq=${qid2}  service-eq=${ser_id4}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -826,7 +823,7 @@ JD-TC-GetWaitlistCountToday-65
 JD-TC-GetWaitlistCountToday-66
       [Documentation]   Get waitlist count today location-eq=${lid1}  queue-eq=${qid2}  waitlistStatus-eq=${wl_status[4]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  queue-eq=${qid2}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -835,7 +832,7 @@ JD-TC-GetWaitlistCountToday-66
 JD-TC-GetWaitlistCountToday-67
       [Documentation]   Get waitlist count today location-eq=${lid1}  queue-eq=${qid2}  token-eq=${token_id5} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  queue-eq=${qid2}  token-eq=${token_id5}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -845,7 +842,7 @@ JD-TC-GetWaitlistCountToday-67
 JD-TC-GetWaitlistCountToday-68
       [Documentation]   Get waitlist count today location-eq=${lid1}  queue-eq=${qid2}  token-eq=${token_id7}  waitlistStatus-eq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  queue-eq=${qid2}  token-eq=${token_id7}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -854,7 +851,7 @@ JD-TC-GetWaitlistCountToday-68
 JD-TC-GetWaitlistCountToday-69
       [Documentation]   Get waitlist count today location-eq=${lid1}  queue-eq=${qid2}  token-eq=${token_id5}  waitlistStatus-eq=${wl_status[1]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today  location-eq=${lid1}  queue-eq=${qid2}  token-eq=${token_id5}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -863,7 +860,7 @@ JD-TC-GetWaitlistCountToday-69
 JD-TC-GetWaitlistCountToday-70
       [Documentation]   Get waitlist queue-eq=${qid2} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200       
       ${resp}=  Get Waitlist Count Today     queue-eq=${qid2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -872,7 +869,7 @@ JD-TC-GetWaitlistCountToday-70
 JD-TC-GetWaitlistCountToday-71
       [Documentation]   Get queue-eq=${qid2} service-eq=${ser_id5} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200   
       ${resp}=  Get Waitlist Count Today   queue-eq=${qid2}   service-eq=${ser_id5}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200 
@@ -881,7 +878,7 @@ JD-TC-GetWaitlistCountToday-71
 JD-TC-GetWaitlistCountToday-72
       [Documentation]   Get waitlist queue-eq=${qid2}  waitlistStatus-eq=${wl_status[2]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today   queue-eq=${qid2}  waitlistStatus-eq=${wl_status[2]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -890,7 +887,7 @@ JD-TC-GetWaitlistCountToday-72
 JD-TC-GetWaitlistCountToday-73
       [Documentation]   Get waitlist queue-eq=${qid2}  waitlistStatus-eq=${wl_status[4]} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today   queue-eq=${qid2}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -899,7 +896,7 @@ JD-TC-GetWaitlistCountToday-73
 JD-TC-GetWaitlistCountToday-74
       [Documentation]   Get waitlist queue-eq=${qid2}  location-eq=${lid1}  from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today   queue-eq=${qid2}  location-eq=${lid1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -908,7 +905,7 @@ JD-TC-GetWaitlistCountToday-74
 JD-TC-GetWaitlistCountToday-75
       [Documentation]   Get waitlist  waitlistStatus-eq=${wl_status[1]}  queue-eq=${qid2} service-eq=${ser_id5} from=0  count=10
 
-      ${resp}=  ProviderLogin  ${PUSERNAME205}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200  
       ${resp}=  Get Waitlist Count Today   waitlistStatus-eq=${wl_status[1]}  queue-eq=${qid2}  service-eq=${ser_id5}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -919,21 +916,26 @@ JD-TC-GetWaitlistCountToday-76
       clear_queue      ${PUSERNAME49}
       clear_location   ${PUSERNAME49}
       clear_service    ${PUSERNAME49}
-      ${resp}=  ProviderLogin  ${PUSERNAME49}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ser_duratn}=  Random Int   min=2   max=4
       ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  ${ser_duratn}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
+      
       ${resp}=   Create Sample Location
       Set Suite Variable    ${loc_id11}    ${resp}  
+      ${resp}=   Get Location ById  ${loc_id11}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name11}=   FakerLibrary.word
       Set Suite Variable    ${ser_name11} 
       ${resp}=   Create Sample Service  ${ser_name11}
-      Set Suite Variable    ${ser_id11}    ${resp}  
+      Set Suite Variable    ${ser_id11}    ${resp}   
       
       ${q_name1}=    FakerLibrary.name
-      ${strt_time}=   subtract_time  2  00
-      ${end_time}=    add_time       0  20 
+      ${strt_time}=   subtract_timezone_time   ${tz}  2  00
+      ${end_time}=    db.add_timezone_time  ${tz}       0  20 
       ${parallel}=   Random Int  min=1   max=2
       ${capacity}=  Random Int   min=10   max=20
       ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id11}  ${ser_id11}  
@@ -960,7 +962,6 @@ JD-TC-GetWaitlistCountToday-76
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id11}  ${que_id11}  ${DAY1}  ${desc}  ${bool[1]}  ${mem_id}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id11}  ${wid[0]}
       ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -983,7 +984,7 @@ JD-TC-GetWaitlistCountToday-76
 JD-TC-GetWaitlistCountToday-77
       [Documentation]  Get Today Waitlist count By first name of family member
 
-      ${resp}=  ProviderLogin  ${PUSERNAME49}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Waitlist Count Today  waitlistingFor-eq=firstName::${f_name}
@@ -994,7 +995,7 @@ JD-TC-GetWaitlistCountToday-77
 JD-TC-GetWaitlistCountToday-78
       [Documentation]  Get Today Waitlist count By last name of family member
 
-      ${resp}=  ProviderLogin  ${PUSERNAME49}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist Count Today  waitlistingFor-eq=lastName::${l_name}
       Log  ${resp.json()}

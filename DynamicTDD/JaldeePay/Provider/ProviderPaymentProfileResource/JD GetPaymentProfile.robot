@@ -32,7 +32,7 @@ JD-TC-GetPaymentProfile-1
 
     [Documentation]  Create and get payment profile
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -109,7 +109,7 @@ JD-TC-GetPaymentProfile-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -133,7 +133,7 @@ JD-TC-GetPaymentProfile-2
 
     [Documentation]  Create and get payment profile for multiple banks.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -210,7 +210,7 @@ JD-TC-GetPaymentProfile-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -230,7 +230,7 @@ JD-TC-GetPaymentProfile-3
 
     [Documentation]  try to get payment profile without create it.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

@@ -30,7 +30,7 @@ JD-TC-AssignTeamToAppointment-1
 
     [Documentation]  Assingn team to appointment.
     
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -45,7 +45,7 @@ JD-TC-AssignTeamToAppointment-1
 
     ${pid}=  get_acc_id  ${HLMUSERNAME7}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
@@ -55,11 +55,14 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     
     ${resp}=    Get Locations
@@ -71,10 +74,11 @@ JD-TC-AssignTeamToAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=  FakerLibrary.word
@@ -127,12 +131,14 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -223,7 +229,7 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -242,7 +248,7 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -266,7 +272,7 @@ JD-TC-AssignTeamToAppointment-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -280,7 +286,7 @@ JD-TC-AssignTeamToAppointment-3
 
     [Documentation]  Assign team to an account level appointment then assign the same appointment to another team.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -332,7 +338,7 @@ JD-TC-AssignTeamToAppointment-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -351,7 +357,7 @@ JD-TC-AssignTeamToAppointment-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -363,7 +369,7 @@ JD-TC-AssignTeamToAppointment-3
     Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[2]}
     Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id2}
     
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -372,7 +378,7 @@ JD-TC-AssignTeamToAppointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}        []
 
-    ${resp}=  ProviderLogin  ${USERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -385,16 +391,16 @@ JD-TC-AssignTeamToAppointment-4
 
     [Documentation]  Assign team to an account level appointment of multiple consumers.
     
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=   add_time  1  00
-    ${eTime1}=    add_time  2  00 
-    # ${sTime1}=  add_time   0  15
+    ${sTime1}=   add_timezone_time  ${tz}  1  00  
+    ${eTime1}=    add_timezone_time  ${tz}  2  00   
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -454,7 +460,7 @@ JD-TC-AssignTeamToAppointment-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -477,7 +483,7 @@ JD-TC-AssignTeamToAppointment-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -497,7 +503,7 @@ JD-TC-AssignTeamToAppointment-UH1
 
     [Documentation]  Assign same appointment to the same team multiple times.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -511,7 +517,7 @@ JD-TC-AssignTeamToAppointment-UH2
 
     [Documentation]  Assign a appointment to a team which has no users.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -534,7 +540,7 @@ JD-TC-AssignTeamToAppointment-UH3
 
     [Documentation]  Try to assign another branch's appointment to the team.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

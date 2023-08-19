@@ -27,7 +27,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-1
     clear_service  ${PUSERNAME48}
     clear_customer   ${PUSERNAME48}
     clear_Item   ${PUSERNAME48}
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -76,17 +76,17 @@ JD-TC-RemoveMultipleLabelsFromOrder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable  ${sTime1} 
-    ${eTime1}=  add_time   3  30 
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable  ${eTime1}   
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -209,7 +209,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${DAY1}
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
@@ -238,7 +238,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-1
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -309,7 +309,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-2
 
     [Documentation]  Remove multiple labels from one order.(pickup)
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -352,7 +352,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-2
     Set Suite Variable  ${orderid3}  ${orderid[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -408,7 +408,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-2
 JD-TC-RemoveMultipleLabelsFromOrder-3
     [Documentation]  Remove one label from multile labels 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -443,7 +443,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-3
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -470,7 +470,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-3
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -559,7 +559,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-4
     clear_service  ${PUSERNAME121}
     clear_customer   ${PUSERNAME121}
     clear_Item   ${PUSERNAME121}
-    ${resp}=  ProviderLogin  ${PUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid1}  ${resp.json()['id']}
@@ -633,18 +633,18 @@ JD-TC-RemoveMultipleLabelsFromOrder-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
 
-    ${sTime3}=  add_time  0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
 
-    ${eTime3}=  add_time   1  00 
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
     
     ${noOfOccurance}=  Random Int  min=0   max=0
 
@@ -764,7 +764,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-4
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -869,7 +869,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-5
     clear_service  ${PUSERNAME56}
     clear_customer   ${PUSERNAME56}
     clear_Item   ${PUSERNAME56}
-    ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -917,16 +917,16 @@ JD-TC-RemoveMultipleLabelsFromOrder-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
-    ${eTime2}=  add_time   3  30 
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
+    ${eTime2}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -1046,7 +1046,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-5
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -1082,7 +1082,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-5
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1108,7 +1108,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-5
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid5}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1216,7 +1216,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-UH2
 JD-TC-RemoveMultipleLabelsFromOrder-UH3
     [Documentation]  Remove label not added in appointments
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1274,7 +1274,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-UH3
     Set Test Variable  ${orderid}  ${orderid[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1356,7 +1356,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-UH3
 JD-TC-RemoveMultipleLabelsFromOrder-UH4
     [Documentation]  Remove same label twice
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1412,7 +1412,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-UH4
     Set Test Variable  ${orderid}  ${orderid[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1500,7 +1500,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-UH4
 JD-TC-RemoveMultipleLabelsFromOrder-UH5
     [Documentation]  Remove label without label name
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1552,7 +1552,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-UH5
     Set Test Variable  ${orderid}  ${orderid[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1615,7 +1615,7 @@ JD-TC-RemoveMultipleLabelsFromOrder-UH5
 JD-TC-RemoveMultipleAppointmentLabel-UH6
     [Documentation]  Remove label without adding any
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1665,7 +1665,7 @@ JD-TC-RemoveMultipleAppointmentLabel-UH6
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

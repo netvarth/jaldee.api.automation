@@ -57,7 +57,7 @@ JD-TC-Get Bill By UUId -1
         ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${PUSERNAME_Z}
-        ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -87,18 +87,22 @@ JD-TC-Get Bill By UUId -1
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
         ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
         ${bs}=  FakerLibrary.bs
-        ${city}=   get_place
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
-        ${sTime}=  db.get_time
-        ${eTime}=  add_time   0  15
+        # ${city}=   get_place
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
+        # ${sTime}=  db.get_time_by_timezone  ${tz}
+        ${sTime}=  db.get_time_by_timezone  ${tz}
+        ${eTime}=  add_timezone_time  ${tz}  0  15  
         ${desc}=   FakerLibrary.sentence  nb_words=2  variable_nb_words=False
         ${url}=   FakerLibrary.url
         ${parking}   Random Element   ${parkingType}
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable   ${DAY}
         ${resp}=  Update Business Profile with schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
         Should Be Equal As Strings    ${resp.status_code}    200
@@ -125,8 +129,8 @@ JD-TC-Get Bill By UUId -1
         Should Be Equal As Strings    ${resp.status_code}   200
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  1  30
-        ${eTime}=  add_time   3  00
+        ${sTime}=  add_timezone_time  ${tz}  1  30  
+        ${eTime}=  add_timezone_time  ${tz}  3  00  
         ${queue1}=   FakerLibrary.word
         ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${sid1}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -138,10 +142,9 @@ JD-TC-Get Bill By UUId -1
         Set Suite Variable  ${cid}  ${resp.json()}   
         ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
-        # ${json}=  Set Variable  ${resp.json()}
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${wid}  ${wid[0]}
+        
         ${resp}=  Get Bill By UUId  ${wid}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${bid}  ${resp.json()['id']}
@@ -169,10 +172,10 @@ JD-TC-Get Bill By UUId -1
         ${cou_amount}=   Convert To Number   ${cou_amount}
         ${cupn_code}=   FakerLibrary.word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_time  0  15
-        ${eTime}=  add_time   0  45
-        ${ST_DAY}=  get_date
-        ${EN_DAY}=  add_date   10
+        ${sTime}=  subtract_timezone_time  ${tz}  0  15
+        ${eTime}=  add_timezone_time  ${tz}  0  45  
+        ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+        ${EN_DAY}=  db.add_timezone_date  ${tz}   10
         ${min_bill_amount}=   Random Int   min=10   max=100
         ${max_disc_val}=   Random Int   min=100   max=500
         ${max_prov_use}=   Random Int   min=10   max=20
@@ -245,7 +248,7 @@ JD-TC-Get Bill By UUId -1
 JD-TC-Get Bill By UUId -UH1
 
         [Documentation]    Get bill Bill by UUId  using another provider's uuid
-        ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Get Bill By UUId  ${wid}
         Should Be Equal As Strings  ${resp.status_code}  401
@@ -293,7 +296,7 @@ JD-TC-Get Bill By UUId -2
         Set Test Variable  ${sd1}  ${max_party['subdomain']}
         
         FOR   ${a}  IN RANGE    ${length}    
-                ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+                ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
                 Should Be Equal As Strings    ${resp.status_code}    200
                 ${domain}=   Set Variable    ${resp.json()['sector']}
                 ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -307,7 +310,7 @@ JD-TC-Get Bill By UUId -2
         END
         Set Suite Variable  ${a}
         Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-        # ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         # Log  ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -332,17 +335,26 @@ JD-TC-Get Bill By UUId -2
         Set Suite Variable  ${cid}  ${resp.json()}   
         # Set Test Variable  ${firstName}  ${resp.json()[0]['firstName']}
 
-        ${resp}=  Create Sample Queue  
+        ${resp}=  Create Sample Queue
         Set Test Variable  ${qid1}   ${resp['queue_id']}
         Set Test Variable  ${sid1}   ${resp['service_id']}
         Set Test Variable  ${lid}   ${resp['location_id']}
         Set Test Variable  ${s_name}   ${resp['service_name']}
 
-        ${resp}=   Get Service
-        Log   ${resp.json()}
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sid1}
-        Set Test Variable   ${service_charge}   ${resp.json()[0]['totalAmount']}
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+        # ${resp}=   Get Service
+        # Log   ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sid1}
+        # Set Test Variable   ${service_charge}   ${resp.json()[0]['totalAmount']}
+        ${resp}=   Get Service By Id  ${sid1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable   ${service_charge}   ${resp.json()['totalAmount']}
 
         ${resp}=    Get Locations
         Log   ${resp.json()}
@@ -583,7 +595,7 @@ JD-TC-Get Bill By UUId -3
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${resp}=  Get Consumer By Id  ${CUSERNAME9}
@@ -607,13 +619,13 @@ JD-TC-Get Bill By UUId -3
         ${lid}=  Create Sample Location
         Set Test Variable   ${lid}
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1} 
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2} 
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list} 
-        ${sTime1}=  add_time  0  15
+        ${sTime1}=  add_timezone_time  ${tz}  0  15  
         Set Suite Variable   ${sTime1}
         ${delta}=  FakerLibrary.Random Int  min=10  max=60
         Set Suite Variable  ${delta}
@@ -626,7 +638,7 @@ JD-TC-Get Bill By UUId -3
         Set Suite Variable  ${schedule_name}
         ${parallel}=  FakerLibrary.Random Int  min=1  max=10
         ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
         ${bool1}=  Random Element  ${bool}
         ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  
         Log  ${resp.json()}
@@ -798,7 +810,7 @@ JD-TC-Get Bill By UUId -4
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${resp}=  Get Consumer By Id  ${CUSERNAME9}
@@ -829,10 +841,10 @@ JD-TC-Get Bill By UUId -4
         Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
         ${lid}=  Create Sample Location
-        ${DAY1}=  get_date
-        ${DAY2}=  add_date  10      
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime1}=  add_time  0  15
+        ${sTime1}=  add_timezone_time  ${tz}  0  15  
         ${delta}=  FakerLibrary.Random Int  min=10  max=60
         ${eTime1}=  add_two   ${sTime1}  ${delta}
         ${s_name}=  FakerLibrary.name
@@ -840,7 +852,7 @@ JD-TC-Get Bill By UUId -4
         ${schedule_name}=  FakerLibrary.bs
         ${parallel}=  FakerLibrary.Random Int  min=1  max=10
         ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
         ${bool1}=  Random Element  ${bool}
         ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  
         Log  ${resp.json()}

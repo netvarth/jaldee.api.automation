@@ -83,11 +83,33 @@ JD-TC-Check Notification-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  ProviderLogin  ${PUSERNAME141}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME141}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pR_id20}  ${resp.json()['id']}
-    Set Suite Variable  ${pname20}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pR_id20}  ${decrypted_data['id']}
+    Set Suite Variable  ${pname20}  ${decrypted_data['userName']}
+    # Set Suite Variable  ${pR_id20}  ${resp.json()['id']}
+    # Set Suite Variable  ${pname20}  ${resp.json()['userName']}
+    
+    # sleep  1s
+    # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${resp.json()['onlinePresence']}'=='${bool[0]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    # ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+    #     ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
     clear_location   ${PUSERNAME141}
     clear_customer   ${PUSERNAME141}
     clear_Providermsg  ${PUSERNAME141}
@@ -95,23 +117,21 @@ JD-TC-Check Notification-1
     clear_Consumermsg  ${CUSERPH1}
     ${con_id}=  get_id  ${CUSERPH1}
     ${con_id1}=  get_id   ${CUSERPH2}
-    
-    sleep  1s
-    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
-    ${Time}=  db.get_time
-    ${sTime}=  add_time  0  45
-    ${eTime}=  add_time   1  00
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${lid}=  Create Sample Location 
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  45  
+    ${eTime}=  add_timezone_time  ${tz}  1  00  
     ${queue1}=    FakerLibrary.Word
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  3  8  ${lid}  ${s_id}
     Log  ${resp.json()}
@@ -131,11 +151,10 @@ JD-TC-Check Notification-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${consumernote}=  FakerLibrary.sentence
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  ${consumernote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -154,7 +173,6 @@ JD-TC-Check Notification-1
 
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id}  ${qid}  ${DAY}  ${consumernote}  ${bool[1]}  ${cid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Business Profile
@@ -169,8 +187,8 @@ JD-TC-Check Notification-1
 
     ${resp}=   Get Waitlist EncodedId    ${wid1}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid1}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${W_uuid1}   ${resp.json()}
     
     Set Suite Variable  ${W_encId1}  ${resp.json()}
 
@@ -190,8 +208,8 @@ JD-TC-Check Notification-1
 
     ${resp}=   Get Waitlist EncodedId    ${wid2}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid2}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${W_uuid2}   ${resp.json()}
     
     Set Suite Variable  ${W_encId2}  ${resp.json()}
 
@@ -215,7 +233,7 @@ JD-TC-Check Notification-1
 
     ${resp}=  Consumer Login  ${CUSERPH2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    ${resp}=  Delete Waitlist Consumer  ${wid2}  ${a_id}
+    ${resp}=  Cancel Waitlist  ${wid2}  ${a_id}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -286,7 +304,7 @@ JD-TC-Check Notification-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME141}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME141}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
       
@@ -302,13 +320,13 @@ JD-TC-Check Notification-1
 *** Comment ***
 JD-TC-Check Notification-1
 	Comment   Check Notification send to next and next to next person after start a waitlist and parallel serving as 3
-	${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${a_id}=  get_acc_id  ${PUSERNAME2}
     Set Test Variable  ${a_id}
     ${resp}=  Update Waitlist Settings  ML  30  true  true  true  true  ${EMPTY}  False
     Should Be Equal As Strings  ${resp.status_code}  200  
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Test Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List   1  2  3  4  5  6  7
     ${resp}=  Create Location  Thiruth  ${longi}  ${latti}  www.sampleurl.com  680220  Palliyil House  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${LsTime}  ${LeTime}
@@ -335,32 +353,27 @@ JD-TC-Check Notification-1
     ${cid1}=  get_id  ${CUSERNAME}
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id11}  ${qid2}  ${DAY1}  hi  True  ${cid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${cid2}=  get_id  ${CUSERPH1}
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id2}  ${qid2}  ${DAY1}  hi  True  ${cid2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${cid3}=  get_id  ${CUSERPH2}
     ${resp}=  Add To Waitlist  ${cid3}  ${s_id11}  ${qid2}  ${DAY1}  hi  True  ${cid3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${cid4}=  get_id  ${CUSERNAME3}
     ${resp}=  Add To Waitlist  ${cid4}  ${s_id2}  ${qid2}  ${DAY1}  hi  True  ${cid4}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}
     ${cid5}=  get_id  ${CUSERNAME4}
     ${resp}=  Add To Waitlist  ${cid5}  ${s_id2}  ${qid2}  ${DAY1}  hi  True  ${cid5}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
     sleep  02s
@@ -419,7 +432,7 @@ JD-TC-Check Notification-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-	${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Providermsg  ${PUSERNAME2}
     clear_Consumermsg  ${CUSERNAME}
@@ -429,7 +442,8 @@ JD-TC-Check Notification-1
     clear_Consumermsg  ${CUSERNAME4}
     ${resp}=  Waitlist Action  STARTED  ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${time}=  db.get_time
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
     sleep  03s
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200   
@@ -487,12 +501,13 @@ JD-TC-Check Notification-1
     clear_Consumermsg  ${CUSERNAME3}
     clear_Consumermsg  ${CUSERNAME4}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     change_system_time  0  5
     ${resp}=  Waitlist Action  STARTED  ${wid2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${time}=  db.get_time
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
     sleep  02s
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -551,19 +566,17 @@ JD-TC-Check Notification-1
     clear_Consumermsg  ${CUSERNAME5}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid6}=  get_id  ${GIN_CUSERNAME}
     ${resp}=  Add To Waitlist  ${cid6}  ${s_id11}  ${qid2}  ${DAY1}  hi  True  ${cid6}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid6}  ${wid[0]}
     sleep  02s
     ${cid7}=  get_id  ${CUSERNAME5}
     ${resp}=  Add To Waitlist  ${cid7}  ${s_id11}  ${qid2}  ${DAY1}  hi  True  ${cid7}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid7}  ${wid[0]}
     sleep  02s
@@ -599,12 +612,13 @@ JD-TC-Check Notification-1
     clear_Consumermsg  ${GIN_CUSERNAME}
     clear_Consumermsg  ${CUSERNAME5}  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     change_system_time  0  5
     ${resp}=  Waitlist Action  STARTED  ${wid3}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${time}=  db.get_time
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
     sleep  02s
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -665,7 +679,7 @@ JD-TC-Check Notification-1
     clear_Consumermsg  ${GIN_CUSERNAME}
     clear_Consumermsg  ${CUSERNAME5} 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action Cancel  ${wid4}  noshowup  ${None}
     Should Be Equal As Strings  ${resp.status_code}  200

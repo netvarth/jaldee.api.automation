@@ -32,7 +32,7 @@ JD-TC-Invoice-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_T}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_T}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_T}${\n}
@@ -40,7 +40,6 @@ JD-TC-Invoice-1
     ${pid}=  get_acc_id  ${PUSERNAME_T}
     Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_T}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_T}+25566128
@@ -52,18 +51,22 @@ JD-TC-Invoice-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_T}.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule    ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -119,6 +122,11 @@ JD-TC-Invoice-1
     Set Suite Variable  ${pkgId}  ${licresp.json()[${index}]['pkgId']}
     Set Suite Variable  ${lprice1}  ${licresp.json()[${index}]['price']}
 
+     IF  '${lic_id}' != '${pkgId}'
+        ${resp}=  Change License Package  ${pkgId}
+        Should Be Equal As Strings    ${resp.status_code}   200
+    END
+    
     ${resp}=  Change License Package  ${pkgId}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -136,7 +144,7 @@ JD-TC-Invoice-1
     ${total_amt_with_gst}=  Evaluate  ${amt_with_gst}+${lprice1}
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  1
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${createdDate}  ${DAY1}
     ${DAY2}=  bill_cycle
     Set Suite Variable  ${DAY2}
@@ -157,7 +165,7 @@ JD-TC-Invoice-1
 
 JD-TC-Invoice-2
     [Documentation]   invoice after addon
-    ${resp}=   ProviderLogin  ${PUSERNAME_T}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_Alert  ${pid}
     ${resp}=   Get Addons Metadata
@@ -197,7 +205,7 @@ JD-TC-Invoice-2
 
 JD-TC-Invoice-3
     [Documentation]   get invoices after payment
-    ${resp}=   ProviderLogin  ${PUSERNAME_T}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Invoices  NotPaid
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -236,7 +244,7 @@ JD-TC-Invoice-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_S}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_S}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_S}${\n}
@@ -244,7 +252,6 @@ JD-TC-Invoice-4
     ${pid}=  get_acc_id  ${PUSERNAME_S}
     Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_S}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_S}+25566128
@@ -256,18 +263,22 @@ JD-TC-Invoice-4
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_S}.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule    ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -331,7 +342,7 @@ JD-TC-Invoice-4
     Set Test Variable  ${licuuid}   ${resp.json()[0]['ynwUuid']}
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  1
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${createdDate}  ${DAY1}
     ${DAY2}=  bill_cycle
     ${amt_with_cgst}=  Evaluate  ${lprice1}*${cGstPct}/100
@@ -419,7 +430,7 @@ JD-TC-Invoice-UH3
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
-    ${resp}=  ProviderLogin  ${ph}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['accStatus']}       ${status[3]}
     ${pid}=  get_acc_id  ${ph}
@@ -505,7 +516,7 @@ JD-TC-Invoice-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_R}${\n}
@@ -513,7 +524,6 @@ JD-TC-Invoice-5
     ${pid}=  get_acc_id  ${PUSERNAME_R}
     Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_R}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_R}+25566128
@@ -525,18 +535,22 @@ JD-TC-Invoice-5
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_R}.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule    ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -617,7 +631,7 @@ JD-TC-Invoice-5
     # ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
-    # ${resp}=  ProviderLogin  ${ph}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${pid}=  get_acc_id  ${ph}
     ${resp}=  Get Invoices  NotPaid 
@@ -630,7 +644,7 @@ JD-TC-Invoice-5
     Set Test Variable  ${licuuid}   ${resp.json()[0]['ynwUuid']}
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  1
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  bill_cycle
     Set Test Variable  ${scdiscpct}  ${resp_config.json()['scDiscCodes'][${index1}]['value']}
     ${scdiscpct}=  Convert To Number  ${scdiscpct}  1

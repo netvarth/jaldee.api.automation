@@ -37,14 +37,15 @@ JD-TC-GetAppointmentEncryptedIDHistory-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME101}
     clear_location  ${PUSERNAME101}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -119,7 +120,7 @@ JD-TC-GetAppointmentEncryptedIDHistory-1
 JD-TC-GetAppointmentEncryptedIDHistory-UH1
     [Documentation]    View Appointment Encoded after changing the Date
     change_system_date   3
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Appointment EncodedID    ${apptid1}
@@ -130,7 +131,7 @@ JD-TC-GetAppointmentEncryptedIDHistory-UH1
 JD-TC-GetAppointmentEncryptedIDHistory-UH2
     [Documentation]    Appointment Encoded is Zero after changing the Date
     change_system_date   3
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Appointment EncodedID    0

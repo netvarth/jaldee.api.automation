@@ -21,14 +21,14 @@ ${SERVICE3}     Radio Repdca222
 JD-TC-GetWaitlistStatusBoard-1
 
     [Documentation]  Create  Waitlist StatusBoards and get status boards
-    ${resp}=  ProviderLogin  ${PUSERNAME156}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME156}
     clear_location  ${PUSERNAME156}
     clear_queue   ${PUSERNAME156}
     clear_Statusboard  ${PUSERNAME156}
     clear_Addon  ${PUSERNAME156}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -74,7 +74,7 @@ JD-TC-GetWaitlistStatusBoard-1
     Set Suite Variable  ${sbq_id2}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -83,7 +83,7 @@ JD-TC-GetWaitlistStatusBoard-1
     Set Suite Variable  ${sb_id1}  ${resp.json()}
 
     ${Positions1}=  FakerLibrary.Words  	nb=3
-    ${matric_list1}=  Create Matric For Status Board  ${Positions1[0]}  ${sbq_id2}
+    ${matric_list1}=  Create Metric For Status Board  ${Positions1[0]}  ${sbq_id2}
     Log  ${matric_list1}
     ${Data1}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data1[0]}  ${Data1[1]}  ${Data1[2]}  ${matric_list1}
@@ -109,7 +109,7 @@ JD-TC-GetWaitlistStatusBoard-1
     Should Be Equal As Strings  ${resp.json()[1]['metric'][0]['position']}  ${Positions1[0]}  
     Should Be Equal As Strings  ${resp.json()[1]['metric'][0]['queueSet']['queryString']}   service-eq=${s_id3}&waitlistStatus-eq=checkedIn&label-eq=::
     ${Positions2}=  FakerLibrary.Words  	nb=3
-    ${matric_list2}=  Create Matric For Status Board  ${Positions2[0]}  ${sbq_id2}
+    ${matric_list2}=  Create Metric For Status Board  ${Positions2[0]}  ${sbq_id2}
     Log  ${matric_list2}
     ${Data2}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data2[0]}  ${Data2[1]}  ${Data2[2]}  ${matric_list2}

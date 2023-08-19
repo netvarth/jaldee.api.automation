@@ -31,7 +31,7 @@ JD-TC-ChangeEnqStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME32}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -46,8 +46,13 @@ JD-TC-ChangeEnqStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}  
@@ -242,7 +247,7 @@ JD-TC-ChangeEnqStatus-1
 JD-TC-ChangeEnqStatus-2
     [Documentation]   Change Enquiry Status 2nd status to 1st status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME32}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -275,7 +280,7 @@ JD-TC-ChangeEnqStatus-2
 JD-TC-ChangeEnqStatus-3
     [Documentation]   Change Enquiry internal status to last status (completed)
 
-    ${resp}=   ProviderLogin  ${PUSERNAME32}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -308,7 +313,7 @@ JD-TC-ChangeEnqStatus-3
 JD-TC-ChangeEnqStatus-UH1
     [Documentation]   Change Enquiry Status from last status (completed) to previous status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME32}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -350,7 +355,7 @@ JD-TC-ChangeEnqStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME32}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -365,8 +370,13 @@ JD-TC-ChangeEnqStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}  
@@ -532,7 +542,7 @@ JD-TC-ChangeEnqStatus-UH1
 
     comment  can't change Rejected to any other status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME32}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -623,7 +633,7 @@ JD-TC-ChangeEnqStatus-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME33}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -638,8 +648,13 @@ JD-TC-ChangeEnqStatus-2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -791,7 +806,7 @@ JD-TC-ChangeEnqStatus-UH2
 
     comment  can't change completed to any other status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME33}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -882,7 +897,7 @@ JD-TC-ChangeEnqStatus-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME34}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -897,8 +912,13 @@ JD-TC-ChangeEnqStatus-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -1050,7 +1070,7 @@ JD-TC-ChangeEnqStatus-UH3
 
     comment  can't change canceled to any other status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME34}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1141,7 +1161,7 @@ JD-TC-ChangeEnqStatus-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME35}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1156,8 +1176,13 @@ JD-TC-ChangeEnqStatus-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -1306,7 +1331,7 @@ JD-TC-ChangeEnqStatus-4
 JD-Tc-ChangeEnqStatus-UH4
     [Documentation]    Change status to the same status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME35}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1322,7 +1347,7 @@ JD-Tc-ChangeEnqStatus-UH4
 JD-TC-ChangeEnqStatus-5
     [Documentation]   Change Enquiry Status Assigned to Other Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME35}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1470,7 +1495,7 @@ JD-TC-ChangeEnqStatus-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME36}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1485,8 +1510,13 @@ JD-TC-ChangeEnqStatus-6
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -1654,7 +1684,7 @@ JD-TC-ChangeEnqStatus-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME36}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1669,8 +1699,13 @@ JD-TC-ChangeEnqStatus-7
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -1838,7 +1873,7 @@ JD-TC-ChangeEnqStatus-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME37}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1853,8 +1888,13 @@ JD-TC-ChangeEnqStatus-8
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -2003,7 +2043,7 @@ JD-TC-ChangeEnqStatus-8
 JD-TC-ChangeEnqStatus-UH5
     [Documentation]   Change Enquiry Status to same status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME37}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2019,7 +2059,7 @@ JD-TC-ChangeEnqStatus-UH5
 JD-TC-ChangeEnqStatus-9
     [Documentation]   Change Enquiry Status Progress to Other Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME37}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2141,7 +2181,7 @@ JD-TC-ChangeEnqStatus-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME38}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2156,8 +2196,13 @@ JD-TC-ChangeEnqStatus-10
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -2325,7 +2370,7 @@ JD-TC-ChangeEnqStatus-11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME39}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2340,8 +2385,13 @@ JD-TC-ChangeEnqStatus-11
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -2509,7 +2559,7 @@ JD-TC-ChangeEnqStatus-12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2524,8 +2574,13 @@ JD-TC-ChangeEnqStatus-12
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -2674,7 +2729,7 @@ JD-TC-ChangeEnqStatus-12
 JD-TC-ChangeEnqStatus-UH6
     [Documentation]   Change Enquiry Status to the Same Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2690,7 +2745,7 @@ JD-TC-ChangeEnqStatus-UH6
 JD-TC-ChangeEnqStatus-13
     [Documentation]   Change Enquiry Status Pending to Other Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2793,7 +2848,7 @@ JD-TC-ChangeEnqStatus-14
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME41}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2808,8 +2863,13 @@ JD-TC-ChangeEnqStatus-14
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -2977,7 +3037,7 @@ JD-TC-ChangeEnqStatus-15
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME42}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -2992,8 +3052,13 @@ JD-TC-ChangeEnqStatus-15
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -3161,7 +3226,7 @@ JD-TC-ChangeEnqStatus-16
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -3176,8 +3241,13 @@ JD-TC-ChangeEnqStatus-16
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -3326,7 +3396,7 @@ JD-TC-ChangeEnqStatus-16
 JD-TC-ChangeEnqStatus-UH7
     [Documentation]   Change Enquiry Status to the Same Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3342,7 +3412,7 @@ JD-TC-ChangeEnqStatus-UH7
 JD-TC-ChangeEnqStatus-17
     [Documentation]   Change Enquiry Status Proceed to Other Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3426,7 +3496,7 @@ JD-TC-ChangeEnqStatus-18
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME44}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -3441,8 +3511,13 @@ JD-TC-ChangeEnqStatus-18
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -3610,7 +3685,7 @@ JD-TC-ChangeEnqStatus-19
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME45}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -3625,8 +3700,13 @@ JD-TC-ChangeEnqStatus-19
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -3794,7 +3874,7 @@ JD-TC-ChangeEnqStatus-20
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME46}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -3809,8 +3889,13 @@ JD-TC-ChangeEnqStatus-20
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -3959,7 +4044,7 @@ JD-TC-ChangeEnqStatus-20
 JD-TC-ChangeEnqStatus-UH8
     [Documentation]   Change Enquiry Status to the Same Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME46}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3975,7 +4060,7 @@ JD-TC-ChangeEnqStatus-UH8
 JD-TC-ChangeEnqStatus-21
     [Documentation]   Change Enquiry Status Proceed to Other Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME46}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4040,7 +4125,7 @@ JD-TC-ChangeEnqStatus-22
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME47}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -4055,8 +4140,13 @@ JD-TC-ChangeEnqStatus-22
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -4224,7 +4314,7 @@ JD-TC-ChangeEnqStatus-23
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME48}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -4239,8 +4329,13 @@ JD-TC-ChangeEnqStatus-23
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -4408,7 +4503,7 @@ JD-TC-ChangeEnqStatus-24
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -4423,8 +4518,13 @@ JD-TC-ChangeEnqStatus-24
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -4573,7 +4673,7 @@ JD-TC-ChangeEnqStatus-24
 JD-TC-ChangeEnqStatus-UH9
     [Documentation]   Change Enquiry Status to the Same Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4589,7 +4689,7 @@ JD-TC-ChangeEnqStatus-UH9
 JD-TC-ChangeEnqStatus-25
     [Documentation]   Change Enquiry Status Suspended to Other Status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME49}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4635,7 +4735,7 @@ JD-TC-ChangeEnqStatus-26
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -4650,8 +4750,13 @@ JD-TC-ChangeEnqStatus-26
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -4819,7 +4924,7 @@ JD-TC-ChangeEnqStatus-27
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME51}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -4834,8 +4939,13 @@ JD-TC-ChangeEnqStatus-27
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
@@ -4993,7 +5103,7 @@ JD-TC-ChangeEnqStatus-27
 JD-TC-ChangeEnqStatus-UH10
     [Documentation]   Change Enquiry Status with wrong enquiry id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME51}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5011,7 +5121,7 @@ JD-TC-ChangeEnqStatus-UH10
 JD-TC-ChangeEnqStatus-UH11
     [Documentation]   Change Enquiry Status without enquiry id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME51}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5026,7 +5136,7 @@ JD-TC-ChangeEnqStatus-UH11
 JD-TC-ChangeEnqStatus-UH12
     [Documentation]   Change Enquiry Status with wrong status id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME51}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -5042,7 +5152,7 @@ JD-TC-ChangeEnqStatus-UH12
 JD-TC-ChangeEnqStatus-UH13
     [Documentation]   Change Enquiry Status without status id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME51}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

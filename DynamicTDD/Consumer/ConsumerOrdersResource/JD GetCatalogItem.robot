@@ -18,7 +18,7 @@ JD-TC-GetCatalogItem-1
     clear_service  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
     clear_Item   ${PUSERNAME130}
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -65,16 +65,16 @@ JD-TC-GetCatalogItem-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -160,7 +160,7 @@ JD-TC-GetCatalogItem-2
     clear_service  ${PUSERNAME131}
     clear_customer   ${PUSERNAME131}
     clear_Item   ${PUSERNAME131}
-    ${resp}=  ProviderLogin  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -207,16 +207,16 @@ JD-TC-GetCatalogItem-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -298,7 +298,7 @@ JD-TC-GetCatalogItem-3
     clear_service  ${PUSERNAME132}
     clear_customer   ${PUSERNAME132}
     clear_Item   ${PUSERNAME132}
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -351,15 +351,15 @@ JD-TC-GetCatalogItem-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
    
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
    
     ${list}=  Create List  1  2  3  4  5  6  7
    
@@ -454,7 +454,7 @@ JD-TC-GetCatalogItem-UH1
     clear_service  ${PUSERNAME133}
     clear_customer   ${PUSERNAME133}
     clear_Item   ${PUSERNAME133}
-    ${resp}=  ProviderLogin  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -507,15 +507,15 @@ JD-TC-GetCatalogItem-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
    
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
    
     ${list}=  Create List  1  2  3  4  5  6  7
    
@@ -590,7 +590,7 @@ JD-TC-GetCatalogItem-UH2
     clear_service  ${PUSERNAME134}
     clear_customer   ${PUSERNAME134}
     clear_Item   ${PUSERNAME134}
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -637,16 +637,16 @@ JD-TC-GetCatalogItem-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -709,7 +709,7 @@ JD-TC-GetCatalogItem-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

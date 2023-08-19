@@ -23,7 +23,7 @@ JD-TC-AddItemsToMultipleItemGroups-1
 
     [Documentation]  Create an item and add that item to 2 item groups.
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -134,7 +134,7 @@ JD-TC-AddItemsToMultipleItemGroups-2
 
     [Documentation]  Add items to group by passing empty set of group ids.
 
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -217,7 +217,7 @@ JD-TC-AddItemsToMultipleItemGroups-UH3
 
     [Documentation]  Add items to another providers item group.
 
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +266,7 @@ JD-TC-AddItemsToMultipleItemGroups-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -321,7 +321,7 @@ JD-TC-AddItemsToMultipleItemGroups-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

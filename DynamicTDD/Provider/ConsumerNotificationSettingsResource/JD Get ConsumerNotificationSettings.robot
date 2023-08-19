@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-GetGetConsumerNotificationSettings-1
     [Documentation]   Getting consumer notification settings
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME14}
     ${msg}=  FakerLibrary.text
@@ -39,7 +39,7 @@ JD-TC-GetGetConsumerNotificationSettings-1
 
 JD-TC-GetConsumerNotificationSettings-2
     [Documentation]   Provider again setting consumer notification settings for another resouce and eventtype, Then getting all notification settings
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${msg1}=  FakerLibrary.text
     Set Suite Variable  ${msg1}
@@ -70,7 +70,7 @@ JD-TC-GetConsumerNotificationSettings-2
 
 JD-TC-GetConsumerNotificationSettings-3
     [Documentation]   Provider setting consumer notification settings with EventType as Early and without PersonAhead
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME14}
     ${msg6}=  FakerLibrary.text
@@ -93,7 +93,7 @@ JD-TC-GetConsumerNotificationSettings-3
 
 JD-TC-GetConsumerNotificationSettings-4
     [Documentation]   Provider get notification settings without creating any early Notification settings
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME14}  
     ${resp}=  Get Consumer Notification Settings

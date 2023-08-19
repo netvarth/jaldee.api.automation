@@ -30,7 +30,7 @@ JD-TC-GetLeadsCountforUser-1
 
     [Documentation]   Get lead count for a branch having one lead.
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -68,8 +68,13 @@ JD-TC-GetLeadsCountforUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -100,7 +105,7 @@ JD-TC-GetLeadsCountforUser-2
 
     [Documentation]   Get lead count for a user having one lead(with admin previlage).
 
-    ${resp}=  Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id}  ${resp.json()['id']}
@@ -190,19 +195,28 @@ JD-TC-GetLeadsCountforUser-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
-    Log  ${resp.content}
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
+    # Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${user_id}  ${resp.json()['id']}
-    Set Suite Variable  ${user_fname}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_fname}  ${decrypted_data['firstName']}
+    # Set Suite Variable  ${user_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${user_fname}  ${resp.json()['firstName']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -239,7 +253,7 @@ JD-TC-GetLeadsCountforUser-3
 
     [Documentation]   Get lead count for a user having multiple leads(with admin previlage).
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -271,7 +285,7 @@ JD-TC-GetLeadsCountforUser-4
 
     [Documentation]   Get lead count for a user having one lead(without admin previlage).
 
-    ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -360,20 +374,28 @@ JD-TC-GetLeadsCountforUser-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U3}  ${PASSWORD} 
-    Log  ${resp.content}
+    ${resp}=   Encrypted Provider Login  ${BUSER_U3}  ${PASSWORD} 
+    # Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${user_id3}  ${resp.json()['id']}
-    Set Suite Variable  ${user_fname3}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id3}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_fname3}  ${decrypted_data['userName']}
+    # Set Suite Variable  ${user_id3}  ${resp.json()['id']}
+    # Set Suite Variable  ${user_fname3}  ${resp.json()['firstName']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId3}=  Create Sample Location
-        Set Suite Variable  ${locId3}
+        ${resp}=   Get Location ById  ${locId3}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId3}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title2}=  FakerLibrary.user name
@@ -411,7 +433,7 @@ JD-TC-GetLeadsCountforUser-5
 
     [Documentation]   Get lead count for a user having multiple leads(with admin previlage).
 
-    ${resp}=   ProviderLogin  ${BUSER_U3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -443,7 +465,7 @@ JD-TC-GetLeadsCountforUser-6
 
     [Documentation]   Get lead count for a branch without having a lead.
 
-    ${resp}=  Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -481,7 +503,7 @@ JD-TC-GetLeadsCountforUser-7
 
     [Documentation]   Get lead count for a user(with admin previlage) who does not have a lead but branch have.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${prov_id}  ${resp.json()['id']}
@@ -515,8 +537,13 @@ JD-TC-GetLeadsCountforUser-7
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -615,7 +642,7 @@ JD-TC-GetLeadsCountforUser-8
 
     [Documentation]   Get lead details for a user(without admin previlage) who does not have a lead but branch have.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${prov_id}  ${resp.json()['id']}
@@ -649,8 +676,13 @@ JD-TC-GetLeadsCountforUser-8
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -749,7 +781,7 @@ JD-TC-GetLeadsCountforUser-9
     [Documentation]   create user token (account level) and create lead (user level)
     ...  then user try to get lead details(with admin previlage).
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${prov_id}  ${resp.json()['id']}
@@ -844,7 +876,7 @@ JD-TC-GetLeadsCountforUser-9
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -853,8 +885,13 @@ JD-TC-GetLeadsCountforUser-9
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -887,7 +924,7 @@ JD-TC-GetLeadsCountforUser-10
     [Documentation]   create user token (account level) and create lead (user level)
     ...  then user try to get lead details(without admin previlage).
 
-    ${resp}=  Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${prov_id}  ${resp.json()['id']}
@@ -982,7 +1019,7 @@ JD-TC-GetLeadsCountforUser-10
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -991,8 +1028,13 @@ JD-TC-GetLeadsCountforUser-10
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -1023,7 +1065,7 @@ JD-TC-GetLeadsCountforUser-UH1
 
     [Documentation]   Get lead details with invalid user token.
 
-    ${resp}=   ProviderLogin  ${BUSER_U3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1039,7 +1081,7 @@ JD-TC-GetLeadsCountforUser-UH2
 
     [Documentation]   Get lead details with sp token.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -36,12 +36,12 @@ JD-TC-Update Account Payment Settings-1
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200
        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
        Set Suite Variable  ${PUSERNAME_B}
-       ${DAY1}=  get_date
+       ${DAY1}=  db.get_date_by_timezone  ${tz}
        Set Suite Variable  ${DAY1}  ${DAY1}
        ${list}=  Create List  1  2  3  4  5  6  7
        Set Suite Variable  ${list}  ${list}
@@ -85,7 +85,7 @@ JD-TC-Update Account Payment Settings-1
 JD-TC-Update Account Payment Settings-2
        [Documentation]   Provider update payment settings for  debitcard or creditcard or Nb
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${acct_id1}=  get_acc_id  ${PUSERNAME_B}
        ${bankAccountNumber1}=  Generate_random_value  size=16  chars=string.digits
@@ -102,7 +102,7 @@ JD-TC-Update Account Payment Settings-2
 JD-TC-Update Account Payment Settings-3
        [Documentation]   Provider try to update payment setting using user dono't have valid email id
 
-       #${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+       #${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
        #Should Be Equal As Strings    ${resp.status_code}   200
 
        ${domresp}=  Get BusinessDomainsConf
@@ -124,12 +124,12 @@ JD-TC-Update Account Payment Settings-3
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200
        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
        Set Suite Variable  ${PUSERNAME_B}
-       ${DAY1}=  get_date
+       ${DAY1}=  db.get_date_by_timezone  ${tz}
        Set Suite Variable  ${DAY1}  ${DAY1}
        ${list}=  Create List  1  2  3  4  5  6  7
        Set Suite Variable  ${list}  ${list}
@@ -144,7 +144,7 @@ JD-TC-Update Account Payment Settings-3
 JD-TC-Update Account Payment Settings-4
        [Documentation]   provider Update payment settings for Paytm
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${acct_id1}=  get_acc_id  ${PUSERNAME_B}
        ${resp}=   Update Account Payment Settings  ${bool[0]}  ${bool[1]}  ${bool[0]}  ${PUSERNAME_B}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${businessStatus}   ${accounttype}    
@@ -158,7 +158,7 @@ JD-TC-Update Account Payment Settings-4
 JD-TC-Update Account Payment Settings-5
        [Documentation]   provider Update payment settings for Paytm  and dehtcard or creditcard NB
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${acct_id1}=  get_acc_id  ${PUSERNAME_B}
        ${bankAccountNumber2}=  Generate_random_value  size=16  chars=string.digits
@@ -190,7 +190,7 @@ JD-TC-Update Account Payment Settings-UH3
 JD-TC-Update Account Payment Settings-UH4
        [Documentation]   Provider check to Update payment settins without Pytm Varified phone number
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Update Account Payment Settings  ${bool[1]}  ${bool[1]}  ${bool[0]}  ${EMPTY}  ${panCardNumber}  ${bankAccountNumber}  ${bankName}  ${ifsc1}  ${panname}  ${firstname}  ${city}   ${businessStatus}   ${accounttype}     
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -199,7 +199,7 @@ JD-TC-Update Account Payment Settings-UH4
 JD-TC-Update Account Payment Settings-UH5
        [Documentation]   Provider try to update payment setting without pancard Number
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Update Account Payment Settings  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${PUSERNAME_B}  ${EMPTY}  ${bankAccountNumber}  ${bankName}  ${ifsc1}  ${panname}  ${firstname}  ${city}   ${businessStatus}   ${accounttype}     
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -208,7 +208,7 @@ JD-TC-Update Account Payment Settings-UH5
 JD-TC-Update Account Payment Settings-UH6
        [Documentation]   Provider try to update payment setting without account number
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${phone_no}=   Random Int   min=1111111111   max=9999999999
        ${resp}=   Update Account Payment Settings  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${phone_no}  ${panCardNumber}  ${EMPTY}  ${bankName}  ${ifsc1}  ${panname}  ${firstname}  ${city}   ${businessStatus}   ${accounttype}     
@@ -218,7 +218,7 @@ JD-TC-Update Account Payment Settings-UH6
 JD-TC-Update Account Payment Settings-UH7
        [Documentation]   Provider try to update payment setting without Bank Name
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${phone_no1}=   Random Int   min=1111111111   max=9999999999
        Set Suite Variable   ${phone_no1}
@@ -229,7 +229,7 @@ JD-TC-Update Account Payment Settings-UH7
 JD-TC-Update Account Payment Settings-UH8
        [Documentation]   Provider try to update payment setting without ifsc Code
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Update Account Payment Settings  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${phone_no1}  ${panCardNumber}  ${bankAccountNumber}  ${bankName}  ${EMPTY}  ${panname}  ${firstname}   ${city}  ${businessStatus}   ${accounttype}   
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -238,7 +238,7 @@ JD-TC-Update Account Payment Settings-UH8
 JD-TC-Update Account Payment Settings-UH9
        [Documentation]   Provider try to update payment setting without Name on pancard
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Update Account Payment Settings  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${phone_no1}  ${panCardNumber}  ${bankAccountNumber}  ${bankName}  ${ifsc1}  ${EMPTY}  ${firstname}  ${city}  ${businessStatus}   ${accounttype}   
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -247,7 +247,7 @@ JD-TC-Update Account Payment Settings-UH9
 JD-TC-Update Account Payment Settings-UH10
        [Documentation]   Provider try to update payment setting without Account holder's name
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Update Account Payment Settings  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${phone_no1}  ${panCardNumber}  ${bankAccountNumber}  ${bankName}  ${ifsc1}  ${panname}  ${EMPTY}  ${city}  ${businessStatus}   ${accounttype}   
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -256,7 +256,7 @@ JD-TC-Update Account Payment Settings-UH10
 JD-TC-Update Account Payment Settings-UH11
        [Documentation]   Provider try to update payment setting without Brach city
 
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Update Account Payment Settings  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${phone_no1}  ${panCardNumber}  ${bankAccountNumber}  ${bankName}  ${ifsc1}  ${panname}  ${firstname}   ${EMPTY}  ${businessStatus}   ${accounttype}   
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -283,7 +283,7 @@ JD-TC-Update Account Payment Settings-UH12
        ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
        sleep  2s
-       ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}    200
        ${acct_id1}=  get_acc_id  ${PUSERNAME}
        ${resp}=   Update Account Payment Settings  ${bool[0]}  ${bool[1]}  ${bool[0]}  ${PUSERNAME_B}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${businessStatus}   ${accounttype}   
@@ -296,7 +296,7 @@ JD-TC-Update Account Payment Settings-UH12
 JD-TC-Update Account Payment Settings-7
     [Documentation]   provider try to update payment setting without basic details ,only OnlinePayment field
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${gstper}=  Random Element  ${gstpercentage}
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -314,7 +314,7 @@ JD-TC-Update Account Payment Settings-7
     ${resp}=  payuVerify  ${pid}
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Update Account Payment Settings  ${bool[1]}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${None}  ${None}  
     Should Be Equal As Strings    ${resp.status_code}  200

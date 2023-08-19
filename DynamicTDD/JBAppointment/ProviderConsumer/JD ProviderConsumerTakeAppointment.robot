@@ -10,6 +10,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
+
 *** Keywords *** 
 
 Add FamilyMember As ProviderConsumer
@@ -41,7 +42,7 @@ JD-TC-providerConsumerAppointment-1
 
     [Documentation]    ProviderConsumer  Login with token After Sign up and take a appointment.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME69}
@@ -109,12 +110,17 @@ JD-TC-providerConsumerAppointment-1
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     # clear_appt_schedule   ${primaryMobileNo}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -136,7 +142,7 @@ JD-TC-providerConsumerAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  1  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}   
 
@@ -145,7 +151,7 @@ JD-TC-providerConsumerAppointment-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()} 
@@ -187,7 +193,7 @@ JD-TC-providerConsumerAppointment-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    # ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -263,7 +269,7 @@ JD-TC-providerConsumerAppointment-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot3}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY3}=  add_date  3
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${cnote}=   FakerLibrary.name
     ${resp}=    Take Appointment with ApptMode For Provider    ${appointmentMode[2]}   ${pid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -296,7 +302,6 @@ JD-TC-providerConsumerAppointment-3
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${Jcid}    ${resp.json()['id']}
 
-
     ${gender}                     Random Element    ${Genderlist}                   
     ${dob}                        FakerLibrary.Date
     ${fname}                      FakerLibrary. name
@@ -309,6 +314,7 @@ JD-TC-providerConsumerAppointment-3
     ${altno}                      FakerLibrary.Numerify   text=%%%%%%%%%%
     ${numt}                       FakerLibrary.Numerify   text=%%%%%%%%%%
     ${numw}                       FakerLibrary.Numerify   text=%%%%%%%%%%
+
 
     ${resp}=    Get FamilyMember
     Log   ${resp.json()}
@@ -334,7 +340,6 @@ JD-TC-providerConsumerAppointment-3
     ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
     
 
     ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${pid}
@@ -357,7 +362,7 @@ JD-TC-providerConsumerAppointment-3
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
      Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -404,18 +409,32 @@ JD-TC-providerConsumerAppointment-UH1
     ${numt1}                       FakerLibrary.Numerify   text=%%%%%%%%%%
     ${numw1}                       FakerLibrary.Numerify   text=%%%%%%%%%%
 
+    
     ${resp}=    Get FamilyMember
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob1}  ${gender}  ${email1}  ${city1}  ${state1}   ${address1}  ${primnum1}  ${altno1}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt1}  ${countryCodes[0]}  ${numw1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get FamilyMember
+    ${resp}=  AddFamilyMember   ${fname1}  ${lname1}  ${dob1}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fid}  ${resp.json()}
+    
+    ${resp}=  ListFamilyMember
+    Verify Response List  ${resp}  0  user=${fid}
+
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fid}     ${cid}   ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
 
     ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${pid}
     Log  ${resp.content}
@@ -433,11 +452,11 @@ JD-TC-providerConsumerAppointment-UH1
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot3}   ${slots[${j}]}
 
-    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot3}   firstName=${fname}    lastName=${lname}
+    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot3}   firstName=${fname1}    lastName=${lname1}
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.name
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
      Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -484,7 +503,7 @@ JD-TC-providerConsumerAppointment-4
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
@@ -513,7 +532,42 @@ JD-TC-providerConsumerAppointment-4
 JD-TC-providerConsumerAppointment-5
 
     [Documentation]     ProviderConsumer takes multiple appointments for same service.
+    
+
+    # ${firstName}=  FakerLibrary.name
+    # Set Suite Variable    ${firstName}
+    # ${lastName}=  FakerLibrary.last_name
+    # Set Suite Variable    ${lastName}
+    # ${primaryMobileNo}    Generate random string    10    123456789
+    # ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    # Set Suite Variable    ${primaryMobileNo}
+    # ${email}=    FakerLibrary.Email
+    # Set Suite Variable    ${email}
+
+    # ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    # ${resp}=    Customer Logout 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}   200    
    
+    # ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+
+
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -538,7 +592,8 @@ JD-TC-providerConsumerAppointment-5
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${DAY1}=  get_date
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  db.add_timezone_date  ${tz}  1     
 
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -565,9 +620,10 @@ JD-TC-providerConsumerAppointment-5
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}  
+    ${DAY2}=  db.add_timezone_date  ${tz}  2 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -593,7 +649,7 @@ JD-TC-providerConsumerAppointment-5
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid6}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response             ${resp}     uid=${apptid6}   appmtDate=${DAY1}   appmtTime=${slot2}
+    Verify Response             ${resp}     uid=${apptid6}   appmtDate=${DAY2}   appmtTime=${slot2}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
@@ -632,7 +688,7 @@ JD-TC-providerConsumerAppointment-6
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY3}=   add_date   3
+    ${DAY3}=   db.add_timezone_date  ${tz}   3
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -669,8 +725,8 @@ JD-TC-providerConsumerAppointment-7
 
     ${gender}                     Random Element    ${Genderlist}                   
     ${dob1}                        FakerLibrary.Date
-    ${fname1}                      FakerLibrary.state
-    ${lname1}                      FakerLibrary.state
+    ${fname1}                      FakerLibrary.firstname
+    ${lname1}                      FakerLibrary.lastname
     ${email1}                      FakerLibrary.email
     ${city1}                       FakerLibrary.city
     ${state1}                      FakerLibrary.state
@@ -709,10 +765,10 @@ JD-TC-providerConsumerAppointment-7
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot3}   ${slots[${j}]}
 
-    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot3}   firstName=${fname}    lastName=${lname}
+    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot3}   firstName=${fname1}    lastName=${lname1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY5}=   add_date   5
+    ${DAY5}=   db.add_timezone_date  ${tz}   5
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY5}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -734,9 +790,9 @@ JD-TC-providerConsumerAppointment-7
     Should Be Equal As Strings  ${resp.json()['apptStatus']}                                    ${appt_status[1]}
     # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}                      ${family_fname}
     # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}                       ${family_lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}                       ${slot1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}                       ${slot3}
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                                     ${DAY5}
-    Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
+    Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot3}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
 JD-TC-providerConsumerAppointment-8
     [Documentation]     ProviderConsumer takes Future appointment for same service in diffrent Appointment Schedule 
@@ -764,7 +820,7 @@ JD-TC-providerConsumerAppointment-8
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot3}   
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY5}=   add_date   4
+    ${DAY5}=   db.add_timezone_date  ${tz}   4
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY5}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -805,7 +861,7 @@ JD-TC-providerConsumerAppointment-8
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY3}=   add_date   3
+    ${DAY3}=   db.add_timezone_date  ${tz}   3
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id2}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -833,7 +889,7 @@ JD-TC-providerConsumerAppointment-8
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
 
 JD-TC-providerConsumerAppointment-9
-    [Documentation]     provider have two location, providerconsumer takes Appointment with same service in different Location
+    [Documentation]     provider have two location, providerConsumer takes Appointment with same service in different Location
 
     ${multilocdoms}=  get_mutilocation_domains
     Log  ${multilocdoms}
@@ -852,7 +908,7 @@ JD-TC-providerConsumerAppointment-9
     ${resp}=  Account Set Credential  ${PUSERNAME_X}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_X}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_X}${\n}
@@ -862,7 +918,6 @@ JD-TC-providerConsumerAppointment-9
     ${pid}=  get_acc_id  ${PUSERNAME_X}
     Set Suite Variable   ${pid}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_X}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_X}+25566122
@@ -874,18 +929,23 @@ JD-TC-providerConsumerAppointment-9
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable    ${DAY1}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -912,11 +972,11 @@ JD-TC-providerConsumerAppointment-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_X}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_X}.test@jaldee.com
 
-    ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Enable Appointment
     Log  ${resp.content}
@@ -948,9 +1008,9 @@ JD-TC-providerConsumerAppointment-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
@@ -962,13 +1022,16 @@ JD-TC-providerConsumerAppointment-9
     ${p1_l1}=  Create Sample Location
     Set Suite Variable   ${p1_l1}
 
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  5  00
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  30
+    ${eTime1}=  db.add_timezone_time  ${tz}  5  00
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -995,7 +1058,7 @@ JD-TC-providerConsumerAppointment-9
     
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_time   ${sTime1}  ${delta}
-    ${eTime1}=  add_time  4  15
+    ${eTime1}=  db.add_timezone_time  ${tz}  4  15
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -1003,7 +1066,7 @@ JD-TC-providerConsumerAppointment-9
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY2}=  add_date  10     
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l2}  ${duration}  ${bool1}  ${p1_s2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1138,7 +1201,7 @@ JD-TC-providerConsumerAppointment-10
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${p_id}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-
+    
     ${gender}                     Random Element    ${Genderlist}                   
     ${dob1}                        FakerLibrary.Date
     ${fname1}                      FakerLibrary.city
@@ -1156,14 +1219,28 @@ JD-TC-providerConsumerAppointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob1}  ${gender}  ${email1}  ${city1}  ${state1}   ${address1}  ${primnum1}  ${altno1}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt1}  ${countryCodes[0]}  ${numw1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob1}  ${gender}  ${email1}  ${city1}  ${state1}   ${address1}  ${primnum1}  ${altno1}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt1}  ${countryCodes[0]}  ${numw1}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable     ${fid}    ${resp.json()}
 
-    ${resp}=    Get FamilyMember
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+
+    ${resp}=  AddFamilyMember   ${fname1}  ${lname1}  ${dob1}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fid}  ${resp.json()}
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fid}     ${cid}   ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id11}   ${p_id}
     Log  ${resp.content}
@@ -1181,7 +1258,7 @@ JD-TC-providerConsumerAppointment-10
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
  
-    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${family_fname1}
+    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${fname1}
     ${apptfor}=   Create List  ${apptfor1}
   
     ${cnote}=   FakerLibrary.word
@@ -1208,7 +1285,7 @@ JD-TC-providerConsumerAppointment-10
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot2}   ${slots[${j}]}
 
-    ${apptfor2}=  Create Dictionary  id=${fid}   apptTime=${slot2}    firstName=${family_fname1}
+    ${apptfor2}=  Create Dictionary  id=${fid}   apptTime=${slot2}    firstName=${fname1}
     ${apptfor2}=   Create List  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
@@ -1223,7 +1300,7 @@ JD-TC-providerConsumerAppointment-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${f_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${l_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${phno}
@@ -1241,7 +1318,7 @@ JD-TC-providerConsumerAppointment-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid2}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${f_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${l_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${phno}
@@ -1256,33 +1333,6 @@ JD-TC-providerConsumerAppointment-10
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${p1_l2}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 JD-TC-providerConsumerAppointment-11
     [Documentation]  same family member takes Appointment with same service and diffrent Appointment Schedule
     
@@ -1292,8 +1342,8 @@ JD-TC-providerConsumerAppointment-11
 
     ${gender}                     Random Element    ${Genderlist}                   
     ${dob1}                        FakerLibrary.Date
-    ${fname1}                      FakerLibrary.city
-    ${lname1}                      FakerLibrary.state
+    ${fname1}                      FakerLibrary.first_name
+    ${lname1}                      FakerLibrary.last_name
     ${email1}                      FakerLibrary.email
     ${city1}                       FakerLibrary.city
     ${state1}                      FakerLibrary.state
@@ -1307,14 +1357,28 @@ JD-TC-providerConsumerAppointment-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob1}  ${gender}  ${email1}  ${city1}  ${state1}   ${address1}  ${primnum1}  ${altno1}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt1}  ${countryCodes[0]}  ${numw1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob1}  ${gender}  ${email1}  ${city1}  ${state1}   ${address1}  ${primnum1}  ${altno1}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt1}  ${countryCodes[0]}  ${numw1}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable     ${fid}    ${resp.json()}
 
-    ${resp}=    Get FamilyMember
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+
+    ${resp}=  AddFamilyMember   ${fname1}  ${lname1}  ${dob1}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fid}  ${resp.json()}
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fid}     ${cid}   ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id11}   ${pid}
     Log  ${resp.content}
@@ -1332,7 +1396,7 @@ JD-TC-providerConsumerAppointment-11
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
  
-    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${family_fname1}
+    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${fname1}
     ${apptfor}=   Create List  ${apptfor1}
   
     ${cnote}=   FakerLibrary.word
@@ -1359,7 +1423,7 @@ JD-TC-providerConsumerAppointment-11
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot2}   ${slots[${j}]}
 
-    ${apptfor2}=  Create Dictionary  id=${fid}   apptTime=${slot2}    firstName=${family_fname1}
+    ${apptfor2}=  Create Dictionary  id=${fid}   apptTime=${slot2}    firstName=${fname1}
     ${apptfor2}=   Create List  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
@@ -1374,7 +1438,7 @@ JD-TC-providerConsumerAppointment-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${f_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${l_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${phno}
@@ -1392,7 +1456,7 @@ JD-TC-providerConsumerAppointment-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid2}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${f_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${l_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${phno}
@@ -1430,14 +1494,28 @@ JD-TC-providerConsumerAppointment-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob1}  ${gender}  ${email1}  ${city1}  ${state1}   ${address1}  ${primnum1}  ${altno1}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt1}  ${countryCodes[0]}  ${numw1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob1}  ${gender}  ${email1}  ${city1}  ${state1}   ${address1}  ${primnum1}  ${altno1}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt1}  ${countryCodes[0]}  ${numw1}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable     ${fid}    ${resp.json()}
 
-    ${resp}=    Get FamilyMember
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+
+    ${resp}=  AddFamilyMember   ${fname1}  ${lname1}  ${dob1}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fid}  ${resp.json()}
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fid}     ${cid}   ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id21}   ${pid}
     Log  ${resp.content}
@@ -1455,10 +1533,10 @@ JD-TC-providerConsumerAppointment-12
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
  
-    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${family_fname1}
+    ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${fname1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${FUT_DAY}=  add_date  4
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}  4
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid}  ${p1_s2}  ${sch_id21}  ${FUT_DAY}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -1483,10 +1561,10 @@ JD-TC-providerConsumerAppointment-12
     ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot2}   ${slots[${j}]}
 
-    ${apptfor2}=  Create Dictionary  id=${fid}   apptTime=${slot2}    firstName=${family_fname1}
+    ${apptfor2}=  Create Dictionary  id=${fid}   apptTime=${slot2}    firstName=${fname1}
     ${apptfor2}=   Create List  ${apptfor2}
     
-    ${FUT_DAY1}=  add_date  5
+    ${FUT_DAY1}=  db.add_timezone_date  ${tz}  5
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid}  ${p1_s2}  ${sch_id21}  ${FUT_DAY1}  ${cnote}   ${apptfor2}
     Log  ${resp.content}
@@ -1499,7 +1577,7 @@ JD-TC-providerConsumerAppointment-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${f_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${l_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${phno}
@@ -1517,7 +1595,7 @@ JD-TC-providerConsumerAppointment-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid2}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${f_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${l_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${phno}
@@ -1530,6 +1608,7 @@ JD-TC-providerConsumerAppointment-12
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                                     ${FUT_DAY1}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${p1_l2}
+
 
 JD-TC-providerConsumerAppointment-13
     [Documentation]  Consumer takes future Appointment then cancel and again add for same service
@@ -1558,7 +1637,7 @@ JD-TC-providerConsumerAppointment-13
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}   
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${FUT_DAY}=  add_date  5
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}  5
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid}  ${p1_s2}  ${sch_id11}  ${FUT_DAY}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -1595,7 +1674,7 @@ JD-TC-providerConsumerAppointment-13
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}   
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${FUT_DAY}=  add_date  5
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}  5
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid}  ${p1_s2}  ${sch_id11}  ${FUT_DAY}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -1608,7 +1687,7 @@ JD-TC-providerConsumerAppointment-13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${f_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${l_Name}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${phno}
@@ -1633,7 +1712,7 @@ JD-TC-providerConsumerAppointment-14
     clear_location  ${billable_providers[3]}
     ${pid}=  get_acc_id  ${billable_providers[3]}
     
-    ${resp}=  Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1682,10 +1761,10 @@ JD-TC-providerConsumerAppointment-14
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1761,7 +1840,7 @@ JD-TC-providerConsumerAppointment-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
-    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${firstName}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
@@ -1771,13 +1850,13 @@ JD-TC-providerConsumerAppointment-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
-    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${firstName}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -1792,7 +1871,7 @@ JD-TC-providerConsumerAppointment-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid2}   appmtDate=${DAY1}   appmtTime=${slot2}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -1816,7 +1895,7 @@ JD-TC-providerConsumerAppointment-15
     
     
     ${pid}=  get_acc_id  ${billable_providers[3]}
-    ${resp}=  Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1847,10 +1926,10 @@ JD-TC-providerConsumerAppointment-15
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     clear_appt_schedule   ${billable_providers[3]}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=40  max=80
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1919,23 +1998,53 @@ JD-TC-providerConsumerAppointment-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable     ${fmem1}    ${resp.json()}
 
-    ${resp}=    Get FamilyMember
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable     ${fmem1}    ${resp.json()[0]['id']}
+
+    ${resp}=  AddFamilyMember   ${fname}  ${lname}  ${dob}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fmem1}  ${resp.json()}
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fmem1}     ${cid}   ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fmem1}    ${resp.json()[0]['id']}
-
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get FamilyMember
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fmem2}    ${resp.json()[0]['id']}
+
+
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable     ${fmem2}    ${resp.json()}
+
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable     ${fmem2}    ${resp.json()[0]['id']}
+
+    ${resp}=  AddFamilyMember   ${fname1}  ${lname1}  ${dob}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fmem2}  ${resp.json()}
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fmem2}     ${cid}   ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 
     ${resp}=  Get Appointment Schedules Consumer  ${pid}
     Log  ${resp.content}
@@ -1959,8 +2068,8 @@ JD-TC-providerConsumerAppointment-15
     Set Test Variable   ${slot5}   ${random slots[4]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
-    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot2}   firstName=${mem_fname1}
-    ${apptfor3}=  Create Dictionary  id=${fmem2}   apptTime=${slot3}   firstName=${mem_fname2}
+    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot2}   firstName=${fname}
+    ${apptfor3}=  Create Dictionary  id=${fmem2}   apptTime=${slot3}   firstName=${fname1}
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}  ${apptfor3}
 
     ${cnote}=   FakerLibrary.name
@@ -1968,15 +2077,15 @@ JD-TC-providerConsumerAppointment-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${mem1_apptid1}=  Get From Dictionary  ${resp.json()}  ${mem_fname1}
-    ${mem2_apptid1}=  Get From Dictionary  ${resp.json()}  ${mem_fname2}
-    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${mem1_apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${mem2_apptid1}=  Get From Dictionary  ${resp.json()}  ${fname1}
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${firstName}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -1991,7 +2100,7 @@ JD-TC-providerConsumerAppointment-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${mem1_apptid1}   appmtDate=${DAY1}   appmtTime=${slot2}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2006,7 +2115,7 @@ JD-TC-providerConsumerAppointment-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${mem2_apptid1}   appmtDate=${DAY1}   appmtTime=${slot3}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2018,7 +2127,7 @@ JD-TC-providerConsumerAppointment-15
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot4}
-    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot5}   firstName=${mem_fname1}
+    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot5}   firstName=${fname}
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
 
     ${cnote}=   FakerLibrary.name
@@ -2026,14 +2135,14 @@ JD-TC-providerConsumerAppointment-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${mem1_apptid2}=  Get From Dictionary  ${resp.json()}  ${mem_fname1}
-    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${mem1_apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${firstName}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid2}   appmtDate=${DAY1}   appmtTime=${slot4}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2048,7 +2157,7 @@ JD-TC-providerConsumerAppointment-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${mem1_apptid2}   appmtDate=${DAY1}   appmtTime=${slot5}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2078,6 +2187,7 @@ JD-TC-providerConsumerAppointment-15
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
 JD-TC-providerConsumerAppointment-16
     [Documentation]  Consumer takes an appointment for consumer and 1 family member, and then takes same appt again for same service with 2 family members
     Log   ${billable_providers}
@@ -2085,7 +2195,7 @@ JD-TC-providerConsumerAppointment-16
     ${pid}=  get_acc_id  ${billable_providers[3]}
     
     ${pid}=  get_acc_id  ${billable_providers[3]}
-    ${resp}=  Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2116,10 +2226,10 @@ JD-TC-providerConsumerAppointment-16
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     clear_appt_schedule   ${billable_providers[3]}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=40  max=80
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2173,7 +2283,7 @@ JD-TC-providerConsumerAppointment-16
     ${dob}                        FakerLibrary.Date
     ${fname}                      FakerLibrary. name
     ${lname}                      FakerLibrary.last_name
-    ${fname1}                      FakerLibrary. name
+    ${fname1}                      FakerLibrary. first_name
     ${lname1}                      FakerLibrary.last_name
     ${email}                      FakerLibrary.email
     ${city}                       FakerLibrary.city
@@ -2188,23 +2298,51 @@ JD-TC-providerConsumerAppointment-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable     ${fmem1}    ${resp.json()}
 
-    ${resp}=    Get FamilyMember
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # # Set Suite Variable     ${fmem1}    ${resp.json()[0]['id']}
+
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable     ${fmem2}    ${resp.json()}
+
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable     ${fmem2}    ${resp.json()[0]['id']}
+
+    ${resp}=  AddFamilyMember   ${fname}  ${lname}  ${dob}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fmem1}  ${resp.json()}
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fmem1}     ${cid}   ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fmem1}    ${resp.json()[0]['id']}
-
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname1}  ${lname1}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get FamilyMember
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fmem2}    ${resp.json()[0]['id']}
+
+    ${resp}=  AddFamilyMember   ${fname1}  ${lname1}  ${dob}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fmem2}  ${resp.json()}
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fmem2}     ${cid}   ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Appointment Schedules Consumer  ${pid}
     Log  ${resp.content}
@@ -2228,7 +2366,7 @@ JD-TC-providerConsumerAppointment-16
     Set Test Variable   ${slot5}   ${random slots[4]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
-    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot2}   firstName=${mem_fname1}
+    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot2}   firstName=${fname}
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
 
     ${cnote}=   FakerLibrary.name
@@ -2236,14 +2374,14 @@ JD-TC-providerConsumerAppointment-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${mem1_apptid1}=  Get From Dictionary  ${resp.json()}  ${mem_fname1}
-    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${mem1_apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${firstName}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2258,7 +2396,7 @@ JD-TC-providerConsumerAppointment-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${mem1_apptid1}   appmtDate=${DAY1}   appmtTime=${slot2}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2270,8 +2408,8 @@ JD-TC-providerConsumerAppointment-16
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot3}
-    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot4}   firstName=${mem_fname1}
-    ${apptfor3}=  Create Dictionary  id=${fmem2}   apptTime=${slot5}   firstName=${mem_fname2}
+    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot4}   firstName=${fname}
+    ${apptfor3}=  Create Dictionary  id=${fmem2}   apptTime=${slot5}   firstName=${fname1}
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}    ${apptfor3}
 
     ${cnote}=   FakerLibrary.name
@@ -2279,15 +2417,15 @@ JD-TC-providerConsumerAppointment-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${mem1_apptid2}=  Get From Dictionary  ${resp.json()}  ${mem_fname1}
-    ${mem2_apptid2}=  Get From Dictionary  ${resp.json()}  ${mem_fname2}
-    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${mem1_apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${mem2_apptid2}=  Get From Dictionary  ${resp.json()}  ${fname1}
+    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${firstName}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid2}   appmtDate=${DAY1}   appmtTime=${slot3}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2302,7 +2440,7 @@ JD-TC-providerConsumerAppointment-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${mem1_apptid2}   appmtDate=${DAY1}   appmtTime=${slot4}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2317,7 +2455,7 @@ JD-TC-providerConsumerAppointment-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${mem2_apptid2}   appmtDate=${DAY1}   appmtTime=${slot5}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2349,7 +2487,7 @@ JD-TC-providerConsumerAppointment-17
     ${pro_len}=  Get Length   ${billable_providers}
     ${pid}=  get_acc_id  ${billable_providers[3]}
     
-    ${resp}=  Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2380,10 +2518,10 @@ JD-TC-providerConsumerAppointment-17
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     clear_appt_schedule   ${billable_providers[3]}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=40  max=80
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2452,14 +2590,28 @@ JD-TC-providerConsumerAppointment-17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable     ${fmem1}    ${resp.json()}
 
-    ${resp}=    Get FamilyMember
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable     ${fmem1}    ${resp.json()[0]['id']}
+
+    ${resp}=  AddFamilyMember   ${fname}  ${lname}  ${dob}  ${gender}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${fmem1}  ${resp.json()}
+
+    ${resp}=    Add FamilyMember As ProviderConsumer     ${fmem1}     ${cid}   ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fmem1}    ${resp.json()[0]['id']}
+    
+    ${resp}=    Get ProviderConsumer FamilyMember     ${Jcid}     ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Appointment Schedules Consumer  ${pid}
     Log  ${resp.content}
@@ -2481,7 +2633,7 @@ JD-TC-providerConsumerAppointment-17
     Set Test Variable   ${slot3}   ${random slots[2]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
-    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot2}   firstName=${mem_fname1}
+    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot2}   firstName=${fname}
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
 
     ${cnote}=   FakerLibrary.name
@@ -2489,14 +2641,14 @@ JD-TC-providerConsumerAppointment-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${mem1_apptid1}=  Get From Dictionary  ${resp.json()}  ${mem_fname1}
-    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${mem1_apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${firstName}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2511,7 +2663,7 @@ JD-TC-providerConsumerAppointment-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${mem1_apptid1}   appmtDate=${DAY1}   appmtTime=${slot2}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2522,7 +2674,7 @@ JD-TC-providerConsumerAppointment-17
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot3}   firstName=${mem_fname1}
+    ${apptfor2}=  Create Dictionary  id=${fmem1}   apptTime=${slot3}   firstName=${fname}
     ${apptfor}=   Create List  ${apptfor2}
 
     ${cnote}=   FakerLibrary.name
@@ -2530,13 +2682,13 @@ JD-TC-providerConsumerAppointment-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${mem1_apptid2}=  Get From Dictionary  ${resp.json()}  ${mem_fname1}
+    ${mem1_apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${mem1_apptid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${mem1_apptid2}   appmtDate=${DAY1}   appmtTime=${slot3}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
@@ -2562,10 +2714,10 @@ JD-TC-providerConsumerAppointment-17
     Should Be Equal As Strings    ${resp.status_code}    200
 
 # *** comment ***
-JD-TC-providerConsumerAppointment-UH1
+JD-TC-providerConsumerAppointment-UH2
 	[Documentation]  ProviderConsumer takes an appointment for the Same Services Two Times
 
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME76}
     clear_location  ${PUSERNAME76}
@@ -2588,12 +2740,12 @@ JD-TC-providerConsumerAppointment-UH1
     Set Suite Variable   ${accountId}
     ${cid5}=  get_id  ${CUSERNAME5}
     Set Suite Variable   ${cid5}
-    ${DAY}=  get_date
-    ${DAY1}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
@@ -2676,7 +2828,7 @@ JD-TC-providerConsumerAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${ph_no}
@@ -2698,10 +2850,10 @@ JD-TC-providerConsumerAppointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-JD-TC-providerConsumerAppointment-UH2
+JD-TC-providerConsumerAppointment-UH3
 	[Documentation]  Consumer takes an appointment for the service but that service is not in Appoinment Schedule
     
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME76}
     clear_location  ${PUSERNAME76}
@@ -2713,17 +2865,26 @@ JD-TC-providerConsumerAppointment-UH2
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${p1_l2}=  Create Sample Location
+    Set Suite Variable   ${p1_l2}
+
+    ${resp}=   Get Location By Id   ${p1_l2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
     ${accountId}=  get_acc_id  ${PUSERNAME76}
     Set Suite Variable   ${accountId}
     ${cid5}=  get_id  ${CUSERNAME5}
     Set Suite Variable   ${cid5}
-    ${DAY}=  get_date
-    ${DAY1}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
@@ -2735,8 +2896,8 @@ JD-TC-providerConsumerAppointment-UH2
     ${p1_l1}=  Create Sample Location
     Set Suite Variable   ${p1_l1}
     clear_appt_schedule   ${PUSERNAME76}
-    ${p1_l2}=  Create Sample Location
-    Set Suite Variable   ${p1_l2}
+    
+
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -2760,10 +2921,41 @@ JD-TC-providerConsumerAppointment-UH2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor1}=   Create List  ${apptfor1}
     Set Suite Variable   ${apptfor1}   
-   
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable    ${lastName}
+    ${primaryMobileNo1}    Generate random string    10    123456789
+    ${primaryMobileNo1}    Convert To Integer  ${primaryMobileNo1}
+    Set Suite Variable    ${primaryMobileNo1}
+    ${email}=    FakerLibrary.Email
+    Set Suite Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo1}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo1}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token1}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo1}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo1}    ${accountId}  ${token1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+    # ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
 
     ${cnote}=   FakerLibrary.word
@@ -2772,9 +2964,9 @@ JD-TC-providerConsumerAppointment-UH2
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${SERVICE_NOT_AVAILABLE_IN_SCHEDULE}"
 
-JD-TC-providerConsumerAppointment-UH3
+JD-TC-providerConsumerAppointment-UH4
 	[Documentation]  Consumer trying to take an Appointment ,When Provider is in holiday
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME76}
     clear_location  ${PUSERNAME76}
@@ -2791,12 +2983,12 @@ JD-TC-providerConsumerAppointment-UH3
     Set Suite Variable   ${pidUH1}
     ${cid5}=  get_id  ${CUSERNAME5}
     Set Suite Variable   ${cid5}
-    ${DAY}=  get_date
-    ${DAY1}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
@@ -2870,7 +3062,7 @@ JD-TC-providerConsumerAppointment-UH3
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200    
    
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo1}    ${accountId}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -2881,10 +3073,10 @@ JD-TC-providerConsumerAppointment-UH3
     Should Be Equal As Strings  ${resp.status_code}  424
     Should Be Equal As Strings  "${resp.json()}"      "${APPOINTMET_SLOT_NOT_AVAILABLE}"
 
-JD-TC-providerConsumerAppointment-UH4
+JD-TC-providerConsumerAppointment-UH5
 	[Documentation]  Consumer trying to take an Appointment, Service DISABLED
     
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME76}
     clear_location  ${PUSERNAME76}
@@ -2901,12 +3093,12 @@ JD-TC-providerConsumerAppointment-UH4
     Set Suite Variable   ${pidUH1}
     ${cid5}=  get_id  ${CUSERNAME5}
     Set Suite Variable   ${cid5}
-    ${DAY}=  get_date
-    ${DAY1}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
@@ -2961,9 +3153,9 @@ JD-TC-providerConsumerAppointment-UH4
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${SERVICE_NOT_AVAILABLE_IN_SCHEDULE}"
 
-JD-TC-providerConsumerAppointment-UH5
+JD-TC-providerConsumerAppointment-UH6
 	[Documentation]  Consumer takes an appointment, But Appointment Disabled  
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME76}
     clear_location  ${PUSERNAME76}
@@ -2979,12 +3171,12 @@ JD-TC-providerConsumerAppointment-UH5
     Set Suite Variable   ${pidUH5}
     ${cid5}=  get_id  ${CUSERNAME5}
     Set Suite Variable   ${cid5}
-    ${DAY}=  get_date
-    ${DAY1}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
@@ -3040,7 +3232,7 @@ JD-TC-providerConsumerAppointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"      "${SCHEDULE_DISABLED}"
 
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Enable Appointment Schedule   ${sch_idUH5}
@@ -3048,9 +3240,9 @@ JD-TC-providerConsumerAppointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-JD-TC-providerConsumerAppointment-UH6
+JD-TC-providerConsumerAppointment-UH7
     [Documentation]  Consumer trying to take future Appointment, But Future appointment is Disable
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME76}
@@ -3084,11 +3276,11 @@ JD-TC-providerConsumerAppointment-UH6
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['futureAppt']}   ${bool[0]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10     
-    ${DAY3}=  add_date  5 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
+    ${DAY3}=  db.add_timezone_date  ${tz}  5 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -3142,11 +3334,12 @@ JD-TC-providerConsumerAppointment-UH6
     ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable     ${fid}    ${resp.json()}
 
     ${resp}=    Get FamilyMember
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+    # Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
 
     ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${fname}
     ${apptfor}=   Create List  ${apptfor1}
@@ -3158,17 +3351,17 @@ JD-TC-providerConsumerAppointment-UH6
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${FUTURE_APPOINTMET_DISABLED}"
 
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Enable Future Appointment
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-providerConsumerAppointment-UH7
+JD-TC-providerConsumerAppointment-UH8
     [Documentation]  Consumer trying to take Today Appointment, But Today appointment is Disable
     
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3216,10 +3409,10 @@ JD-TC-providerConsumerAppointment-UH7
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[0]}  
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -3273,11 +3466,12 @@ JD-TC-providerConsumerAppointment-UH7
     ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable     ${fid}    ${resp.json()}
 
     ${resp}=    Get FamilyMember
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+    # Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
 
     ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${fname}
     ${apptfor}=   Create List  ${apptfor1}
@@ -3289,7 +3483,7 @@ JD-TC-providerConsumerAppointment-UH7
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${TODAY_APPOINTMET_DISABLED}"
 
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Enable Today Appointment
@@ -3297,10 +3491,10 @@ JD-TC-providerConsumerAppointment-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-JD-TC-providerConsumerAppointment-UH8
+JD-TC-providerConsumerAppointment-UH9
 	[Documentation]  Consumer takes an appointment but provider disable Appointment Schedule
     
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3350,10 +3544,10 @@ JD-TC-providerConsumerAppointment-UH8
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[0]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -3407,11 +3601,12 @@ JD-TC-providerConsumerAppointment-UH8
     ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable     ${fid}    ${resp.json()}
 
     ${resp}=    Get FamilyMember
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+    # Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
 
     ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${fname}
     ${apptfor}=   Create List  ${apptfor1}
@@ -3423,7 +3618,7 @@ JD-TC-providerConsumerAppointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${APPT_NOT_ENABLED}"
 
-    ${resp}=  Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Enable Appointment
@@ -3431,10 +3626,10 @@ JD-TC-providerConsumerAppointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
       
   
-JD-TC-providerConsumerAppointment-UH9
+JD-TC-providerConsumerAppointment-UH10
 	[Documentation]  Passing Invalid provider in the Take an appointment
    
-    ${resp}=  ProviderLogin  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME104}
@@ -3444,7 +3639,7 @@ JD-TC-providerConsumerAppointment-UH9
     ${pid3}=  get_acc_id  ${PUSERNAME104}
     Set Suite Variable   ${pid3}
     ${cid4}=  get_id  ${CUSERNAME4}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
 
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
@@ -3456,7 +3651,7 @@ JD-TC-providerConsumerAppointment-UH9
     ${p1_l1}=  Create Sample Location
     Set Suite Variable   ${p1_l1}
     clear_appt_schedule   ${PUSERNAME104}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -3465,9 +3660,9 @@ JD-TC-providerConsumerAppointment-UH9
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10     
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${Empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}   ${p1_s1}
@@ -3500,7 +3695,7 @@ JD-TC-providerConsumerAppointment-UH9
     Should Be Equal As Strings  "${resp.json()}"   "${ACCOUNT_NOT_EXIST}"    
     Should Be Equal As Strings  ${resp.status_code}  404
 
-JD-TC-providerConsumerAppointment-UH10    
+JD-TC-providerConsumerAppointment-UH11
     [Documentation]   Consumer trying to take an Appointment without login
 
     ${cnote}=   FakerLibrary.word
@@ -3510,17 +3705,17 @@ JD-TC-providerConsumerAppointment-UH10
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
 
-JD-TC-providerConsumerAppointment-UH11
+JD-TC-providerConsumerAppointment-UH12
     [Documentation]  Consumer takes an appointment, When provider location Disabled  
     
     clear_service   ${PUSERNAME77}
     clear_location  ${PUSERNAME77}
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid_11}=  get_acc_id  ${PUSERNAME77}
     ${cid4}=  get_id  ${CUSERNAME4}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${p1_s1}
@@ -3539,7 +3734,7 @@ JD-TC-providerConsumerAppointment-UH11
     ${resp}=  Disable Location  ${p1_l2}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -3550,9 +3745,9 @@ JD-TC-providerConsumerAppointment-UH11
     ${list}=  Create List  1  2  3  4  5  6  7
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     Set Suite Variable   ${parallel}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10     
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     Set Suite Variable   ${DAY2}   
  
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${Empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l2}  ${duration}  ${bool1}   ${p1_s1}
@@ -3587,14 +3782,14 @@ JD-TC-providerConsumerAppointment-UH11
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${LOCATION_DISABLED}"  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=  Enable Location  ${p1_l2}                                          
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200    
 
-JD-TC-providerConsumerAppointment-UH12
+JD-TC-providerConsumerAppointment-UH13
     [Documentation]   Consumer takes an Appointment, When non scheduled day
     
     ${multilocdoms}=  get_mutilocation_domains
@@ -3614,13 +3809,13 @@ JD-TC-providerConsumerAppointment-UH12
     ${resp}=  Account Set Credential  ${PUSERNAME_W}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_W}${\n}
     Set Suite Variable  ${PUSERNAME_W}
 
-    # ${resp}=  Provider Login  ${PUSERNAME_W}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -3628,7 +3823,6 @@ JD-TC-providerConsumerAppointment-UH12
     ${pid_12}=  get_acc_id  ${PUSERNAME_W}
     ${cid4}=  get_id  ${CUSERNAME4}
     
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_W}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_W}+25566122
@@ -3640,18 +3834,22 @@ JD-TC-providerConsumerAppointment-UH12
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3703,7 +3901,7 @@ JD-TC-providerConsumerAppointment-UH12
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_W}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3724,13 +3922,16 @@ JD-TC-providerConsumerAppointment-UH12
     ${p1_l1}=  Create Sample Location
     Set Suite Variable   ${p1_l1}
 
-    ${sTime1}=  add_time  1  30
-    ${eTime1}=  add_time  2  30
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  db.add_timezone_time  ${tz}  1  30
+    ${eTime1}=  db.add_timezone_time  ${tz}  2  30
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -3739,7 +3940,7 @@ JD-TC-providerConsumerAppointment-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l2}  ${resp.json()}
 
-    ${sTime1}=  add_time  3   15
+    ${sTime1}=  db.add_timezone_time  ${tz}  3   15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -3752,9 +3953,9 @@ JD-TC-providerConsumerAppointment-UH12
     Set Suite Variable   ${bool1}
     ${list}=  Create List  1  2  3  4  5  6
     Set Suite Variable   ${list}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10     
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     Set Suite Variable   ${DAY2}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}   ${p1_s1}
     Log  ${resp.content}
@@ -3767,12 +3968,12 @@ JD-TC-providerConsumerAppointment-UH12
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
     
     FOR   ${i}  IN RANGE   1   3
-        ${DAYQ}=  add_date  ${i}
+        ${DAYQ}=  db.add_timezone_date  ${tz}  ${i}
         ${DAYQ_weekday}=  get_weekday_by_date  ${DAYQ}
         Continue For Loop If   '${DAYQ_weekday}' == '7'
         Exit For Loop If  '${DAYQ_weekday}' != '7'
     END
-    # ${DAYQ}=  add_date  2     
+    # ${DAYQ}=  db.add_timezone_date  ${tz}  2     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAYQ}  ${p1_s1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3834,11 +4035,12 @@ JD-TC-providerConsumerAppointment-UH12
     ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${countryCodes[0]}  ${countryCodes[0]}  ${numt}  ${countryCodes[0]}  ${numw}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable     ${fid}    ${resp.json()}
 
     ${resp}=    Get FamilyMember
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
+    # Set Suite Variable     ${fid}    ${resp.json()[0]['id']}
 
     ${apptfor1}=  Create Dictionary  id=${fid}   apptTime=${slot1}   firstName=${family_fname}
     ${apptfor}=   Create List  ${apptfor1}
@@ -3846,7 +4048,7 @@ JD-TC-providerConsumerAppointment-UH12
 
     ${curr_weekday}=  get_weekday
     ${daygap}=  Evaluate  7-${curr_weekday}
-    ${DAYUH12}=  add_date  ${daygap}
+    ${DAYUH12}=  db.add_timezone_date  ${tz}  ${daygap}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid_12}  ${p1_s1}  ${sch_id1}  ${DAYUH12}  ${cnote}   ${apptfor}
@@ -3876,7 +4078,7 @@ JD-TC-providerConsumerAppointment-18
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3922,10 +4124,10 @@ JD-TC-providerConsumerAppointment-18
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -3987,7 +4189,7 @@ JD-TC-providerConsumerAppointment-18
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${cid}   ${resp.json()}
 
-    ${resp}=  Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4093,7 +4295,7 @@ JD-TC-providerConsumerAppointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4134,7 +4336,7 @@ JD-TC-providerConsumerAppointment-18
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4182,7 +4384,7 @@ JD-TC-providerConsumerAppointment-19
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4214,17 +4416,17 @@ JD-TC-providerConsumerAppointment-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${maxval}=  Convert To Integer   ${delta/4}
-        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
@@ -4296,9 +4498,9 @@ JD-TC-providerConsumerAppointment-19
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz}
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${PO_Number}    Generate random string    5    0123456789
@@ -4348,7 +4550,7 @@ JD-TC-providerConsumerAppointment-20
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${MUSERNAME72}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME72}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4374,17 +4576,21 @@ JD-TC-providerConsumerAppointment-20
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${MUSERNAME72}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -4500,7 +4706,7 @@ JD-TC-providerConsumerAppointment-21
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${MUSERNAME72}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME72}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -4519,9 +4725,12 @@ JD-TC-providerConsumerAppointment-21
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -4603,10 +4812,10 @@ JD-TC-providerConsumerAppointment-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -4727,18 +4936,17 @@ JD-TC-providerConsumerAppointment-UH14
     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
-    # ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_D}+15566165
     ${ph2}=  Evaluate  ${PUSERNAME_D}+25566165
@@ -4750,18 +4958,22 @@ JD-TC-providerConsumerAppointment-UH14
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4825,11 +5037,11 @@ JD-TC-providerConsumerAppointment-UH14
 
     ${pid}=  get_acc_id  ${PUSERNAME_D}
     Set Suite Variable   ${pid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -4856,7 +5068,7 @@ JD-TC-providerConsumerAppointment-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  1  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}   
 
@@ -4945,7 +5157,7 @@ JD-TC-providerConsumerAppointment-UH14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${ph_no}
@@ -4982,7 +5194,7 @@ JD-TC-providerConsumerAppointment-25
 
     [Documentation]  Two Consumer takes future Appointments, Provider parallelServing is one.
 
-    ${resp}=  Provider Login  ${PUSERNAME_X}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4991,9 +5203,9 @@ JD-TC-providerConsumerAppointment-25
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME_X}
     Set Suite Variable   ${pid}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
@@ -5006,10 +5218,10 @@ JD-TC-providerConsumerAppointment-25
     Set Suite Variable   ${p1_l1}
 
     clear_appt_schedule   ${PUSERNAME_X}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10   
-    ${sTime1}=  add_time  0  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -5037,7 +5249,7 @@ JD-TC-providerConsumerAppointment-25
     # ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     # ${bool1}=  Random Element  ${bool}
     # ${list}=  Create List  1  2  3  4  5  6  7
-    # ${DAY2}=  add_date  10     
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10     
     # ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l2}  ${duration}  ${bool1}  ${p1_s2}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -5099,7 +5311,7 @@ JD-TC-providerConsumerAppointment-25
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY3}=  add_date  5
+    ${DAY3}=  db.add_timezone_date  ${tz}  5
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid}  ${p1_s1}  ${sch_id21}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -5112,7 +5324,7 @@ JD-TC-providerConsumerAppointment-25
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY3}   appmtTime=${slot1}
-    Should Be Equal As Strings  ${resp.json()['providerconsumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${ph_no}
@@ -5154,7 +5366,7 @@ JD-TC-providerConsumerAppointment-25
     # ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     # ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY3}=  add_date  5
+    ${DAY3}=  db.add_timezone_date  ${tz}  5
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid}  ${p1_s1}  ${sch_id21}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.content}

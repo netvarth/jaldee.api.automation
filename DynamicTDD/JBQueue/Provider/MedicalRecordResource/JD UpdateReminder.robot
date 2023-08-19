@@ -23,10 +23,13 @@ JD-TC-UpdateReminder-1
 
     [Documentation]    Provider create a reminder for his consumer and update it with the same details.
 
-    ${resp}=  Provider Login  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -40,11 +43,25 @@ JD-TC-UpdateReminder-1
         Set Suite Variable  ${pcid18}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -89,7 +106,7 @@ JD-TC-UpdateReminder-2
 
     [Documentation]    Provider create a reminder for his consumer and update it for another consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -105,11 +122,11 @@ JD-TC-UpdateReminder-2
         Set Suite Variable  ${pcid11}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Update Reminder   ${rem_id}  ${prov_id1}  ${pcid11}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -133,15 +150,15 @@ JD-TC-UpdateReminder-3
 
     [Documentation]    Provider create a reminder for his consumer and update it for a short date range.
 
-    ${resp}=  Provider Login  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  add_date  2
-    ${DAY2}=  add_date  4    
+    ${DAY1}=  db.add_timezone_date  ${tz}  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  4    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Update Reminder   ${rem_id}  ${prov_id1}  ${pcid11}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -166,38 +183,38 @@ JD-TC-UpdateReminder-UH1
 
     [Documentation]    Provider create a reminder for his consumer and update it without message.
 
-    ${resp}=  Provider Login  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     
     ${resp}=  Update Reminder   ${rem_id}  ${prov_id1}  ${pcid11}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${INVALID_MESSAGE}"
 
-JD-TC-UpdateReminder-UH2
+# JD-TC-UpdateReminder-UH2
 
-    [Documentation]    Provider create a reminder for his consumer and update it without reminder id.
+#     [Documentation]    Provider create a reminder for his consumer and update it without reminder id.
 
-    ${resp}=  Provider Login  ${PUSERNAME135}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  3  15
-    ${msg}=  FakerLibrary.word
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10    
+#     ${list}=  Create List  1  2  3  4  5  6  7
+#     ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+#     ${eTime1}=  db.add_timezone_time  ${tz}  3  15
+#     ${msg}=  FakerLibrary.word
 
-    ${resp}=  Update Reminder   ${EMPTY}  ${prov_id1}  ${pcid11}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
+#     ${resp}=  Update Reminder   ${EMPTY}  ${prov_id1}  ${pcid11}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  422
     
     

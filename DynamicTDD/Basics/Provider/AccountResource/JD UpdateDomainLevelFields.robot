@@ -26,9 +26,14 @@ JD-TC-UpdateDomainVirtualField-1
         ${subdomain_len}=  Evaluate  ${subdomain_len}+${sublen}
     END
     FOR   ${a}  IN RANGE   ${subdomain_len}
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable   ${d}  ${resp.json()['sector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable   ${d}  ${decrypted_data['sector']}
+        
+        # Set Test Variable   ${d}  ${resp.json()['sector']}
         ${fields}=   Get Domain level Fields  ${d}
         Log  ${fields.json()}
         Should Be Equal As Strings    ${fields.status_code}   200
@@ -61,9 +66,14 @@ JD-TC-UpdateSubDomainVirtualField-UH2
 
 JD-TC-UpdateDomainVirtualField-2
     [Documentation]   update domain virtual fields  of a valid provider with another domain virtual fields
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${d}  ${resp.json()['sector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${d}  ${decrypted_data['sector']}
+       
+    # Set Test Variable   ${d}  ${resp.json()['sector']}
     ${resp}=  Update Domain_Level  ${virtual_fields}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_DOM_VIRTUAL_FIELDS}

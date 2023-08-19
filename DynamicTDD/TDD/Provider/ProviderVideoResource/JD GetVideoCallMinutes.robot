@@ -23,7 +23,7 @@ JD-TC-GetVideoCallMinutes-1
 
     [Documentation]  Get Video Call minutes of a provider(by default).
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -37,7 +37,7 @@ JD-TC-GetVideoCallMinutes-2
 
     [Documentation]  Get Video Call minutes of a provider(add on added).
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -63,7 +63,7 @@ JD-TC-GetVideoCallMinutes-3
 
     [Documentation]  Get Video Call minutes of a provider(add on added).
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,7 +89,7 @@ JD-TC-GetVideoCallMinutes-4
 
     [Documentation]  Get Video Call minutes of a provider(add on added).
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

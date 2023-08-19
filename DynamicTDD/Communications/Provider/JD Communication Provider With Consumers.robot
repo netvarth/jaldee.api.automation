@@ -27,10 +27,15 @@ JD-TC-Communication provider with consumer-1
 
     clear_Providermsg  ${PUSERNAME4}
     
-    ${resp}=   ProviderLogin  ${PUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME4}
     Set Suite Variable   ${acc_id} 
     
@@ -108,10 +113,15 @@ JD-TC-Communication provider with consumer-2
     [Documentation]   Communication provider with consumer
 
     clear_Providermsg  ${PUSERNAME5}
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME5}
     Set Suite Variable   ${acc_id} 
 

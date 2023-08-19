@@ -21,6 +21,7 @@ ${self}               0
 @{provider_list}
 ${start}              140
 ${jcoupon1}   CouponMul00
+${tz}   Asia/Kolkata
 
 
 
@@ -31,7 +32,7 @@ JD-TC-GetAllBankInfo-1
 
     [Documentation]  Get my own bank details by superadmin.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -42,7 +43,7 @@ JD-TC-GetAllBankInfo-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
    
@@ -103,7 +104,7 @@ JD-TC-GetBankInfoById-2
     Set Suite Variable  ${pan_num1}
     Set Suite Variable  ${GST_num1}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -155,7 +156,7 @@ JD-TC-GetAllBankInfo-3
 
     [Documentation]  Get bank details of multiple providers by superadmin.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -264,7 +265,7 @@ JD-TC-CreateBankInfo-UH2
 
     [Documentation]  get bank details by provider login.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

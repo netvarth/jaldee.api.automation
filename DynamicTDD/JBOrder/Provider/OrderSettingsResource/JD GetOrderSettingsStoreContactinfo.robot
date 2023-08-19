@@ -60,13 +60,20 @@ JD-TC-GetOrderSettingsStoreContactinfo-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    Set Suite Variable  ${pid226}  ${resp.json()['id']}
-    Set Suite Variable  ${P226_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P226_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph226}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid226}  ${decrypted_data['id']}
+    Set Suite Variable  ${P226_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P226_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph226}  ${decrypted_data['primaryPhoneNumber']}
+
+    # Set Suite Variable  ${pid226}  ${resp.json()['id']}
+    # Set Suite Variable  ${P226_fName}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${P226_lName}  ${resp.json()['lastName']}
+    # Set Suite Variable  ${Ph226}  ${resp.json()['primaryPhoneNumber']}
 
     ${accId226}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId226}
@@ -84,7 +91,7 @@ JD-TC-GetOrderSettingsStoreContactinfo-1
 JD-TC-GetOrderSettingsStoreContactinfo-2
     [Documentation]   Update order settings and get Store_Contact_info
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fName}=    FakerLibrary.name
@@ -125,7 +132,7 @@ JD-TC-GetOrderSettingsStoreContactinfo-2
 JD-TC-GetOrderSettingsStoreContactinfo-3
     [Documentation]   Update Store_Contact_info and get Store_Contact_info
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -166,12 +173,20 @@ JD-TC-GetOrderSettingsStoreContactinfo-3
 JD-TC-GetOrderSettingsStoreContactinfo-4
     [Documentation]   Update Email again and Get Store_Contact_info 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid38}  ${resp.json()['id']}
-    Set Suite Variable  ${P38_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P38_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph38}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid38}  ${decrypted_data['id']}
+    Set Suite Variable  ${P38_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P38_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph38}  ${decrypted_data['primaryPhoneNumber']}
+
+    # Set Suite Variable  ${pid38}  ${resp.json()['id']}
+    # Set Suite Variable  ${P38_fName}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${P38_lName}  ${resp.json()['lastName']}
+    # Set Suite Variable  ${Ph38}  ${resp.json()['primaryPhoneNumber']}
 
     ${accId38}=  get_acc_id  ${PUSERNAME38}
     Set Suite Variable  ${accId38}

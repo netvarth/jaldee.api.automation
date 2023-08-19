@@ -25,7 +25,7 @@ JD-TC-RemoveOrderLabel-1
     clear_service  ${PUSERNAME88}
     clear_customer   ${PUSERNAME88}
     clear_Item   ${PUSERNAME88}
-    ${resp}=  ProviderLogin  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -72,16 +72,16 @@ JD-TC-RemoveOrderLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -153,7 +153,7 @@ JD-TC-RemoveOrderLabel-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -183,7 +183,7 @@ JD-TC-RemoveOrderLabel-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -259,7 +259,7 @@ JD-TC-RemoveOrderLabel-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Verify Response  ${resp}   orderStatus=${orderStatuses[0]}   label=${label_lbl1}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -290,7 +290,7 @@ JD-TC-RemoveOrderLabel-UH3
 
     [Documentation]  Remove a label from a non existant order 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Remove Label for Order   abcdefg  ${lblname_1}
@@ -302,7 +302,7 @@ JD-TC-RemoveOrderLabel-UH4
 
     [Documentation]  Remove a non existant label from an order 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${labelname}=  FakerLibrary.Word
@@ -315,7 +315,7 @@ JD-TC-RemoveOrderLabel-UH5
 
     [Documentation]  Remove an already removed label from an order. 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Remove Label for Order   ${orderid1}  ${lblname_1}
@@ -331,7 +331,7 @@ JD-TC-RemoveOrderLabel-UH6
     clear_service  ${PUSERNAME89}
     clear_customer   ${PUSERNAME89}
     clear_Item   ${PUSERNAME89}
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -378,16 +378,16 @@ JD-TC-RemoveOrderLabel-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -459,7 +459,7 @@ JD-TC-RemoveOrderLabel-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -487,7 +487,7 @@ JD-TC-RemoveOrderLabel-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

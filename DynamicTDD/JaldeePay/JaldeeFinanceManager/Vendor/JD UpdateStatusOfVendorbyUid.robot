@@ -32,7 +32,7 @@ JD-TC-UpdateVendorStatus-1
 
     [Documentation]  Create Vendor for an SP then update default status enable to disable.
 
-    ${resp}=  Provider Login  ${PUSERNAME78}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -155,7 +155,7 @@ JD-TC-UpdateVendorStatus-2
 
     [Documentation]  try to disable again.
 
-    ${resp}=  Provider Login  ${PUSERNAME78}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

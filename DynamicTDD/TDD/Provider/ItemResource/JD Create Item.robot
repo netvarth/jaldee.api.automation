@@ -32,7 +32,7 @@ ${item5}   ITEM5
 JD-TC-Create Item-1
 
     [Documentation]  Provider Create item taxable is true and false
-    ${resp}=  ProviderLogin  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 #     clear_Item  ${PUSERNAME24}
 #     ${des}=  FakerLibrary.Word
@@ -40,7 +40,7 @@ JD-TC-Create Item-1
 #     ${amount1}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     Set Suite Variable    ${amount1}
 #     ${amount2}=   FakerLibrary.pyfloat   left_digits=2   right_digits=2   positive=True
-#     ${resp}=  ProviderLogin  ${PUSERNAME24}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${GST_num}  ${pan_num}=  db.Generate_gst_number  ${Container_id}
 #     ${Percentage}    Random Element     [5,12,18,28]  
@@ -69,7 +69,7 @@ JD-TC-Create Item-1
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
 #     ${amount3}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
-#     ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Create Item   ${item1}  ${des}   ${description}  ${amount3}    ${bool[0]}   
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -108,7 +108,7 @@ JD-TC-Create Item-1
 #     [Documentation]  Provider create already existing item name
 #      ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME24}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}  200   
 #     ${resp}=  Create Item   ${item1}  ${des}   ${description}  ${amount1}   ${bool[0]}   
 #     Should Be Equal As Strings  ${resp.status_code}  422
@@ -137,7 +137,7 @@ JD-TC-Create Item-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  ProviderLogin  ${PUSERNAME}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${length}=  get_item_metrics_value   Item   1
@@ -163,7 +163,7 @@ JD-TC-Create Item-1
 # JD-TC-Create Item-UH4
 
 #     [Documentation]  Check Item limit(only 10 items can create under packageid 1,here trying to create one more item without upgrade license )
-#     ${resp}=  ProviderLogin  ${PUSERNAME}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     sleep  1s
@@ -181,7 +181,7 @@ JD-TC-Create Item-1
 
 #     [Documentation]  Check Item limit(only 50 items can create under packageid 2 )
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=   Get upgradable license
@@ -216,7 +216,7 @@ JD-TC-Create Item-1
 
 #     [Documentation]  Check Item limit(only 50 items can create under packageid 2,here trying to create one more item without upgrade license )
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     sleep  1s

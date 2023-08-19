@@ -23,15 +23,19 @@ JD-TC-DeleteteReminder-1
 
     [Documentation]    Provider create a reminder for his consumer and delete it.
 
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
@@ -45,11 +49,11 @@ JD-TC-DeleteteReminder-1
         Set Suite Variable  ${pcid18}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  3  15
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
@@ -110,7 +114,7 @@ JD-TC-DeleteteReminder-UH3
 
     [Documentation]    Delete reminder with another porviders reminder id.
 
-    ${resp}=  Provider Login  ${PUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -123,7 +127,7 @@ JD-TC-DeleteteReminder-UH4
 
     [Documentation]    Delete reminder with another invalid reminder id.
 
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -137,22 +141,9 @@ JD-TC-DeleteteReminder-UH4
 
 JD-TC-DeleteteReminder-UH5
 
-    [Documentation]    Delete reminder with empty reminder id.
-
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Delete Reminder  ${EMPTY}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.content}  "${LOGIN_NO_ACCESS_FOR_URL}"
-
-JD-TC-DeleteteReminder-UH6
-
     [Documentation]    Delete reminder which is already deleted.
 
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

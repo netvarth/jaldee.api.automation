@@ -36,7 +36,7 @@ JD-TC-GetSlots By Date and service -1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -93,6 +93,11 @@ JD-TC-GetSlots By Date and service -1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
 
     ${description}=  FakerLibrary.sentence
@@ -107,10 +112,11 @@ JD-TC-GetSlots By Date and service -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
@@ -202,7 +208,7 @@ JD-TC-GetSlots By Date and service-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME185}
@@ -218,12 +224,18 @@ JD-TC-GetSlots By Date and service-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=3  resoucesRequired=2
@@ -329,7 +341,7 @@ JD-TC-GetSlots By Date and service-3
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME185}
@@ -345,12 +357,18 @@ JD-TC-GetSlots By Date and service-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=3  resoucesRequired=2
@@ -462,7 +480,7 @@ JD-TC-GetSlots By Date and service-4
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -478,12 +496,18 @@ JD-TC-GetSlots By Date and service-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=0
@@ -573,7 +597,7 @@ JD-TC-GetSlots By Date and service-5
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -589,12 +613,18 @@ JD-TC-GetSlots By Date and service-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=5
@@ -684,7 +714,7 @@ JD-TC-GetSlots By Date and service-6
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -700,12 +730,18 @@ JD-TC-GetSlots By Date and service-6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=5
@@ -830,7 +866,7 @@ JD-TC-GetSlots By Date and service-6
 
 JD-TC-GetSlots By Date and service-7
     [Documentation]  Provider takes appointment for consumer and consumer's family member here max booking is 1
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME185}
@@ -846,12 +882,18 @@ JD-TC-GetSlots By Date and service-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=1  resoucesRequired=5
@@ -975,7 +1017,7 @@ JD-TC-GetSlots By Date and service-7
 JD-TC-GetSlots By Date and service-8
 
     [Documentation]  Provider takes appointment for consumer and consumer's family member here  maxbooking is 2
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME185}
@@ -991,12 +1033,18 @@ JD-TC-GetSlots By Date and service-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=2  resoucesRequired=5
@@ -1134,7 +1182,7 @@ JD-TC-GetSlots By Date and service-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME115}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME115}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1194,6 +1242,11 @@ JD-TC-GetSlots By Date and service-9
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1202,10 +1255,10 @@ JD-TC-GetSlots By Date and service-9
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=3
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1238,9 +1291,9 @@ JD-TC-GetSlots By Date and service-9
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word
@@ -1359,7 +1412,7 @@ JD-TC-GetSlots By Date and service-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME185}
@@ -1377,12 +1430,18 @@ JD-TC-GetSlots By Date and service-10
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=3  resoucesRequired=2
@@ -1468,7 +1527,7 @@ JD-TC-GetSlots By Date and service-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1506,7 +1565,7 @@ JD-TC-GetSlots By Date and service-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -1522,12 +1581,18 @@ JD-TC-GetSlots By Date and service-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=1  resoucesRequired=2
@@ -1628,7 +1693,7 @@ JD-TC-GetSlots By Date and service-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -1644,12 +1709,18 @@ JD-TC-GetSlots By Date and service-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=5
@@ -1746,7 +1817,7 @@ JD-TC-GetSlots By Date and service-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -1762,12 +1833,18 @@ JD-TC-GetSlots By Date and service-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=2
@@ -1797,7 +1874,7 @@ JD-TC-GetSlots By Date and service-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -1813,12 +1890,18 @@ JD-TC-GetSlots By Date and service-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=5
@@ -1900,7 +1983,7 @@ JD-TC-GetSlots By Date and service-UH4
 
 JD-TC-GetSlots By Date and service-UH5
     [Documentation]  Provider takes appointment for consumer and consumer's family member here parallel is less than service required 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME185}
@@ -1916,12 +1999,18 @@ JD-TC-GetSlots By Date and service-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}   maxBookingsAllowed=2  resoucesRequired=10
@@ -1996,7 +2085,7 @@ JD-TC-GetSlots By Date and service-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -2012,12 +2101,18 @@ JD-TC-GetSlots By Date and service-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=5
@@ -2114,7 +2209,7 @@ JD-TC-GetSlots By Date and service-UH7
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME186}
@@ -2130,12 +2225,18 @@ JD-TC-GetSlots By Date and service-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=2  resoucesRequired=5
@@ -2262,7 +2363,7 @@ JD-TC-GetSlots By Date and service-UH7
 JD-TC-GetSlots By Date and service -11
     [Documentation]  provider ser price variation for second schedule and give 50% prepayment
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2328,6 +2429,11 @@ JD-TC-GetSlots By Date and service -11
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${description}=  FakerLibrary.sentence
@@ -2344,12 +2450,13 @@ JD-TC-GetSlots By Date and service -11
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=6  max=10
@@ -2361,8 +2468,8 @@ JD-TC-GetSlots By Date and service -11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -2460,7 +2567,7 @@ JD-TC-GetSlots By Date and service -11
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2513,7 +2620,7 @@ JD-TC-GetSlots By Date and service -11
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2539,7 +2646,7 @@ JD-TC-GetSlots By Date and service -11
 JD-TC-GetSlots By Date and service -12
     [Documentation]  provider ser price variation for second schedule without prepayment
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2580,6 +2687,11 @@ JD-TC-GetSlots By Date and service -12
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${description}=  FakerLibrary.sentence
@@ -2594,12 +2706,13 @@ JD-TC-GetSlots By Date and service -12
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -2611,8 +2724,8 @@ JD-TC-GetSlots By Date and service -12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -2653,7 +2766,7 @@ JD-TC-GetSlots By Date and service -12
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2722,7 +2835,7 @@ JD-TC-GetSlots By Date and service -12
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2748,7 +2861,7 @@ JD-TC-GetSlots By Date and service -12
 JD-TC-GetSlots By Date and service -13
     [Documentation]  provider ser price variation for second schedule and give full amount prepayment
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2789,6 +2902,11 @@ JD-TC-GetSlots By Date and service -13
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${description}=  FakerLibrary.sentence
@@ -2803,12 +2921,13 @@ JD-TC-GetSlots By Date and service -13
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -2820,8 +2939,8 @@ JD-TC-GetSlots By Date and service -13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -2863,7 +2982,7 @@ JD-TC-GetSlots By Date and service -13
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2929,7 +3048,7 @@ JD-TC-GetSlots By Date and service -13
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2954,7 +3073,7 @@ JD-TC-GetSlots By Date and service -13
 JD-TC-GetSlots By Date and service -14
     [Documentation]  provider ser price variation for second schedule and reschedule to 2nd schedule and check prepayment
     
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3008,6 +3127,11 @@ JD-TC-GetSlots By Date and service -14
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME181}
 
     # ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
@@ -3060,12 +3184,13 @@ JD-TC-GetSlots By Date and service -14
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -3077,8 +3202,8 @@ JD-TC-GetSlots By Date and service -14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -3141,7 +3266,7 @@ JD-TC-GetSlots By Date and service -14
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3222,7 +3347,7 @@ JD-TC-GetSlots By Date and service -14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME181}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME181}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3244,7 +3369,7 @@ JD-TC-GetSlots By Date and service -14
     Verify Response   ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot2}
     ...  apptStatus=${apptStatus[1]}    amountPaid=${min_pre}  amountDue=${amtdue}
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3276,7 +3401,7 @@ JD-TC-GetSlots By Date and service -14
 JD-TC-GetSlots By Date and service -15
     [Documentation]  provider ser price variation for second schedule and cancel appmnt then check bill
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3325,6 +3450,11 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     # ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
@@ -3377,12 +3507,13 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -3394,8 +3525,8 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -3436,7 +3567,7 @@ JD-TC-GetSlots By Date and service -15
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3517,7 +3648,7 @@ JD-TC-GetSlots By Date and service -15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME180}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME180}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3543,7 +3674,7 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
     Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${amtdue}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3571,7 +3702,7 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  02s
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3587,7 +3718,7 @@ JD-TC-GetSlots By Date and service -15
 JD-TC-GetSlots By Date and service -16
     [Documentation]  provider ser price variation for second schedule and cancel appmnt then check bill(doing old prepayment amount)
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3637,6 +3768,11 @@ JD-TC-GetSlots By Date and service -16
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     # ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
@@ -3686,12 +3822,13 @@ JD-TC-GetSlots By Date and service -16
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -3703,8 +3840,8 @@ JD-TC-GetSlots By Date and service -16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -3745,7 +3882,7 @@ JD-TC-GetSlots By Date and service -16
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3825,7 +3962,7 @@ JD-TC-GetSlots By Date and service -16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME180}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME180}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3850,7 +3987,7 @@ JD-TC-GetSlots By Date and service -16
     Verify Response  ${resp}  uuid=${apptid1}   billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  billPaymentStatus=${paymentStatus[1]}   
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${minpre} 
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3878,7 +4015,7 @@ JD-TC-GetSlots By Date and service -16
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  02s
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3893,7 +4030,7 @@ JD-TC-GetSlots By Date and service -16
 JD-TC-GetSlots By Date and service -17
     [Documentation]  provider ser price variation for second schedule and give 50% prepayment and doing payment
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3959,6 +4096,11 @@ JD-TC-GetSlots By Date and service -17
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${description}=  FakerLibrary.sentence
@@ -3975,12 +4117,13 @@ JD-TC-GetSlots By Date and service -17
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -3992,8 +4135,8 @@ JD-TC-GetSlots By Date and service -17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -4109,7 +4252,7 @@ JD-TC-GetSlots By Date and service -17
     sleep   02s
     ${amountDue}=   Evaluate  ${totalamt} - ${amt_float} 
     ${amountDue}=  twodigitfloat  ${amountDue} 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4141,7 +4284,7 @@ JD-TC-GetSlots By Date and service -17
     Verify Response  ${resp}  uuid=${apptid1}   billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[0]}  billPaymentStatus=${paymentStatus[2]}   
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${totalamt} 
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4159,7 +4302,7 @@ JD-TC-GetSlots By Date and service -17
 JD-TC-GetSlots By Date and service -18
     [Documentation]  provider ser minus amount price variation for second schedule and give 50% prepayment
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4214,6 +4357,11 @@ JD-TC-GetSlots By Date and service -18
     Run Keyword If  '${resp1}' != '${None}'   Should Be Equal As Strings  ${resp1.status_code}  200
    
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${description}=  FakerLibrary.sentence
@@ -4230,12 +4378,13 @@ JD-TC-GetSlots By Date and service -18
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -4247,8 +4396,8 @@ JD-TC-GetSlots By Date and service -18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -4347,7 +4496,7 @@ JD-TC-GetSlots By Date and service -18
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4372,7 +4521,7 @@ JD-TC-GetSlots By Date and service -18
 JD-TC-GetSlots By Date and service -19
     [Documentation]  provider ser price variation for second schedule and cancel appmnt then check bill schedule contain mutiple service
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4414,6 +4563,11 @@ JD-TC-GetSlots By Date and service -19
     Run Keyword If  '${resp1}' != '${None}'   Should Be Equal As Strings  ${resp1.status_code}  200
    
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${resp}=  Get Account Payment Settings
@@ -4456,12 +4610,13 @@ JD-TC-GetSlots By Date and service -19
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE2}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total2}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=10  max=10
@@ -4473,8 +4628,8 @@ JD-TC-GetSlots By Date and service -19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
@@ -4515,7 +4670,7 @@ JD-TC-GetSlots By Date and service -19
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4593,7 +4748,7 @@ JD-TC-GetSlots By Date and service -19
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${PUSERNAME180}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME180}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4619,7 +4774,7 @@ JD-TC-GetSlots By Date and service -19
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
     Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${amtdue}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4644,7 +4799,7 @@ JD-TC-GetSlots By Date and service -19
 JD-TC-GetSlots By Date and service -20
     [Documentation]  provider ser price variation for second schedule and reschedule to 2nd schedule with no prepayment
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4677,6 +4832,11 @@ JD-TC-GetSlots By Date and service -20
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${description}=  FakerLibrary.sentence
@@ -4691,12 +4851,13 @@ JD-TC-GetSlots By Date and service -20
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -4708,8 +4869,8 @@ JD-TC-GetSlots By Date and service -20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -4772,7 +4933,7 @@ JD-TC-GetSlots By Date and service -20
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -4837,7 +4998,7 @@ JD-TC-GetSlots By Date and service -20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4866,7 +5027,7 @@ JD-TC-GetSlots By Date and service -20
 JD-TC-GetSlots By Date and service -21
     [Documentation]  provider ser price variation for second schedule and reschedule to 1st schedule and check prepayment
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4899,6 +5060,11 @@ JD-TC-GetSlots By Date and service -21
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${resp}=   Get Account Payment Settings
@@ -4934,12 +5100,13 @@ JD-TC-GetSlots By Date and service -21
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -4951,8 +5118,8 @@ JD-TC-GetSlots By Date and service -21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -5103,7 +5270,7 @@ JD-TC-GetSlots By Date and service -21
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5140,7 +5307,7 @@ JD-TC-GetSlots By Date and service -22
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5173,6 +5340,11 @@ JD-TC-GetSlots By Date and service -22
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${resp}=   Get Account Payment Settings
@@ -5205,12 +5377,13 @@ JD-TC-GetSlots By Date and service -22
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -5222,8 +5395,8 @@ JD-TC-GetSlots By Date and service -22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -5250,9 +5423,9 @@ JD-TC-GetSlots By Date and service -22
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
     
     ${cnote}=   FakerLibrary.word
@@ -5295,7 +5468,7 @@ JD-TC-GetSlots By Date and service -22
     # Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['time']}   ${slot1}
     # Should Be Equal As Strings   ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   0
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5350,7 +5523,7 @@ JD-TC-GetSlots By Date and service -22
    
     sleep   02s
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5399,7 +5572,7 @@ JD-TC-GetSlots By Date and service -22
 JD-TC-GetSlots By Date and service -UH8
     [Documentation]  provider ser price variation for invalid schedule id
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5454,6 +5627,11 @@ JD-TC-GetSlots By Date and service -UH8
     Run Keyword If  '${resp1}' != '${None}'   Should Be Equal As Strings  ${resp1.status_code}  200
    
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${description}=  FakerLibrary.sentence
@@ -5470,12 +5648,13 @@ JD-TC-GetSlots By Date and service -UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -5487,8 +5666,8 @@ JD-TC-GetSlots By Date and service -UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -5511,7 +5690,7 @@ JD-TC-GetSlots By Date and service -UH8
 JD-TC-GetSlots By Date and service -UH9
     [Documentation]  provider set price variation for second schedule with invalid service id
     
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5565,6 +5744,11 @@ JD-TC-GetSlots By Date and service -UH9
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME180}
 
     ${description}=  FakerLibrary.sentence
@@ -5581,12 +5765,13 @@ JD-TC-GetSlots By Date and service -UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}    totalAmount=${Total}  status=${status[0]}  bType=${btype} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  2  00 
+    ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=5  max=10
@@ -5598,8 +5783,8 @@ JD-TC-GetSlots By Date and service -UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=    add_time  2  00 
-    ${eTime2}=    add_time  3  00 
+    ${sTime2}=    add_timezone_time  ${tz}  2  00   
+    ${eTime2}=    add_timezone_time  ${tz}  3  00   
     ${schedule_name1}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
@@ -5636,7 +5821,7 @@ JD-TC-GetSlots By Date and service -UH9
 JD-TC-Take Appointment-2
     [Documentation]  Provider takes appointment for a valid consumer when appointment and today appointment is enabled
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5693,6 +5878,11 @@ JD-TC-Take Appointment-2
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME186}
 
     ${description}=  FakerLibrary.sentence
@@ -5707,10 +5897,11 @@ JD-TC-Take Appointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[1]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE2}   maxBookingsAllowed=2  resoucesRequired=2

@@ -53,7 +53,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${acc_id}  ${resp.json()['id']}
@@ -70,7 +70,6 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_A}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_A}+25566122
@@ -82,18 +81,22 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   4  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  4  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -177,17 +180,17 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   3  30 
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable  ${eTime1}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -308,10 +311,10 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${item_quantity2}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${DAY1}
 
-    ${DAY2}=  add_date   13
+    ${DAY2}=  db.add_timezone_date  ${tz}  13  
     Set Suite Variable  ${DAY2}
 
     FOR   ${a}  IN RANGE   ${count}
@@ -393,7 +396,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     
     FOR   ${a}  IN RANGE   ${count}
         
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -461,7 +464,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${pre_payment_total}=  Evaluate  ${pickup_pre_total} + ${home_pre_total}
     Set Suite Variable   ${pre_payment_total}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -478,7 +481,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     
     END
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${resp}=  Get Account Level Analytics  metricId=${paymentAnalyticsMetrics['ORDER_PRE_PAYMENT_COUNT']}  dateFrom=${DAY}  dateTo=${DAY}  frequency=DAILY
     Log  ${resp.content}
@@ -593,7 +596,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-2
     
     FOR   ${a}  IN RANGE   ${count}
         
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -703,7 +706,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-2
     Set Suite Variable   ${bill_payment_total}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -742,7 +745,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-3
     [Documentation]   take online order(home delivery and pickup) for a provider by 10 consumers and do the prepayment and then bill payment with tax
     ...  and check account level analytics for ORDER_BILL_PAYMENT_COUNT matrix.
     
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -838,7 +841,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-3
     
     FOR   ${a}  IN RANGE   ${count}
         
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -948,7 +951,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-3
     ${bill_payment_total}=  Evaluate  ${home_bill_total} + ${pickup_bill_total}
     Set Test Variable   ${bill_payment_total}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -996,7 +999,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${item_quantity2}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -1082,7 +1085,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
     
     FOR   ${a}  IN RANGE   ${count}
         
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -1149,7 +1152,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
     Set Suite Variable   ${pre_payment_total}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1166,7 +1169,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
     
     END
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${resp}=  Get Account Level Analytics  metricId=${paymentAnalyticsMetrics['ORDER_PRE_PAYMENT_COUNT']}  dateFrom=${DAY}  dateTo=${DAY}  frequency=DAILY
     Log  ${resp.content}
@@ -1255,7 +1258,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-6
     
     FOR   ${a}  IN RANGE   ${count}
         
-        ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -1327,7 +1330,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-6
     ${billpayment_count}=   Evaluate  len($order_ids)
     Set Suite Variable   ${billpayment_count}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

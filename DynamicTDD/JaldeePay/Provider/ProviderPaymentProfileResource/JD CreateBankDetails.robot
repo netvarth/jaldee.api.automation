@@ -31,7 +31,7 @@ JD-TC-CreateBankDetails-1
 
     [Documentation]  Create my own bank details by provider.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -83,7 +83,7 @@ JD-TC-CreateBankInfo-2
 
     [Documentation]  Create my own bank details then do the payu verification.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -134,7 +134,7 @@ JD-TC-CreateBankInfo-4
 
     [Documentation]  Create multiple bank details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -192,7 +192,7 @@ JD-TC-CreateBankInfo-5
 
     [Documentation]  Create my own bank details for a provider without any deatils.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -209,7 +209,7 @@ JD-TC-CreateBankInfo-UH1
 
     [Documentation]  Create my own bank details without phone number.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -262,7 +262,7 @@ JD-TC-CreateBankInfo-UH5
 
     [Documentation]  create bank details without pancard number.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -277,7 +277,7 @@ JD-TC-CreateBankInfo-UH6
 
     [Documentation]  create bank details without bank account number.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -292,7 +292,7 @@ JD-TC-CreateBankInfo-UH7
 
     [Documentation]  create bank details without bank name.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -307,7 +307,7 @@ JD-TC-CreateBankInfo-UH8
 
     [Documentation]  create bank details without ifsc code.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -322,7 +322,7 @@ JD-TC-CreateBankInfo-UH9
 
     [Documentation]  create bank details without name on pan card.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -337,7 +337,7 @@ JD-TC-CreateBankInfo-UH10
 
     [Documentation]  create bank details without Account holder's name.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -352,7 +352,7 @@ JD-TC-CreateBankInfo-UH11
 
     [Documentation]  create bank details without branch city.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

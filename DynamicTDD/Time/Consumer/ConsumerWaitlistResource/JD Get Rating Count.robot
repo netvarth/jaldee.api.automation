@@ -37,7 +37,7 @@ JD-TC-Get Waitist Rating-1
 
     change_system_date  -5
 
-    ${resp}=  ProviderLogin  ${PUSERNAME206}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
@@ -48,7 +48,7 @@ JD-TC-Get Waitist Rating-1
     # Set Suite Variable  ${cid}
     ${pid}=  get_acc_id  ${PUSERNAME206}
     Set suite variable  ${pid} 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List   1  2  3  4  5  6  7
 
@@ -74,10 +74,11 @@ JD-TC-Get Waitist Rating-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     
-    ${sTime1}=  add_time  1  00
-    ${eTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  00  
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable   ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -87,8 +88,8 @@ JD-TC-Get Waitist Rating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_q1}  ${resp.json()}    
 
-    ${sTime2}=  add_time  1  30
-    ${eTime2}=  add_time  2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  30  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${p1queue2}=    FakerLibrary.word
     Set Suite Variable   ${p1queue2}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -106,7 +107,6 @@ JD-TC-Get Waitist Rating-1
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid1}  ${wid[0]}
 
@@ -121,7 +121,6 @@ JD-TC-Get Waitist Rating-1
 
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s2}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid2}  ${wid[0]}
 
@@ -142,7 +141,6 @@ JD-TC-Get Waitist Rating-1
 
     ${resp}=  Add To Waitlist  ${cid1}  ${p1_s1}  ${p1_q2}  ${DAY}  ${cnote}  ${bool[1]}  ${cid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid3}  ${wid[0]}
 
@@ -157,7 +155,6 @@ JD-TC-Get Waitist Rating-1
 
     ${resp}=  Add To Waitlist  ${cid1}  ${p1_s2}  ${p1_q2}  ${DAY}  ${cnote}  ${bool[1]}  ${cid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid4}  ${wid[0]}
 
@@ -178,7 +175,6 @@ JD-TC-Get Waitist Rating-1
 
     ${resp}=  Add To Waitlist  ${cid2}  ${p1_s1}  ${p1_q2}  ${DAY}  ${cnote}  ${bool[1]}  ${cid2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid5}  ${wid[0]}
 
@@ -193,7 +189,6 @@ JD-TC-Get Waitist Rating-1
 
     ${resp}=  Add To Waitlist  ${cid2}  ${p1_s2}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid6}  ${wid[0]}
 
@@ -224,7 +219,7 @@ JD-TC-Get Waitist Rating-2
  
     [Documentation]   add rating to a waitlist in the history.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME206}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -246,7 +241,7 @@ JD-TC-Get Waitist Rating-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${date}=  subtract_date   5
+    ${date}=  db.subtract_timezone_date  ${tz}    5
 
     ${resp}=  Get Rating  createdDate-eq=${date}
     Log   ${resp.json()}
@@ -255,7 +250,7 @@ JD-TC-Get Waitist Rating-3
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  5 
 
-    ${date1}=  get_date  
+    ${date1}=  db.get_date_by_timezone  ${tz}  
 
     ${resp}=  Get Rating  createdDate-eq=${date1}
     Log   ${resp.json()}
@@ -270,12 +265,13 @@ JD-TC-Get Waitist Rating-4
     [Documentation]  get history waitlist rating of a provider.(online checkin) with filter- date and account  
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME206}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -291,10 +287,10 @@ JD-TC-Get Waitist Rating-4
 
     change_system_date  -1
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set suite variable  ${DAY1}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME206}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME4}  
@@ -305,7 +301,6 @@ JD-TC-Get Waitist Rating-4
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid3}  ${p1_s1}  ${p1_q2}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid3}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid7}  ${wid[0]}
 
@@ -320,7 +315,6 @@ JD-TC-Get Waitist Rating-4
     
     ${resp}=  Add To Waitlist  ${cid3}  ${p1_s2}  ${p1_q1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid3}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid8}  ${wid[0]}
 

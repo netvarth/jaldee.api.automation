@@ -25,20 +25,20 @@ JD-TC-Create_Catalog_For_ShoppingList-1
     [Documentation]  Provider Create order catalog For SHOPPINGLIST
     clear_Item  ${PUSERNAME60}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -125,7 +125,7 @@ JD-TC-Create_Catalog_For_ShoppingList-1
 JD-TC-Create_Catalog_For_ShoppingList-2
     [Documentation]   Another provider also uses same details to Create catalog for shoppinglist
     clear_Item  ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -170,7 +170,7 @@ JD-TC-Create_Catalog_For_ShoppingList-UH2
 
 JD-TC-Create_Catalog_For_ShoppingList-UH3
     [Documentation]  Create catalog for ShoppingList using CancelationPolicy as EMPTY
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,7 +183,7 @@ JD-TC-Create_Catalog_For_ShoppingList-UH3
 
 JD-TC-Create_Catalog_For_ShoppingList-3
     [Documentation]  Create catalog for ShoppingList using Minimum_Number_of_item as EMPTY
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -202,7 +202,7 @@ JD-TC-Create_Catalog_For_ShoppingList-3
 
 JD-TC-Create_Catalog_For_ShoppingList-4
     [Documentation]  Create catalog for ShoppingList using Maximum_Number_of_item as EMPTY
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -221,7 +221,7 @@ JD-TC-Create_Catalog_For_ShoppingList-4
 
 JD-TC-Create_Catalog_For_ShoppingList-UH4
     [Documentation]  Provider again Create catalog for ShoppingList using same details
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -241,7 +241,7 @@ JD-TC-Create_Catalog_For_ShoppingList-UH4
 
 JD-TC-Create_Catalog_For_ShoppingList-UH5
     [Documentation]  Provider Create catalog for ShoppingList using Advanced_Payment_Type as FULL_AMOUNT
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -261,7 +261,7 @@ JD-TC-Create_Catalog_For_ShoppingList-5
     clear_service  ${PUSERNAME60}
     clear_customer   ${PUSERNAME60}
     clear_Item   ${PUSERNAME60}
-    ${resp}=  ProviderLogin  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid2}  ${resp.json()['id']}
@@ -309,17 +309,17 @@ JD-TC-Create_Catalog_For_ShoppingList-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable    ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime2}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -395,7 +395,7 @@ JD-TC-Create_Catalog_For_ShoppingList-6
     clear_service  ${PUSERNAME60}
     clear_customer   ${PUSERNAME60}
     clear_Item   ${PUSERNAME60}
-    ${resp}=  ProviderLogin  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid2}  ${resp.json()['id']}
@@ -443,17 +443,17 @@ JD-TC-Create_Catalog_For_ShoppingList-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable    ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime2}  
     ${list}=  Create List  1  2  3  4  5  6  7
   

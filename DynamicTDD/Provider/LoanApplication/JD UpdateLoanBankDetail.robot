@@ -52,7 +52,7 @@ JD-TC-UpdateLoanApplication-1
                                   
     [Documentation]               Create Loan Application and update loan application.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -102,9 +102,14 @@ JD-TC-UpdateLoanApplication-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
   
@@ -475,7 +480,7 @@ JD-TC-UpdateLoanApplication-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -652,7 +657,7 @@ JD-TC-UpdateLoanApplication-3
                                   
     [Documentation]               Create Loan Application and update loan application with invalid orginfrom.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -686,7 +691,7 @@ JD-TC-UpdateLoanApplication-4
                                   
     [Documentation]               Create Loan Application and update loan application with another provider loan id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -719,7 +724,7 @@ JD-TC-UpdateLoanApplication-4
 JD-TC-UpdateLoanApplication-5
                                   
     [Documentation]               Create Loan Application and update loan application with invalid originUid.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -752,7 +757,7 @@ JD-TC-UpdateLoanApplication-5
 JD-TC-UpdateLoanApplication-6
                                   
     [Documentation]               Create Loan Application and update loan application with invalid loanApplicationUid.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -785,7 +790,7 @@ JD-TC-UpdateLoanApplication-6
 JD-TC-UpdateLoanApplication-7
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY loanApplicationUid.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -818,7 +823,7 @@ JD-TC-UpdateLoanApplication-7
 JD-TC-UpdateLoanApplication-8
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY orginuid.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -851,7 +856,7 @@ JD-TC-UpdateLoanApplication-8
 JD-TC-UpdateLoanApplication-9
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankName.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -884,7 +889,7 @@ JD-TC-UpdateLoanApplication-9
 JD-TC-UpdateLoanApplication-10
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankAccountNo2.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -917,7 +922,7 @@ JD-TC-UpdateLoanApplication-10
 JD-TC-UpdateLoanApplication-11
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankIfsc.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -950,7 +955,7 @@ JD-TC-UpdateLoanApplication-11
 JD-TC-UpdateLoanApplication-12
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankAddress1.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -983,7 +988,7 @@ JD-TC-UpdateLoanApplication-12
 JD-TC-UpdateLoanApplication-13
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankAddress2.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1016,7 +1021,7 @@ JD-TC-UpdateLoanApplication-13
 JD-TC-UpdateLoanApplication-14
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankCity.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1049,7 +1054,7 @@ JD-TC-UpdateLoanApplication-14
 JD-TC-UpdateLoanApplication-15
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankState.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1082,7 +1087,7 @@ JD-TC-UpdateLoanApplication-15
 JD-TC-UpdateLoanApplication-16
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankPin2.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1115,7 +1120,7 @@ JD-TC-UpdateLoanApplication-16
 JD-TC-UpdateLoanApplication-17
                                   
     [Documentation]               Create Loan Application and update loan application with EMPTY bankStatementAttachments2.
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME84}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

@@ -24,15 +24,21 @@ ${CUSERPH}      ${CUSERNAME}
 JD-TC-Delete Lucene Search Documentation-1
     [Documentation]   Delete Lucene Search Documentation by provider login using id param .
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pid}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME8}
     Log   ${resp.json()}
@@ -69,7 +75,7 @@ JD-TC-Delete Lucene Search Documentation-1
 JD-TC-Delete Lucene Search Documentation-2
     [Documentation]   Delete Lucene Search Documentation by provider login using name param.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -109,7 +115,7 @@ JD-TC-Delete Lucene Search Documentation-2
 JD-TC-Delete Lucene Search Documentation-3
     [Documentation]   Delete Lucene Search Documentation by provider login using phoneNumber param.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -46,7 +46,7 @@ JD-TC-GetstatusListByCategoryId-1
 
     [Documentation]  Create Status as New for Vendor then get with catagory Id.
 
-    ${resp}=  Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -90,7 +90,7 @@ JD-TC-GetstatusListByCategoryId-2
 
     [Documentation]  Create Two Status for Vendor then get with catagory Id.
 
-    ${resp}=  Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

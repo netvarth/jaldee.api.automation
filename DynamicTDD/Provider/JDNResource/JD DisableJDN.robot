@@ -48,11 +48,11 @@ JD-TC-DisableJDN-1
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -69,14 +69,16 @@ JD-TC-DisableJDN-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -124,7 +126,7 @@ JD-TC-DisableJDN-1
 JD-TC-DisableJDN-2
 	[Documentation]  Disable JDN Percent and check bill
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${d_note}=   FakerLibrary.word
     ${resp}=   Enable JDN for Percent    ${d_note}  ${jdn_disc_percentage[0]}   ${disc_max}
@@ -147,8 +149,8 @@ JD-TC-DisableJDN-2
 
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  1  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  1  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     ${queue1}=   FakerLibrary.word
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${sid1}
     Log   ${resp.json()} 
@@ -165,12 +167,11 @@ JD-TC-DisableJDN-2
     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 	${desc}=    FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -238,7 +239,7 @@ JD-TC-DisableJDN-3
     ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Y}
-    ${resp}=  Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+1505
@@ -254,14 +255,16 @@ JD-TC-DisableJDN-3
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -308,8 +311,8 @@ JD-TC-DisableJDN-3
 
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  1  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  1  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     ${queue1}=   FakerLibrary.word
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid11}  ${sid11}   ${sid12}
     Log   ${resp.json()} 
@@ -416,7 +419,7 @@ JD-TC-DisableJDN-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_A}
     
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -433,14 +436,16 @@ JD-TC-DisableJDN-4
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -486,7 +491,7 @@ JD-TC-DisableJDN-4
 JD-TC-DiableJDN-UH1
 	[Documentation]  Disable already disabled JDN 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable JDN 
     Log   ${resp.json()}
@@ -496,7 +501,7 @@ JD-TC-DiableJDN-UH1
 JD-TC-DiableJDN-UH2
 	[Documentation]  Disable JDN without enable JDN
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable JDN 
     Log   ${resp.json()}

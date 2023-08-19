@@ -216,7 +216,7 @@ JD-TC-GetQuestionnaireListByProvider-1
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -259,7 +259,7 @@ JD-TC-GetQuestionnaireListByProvider-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -275,7 +275,7 @@ JD-TC-GetQuestionnaireListByProvider-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -349,7 +349,7 @@ JD-TC-GetQuestionnaireListByProvider-2
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -392,7 +392,7 @@ JD-TC-GetQuestionnaireListByProvider-2
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    # ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -408,7 +408,7 @@ JD-TC-GetQuestionnaireListByProvider-2
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -480,7 +480,7 @@ JD-TC-GetQuestionnaireListByProvider-3
     Set Suite Variable   ${colnames1}
     ${servicenames}   getColumnValuesByName  ${sheet2}  ${colnames1[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -539,7 +539,7 @@ JD-TC-GetQuestionnaireListByProvider-3
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -636,7 +636,7 @@ JD-TC-GetQuestionnaireListByProvider-UH2
 
     ${account_id}=  db.get_acc_id  ${PUSERNAME2}
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -672,7 +672,7 @@ JD-TC-GetQuestionnaireListByProvider-3
     Set Suite Variable   ${colnames1}
     ${servicenames}   getColumnValuesByName  ${sheet2}  ${colnames1[7]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -731,7 +731,7 @@ JD-TC-GetQuestionnaireListByProvider-3
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -19,10 +19,10 @@ Suite Setup       Run Keywords  clear_queue  ${PUSERNAME34}  AND  clear_location
 
 JD-TC-EnableDisableOnlineCheckin-1
     [Documentation]  Enable online checkin by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  add_date  2
+    ${DAY}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
@@ -38,9 +38,9 @@ JD-TC-EnableDisableOnlineCheckin-1
     Set Suite Variable   ${postcode}
     ${address}=  get_address
     Set Suite Variable   ${address}
-    ${sTime}=  add_time  9   0
+    ${sTime}=  add_timezone_time  ${tz}  9   0
     Set Suite Variable   ${sTime}   
-    ${eTime}=  add_time  11  0
+    ${eTime}=  add_timezone_time  ${tz}  11  0
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}  ${address}  free  True  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log   ${resp.json()}
@@ -55,7 +55,7 @@ JD-TC-EnableDisableOnlineCheckin-1
 
 JD-TC-EnableDisableOnlineCheckin-2
     [Documentation]  Disable online checkin by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Online Checkin
     Log  ${resp.json()}
@@ -101,7 +101,7 @@ JD-TC-EnableDisableOnlineCheckin-UH4
 
 JD-TC-EnableDisableOnlineCheckin-UH5
     [Documentation]  Enable a already enabled future checkin
-    ${resp}=  ProviderLogin  ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
@@ -114,7 +114,7 @@ JD-TC-EnableDisableOnlineCheckin-UH5
 
 JD-TC-EnableDisableOnlineCheckin-UH6
     [Documentation]  Disable a already disabled future checkin
-    ${resp}=  ProviderLogin  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Online Checkin
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -125,7 +125,7 @@ JD-TC-EnableDisableOnlineCheckin-UH6
 
 JD-TC-EnableDisableOnlineCheckin-3
     [Documentation]  Disable search data when no base location
-    ${resp}=  ProviderLogin  ${PUSERNAME34}  ${PASSWORD}  
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}  
     ${resp}=  Enable Search Data
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -135,7 +135,7 @@ JD-TC-EnableDisableOnlineCheckin-3
 
 JD-TC-EnableDisableOnlineCheckin-CLEAR
     [Documentation]  Enable search data when no base location
-    ${resp}=  ProviderLogin  ${PUSERNAME34}  ${PASSWORD}    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}    
     ${resp}=  UpdateBaseLocation  ${lid1}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile

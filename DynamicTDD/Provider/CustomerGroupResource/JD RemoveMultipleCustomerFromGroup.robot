@@ -21,7 +21,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-1
 
     [Documentation]  Remove Multiple provider customers from a group.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -102,7 +102,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-2
 
     [Documentation]  Remove Multiple provider customers from a group and add them again.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -218,7 +218,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-3
 
     [Documentation]  Remove waitlisted Multiple provider customers from a group .
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -234,11 +234,15 @@ JD-TC-RemoveMultipleCustomerFromGroup-3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${lid}=  Create Sample Location 
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_queue   ${PUSERNAME155}
+    clear_queue${PUSERNAME155}
 
-    ${DAY1}=  get_date
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -314,7 +318,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-3
         Should Be Equal As Strings    ${resp.status_code}    200
     END
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -359,7 +363,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-4
 
     [Documentation]  Remove already removed Multiple provider customers from a group.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -444,7 +448,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-5
 
     [Documentation]  Add customers to group, remove these customers and add them again. 
 
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -560,7 +564,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH1
 
     [Documentation]  Remove Multiple provider customers from a group by another provider.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -627,7 +631,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH1
 
     END
     
-    ${resp}=  Provider Login  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -640,7 +644,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH2
 
     [Documentation]  Remove Multiple provider customers from a group by consumer login.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -721,7 +725,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH3
 
     [Documentation]  Remove Multiple provider customers from a group without login.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -802,7 +806,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH4
 
     [Documentation]  Remove Multiple provider customers from a group with non existant groupname.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -880,7 +884,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH5
 
     [Documentation]  Remove Multiple provider customers from a group without adding them to the group.
     
-    ${resp}=  Provider Login  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -936,7 +940,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH6
 
     [Documentation]  Remove Multiple provider customers from a group with invalid provider customer ids.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1014,7 +1018,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH7
 
     [Documentation]  Remove Multiple provider customers from a group with group name as empty.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1091,7 +1095,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH8
 
     [Documentation]  Remove Multiple provider customers from a group with customer ids as empty.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1169,7 +1173,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH9
 
     [Documentation]  Remove Multiple provider customers from a group without creating group.
     
-    ${resp}=  Provider Login  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

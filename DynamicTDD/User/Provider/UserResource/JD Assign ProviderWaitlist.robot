@@ -37,7 +37,7 @@ ${waitlistedby}           PROVIDER
 JD-TC-AssignproviderWaitlist-1
     [Documentation]  Assingn waitlist to user
     
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -52,7 +52,7 @@ JD-TC-AssignproviderWaitlist-1
 
     ${pid}=  get_acc_id  ${HLMUSERNAME4}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -62,17 +62,21 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
@@ -83,8 +87,9 @@ JD-TC-AssignproviderWaitlist-1
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -122,12 +127,14 @@ JD-TC-AssignproviderWaitlist-1
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -166,14 +173,14 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
-    ${sTime1}=  add_time   0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${eTime1}
 
     ${description}=  FakerLibrary.sentence
@@ -202,8 +209,8 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
 
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -231,8 +238,8 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
 
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  15  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -253,7 +260,6 @@ JD-TC-AssignproviderWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid} 
-    Log  ${resp.json()}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby}  personsAhead=0
@@ -279,7 +285,7 @@ JD-TC-AssignproviderWaitlist-1
     @{resp}=  ResetProviderPassword  ${ph1}  ${P_PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${P_PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${P_PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -327,7 +333,7 @@ JD-TC-AssignproviderWaitlist-1
 JD-TC-AssignproviderWaitlist-2
     [Documentation]  Assingn waitlist to user and then it again assign to another user
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -350,8 +356,9 @@ JD-TC-AssignproviderWaitlist-2
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -402,8 +409,8 @@ JD-TC-AssignproviderWaitlist-2
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -429,8 +436,8 @@ JD-TC-AssignproviderWaitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -498,7 +505,7 @@ JD-TC-AssignproviderWaitlist-2
 JD-TC-AssignproviderWaitlist-3
     [Documentation]  Assingn waitlist to user here user doesn't have any service and queue
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -521,8 +528,9 @@ JD-TC-AssignproviderWaitlist-3
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -602,7 +610,7 @@ JD-TC-AssignproviderWaitlist-3
 JD-TC-AssignproviderWaitlist-4
     [Documentation]  Assingn waitlist to user and it reAssingn to the same user 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -625,8 +633,9 @@ JD-TC-AssignproviderWaitlist-4
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -678,8 +687,8 @@ JD-TC-AssignproviderWaitlist-4
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -705,8 +714,8 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -799,7 +808,7 @@ JD-TC-AssignproviderWaitlist-4
 JD-TC-AssignproviderWaitlist-5
     [Documentation]  Assingn waitlist to user and user generate bill
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -822,8 +831,9 @@ JD-TC-AssignproviderWaitlist-5
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -875,8 +885,8 @@ JD-TC-AssignproviderWaitlist-5
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -902,8 +912,8 @@ JD-TC-AssignproviderWaitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -979,7 +989,7 @@ JD-TC-AssignproviderWaitlist-5
 JD-TC-AssignproviderWaitlist-6
     [Documentation]  Assingn 3 waitlist to the same user and get count
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -999,19 +1009,23 @@ JD-TC-AssignproviderWaitlist-6
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=5   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -1103,12 +1117,14 @@ JD-TC-AssignproviderWaitlist-6
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -1133,8 +1149,8 @@ JD-TC-AssignproviderWaitlist-6
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -1160,8 +1176,8 @@ JD-TC-AssignproviderWaitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -1258,7 +1274,7 @@ JD-TC-AssignproviderWaitlist-6
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist Today  
@@ -1271,7 +1287,7 @@ JD-TC-AssignproviderWaitlist-6
 JD-TC-AssignproviderWaitlist-7
     [Documentation]  Assingn waitlist to user here user contain user side waitlist and assigned waitlist 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1286,7 +1302,7 @@ JD-TC-AssignproviderWaitlist-7
 
     ${pid}=  get_acc_id  ${HLMUSERNAME11}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1296,11 +1312,14 @@ JD-TC-AssignproviderWaitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     
     ${resp}=    Get Locations
@@ -1317,8 +1336,9 @@ JD-TC-AssignproviderWaitlist-7
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid3}  ${ser_id}
@@ -1356,12 +1376,14 @@ JD-TC-AssignproviderWaitlist-7
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -1400,14 +1422,14 @@ JD-TC-AssignproviderWaitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
-    ${sTime3}=  add_time   0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  00
+    ${eTime3}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${eTime3}
 
     ${description}=  FakerLibrary.sentence
@@ -1430,7 +1452,7 @@ JD-TC-AssignproviderWaitlist-7
     Set Test Variable  ${cid3}  ${resp.json()}
 
     ${desc}=   FakerLibrary.word
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${CUR_DAY}
     ${resp}=  Add To Waitlist By User  ${cid3}  ${s_id3}  ${que_id3}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${u_id1}  ${cid3}
     Log   ${resp.json()}
@@ -1483,7 +1505,7 @@ JD-TC-AssignproviderWaitlist-7
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -1526,7 +1548,7 @@ JD-TC-AssignproviderWaitlist-7
 JD-TC-AssignproviderWaitlist-8
     [Documentation]  Assingn waitlist to a assistant user
     
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1541,7 +1563,7 @@ JD-TC-AssignproviderWaitlist-8
 
     ${pid}=  get_acc_id  ${HLMUSERNAME11}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1551,11 +1573,14 @@ JD-TC-AssignproviderWaitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     
     ${resp}=    Get Locations
@@ -1572,8 +1597,9 @@ JD-TC-AssignproviderWaitlist-8
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid3}  ${ser_id}
@@ -1611,12 +1637,14 @@ JD-TC-AssignproviderWaitlist-8
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -1655,9 +1683,9 @@ JD-TC-AssignproviderWaitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
 
     ${resp}=   Assign provider Waitlist   ${wid}   ${u_id1}
@@ -1690,7 +1718,7 @@ JD-TC-AssignproviderWaitlist-8
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -1717,7 +1745,7 @@ JD-TC-AssignproviderWaitlist-8
 JD-TC-AssignproviderWaitlist-9
     [Documentation]  Try to Assingn a done state waitlist
     
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1732,7 +1760,7 @@ JD-TC-AssignproviderWaitlist-9
 
     ${pid}=  get_acc_id  ${HLMUSERNAME11}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1742,11 +1770,14 @@ JD-TC-AssignproviderWaitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     
     ${resp}=    Get Locations
@@ -1763,8 +1794,9 @@ JD-TC-AssignproviderWaitlist-9
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   db.get_time 
-    ${end_time}=    add_time  2  00 
+    # ${strt_time}=   db.get_time_by_timezone  ${tz}  
+    ${strt_time}=   db.get_time_by_timezone  ${tz}  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid3}  ${ser_id}
@@ -1809,12 +1841,14 @@ JD-TC-AssignproviderWaitlist-9
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -1853,14 +1887,14 @@ JD-TC-AssignproviderWaitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
-    ${sTime3}=  add_time   0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  00
+    ${eTime3}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${eTime3}
 
     ${description}=  FakerLibrary.sentence
@@ -1907,7 +1941,7 @@ JD-TC-AssignproviderWaitlist-9
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -1933,7 +1967,7 @@ JD-TC-AssignproviderWaitlist-9
 JD-TC-AssignproviderWaitlist-10
     [Documentation]  Assingn waitlist to a admin user
     
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1948,7 +1982,7 @@ JD-TC-AssignproviderWaitlist-10
 
     ${pid}=  get_acc_id  ${HLMUSERNAME11}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1958,11 +1992,14 @@ JD-TC-AssignproviderWaitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     
     ${resp}=    Get Locations
@@ -1979,8 +2016,9 @@ JD-TC-AssignproviderWaitlist-10
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid3}  ${ser_id}
@@ -2018,12 +2056,14 @@ JD-TC-AssignproviderWaitlist-10
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -2062,9 +2102,9 @@ JD-TC-AssignproviderWaitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
 
 
@@ -2098,7 +2138,7 @@ JD-TC-AssignproviderWaitlist-10
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -2126,7 +2166,7 @@ JD-TC-AssignproviderWaitlist-10
 JD-TC-AssignproviderWaitlist-UH1
     [Documentation]  User take checkin and try to assign another user
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2138,6 +2178,7 @@ JD-TC-AssignproviderWaitlist-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
@@ -2159,8 +2200,8 @@ JD-TC-AssignproviderWaitlist-UH1
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -2181,7 +2222,7 @@ JD-TC-AssignproviderWaitlist-UH1
     Set Test Variable  ${cid}  ${resp.json()}
 
     ${desc}=   FakerLibrary.word
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${CUR_DAY}
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${u_id1}  ${cid}
     Log   ${resp.json()}
@@ -2216,8 +2257,8 @@ JD-TC-AssignproviderWaitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -2240,7 +2281,7 @@ JD-TC-AssignproviderWaitlist-UH1
 JD-TC-AssignproviderWaitlist-UH3
     [Documentation]  Assingn waitlist to a invalid user
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2252,6 +2293,7 @@ JD-TC-AssignproviderWaitlist-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -2263,8 +2305,9 @@ JD-TC-AssignproviderWaitlist-UH3
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -2312,8 +2355,8 @@ JD-TC-AssignproviderWaitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -2337,7 +2380,7 @@ JD-TC-AssignproviderWaitlist-UH3
 JD-TC-AssignproviderWaitlist-UH4
     [Documentation]  Assingn waitlist to user by using invalid waitlist id
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2349,6 +2392,7 @@ JD-TC-AssignproviderWaitlist-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -2360,8 +2404,9 @@ JD-TC-AssignproviderWaitlist-UH4
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -2408,8 +2453,8 @@ JD-TC-AssignproviderWaitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -2433,7 +2478,7 @@ JD-TC-AssignproviderWaitlist-UH4
 JD-TC-AssignproviderWaitlist-UH5 
     [Documentation]  Assingn waitlist to another account's user
     
-    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2448,7 +2493,7 @@ JD-TC-AssignproviderWaitlist-UH5
 
     ${pid}=  get_acc_id  ${HLMUSERNAME10}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -2461,21 +2506,26 @@ JD-TC-AssignproviderWaitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid1}  ${ser_id}
@@ -2484,12 +2534,14 @@ JD-TC-AssignproviderWaitlist-UH5
     Set Test Variable  ${q_id}   ${resp.json()}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -2511,11 +2563,11 @@ JD-TC-AssignproviderWaitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   3  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -2531,7 +2583,7 @@ JD-TC-AssignproviderWaitlist-UH5
     Set Test Variable  ${que_id1}  ${resp.json()}
 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2543,6 +2595,7 @@ JD-TC-AssignproviderWaitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -2554,8 +2607,9 @@ JD-TC-AssignproviderWaitlist-UH5
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -2601,8 +2655,8 @@ JD-TC-AssignproviderWaitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -2625,7 +2679,7 @@ JD-TC-AssignproviderWaitlist-UH5
 JD-TC-AssignproviderWaitlist-UH6
     [Documentation]  Try to Assingn a canceled waitlist
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2637,6 +2691,7 @@ JD-TC-AssignproviderWaitlist-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -2648,8 +2703,9 @@ JD-TC-AssignproviderWaitlist-UH6
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -2700,8 +2756,8 @@ JD-TC-AssignproviderWaitlist-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -2727,7 +2783,7 @@ JD-TC-AssignproviderWaitlist-UH6
 JD-TC-AssignproviderWaitlist-UH7
     [Documentation]  Try to Assingn waitlist through consumer login
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2739,6 +2795,7 @@ JD-TC-AssignproviderWaitlist-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -2750,8 +2807,9 @@ JD-TC-AssignproviderWaitlist-UH7
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -2797,8 +2855,8 @@ JD-TC-AssignproviderWaitlist-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id6}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -2833,7 +2891,7 @@ JD-TC-AssignproviderWaitlist-UH8
 JD-TC-AssignproviderWaitlist-UH9
     [Documentation]  Try to Assingn a started waitlist
     
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2848,7 +2906,7 @@ JD-TC-AssignproviderWaitlist-UH9
 
     ${pid}=  get_acc_id  ${HLMUSERNAME11}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -2858,11 +2916,14 @@ JD-TC-AssignproviderWaitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     
     ${resp}=    Get Locations
@@ -2879,8 +2940,9 @@ JD-TC-AssignproviderWaitlist-UH9
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   db.get_time 
-    ${end_time}=    add_time  2  00 
+    # ${strt_time}=   db.get_time_by_timezone  ${tz}  
+    ${strt_time}=   db.get_time_by_timezone  ${tz}  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid3}  ${ser_id}
@@ -2925,12 +2987,14 @@ JD-TC-AssignproviderWaitlist-UH9
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -2969,14 +3033,14 @@ JD-TC-AssignproviderWaitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
-    ${sTime3}=  add_time   0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  00
+    ${eTime3}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${eTime3}
 
     ${description}=  FakerLibrary.sentence
@@ -3032,7 +3096,7 @@ JD-TC-AssignproviderWaitlist-UH9
 
 JD-TC-CreateUser -0
     [Documentation]  Create 20 users by branch login and assign waitlist
-    ${resp}=  Provider Login  ${MUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3047,7 +3111,7 @@ JD-TC-CreateUser -0
 
     ${pid}=  get_acc_id  ${MUSERNAME58}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -3060,6 +3124,7 @@ JD-TC-CreateUser -0
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}
@@ -3070,8 +3135,9 @@ JD-TC-CreateUser -0
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=20   max=30
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}  ${ser_id2}
@@ -3114,12 +3180,14 @@ JD-TC-CreateUser -0
 
      
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -3159,7 +3227,7 @@ JD-TC-CreateUser -0
 JD-TC-CreateUser -01
 
     [Documentation]  take 20 waitlist and Create 20 users by branch login and assign each waitlist 
-    ${resp}=  Provider Login  ${MUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME66}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3188,7 +3256,7 @@ JD-TC-CreateUser -01
     # sleep  3s
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -3201,14 +3269,16 @@ JD-TC-CreateUser -01
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Test Variable    ${ser_id}    ${resp}  
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -3246,12 +3316,14 @@ JD-TC-CreateUser -01
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -3306,7 +3378,7 @@ JD-TC-CreateUser -01
 JD-TC-AssignproviderWaitlist-4
     [Documentation]  Assingn waitlist to user here user doesn't have any service and queue
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3329,8 +3401,9 @@ JD-TC-AssignproviderWaitlist-4
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -3383,8 +3456,8 @@ JD-TC-AssignproviderWaitlist-4
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
 
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -3411,8 +3484,8 @@ JD-TC-AssignproviderWaitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500
@@ -3439,7 +3512,7 @@ JD-TC-AssignproviderWaitlist-4
 JD-TC-AssignproviderWaitlist-UH2
     [Documentation]  Assingn waitlist to user but didn't create any user in this id
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3451,6 +3524,7 @@ JD-TC-AssignproviderWaitlist-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -3462,8 +3536,9 @@ JD-TC-AssignproviderWaitlist-UH2
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  6  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  6  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${ser_id}
@@ -3510,8 +3585,8 @@ JD-TC-AssignproviderWaitlist-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
     
-    ${sTime2}=  add_time   1  15
-    ${eTime2}=  add_time   2  00
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${eTime2}=  add_timezone_time  ${tz}  2  00  
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
     ${amt}=  FakerLibrary.Random Int  min=200  max=500

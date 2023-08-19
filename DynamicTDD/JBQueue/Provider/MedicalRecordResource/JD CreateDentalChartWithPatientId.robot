@@ -107,18 +107,21 @@ JD-TC-CreatedentalchartWithPatientid-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName}    ${resp.json()['userName']}         
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     ${pid}=  get_acc_id  ${PUSERNAME_C}
     Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_C}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_C}+25566122
@@ -130,18 +133,22 @@ JD-TC-CreatedentalchartWithPatientid-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -182,7 +189,7 @@ JD-TC-CreatedentalchartWithPatientid-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -204,13 +211,17 @@ JD-TC-CreatedentalchartWithPatientid-1
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}    ${resp} 
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -384,7 +395,6 @@ JD-TC-CreatedentalchartWithPatientid-1
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['surface']['occlusal']['observations']}  ${occlusal_observations}
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['surface']['occlusal']['diagnosis']}  ${occlusal_diagnosis}
 
-
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['attachments'][0]['owner']}  ${pid}
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['attachments'][0]['fileName']}  ${pdffile}
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['attachments'][0]['fileSize']}  ${fileSize}
@@ -395,7 +405,7 @@ JD-TC-CreatedentalchartWithPatientid-1
 JD-TC-CreatedentalchartWithPatientid-2
     [Documentation]    create a dental chart for Same Patient -Appointment(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -444,7 +454,7 @@ JD-TC-CreatedentalchartWithPatientid-2
 JD-TC-CreatedentalchartWithPatientid-3
     [Documentation]    create a dental chart for Same Patient with different consultationMode-Appointment(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -497,7 +507,7 @@ JD-TC-CreatedentalchartWithPatientid-3
 JD-TC-CreatedentalchartWithPatientid-UH1
     [Documentation]    create a dental chart for Same Patient with EMPTY patientId-Appointment(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -524,7 +534,7 @@ JD-TC-CreatedentalchartWithPatientid-UH1
 JD-TC-CreatedentalchartWithPatientid-4
     [Documentation]    create a dental chart for Same Patient with EMPTY remarks -Appointment(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -574,7 +584,7 @@ JD-TC-CreatedentalchartWithPatientid-4
 JD-TC-CreatedentalchartWithPatientid-UH3
     [Documentation]    create a dental chart for Same Patient with EMPTY teeth -Appointment(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -611,14 +621,13 @@ JD-TC-CreatedentalchartWithPatientid-UH3
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['surface']['occlusal']['symptoms']}  ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['surface']['occlusal']['observations']}  ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['surface']['occlusal']['diagnosis']}  ${EMPTY}
-
-
     Should Be Equal As Strings  ${resp.json()['teeth'][0]['attachments']}   []
-    
+
+
 JD-TC-CreatedentalchartWithPatientid-5
     [Documentation]    create a dental chart for another provider customer -Appointment(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -627,7 +636,7 @@ JD-TC-CreatedentalchartWithPatientid-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,7 +663,7 @@ JD-TC-CreatedentalchartWithPatientid-5
 JD-TC-CreatedentalchartWithPatientid-6
     [Documentation]    create a dental chart for Same Patient with EMPTY attachments.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -696,7 +705,7 @@ JD-TC-CreatedentalchartWithPatientid-6
 JD-TC-CreatedentalchartWithPatientid-7
     [Documentation]    create a dental chart for Patient with bookingType -TOKEN.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -723,7 +732,7 @@ JD-TC-CreatedentalchartWithPatientid-7
 JD-TC-CreatedentalchartWithPatientid-8
     [Documentation]    create a dental chart for Patient with bookingType -APPT.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -750,7 +759,7 @@ JD-TC-CreatedentalchartWithPatientid-8
 JD-TC-CreatedentalchartWithPatientid-9
     [Documentation]    create a dental chart for Patient with consultationMode -EMAIL.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -792,7 +801,7 @@ JD-TC-CreatedentalchartWithPatientid-9
 JD-TC-CreatedentalchartWithPatientid-10
     [Documentation]    create a dental chart for Patient with consultationMode -PHONE.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -834,7 +843,7 @@ JD-TC-CreatedentalchartWithPatientid-10
 JD-TC-CreatedentalchartWithPatientid-11
     [Documentation]    create a dental chart for Patient with consultationMode -VIDEO.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

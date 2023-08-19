@@ -14,7 +14,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-Delete Adwords -1
        Comment    Provider delete a adword from his adword list
-       ${resp}=   ProviderLogin  ${PUSERNAME145}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD} 
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}   200 
        ${acid}=   get_acc_id  ${PUSERNAME145}       
@@ -65,7 +65,7 @@ JD-TC-Delete Adwords -UH2
        
 JD-TC-Delete Adwords -UH3
        Comment    Provider check to Delete Adwords  another Provider
-       ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Delete Adword  ${adId}            
        Should Be Equal As Strings  ${resp.status_code}   422

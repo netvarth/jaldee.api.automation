@@ -60,13 +60,14 @@ JD-TC-ValidateQuestionnaire-1
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -113,11 +114,12 @@ JD-TC-ValidateQuestionnaire-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}    ${xlFile}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -209,7 +211,7 @@ JD-TC-ValidateQuestionnaire-2
     # Log   ${servicenames}
     # Set Suite Variable   ${servicenames}
 
-    # ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -253,11 +255,11 @@ JD-TC-ValidateQuestionnaire-2
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    # ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -347,7 +349,7 @@ JD-TC-ValidateQuestionnaire-2
 JD-TC-ValidateQuestionnaire-UH1
     [Documentation]  Validate service questionnaire with wrong caption.
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -471,7 +473,7 @@ JD-TC-ValidateQuestionnaire-UH1
 JD-TC-ValidateQuestionnaire-UH2
     [Documentation]  Validate service questionnaire without caption
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -518,7 +520,7 @@ JD-TC-ValidateQuestionnaire-UH2
 JD-TC-ValidateQuestionnaire-UH3
     [Documentation]  Validate service questionnaire without index
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -551,7 +553,7 @@ JD-TC-ValidateQuestionnaire-UH3
 JD-TC-ValidateQuestionnaire-UH4
     [Documentation]  Validate service questionnaire with incorrect action (anything other than "add")
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -582,7 +584,7 @@ JD-TC-ValidateQuestionnaire-UH4
 JD-TC-ValidateQuestionnaire-UH5
     [Documentation]  Validate service questionnaire with invalid action
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -616,7 +618,7 @@ JD-TC-ValidateQuestionnaire-UH5
 JD-TC-ValidateQuestionnaire-UH6
     [Documentation]  Validate service questionnaire without action.
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -649,7 +651,7 @@ JD-TC-ValidateQuestionnaire-UH6
 JD-TC-ValidateQuestionnaire-UH7
     [Documentation]  Validate service questionnaire without provider login.
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -680,7 +682,7 @@ JD-TC-ValidateQuestionnaire-UH7
 JD-TC-ValidateQuestionnaire-UH8
     [Documentation]  Validate service questionnaire by consumer login.
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

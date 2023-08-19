@@ -15,6 +15,10 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
+
+*** Variable ***
+${tz}   Asia/Kolkata
+
 *** Test Cases ***
 JD-TC-GetJaldeeCoupons-1
     [Documentation]    Get jaldee coupons by superadmin login
@@ -33,9 +37,9 @@ JD-TC-GetJaldeeCoupons-1
     Set Suite Variable  ${lic1}  ${resp.json()[0]['pkgId']}
     Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -64,12 +68,12 @@ JD-TC-GetJaldeeCoupons-1
    
 JD-TC-GetJaldeeCoupons-2
     [Documentation]    Get jaldee coupons for specific providers
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME1}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME2}
     ${p2}=  Convert To String  ${p2}
@@ -110,8 +114,8 @@ JD-TC-GetJaldeeCoupons-3
     ${domains}=  Jaldee Coupon Target Domains  ALL
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
     ${licenses}=  Jaldee Coupon Target License  0
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${resp}=  Create Jaldee Coupon  XMASCoupon2020  Onam Coupon  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  1000  1000  5  2  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log   ${resp.json()}

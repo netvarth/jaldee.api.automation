@@ -164,7 +164,7 @@ JD-TC-UpdateFamilyMember-4
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERPH1}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -204,7 +204,7 @@ JD-TC-UpdateFamilyMember-5
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERPH2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -235,7 +235,7 @@ JD-TC-UpdateFamilyMember-5
 
 JD-TC-UpdateFamilyMember-6
       [Documentation]  Update a family member after take waitlist
-      ${resp}=   ProviderLogin  ${PUSERNAME79}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${pid0}=  get_acc_id  ${PUSERNAME79}
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -243,9 +243,15 @@ JD-TC-UpdateFamilyMember-6
       clear_location  ${PUSERNAME79}
       clear_queue  ${PUSERNAME79}
       Clear_service  ${PUSERNAME79}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       
       ${resp}=   ProviderLogout
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -265,7 +271,7 @@ JD-TC-UpdateFamilyMember-6
       Log   ${resp.json()}
       Verify Response List  ${resp}  0  user=${mem_id5}
 
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${cnote}=   FakerLibrary.word
       ${resp}=  Add To Waitlist Consumers  ${pid0}  ${qid}  ${DAY}  ${s_id}  ${cnote}  ${bool[0]}  ${mem_id5} 
       Log  ${resp.json()}
@@ -314,7 +320,7 @@ JD-TC-UpdateFamilyMember-UH1
 
 JD-TC-UpdateFamilyMember-UH2
       [Documentation]  Update a family member using provider login
-      ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -366,7 +372,7 @@ JD-TC-UpdateFamilyMember-2
 
 JD-TC-UpdateFamilyMember-3
       [Documentation]  Update a details of their own family member using provider login
-      ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name

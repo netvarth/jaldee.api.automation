@@ -56,7 +56,7 @@ JD-TC-UpdateAppointmentQueueSet-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_M}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_M}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_M}${\n}
@@ -75,14 +75,19 @@ JD-TC-UpdateAppointmentQueueSet-1
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id2}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -204,7 +209,7 @@ JD-TC-UpdateAppointmentQueueSet-1
 JD-TC-UpdateAppointmentQueueSet-2
 
     [Documentation]  Update few details of a Appointment QueueSet
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME150}
     clear_location  ${PUSERNAME150}
@@ -212,14 +217,19 @@ JD-TC-UpdateAppointmentQueueSet-2
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -315,7 +325,7 @@ JD-TC-UpdateAppointmentQueueSet-UH2
 
 JD-TC-UpdateAppointmentQueueSet-UH3
     [Documentation]  Upadte a QueueSet which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${s_name2}=  FakerLibrary.Words  nb=2
@@ -326,7 +336,7 @@ JD-TC-UpdateAppointmentQueueSet-UH3
 
 JD-TC-UpdateAppointmentQueueSet-UH4
     [Documentation]  Update a QueueSet by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${s_name2}=  FakerLibrary.Words  nb=2
     ${s_desc2}=  FakerLibrary.Sentence

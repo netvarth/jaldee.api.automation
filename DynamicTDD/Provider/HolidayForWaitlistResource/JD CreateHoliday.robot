@@ -25,25 +25,29 @@ JD-TC-CreateHoliday-1
       clear_service    ${PUSERNAME25}
       clear_location   ${PUSERNAME25}
       clear_queue      ${PUSERNAME25}
-      ${resp}=  ProviderLogin     ${PUSERNAME25}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME25}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID25}=  get_acc_id    ${PUSERNAME25}
       Set Suite Variable          ${ACC_ID25}  
       ${resp}=  Create Sample Location
       Set Suite Variable    ${loc_id}   ${resp}
+      ${resp}=   Get Location ById  ${loc_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
       Set Suite Variable    ${ser_id}   ${resp}   
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable    ${CUR_DAY}
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   add_timezone_time  ${tz}  1  00  
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  6  00 
+      ${end_time}=    add_timezone_time  ${tz}  6  00   
       Set Suite Variable    ${end_time}  
       ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
       Set Suite Variable   ${parallel}
@@ -53,7 +57,7 @@ JD-TC-CreateHoliday-1
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${q_id}   ${resp.json()}
-      ${cur_time}=  add_time   1  30
+      ${cur_time}=  add_timezone_time  ${tz}  1  30  
       Set Suite Variable   ${cur_time}
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}
@@ -84,11 +88,11 @@ JD-TC-CreateHoliday-1
 JD-TC-CreateHoliday-2
       [Documentation]  create  a future date holiday 
 
-      ${resp}=  ProviderLogin  ${PUSERNAME25}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${FUTRE_DAY}=  add_date  6
+      ${FUTRE_DAY}=  db.add_timezone_date  ${tz}  6  
       Set Suite Variable   ${FUTRE_DAY}
-      ${holi_time}=  add_time   5  00
+      ${holi_time}=  add_timezone_time  ${tz}  5  00  
       Set Suite Variable   ${holi_time}
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}
@@ -120,7 +124,7 @@ JD-TC-CreateHoliday-3
 
       clear_location  ${PUSERNAME26}
       clear_service   ${PUSERNAME26}
-      ${resp}=  ProviderLogin  ${PUSERNAME26}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID26}=  get_acc_id  ${PUSERNAME26}
       Set Suite Variable  ${ACC_ID26}
@@ -130,15 +134,16 @@ JD-TC-CreateHoliday-3
       Set Suite Variable   ${que_id1}   ${resp['queue_id']}
       ${q_name1}=    FakerLibrary.name
       Set Suite Variable      ${q_name1}
-      ${start_time1}=   add_time   2  00
+      ${start_time1}=   add_timezone_time  ${tz}  2  00  
       Set Suite Variable   ${start_time1}
-      ${end_time1}=     add_time   5  00
+      ${end_time1}=     add_timezone_time  ${tz}  5  00  
       Set Suite Variable   ${end_time1}
       ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${start_time1}  ${end_time1}    ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Queue By Location and service By Date  ${loc_id1}  ${ser_id1}  ${CUR_DAY}  ${ACC_ID26}
       Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable   ${h_start_time}    ${resp.json()[1]['effectiveSchedule']['timeSlots'][0]['sTime']} 
       Set Suite Variable   ${h_end_time}      ${resp.json()[1]['effectiveSchedule']['timeSlots'][0]['eTime']}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -168,7 +173,7 @@ JD-TC-CreateHoliday-4
 
       clear_location  ${PUSERNAME27}
       clear_service   ${PUSERNAME27}
-      ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID27}=  get_acc_id  ${PUSERNAME27}
       Set Suite Variable  ${ACC_ID27}
@@ -178,11 +183,11 @@ JD-TC-CreateHoliday-4
       Set Suite Variable   ${que_id2}   ${resp['queue_id']}
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}
-      ${DAY_ONE}=  add_date   1
+      ${DAY_ONE}=  db.add_timezone_date  ${tz}  1
       Set Suite Variable   ${DAY_ONE}
-      ${h_start_time1}=   add_time   0  50
+      ${h_start_time1}=   add_timezone_time  ${tz}  0  50  
       Set Suite Variable   ${h_start_time1}
-      ${h_end_time1}=     add_time   0  56
+      ${h_end_time1}=     add_timezone_time  ${tz}   0  56
       Set Suite Variable   ${h_end_time1}
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY_ONE}  ${DAY_ONE}  ${EMPTY}  ${h_start_time1}  ${h_end_time1}  ${desc}
       Log   ${resp.json()}
@@ -201,9 +206,9 @@ JD-TC-CreateHoliday-4
    
       ${q_name2}=    FakerLibrary.name
       Set Suite Variable      ${q_name2}
-      ${start_time2}=   add_time   0  45
+      ${start_time2}=   add_timezone_time  ${tz}  0  45  
       Set Suite Variable   ${start_time2}
-      ${end_time2}=   add_time   5  00
+      ${end_time2}=   add_timezone_time  ${tz}  5  00  
       Set Suite Variable   ${end_time2}
       ${resp}=  Update Queue  ${que_id2}  ${q_name2}  ${recurringtype[1]}  ${list}  ${DAY_ONE}  ${EMPTY}  ${EMPTY}  ${start_time2}  ${end_time2}   ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2}
       Log   ${resp.json()}
@@ -212,17 +217,17 @@ JD-TC-CreateHoliday-4
 JD-TC-CreateHoliday-5
       [Documentation]  Create a holiday and update schedule
 
-      ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Create Sample Queue
       Set Suite Variable   ${loc_id4}   ${resp['location_id']}
       Set Suite Variable   ${ser_id4}   ${resp['service_id']}
       Set Suite Variable   ${que_id4}   ${resp['queue_id']}
-      ${DAY_TWO}=  add_date   4
+      ${DAY_TWO}=  db.add_timezone_date  ${tz}   4
       Set Suite Variable    ${DAY_TWO}
-      ${cur_time1}=  add_time  1  45
+      ${cur_time1}=  add_timezone_time  ${tz}  1  45  
       Set Suite Variable     ${cur_time1}      
-      ${holi_time2}=   add_time  4   00
+      ${holi_time2}=   add_timezone_time  ${tz}  4   00
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}
       ${resp}=   Get Holiday By Account
@@ -245,9 +250,9 @@ JD-TC-CreateHoliday-5
    
       ${q_name3}=    FakerLibrary.name
       Set Suite Variable      ${q_name3}
-      ${new_strt_time}=   add_time   1   00
+      ${new_strt_time}=   add_timezone_time  ${tz}   1   00
       Set Suite Variable   ${new_strt_time}
-      ${new_end_time}=    add_time   3   30
+      ${new_end_time}=    add_timezone_time  ${tz}   3   30
       Set Suite Variable   ${new_end_time}
       ${resp}=  Update Queue  ${que_id4}  ${q_name3}  ${recurringtype[1]}  ${list}  ${DAY_TWO}  ${EMPTY}  ${EMPTY}  ${new_strt_time}  ${new_end_time}   ${parallel}   ${capacity}     ${loc_id4}  ${ser_id4}
       Log   ${resp.json()}
@@ -259,7 +264,7 @@ JD-TC-CreateHoliday-6
       clear_queue      ${PUSERNAME28}
       clear_service    ${PUSERNAME28}
       clear_location   ${PUSERNAME28}
-      ${resp}=  ProviderLogin  ${PUSERNAME28}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID28}=  get_acc_id   ${PUSERNAME28}
       Set Suite Variable   ${ACC_ID28}
@@ -269,18 +274,18 @@ JD-TC-CreateHoliday-6
       Set Suite Variable   ${que_id3}   ${resp['queue_id']}
       ${qu_name}=    FakerLibrary.name
       Set Suite Variable      ${qu_name}
-      ${start_tim}=   add_time   2  00
+      ${start_tim}=   add_timezone_time  ${tz}  2  00  
       Set Suite Variable   ${start_tim}
-      ${end_tim}=     add_time   5  00
+      ${end_tim}=     add_timezone_time  ${tz}  5  00  
       Set Suite Variable   ${end_tim}
       ${resp}=  Create Queue    ${qu_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${start_tim}  ${end_tim}    ${parallel}   ${capacity}    ${loc_id3}  ${ser_id3}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY_THREE}=  add_date   3
+      ${DAY_THREE}=  db.add_timezone_date  ${tz}   3
       Set Suite Variable   ${DAY_THREE}
-      ${current_time}=   add_time     2  50
+      ${current_time}=   add_timezone_time  ${tz}     2  50
       Set Suite Variable   ${current_time}
-      ${e_time}=     add_time     4  00
+      ${e_time}=     add_timezone_time  ${tz}     4  00
       Set Suite Variable   ${e_time}
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}
@@ -314,12 +319,12 @@ JD-TC-CreateHoliday-6
 JD-TC-CreateHoliday-7
       [Documentation]  Create a holiday which affects multiple queues
       
-      ${resp}=  ProviderLogin  ${PUSERNAME28}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200    
-      ${DAY1}=  add_date   1
-      ${hol_sTime}    add_time   0   55
+      ${DAY1}=  db.add_timezone_date  ${tz}  1
+      ${hol_sTime}    add_timezone_time  ${tz}   0   55
       Set Test Variable    ${hol_sTime} 
-      ${hol_eTime}    add_time   2   50
+      ${hol_eTime}    add_timezone_time  ${tz}   2   50
       Set Test Variable    ${hol_eTime}  
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}  
@@ -349,13 +354,13 @@ JD-TC-CreateHoliday-7
 JD-TC-CreateHoliday-8
       [Documentation]  create  a holiday with end time greater than scheduled end time
 
-      ${resp}=  ProviderLogin  ${PUSERNAME25}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Queues
       Log   ${resp.json()}
-      ${FUTRE_DAY1}=    add_date   9
-      ${START_TIME1}=   add_time   00  47
-      ${END_TIME1}=     add_time   6   30 
+      ${FUTRE_DAY1}=    db.add_timezone_date  ${tz}  9
+      ${START_TIME1}=   add_timezone_time  ${tz}   00  47
+      ${END_TIME1}=     add_timezone_time  ${tz}   6   30 
       ${desc}=    FakerLibrary.name
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${FUTRE_DAY1}  ${FUTRE_DAY1}  ${EMPTY}  ${START_TIME1}  ${END_TIME1}  ${desc}
       Log   ${resp.json()}
@@ -376,11 +381,11 @@ JD-TC-CreateHoliday-9
       [Documentation]  create  a holiday with start time less than scheduled start time
 
       clear_queue     ${PUSERNAME26}     
-      ${resp}=  ProviderLogin  ${PUSERNAME26}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${sat_time}=   add_time   3  30
+      ${sat_time}=   add_timezone_time  ${tz}  3  30  
       Set Suite Variable  ${sat_time} 
-      ${ed_time}=    add_time   4  00
+      ${ed_time}=    add_timezone_time  ${tz}  4  00  
       Set Suite Variable  ${ed_time} 
       ${q_name4}=    FakerLibrary.name
       Set Suite Variable      ${q_name4}
@@ -388,8 +393,8 @@ JD-TC-CreateHoliday-9
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${queue_id}  ${resp.json()}
-      ${les_strt_time}=  add_time  3  25
-      ${les_end_time}=  add_time  3  50
+      ${les_strt_time}=  add_timezone_time  ${tz}  3  25
+      ${les_end_time}=  add_timezone_time  ${tz}  3  50
       ${desc}=    FakerLibrary.name
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${CUR_DAY}  ${EMPTY}  ${les_strt_time}  ${les_end_time}  ${desc}
       Log   ${resp.json()}
@@ -415,19 +420,23 @@ JD-TC-CreateHoliday-10
       clear_customer   ${PUSERNAME30}
 
 
-      ${resp}=  ProviderLogin     ${PUSERNAME30}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME30}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID30}=  get_acc_id    ${PUSERNAME30}
       ${resp}=  Create Sample Location
       Set Test Variable    ${loc_id}   ${resp}
+      ${resp}=   Get Location ById  ${loc_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
       Set Test Variable    ${ser_id}   ${resp}   
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Test Variable    ${CUR_DAY}
 
-      ${Last_Day}=  add_date   3
+      ${Last_Day}=  db.add_timezone_date  ${tz}   3
 
       ${resp}=  AddCustomer  ${CUSERNAME11}
       Log   ${resp.json()}
@@ -436,11 +445,12 @@ JD-TC-CreateHoliday-10
 
       ${q_name}=    FakerLibrary.name
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${strt_time}=   db.get_time  
-      ${end_time}=    add_time  2  00 
+      # ${strt_time}=   db.get_time_by_timezone  ${tz}  
+    ${strt_time}=   db.get_time_by_timezone  ${tz}   
+      ${end_time}=    add_timezone_time  ${tz}  2  00   
       ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
       ${capacity}=   FakerLibrary.Random Int  min=5   max=10 
-      ${endday}=   add_date  15
+      ${endday}=   db.add_timezone_date  ${tz}  15  
       ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id}  ${ser_id}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -467,7 +477,8 @@ JD-TC-CreateHoliday-10
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid2}  ${wid[0]}
       
-      ${cur_time}=  db.get_time  
+      # ${cur_time}=  db.get_time_by_timezone  ${tz}  
+    ${cur_time}=  db.get_time_by_timezone  ${tz}    
       ${desc}=    FakerLibrary.name
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${cur_time}  ${end_time}  ${desc}
       Log   ${resp.json()}
@@ -515,7 +526,7 @@ JD-TC-CreateHoliday-10
 JD-TC-CreateHoliday-UH1
      [Documentation]  Create an already existing holiday
 
-     ${resp}=  ProviderLogin   ${PUSERNAME25}   ${PASSWORD}
+     ${resp}=  Encrypted Provider Login   ${PUSERNAME25}   ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${holi_name}=    FakerLibrary.name
      Set Suite Variable      ${holi_name}
@@ -545,9 +556,9 @@ JD-TC-CreateHoliday-UH3
 JD-TC-CreateHoliday-UH6
       [Documentation]  create a past date  holiday for a valid provider
 
-      ${resp}=  ProviderLogin  ${PUSERNAME25}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${PAST_DAY}=  add_date  -1
+      ${PAST_DAY}=  db.add_timezone_date  ${tz}  -1
       Set Suite Variable   ${PAST_DAY}
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${PAST_DAY}  ${PAST_DAY}  ${EMPTY}  ${strt_time}  ${holi_time}  ${holi_name}
       Log   ${resp.json()}
@@ -557,7 +568,7 @@ JD-TC-CreateHoliday-UH6
 JD-TC-CreateHoliday-UH7
       [Documentation]  create  an overlapping end time for an existing holiday
 
-      ${resp}=  ProviderLogin  ${PUSERNAME25}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${CUR_DAY}  ${EMPTY}  ${strt_time}  ${holi_time}  ${holi_name}
       Log   ${resp.json()}
@@ -567,7 +578,7 @@ JD-TC-CreateHoliday-UH7
 JD-TC-CreateHoliday-UH8
       [Documentation]  create a holiday with already existing starttime and endtime less than existing one
 
-      ${resp}=  ProviderLogin  ${PUSERNAME25}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${CUR_DAY}  ${EMPTY}  ${strt_time}  ${end_time1}  ${holi_name}
       Log   ${resp.json()}
@@ -583,19 +594,23 @@ JD-TC-CreateHoliday-UH9
       clear_customer   ${PUSERNAME30}
 
 
-      ${resp}=  ProviderLogin     ${PUSERNAME30}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME30}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID30}=  get_acc_id    ${PUSERNAME30}
       ${resp}=  Create Sample Location
       Set Test Variable    ${loc_id}   ${resp}
+      ${resp}=   Get Location ById  ${loc_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
       Set Test Variable    ${ser_id}   ${resp}   
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Test Variable    ${CUR_DAY}
 
-      ${Last_Day}=  add_date   3
+      ${Last_Day}=  db.add_timezone_date  ${tz}   3
 
       ${resp}=  AddCustomer  ${CUSERNAME11}
       Log   ${resp.json()}
@@ -604,17 +619,19 @@ JD-TC-CreateHoliday-UH9
 
       ${q_name}=    FakerLibrary.name
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${strt_time}=   db.get_time  
-      ${end_time}=    add_time  4  00 
+      # ${strt_time}=   db.get_time_by_timezone  ${tz}  
+    ${strt_time}=   db.get_time_by_timezone  ${tz}   
+      ${end_time}=    add_timezone_time  ${tz}  4  00   
       ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
       ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
-      ${endday}=   add_date  15
+      ${endday}=   db.add_timezone_date  ${tz}  15  
       ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id}  ${ser_id}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${q_id}   ${resp.json()}
-      ${cur_time}=  db.get_time  
-      # ${hol_time}=    add_time  1  00 
+      # ${cur_time}=  db.get_time_by_timezone  ${tz}  
+    ${cur_time}=  db.get_time_by_timezone  ${tz}    
+      # ${hol_time}=    add_timezone_time  ${tz}  1  00   
       ${desc}=    FakerLibrary.name
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${cur_time}  ${end_time}  ${desc}
       Log   ${resp.json()}
@@ -626,7 +643,7 @@ JD-TC-CreateHoliday-UH9
       Log   ${resp.json()}
       Should Be Equal As Strings   ${resp.status_code}  200 
 
-      ${availableDate}=  add_date   4
+      ${availableDate}=  db.add_timezone_date  ${tz}   4
       ${resp}=  Get Next Availability    ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${cur_time}  ${end_time}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200     
@@ -648,33 +665,38 @@ JD-TC-CreateHoliday-UH10
       clear_customer   ${PUSERNAME30}
 
 
-      ${resp}=  ProviderLogin     ${PUSERNAME30}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME30}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID30}=  get_acc_id    ${PUSERNAME30}
       ${resp}=  Create Sample Location
       Set Test Variable    ${loc_id}   ${resp}
+      ${resp}=   Get Location ById  ${loc_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
       Set Test Variable    ${ser_id}   ${resp}   
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Test Variable    ${CUR_DAY}
 
-      ${Last_Day}=  add_date   3
+      ${Last_Day}=  db.add_timezone_date  ${tz}   3
 
       ${q_name}=    FakerLibrary.name
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${strt_time}=   db.get_time  
-      ${end_time}=    add_time  6  00 
+      # ${strt_time}=   db.get_time_by_timezone  ${tz}  
+    ${strt_time}=   db.get_time_by_timezone  ${tz}   
+      ${end_time}=    add_timezone_time  ${tz}  6  00   
       ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
       ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
-      ${endday}=   add_date  15
+      ${endday}=   db.add_timezone_date  ${tz}  15  
       ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id}  ${ser_id}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${q_id}   ${resp.json()}
 
-      ${ptime}=  subtract_time  0  1
+      ${ptime}=  subtract_timezone_time  ${tz}  0  1
       ${desc}=    FakerLibrary.name
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${ptime}  ${end_time}  ${desc}
       Log   ${resp.json()}
@@ -689,23 +711,28 @@ JD-TC-CreateHoliday-UH11
       clear_service    ${PUSERNAME188}
       clear_location   ${PUSERNAME188}
       clear_queue      ${PUSERNAME188}
-      ${resp}=  ProviderLogin     ${PUSERNAME188}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME188}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID30}=  get_acc_id    ${PUSERNAME188} 
       ${resp}=  Create Sample Location
       Set Suite Variable    ${loc_id5}   ${resp}
+      ${resp}=   Get Location ById  ${loc_id5}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name5}=    FakerLibrary.name
       Set Test Variable     ${ser_name5}
       ${resp}=  Create Sample Service   ${ser_name5}
       Set Suite Variable    ${ser_id5}   ${resp}   
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable    ${CUR_DAY}
       ${q_name5}=    FakerLibrary.name
       Set Suite Variable    ${q_name5}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${sone}=   db.get_time
-      ${eone}=   add_time  3  00
+      # ${sone}=   db.get_time_by_timezone  ${tz}
+      ${sone}=   db.get_time_by_timezone  ${tz}
+      ${eone}=   add_timezone_time  ${tz}  3  00  
     
       ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
       ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
@@ -714,10 +741,10 @@ JD-TC-CreateHoliday-UH11
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${q_id5}   ${resp.json()}
 
-      ${DAY}=  add_date  1
-      ${DAY2}=  add_date  3
+      ${DAY}=  db.add_timezone_date  ${tz}  1  
+      ${DAY2}=  db.add_timezone_date  ${tz}  3  
 
-      ${holitm}=   add_time  1  00
+      ${holitm}=   add_timezone_time  ${tz}  1  00  
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY}  ${DAY2}  ${EMPTY}  ${holitm}  ${eone}  ${desc}
@@ -754,8 +781,8 @@ JD-TC-CreateHoliday-UH11
 
       #create  another oveelapped one
 
-      ${DAY3}=  add_date  2
-      ${DAY4}=  add_date  4
+      ${DAY3}=  db.add_timezone_date  ${tz}  2  
+      ${DAY4}=  db.add_timezone_date  ${tz}  4  
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${holitm}  ${eone}  ${desc}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -764,19 +791,20 @@ JD-TC-CreateHoliday-UH11
       ${resp}=   Delete Holiday  ${holidayId}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=   Get Holiday By Account
+      Should Be Equal As Strings  ${resp.status_code}  200
       Should Not Contain   ${resp.json()}  "id":"${holidayId}"
 
 JD-TC-CreateHoliday-UH12
       [Documentation]   create 3  holiday and then creating another holiday between this day(end date is already a holiday)
 
-      ${resp}=  ProviderLogin     ${PUSERNAME188}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME188}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${DAY}=  add_date  3
-      ${DAY2}=  add_date  6
+      ${DAY}=  db.add_timezone_date  ${tz}  3  
+      ${DAY2}=  db.add_timezone_date  ${tz}  6  
 
-      ${holitm}=   add_time  1  00
-      ${eone}=   add_time  3  00
+      ${holitm}=   add_timezone_time  ${tz}  1  00  
+      ${eone}=   add_timezone_time  ${tz}  3  00  
     
       ${desc}=    FakerLibrary.name
       Set Test Variable      ${desc}
@@ -796,7 +824,7 @@ JD-TC-CreateHoliday-UH12
       Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eone}
   
      
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${DAY}  ${EMPTY}  ${holitm}  ${eone}  ${desc}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -805,7 +833,7 @@ JD-TC-CreateHoliday-UH12
 JD-TC-Verify CreateHoliday-1
       [Documentation]   Verify create a  holiday for the current day
 
-      ${resp}=  ProviderLogin     ${PUSERNAME25}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME25}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Queue By Location and service By Date  ${loc_id}  ${ser_id}  ${CUR_DAY}  ${ACC_ID25}
       Log   ${resp.json()}
@@ -830,7 +858,7 @@ JD-TC-Verify CreateHoliday-1
 JD-TC-Verify CreateHoliday-4
       [Documentation]  verify Create a holiday and update schedule
 
-      ${resp}=  ProviderLogin     ${PUSERNAME27}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME27}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Queue By Location and service By Date  ${loc_id2}  ${ser_id2}  ${DAY_ONE}  ${ACC_ID27}
       Log   ${resp.json()}
@@ -860,7 +888,7 @@ JD-TC-CreateHoliday-11
     clear_service  ${PUSERNAME100}
     clear_customer   ${PUSERNAME100}
     clear_Item   ${PUSERNAME100}
-    ${resp}=  ProviderLogin  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -915,23 +943,23 @@ JD-TC-CreateHoliday-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   2  30 
+    ${eTime2}=  add_timezone_time  ${tz}  2  30   
     Set Suite Variable    ${eTime2}
     ${list}=  Create List  1  2  3  4  5  6  7
 
-    ${sTime3}=  add_time  2  40
+    ${sTime3}=  add_timezone_time  ${tz}  2  40
     Set Suite Variable  ${sTime3}
-    ${eTime3}=  add_time   3  30 
+    ${eTime3}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable  ${eTime3}  
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -1010,7 +1038,7 @@ JD-TC-CreateHoliday-11
     Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
     Set Suite Variable  ${uname1}   ${resp.json()['userName']}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -1046,7 +1074,7 @@ JD-TC-CreateHoliday-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1055,7 +1083,7 @@ JD-TC-CreateHoliday-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  add_date  3  
+    ${DAY}=  db.add_timezone_date  ${tz}  3    
     ${desc}=    FakerLibrary.name
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${startDate}  ${DAY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${desc}
     Log   ${resp.json()}
@@ -1106,7 +1134,7 @@ JD-TC-CreateHoliday-12
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -1162,20 +1190,20 @@ JD-TC-CreateHoliday-UH9
       [Documentation]  create a holiday on a non-working day
 
       clear_queue     ${PUSERNAME26}     
-      ${resp}=  ProviderLogin  ${PUSERNAME26}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Create Sample Location
       Set Suite Variable    ${loc_id1}   ${resp}
-      ${DAY1}=  get_date
-      ${d}=  get_weekday
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      ${d}=  get_timezone_weekday  ${tz}
       ${d1}=  Evaluate  ${d}-2
-      ${DAY2}=  add_date  ${d1}
+      ${DAY2}=  db.add_timezone_date  ${tz}  ${d1}
       ${list1}=  Create List  ${d}
       Set Suite Variable  ${list1} 
      
-      ${sat_time}=   add_time   0  50
+      ${sat_time}=   add_timezone_time  ${tz}  0  50  
       Set Suite Variable  ${sat_time} 
-      ${ed_time}=    add_time   3  25
+      ${ed_time}=    add_timezone_time  ${tz}   3  25
       Set Suite Variable  ${ed_time} 
       ${q_name4}=    FakerLibrary.name
       Set Suite Variable      ${q_name4}
@@ -1185,11 +1213,11 @@ JD-TC-CreateHoliday-UH9
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Queues
       Set Suite Variable   ${queue_id}    ${resp.json()[0]['id']}
-      ${c_time}=  add_time  1   00
-      ${e_time}=  add_time  2   00
+      ${c_time}=  add_timezone_time  ${tz}  1  00  
+      ${e_time}=  add_timezone_time  ${tz}  2  00  
       Set Test Variable    ${e_time}
       # ${resp}=  Create Holiday  ${DAY2}  ${holi_name}  ${c_time}  ${e_time}
-      # ${DAY5}=  add_date  5
+      # ${DAY5}=  db.add_timezone_date  ${tz}  5  
 
       ${DATE}=  Convert Date   ${DAY2}  result_format=%d-%m-%Y
       ${DATE1}=  Convert Date  ${DAY2}  result_format=%a, %d %b %Y
@@ -1225,11 +1253,11 @@ JD-TC-CreateHoliday-UH10
       ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME_Z}
-      ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200 
 
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable   ${DAY}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable    ${list}
@@ -1246,14 +1274,18 @@ JD-TC-CreateHoliday-UH10
       ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
       ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
       ${bs}=  FakerLibrary.bs
-      ${city}=   get_place
-      ${latti}=  get_latitude
-      ${longi}=  get_longitude
       ${companySuffix}=  FakerLibrary.companySuffix
-      ${postcode}=  FakerLibrary.postcode
-      ${address}=  get_address
-      ${sTime}=  db.get_time
-      ${eTime}=  add_time   0  15
+      # ${city}=   get_place
+      # ${latti}=  get_latitude
+      # ${longi}=  get_longitude
+      # ${postcode}=  FakerLibrary.postcode
+      # ${address}=  get_address
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
+      # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+      ${eTime}=  add_timezone_time  ${tz}  0  15  
       ${desc}=   FakerLibrary.sentence
       ${url}=   FakerLibrary.url
       ${parking}   Random Element   ${parkingType}
@@ -1264,19 +1296,23 @@ JD-TC-CreateHoliday-UH10
 
       ${resp}=  Create Sample Location
       Set Test Variable    ${loc_id}   ${resp}
+      ${resp}=   Get Location ById  ${loc_id}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
       Set Test Variable    ${ser_id}   ${resp} 
 
-      ${d}=  get_weekday
-      ${DAY1}=  get_date
+      ${d}=  get_timezone_weekday  ${tz}
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
       # ${d1}=  Evaluate  ${d}
       ${list1}=  Create List  ${d}
       Set Suite Variable  ${list1} 
-      ${sat_time}=   add_time   4  00
+      ${sat_time}=   add_timezone_time  ${tz}  4  00  
       Set Suite Variable  ${sat_time} 
-      ${ed_time}=    add_time   4  30
+      ${ed_time}=    add_timezone_time  ${tz}  4  30  
       Set Suite Variable  ${ed_time} 
       ${q_name4}=    FakerLibrary.name
       Set Suite Variable      ${q_name4}
@@ -1289,8 +1325,8 @@ JD-TC-CreateHoliday-UH10
       ${resp}=  Get Queue ById  ${queue_id}
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  queueState=DISABLED
-      ${les_strt_time}=  add_time  4  05
-      ${les_end_time}=  add_time  4  15
+      ${les_strt_time}=  add_timezone_time  ${tz}  4  05
+      ${les_end_time}=  add_timezone_time  ${tz}  4  15  
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY1}  ${EMPTY}  ${les_strt_time}  ${les_end_time}  ${holi_name}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -1300,16 +1336,16 @@ JD-TC-CreateHoliday-UH11
       [Documentation]  create  a future date holiday on disabled queue
 
       clear_queue     ${PUSERNAME26}     
-      ${resp}=  ProviderLogin  ${PUSERNAME26}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${d}=  get_weekday
-      ${DAY1}=  get_date
+      ${d}=  get_timezone_weekday  ${tz}
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
       ${d1}=  Evaluate  ${d} + 1
-      ${DAY2}=  add_date  ${d1}
+      ${DAY2}=  db.add_timezone_date  ${tz}  ${d1}
       ${list1}=  Create List  ${d}
-      ${sat_time}=   add_time   4  30
+      ${sat_time}=   add_timezone_time  ${tz}  4  30  
       Set Suite Variable  ${sat_time} 
-      ${ed_time}=    add_time   4  45
+      ${ed_time}=    add_timezone_time  ${tz}  4  45  
       Set Suite Variable  ${ed_time} 
       ${q_name4}=    FakerLibrary.name
       Set Suite Variable      ${q_name4}
@@ -1335,27 +1371,31 @@ JD-TC-CreateHoliday-UH15
       clear_service    ${PUSERNAME20}
       clear_location   ${PUSERNAME20}
       clear_queue      ${PUSERNAME20}
-      ${resp}=  ProviderLogin     ${PUSERNAME20}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME20}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID20}=  get_acc_id    ${PUSERNAME20}
       ${resp}=  Create Sample Location
       Set Test Variable    ${loc_id7}   ${resp}
+      ${resp}=   Get Location ById  ${loc_id7}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
       Set Test Variable    ${ser_id7}   ${resp}   
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       ${q_name}=    FakerLibrary.name
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${strt_time}=   add_time  1  00
-      ${end_time}=    add_time  6  00 
+      ${strt_time}=   add_timezone_time  ${tz}  1  00  
+      ${end_time}=    add_timezone_time  ${tz}  6  00   
       ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
       ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
       ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id7}  ${ser_id7}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${q_id7}   ${resp.json()}
-      ${cur_time}=  add_time   1  30
+      ${cur_time}=  add_timezone_time  ${tz}  1  30  
       ${desc}=    FakerLibrary.name
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${cur_time}  ${end_time}  ${desc}
       Log   ${resp.json()}
@@ -1369,27 +1409,31 @@ JD-TC-CreateHoliday-UH16
       clear_service    ${PUSERNAME20}
       clear_location   ${PUSERNAME20}
       clear_queue      ${PUSERNAME20}
-      ${resp}=  ProviderLogin     ${PUSERNAME20}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login     ${PUSERNAME20}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${ACC_ID20}=  get_acc_id    ${PUSERNAME20}
       ${resp}=  Create Sample Location
       Set Test Variable    ${loc_id7}   ${resp}
+      ${resp}=   Get Location ById  ${loc_id7}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name}=    FakerLibrary.name
       Set Test Variable     ${ser_name}
       ${resp}=  Create Sample Service   ${ser_name}
       Set Test Variable    ${ser_id7}   ${resp}   
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       ${q_name}=    FakerLibrary.name
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${strt_time}=   add_time  1  00
-      ${end_time}=    add_time  6  00 
+      ${strt_time}=   add_timezone_time  ${tz}  1  00  
+      ${end_time}=    add_timezone_time  ${tz}  6  00   
       ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
       ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
       ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id7}  ${ser_id7}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${q_id7}   ${resp.json()}
-      ${cur_time}=  add_time   1  30
+      ${cur_time}=  add_timezone_time  ${tz}  1  30  
       ${desc}=    FakerLibrary.name
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${CUR_DAY}  ${EMPTY}  ${NULL}  ${NULL}  ${desc}
       Log   ${resp.json()}

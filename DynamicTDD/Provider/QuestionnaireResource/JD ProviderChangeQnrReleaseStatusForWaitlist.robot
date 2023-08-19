@@ -114,7 +114,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -123,6 +123,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     reset_metric_usage  ${account_id}
 
@@ -166,7 +167,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -187,6 +188,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -200,7 +202,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
 
     clear_queue   ${PUSERNAME151}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -234,11 +236,12 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -307,13 +310,14 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
 JD-TC-ProviderChangeQnrReleaseStatusForWL-2
     [Documentation]  Take a walkin checkin and provider submit questionnaire 
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     reset_metric_usage  ${account_id}
 
@@ -326,6 +330,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -339,9 +344,9 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-2
 
     clear_queue   ${PUSERNAME151}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -438,7 +443,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-3
 
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -460,6 +465,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -473,7 +479,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-3
 
     clear_queue   ${PUSERNAME151}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -503,11 +509,12 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-3
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -547,7 +554,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -607,7 +614,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-4
 
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -629,6 +636,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -642,7 +650,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-4
 
     clear_queue   ${PUSERNAME151}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -683,11 +691,12 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-4
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -779,7 +788,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
 
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -801,6 +810,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -814,7 +824,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
 
     clear_queue   ${PUSERNAME151}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -843,11 +853,12 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -893,7 +904,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-5
     # Should Be Equal As Strings   ${qnr_resp.json()['questionnaireId']}  ${qnrid}
     # Should Be Equal As Strings  ${qnr_resp.json()['id']}   ${id}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -963,7 +974,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
 
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -985,6 +996,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -998,7 +1010,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
 
     clear_queue   ${PUSERNAME151}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1028,11 +1040,12 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -1072,7 +1085,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[0]}
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
-    ${resp}=  Delete Waitlist Consumer  ${wid}  ${account_id}
+    ${resp}=  Cancel Waitlist  ${wid}  ${account_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1081,7 +1094,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}    waitlistStatus=${wl_status[4]}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

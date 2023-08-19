@@ -56,7 +56,7 @@ JD-TC-Get SubDomain Filters-1
               
 JD-TC-Get SubDomain Filters -2
        [Documentation]   Provider check to Get SubDomain Filters provider login
-       ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Get SubDomain Filters  healthCare  physiciansSurgeons
        Should Be Equal As Strings    ${resp.json()['commonFilters'][0]['enumeratedConstants'][0]['name']}  assamese    

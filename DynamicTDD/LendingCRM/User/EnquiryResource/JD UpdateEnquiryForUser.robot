@@ -26,7 +26,7 @@ Multiple Users branches
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -57,7 +57,7 @@ JD-TC-Update Enquiry For User-1
     ${BUSER}=  Random Element    ${multiusers}
     Set Suite Variable  ${BUSER}
 
-    ${resp}=   ProviderLogin  ${BUSER}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_customer   ${BUSER}
@@ -73,6 +73,7 @@ JD-TC-Update Enquiry For User-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
@@ -128,7 +129,7 @@ JD-TC-Update Enquiry For User-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -138,8 +139,13 @@ JD-TC-Update Enquiry For User-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
@@ -262,7 +268,7 @@ JD-TC-Update Enquiry For User-1
 JD-TC-Update Enquiry For User-2
     [Documentation]   Update Enquiry for a User with a different customer.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -271,8 +277,13 @@ JD-TC-Update Enquiry For User-2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${BUSER}
 
@@ -395,13 +406,13 @@ JD-TC-Update Enquiry For User-2
 JD-TC-Update Enquiry For User-3
     [Documentation]   Update Enquiry for a User with a different location.
 
-    ${resp}=   ProviderLogin  ${BUSER}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${locId1}=  Create Sample Location
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -522,7 +533,7 @@ JD-TC-Update Enquiry For User-3
 JD-TC-Update Enquiry For User-4
     [Documentation]   Update Enquiry twice with same details.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -668,7 +679,7 @@ JD-TC-Update Enquiry For User-4
 JD-TC-Update Enquiry For User-UH1
     [Documentation]   Update Enquiry without catagory.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -794,7 +805,7 @@ JD-TC-Update Enquiry For User-UH1
 JD-TC-Update Enquiry For User-6
     [Documentation]   Update Enquiry without catagory type.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -918,7 +929,7 @@ JD-TC-Update Enquiry For User-6
 JD-TC-Update Enquiry For User-7
     [Documentation]   Update Enquiry without priority.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1039,7 +1050,7 @@ JD-TC-Update Enquiry For User-7
 JD-TC-Update Enquiry For User-8
     [Documentation]   Update Enquiry without status.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1162,7 +1173,7 @@ JD-TC-Update Enquiry For User-8
 JD-TC-Update Enquiry For User-9
     [Documentation]   Update Enquiry with a different category.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1238,7 +1249,7 @@ JD-TC-Update Enquiry For User-9
 JD-TC-Update Enquiry For User-10
     [Documentation]   Update Enquiry with a different type.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1323,7 +1334,7 @@ JD-TC-Update Enquiry For User-10
 JD-TC-Update Enquiry For User-11
     [Documentation]   Update Enquiry with a different priority.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1408,7 +1419,7 @@ JD-TC-Update Enquiry For User-11
 JD-TC-Update Enquiry For User-UH2
     [Documentation]   Update Enquiry with isLeadAutogenerate as true when leadMasterId & enquireMasterId are not provided.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -27,7 +27,7 @@ JD-TC-GetUsers-1
 
     [Documentation]  Get users by branch login
 
-    ${resp}=  Provider Login  ${MUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -51,9 +51,16 @@ JD-TC-GetUsers-1
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}

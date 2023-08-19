@@ -25,7 +25,7 @@ ${DisplayName1}   item1_DisplayName
 
 JD-TC-DonationBill-1
         [Documentation]   Provider Get Bill of a Donation
-        ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME28}
@@ -43,7 +43,12 @@ JD-TC-DonationBill-1
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -70,7 +75,7 @@ JD-TC-DonationBill-1
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME28}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${don_amt}=  Evaluate  ${min_don_amt}*${multiples[0]}
 
@@ -106,7 +111,7 @@ JD-TC-DonationBill-1
         Should Be Equal As Strings  ${resp.json()['service'][0]['maxDonationAmount']}  ${max_don_amt}
         Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${con_id}
 
-        ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -125,7 +130,7 @@ JD-TC-DonationBill-1
 
 JD-TC-DonationBill-2
         [Documentation]   Provider Get Bill of a Donation where donation service has tax
-        ${resp}=  Provider Login  ${PUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME25}
@@ -143,7 +148,12 @@ JD-TC-DonationBill-2
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${gstper}=  Random Element  ${gstpercentage}
         ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
         ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
@@ -179,7 +189,7 @@ JD-TC-DonationBill-2
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME25}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=1000   max=4000
@@ -220,7 +230,7 @@ JD-TC-DonationBill-2
         Should Be Equal As Strings  ${resp.json()['service'][0]['maxDonationAmount']}  ${max_don_amt}
         Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${con_id}
 
-        ${resp}=  Provider Login  ${PUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -242,7 +252,7 @@ JD-TC-DonationBill-2
 
 JD-TC-DonationBill-UH1
         [Documentation]  Adding item to donation bill
-        ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${short_desc}=   FakerLibrary.sentence  nb_words=3
@@ -265,7 +275,7 @@ JD-TC-DonationBill-UH1
 
 JD-TC-DonationBill-UH2
         [Documentation]   add service to bill
-        ${resp}=  ProviderLogin  ${PUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${service}=  Service Bill  service forme  ${sid1}  1 
         ${resp}=  Update Bill   ${don_id}  addService   ${service}
@@ -274,7 +284,7 @@ JD-TC-DonationBill-UH2
 
 JD-TC- DonationBill-UH3
         [Documentation]  remove service from bill
-        ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${service}=  Service Bill  service forme  ${sid1}  1 
         ${resp}=  Update Bill   ${don_id}  removeService   ${service}
@@ -283,7 +293,7 @@ JD-TC- DonationBill-UH3
 
 JD-TC- DonationBill-UH4
         [Documentation]  adjust service from bill
-        ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${service}=  Service Bill  service forme  ${sid1}  3 
         ${resp}=  Update Bill   ${don_id}  adjustService   ${service}
@@ -294,7 +304,7 @@ JD-TC- DonationBill-UH5
         [Documentation]   add coupon to netBill
         ${data}=  FakerLibrary.Word
         ${coupon11}=  FakerLibrary.Word
-        ${resp}=  ProviderLogin  ${PUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${coupon11}=    FakerLibrary.word
@@ -303,10 +313,10 @@ JD-TC- DonationBill-UH5
         ${cupn_code}=   FakerLibrary.word
         Set Suite Variable   ${cupn_code}
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_time  0  15
-        ${eTime}=  add_time   0  45
-        ${ST_DAY}=  get_date
-        ${EN_DAY}=  add_date   10
+        ${sTime}=  subtract_timezone_time  ${tz}  0  15
+        ${eTime}=  add_timezone_time  ${tz}  0  45  
+        ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+        ${EN_DAY}=  db.add_timezone_date  ${tz}   10
         ${min_bill_amount}=   Random Int   min=100   max=150
         ${max_disc_val}=   Random Int   min=100   max=500
         ${max_prov_use}=   Random Int   min=10   max=20
@@ -333,7 +343,7 @@ JD-TC- DonationBill-UH5
 
 JD-TC- DonationBill-UH6
         [Documentation]   add bill level discount
-        ${resp}=  ProviderLogin  ${PUSERNAME25}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${discount2}=  FakerLibrary.Word
         ${resp}=   Create Discount  ${discount2}   disc   100.0   Fixed   Predefine
@@ -352,7 +362,7 @@ JD-TC- DonationBill-UH6
 
 JD-TC-DonationBill-UH7
         [Documentation]   Provider Get Bill of a Donation but bill not generated by consumer
-        ${resp}=  Provider Login  ${PUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME29}
@@ -398,7 +408,7 @@ JD-TC-DonationBill-UH7
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME29}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=1000   max=4000
@@ -420,7 +430,7 @@ JD-TC-DonationBill-UH7
         Should Be Equal As Strings  ${resp.json()['service']['id']}  ${sid1}
         Should Be Equal As Strings  ${resp.json()['location']['id']}  ${loc_id1}
 
-        ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -439,7 +449,7 @@ JD-TC-DonationBill-UH8
 
 JD-TC-DonationBill-UH9
         [Documentation]   get bill by another provider
-        ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
         Should Be Equal As Strings    ${resp.status_code}   200 
         ${resp}=  Get Bill By UUId  ${don_id}  
         Log  ${resp.json()}
@@ -454,7 +464,7 @@ JD-TC-DonationBill-UH10
 
 JD-TC-DonationBill-UH11
         [Documentation]   get bill by invalid id
-        ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
         Should Be Equal As Strings    ${resp.status_code}   200 
         ${resp}=  Get Bill By UUId  000 
         Log  ${resp.json()}

@@ -19,7 +19,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Update Privacy Setting-1
     [Documentation]   Get Privacy Setting of a valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ph1}=  Evaluate  ${PUSERNAME}+10000101
     ${ph2}=  Evaluate  ${PUSERNAME}+20000102
@@ -55,7 +55,7 @@ JD-TC-Update Privacy Setting-1
             
 JD-TC-Update Privacy Setting-2
     [Documentation]   update only phone number details of Privacy Setting of a valid provider and update email details as empty
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ph1}=  Evaluate  ${PUSERNAME}+10000103
     ${ph2}=  Evaluate  ${PUSERNAME}+20000104
@@ -86,7 +86,7 @@ JD-TC-Update Privacy Setting-2
 
 JD-TC-Update Privacy Setting-3
     [Documentation]   update only email details of Privacy Setting of a valid provider and update phone no details as empty
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ph1}=  Create List
     ${views}=  Evaluate  random.choice($Views)  random
@@ -105,7 +105,7 @@ JD-TC-Update Privacy Setting-3
 
 JD-TC-Update Privacy Setting-4
     [Documentation]   Get business Privacy Setting of a valid provider, provider updated privacy settings with empty values
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${ph1}=  Create List
     Set Suite Variable  ${ph1}

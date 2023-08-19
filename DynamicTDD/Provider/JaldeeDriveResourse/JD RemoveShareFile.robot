@@ -68,7 +68,7 @@ JD-TC-RemoveShareFiles-1
     clear_Consumermsg  ${CUSERNAME5}
   
 
-    ${resp}=  Provider Login  ${PUSERNAME201}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME201}
     Set Test Variable    ${acc_id}
@@ -167,7 +167,7 @@ JD-TC-RemoveShareFiles-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${jc_id1}=  get_id  ${CUSERNAME5}
    
-    ${resp}=  Provider Login  ${PUSERNAME201}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id12}=  get_acc_id  ${PUSERNAME201}
   
@@ -217,7 +217,7 @@ JD-TC-RemoveShareFiles-3
     clear_Consumermsg   ${CUSERNAME3}
   
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${HLMUSERNAME3}
@@ -225,6 +225,7 @@ JD-TC-RemoveShareFiles-3
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=    Get Locations
@@ -232,8 +233,13 @@ JD-TC-RemoveShareFiles-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${bs}=  FakerLibrary.bs
@@ -241,10 +247,12 @@ JD-TC-RemoveShareFiles-3
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
        sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -281,7 +289,7 @@ JD-TC-RemoveShareFiles-3
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
     
-    ${resp}=   ProviderLogin  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -297,7 +305,7 @@ JD-TC-RemoveShareFiles-3
     Set Test Variable  ${pcons_id3}  ${resp.json()[0]['id']}
     Set Test Variable  ${jaldeeId}  ${resp.json()[0]['jaldeeId']}
   
-    ${resp}=   ProviderLogin   ${PUSERNAME_U1}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME_U1}   ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -357,7 +365,7 @@ JD-TC-RemoveShareFiles-4
 
     [Documentation]   branch remove share file from consumer
    
-    ${resp}=   ProviderLogin  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${HLMUSERNAME3}
@@ -418,7 +426,7 @@ JD-TC-RemoveShareFiles-5
 
     [Documentation]   branch  share file  and user remove file
    
-    ${resp}=   ProviderLogin  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${HLMUSERNAME3}
@@ -464,7 +472,7 @@ JD-TC-RemoveShareFiles-5
     Should Be Equal As Strings  ${resp.status_code}     200
   
 
-    ${resp}=   ProviderLogin   ${PUSERNAME_U1}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME_U1}   ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -483,7 +491,7 @@ JD-TC-RemoveShareFiles-6
 
     [Documentation]   user  share file  and branch remove file
 
-    ${resp}=   ProviderLogin   ${PUSERNAME_U1}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME_U1}   ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    
@@ -526,7 +534,7 @@ JD-TC-RemoveShareFiles-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    
@@ -573,7 +581,7 @@ JD-TC-RemoveShareFiles-UH3
    
     [Documentation]   with  another provider login
     
-    ${resp}=   ProviderLogin     ${PUSERNAME10}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME10}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -591,7 +599,7 @@ JD-TC-RemoveShareFiles-UH3
 #     [Documentation]  Get upload pdf file by provider id
     
 #     clear_Item  ${PUSERNAME200}
-#     ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${acc_id}=  get_acc_id  ${PUSERNAME200}
 #     Set Test Variable   ${acc_id}
@@ -670,7 +678,7 @@ JD-TC-RemoveShareFiles-UH3
 
 #     [Documentation]  UploadTaskAttachment using Task Id.
 
-#     ${resp}=   ProviderLogin  ${PUSERNAME33}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -777,7 +785,7 @@ JD-TC-RemoveShareFiles-UH3
 
 #     [Documentation]  file upload to private folder
 
-#     ${resp}=  Provider Login  ${PUSERNAME144}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${acc_id}=  get_acc_id  ${PUSERNAME144}
 #     Set Test Variable  ${providerId}   ${acc_id}

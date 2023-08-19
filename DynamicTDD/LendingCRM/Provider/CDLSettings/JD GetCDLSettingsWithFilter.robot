@@ -26,7 +26,7 @@ JD-TC-Get CDL Settings with Filter-1
                                   
     [Documentation]               Get CDL Settings with filter
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -53,7 +53,7 @@ JD-TC-Get CDL Settings with Filter-2
                                   
     [Documentation]               Get CDL Settings with id filter
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -65,7 +65,7 @@ JD-TC-Get CDL Settings with Filter-3
                                   
     [Documentation]               Get CDL Settings with partner filter
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -77,7 +77,7 @@ JD-TC-Get CDL Settings with Filter-4
                                   
     [Documentation]               Get CDL Settings with autoApproval filter
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -89,7 +89,7 @@ JD-TC-Get CDL Settings with Filter-5
                                   
     [Documentation]               Get CDL Settings with autoApprovalUptoAmount filter
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -101,7 +101,7 @@ JD-TC-Get CDL Settings with Filter-6
                                   
     [Documentation]               Get CDL Settings with districtWiseRestriction filter
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -113,7 +113,7 @@ JD-TC-Get CDL Settings with Filter-7
                                   
     [Documentation]               Get CDL Settings with status filter
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -125,7 +125,7 @@ JD-TC-Get CDL Settings with Filter-8
                                   
     [Documentation]               Get CDL Settings with salesOfficerVerificationRequired filter
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -159,7 +159,7 @@ JD-TC-Get Count Of CDL Settings with Filter-UH3
                                   
     [Documentation]               Get Count Of CDL Settings where CDL settings are not created
 
-    ${resp}=   ProviderLogin  ${PUSERNAME66}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200 
 

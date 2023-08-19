@@ -41,7 +41,7 @@ JD-TC-Get Department ById-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_K}${\n}
@@ -77,7 +77,7 @@ JD-TC-Get Department ById-2
     [Documentation]  Provider Create department using Service names then Get Department ById
 
     clear_service   ${MUSERNAME_K}
-    ${resp}=  ProviderLogin  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name2}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name2}
@@ -111,7 +111,7 @@ JD-TC-Get Department ById-UH2
 JD-TC-Get Department ById-UH3
     [Documentation]  Provider get a department with Invalid department id
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  0000
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -120,7 +120,7 @@ JD-TC-Get Department ById-UH3
 JD-TC-Get Department ById-UH4
     [Documentation]  Provider get a another providers department id
 
-    ${resp}=  ProviderLogin  ${MUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME36}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Department ById  ${depid1}
     Should Be Equal As Strings  ${resp.status_code}  401

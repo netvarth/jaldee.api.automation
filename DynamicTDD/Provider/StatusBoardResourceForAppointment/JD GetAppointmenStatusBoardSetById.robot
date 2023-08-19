@@ -25,7 +25,7 @@ ${SERVICE3}     Radio Repdca222
 JD-TC-GetAppointmenStatusBoardSetById-1
 	[Documentation]  Get the appoinment status board by id
     
-    ${resp}=  ProviderLogin  ${PUSERNAME98}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME98}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME98}
     clear_location  ${PUSERNAME98}
@@ -33,14 +33,19 @@ JD-TC-GetAppointmenStatusBoardSetById-1
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -87,7 +92,7 @@ JD-TC-GetAppointmenStatusBoardSetById-1
     Set Suite Variable  ${sba_id1}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sba_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     
@@ -129,7 +134,7 @@ JD-TC-GetStatusBoardById -UH2
 
 JD-TC-GetStatusBoardById-UH3
     [Documentation]  Get a Status Board by id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Get Appoinment StatusBoard By Id  ${invalid_id}
@@ -139,7 +144,7 @@ JD-TC-GetStatusBoardById-UH3
 
 JD-TC-GetStatusBoardById-UH4
     [Documentation]  Get a Status Board by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Appoinment StatusBoard By Id  ${sb_id}
     Log  ${resp.json()}

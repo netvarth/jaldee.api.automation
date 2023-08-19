@@ -34,7 +34,7 @@ JD-TC-AssignProfileToService-1
     
     clear_queue    ${PUSERNAME188}
     clear_service  ${PUSERNAME188}
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -136,7 +136,7 @@ JD-TC-AssignProfileToService-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -168,7 +168,7 @@ JD-TC-AssignProfileToService-2
 
     [Documentation]  Assign profile to multiple services.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -217,7 +217,7 @@ JD-TC-AssignProfileToService-3
 
     [Documentation]  Assign profile to a service after updating jaldee bank to my own bank.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -256,7 +256,7 @@ JD-TC-AssignProfileToService-4
 
     [Documentation]  try to assign same profile to services multiple times.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -279,7 +279,7 @@ JD-TC-AssignProfileToService-5
 
     [Documentation]   update payment profile of a service.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -302,7 +302,7 @@ JD-TC-AssignProfileToService-6
 
     [Documentation]  assign profile to a disabled service.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -326,7 +326,7 @@ JD-TC-AssignProfileToService-7
 
     [Documentation]  Assign profile to a virtual service.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -363,7 +363,7 @@ JD-TC-AssignProfileToService-8
 
     [Documentation]  Assign profile to a donation service.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -403,7 +403,7 @@ JD-TC-AssignProfileToService-UH1
 
     [Documentation]  try to assign profile for another providers service who does not have payment profile.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -420,7 +420,7 @@ JD-TC-AssignProfileToService-UH2
 
     clear_queue    ${PUSERNAME189}
     clear_service  ${PUSERNAME189}
-    ${resp}=  ProviderLogin  ${PUSERNAME189}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -488,7 +488,7 @@ JD-TC-AssignProfileToService-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME189}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -517,7 +517,7 @@ JD-TC-AssignProfileToService-UH4
 
     [Documentation]  assign profile with empty list of service ids.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -532,7 +532,7 @@ JD-TC-AssignProfileToService-UH5
 
     [Documentation]  Assign profile to an invalid service.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

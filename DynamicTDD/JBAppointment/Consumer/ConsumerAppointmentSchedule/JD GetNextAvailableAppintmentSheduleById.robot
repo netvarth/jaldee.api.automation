@@ -27,24 +27,30 @@ ${self}         0
 JD-TC-GetNextAvailableAppointmentScheduleById-1
 
     [Documentation]  Get next available appointment slots when parallel serving is one.
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable  ${accId}
     clear_service   ${PUSERNAME140}
     clear_location  ${PUSERNAME140}
-   
+    clear_appt_schedule    ${PUSERNAME140}
+    
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -110,7 +116,7 @@ JD-TC-GetNextAvailableAppointmentScheduleById-1
 JD-TC-GetNextAvailableAppointmentScheduleById-2
 
     [Documentation]  Get next available appointment slots when disabled today's appointments.
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable  ${accId}
@@ -170,7 +176,7 @@ JD-TC-GetNextAvailableAppointmentScheduleById-2
 JD-TC-GetNextAvailableAppointmentScheduleById-3
 
     [Documentation]  Get Today's next available appointment slots when Again enabled today's appointments.
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable  ${accId}
@@ -215,7 +221,7 @@ JD-TC-GetNextAvailableAppointmentScheduleById-3
     ${apptfor}=   Create List  ${apptfor1}
     Set Suite Variable   ${apptfor}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME16}   
     Set Suite Variable   ${cid}
     ${cnote}=   FakerLibrary.name
@@ -231,7 +237,7 @@ JD-TC-GetNextAvailableAppointmentScheduleById-3
 JD-TC-GetNextAvailableAppointmentScheduleById-4
 
     [Documentation]  Get next available appointment slots  when parallel serving is more than one.
-    ${resp}=  ProviderLogin  ${PUSERNAME136}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME136}
     Set Suite Variable  ${accId}
@@ -241,14 +247,19 @@ JD-TC-GetNextAvailableAppointmentScheduleById-4
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id2}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -312,7 +323,7 @@ JD-TC-GetNextAvailableAppointmentScheduleById-4
 JD-TC-GetNextAvailableAppointmentScheduleById-UH1
 
     [Documentation]   Provider try to Get Next Available Appointment
-    ${resp}=  ProviderLogin  ${PUSERNAME138}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME138}
     Set Test Variable   ${accId}  

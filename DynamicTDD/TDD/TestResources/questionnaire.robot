@@ -92,7 +92,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Log  ${unique_itemnames}
     Set Suite Variable   ${unique_itemnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
@@ -102,6 +102,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -128,8 +129,8 @@ JD-TC-ServiceOptionPaymentForItem-4
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -143,8 +144,9 @@ JD-TC-ServiceOptionPaymentForItem-4
     clear_jaldeecoupon   ${cupn_codeG}
     Log  ${cupn_codeG} 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  45
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
 
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
@@ -162,7 +164,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_codeG}
@@ -262,7 +264,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cat_name}=     FakerLibrary.job
-    ${CatalogId1}=   Create Sample Catalog  ${cat_name}  ${item_id1}
+    ${CatalogId1}=   Create Sample Catalog  ${cat_name}   ${tz}  ${item_id1}
 
 # <!-- *** Comment *** -->
 
@@ -286,7 +288,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -329,7 +331,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -435,7 +437,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Set Suite Variable  ${CartAmount}   ${resp.json()['cartAmount']}
     Should Be Equal As Strings      ${CartAmount}   ${ActualAmount}
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -508,7 +510,7 @@ JD-TC-ServiceOptionPaymentForItem-4
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[2]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}  ${item_id1}  
+            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[2]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}  ${item_id1}  
         END
     END
     Set Test Variable  ${CatalogId1}
@@ -535,7 +537,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     #     Log  ${ttype}
     #     ${u_ttype}=    Remove Duplicates    ${ttype}
     #     Log  ${u_ttype}
-    #     ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[2]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}  ${item_id1}  
+    #     ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[2]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}  ${item_id1}  
     # END
     # Set Test Variable  ${CatalogId1}
 
@@ -559,7 +561,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -602,7 +604,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.ynwtest@netvarth.com
@@ -708,7 +710,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Set Suite Variable  ${CartAmount}   ${resp.json()['cartAmount']}
     Should Be Equal As Strings      ${CartAmount}   ${ActualAmount}
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

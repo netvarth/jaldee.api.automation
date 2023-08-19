@@ -22,12 +22,20 @@ ${countryCode}   +91
 JD-TC-GetOrderSettingsByAccountid-1
     [Documentation]   Get Order Settings after signup
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid222}  ${resp.json()['id']}
-    Set Suite Variable  ${P222_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P222_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph222}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid222}  ${decrypted_data['id']}
+    Set Suite Variable  ${P222_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P222_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph222}  ${decrypted_data['primaryPhoneNumber']}
+    
+    # Set Suite Variable  ${pid222}  ${resp.json()['id']}
+    # Set Suite Variable  ${P222_fName}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${P222_lName}  ${resp.json()['lastName']}
+    # Set Suite Variable  ${Ph222}  ${resp.json()['primaryPhoneNumber']}
 
     ${accId222}=  get_acc_id  ${PUSERNAME222}
     Set Suite Variable  ${accId222}
@@ -47,7 +55,7 @@ JD-TC-GetOrderSettingsByAccountid-1
 JD-TC-GetOrderSettingsByAccountid-2
     [Documentation]   Get Order Settings after Enable order settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${firstname2}=  FakerLibrary.first_name
@@ -80,7 +88,7 @@ JD-TC-GetOrderSettingsByAccountid-2
 JD-TC-GetOrderSettingsByAccountid-3
     [Documentation]   Get Order Settings after Disable order settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Order Settings
@@ -101,7 +109,7 @@ JD-TC-GetOrderSettingsByAccountid-3
 JD-TC-GetOrderSettingsByAccountid-4
     [Documentation]   Enable order settings through Updation, after that Get Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fName}=    FakerLibrary.word
@@ -144,7 +152,7 @@ JD-TC-GetOrderSettingsByAccountid-4
 JD-TC-GetOrderSettingsByAccountid-5
     [Documentation]   Disable order settings through Updation, after that Get Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME222}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME222}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -188,12 +196,20 @@ JD-TC-GetOrderSettingsByAccountid-5
 JD-TC-GetOrderSettingsByAccountid-6
     [Documentation]   Update Email again and Get Order Settings 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid32}  ${resp.json()['id']}
-    Set Suite Variable  ${P32_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P32_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph32}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid32}  ${decrypted_data['id']}
+    Set Suite Variable  ${P32_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P32_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph32}  ${decrypted_data['primaryPhoneNumber']}
+
+    # Set Suite Variable  ${pid32}  ${resp.json()['id']}
+    # Set Suite Variable  ${P32_fName}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${P32_lName}  ${resp.json()['lastName']}
+    # Set Suite Variable  ${Ph32}  ${resp.json()['primaryPhoneNumber']}
 
     ${accId32}=  get_acc_id  ${PUSERNAME32}
     Set Suite Variable  ${accId32}

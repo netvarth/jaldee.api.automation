@@ -32,7 +32,7 @@ JD-TC-CancelOrder-UH1
     clear_service  ${PUSERNAME123}
     clear_customer   ${PUSERNAME123}
     clear_Item   ${PUSERNAME123}
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid3}  ${resp.json()['id']}
@@ -108,17 +108,17 @@ JD-TC-CancelOrder-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   3  30 
+    ${eTime3}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime3}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -205,7 +205,7 @@ JD-TC-CancelOrder-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity1}
@@ -255,7 +255,7 @@ JD-TC-CancelOrder-1
     [Documentation]    Cancel order by Provider after the date of order
 
     change_system_date   15
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

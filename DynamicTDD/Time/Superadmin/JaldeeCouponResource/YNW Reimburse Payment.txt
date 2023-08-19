@@ -26,7 +26,7 @@ ${longi}        89.524764
 ${latti}        86.524764
 *** Test Cases ***
 
-YNW-TC-Reimburse payment-1
+JD-TC-Reimburse payment-1
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME7}
     Comment  Provider apply a coupon after waitlist ,done payment, settil bill,Request for payment then done reimburse payment through CHEQUE(full amount paid)    
@@ -213,7 +213,7 @@ YNW-TC-Reimburse payment-1
     Should Be Equal As Strings  ${resp.json()['balanceDue']}  0.0
 
 
-YNW-TC-Reimburse payment-2
+JD-TC-Reimburse payment-2
     Comment     Reimburse payment of same jaldee coupon and same provider
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -317,7 +317,7 @@ YNW-TC-Reimburse payment-2
     Should Be Equal As Strings  ${resp.json()['reimbursed']}  100.0 
     Should Be Equal As Strings  ${resp.json()['balanceDue']}  0.0
 
-YNW-TC-Reimburse payment-UH1
+JD-TC-Reimburse payment-UH1
     Comment  SA do payment for already fully paid inoice id
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -328,7 +328,7 @@ YNW-TC-Reimburse payment-UH1
     Should Be Equal As Strings  "${resp.json()}"  "Reimburse payment for jaldee coupon has already done"
 
 
-YNW-TC-Reimburse payment-3
+JD-TC-Reimburse payment-3
     Comment  SA do reimuburse payment of 2 jaldeee coupon and same provider
     change_system_time  0  1  
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
@@ -496,7 +496,7 @@ YNW-TC-Reimburse payment-3
     Should Be Equal As Strings  ${resp.json()['reimbursed']}  50.0 
     Should Be Equal As Strings  ${resp.json()['balanceDue']}  0.0
 
-YNW-TC-Reimburse payment-UH3
+JD-TC-Reimburse payment-UH3
     Comment  SA reimburse payment     
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -592,7 +592,7 @@ YNW-TC-Reimburse payment-UH3
     Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
 
-YNW-TC-Reimburse payment-4
+JD-TC-Reimburse payment-4
     Comment  Check an alert is gone after payment of reimburse done    
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -705,13 +705,13 @@ YNW-TC-Reimburse payment-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain    ${resp.json()}  payment of reimburse is done
 
-YNW-TC-Reimburse payment -UH4
+JD-TC-Reimburse payment -UH4
     Comment  Reimburse payment without login  
     ${resp}=  Reimburse Payment  ${invoices}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-Reimburse payment -UH5
+JD-TC-Reimburse payment -UH5
     Comment   Consumer do Reimburse payment
     ${resp}=   Consumer Login  ${CUSERNAME}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -719,7 +719,7 @@ YNW-TC-Reimburse payment -UH5
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-Reimburse payment -UH6
+JD-TC-Reimburse payment -UH6
     Comment   Provider do Reimburse payment
     ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -728,7 +728,7 @@ YNW-TC-Reimburse payment -UH6
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
     
 *** Comment ***
-YNW-TC-Reimburse payment-UH2
+JD-TC-Reimburse payment-UH2
     Comment  SA do invalid amount reimburse payment     
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200

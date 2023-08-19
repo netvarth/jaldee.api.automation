@@ -26,7 +26,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-1
                                   
     [Documentation]               Get CDL Settings
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -42,7 +42,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-UH1
                                   
     [Documentation]               Get CDL Settings where cdl settings is not created
 
-    ${resp}=   ProviderLogin  ${PUSERNAME44}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

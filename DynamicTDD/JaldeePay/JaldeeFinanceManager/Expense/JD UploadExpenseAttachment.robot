@@ -34,7 +34,7 @@ JD-TC-UploadAttachment-1
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Vendor)
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${userName}  ${resp.json()['userName']}
@@ -43,6 +43,7 @@ JD-TC-UploadAttachment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -154,7 +155,7 @@ JD-TC-UploadAttachment-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -226,7 +227,7 @@ JD-TC-UploadAttachment-UH1
 
     [Documentation]  Create Category and upload a attachment with invalid Vendor id.
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}

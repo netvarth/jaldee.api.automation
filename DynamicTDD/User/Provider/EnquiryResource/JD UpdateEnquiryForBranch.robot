@@ -22,7 +22,7 @@ JD-TC-Update Enquiry For Branch-1
     [Documentation]   Update Enquiry for a branch with all details.
     Comment   Task and Lead does not get created automatically on updating enquireMasterId & leadMasterId, like it does when creating with it.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -37,8 +37,13 @@ JD-TC-Update Enquiry For Branch-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -210,7 +215,7 @@ JD-TC-Update Enquiry For Branch-1
 JD-TC-Update Enquiry For Branch-2
     [Documentation]   Update Enquiry for a branch with a different customer.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -224,8 +229,13 @@ JD-TC-Update Enquiry For Branch-2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -345,7 +355,7 @@ JD-TC-Update Enquiry For Branch-2
 JD-TC-Update Enquiry For Branch-3
     [Documentation]   Update Enquiry for a branch with a different location.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -359,8 +369,13 @@ JD-TC-Update Enquiry For Branch-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -470,7 +485,7 @@ JD-TC-Update Enquiry For Branch-3
 JD-TC-Update Enquiry For Branch-4
     [Documentation]   Update Enquiry twice with same details.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -484,8 +499,13 @@ JD-TC-Update Enquiry For Branch-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -618,7 +638,7 @@ JD-TC-Update Enquiry For Branch-4
 JD-TC-Update Enquiry For Branch-5
     [Documentation]   Update Enquiry without catagory.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -632,8 +652,13 @@ JD-TC-Update Enquiry For Branch-5
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -743,7 +768,7 @@ JD-TC-Update Enquiry For Branch-5
 JD-TC-Update Enquiry For Branch-6
     [Documentation]   Update Enquiry without catagory type.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -757,8 +782,13 @@ JD-TC-Update Enquiry For Branch-6
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -867,7 +897,7 @@ JD-TC-Update Enquiry For Branch-6
 JD-TC-Update Enquiry For Branch-7
     [Documentation]   Update Enquiry without priority.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -881,8 +911,13 @@ JD-TC-Update Enquiry For Branch-7
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -992,7 +1027,7 @@ JD-TC-Update Enquiry For Branch-7
 JD-TC-Update Enquiry For Branch-8
     [Documentation]   Update Enquiry without status.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1006,8 +1041,13 @@ JD-TC-Update Enquiry For Branch-8
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -1114,7 +1154,7 @@ JD-TC-Update Enquiry For Branch-8
 JD-TC-Update Enquiry For Branch-9
     [Documentation]   Update Enquiry with a different category.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1128,8 +1168,13 @@ JD-TC-Update Enquiry For Branch-9
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -1194,7 +1239,7 @@ JD-TC-Update Enquiry For Branch-9
 JD-TC-Update Enquiry For Branch-10
     [Documentation]   Update Enquiry with a different type.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1208,8 +1253,13 @@ JD-TC-Update Enquiry For Branch-10
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -1280,7 +1330,7 @@ JD-TC-Update Enquiry For Branch-10
 JD-TC-Update Enquiry For Branch-11
     [Documentation]   Update Enquiry with a different priority.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1294,8 +1344,13 @@ JD-TC-Update Enquiry For Branch-11
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -1360,7 +1415,7 @@ JD-TC-Update Enquiry For Branch-11
 JD-TC-Update Enquiry For Branch-UH1
     [Documentation]   Update Enquiry with isLeadAutogenerate as true when leadMasterId & enquireMasterId are not provided.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1374,8 +1429,13 @@ JD-TC-Update Enquiry For Branch-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     clear_customer   ${MUSERNAME28}
 
@@ -1416,7 +1476,7 @@ JD-TC-Update Enquiry For Branch-UH1
 #     [Documentation]   Update Enquiry with isLeadAutogenerate as true, leadMasterId & enquireMasterId.
 #     comment  Lead doesn't get generated.
 
-#     ${resp}=   ProviderLogin  ${MUSERNAME28}  ${PASSWORD}
+#     ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 

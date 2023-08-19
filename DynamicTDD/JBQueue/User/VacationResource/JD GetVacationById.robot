@@ -45,7 +45,7 @@ JD-TC-GetByIdVacation-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -56,8 +56,6 @@ JD-TC-GetByIdVacation-1
     Set Suite Variable  ${bs}
 
 
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     ${ph1}=  Evaluate  ${MUSERNAME_E1}+1099880111
@@ -70,19 +68,25 @@ JD-TC-GetByIdVacation-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  subtract_time  3  00
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  subtract_timezone_time  ${tz}  3  00
     Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_time   4  30
+    ${eTime}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -117,12 +121,20 @@ JD-TC-GetByIdVacation-1
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}
+        ${resp1}=  Enable Waitlist
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+    END
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp1}=  Toggle Department Enable
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+    END
     sleep   01s
 
     ${resp}=  Get jaldeeIntegration Settings
@@ -138,10 +150,17 @@ JD-TC-GetByIdVacation-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
+    # ${resp}=  View Waitlist Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Toggle Department Enable
+    #     Log  ${resp.content}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
+
+    # END
+    
+    # sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -166,14 +185,14 @@ JD-TC-GetByIdVacation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Test Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   4  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  4  00  
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -198,13 +217,13 @@ JD-TC-GetByIdVacation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]}
 
-    ${start_time}=  add_time   0  20
-    ${end_time}=    add_time   1  45 
-    ${CUR_DAY}=  get_date
+    ${start_time}=  add_timezone_time  ${tz}  0  20  
+    ${end_time}=    add_timezone_time  ${tz}  0  45   
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${CUR_DAY}
     ${desc}=    FakerLibrary.name
 
-    # ${Last_Day}=  add_date   3
+    # ${Last_Day}=  db.add_timezone_date  ${tz}   3
     # ${resp}=  Create Vacation  ${start_time}  ${end_time}  ${CUR_day}  ${desc}  ${p1_id}
     ${resp}=  Create Vacation   ${desc}  ${p1_id}  ${recurringtype[1]}  ${list}  ${CUR_day}  ${CUR_day}  ${EMPTY}  ${start_time}  ${end_time}  
     Log  ${resp.json()}
@@ -226,7 +245,7 @@ JD-TC-GetByIdVacation-1
 JD-TC-GetByIdVacation-2
     [Documentation]   Get By Id after Created a Vacation When Appointment is Enable
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -250,10 +269,10 @@ JD-TC-GetByIdVacation-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
-    ${resp}=  Get User
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p3_id}   ${resp.json()[0]['id']}
+    # ${resp}=  Get User
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${p3_id}   ${resp.json()[0]['id']}
     # Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
    
     ${description}=  FakerLibrary.sentence
@@ -270,10 +289,9 @@ JD-TC-GetByIdVacation-2
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
    
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=60  max=90
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
@@ -295,12 +313,12 @@ JD-TC-GetByIdVacation-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
 
-    ${start_time}=  add_time   1  20
-    ${end_time}=    add_time   1  45 
-    ${CUR_DAY}=  get_date
+    ${start_time}=  add_timezone_time  ${tz}   1  20
+    ${end_time}=    add_timezone_time  ${tz}  0  45   
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${desc}=    FakerLibrary.name
     # ${resp}=  Create Vacation  ${start_time}  ${end_time}  ${CUR_day}  ${desc}  ${p1_id}
-    ${resp}=  Create Vacation   ${desc}  ${p3_id}  ${recurringtype[1]}  ${list}  ${CUR_day}  ${CUR_day}  ${EMPTY}  ${start_time}  ${end_time}  
+    ${resp}=  Create Vacation   ${desc}  ${u_id1}  ${recurringtype[1]}  ${list}  ${CUR_day}  ${CUR_day}  ${EMPTY}  ${start_time}  ${end_time}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${v_id1}    ${resp.json()['holidayId']}
@@ -322,7 +340,7 @@ JD-TC-GetByIdVacation-2
 JD-TC-GetByIdVacation-3
     [Documentation]   Get By Id after Created a Vacation
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -346,14 +364,13 @@ JD-TC-GetByIdVacation-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
-    ${resp}=  Get User
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p4_id}   ${resp.json()[0]['id']}
+    # ${resp}=  Get User
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${p4_id}   ${resp.json()[0]['id']}
     # Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
     
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   4  00
+      
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -363,6 +380,9 @@ JD-TC-GetByIdVacation-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
+
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  4  00
     ${queue_name}=  FakerLibrary.name
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id2}  ${s_id}
     Log  ${resp.json()}
@@ -393,12 +413,12 @@ JD-TC-GetByIdVacation-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}    waitlist=${bool[1]}
 
-    ${start_time}=  add_time   2  00
-    ${end_time}=    add_time   3  00 
-    ${CUR_DAY}=  get_date
+    ${start_time}=  add_timezone_time  ${tz}  2  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${desc}=    FakerLibrary.name
     # ${resp}=  Create Vacation  ${start_time}  ${end_time}  ${CUR_day}  ${desc}  ${p1_id}
-    ${resp}=  Create Vacation   ${desc}  ${p4_id}  ${recurringtype[1]}  ${list}  ${CUR_day}  ${CUR_day}  ${EMPTY}  ${start_time}  ${end_time} 
+    ${resp}=  Create Vacation   ${desc}  ${u_id2}  ${recurringtype[1]}  ${list}  ${CUR_day}  ${CUR_day}  ${EMPTY}  ${start_time}  ${end_time} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${v_id2}    ${resp.json()['holidayId']}
@@ -418,7 +438,7 @@ JD-TC-GetByIdVacation-3
 
 JD-TC-GetByIdVacation-UH1
     [Documentation]    GetById is Zero after Created a Vacation
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Vacation By Id   0
@@ -429,7 +449,7 @@ JD-TC-GetByIdVacation-UH1
 
 JD-TC-GetByIdVacation-UH2
     [Documentation]  Verifying Get By id Using Existing Branch Number
-    ${resp}=  Provider Login  ${MUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -461,7 +481,7 @@ JD-TC-GetByIdVacation-UH4
 
 # JD-TC-GetByIdVacation-UH5
 #     [Documentation]  Verifying Get By id Using another Branch user ID
-#     ${resp}=  Provider Login  ${MUSERNAME12}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${MUSERNAME12}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -488,7 +508,7 @@ JD-TC-GetByIdVacation-UH4
 ***comment***
 JD-TC-GetByIdVacation-4
     [Documentation]   GetById is Empty after Created a Vacation   
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Vacation By Id  ${EMPTY}

@@ -27,10 +27,10 @@ JD-TC-GetWaitlistByEncryptedIDHistory-1
     clear_location   ${PUSERNAME68}
     clear_service    ${PUSERNAME68}
     clear_waitlist   ${PUSERNAME68}
-    ${resp}=  ProviderLogin  ${PUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
     ${lid}=   Create Sample Location
     Set Suite Variable    ${lid} 
@@ -42,9 +42,9 @@ JD-TC-GetWaitlistByEncryptedIDHistory-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_time  2  00
+    ${strt_time}=   subtract_timezone_time  ${tz}  2  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time       0  20 
+    ${end_time}=    add_timezone_time  ${tz}       0  20 
     Set Suite Variable    ${end_time} 
     ${capacity}=  Random Int  min=8   max=20
     ${parallel}=  Random Int   min=1   max=2
@@ -72,11 +72,10 @@ JD-TC-GetWaitlistByEncryptedIDHistory-1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id}  ${wid[0]}
   
-    ${resp}=  ProviderLogin  ${PUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By Id  ${waitlist_id} 
     Log   ${resp.json()}
@@ -98,7 +97,7 @@ JD-TC-GetWaitlistByEncryptedIDHistory-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     change_system_date   3
-    ${resp}=  ProviderLogin  ${PUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist History
     Log   ${resp.json()}
@@ -113,7 +112,7 @@ JD-TC-GetWaitlistByEncryptedIDHistory-UH1
     [Documentation]   View Waitlist By Encoded Id
 
     change_system_date   3
-    ${resp}=  ProviderLogin  ${PUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}   200
     
     ${resp}=  Get Waitlist By Id  ${waitlist_id} 
@@ -130,7 +129,7 @@ JD-TC-GetWaitlistByEncryptedIDHistory-UH2
     [Documentation]   View Waitlist By Encoded Id is Zero
 
     change_system_date   3
-    ${resp}=  ProviderLogin  ${PUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}   200
     
     ${resp}=  Get Waitlist By Id  ${waitlist_id} 

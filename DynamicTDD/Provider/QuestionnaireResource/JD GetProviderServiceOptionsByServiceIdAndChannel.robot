@@ -207,7 +207,7 @@ JD-TC-ServiceOptionsByChannelServiceId-1
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -256,7 +256,7 @@ JD-TC-ServiceOptionsByChannelServiceId-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -321,7 +321,7 @@ JD-TC-ServiceOptionsByChannelServiceId-1
 JD-TC-ServiceOptionsByChannelServiceId-2
     [Documentation]  Get Service options by service id and channel for a consumer Where Channel is online
     
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -419,7 +419,7 @@ JD-TC-ServiceOptionsByChannelServiceId-2
 JD-TC-ServiceOptionsByChannelServiceId-3
     [Documentation]     Get Service options by service id and channel for a consumer Where Channel is any
     
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -516,7 +516,7 @@ JD-TC-ServiceOptionsByChannelServiceId-3
 JD-TC-ServiceOptionsByChannelServiceId-4
     [Documentation]     Get Service options by service id and channel for a consumer Where Channel is PHONEIN
     
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

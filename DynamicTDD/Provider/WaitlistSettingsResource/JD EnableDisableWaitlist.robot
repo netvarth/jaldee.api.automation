@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-EnableDisableWaitlist-1
     [Documentation]  Disable  waitlist by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -25,11 +25,13 @@ JD-TC-EnableDisableWaitlist-1
     ${resp}=   Disable Waitlist
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  enabledWaitlist=${bool[0]}
 
 JD-TC-EnableDisableWaitlist-2
     [Documentation]  Enable waitlist by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -44,7 +46,7 @@ JD-TC-EnableDisableWaitlist-2
 
 JD-TC-EnableDisableWaitlist-UH1
     [Documentation]  Enable a waitlist when already enabled waitlist
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Enable Waitlist
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -52,7 +54,7 @@ JD-TC-EnableDisableWaitlist-UH1
 
 JD-TC-EnableDisableWaitlist-UH2
     [Documentation]  Disable a waitlist when already disabled waitlist
-    ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Waitlist
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -90,7 +92,7 @@ JD-TC-EnableDisableWaitlist-UH6
      
 JD-TC-EnableDisableWaitlist-PRE
     [Documentation]  Enable waitlist by login as a  valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable Waitlist
     Log   ${resp.json()}

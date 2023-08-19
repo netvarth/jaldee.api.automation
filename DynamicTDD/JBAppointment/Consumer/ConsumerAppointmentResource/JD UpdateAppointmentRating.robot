@@ -27,7 +27,7 @@ JD-TC-UpdateAppointmentRating-1
 
 	[Documentation]    Consumer Update Appointment Rating.
 	
-    ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_queue    ${PUSERNAME102}
     clear_service  ${PUSERNAME102}
@@ -36,11 +36,11 @@ JD-TC-UpdateAppointmentRating-1
 
     ${pid}=  get_acc_id  ${PUSERNAME102}
     Set Suite Variable  ${pid} 
-    Should Be Equal As Strings    ${resp.status_code}   200
  
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME102}
 
      ${SERVICE1}=   FakerLibrary.name
@@ -59,11 +59,11 @@ JD-TC-UpdateAppointmentRating-1
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${s_id4}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -83,9 +83,9 @@ JD-TC-UpdateAppointmentRating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${DAY2}=  add_date  11      
+    ${DAY2}=  db.add_timezone_date  ${tz}  11      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -153,7 +153,7 @@ JD-TC-UpdateAppointmentRating-1
     Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating1}
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment1}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${rating1} =  roundval  ${rating1}  2
@@ -181,7 +181,7 @@ JD-TC-UpdateAppointmentRating-1
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment1}
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][1]['comments']}  ${comment2}    
     
-    ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${rating12} =  roundval  ${rating12}  2
@@ -194,6 +194,18 @@ JD-TC-UpdateAppointmentRating-1
 JD-TC-UpdateAppointmentRating-2
 
 	[Documentation]    Consumer Update Multiple Appointment ratings.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Location By Id   ${lid} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
@@ -218,7 +230,7 @@ JD-TC-UpdateAppointmentRating-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY}=  add_date  3
+    ${DAY}=  db.add_timezone_date  ${tz}  3  
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -260,7 +272,7 @@ JD-TC-UpdateAppointmentRating-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY11}=  add_date  2
+    ${DAY11}=  db.add_timezone_date  ${tz}  2  
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id3}  ${sch_id1}  ${DAY11}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -288,7 +300,7 @@ JD-TC-UpdateAppointmentRating-2
     ${avg_round}=     roundval    ${avg_rating}   2
     Set Suite Variable   ${avg_round}   
 
-    ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -318,7 +330,7 @@ JD-TC-UpdateAppointmentRating-2
     # ${avg_round11}=     roundval    ${avg_rating}   2
     Set Suite Variable   ${avg_round11}   
 
-    ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -362,7 +374,7 @@ JD-TC-UpdateAppointmentRating-3
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot3}   firstName=${family_fname}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY2}=  add_date  7
+    ${DAY2}=  db.add_timezone_date  ${tz}  7  
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id4}  ${sch_id1}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -388,7 +400,7 @@ JD-TC-UpdateAppointmentRating-3
     ${avg_round1}=     roundval    ${avg_rating}   2
     Set Suite Variable   ${avg_round1}  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
   
     ${resp}=  Get Business Profile
@@ -416,7 +428,7 @@ JD-TC-UpdateAppointmentRating-3
     ${avg_round12}=     roundval    ${avg_rating}   2
     Set Suite Variable   ${avg_round12}  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -436,7 +448,7 @@ JD-TC-UpdateAppointmentRating-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY3}=  add_date  3
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
     # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -455,7 +467,7 @@ JD-TC-UpdateAppointmentRating-4
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
 
-    # ${DAY3}=  add_date  3
+    # ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -511,7 +523,7 @@ JD-TC-UpdateAppointmentRating-6
 
 	[Documentation]    Update Appointment rating by provider login.
 
-    ${resp}=  Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -543,7 +555,7 @@ JD-TC-UpdateAppointmentRating-6
     ${apptfor}=   Create List  ${apptfor1}
     Set Test Variable   ${apptfor}  
     
-    ${DAY3}=  add_date  9
+    ${DAY3}=  db.add_timezone_date  ${tz}  9
     ${cnote}=   FakerLibrary.name
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
@@ -657,7 +669,7 @@ JD-TC-UpdateAppointmentRating-UH7
 
 	[Documentation]   Update Rating By Consumer using another provider's account id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid1}=  get_acc_id  ${PUSERNAME104}
     

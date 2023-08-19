@@ -52,18 +52,22 @@ JD-TC-ShareprescriptionThirdparty-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName}    ${resp.json()['userName']}         
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
-    ${pid}=  get_acc_id  ${PUSERNAME_C}
-    Set Suite Variable  ${pid}
+    # ${pid}=  get_acc_id  ${PUSERNAME_C}
+    # Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_C}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_C}+25566122
@@ -75,18 +79,22 @@ JD-TC-ShareprescriptionThirdparty-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -94,6 +102,7 @@ JD-TC-ShareprescriptionThirdparty-1
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
 
     ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
     Log  ${fields.json()}
@@ -144,19 +153,24 @@ JD-TC-ShareprescriptionThirdparty-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${CUR_DAY}
     ${C_date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
     Set Suite Variable   ${C_date}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable   ${strt_time}
-    ${end_time}=    add_time  3  00  
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -168,14 +182,13 @@ JD-TC-ShareprescriptionThirdparty-1
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -249,7 +262,7 @@ JD-TC-ShareprescriptionThirdparty-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${mr_id1}   ${resp.json()}
     
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Get MR By Id  ${mr_id1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -304,18 +317,21 @@ JD-TC-ShareprescriptionThirdparty-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id1}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName1}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName1}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id1}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName1}    ${resp.json()['userName']}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
-    ${pid0}=  get_acc_id  ${PUSERNAME_D}
-    Set Suite Variable  ${pid0}
+    # ${pid0}=  get_acc_id  ${PUSERNAME_D}
+    # Set Suite Variable  ${pid0}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_D}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_D}+25566122
@@ -327,18 +343,22 @@ JD-TC-ShareprescriptionThirdparty-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -346,6 +366,7 @@ JD-TC-ShareprescriptionThirdparty-2
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
     Log  ${fields.json()}
@@ -386,16 +407,20 @@ JD-TC-ShareprescriptionThirdparty-2
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id2}    ${resp}  
+    Set Suite Variable    ${loc_id2}    ${resp} 
+    ${resp}=   Get Location ById  ${loc_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}   
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id2}    ${resp}  
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time1}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time1}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable   ${strt_time1}
-    ${end_time}=    add_time  3  00  
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2} 
@@ -407,7 +432,7 @@ JD-TC-ShareprescriptionThirdparty-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -419,7 +444,7 @@ JD-TC-ShareprescriptionThirdparty-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -428,8 +453,8 @@ JD-TC-ShareprescriptionThirdparty-2
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -492,7 +517,7 @@ JD-TC-ShareprescriptionThirdparty-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -504,7 +529,7 @@ JD-TC-ShareprescriptionThirdparty-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -514,8 +539,8 @@ JD-TC-ShareprescriptionThirdparty-3
     Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
 
     
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -593,7 +618,7 @@ JD-TC-ShareprescriptionThirdparty-4
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
        
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${cidfor}  
     Log  ${resp.json()}
@@ -605,7 +630,7 @@ JD-TC-ShareprescriptionThirdparty-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -619,8 +644,8 @@ JD-TC-ShareprescriptionThirdparty-4
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    # ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    # ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -641,7 +666,7 @@ JD-TC-ShareprescriptionThirdparty-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mr_id}   ${resp.json()}
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
 
     ${resp}=  Get MR By Id  ${mr_id} 
     Log  ${resp.json()}
@@ -689,7 +714,7 @@ JD-TC-ShareprescriptionThirdparty-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -709,10 +734,10 @@ JD-TC-ShareprescriptionThirdparty-5
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -785,8 +810,8 @@ JD-TC-ShareprescriptionThirdparty-5
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -878,7 +903,7 @@ JD-TC-ShareprescriptionThirdparty-6
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME7}   
     Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
@@ -907,7 +932,7 @@ JD-TC-ShareprescriptionThirdparty-6
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -916,8 +941,8 @@ JD-TC-ShareprescriptionThirdparty-6
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1016,7 +1041,7 @@ JD-TC-ShareprescriptionThirdparty-7
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME7}   
     Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
@@ -1045,7 +1070,7 @@ JD-TC-ShareprescriptionThirdparty-7
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1059,8 +1084,8 @@ JD-TC-ShareprescriptionThirdparty-7
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1140,14 +1165,17 @@ JD-TC-ShareprescriptionThirdparty-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id3}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName3}    ${resp.json()['userName']}   
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id3}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName3}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id3}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName3}    ${resp.json()['userName']}  
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
     ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
@@ -1159,18 +1187,22 @@ JD-TC-ShareprescriptionThirdparty-8
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1214,9 +1246,16 @@ JD-TC-ShareprescriptionThirdparty-8
 
     ${id}=  get_id  ${MUSERNAME_E}
     ${bs}=  FakerLibrary.bs
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1267,17 +1306,18 @@ JD-TC-ShareprescriptionThirdparty-8
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime4}=  add_time  0  15
+    ${sTime4}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable  ${sTime4}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
 
     ${resp}=  Get Locations
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=05  max=10
@@ -1322,7 +1362,6 @@ JD-TC-ShareprescriptionThirdparty-8
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -1334,8 +1373,8 @@ JD-TC-ShareprescriptionThirdparty-8
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1395,7 +1434,7 @@ JD-TC-ShareprescriptionThirdparty-8
 JD-TC-ShareprescriptionThirdparty-UH1
     [Documentation]   Share prescription to thirdparty without using any medium
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1413,14 +1452,13 @@ JD-TC-ShareprescriptionThirdparty-UH1
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1478,7 +1516,7 @@ JD-TC-ShareprescriptionThirdparty-UH1
 JD-TC-ShareprescriptionThirdparty-UH2
     [Documentation]   share prescription to third party for a canceled waitlist (After prescription creation provider cancel the waitlist and try to share mr prescreption)
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1496,18 +1534,17 @@ JD-TC-ShareprescriptionThirdparty-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     ${desc}=   FakerLibrary.word
-    ${CUR_DAY}=  get_date   
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}   
     ${resp}=  Add To Waitlist  ${cid3}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid3} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1572,7 +1609,7 @@ JD-TC-ShareprescriptionThirdparty-UH2
 JD-TC-ShareprescriptionThirdparty-UH3
     [Documentation]   Share prescription to thirdparty without msg.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1597,7 +1634,7 @@ JD-TC-ShareprescriptionThirdparty-UH3
 JD-TC-ShareprescriptionThirdparty-UH4
     [Documentation]   Share prescription to thirdparty without html.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1622,7 +1659,7 @@ JD-TC-ShareprescriptionThirdparty-UH4
 JD-TC-ShareprescriptionThirdparty-UH5
     [Documentation]   Share prescription to thirdparty with invalid mrid.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1647,7 +1684,7 @@ JD-TC-ShareprescriptionThirdparty-UH5
 JD-TC-ShareprescriptionThirdparty-UH6
     [Documentation]   Share prescription to thirdparty with another mrid.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1736,7 +1773,7 @@ JD-TC-ShareprescriptionThirdparty-UH8
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME17}   
     Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
@@ -1765,7 +1802,7 @@ JD-TC-ShareprescriptionThirdparty-UH8
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1784,8 +1821,8 @@ JD-TC-ShareprescriptionThirdparty-UH8
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1807,7 +1844,7 @@ JD-TC-ShareprescriptionThirdparty-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mr_id}   ${resp.json()}
     
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Get MR By Id  ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1841,7 +1878,7 @@ JD-TC-ShareprescriptionThirdparty-UH8
     Should Be Equal As Strings  ${resp.json()['apptStatus']}        ${appt_status[4]}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}    ${sch_id}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1866,7 +1903,7 @@ JD-TC-ShareprescriptionThirdparty-UH8
 JD-TC-ShareprescriptionThirdparty-9
     [Documentation]  Share prescription image to thirdparty for a waitlist(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1883,14 +1920,13 @@ JD-TC-ShareprescriptionThirdparty-9
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaints}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1949,7 +1985,7 @@ JD-TC-ShareprescriptionThirdparty-9
 JD-TC-ShareprescriptionThirdparty-10
     [Documentation]   Share prescription image to thirdparty for a waitlist(Walk-in) and share through email, do not expirable
     
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1969,7 +2005,6 @@ JD-TC-ShareprescriptionThirdparty-10
     ${resp}=  Add To Waitlist  ${cid4}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid4} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -1977,7 +2012,7 @@ JD-TC-ShareprescriptionThirdparty-10
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaints}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -2043,7 +2078,7 @@ JD-TC-ShareprescriptionThirdparty-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -2055,7 +2090,7 @@ JD-TC-ShareprescriptionThirdparty-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2065,8 +2100,8 @@ JD-TC-ShareprescriptionThirdparty-11
     Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
 
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${wid2}  ${bookingType[0]}  ${consultationMode[0]}  ${CUR_DAY}  ${status[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2124,7 +2159,7 @@ JD-TC-ShareprescriptionThirdparty-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200        
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
@@ -2136,7 +2171,7 @@ JD-TC-ShareprescriptionThirdparty-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2145,8 +2180,8 @@ JD-TC-ShareprescriptionThirdparty-12
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${wid2}  ${bookingType[0]}  ${consultationMode[0]}  ${CUR_DAY}  ${status[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2212,7 +2247,7 @@ JD-TC-ShareprescriptionThirdparty-13
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cidfor}   ${resp.json()}
        
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${cidfor}  
     Log  ${resp.json()}
@@ -2224,7 +2259,7 @@ JD-TC-ShareprescriptionThirdparty-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2238,13 +2273,13 @@ JD-TC-ShareprescriptionThirdparty-13
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mr_id}   ${resp.json()}
     
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Get MR By Id  ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2301,7 +2336,7 @@ JD-TC-ShareprescriptionThirdparty-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2321,10 +2356,10 @@ JD-TC-ShareprescriptionThirdparty-14
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime2}=  db.get_time
+    ${sTime2}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime2}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
@@ -2399,8 +2434,8 @@ JD-TC-ShareprescriptionThirdparty-14
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
 
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2512,7 +2547,7 @@ JD-TC-ShareprescriptionThirdparty-15
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id2}
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2521,8 +2556,8 @@ JD-TC-ShareprescriptionThirdparty-15
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2641,7 +2676,7 @@ JD-TC-ShareprescriptionThirdparty-16
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id2}
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2655,8 +2690,8 @@ JD-TC-ShareprescriptionThirdparty-16
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2708,7 +2743,7 @@ JD-TC-ShareprescriptionThirdparty-16
 JD-TC-ShareprescriptionThirdparty-17
     [Documentation]  User Share prescription image to third party(waitlist for current day) and share through phone and email
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2728,12 +2763,11 @@ JD-TC-ShareprescriptionThirdparty-17
     Set Test Variable  ${cid3}  ${resp.json()[0]['id']}
 
     ${cons_id}=  get_id  ${CUSERNAME2} 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist By User  ${cid3}  ${s_id}  ${q_id}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${u_id}  ${cid3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -2745,7 +2779,7 @@ JD-TC-ShareprescriptionThirdparty-17
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid3}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid3}
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR  ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2800,7 +2834,7 @@ JD-TC-ShareprescriptionThirdparty-17
 JD-TC-ShareprescriptionThirdparty-UH9
     [Documentation]   Share prescription image to third party for a  customer with invalid email(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2819,15 +2853,14 @@ JD-TC-ShareprescriptionThirdparty-UH9
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2882,7 +2915,7 @@ JD-TC-ShareprescriptionThirdparty-UH9
 JD-TC-ShareprescriptionThirdparty-UH10
     [Documentation]   Share prescription image to thirdparty for a customer with invalid phone number (Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2901,14 +2934,13 @@ JD-TC-ShareprescriptionThirdparty-UH10
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR  ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2961,7 +2993,7 @@ JD-TC-ShareprescriptionThirdparty-UH10
 JD-TC-ShareprescriptionThirdparty-UH11
     [Documentation]   Share prescription image to third party without using any medium(Walk-in).
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2983,14 +3015,13 @@ JD-TC-ShareprescriptionThirdparty-UH11
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR  ${wid}  ${bookingType[0]}  ${consultationMode[3]}   ${CUR_DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3043,7 +3074,7 @@ JD-TC-ShareprescriptionThirdparty-UH11
 JD-TC-ShareprescriptionThirdparty-UH12
     [Documentation]   share prescription image to third party for a canceled waitlist (After prescription image upload provider cancel the waitlist and try to share mr prescreption image)
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3061,18 +3092,17 @@ JD-TC-ShareprescriptionThirdparty-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     ${desc}=   FakerLibrary.word
-    ${CUR_DAY}=  get_date   
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}   
     ${resp}=  Add To Waitlist  ${cid3}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid3} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid3} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid3}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3136,7 +3166,7 @@ JD-TC-ShareprescriptionThirdparty-UH12
 JD-TC-ShareprescriptionThirdparty-UH13
     [Documentation]   Share prescription image to third party without msg.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3172,7 +3202,7 @@ JD-TC-ShareprescriptionThirdparty-UH13
 JD-TC-ShareprescriptionThirdparty-UH14
     [Documentation]   Share prescription image  to third party with invalid mrid.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3208,7 +3238,7 @@ JD-TC-ShareprescriptionThirdparty-UH14
 JD-TC-ShareprescriptionThirdparty-UH15
     [Documentation]   Share prescription to third party with another mrid.
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3287,7 +3317,7 @@ JD-TC-ShareprescriptionThirdparty-UH16
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME17}   
     Set Test Variable   ${cid}
     ${cnote}=   FakerLibrary.name
@@ -3316,7 +3346,7 @@ JD-TC-ShareprescriptionThirdparty-UH16
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id1}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3335,8 +3365,8 @@ JD-TC-ShareprescriptionThirdparty-UH16
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR   ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}   ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3387,7 +3417,7 @@ JD-TC-ShareprescriptionThirdparty-UH16
     Should Be Equal As Strings  ${resp.json()['apptStatus']}        ${appt_status[4]}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}    ${sch_id}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

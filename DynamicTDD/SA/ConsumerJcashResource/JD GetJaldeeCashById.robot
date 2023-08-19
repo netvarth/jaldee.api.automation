@@ -21,6 +21,7 @@ Resource          /ebs/TDD/AppKeywords.robot
 *** Variables ***
 
 ${CUSERPH}      ${CUSERNAME}
+${tz}   Asia/Kolkata
 
 *** Test Cases ***
 
@@ -52,18 +53,18 @@ JD-TC-GetAvailableJcashById-2
     ${name}=  FakerLibrary.name
     Set Suite Variable   ${name}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date 
+    ${start_date}=  db.get_date_by_timezone  ${tz} 
     Set Suite Variable   ${start_date}
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     Set Suite Variable   ${end_date}
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
     Set Suite Variable   ${minOnlinePaymentAmt}
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     Set Suite Variable   ${maxValidUntil}
     ${validForDays}=  Random Int  min=5   max=10 
     Set Suite Variable   ${validForDays}
-    ${ex_date}=    add_date   ${validForDays} 
+    ${ex_date}=    db.add_timezone_date  ${tz}   ${validForDays} 
     Set Suite Variable   ${ex_date}
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -181,13 +182,13 @@ JD-TC-GetAvailableJcashById-3
     ${name1}=  FakerLibrary.name
     Set Suite Variable   ${name1}
     ${EMPTY_List}=  Create List
-    ${start_date1}=  add_date  1 
-    ${end_date1}=  add_date   12  
+    ${start_date1}=  db.add_timezone_date  ${tz}  1   
+    ${end_date1}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt1}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt1}=  Convert To Number  ${minOnlinePaymentAmt1}  1
-    ${maxValidUntil1}=  add_date   26  
+    ${maxValidUntil1}=  db.add_timezone_date  ${tz}   26  
     ${validForDays1}=  Random Int  min=5   max=10 
-    ${ex_date1}=    add_date   ${validForDays1} 
+    ${ex_date1}=    db.add_timezone_date  ${tz}   ${validForDays1} 
     ${maxSpendLimit1}=  Random Int  min=30   max=100 
     ${maxSpendLimit1}=  Convert To Number  ${maxSpendLimit1}  1
     ${max_limit1}=   Set Variable If  ${maxSpendLimit1} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit1}
@@ -317,7 +318,7 @@ JD-TC-GetAvailableJcashById-UH3
 
     [Documentation]    Get Available jaldee cash by provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     

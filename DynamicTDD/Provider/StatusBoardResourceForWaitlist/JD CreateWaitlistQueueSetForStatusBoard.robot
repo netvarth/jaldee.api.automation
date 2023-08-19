@@ -40,7 +40,7 @@ JD-TC-CreateQueueSet-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_K}${\n}
@@ -48,7 +48,7 @@ JD-TC-CreateQueueSet-1
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']} 
     ${resp}=  Toggle Department Enable
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -115,14 +115,14 @@ JD-TC-CreateQueueSet-1
 
 JD-TC-CreateQueueSet-2
 	[Documentation]  Create a Waitlist QueueSet for Queue only
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME130}
     clear_location  ${PUSERNAME130}
     clear_queue   ${PUSERNAME130}
     clear_Statusboard  ${PUSERNAME130}
     clear_Addon  ${PUSERNAME130}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -167,7 +167,7 @@ JD-TC-CreateQueueSet-2
 
 JD-TC-CreateQueueSet-3
 	[Documentation]  Create a QueueSet for Service only
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME119}
     clear_location  ${PUSERNAME119}
@@ -216,7 +216,7 @@ JD-TC-CreateQueueSet-3
 
 JD-TC-CreateQueueSet-4
 	[Documentation]  Create a Waitlist QueueSet for same service with another Waitlist QueueSet details
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${order1}=   Random Int   min=0   max=1
     ${Values}=  FakerLibrary.Words  	nb=3
@@ -274,7 +274,7 @@ JD-TC-CreateQueueSet-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_G}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_G}${\n}
@@ -341,7 +341,7 @@ JD-TC-CreateQueueSet-5
 JD-TC-CreateQueueSet-6
 
 	[Documentation]  Create a QueueSet for same department with another QueueSet details
-    ${resp}=  ProviderLogin  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${order1}=   Random Int   min=0   max=1
     ${Values}=  FakerLibrary.Words  	nb=3
@@ -410,7 +410,7 @@ JD-TC-CreateQueueSet -UH2
 
 JD-TC-CreateQueueSet-UH3
     [Documentation]  Create a QueueSet which is already created
-    ${resp}=  ProviderLogin  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dept1}=   Create Dictionary  departmentId=${depid1}
     ${dept}=  Create List   ${dept1}
@@ -426,7 +426,7 @@ JD-TC-CreateQueueSet-UH3
 
 JD-TC-CreateQueueSet-UH4
 	[Documentation]  Create a Waitlist QueueSet with empty fieldlist
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME119}
     clear_Addon  ${PUSERNAME119}
@@ -456,7 +456,7 @@ JD-TC-CreateQueueSet-UH4
 
 JD-TC-CreateQueueSet-UH5
 	[Documentation]  Create a Waitlist QueueSet with empty Status Board For
-    ${resp}=  ProviderLogin  ${PUSERNAME135}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME135}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME135}
     clear_Addon  ${PUSERNAME135}
@@ -486,7 +486,7 @@ JD-TC-CreateQueueSet-UH5
 
 JD-TC-CreateQueueSet-UH7
 	[Documentation]  Create a QueueSet with status board type and without service list
-    ${resp}=  ProviderLogin  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME105}
     clear_Addon  ${PUSERNAME105}
@@ -514,7 +514,7 @@ JD-TC-CreateQueueSet-UH7
 
 JD-TC-CreateQueueSet-UH8
 	[Documentation]  Create a Waitlist QueueSet with status board type and using invalid sevice ids
-    ${resp}=  ProviderLogin  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${order1}=   Random Int   min=0   max=1
     ${Values}=  FakerLibrary.Words  	nb=3
@@ -537,7 +537,7 @@ JD-TC-CreateQueueSet-UH8
 
 JD-TC-CreateQueueSet-UH9
 	[Documentation]  Create a Waitlist statusboard for a valid provider who is not added addon of Status_Board
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
     clear_service   ${PUSERNAME22}
     clear_Addon  ${PUSERNAME22}
@@ -564,7 +564,7 @@ JD-TC-CreateQueueSet-UH9
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
     # Should Be Equal As Strings  "${resp.json()}"  "${EXCEEDS_LIMIT}"
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=   Create Status Board waitlist    ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -572,7 +572,7 @@ JD-TC-CreateQueueSet-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     Set Suite Variable   ${Data19}   ${Data}   

@@ -46,11 +46,14 @@ JD-TC-High Level Test Case-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
-    ${DAY}=  get_date
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+815
@@ -66,14 +69,18 @@ JD-TC-High Level Test Case-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   4  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  4  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -135,8 +142,8 @@ JD-TC-High Level Test Case-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  00
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -174,7 +181,6 @@ JD-TC-High Level Test Case-1
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${p_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${mem_id}  ${mem_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -206,10 +212,14 @@ JD-TC-High Level Test Case-UH1
     ${length}=  Get Length   ${len}
     
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${check}  ${resp2.json()['maxPartySize']}
@@ -221,7 +231,13 @@ JD-TC-High Level Test Case-UH1
     ${resp} =  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
-    ${DAY}=  get_date
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 
 
     ${resp}=  AddCustomer  ${CUSERNAME5}

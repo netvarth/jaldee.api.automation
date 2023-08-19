@@ -45,7 +45,7 @@ JD-TC-ChangeTaskManager-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -53,21 +53,51 @@ JD-TC-ChangeTaskManager-1
     ${id}=  get_id  ${MUSERNAME_E}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid2}=  Create Sample Location
     Set Suite Variable  ${lid2}
+    
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid3}=  Create Sample Location
     Set Suite Variable  ${lid3}
+    
+    ${resp}=   Get Location ById  ${lid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
 
 
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -118,7 +148,7 @@ JD-TC-ChangeTaskManager-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -150,7 +180,7 @@ JD-TC-ChangeTaskManager-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -182,7 +212,7 @@ JD-TC-ChangeTaskManager-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -271,7 +301,7 @@ JD-TC-ChangeTaskManager-1
 JD-TC-ChangeTaskManager-2
     [Documentation]  Create a task for a user then change the task manager.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -295,7 +325,7 @@ JD-TC-ChangeTaskManager-2
 JD-TC-ChangeTaskManager-3
     [Documentation]  Change Task manager multiple times.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -317,7 +347,7 @@ JD-TC-ChangeTaskManager-3
 JD-TC-ChangeTaskManager-4
     [Documentation]  Change Task manager multiple times for same user.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -333,7 +363,7 @@ JD-TC-ChangeTaskManager-4
 JD-TC-ChangeTaskManager-5
     [Documentation]  Branch create a task for user then change manager to assignee id.
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${assignee}=    Create Dictionary    id=${u_id2}
@@ -379,7 +409,7 @@ JD-TC-ChangeTaskManager-UH2
 JD-TC-ChangeTaskManager-UH3
     [Documentation]  Change task manager with another branch's user id
 
-    ${resp}=  Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Toggle Department Enable
@@ -391,7 +421,7 @@ JD-TC-ChangeTaskManager-UH3
     Log  ${resp.content}  
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -405,7 +435,7 @@ JD-TC-ChangeTaskManager-UH3
 JD-TC-ChangeTaskManager-UH4
     [Documentation]  Change task manager after canceled the lead.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

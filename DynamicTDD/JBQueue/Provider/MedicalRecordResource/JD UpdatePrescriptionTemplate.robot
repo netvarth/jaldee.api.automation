@@ -24,10 +24,14 @@ JD-TC-UpdatePrescriptionTemplate-1
 
    [Documentation]                Update prescription Template with id where created only one template
 
-    ${resp}=  Provider Login      ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
+
     ${med_name1}                  FakerLibrary.name
     ${frequency1}                 FakerLibrary.word
     ${duration1}                  FakerLibrary.sentence
@@ -92,10 +96,13 @@ JD-TC-UpdatePrescriptionTemplate-UH1
 
    [Documentation]                Update prescription Template where template is not created
 
-    ${resp}=  Provider Login      ${PUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME38}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     
     ${templateName2}              FakerLibrary.sentence
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  instructions=${instrn1}  duration=${duration1}  dosage=${dosage1}
@@ -117,10 +124,13 @@ JD-TC-UpdatePrescriptionTemplate-2
 
     [Documentation]                Update Prescription Template with same data
 
-    ${resp}=  Provider Login      ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     
     ${templateName1}              FakerLibrary.sentence
     Set Suite Variable            ${templateName1}
@@ -150,10 +160,13 @@ JD-TC-UpdatePrescriptionTemplate-3
 
     [Documentation]                Update Prescription Template with same templatename
 
-    ${resp}=  Provider Login      ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     
     ${templateName1}              FakerLibrary.sentence
     Set Suite Variable            ${templateName1}

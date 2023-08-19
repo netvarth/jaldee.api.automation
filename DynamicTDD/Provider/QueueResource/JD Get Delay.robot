@@ -36,17 +36,17 @@ JD-TC-GetDelay-1
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_G}${\n}
       Set Suite Variable  ${PUSERNAME_G}
 
-      ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${DAY1}=  get_date
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
       ${list}=  Create List  1  2  3  4  5  6  7
       ${ph1}=  Evaluate  ${PUSERNAME_G}+15566124
       ${ph2}=  Evaluate  ${PUSERNAME_G}+25566128
@@ -58,18 +58,21 @@ JD-TC-GetDelay-1
       ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
       ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_G}.ynwtest@netvarth.com  ${views}
       ${bs}=  FakerLibrary.bs
-      ${city}=   get_place
-      ${latti}=  get_latitude
-      ${longi}=  get_longitude
       ${companySuffix}=  FakerLibrary.companySuffix
-      ${postcode}=  FakerLibrary.postcode
-      ${address}=  get_address
+      # ${city}=   get_place
+      # ${latti}=  get_latitude
+      # ${longi}=  get_longitude
+      # ${postcode}=  FakerLibrary.postcode
+      # ${address}=  get_address
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       ${parking}   Random Element   ${parkingType}
       ${24hours}    Random Element    ${bool}
       ${desc}=   FakerLibrary.sentence
       ${url}=   FakerLibrary.url
-      ${sTime}=  add_time  0  15
-      ${eTime}=  add_time   0  45
+      ${sTime}=  add_timezone_time  ${tz}  0  15  
+      ${eTime}=  add_timezone_time  ${tz}  0  45  
       ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -112,25 +115,33 @@ JD-TC-GetDelay-1
     
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  true  true  true  true  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY1}=  get_date
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY1}  ${DAY1}
-      ${DAY2}=  add_date  70      
+      ${DAY2}=  db.add_timezone_date  ${tz}  70      
       Set Suite Variable  ${DAY2}  ${DAY2}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}  ${list}
-      ${sTime}=  add_time  4  00
+      ${sTime}=  add_timezone_time  ${tz}  4  00  
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time   5  30
+      ${eTime}=  add_timezone_time  ${tz}   5  30
       Set Suite Variable   ${eTime}
-      ${city}=   get_place
+      # ${city}=   get_place
+      # Set Suite Variable  ${city}
+      # ${latti}=  get_latitude
+      # Set Suite Variable  ${latti}
+      # ${longi}=  get_longitude
+      # Set Suite Variable  ${longi}
+      # ${postcode}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode}
+      # ${address}=  get_address
+      # Set Suite Variable  ${address}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       Set Suite Variable  ${city}
-      ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
       Set Suite Variable  ${address}
       ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type}
@@ -142,9 +153,9 @@ JD-TC-GetDelay-1
       Set Suite Variable  ${lid}  ${resp.json()}
       ${s_id1}=  Create Sample Service  ${SERVICE1}
       Set Suite Variable  ${s_id1}
-      ${sTime1}=  subtract_time  2  00
+      ${sTime1}=  subtract_timezone_time  ${tz}  2  00
       Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_time   3  30
+      ${eTime1}=  add_timezone_time  ${tz}  3  30  
       Set Suite Variable   ${eTime1}
       ${queue_name}=  FakerLibrary.bs
       ${resp}=  Create Queue  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id1}
@@ -180,7 +191,7 @@ JD-TC-GetDelay-UH2
 
 JD-TC-GetDelay-UH3
     [Documentation]  Get delay of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_queue  ${PUSERNAME1}
     ${resp}=  Get Queues

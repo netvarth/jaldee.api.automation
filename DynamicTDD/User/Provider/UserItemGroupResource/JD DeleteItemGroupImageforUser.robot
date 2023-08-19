@@ -30,7 +30,7 @@ JD-TC-DeleteItemGroupImageforUser-1
 
     [Documentation]  delete item group image after uploading it..
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -71,7 +71,7 @@ JD-TC-DeleteItemGroupImageforUser-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -101,7 +101,7 @@ JD-TC-DeleteItemGroupImageforUser-2
 
     [Documentation]  upload mutiple item images to the same group and then delete one of them.
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -117,7 +117,7 @@ JD-TC-DeleteItemGroupImageforUser-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -150,7 +150,7 @@ JD-TC-DeleteItemGroupImageforUser-3
 
     [Documentation]  Create Item Group by user and upload item group image then delete it.
 
-    ${resp}=  Provider Login  ${MUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME134}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -231,7 +231,7 @@ JD-TC-DeleteItemGroupImageforUser-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -255,7 +255,7 @@ JD-TC-DeleteItemGroupImageforUser-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -284,7 +284,7 @@ JD-TC-DeleteItemGroupImageforUser-UH1
 
     [Documentation]  delete already deleted item image.
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -297,7 +297,7 @@ JD-TC-DeleteItemGroupImageforUser-UH2
 
     [Documentation]  delete using another providers item group id.
 
-    ${resp}=  Provider Login  ${MUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME88}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -327,7 +327,7 @@ JD-TC-DeleteItemGroupImageforUser-UH2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -364,7 +364,7 @@ JD-TC-DeleteItemGroupImageforUser-UH5
 
     [Documentation]  upload an image to an item group , then delete that item group and try to delete item image.
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -387,7 +387,7 @@ JD-TC-DeleteItemGroupImageforUser-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -237,14 +237,23 @@ Create Location
     [Return]  ${resp} 
 
 Create Sample Location
-    ${latti}  ${longi}  ${city}  ${postcode}=   get_lat_long_city_pin
-    ${address}=  get_address
+    FOR   ${i}  IN RANGE   5
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${check}=  Check Location Exists  ${city}
+        IF  '${check}' == 'True'
+            Continue For Loop
+        ELSE
+            Exit For Loop
+        END
+    END
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
-	${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   0  45
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY}=  get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -406,14 +415,42 @@ Create Queue
    [Return]  ${resp}
    
 Create Sample Queue
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    FakerLibrary.Word
+        ${s_id}=  Create Sample Service  ${SERVICE1}
+    ELSE
+        Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+        ${SERVICE1}=  Set Variable  ${resp.json()[0]['name']}
+    END
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
-    ${Time}=  db.get_time
-    ${sTime}=  add_time  0  45
-    ${eTime}=  add_time   1  00
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${lid}=  Create Sample Location 
+    # ${DAY}=  get_date
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    # ${sTime}=  add_time  0  45
+    # ${eTime}=  add_time   1  00
+    # ${SERVICE1}=    FakerLibrary.Word
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location 
+    ${DAY}=  get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  45  
+    ${eTime}=  add_timezone_time  ${tz}  1  00  
     ${queue1}=    FakerLibrary.Word
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  5  ${lid}  ${s_id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2229,7 +2266,7 @@ Update QueueSet
     ${resp}=  PUT On Session  ynw  /provider/statusBoard   data=${data}  expected_status=any
     [Return]  ${resp}
 
-Create Matric For Status Board
+Create Metric For Status Board
     [Arguments]  @{matrics}
     ${len}=  Get Length  ${matrics}
     ${len}=  Evaluate  ${len}-1

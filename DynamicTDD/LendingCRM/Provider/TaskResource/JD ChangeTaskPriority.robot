@@ -25,7 +25,7 @@ JD-TC-ChangeTaskPriority-1
 
     [Documentation]  Change  task  Priority to normal
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -37,8 +37,13 @@ JD-TC-ChangeTaskPriority-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -136,7 +141,7 @@ JD-TC-ChangeTaskPriority-2
 
     [Documentation]  Change  task  priority to   high
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -183,7 +188,7 @@ JD-TC-ChangeTaskPriority-2
 JD-TC-ChangeTaskPriority3
 
     [Documentation]  Change  task  priority to urgent
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -235,7 +240,7 @@ JD-TC-ChangeTaskPriority4
 
     [Documentation]  Change  task  priority to  low
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -291,7 +296,7 @@ JD-TC-ChangeTaskPriority-UH1
 
     [Documentation]  Change  task priority to Low already Low priority
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -328,7 +333,7 @@ JD-TC-ChangeTaskPriority-UH2
 
     [Documentation]  Change  task  priority to   normal already normal
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -36,7 +36,7 @@ JD-TC-UploadItemGroupImage-1
 
     [Documentation]  Upload Item Group image with jpg format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -77,7 +77,7 @@ JD-TC-UploadItemGroupImage-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +93,7 @@ JD-TC-UploadItemGroupImage-2
 
     [Documentation]  Upload Item Group image with png format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -119,7 +119,7 @@ JD-TC-UploadItemGroupImage-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -136,7 +136,7 @@ JD-TC-UploadItemGroupImage-3
 
     [Documentation]  Upload Item Group image with gif format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -162,7 +162,7 @@ JD-TC-UploadItemGroupImage-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -179,7 +179,7 @@ JD-TC-UploadItemGroupImage-4
 
     [Documentation]  Upload Item Group image with jpeg format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -205,7 +205,7 @@ JD-TC-UploadItemGroupImage-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -222,7 +222,7 @@ JD-TC-UploadItemGroupImage-5
 
     [Documentation]  verify all the uploaded images of a provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -254,7 +254,7 @@ JD-TC-UploadItemGroupImage-6
 
     [Documentation]  Upload Item Group image with txt format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -278,7 +278,7 @@ JD-TC-UploadItemGroupImage-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -295,7 +295,7 @@ JD-TC-UploadItemGroupImage-7
 
     [Documentation]  Upload Item Group image with pdf format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -319,7 +319,7 @@ JD-TC-UploadItemGroupImage-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -336,7 +336,7 @@ JD-TC-UploadItemGroupImage-8
 
     [Documentation]  Upload Item Group image with doc format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -360,7 +360,7 @@ JD-TC-UploadItemGroupImage-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -377,7 +377,7 @@ JD-TC-UploadItemGroupImage-9
 
     [Documentation]  Upload Item Group image with sh format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -401,7 +401,7 @@ JD-TC-UploadItemGroupImage-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -418,7 +418,7 @@ JD-TC-UploadItemGroupImage-10
 
     [Documentation]  Upload multiple images to the same Item Group with jpg format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -446,7 +446,7 @@ JD-TC-UploadItemGroupImage-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -464,7 +464,7 @@ JD-TC-UploadItemGroupImage-11
 
     [Documentation]  Upload multiple images to the same Item Group with jpg and png format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -492,7 +492,7 @@ JD-TC-UploadItemGroupImage-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -510,7 +510,7 @@ JD-TC-UploadItemGroupImage-UH1
 
     [Documentation]  Upload Item Group image with another providers item group id.
 
-    ${resp}=  Provider Login  ${PUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -541,7 +541,7 @@ JD-TC-UploadItemGroupImage-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['itemGroupImages']}    []
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -563,7 +563,7 @@ JD-TC-UploadItemGroupImage-5
 
     [Documentation]  Upload Item Group image with bmp format.
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -589,7 +589,7 @@ JD-TC-UploadItemGroupImage-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

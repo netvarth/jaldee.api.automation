@@ -51,18 +51,22 @@ JD-TC-Getauditlog-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName}    ${resp.json()['userName']}         
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
-    ${pid}=  get_acc_id  ${PUSERNAME_C}
-    Set Suite Variable  ${pid}
+    # ${pid}=  get_acc_id  ${PUSERNAME_C}
+    # Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_C}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_C}+25566122
@@ -74,18 +78,22 @@ JD-TC-Getauditlog-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -93,6 +101,7 @@ JD-TC-Getauditlog-1
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
 
     ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
     Log  ${fields.json()}
@@ -137,19 +146,26 @@ JD-TC-Getauditlog-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
+    ${resp}=   Create Sample Location
+    Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+    ${resp}=   Create Sample Service  ${SERVICE1}
+    Set Suite Variable    ${ser_id1}    ${resp}  
+    
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
     ${C_date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
     Set Suite Variable   ${C_date}
-    ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
-    ${resp}=   Create Sample Service  ${SERVICE1}
-    Set Suite Variable    ${ser_id1}    ${resp}  
+    
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable   ${strt_time}
-    ${end_time}=    add_time  3  00  
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -161,14 +177,14 @@ JD-TC-Getauditlog-1
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -276,12 +292,12 @@ JD-TC-Getauditlog-2
  
     [Documentation]   Get mr auditlog with create another prescription for a mr 
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${med_name1}=      FakerLibrary.name
     ${frequency1}=     FakerLibrary.word
     ${duration1}=      FakerLibrary.sentence
@@ -345,7 +361,7 @@ JD-TC-Getauditlog-3
  
     [Documentation]   Get  mr auditlog with update prescription
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -362,14 +378,14 @@ JD-TC-Getauditlog-3
     ${resp}=  Add To Waitlist  ${cid2}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -480,11 +496,11 @@ JD-TC-Getauditlog-4
  
     [Documentation]   Get auditlog with update clinical note
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${symptoms1}=      FakerLibrary.name
     ${allergies1}=     FakerLibrary.word
     ${diagnosis1}=     FakerLibrary.sentence
@@ -562,18 +578,22 @@ JD-TC-Getauditlog-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id1}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName1}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName1}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id1}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName1}    ${resp.json()['userName']}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
-    ${pid0}=  get_acc_id  ${PUSERNAME_D}
-    Set Suite Variable  ${pid0}
+    # ${pid0}=  get_acc_id  ${PUSERNAME_D}
+    # Set Suite Variable  ${pid0}
 
-    ${DAY1}=  get_date
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_D}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_D}+25566122
@@ -585,18 +605,22 @@ JD-TC-Getauditlog-5
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -604,6 +628,7 @@ JD-TC-Getauditlog-5
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
     Log  ${fields.json()}
@@ -644,16 +669,20 @@ JD-TC-Getauditlog-5
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id2}    ${resp}  
+    Set Suite Variable    ${loc_id2}    ${resp} 
+    ${resp}=   Get Location ById  ${loc_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}   
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id2}    ${resp}  
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time1}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time1}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable   ${strt_time1}
-    ${end_time}=    add_time  3  00  
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00  
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2} 
@@ -667,19 +696,18 @@ JD-TC-Getauditlog-5
     Set Test Variable  ${cusername}  ${resp.json()['userName']}
     
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -688,8 +716,8 @@ JD-TC-Getauditlog-5
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -753,7 +781,7 @@ JD-TC-Getauditlog-6
  
     [Documentation]   Get auditlog without create a prescription and clinical notes in mr 
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -766,19 +794,18 @@ JD-TC-Getauditlog-6
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=   db.get_time
+    ${ctime}=   db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[0]}   ${CUR_DAY}  ${status[0]}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -803,12 +830,12 @@ JD-TC-Getauditlog-6
     ${resp}=  Get MR Auditlogs by MR Id   ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['Action']}            ${mraction[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['Action']}            ${mraction[2]}
     Should Be Equal As Strings  ${resp.json()[0]['Description']}       ${MR_Description}
     Should Be Equal As Strings  ${resp.json()[0]['User']}              ${userName}
     Should Be Equal As Strings  ${resp.json()[0]['DateTime']}          ${C_date} ${ctime}
 
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${med_name1}=      FakerLibrary.name
     ${frequency1}=     FakerLibrary.word
     ${duration1}=      FakerLibrary.sentence
@@ -843,7 +870,7 @@ JD-TC-Getauditlog-7
  
     [Documentation]   Get auditlog without create a mr clinical notes 
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -856,12 +883,11 @@ JD-TC-Getauditlog-7
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -877,7 +903,7 @@ JD-TC-Getauditlog-7
     ${prescriptions}=  Create List  ${prescriptions}
     ${pre_list}=       Create Dictionary  prescriptionsList=${prescriptions}  notes=${notes} 
    
-    ${ctime}=   db.get_time
+    ${ctime}=   db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[0]}   ${CUR_DAY}  ${status[0]}   prescriptions=${pre_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -904,15 +930,21 @@ JD-TC-Getauditlog-7
     ${resp}=  Get MR Auditlogs by MR Id   ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['Action']}            ${mraction[1]}
+
+    Should Be Equal As Strings  ${resp.json()[0]['Action']}            ${mraction[2]}
     Should Be Equal As Strings  ${resp.json()[0]['Description']}       ${PRE_Description}
     Should Be Equal As Strings  ${resp.json()[0]['User']}              ${userName}
     Should Be Equal As Strings  ${resp.json()[0]['DateTime']}          ${C_date} ${ctime}
 
-    Should Be Equal As Strings  ${resp.json()[1]['Action']}            ${mraction[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['Description']}       ${MR_Description}
+    Should Be Equal As Strings  ${resp.json()[1]['Action']}            ${mraction[1]}
+    Should Be Equal As Strings  ${resp.json()[1]['Description']}       ${PRE_Description}
     Should Be Equal As Strings  ${resp.json()[1]['User']}              ${userName}
     Should Be Equal As Strings  ${resp.json()[1]['DateTime']}          ${C_date} ${ctime}
+
+    Should Be Equal As Strings  ${resp.json()[2]['Action']}            ${mraction[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['Description']}       ${MR_Description}
+    Should Be Equal As Strings  ${resp.json()[2]['User']}              ${userName}
+    Should Be Equal As Strings  ${resp.json()[2]['DateTime']}          ${C_date} ${ctime}
 
    
 
@@ -920,7 +952,7 @@ JD-TC-Getauditlog-8
  
     [Documentation]   Get auditlog without create a mr prescription 
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -933,14 +965,14 @@ JD-TC-Getauditlog-8
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -954,7 +986,7 @@ JD-TC-Getauditlog-8
     ${vaccinationHistory1}=  FakerLibrary.sentence
     ${clinicalNotes}=  Create Dictionary  symptoms=${symptoms1}  allergies=${allergies1}  diagnosis=${diagnosis1}  complaints=${complaints1}   misc_notes=${misc_notes1}  observations=${observations1}  vaccinationHistory=${vaccinationHistory1}  
    
-    ${ctime}=   db.get_time
+    ${ctime}=   db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[0]}   ${CUR_DAY}  ${status[0]}   clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1005,7 +1037,7 @@ JD-TC-Getauditlog-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1019,16 +1051,17 @@ JD-TC-Getauditlog-9
     ${gender0}=  Random Element    ${Genderlist}
     ${resp}=  AddFamilyMemberByProvider  ${cid}  ${firstname0}  ${lastname0}  ${dob0}  ${gender0}  
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id0}  ${resp.json()}
     
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${mem_id0}  
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1038,7 +1071,7 @@ JD-TC-Getauditlog-9
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${mem_id0}
    
-    ${ctime}=         db.get_time
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1147,7 +1180,7 @@ JD-TC-Getauditlog-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1167,11 +1200,11 @@ JD-TC-Getauditlog-10
     # Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}  
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -1236,8 +1269,8 @@ JD-TC-Getauditlog-10
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1366,7 +1399,7 @@ JD-TC-Getauditlog-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1393,7 +1426,6 @@ JD-TC-Getauditlog-11
     ${resp}=  Take Appointment For Consumer  ${cid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1419,8 +1451,8 @@ JD-TC-Getauditlog-11
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot3}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -1548,7 +1580,7 @@ JD-TC-Getauditlog-12
     [Documentation]   Get auditlog for appointment(walkin).
     ...              (Here created a MR without passing prescription and clinical notes and then create a clinical notes.)
     
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1570,7 +1602,6 @@ JD-TC-Getauditlog-12
     ${resp}=  Take Appointment For Consumer  ${cid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1596,8 +1627,8 @@ JD-TC-Getauditlog-12
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
 
-    ${ctime}=         db.get_time
-    ${CUR_DAY}=       get_date
+    ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${resp}=  Create MR  ${apptid1}  ${bookingType[1]}  ${consultationMode[3]}   ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1623,7 +1654,7 @@ JD-TC-Getauditlog-12
     ${resp}=  Get MR Auditlogs by MR Id   ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['Action']}            ${mraction[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['Action']}            ${mraction[2]}
     Should Be Equal As Strings  ${resp.json()[0]['Description']}       ${MR_Description}
     Should Be Equal As Strings  ${resp.json()[0]['User']}              ${userName}
     Should Be Equal As Strings  ${resp.json()[0]['DateTime']}          ${C_date} ${ctime}
@@ -1684,7 +1715,7 @@ JD-TC-Getauditlog-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1697,19 +1728,19 @@ JD-TC-Getauditlog-13
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=   db.get_time
+    ${ctime}=   db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[0]}   ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1780,14 +1811,14 @@ JD-TC-Getauditlog-13
     Should Be Equal As Strings  ${resp.json()[1]['User']}              ${userName}
     Should Be Equal As Strings  ${resp.json()[1]['DateTime']}          ${C_date} ${ctime}
 
-    Should Be Equal As Strings  ${resp.json()[2]['Action']}            ${mraction[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['Action']}            ${mraction[2]}
     Should Be Equal As Strings  ${resp.json()[2]['Description']}       ${MR_Description_name}
     Should Be Equal As Strings  ${resp.json()[2]['User']}              ${userName}
     Should Be Equal As Strings  ${resp.json()[2]['DateTime']}          ${C_date} ${ctime}
 
 
     ${resp}=  DeletePrescriptionImg  ${mrid}  ${imgName}  ${cookie}
-    sleep  02s
+    # sleep  02s
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1814,7 +1845,7 @@ JD-TC-Getauditlog-13
     Should Be Equal As Strings  ${resp.json()[2]['User']}              ${userName}
     Should Be Equal As Strings  ${resp.json()[2]['DateTime']}          ${C_date} ${ctime}
    
-    Should Be Equal As Strings  ${resp.json()[3]['Action']}            ${mraction[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['Action']}            ${mraction[2]}
     Should Be Equal As Strings  ${resp.json()[3]['Description']}       ${MR_Description_name}
     Should Be Equal As Strings  ${resp.json()[3]['User']}              ${userName}
     Should Be Equal As Strings  ${resp.json()[3]['DateTime']}          ${C_date} ${ctime}
@@ -1835,7 +1866,7 @@ JD-TC-Getauditlog-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1848,19 +1879,19 @@ JD-TC-Getauditlog-14
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=   db.get_time
+    ${ctime}=   db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[0]}   ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1929,7 +1960,7 @@ JD-TC-Getauditlog-14
     ${PRE_ImageDescription}=  Format String   ${PRE_ImageDescription}    ${mr_id}
     ${PRE_ShareDescription}=  Format String    ${PRE_ShareDescription}    ${mr_id}    ${cusername}
     
-    ${ctime}=   db.get_time
+    ${ctime}=   db.get_time_by_timezone   ${tz}
     ${resp}=  Get MR Auditlogs by MR Id   ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1975,7 +2006,7 @@ JD-TC-Getauditlog-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1988,19 +2019,19 @@ JD-TC-Getauditlog-15
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
+    
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=   db.get_time
+    ${ctime}=   db.get_time_by_timezone   ${tz}
     ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[0]}   ${CUR_DAY}  ${status[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2069,7 +2100,7 @@ JD-TC-Getauditlog-15
     # ${CLINI_Description_name}=  Format String   ${CLINI_Description_name}  ${cusername}
     ${PRE_ShareDescription}=  Format String   ${PRE_ShareDescription}    ${mr_id}    ${cusername}
    
-    ${ctime}=   db.get_time
+    ${ctime}=   db.get_time_by_timezone   ${tz}
     ${resp}=  Get MR Auditlogs by MR Id   ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2083,7 +2114,7 @@ JD-TC-Getauditlog-15
     Should Be Equal As Strings  ${resp.json()[1]['User']}              ${userName1}
     Should Be Equal As Strings  ${resp.json()[1]['DateTime']}          ${C_date} ${ctime}
 
-    Should Be Equal As Strings  ${resp.json()[2]['Action']}            ${mraction[0]}
+    Should Be Equal As Strings  ${resp.json()[2]['Action']}            ${mraction[2]}
     Should Be Equal As Strings  ${resp.json()[2]['Description']}       ${MR_Description_name}
     Should Be Equal As Strings  ${resp.json()[2]['User']}              ${userName1}
     Should Be Equal As Strings  ${resp.json()[2]['DateTime']}          ${C_date} ${ctime}
@@ -2093,7 +2124,7 @@ JD-TC-Getauditlog-UH1
  
     [Documentation]   Get auditlog by using another provider's mrid
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2107,7 +2138,7 @@ JD-TC-Getauditlog-UH2
  
     [Documentation]   Get auditlog with invalid mrid
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2171,7 +2202,7 @@ JD-TC-Getauditlog-4
  
     [Documentation]   Get auditlog with mr prescription create to another waitlisted customer
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2184,12 +2215,11 @@ JD-TC-Getauditlog-4
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${CUR_DAY}=       get_date
+    ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 

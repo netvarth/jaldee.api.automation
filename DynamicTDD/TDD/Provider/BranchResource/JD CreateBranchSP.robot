@@ -51,7 +51,7 @@ JD-TC-CreateBranchSP-1
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${corp_name}=   FakerLibrary.word
@@ -103,7 +103,7 @@ JD-TC-CreateBranchSP-1
 JD-TC-CreateBranchSP-2
 	[Documentation]  create Multiple Branch SPs
 
-	${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -123,7 +123,7 @@ JD-TC-CreateBranchSP-2
 JD-TC-CreateBranchSP-3
 	[Documentation]  create Branch SP with non corporatable subdomain within the corporatable domain.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -165,7 +165,7 @@ JD-TC-CreateBranchSP-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${corp_name}=   FakerLibrary.word
@@ -197,7 +197,7 @@ JD-TC-CreateBranchSP-4
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     
-    ${resp}=  Provider Login  ${PHONE1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PHONE1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -260,7 +260,7 @@ JD-TC-CreateBranchSP-5
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -319,7 +319,7 @@ JD-TC-CreateBranchSP-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${corp_name}=   FakerLibrary.word
@@ -356,7 +356,7 @@ JD-TC-CreateBranchSP-UH1
 JD-TC-CreateBranchSP-UH2
 	[Documentation]  create Branch SP with subdomain in different domain.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -378,7 +378,7 @@ JD-TC-CreateBranchSP-UH2
 JD-TC-CreateBranchSP-UH3
 	[Documentation]  create Branch SP with same phone number.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${f_name}=  	 FakerLibrary.first_name
@@ -394,7 +394,7 @@ JD-TC-CreateBranchSP-UH3
 JD-TC-CreateBranchSP-UH4
 	[Documentation]  create Branch SP with same email.
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${f_name}=  	 FakerLibrary.first_name
@@ -438,7 +438,7 @@ JD-TC-CreateBranchSP-UH6
 JD-TC-CreateBranchSP-UH7
 	[Documentation]  create Branch SP without  department id
 
-	${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7910    
@@ -481,7 +481,7 @@ JD-TC-CreateBranchSP-UH8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${corp_name}=   FakerLibrary.word

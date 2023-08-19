@@ -34,10 +34,14 @@ JD-TC-Remove_Business_Logo-1
                                   
     [Documentation]               Remove Business Logo
     
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
 
     ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}
@@ -77,7 +81,7 @@ JD-TC-Remove_Business_Logo-UH1
                                   
     [Documentation]               Remove Business Logo where provider id is invalid
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -116,7 +120,7 @@ JD-TC-Remove_Business_Logo-UH2
                                   
     [Documentation]               Remove Business Logo with empty file name
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -153,7 +157,7 @@ JD-TC-Remove_Business_Logo-UH3
                                   
     [Documentation]               Remove Business Logo with empty file size
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -181,7 +185,7 @@ JD-TC-Remove_Business_Logo-UH4
                                   
     [Documentation]               Remove Business Logo with empty action
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -208,7 +212,7 @@ JD-TC-Remove_Business_Logo-UH5
                                   
     [Documentation]               Remove Business Logo with action no change
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -245,7 +249,7 @@ JD-TC-Remove_Business_Logo-UH6
                                   
     [Documentation]               Remove Business Logo with empty caption
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -277,7 +281,7 @@ JD-TC-Remove_Business_Logo-UH7
                                   
     [Documentation]    Remove Business Logo with empty file type
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -314,7 +318,7 @@ JD-TC-Remove_Business_Logo-UH8
                                   
     [Documentation]               Remove Business Logo with empty order
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

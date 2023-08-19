@@ -31,7 +31,7 @@ JD-TC-paymentReportForUser-1
     [Documentation]   take a walkin checkin(today, without prepayment, for physical service) by multi user(account level) then 
     ...   do the bill payment through jaldee bank, then verify the payment report by provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -51,8 +51,13 @@ JD-TC-paymentReportForUser-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
@@ -84,11 +89,11 @@ JD-TC-paymentReportForUser-1
     Should Be Equal As Numbers  ${resp.json()['totalAmount']}    ${servicecharge} 
     Should Be Equal As Strings  ${resp.json()['serviceType']}    ${service_type[2]} 
 
-    ${CUR_DAY}=  get_date
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
    
@@ -148,7 +153,7 @@ JD-TC-paymentReportForUser-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -168,7 +173,7 @@ JD-TC-paymentReportForUser-2
     ...   do the bill payment through jaldee bank, then verify the reimburse report by SA.
     ...   then reimburse partial amount to the provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -177,9 +182,14 @@ JD-TC-paymentReportForUser-2
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
 
-    ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
-    Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
+    # Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -193,8 +203,13 @@ JD-TC-paymentReportForUser-2
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
@@ -265,7 +280,7 @@ JD-TC-paymentReportForUser-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -286,11 +301,11 @@ JD-TC-paymentReportForUser-2
     Should Be Equal As Numbers  ${resp.json()['totalAmount']}    ${servicecharge} 
     Should Be Equal As Strings  ${resp.json()['serviceType']}    ${service_type[2]} 
 
-    ${CUR_DAY}=  get_date
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -350,7 +365,7 @@ JD-TC-paymentReportForUser-2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -370,7 +385,7 @@ JD-TC-paymentReportForUser-3
     [Documentation]   take a walkin checkin(today, without prepayment, for physical service) by multi user(account level, then assign to a user) then 
     ...   do the bill payment through jaldee bank, then verify the payment report by provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -379,9 +394,14 @@ JD-TC-paymentReportForUser-3
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
 
-    ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
-    Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
+    # Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -395,8 +415,13 @@ JD-TC-paymentReportForUser-3
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
@@ -428,11 +453,11 @@ JD-TC-paymentReportForUser-3
     Should Be Equal As Numbers  ${resp.json()['totalAmount']}    ${servicecharge} 
     Should Be Equal As Strings  ${resp.json()['serviceType']}    ${service_type[2]} 
 
-    ${CUR_DAY}=  get_date
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
    
@@ -520,7 +545,7 @@ JD-TC-paymentReportForUser-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -531,7 +556,7 @@ JD-TC-paymentReportForUser-3
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -565,7 +590,7 @@ JD-TC-paymentReportForUser-3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

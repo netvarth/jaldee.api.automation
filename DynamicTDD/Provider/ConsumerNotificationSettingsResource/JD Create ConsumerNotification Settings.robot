@@ -21,7 +21,7 @@ ${One_person_ahead}    1
 
 JD-TC-ConsumerNotificationSettings-1
     [Documentation]   Provider setting consumer notification settings
-    ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME4}
     ${msg}=  FakerLibrary.text
@@ -44,7 +44,7 @@ JD-TC-ConsumerNotificationSettings-1
 
 JD-TC-ConsumerNotificationSettings-2
     [Documentation]   Provider again setting consumer notification settings for another resouce and eventtype
-    ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${msg1}=  FakerLibrary.text
     Set Suite Variable  ${msg1}
@@ -73,7 +73,7 @@ JD-TC-ConsumerNotificationSettings-2
 
 JD-TC-ConsumerNotificationSettings-3
     [Documentation]   Provider setting consumer notification settings without commonMessage
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME5}
     ${person_ahead}=   Random Int  min=2   max=5
@@ -93,7 +93,7 @@ JD-TC-ConsumerNotificationSettings-3
 
 JD-TC-ConsumerNotificationSettings-UH1
     [Documentation]   Provider setting consumer notification settings for already exist
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_resourcetype}=  FakerLibrary.word
     ${resp}=  Create Consumer Notification Settings  ${NotificationResourceType[1]}  ${EventType[1]}  ${bool[0]}  ${bool[1]}  ${bool[0]}  ${EMPTY}  ${person_ahead}
@@ -117,7 +117,7 @@ JD-TC-ConsumerNotificationSettings -UH3
 
 JD-TC-ConsumerNotificationSettings-UH4
     [Documentation]   Provider setting consumer notification settings with EventType as Early and PersonAhead is ONE
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME6}
     ${msg}=  FakerLibrary.text
@@ -131,7 +131,7 @@ JD-TC-ConsumerNotificationSettings-UH4
 
 JD-TC-ConsumerNotificationSettings-UH5
     [Documentation]   Provider setting consumer notification settings with EventType as Early and PersonAhead is ZERO
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME6}
     ${msg}=  FakerLibrary.text
@@ -145,7 +145,7 @@ JD-TC-ConsumerNotificationSettings-UH5
 
 JD-TC-ConsumerNotificationSettings-UH6
     [Documentation]   Provider setting consumer notification settings with EventType as Early and without PersonAhead
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME6}
     ${msg6}=  FakerLibrary.text

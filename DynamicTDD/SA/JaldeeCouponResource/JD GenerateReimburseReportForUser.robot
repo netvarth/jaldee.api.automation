@@ -35,7 +35,7 @@ JD-TC-GenerateReimburseReportforUser-1
     ...   do the bill payment through jaldee bank, then verify the reimburse report by SA.
     ...   then reimburse partial amount to the provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME120}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -50,8 +50,13 @@ JD-TC-GenerateReimburseReportforUser-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
@@ -83,11 +88,11 @@ JD-TC-GenerateReimburseReportforUser-1
     Should Be Equal As Numbers  ${resp.json()['totalAmount']}    ${servicecharge} 
     Should Be Equal As Strings  ${resp.json()['serviceType']}    ${service_type[2]} 
 
-    ${CUR_DAY}=  get_date
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
    
@@ -204,7 +209,7 @@ JD-TC-GenerateReimburseReportforUser-2
     ...   do the bill payment through jaldee bank, then verify the reimburse report by SA.
     ...   then reimburse partial amount to the provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME110}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -220,8 +225,13 @@ JD-TC-GenerateReimburseReportforUser-2
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Test Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
@@ -292,7 +302,7 @@ JD-TC-GenerateReimburseReportforUser-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -313,11 +323,11 @@ JD-TC-GenerateReimburseReportforUser-2
     Should Be Equal As Numbers  ${resp.json()['totalAmount']}    ${servicecharge} 
     Should Be Equal As Strings  ${resp.json()['serviceType']}    ${service_type[2]} 
 
-    ${CUR_DAY}=  get_date
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  3  00 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 

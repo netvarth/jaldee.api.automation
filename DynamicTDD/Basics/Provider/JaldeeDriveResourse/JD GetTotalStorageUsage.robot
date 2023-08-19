@@ -58,7 +58,7 @@ ${mp3mime}   audio/mpeg
 JD-TC-GetTotalStorageUsage-1
      [Documentation]  Get upload pdf file by provider id
     
-    ${resp}=  Provider Login  ${PUSERNAME204}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME204}
@@ -165,7 +165,7 @@ JD-TC-GetTotalStorageUsage-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME204}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME204}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -182,7 +182,7 @@ JD-TC-GetTotalStorageUsage-2
     [Documentation]  Get  total storage
     clear_Providermsg  ${PUSERNAME204}
     
-    ${resp}=  Provider Login  ${PUSERNAME204}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME204}
@@ -221,7 +221,7 @@ JD-TC-GetTotalStorageUsage-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME204}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME204}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -302,7 +302,7 @@ JD-TC-GetTotalStorageUsage-3
 
     [Documentation]   with  another provider login
     
-    ${resp}=   ProviderLogin     ${PUSERNAME10}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME10}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

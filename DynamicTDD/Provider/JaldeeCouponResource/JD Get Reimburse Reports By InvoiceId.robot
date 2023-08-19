@@ -49,7 +49,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
     #clear_jaldeecoupon  Coupon03
     #clear_jaldeecoupon  Coupon04
     #clear_jaldeecoupon  Coupon05         
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
     Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
@@ -81,9 +81,9 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ProviderLogout
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -109,7 +109,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
 
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -165,7 +165,6 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${description}  ${bool[1]}  ${cid}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]} 
     
@@ -222,8 +221,8 @@ JD-TC-GetReimburseReportByInvoiceId-1
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]}
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
     Log   ${resp.json()} 
@@ -265,7 +264,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
 
 JD-TC-GetReimburseReportByInvoiceId-UH1
     [Documentation]  Provider get reimburse report of  invalid  invoice_id
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200  
     ${resp}=  Get Reimburse Reports By Provider By InvoiceId  0
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -287,7 +286,7 @@ JD-TC-GetReimburseReportByInvoiceId -UH3
 
 JD-TC-GetReimburseReportByInvoiceId -UH4
     [Documentation]   Another Provider request reimburse payment
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimburse Reports By Provider By InvoiceId  ${invoice_id}
     Should Be Equal As Strings    ${resp.status_code}   422
@@ -296,13 +295,13 @@ JD-TC-GetReimburseReportByInvoiceId -UH4
 *** comment***
 JD-TC-Verify GetReimburseReportByInvoiceId-1
     [Documentation]  Provider apply a coupon after waitlist ,done payment and settil bill,create report then get reprt by invoice_id
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
     Log   ${resp.json()} 
@@ -341,12 +340,12 @@ JD-TC-Verify GetReimburseReportByInvoiceId-1
 
 JD-TC-Verify GetReimburseReportByInvoiceId-2
     [Documentation]  Provider agian apply a same coupon then create report and report by InvoiceId
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
 
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Log    ${resp.json()}

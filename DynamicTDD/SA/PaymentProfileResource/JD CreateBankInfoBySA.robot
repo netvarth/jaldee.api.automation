@@ -21,6 +21,7 @@ ${self}               0
 @{provider_list}
 ${start}              140
 ${jcoupon1}   CouponMul00
+${tz}   Asia/Kolkata
 
 
 
@@ -31,7 +32,7 @@ JD-TC-CreateBankInfo-1
 
     [Documentation]  Create my own bank details for a provider by superadmin.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -42,7 +43,7 @@ JD-TC-CreateBankInfo-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
    
@@ -91,7 +92,7 @@ JD-TC-CreateBankInfo-2
 
     [Documentation]  Create my own bank details for a provider by superadmin then do the payu verification.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -124,7 +125,7 @@ JD-TC-CreateBankInfo-3
 
     [Documentation]  Create my own bank details for a provider by superadmin and get the bank details by provider..
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -154,7 +155,7 @@ JD-TC-CreateBankInfo-4
     Set Suite Variable  ${pan_num1}
     Set Suite Variable  ${GST_num1}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -253,7 +254,7 @@ JD-TC-CreateBankInfo-UH3
 
     [Documentation]  create bank details by provider login.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

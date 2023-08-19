@@ -37,7 +37,7 @@ JD-TC-Enable Disable Appmnt change Status By Batch-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -62,11 +62,11 @@ JD-TC-Enable Disable Appmnt change Status By Batch-1
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME34}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -135,7 +135,7 @@ JD-TC-Enable Disable Appmnt change Status By Batch-1
 JD-TC-Enable Disable Appmnt change Status By Batch-2
     [Documentation]   Provider change appointment Batch status from Disable to Enable
     
-    ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,11 +161,11 @@ JD-TC-Enable Disable Appmnt change Status By Batch-2
     
     clear_appt_schedule   ${PUSERNAME35}
   
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  1   20  
+    ${sTime1}=  add_timezone_time  ${tz}  1   20  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -234,7 +234,7 @@ JD-TC-Enable Disable Appmnt change Status By Batch-2
 JD-TC-Enable Disable Appmnt change Status By Batch-UH1
     [Documentation]   Trying to Enable Batch, Alreay enable appointment Batch status
     
-    ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -246,7 +246,7 @@ JD-TC-Enable Disable Appmnt change Status By Batch-UH1
 JD-TC-Enable Disable Appmnt change Status By Batch-UH2
     [Documentation]   Trying to Disable Batch, Alreay Disable appointment Batch status
     
-    ${resp}=  Provider Login  ${PUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -258,7 +258,7 @@ JD-TC-Enable Disable Appmnt change Status By Batch-UH2
 JD-TC-Enable Disable Appmnt change Status By Batch-UH3
     [Documentation]   Trying to Disable Batch with another provider's scheduleId, Already Disable appointment Batch status
     
-    ${resp}=  Provider Login  ${PUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-Enable Disable Appmnt change Status By Batch-UH3
 JD-TC-Enable Disable Appmnt change Status By Batch-UH4
     [Documentation]   Trying to Enable Batch with another provider's scheduleId, Alreay Enable appointment Batch status
     
-    ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

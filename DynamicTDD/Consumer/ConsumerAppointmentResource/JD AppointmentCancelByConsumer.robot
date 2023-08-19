@@ -24,7 +24,7 @@ JD-TC-AppointmentCancelByConsumer-1
 
     [Documentation]  Consumer Cancel an appointment for a valid Provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME131}
     clear_location  ${PUSERNAME131}    
@@ -37,15 +37,20 @@ JD-TC-AppointmentCancelByConsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME131}
     Set Suite Variable   ${pid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME131}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -172,22 +177,27 @@ JD-TC-AppointmentCancelByConsumer-2
 
     [Documentation]  Consumer Cancel an appointment for a valid another Provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME132}
     clear_location  ${PUSERNAME132} 
 
     ${pid01}=  get_acc_id  ${PUSERNAME132}
     Set Suite Variable   ${pid01}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME132}
     clear_appt_schedule   ${PUSERNAME132}
     ${SERVICE1}=   FakerLibrary.name
@@ -293,7 +303,7 @@ JD-TC-AppointmentCancelByConsumer-UH1
 
     [Documentation]  Consumer Cancel an already started appointment.
 
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid4}

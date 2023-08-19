@@ -17,7 +17,7 @@ ${latti1}       88.259874
 
 *** Test Cases ***
 
-YNW-TC-GetJaldeeCouponsCount-1
+JD-TC-GetJaldeeCouponsCount-1
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -103,7 +103,7 @@ YNW-TC-GetJaldeeCouponsCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
 
-YNW-TC-GetJaldeeCouponsCount-2
+JD-TC-GetJaldeeCouponsCount-2
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -115,7 +115,7 @@ YNW-TC-GetJaldeeCouponsCount-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  ${count}
 
-YNW-TC-GetJaldeeCouponsCount-3
+JD-TC-GetJaldeeCouponsCount-3
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -160,7 +160,7 @@ YNW-TC-GetJaldeeCouponsCount-3
     Should Be Equal As Strings  ${resp.json()}  ${count}
 
 
-YNW-TC-GetJaldeeCouponsCount-4
+JD-TC-GetJaldeeCouponsCount-4
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -171,7 +171,7 @@ YNW-TC-GetJaldeeCouponsCount-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
 
-YNW-TC-GetJaldeeCouponsCount-5
+JD-TC-GetJaldeeCouponsCount-5
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -187,7 +187,7 @@ YNW-TC-GetJaldeeCouponsCount-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  ${count}
 
-YNW-TC-GetJaldeeCouponsCount-6
+JD-TC-GetJaldeeCouponsCount-6
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -200,7 +200,7 @@ YNW-TC-GetJaldeeCouponsCount-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  ${count}
 
-YNW-TC-GetJaldeeCouponsCount-7
+JD-TC-GetJaldeeCouponsCount-7
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -213,7 +213,7 @@ YNW-TC-GetJaldeeCouponsCount-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  ${count}
 
-YNW-TC-GetJaldeeCouponsCount-8
+JD-TC-GetJaldeeCouponsCount-8
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -228,13 +228,13 @@ YNW-TC-GetJaldeeCouponsCount-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  0
 
-YNW-TC-GetJaldeeCouponsCount -UH1
+JD-TC-GetJaldeeCouponsCount -UH1
     Comment   Get jaldee coupons without login  
     ${resp}=  Get Jaldee Coupons Count  CreatedDate-eq=${c_date}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
  
-YNW-TC-GetJaldeeCouponsCount -UH2
+JD-TC-GetJaldeeCouponsCount -UH2
     Comment   Consumer try to Get jaldee coupons count
     ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -242,7 +242,7 @@ YNW-TC-GetJaldeeCouponsCount -UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-GetJaldeeCouponsCount -UH3
+JD-TC-GetJaldeeCouponsCount -UH3
     Comment   Provider try to Get jaldee coupons count
     ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -284,7 +284,7 @@ YNW-TC-GetJaldeeCouponsCount -UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
 
-YNW-TC-GetJaldeeCouponsCount-4
+JD-TC-GetJaldeeCouponsCount-4
     resetsystem_time  
     Comment    Get jaldee coupons count by superadmin
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

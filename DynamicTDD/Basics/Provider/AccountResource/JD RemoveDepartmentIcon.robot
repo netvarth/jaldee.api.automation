@@ -36,10 +36,15 @@ JD-TC-Remove_Department_Icon-1
 
     [Documentation]   Remove Department Icon
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}
@@ -118,10 +123,15 @@ JD-TC-Remove_Department_Icon-UH1
 
     [Documentation]   Remove Department Icon where department id is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -173,7 +183,7 @@ JD-TC-Remove_Department_Icon-UH2
 
     [Documentation]   Remove Department Icon where provider id is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -188,7 +198,7 @@ JD-TC-Remove_Department_Icon-UH3
 
     [Documentation]   Remove Department Icon where filename is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -201,7 +211,7 @@ JD-TC-Remove_Department_Icon-UH4
 
     [Documentation]   Remove Department Icon where file size is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -214,7 +224,7 @@ JD-TC-Remove_Department_Icon-UH5
 
     [Documentation]   Remove Department Icon where action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -226,7 +236,7 @@ JD-TC-Remove_Department_Icon-UH6
 
     [Documentation]   Remove Department Icon where action is no change
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -239,7 +249,7 @@ JD-TC-Remove_Department_Icon-UH7
 
     [Documentation]   Remove Department Icon where caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -252,7 +262,7 @@ JD-TC-Remove_Department_Icon-UH8
 
     [Documentation]   Remove Department Icon where file type is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -265,7 +275,7 @@ JD-TC-Remove_Department_Icon-UH9
 
     [Documentation]   Remove Department Icon where order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

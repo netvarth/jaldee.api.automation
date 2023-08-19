@@ -22,10 +22,13 @@ JD-TC-GetPrescriptionTemplateWithId-1
 
    [Documentation]               Get prescription Template with id where created only one template
 
-    ${resp}=  Provider Login      ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     ${med_name1}                  FakerLibrary.name
     ${frequency1}                 FakerLibrary.word
     ${duration1}                  FakerLibrary.sentence
@@ -73,10 +76,13 @@ JD-TC-GetPrescriptionTemplateWithId-2
                                   
     [Documentation]               Get prescription Template with id where created multiple template
 
-    ${resp}=  Provider Login      ${PUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME38}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
     
     ${templateName2}              FakerLibrary.sentence
     ${pre_list1}=                 Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  instructions=${instrn1}  duration=${duration1}  dosage=${dosage1}
@@ -117,10 +123,13 @@ JD-TC-GetPrescriptionTemplateWithId-3
 
    [Documentation]               Get prescription Template with empty id
 
-    ${resp}=  Provider Login      ${PUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME38}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
 
     ${tempid}=                    FakerLibrary.Random Number
 
@@ -149,10 +158,13 @@ JD-TC-GetPrescriptionTemplateWithId-UH1
 
    [Documentation]               Get prescription Template with invalid id
 
-    ${resp}=  Provider Login      ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}   ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${id}   ${resp.json()['id']}
 
     ${tempid}=                    FakerLibrary.Random Number
 

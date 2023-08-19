@@ -13,21 +13,23 @@ Library           FakerLibrary
 *** Variables ***
 ${nods}  0
 @{Views}  self  all  customersOnly
+${BR}  ${0}
 # ${defaultCount}  260
 *** Test Cases ***
 
-Set Time
-    ${Time}=  db.get_time
-    ${sTime}=  add_time  0  15
-    Set Suite Variable   ${sTime}  ${sTime}
-    ${eTime}=  add_time   0  45
-    Set Suite Variable   ${eTime}  ${eTime}
+Remove Files
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    # ${sTime}=  add_time  0  15
+    # Set Suite Variable   ${sTime}  ${sTime}
+    # ${eTime}=  add_time   0  45
+    # Set Suite Variable   ${eTime}  ${eTime}
     Remove File   ${EXECDIR}/TDD/varfiles/providers.py
     Create File   ${EXECDIR}/TDD/varfiles/providers.py
 
-YNW-TC-Provider_Signup-1
+JD-TC-Provider_Signup-1
     [Documentation]    Create a provider with all valid attributes
     Set Global Variable  ${US}  0
+    # Set Global Variable  ${BR}  ${0}
     # Set Global Variable  ${BC}  0
     # Set Global Variable  ${PC}  0
     
@@ -68,15 +70,20 @@ YNW-TC-Provider_Signup-1
     ${count}=  Set Variable If  ${count}==${totnods}  ${totnoncorpnods}   ${provider_count}
     Log  ${count}
 
+    Log  \n${count} service provider accounts signed up   console=yes
+
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}-${count}
     
     Log  ${count}
     FOR  ${no}  IN RANGE  ${count}
         ${PUSERNAME}=  Evaluate  ${PUSERNAME}+1
-        ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${sub_domain}  ${decrypted_data['subSector']}
+        # Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
         ${resp}=  View Waitlist Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -100,7 +107,7 @@ YNW-TC-Provider_Signup-1
         ${resp}=  Get Service
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
+        Run Keyword And Continue On Failure  Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
         #Verify Response List   ${resp}  0  totalAmount=${service_amt}
         ${resp}=   Get Appointment Settings
         Log   ${resp.json()}
@@ -136,17 +143,25 @@ SignUp Account
         # Log  ${is_corp}
         # Run Keyword If  '${is_corp}' == 'True'  Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${BC}=${PUSERNAME}${\n}
         # Run Keyword If  '${is_corp}' == 'False'  Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${PC}=${PUSERNAME}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${PUSERNAME}${\n}
+        # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}
+        ${highest_pkg}=  get_highest_license_pkg
+        IF  '${pkgId}' == '${highest_pkg[0]}'
+        Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${PUSERNAME}${\n}
+        END
+        ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
+        Set Global Variable  ${BR}
+
+        sleep  01s
+
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Suite Variable  ${pid}  ${decrypted_data['id']}
+        
         Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${PUSERNAME}${\n}
         Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}
-        ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${pid}  ${resp.json()['id']}
-        # ${Temp}=  Evaluate   ${BC}+1
-        # ${BC}=  Set Variable If   '${is_corp}' == 'True'  ${Temp}  ${BC}
-        # Set Global Variable  ${BC} 
-        # ${Temp1}=  Evaluate   ${PC}+1
-        # ${PC}=  Set Variable If   '${is_corp}' == 'False'  ${Temp1}  ${PC}
-        # Set Global Variable  ${PC} 
 
         Set Test Variable  ${email_id}  ${P_EMAIL}${PUSERNAME}.ynwtest@netvarth.com
 
@@ -160,8 +175,8 @@ SignUp Account
         Verify Response  ${resp}  status=INCOMPLETE
         ${US} =  Evaluate  ${US}+1
         Set Global Variable  ${US} 
-        ${DAY1}=  get_date
-        Set Suite Variable  ${DAY1}  ${DAY1}
+        # ${DAY1}=  get_date
+        # Set Suite Variable  ${DAY1}  ${DAY1}
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list}  ${list}
         ${ph1}=  Evaluate  ${PUSERNAME}+1000000000
@@ -174,14 +189,22 @@ SignUp Account
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
         ${emails1}=  Emails  ${name3}  Email  ${P_Email}${US}.ynwtest@netvarth.com  ${views}
         ${bs}=  FakerLibrary.bs
+        ${companySuffix}=  FakerLibrary.companySuffix
         # ${city}=   get_place
         # ${latti}=  get_latitude
         # ${longi}=  get_longitude
         # ${latti}  ${longi}=  get_lat_long
-        ${companySuffix}=  FakerLibrary.companySuffix
         # ${postcode}=  FakerLibrary.postcode
         # ${address}=  get_address
         ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
+        ${DAY1}=  get_date_by_timezone  ${tz}
+        ${Time}=  db.get_time_by_timezone   ${tz}
+        ${sTime}=  add_timezone_time  ${tz}  0  15  
+        Set Suite Variable   ${sTime}  ${sTime}
+        ${eTime}=  add_timezone_time  ${tz}  0  45  
+        Set Suite Variable   ${eTime}  ${eTime}
 
         #${resp}=  Create Business Profile  ${bs}  ${bs} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}
         #Log  ${resp.json()}

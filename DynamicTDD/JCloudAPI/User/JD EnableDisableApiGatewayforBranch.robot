@@ -29,7 +29,7 @@ JD-TC-EnableDisableApiGateway-1
 
     [Documentation]   Enable Api Gateway for a branch(account level).
 
-    ${resp}=  Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -51,7 +51,7 @@ JD-TC-EnableDisableApiGateway-2
 
     [Documentation]   Disable Api Gateway for a branch(account level).
 
-    ${resp}=  Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,7 +82,7 @@ JD-TC-EnableDisableApiGateway-3
 
     [Documentation]   Enable Api Gateway for a user(user level) with admin previlage.
 
-    ${resp}=  Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,7 +148,7 @@ JD-TC-EnableDisableApiGateway-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -170,7 +170,7 @@ JD-TC-EnableDisableApiGateway-4
 
     [Documentation]   Enable Api Gateway for a user(user level) without admin previlage.
 
-    ${resp}=  Provider Login  ${MUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,7 +236,7 @@ JD-TC-EnableDisableApiGateway-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -254,7 +254,7 @@ JD-TC-EnableDisableApiGateway-UH1
 
     [Documentation]   Enable Api Gateway for a branch(account level) which is already enabled.
 
-    ${resp}=  Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -280,7 +280,7 @@ JD-TC-EnableDisableApiGateway-UH2
 
     [Documentation]   Disable Api Gateway for a branch(account level) which is already disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

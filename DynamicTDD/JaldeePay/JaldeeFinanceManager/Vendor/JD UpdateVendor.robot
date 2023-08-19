@@ -32,8 +32,9 @@ JD-TC-UpdateVendor-1
 
     [Documentation]    Create Vendor for an SP and verify the details then update the Vendor vendorId.
 
-    ${resp}=                      Provider Login         ${PUSERNAME75}    ${PASSWORD}
-    Log                           ${resp.content}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=                      Get Business Profile
@@ -192,8 +193,9 @@ JD-TC-UpdateVendor-2
 
     [Documentation]    Create Vendor for an SP and verify the details then update the Vendor vendorId is EMPTY.
 
-    ${resp}=                      Provider Login         ${PUSERNAME75}    ${PASSWORD}
-    Log                           ${resp.content}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${preferredPaymentMode}=    Create List          ${jaldeePaymentmode[0]}

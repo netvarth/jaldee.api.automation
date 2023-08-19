@@ -21,14 +21,14 @@ ${SERVICE3}     Radio Repdca222
 
 JD-TC-DeleteWaitlistStatusBoardById-1
 	[Documentation]  Delete a StatusBoard
-    ${resp}=  ProviderLogin  ${PUSERNAME146}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME146}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME146}
     clear_location  ${PUSERNAME146}
     clear_queue   ${PUSERNAME146}
     clear_Statusboard  ${PUSERNAME146}
     clear_Addon  ${PUSERNAME146}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -71,7 +71,7 @@ JD-TC-DeleteWaitlistStatusBoardById-1
     Set Suite Variable  ${sbq_id2}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}  ${Positions[1]}  ${sbq_id2}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}  ${Positions[1]}  ${sbq_id2}
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -110,7 +110,7 @@ JD-TC-DeleteWaitlistStatusBoardById -UH2
 
 JD-TC-DeleteWaitlistStatusBoardById-UH3
     [Documentation]  Delete a Waitlist StatusBoard by id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Delete Waitlist Status Board By Id  ${invalid_id}
@@ -120,7 +120,7 @@ JD-TC-DeleteWaitlistStatusBoardById-UH3
 
 JD-TC-DeleteWaitlistStatusBoardById-UH4
     [Documentation]  Delete a StatusBoard by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Delete Waitlist Status Board By Id  ${sb_id}
     Should Be Equal As Strings  ${resp.status_code}  422

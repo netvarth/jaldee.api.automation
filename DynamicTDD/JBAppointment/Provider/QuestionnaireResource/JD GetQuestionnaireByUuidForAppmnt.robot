@@ -228,13 +228,14 @@ JD-TC-GetQuestionnaireByUuidForAppointment-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME166}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -276,7 +277,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME166}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -300,6 +301,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -313,7 +315,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-1
 
     clear_appt_schedule   ${PUSERNAME166}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -404,7 +406,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-2
 
     clear_customer   ${PUSERNAME166}
 
-    ${resp}=  Provider Login  ${PUSERNAME166}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -437,6 +439,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -450,7 +453,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-2
 
     clear_appt_schedule   ${PUSERNAME166}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -528,7 +531,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-2
     ...   apptStatus=${apptStatus[1]}
 
     
-    ${resp}=  Provider Login  ${PUSERNAME166}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -546,7 +549,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-3
 
     clear_customer   ${PUSERNAME166}
 
-    ${resp}=  Provider Login  ${PUSERNAME166}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -579,6 +582,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -592,7 +596,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-3
 
     clear_appt_schedule   ${PUSERNAME166}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -675,7 +679,7 @@ JD-TC-GetQuestionnaireByUuidForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
   
-    ${resp}=  Provider Login  ${PUSERNAME166}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -63,7 +63,7 @@ JD-TC-RequstForPanValidation-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -283,7 +283,7 @@ JD-TC-RequstForPanValidation-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -441,7 +441,7 @@ JD-TC-RequstForPanValidation-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -599,7 +599,7 @@ JD-TC-RequstForPanValidation-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -738,7 +738,7 @@ JD-TC-RequstForPanValidation-11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -867,7 +867,7 @@ JD-TC-RequstForPanValidation-UH1
 
 
   
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -943,7 +943,7 @@ JD-TC-RequstForPanValidation-UH2
 
 
   
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1012,7 +1012,7 @@ JD-TC-RequstForPanValidation-UH3
     [Documentation]               Requst for Pancard validation invalid phoneNo
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1084,7 +1084,7 @@ JD-TC-RequstForPanValidation-UH4
                                   
     [Documentation]               Requst for Pancard validation empty loan uid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1169,7 +1169,7 @@ JD-TC-RequstForPanValidation-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1322,7 +1322,7 @@ JD-TC-RequstForPanValidation-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1474,7 +1474,7 @@ JD-TC-RequstForPanValidation-UH7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1631,7 +1631,7 @@ JD-TC-RequstForPanValidation-UH10
                                   
     [Documentation]               Requst for Pancard validation with another provider login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

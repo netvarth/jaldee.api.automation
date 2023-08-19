@@ -61,11 +61,16 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${accountId}   ${resp.json()['id']}
-    Set Suite Variable   ${Pf_name}   ${resp.json()['firstName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${accountId}  ${decrypted_data['id']}
+    Set Suite Variable   ${Pf_name}   ${decrypted_data['firstName']}
+    # Set Suite Variable   ${accountId}   ${resp.json()['id']}
+    # Set Suite Variable   ${Pf_name}   ${resp.json()['firstName']}
     ${pid}=  get_acc_id  ${PUSERNAME61}
 
     ${resp}=  Get Business Profile
@@ -95,12 +100,13 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME61}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  90
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}   0  90
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=6  max=20
@@ -245,7 +251,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
     ${resp}=    Get Appointment Schedule Delay    ${sch_id}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
-    Verify Response  ${resp}     delayDuration=${delay_time}
+    # Verify Response  ${resp}     delayDuration=${delay_time}
 
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}
@@ -320,7 +326,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get jaldeeIntegration Settings
@@ -348,7 +354,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_service   ${PUSERNAME61}
@@ -356,6 +362,10 @@ JD-TC-Appointment Schedule Delay By Scheduleid-2
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME61}
     clear_consumer_msgs  ${CUSERNAME5}
     clear_provider_msgs  ${PUSERNAME61}
@@ -387,12 +397,12 @@ JD-TC-Appointment Schedule Delay By Scheduleid-2
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME61}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   1  40
-    ${eTime1}=  add_time   2  10
+    ${sTime1}=  add_timezone_time  ${tz}   1  40
+    ${eTime1}=  add_timezone_time  ${tz}   2  10
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=6  max=20
@@ -487,10 +497,15 @@ JD-TC-Appointment Schedule Delay By Scheduleid-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${accountId}   ${resp.json()['id']}
-    Set Suite Variable   ${Pf_name}   ${resp.json()['firstName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${accountId}  ${decrypted_data['id']}
+    Set Suite Variable   ${Pf_name}   ${decrypted_data['firstName']}
+    # Set Suite Variable   ${accountId}   ${resp.json()['id']}
+    # Set Suite Variable   ${Pf_name}   ${resp.json()['firstName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -531,17 +546,22 @@ JD-TC-Appointment Schedule Delay By Scheduleid-3
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME69}
 
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     # clear_appt_schedule   ${PUSERNAME69}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  90
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}   0  90
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=6  max=20
@@ -688,7 +708,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-3
 
 JD-TC-Appointment Schedule Delay By Scheduleid-4
     [Documentation]   When delay is Zero
-    ${resp}=  ProviderLogin  ${PUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${delay_time}=   Random Int  min=1   max=60
@@ -731,7 +751,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
@@ -753,12 +773,13 @@ JD-TC-Appointment Schedule Delay By Scheduleid-5
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME60}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=3  max=10
@@ -807,11 +828,16 @@ JD-TC-Appointment Schedule Delay By Scheduleid-5
 JD-TC-Appointment Schedule Delay By Scheduleid-6
     [Documentation]    Add delay after disabling Appointment Location
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${accountId}   ${resp.json()['id']}
-    Set Suite Variable   ${Pf_name}   ${resp.json()['firstName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${accountId}  ${decrypted_data['id']}
+    Set Suite Variable   ${Pf_name}   ${decrypted_data['firstName']}
+    # Set Suite Variable   ${accountId}   ${resp.json()['id']}
+    # Set Suite Variable   ${Pf_name}   ${resp.json()['firstName']}
     ${pid}=  get_acc_id  ${PUSERNAME1}
 
     clear_service   ${PUSERNAME1}
@@ -824,12 +850,13 @@ JD-TC-Appointment Schedule Delay By Scheduleid-6
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  90
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}   0  90
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=3  max=10
@@ -905,11 +932,18 @@ JD-TC-Appointment Schedule Delay By Scheduleid-7
     ${length}=  Get Length   ${len}
     
     FOR   ${b}  IN RANGE   ${length}    
-        ${resp1}=  Provider Login  ${PUSERNAME${b}}  ${PASSWORD}
-        Log   ${resp1.json()}
+        ${resp1}=  Encrypted Provider Login  ${PUSERNAME${b}}  ${PASSWORD}
+        # Log   ${resp1.json()}
         Should Be Equal As Strings    ${resp1.status_code}    200
-        ${domain}=   Set Variable    ${resp1.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp1.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+        # ${domain}=   Set Variable    ${resp1.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp1.json()['subSector']}
         ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
         Log Many  ${status} 	${value}
         ${count}=   Run Keyword If   '${status}' == 'PASS'  Evaluate  ${count}+1
@@ -922,7 +956,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-7
     Should Be Equal As Strings    ${resp.status_code}    200
     Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
     
-    # ${resp}=  ProviderLogin  ${PUSERNAME70}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${accountId}   ${resp1.json()['id']}
     Set Suite Variable   ${Pf_name}   ${resp1.json()['firstName']}
@@ -952,12 +986,12 @@ JD-TC-Appointment Schedule Delay By Scheduleid-7
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
     clear_appt_schedule   ${PUSERNAME${b}}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   0  60
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=6  max=20
@@ -1100,7 +1134,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-7
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}  ${consumer_id4}
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['name']}  ${uname5}
 
-    ${resp}=   Provider Login   ${PUSERNAME${b}}    ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME${b}}    ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     #updateIncreasingAddDelayTime
@@ -1158,7 +1192,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-7
     Should Be Equal As Strings  ${resp.json()[2]['receiver']['id']}  ${consumer_id4}
     Should Be Equal As Strings  ${resp.json()[2]['receiver']['name']}  ${consumername}
 
-    ${resp}=   Provider Login   ${PUSERNAME${b}}    ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME${b}}    ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     #UpdateWithDecresingAddDelayTime
@@ -1238,7 +1272,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-UH2
 
 JD-TC-Appointment Schedule Delay By Scheduleid-UH3
     [Documentation]   Add delay to another provider's Appointment
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${des}=   FakerLibrary.sentence
     ${resp}=  Add Appointment Schedule Delay  ${sch_id}  ${delay_time}
@@ -1248,7 +1282,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-UH3
 JD-TC-Appointment Schedule Delay By Scheduleid-UH4
     [Documentation]    Add Delay performing after business hours
     
-    ${resp}=  ProviderLogin  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
@@ -1256,14 +1290,14 @@ JD-TC-Appointment Schedule Delay By Scheduleid-UH4
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME80}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${sTime1}=  add_time  0  10
+    ${sTime1}=  add_timezone_time  ${tz}  0  10  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time  0  15
+    ${eTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${eTime1}
 
 

@@ -85,7 +85,7 @@ JD-TC-AddLeadToken-1
     clear_customer   ${MUSERNAME61}
     clear_location   ${MUSERNAME61}
     clear_queue      ${MUSERNAME61}
-    ${resp}=   ProviderLogin  ${MUSERNAME61}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${p_id}    ${resp.json()['id']}
@@ -98,22 +98,51 @@ JD-TC-AddLeadToken-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
    
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid2}=  Create Sample Location
     Set Suite Variable  ${lid2}
+    
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid3}=  Create Sample Location
     Set Suite Variable  ${lid3}
+    
+    ${resp}=   Get Location ById  ${lid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     # Set Suite Variable  ${id}
 
     enquiryStatus  ${account_id}
@@ -495,15 +524,19 @@ JD-TC-AddLeadToken-1
 
     ${resp}=  Create Sample Location
     Set Test Variable    ${loc_id4}   ${resp}
+    ${resp}=   Get Location ById  ${loc_id4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_name3}=    FakerLibrary.name
     Set Test Variable     ${ser_name3}
     ${resp}=  Create Sample Service   ${ser_name3}
     Set Test Variable    ${ser_id4}   ${resp}   
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name3}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sone}=   db.get_time
-    ${eone}=   add_time  3  00
+    ${sone}=   db.get_time_by_timezone  ${tz}
+    ${eone}=   add_timezone_time  ${tz}  3  00  
     
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
@@ -512,7 +545,7 @@ JD-TC-AddLeadToken-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id4}   ${resp.json()}
 
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${desc}=   FakerLibrary.word
     ${lead}=  Create Dictionary   id=${leadid}
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id4}  ${q_id4}  ${DAY4}  ${desc}  ${bool[1]}  ${cid}   lead=${lead}
@@ -569,14 +602,14 @@ JD-TC-AddLeadToken-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
      
     Set Suite Variable  ${MUSERNAME_E}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
@@ -590,19 +623,23 @@ JD-TC-AddLeadToken-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -647,11 +684,14 @@ JD-TC-AddLeadToken-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=   Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -661,9 +701,16 @@ JD-TC-AddLeadToken-2
     ${resp}=   enquiryStatus  ${account_id1}
     ${resp}=   leadStatus  ${account_id1}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -746,7 +793,7 @@ JD-TC-AddLeadToken-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -778,7 +825,7 @@ JD-TC-AddLeadToken-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -827,18 +874,18 @@ JD-TC-AddLeadToken-2
     Set Suite Variable  ${s_id1}  ${resp.json()}
     # ${resp}=  Create Sample Service   ${ser_name3}
     # Set Test Variable    ${ser_id4}   ${resp}   
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name3}=    FakerLibrary.name
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sone}=   db.get_time
-    ${eone}=   add_time  3  00
-    ${sTime1}=  add_time   0  15
+    ${sone}=   db.get_time_by_timezone  ${tz}
+    ${eone}=   add_timezone_time  ${tz}  3  00  
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  00
+    ${eTime1}=  add_timezone_time  ${tz}  2  00  
     Set Suite Variable   ${eTime1}
     
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
@@ -854,7 +901,7 @@ JD-TC-AddLeadToken-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id}  ${resp.json()}
 
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${desc}=   FakerLibrary.word
     ${lead}=  Create Dictionary   id=${lead_id2}
 
@@ -891,7 +938,7 @@ JD-TC-AddLeadToken-3
     # clear_customer   ${MUSERNAME61}
     # clear_location   ${MUSERNAME61}
     # clear_queue      ${MUSERNAME61}
-    ${resp}=   ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -912,7 +959,7 @@ JD-TC-AddLeadToken-3
     Set Suite Variable   ${lead_id3}        ${resp.json()['id']}
     Set Suite Variable   ${leUid3}        ${resp.json()['uid']}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
 
     ${resp}=    Get Locations
@@ -936,9 +983,10 @@ JD-TC-AddLeadToken-3
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=1
     Set Suite Variable   ${parallel}
@@ -986,7 +1034,7 @@ JD-TC-AddLeadToken-4
 
     [Documentation]  Create a lead for user Then Add a consumer to the waitlist for the Futur day .
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1000,7 +1048,7 @@ JD-TC-AddLeadToken-4
     Set Suite Variable   ${lead_id4}        ${resp.json()['id']}
     Set Suite Variable   ${leUid4}        ${resp.json()['uid']}
     ${lead}=  Create Dictionary   id=${lead_id4}
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${desc}=   FakerLibrary.word
 
     ${resp}=  Add To Waitlist By User  ${cid1}  ${s_id3}  ${que_id}  ${DAY2}  ${desc}  ${bool[1]}  ${u_id}  ${cid1}     lead=${lead}
@@ -1026,7 +1074,7 @@ JD-TC-AddLeadToken-5
 
     [Documentation]  Create a lead for user Then Consumer Take Waitlist for the Futur day .
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -1048,7 +1096,7 @@ JD-TC-AddLeadToken-5
 
     ${cid1}=  get_id  ${CUSERNAME4}
     Set Suite Variable   ${cid1}
-    ${DAY5}=  add_date  5
+    ${DAY5}=  db.add_timezone_date  ${tz}  5  
 
     ${msg}=  FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${que_id}  ${DAY5}  ${s_id3}  ${msg}  ${bool[0]}  ${cidfor}
@@ -1078,7 +1126,7 @@ JD-TC-AddLeadToken-6
 
     [Documentation]  Create a lead for user Then Another user Add waitlist .
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1092,12 +1140,12 @@ JD-TC-AddLeadToken-6
     Set Suite Variable   ${lead_id5}        ${resp.json()['id']}
     Set Suite Variable   ${leUid5}        ${resp.json()['uid']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lead}=  Create Dictionary   id=${lead_id5}
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${desc}=   FakerLibrary.word
 
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id2}  ${que_id}  ${DAY2}  ${desc}  ${bool[1]}  ${u_id}  ${cid}     lead=${lead}
@@ -1118,7 +1166,7 @@ JD-TC-AddLeadToken-7
 
     [Documentation]  Create a lead for user and Assign a user  Then First user Add waitlist .
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1148,7 +1196,7 @@ JD-TC-AddLeadToken-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${lead}=  Create Dictionary   id=${lead_id6}
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${desc}=   FakerLibrary.word
 
     ${resp}=  Add To Waitlist By User  ${cid2}  ${s_id2}  ${que_id}  ${DAY2}  ${desc}  ${bool[1]}  ${u_id}  ${cid2}     lead=${lead}
@@ -1199,7 +1247,7 @@ JD-TC-AddLeadToken-8
     [Documentation]  Create a lead for user Then Add Two times same Waitlist .
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p_id}  ${resp.json()['id']}
@@ -1218,7 +1266,7 @@ JD-TC-AddLeadToken-8
     Set Suite Variable   ${lead_id3}        ${resp.json()['id']}
     Set Suite Variable   ${leUid3}        ${resp.json()['uid']}
 
-    ${DAY4}=  add_date  1
+    ${DAY4}=  db.add_timezone_date  ${tz}  1  
     ${desc1}=   FakerLibrary.word
     ${lead}=  Create Dictionary   id=${lead_id3}
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id2}  ${que_id}  ${DAY4}  ${desc1}  ${bool[1]}  ${u_id}  ${cid}     lead=${lead}

@@ -22,7 +22,7 @@ JD-TC-providerConsumerSignup-1
 
     [Documentation]    Provider Consumer Signup
 
-    ${resp}=   ProviderLogin  ${PUSERNAME73}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME73}
@@ -59,7 +59,7 @@ JD-TC-providerConsumerSignup-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME73}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -72,7 +72,7 @@ JD-TC-providerConsumerSignup-2
 
     [Documentation]    Provider Consumer Signup without email id
     
-    ${resp}=   ProviderLogin  ${PUSERNAME73}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -87,7 +87,7 @@ JD-TC-providerConsumerSignup-UH1
     
     [Documentation]    Provider Consumer Signup without mobile number
     
-    ${resp}=   ProviderLogin  ${PUSERNAME73}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -100,7 +100,7 @@ JD-TC-providerConsumerSignup-UH2
     
     [Documentation]    Provider Consumer Signup without firstname
     
-    ${resp}=   ProviderLogin  ${PUSERNAME73}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -113,7 +113,7 @@ JD-TC-providerConsumerSignup-UH3
   
     [Documentation]    Provider Consumer Signup without lastname
   
-    ${resp}=   ProviderLogin  ${PUSERNAME73}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -63,7 +63,7 @@ JD-TC-GenerateOtpforConsumerAcceptancePhone-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME63}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -364,7 +364,7 @@ JD-TC-GenerateOtpforConsumerAcceptancePhone-2
                                   
     [Documentation]              Generate Otp for Consumer Acceptance Phone   direct provider login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME63}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -383,7 +383,7 @@ JD-TC-GenerateOtpforConsumerAcceptancePhone-3
                                   
     [Documentation]              Generate Otp for Consumer Acceptance Phone   with invalid phone num
 
-    ${resp}=   ProviderLogin  ${PUSERNAME63}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -402,7 +402,7 @@ JD-TC-GenerateOtpforConsumerAcceptancePhone-4
                                   
     [Documentation]              Generate Otp for Consumer Acceptance Phone  with another country code
 
-    ${resp}=   ProviderLogin  ${PUSERNAME63}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -438,7 +438,7 @@ JD-TC-GenerateOtpforConsumerAcceptancePhone-6
     [Documentation]              Generate Otp for Consumer Acceptance Phone  another provider login
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME13}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

@@ -213,16 +213,24 @@ JD-TC-GetQuestionnaireListByProvider-1
     Set Suite Variable   ${sheet1}
     ${colnames}=  getColumnHeaders  ${sheet1}
     Log List  ${colnames}
+    Log List  ${QnrChannel}
+    Log List  ${QnrTransactionType}
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    Remove Values From List  ${servicenames}   ${NONE}
+    Log  ${servicenames}
+    ${unique_snames}=    Remove Duplicates    ${servicenames}
+    Log  ${unique_snames}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -230,34 +238,45 @@ JD-TC-GetQuestionnaireListByProvider-1
     ${s_len}=  Get Length  ${resp.json()}
     @{snames}=  Create List
     FOR  ${i}  IN RANGE   ${s_len}
-        Append To List  ${snames}  ${resp.json()[${i}]['name']}
+        IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[2]}'
+            ${s_id}=  Set Variable   ${resp.json()[${i}]['id']}
+        ELSE IF  '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' == '${service_type[0]}'
+            ${d_id}=  Set Variable   ${resp.json()[${i}]['id']}
+        ELSE
+            Append To List  ${snames}  ${resp.json()[${i}]['name']}
+        END
     END
 
-    Remove Values From List  ${servicenames}   ${NONE}
-    Log  ${servicenames}
-    ${unique_snames}=    Remove Duplicates    ${servicenames}
-    Log  ${unique_snames}
-    ${snames_len}=  Get Length  ${unique_snames}
-    FOR  ${i}  IN RANGE   ${snames_len}
-        ${kwstatus} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${snames}  ${unique_snames[${i}]}
-        Log Many  ${kwstatus} 	${value}
-        Continue For Loop If  '${kwstatus}' == 'PASS'
-        &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
-        ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
-        Log  ${ttype}
-        ${u_ttype}=    Remove Duplicates    ${ttype}
-        Log  ${u_ttype}
-        ${s_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[3]}' in @{u_ttype}  Create Sample Service  ${unique_snames[${i}]}
-        ${d_id}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[0]}' in @{u_ttype}   Create Sample Donation  ${unique_snames[${i}]}
+    Log  ${snames}
+    ${srv_val}=    Get Variable Value    ${s_id}
+    ${don_val}=    Get Variable Value    ${d_id}
+    
+    IF  '${srv_val}'=='${None}' or '${don_val}'=='${None}'
+        ${snames_len}=  Get Length  ${unique_snames}
+        FOR  ${i}  IN RANGE   ${snames_len}
+            &{dict}=  Create Dictionary   ${colnames[6]}=${unique_snames[${i}]}
+            ${ttype}=  getColumnValueByMultipleVals  ${sheet1}  ${colnames[1]}  &{dict}  
+            Log  ${ttype}
+            ${u_ttype}=    Remove Duplicates    ${ttype}
+            Log  ${u_ttype}
+            IF   '${QnrTransactionType[3]}' in @{u_ttype} and '${srv_val}'=='${None}'
+                ${s_id}=  Create Sample Service  ${unique_snames[${i}]}  maxBookingsAllowed=10
+            ELSE IF  '${QnrTransactionType[0]}' in @{u_ttype} and '${don_val}'=='${None}'
+                ${d_id}=  Create Sample Donation  ${unique_snames[${i}]}
+            END
+        END
     END
+
+    Set Suite Variable   ${s_id}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
+    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}    ${xlFile}  
     Log  ${resp.content}
@@ -275,7 +294,7 @@ JD-TC-GetQuestionnaireListByProvider-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -349,7 +368,7 @@ JD-TC-GetQuestionnaireListByProvider-2
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -392,7 +411,7 @@ JD-TC-GetQuestionnaireListByProvider-2
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    # ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -408,7 +427,7 @@ JD-TC-GetQuestionnaireListByProvider-2
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -480,7 +499,7 @@ JD-TC-GetQuestionnaireListByProvider-3
     Set Suite Variable   ${colnames1}
     ${servicenames}   getColumnValuesByName  ${sheet2}  ${colnames1[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -539,7 +558,7 @@ JD-TC-GetQuestionnaireListByProvider-3
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -636,7 +655,7 @@ JD-TC-GetQuestionnaireListByProvider-UH2
 
     ${account_id}=  db.get_acc_id  ${PUSERNAME2}
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -672,7 +691,7 @@ JD-TC-GetQuestionnaireListByProvider-3
     Set Suite Variable   ${colnames1}
     ${servicenames}   getColumnValuesByName  ${sheet2}  ${colnames1[7]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -731,7 +750,7 @@ JD-TC-GetQuestionnaireListByProvider-3
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

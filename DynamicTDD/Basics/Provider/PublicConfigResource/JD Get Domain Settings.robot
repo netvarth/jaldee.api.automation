@@ -23,7 +23,7 @@ JD-TC-Get Domain Settings -1
 
 JD-TC-Get Get Domain Settings -2
        [Documentation]   Provider check to Get Domain Settings provider login
-       ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Get Domain Settings  healthCare
        Log   ${resp.json()}

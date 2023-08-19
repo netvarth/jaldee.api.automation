@@ -75,18 +75,18 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -800
     
-#     ${StartDate}=  get_date
+#     ${StartDate}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${StartDate}  datetime
 #     Log  ${D1.year}  
 #     # ${SecondDay}=  db.Add Date   80
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -112,8 +112,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${StartDate}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -275,11 +275,11 @@ ${zero_value}     0
     
 #     change_system_date   350
 
-#     ${SecondDate}=  get_date
+#     ${SecondDate}=  db.get_date_by_timezone  ${tz}
 #     ${D2} =  Convert Date  ${SecondDate}  datetime
 #     Log  ${D2.year}  
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -357,9 +357,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
     
-#     ${End_Date}=    get_date 
+#     ${End_Date}=    db.get_date_by_timezone  ${tz} 
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -447,13 +447,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
 #     change_system_date   -900
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${Day1}  datetime
 #     Log  ${D1.year} 
 
@@ -479,8 +479,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -641,11 +641,11 @@ ${zero_value}     0
 
 #     change_system_date   400
 
-#     ${DAY2}=  get_date
+#     ${DAY2}=  db.get_date_by_timezone  ${tz}
 #     ${D2} =  Convert Date  ${Day2}  datetime
 #     Log  ${D2.year} 
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -706,9 +706,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -788,13 +788,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -750
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     @{Views}=  Create List  self  all  customersOnly
 #     ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
@@ -817,8 +817,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -979,9 +979,9 @@ ${zero_value}     0
 
 #     change_system_date   250
 
-#     ${DAY2}=  get_date
+#     ${DAY2}=  db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1058,9 +1058,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1137,13 +1137,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -800
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${Day1}  datetime
 #     Log  ${D1.year} 
 
@@ -1169,8 +1169,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1333,11 +1333,11 @@ ${zero_value}     0
 
 #     change_system_date   400
 
-#     ${DAY2}=  get_date
+#     ${DAY2}=  db.get_date_by_timezone  ${tz}
 #     ${D2} =  Convert Date  ${Day2}  datetime
 #     Log  ${D2.year} 
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1413,10 +1413,10 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1510,13 +1510,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -780
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${Day1}  datetime
 #     Log  ${D1.year} 
 
@@ -1542,8 +1542,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1643,7 +1643,7 @@ ${zero_value}     0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${eTime}=  add_time   1  45
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 
 #     ${resp}=  Update Appointment Schedule  ${sch_id1}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
 #     ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${EMPTY}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
@@ -1730,11 +1730,11 @@ ${zero_value}     0
 
 #     change_system_date   350
 
-#     ${DAY2}=  get_date
+#     ${DAY2}=  db.get_date_by_timezone  ${tz}
 #     ${D2} =  Convert Date  ${Day2}  datetime
 #     Log  ${D2.year} 
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1747,7 +1747,7 @@ ${zero_value}     0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${eTime}=  add_time   1  45
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 
 #     ${resp}=  Update Appointment Schedule  ${sch_id2}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
 #     ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${EMPTY}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
@@ -1818,9 +1818,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1901,13 +1901,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -840
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${Day1}  datetime
 #     Log  ${D1.year} 
 
@@ -1933,8 +1933,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2034,7 +2034,7 @@ ${zero_value}     0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${eTime}=  add_time   1  45
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 
 #     ${resp}=  Update Appointment Schedule  ${sch_id1}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
 #     ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${EMPTY}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
@@ -2121,11 +2121,11 @@ ${zero_value}     0
 
 #     change_system_date   390
 
-#     ${DAY2}=  get_date
+#     ${DAY2}=  db.get_date_by_timezone  ${tz}
 #     ${D2} =  Convert Date  ${Day2}  datetime
 #     Log  ${D2.year} 
     
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2138,7 +2138,7 @@ ${zero_value}     0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${eTime}=  add_time   1  45
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 
 #     ${resp}=  Update Appointment Schedule  ${sch_id2}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
 #     ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${EMPTY}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
@@ -2209,9 +2209,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2293,13 +2293,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -1000
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${Day1}  datetime
 #     Log  ${D1.year} 
 
@@ -2325,8 +2325,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2426,7 +2426,7 @@ ${zero_value}     0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${eTime}=  add_time   1  45
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 
 #     ${resp}=  Update Appointment Schedule  ${sch_id1}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
 #     ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${EMPTY}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
@@ -2520,11 +2520,11 @@ ${zero_value}     0
 
 #     change_system_date   350
 
-#     ${DAY2}=  get_date
+#     ${DAY2}=  db.get_date_by_timezone  ${tz}
 #     ${D2} =  Convert Date  ${Day2}  datetime
 #     Log  ${D2.year}
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2537,7 +2537,7 @@ ${zero_value}     0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${eTime}=  add_time   1  45
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 
 #     ${resp}=  Update Appointment Schedule  ${sch_id2}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
 #     ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${EMPTY}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
@@ -2588,9 +2588,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2671,13 +2671,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -900
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${Day1}  datetime
 #     Log  ${D1.year} 
 
@@ -2703,8 +2703,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2868,7 +2868,7 @@ ${zero_value}     0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${DAY2}=  add_date  1
+#     ${DAY2}=  db.add_timezone_date  ${tz}  1  
 
 #     FOR   ${a}  IN RANGE   ${count}
 
@@ -2909,11 +2909,11 @@ ${zero_value}     0
 
 #     change_system_date   450
 
-#     ${DAY3}=  get_date
+#     ${DAY3}=  db.get_date_by_timezone  ${tz}
 #     ${D3} =  Convert Date  ${Day3}  datetime
 #     Log  ${D3.year} 
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2990,9 +2990,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3076,13 +3076,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -1300
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${Day1}  datetime
 #     Log  ${D1.year} 
 
@@ -3108,8 +3108,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3273,7 +3273,7 @@ ${zero_value}     0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${DAY2}=  add_date  1
+#     ${DAY2}=  db.add_timezone_date  ${tz}  1  
 
 #     FOR   ${a}  IN RANGE   ${count}
 
@@ -3312,11 +3312,11 @@ ${zero_value}     0
 
 #     change_system_date   500
 
-#     ${DAY3}=  get_date
+#     ${DAY3}=  db.get_date_by_timezone  ${tz}
 #     ${D3} =  Convert Date  ${Day3}  datetime
 #     Log  ${D3.year} 
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3391,9 +3391,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3465,13 +3465,13 @@ ${zero_value}     0
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
 #     change_system_date   -769
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${D1} =  Convert Date  ${Day1}  datetime
 #     Log  ${D1.year} 
 
@@ -3497,8 +3497,8 @@ ${zero_value}     0
 #     ${24hours}    Random Element    ['True','False']
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3662,11 +3662,11 @@ ${zero_value}     0
 
 #     change_system_date   500
 
-#     ${DAY2}=  get_date
+#     ${DAY2}=  db.get_date_by_timezone  ${tz}
 #     ${D2} =  Convert Date  ${Day2}  datetime
 #     Log  ${D2.year} 
     
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3740,9 +3740,9 @@ ${zero_value}     0
 
 #     Resetsystem Time
 
-#     ${DayToday}    get_date
+#     ${DayToday}    db.get_date_by_timezone  ${tz}
 
-#     ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3828,17 +3828,17 @@ JD-TC-TOTAL_ON_APPMT-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
     change_system_date   -840
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${D1} =  Convert Date  ${Day}  datetime
     Log  ${D1.year} 
 
-    ${DAY1}=    add_date  5
+    ${DAY1}=    db.add_timezone_date  ${tz}  5  
 
     ${list}=  Create List  1  2  3  4  5  6  7
     @{Views}=  Create List  self  all  customersOnly
@@ -3852,18 +3852,21 @@ JD-TC-TOTAL_ON_APPMT-11
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3963,7 +3966,7 @@ JD-TC-TOTAL_ON_APPMT-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${eTime}=  add_time   1  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
 
     ${resp}=  Update Appointment Schedule  ${sch_id1}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
     ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${EMPTY}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
@@ -4058,11 +4061,11 @@ JD-TC-TOTAL_ON_APPMT-11
 
     Resetsystem Time
 
-    ${DAY2}=  get_date
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
     ${D2} =  Convert Date  ${Day2}  datetime
     Log  ${D2.year} 
     
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -4075,7 +4078,7 @@ JD-TC-TOTAL_ON_APPMT-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${eTime}=  add_time   1  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
 
     ${resp}=  Update Appointment Schedule  ${sch_id2}  ${resp.json()['name']}  ${resp.json()['apptSchedule']['recurringType']}  ${resp.json()['apptSchedule']['repeatIntervals']}
     ...  ${resp.json()['apptSchedule']['startDate']}  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${EMPTY}  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}

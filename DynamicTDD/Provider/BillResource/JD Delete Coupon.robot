@@ -18,7 +18,7 @@ ${start}         170
 *** Test Cases ***
 JD-TC-Delete Coupon-1
     [Documentation]  Provider check to delete coupon 
-    ${resp}=  ProviderLogin  ${PUSERNAME129}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME129}
     clear_service   ${PUSERNAME129}
@@ -71,10 +71,10 @@ JD-TC-Delete Coupon-1
     ${amount1}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -92,10 +92,10 @@ JD-TC-Delete Coupon-1
     ${amount2}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -113,10 +113,10 @@ JD-TC-Delete Coupon-1
     ${amount3}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -189,7 +189,7 @@ JD-TC-Delete Coupon-UH3
 
     [Documentation]  Provider check to delete coupon  with invalid coupon id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME129}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Delete Coupon  0
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -199,7 +199,7 @@ JD-TC-Delete Coupon-UH4
 
     [Documentation]   delete coupon  with another provider's coupon id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Delete Coupon  ${coupon_id1}   
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -217,10 +217,14 @@ JD-TC-Delete Coupon-UH5
     ${length}=  Get Length   ${len}
     
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${check}  ${resp2.json()['serviceBillable']}
@@ -252,6 +256,12 @@ JD-TC-Delete Coupon-UH5
     ${resp} =  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
     ${resp}=  AddCustomer  ${CUSERNAME4}
     Log   ${resp.json()}
@@ -263,10 +273,10 @@ JD-TC-Delete Coupon-UH5
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time   0   30
-    ${eTime}=  add_time   1  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}   0   30
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=100
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -279,10 +289,9 @@ JD-TC-Delete Coupon-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${couponId}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -316,7 +325,7 @@ JD-TC-Delete Coupon-UH6
 
     [Documentation]  try to delete coupon when coupon is on setled bill
 
-    ${resp}=   ProviderLogin  ${PUSERNAME${a}}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     # ${desc}=  FakerLibrary.Sentence   nb_words=2
     # ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=2  right_digits=1
@@ -330,10 +339,10 @@ JD-TC-Delete Coupon-UH6
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=10   max=100
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -351,11 +360,10 @@ JD-TC-Delete Coupon-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}   
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 

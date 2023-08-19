@@ -45,17 +45,16 @@ JD-TC-Approximate Waiting Time Conventional-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
     Set Suite Variable  ${PUSERNAME_Z}
 
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_Z}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_Z}+25566128
@@ -67,18 +66,22 @@ JD-TC-Approximate Waiting Time Conventional-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -130,17 +133,13 @@ JD-TC-Approximate Waiting Time Conventional-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time   1  30
-    ${eTime1}=  add_time   3   30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  subtract_timezone_time  ${tz}   1  30
+    ${eTime1}=  add_timezone_time  ${tz}   3   30
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
@@ -201,7 +200,6 @@ JD-TC-Approximate Waiting Time Conventional-1
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -213,13 +211,11 @@ JD-TC-Approximate Waiting Time Conventional-1
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}    
     
@@ -232,25 +228,21 @@ JD-TC-Approximate Waiting Time Conventional-1
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid6}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid7}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid8}  ${wid[0]}
 
@@ -426,7 +418,7 @@ JD-TC-Approximate Waiting Time Conventional-1
 
 JD-TC-Approximate Waiting Time Conventional-2
     [Documentation]   Add a consumer to the waitlist for the current day when calculation mode as Conventional and parallel serving is 2 , Then Verify all consumers approximate waiting time
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_service   ${PUSERNAME_Z}
@@ -440,21 +432,17 @@ JD-TC-Approximate Waiting Time Conventional-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  2  00
-    ${eTime1}=  add_time   3  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  5  15
-    ${eTime}=  add_time   6  30
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -512,7 +500,6 @@ JD-TC-Approximate Waiting Time Conventional-2
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -522,12 +509,10 @@ JD-TC-Approximate Waiting Time Conventional-2
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}    
 
@@ -539,22 +524,18 @@ JD-TC-Approximate Waiting Time Conventional-2
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid6}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid7}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid8}  ${wid[0]}
 
@@ -710,7 +691,7 @@ JD-TC-Approximate Waiting Time Conventional-2
 
 JD-TC-Approximate Waiting Time Conventional-3
     [Documentation]  delay add to the conventional waiting time calculation   
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME_Z}
     clear_location  ${PUSERNAME_Z}
@@ -723,21 +704,17 @@ JD-TC-Approximate Waiting Time Conventional-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  2  00
-    ${eTime1}=  add_time   3  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  5  15
-    ${eTime}=  add_time   6  30
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -801,7 +778,6 @@ JD-TC-Approximate Waiting Time Conventional-3
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -811,12 +787,10 @@ JD-TC-Approximate Waiting Time Conventional-3
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}    
     Set Test Variable  ${wid4}  ${wid[0]}     
    
@@ -925,7 +899,7 @@ JD-TC-Approximate Waiting Time Conventional-3
     
 JD-TC-Approximate Waiting Time Conventional-4
     [Documentation]   Check queue waiting time when token1 is started after token3
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME_Z}
     clear_location  ${PUSERNAME_Z}
@@ -939,21 +913,17 @@ JD-TC-Approximate Waiting Time Conventional-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  2  00
-    ${eTime1}=  add_time   3  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  5  15
-    ${eTime}=  add_time   6  30
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1062,7 +1032,7 @@ JD-TC-Approximate Waiting Time Conventional-4
     ${wait_time3}=  Convert To Integer  ${waiting_time3}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Queue ById  ${qi_d1}
     Verify Response  ${resp}  turnAroundTime=${wait_time}  queueWaitingTime=${wait_time3}
@@ -1182,7 +1152,7 @@ JD-TC-Approximate Waiting Time Conventional-4
 
 JD-TC-Approximate Waiting Time Conventional-5
     [Documentation]   Check queue waiting time after disable service
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME_Z}
     clear_location  ${PUSERNAME_Z}
@@ -1195,21 +1165,17 @@ JD-TC-Approximate Waiting Time Conventional-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  2  00
-    ${eTime1}=  add_time   3  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  5  15
-    ${eTime}=  add_time   6  30
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1275,7 +1241,6 @@ JD-TC-Approximate Waiting Time Conventional-5
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -1285,12 +1250,10 @@ JD-TC-Approximate Waiting Time Conventional-5
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}    
 
@@ -1350,7 +1313,7 @@ JD-TC-Approximate Waiting Time Conventional-5
 JD-TC-Approximate Waiting Time Conventional-6
 	[Documentation]  Checking appxWaitingTime in different situations when calculation mode as Conventional
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_service   ${PUSERNAME_Z}
@@ -1364,21 +1327,17 @@ JD-TC-Approximate Waiting Time Conventional-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  2  00
-    ${eTime1}=  add_time   3  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  5  15
-    ${eTime}=  add_time   6  30
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1430,7 +1389,6 @@ JD-TC-Approximate Waiting Time Conventional-6
     Set Test Variable  ${cid}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
@@ -1440,12 +1398,10 @@ JD-TC-Approximate Waiting Time Conventional-6
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}    
     
@@ -1455,12 +1411,10 @@ JD-TC-Approximate Waiting Time Conventional-6
     Set Test Variable  ${cid}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid6}  ${wid[0]}
 
@@ -1556,7 +1510,6 @@ JD-TC-Approximate Waiting Time Conventional-6
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  hi  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid7}  ${wid[0]}
    
@@ -1592,7 +1545,7 @@ JD-TC-Approximate Waiting Time Conventional-6
 
 JD-TC-Approximate Waiting Time Conventional-5
     [Documentation]   Check queue waiting time when batch mode enabled
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME_Z}
     clear_location  ${PUSERNAME_Z}
@@ -1604,21 +1557,17 @@ JD-TC-Approximate Waiting Time Conventional-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  2  00
-    ${eTime1}=  add_time   3  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  5  15
-    ${eTime}=  add_time   6  30
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1685,7 +1634,6 @@ JD-TC-Approximate Waiting Time Conventional-5
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
@@ -1695,12 +1643,10 @@ JD-TC-Approximate Waiting Time Conventional-5
     Set Test Variable  ${wid2}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid3}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}    
     
@@ -1711,22 +1657,18 @@ JD-TC-Approximate Waiting Time Conventional-5
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid5}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid6}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid7}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid8}  ${wid[0]}
 
@@ -1842,7 +1784,6 @@ JD-TC-Approximate Waiting Time Conventional-5
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid9}  ${wid[0]}
 
@@ -1852,7 +1793,6 @@ JD-TC-Approximate Waiting Time Conventional-5
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid10}  ${wid[0]}
     ${resp}=  Get Queue ById  ${qi_d1}
@@ -1861,12 +1801,10 @@ JD-TC-Approximate Waiting Time Conventional-5
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId_3}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid11}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_4}  ${qi_d1}  ${DAY}  ${desc}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid12}  ${wid[0]}
 

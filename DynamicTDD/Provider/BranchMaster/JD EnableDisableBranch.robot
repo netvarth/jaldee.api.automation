@@ -26,7 +26,7 @@ JD-TC-Enable Disable Branch-1
 
     [Documentation]   Enable Branch and create branch master
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -40,8 +40,13 @@ JD-TC-Enable Disable Branch-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${branchCode}=    FakerLibrary.Random Number
@@ -78,7 +83,7 @@ JD-TC-Enable Disable Branch-UH1
 
     [Documentation]   Trying to create branch master after disable branch
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -95,7 +100,7 @@ JD-TC-Enable Disable Branch-UH2
 
     [Documentation]   Disable branch which is already Disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -108,7 +113,7 @@ JD-TC-Enable Disable Branch-UH3
 
     [Documentation]   Enable branch which is already Enabled
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

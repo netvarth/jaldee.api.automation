@@ -40,12 +40,15 @@ JD-TC-OrderByProviderForPickup
     clear_service  ${PUSERNAME39}
     clear_customer   ${PUSERNAME39}
     clear_Item   ${PUSERNAME39}
-    ${resp}=  ProviderLogin  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME39}
     Set Suite Variable  ${accId3} 
@@ -131,22 +134,27 @@ JD-TC-OrderByProviderForPickup
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  05
+    ${sTime1}=  add_timezone_time  ${tz}  0  05
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30 
+    ${eTime1}=  add_timezone_time  ${tz}  0  30   
     Set Suite Variable    ${eTime1}
 
-    ${sTime2}=  add_time  0  35
+    ${sTime2}=  add_timezone_time  ${tz}  0  35  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   0  55 
+    ${eTime2}=  add_timezone_time  ${tz}   0  55 
     Set Suite Variable    ${eTime2}
 
 
@@ -256,7 +264,7 @@ JD-TC-OrderByProviderForPickup
     Should Be Equal As Strings      ${resp.status_code}  200
 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
     Set Suite Variable  ${email}  ${firstname}${CUSERNAME13}.ynwtest@netvarth.com
 
@@ -309,11 +317,11 @@ JD-TC-OrderByProviderForPickup
 JD-TC-OrderByProviderForHomeDelivery
     [Documentation]    Place an order By Provider for Home Delivery.           
 
-    ${resp}=  ProviderLogin  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY10}=  add_date   10
+    ${DAY10}=  db.add_timezone_date  ${tz}   10
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -374,7 +382,7 @@ JD-TC-OrderByConsumerForHomeDelivery
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY12}=  add_date   12
+    ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${DATE12}=  Convert Date  ${DAY12}  result_format=%a, %d %b %Y
     Set Suite Variable  ${DATE12}
     # ${address}=  get_address
@@ -423,7 +431,7 @@ JD-TC-OrderByConsumerForPickup
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY12}=  add_date   12
+    ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
     ${caption}=  FakerLibrary.Sentence   nb_words=4
@@ -453,7 +461,7 @@ JD-TC-OrderByConsumerForPickup
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no42}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -468,7 +476,7 @@ JD-TC-OrderByConsumerForPickup
 
 JD-TC-ConsumerOrderCommunication-1
     [Documentation]  Send order comunication message to consumer without attachment
-    # ${weekday}=  get_weekday
+    # ${weekday}=  get_timezone_weekday  ${tz}
 
     clear_consumer_msgs  ${CUSERNAME13}
     clear_consumer_msgs  ${CUSERNAME20}
@@ -511,10 +519,14 @@ JD-TC-ConsumerOrderCommunication-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -597,10 +609,10 @@ JD-TC-ConsumerOrderCommunication-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
     
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}
@@ -698,10 +710,10 @@ JD-TC-ConsumerOrderCommunication-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
    
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}
     Log   ${resp.json()}
@@ -787,10 +799,10 @@ JD-TC-ConsumerOrderCommunication-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
     
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}
     Log   ${resp.json()}
@@ -865,10 +877,10 @@ JD-TC-ConsumerOrderCommunication-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -937,10 +949,10 @@ JD-TC-ConsumerOrderCommunication-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
     
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -1016,10 +1028,10 @@ JD-TC-ConsumerOrderCommunication-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -1046,7 +1058,7 @@ JD-TC-ConsumerOrderCommunication-8
     clear_consumer_msgs  ${CUSERNAME13}
     clear_provider_msgs  ${PUSERNAME39}
 
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${p_id}  ${resp.json()['id']}
@@ -1105,10 +1117,10 @@ JD-TC-ConsumerOrderCommunication-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
     ${resp}=  Get provider communications
     Log  ${resp.json()}

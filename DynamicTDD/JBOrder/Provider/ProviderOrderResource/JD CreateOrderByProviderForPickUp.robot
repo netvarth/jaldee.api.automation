@@ -38,10 +38,14 @@ JD-TC-CreateOrderByProviderForPickUp-1
     clear_service  ${PUSERNAME119}
     clear_customer   ${PUSERNAME119}
     clear_Item   ${PUSERNAME119}
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME119}
     Set Suite Variable  ${accId3} 
@@ -133,20 +137,25 @@ JD-TC-CreateOrderByProviderForPickUp-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
+
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  00 
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime3}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -258,7 +267,7 @@ JD-TC-CreateOrderByProviderForPickUp-1
 
     # ${cid20}=  get_id  ${CUSERNAME20}
     # Set Suite Variable   ${cid20}
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     # Set Suite Variable  ${address}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
@@ -294,10 +303,10 @@ JD-TC-CreateOrderByProviderForPickUp-1
 JD-TC-CreateOrderByProviderForPickUp-2
     [Documentation]     Create order by provider for store pickup when payment type is FIXED (AdvancePayment is not required for order by provider)
 
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
    
     ${resp}=  Get Order Catalog    ${CatalogId2}  
     Log   ${resp.json()}
@@ -309,7 +318,7 @@ JD-TC-CreateOrderByProviderForPickUp-2
 
     # ${cid20}=  get_id  ${CUSERNAME20}
     # Set Suite Variable   ${cid20}
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
@@ -336,7 +345,7 @@ JD-TC-CreateOrderByProviderForPickUp-2
 JD-TC-CreateOrderByProviderForPickUp-UH1
     [Documentation]    Place an order By Provider for store pickup a date other than in catalog schedule.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -348,7 +357,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${Add_Day1}=  add_date   1
+    ${Add_Day1}=  db.add_timezone_date  ${tz}  1
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
@@ -363,11 +372,11 @@ JD-TC-CreateOrderByProviderForPickUp-UH1
 JD-TC-CreateOrderByProviderForPickUp-UH2
     [Documentation]   place an order by Provider for a past date.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${Sub_DAY1}=  subtract_date   1
+    ${Sub_DAY1}=  db.subtract_timezone_date  ${tz}    1
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
@@ -383,11 +392,11 @@ JD-TC-CreateOrderByProviderForPickUp-UH2
 JD-TC-CreateOrderByProviderForPickUp-UH3
     [Documentation]   place an order by Provider  without an order date.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${Sub_DAY1}=  subtract_date   1
+    ${Sub_DAY1}=  db.subtract_timezone_date  ${tz}    1
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
@@ -406,7 +415,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  ListFamilyMember
 
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -421,7 +430,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH4
 
     ${resp}=  ListFamilyMemberByProvider  ${cid20}
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     # ${INVALID_Fid}=  Random Int  min=10000   max=50000
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
@@ -438,12 +447,12 @@ JD-TC-CreateOrderByProviderForPickUp-UH4
 JD-TC-CreateOrderByProviderForPickUp-UH5
     [Documentation]    Place an order By provider for an item not in catalog.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
@@ -460,11 +469,11 @@ JD-TC-CreateOrderByProviderForPickUp-UH5
 JD-TC-CreateOrderByProviderForPickUp-UH6
     [Documentation]    Place an order By Provider for Store pickup with item quantity less than that of minimum quantity in catalog.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY7}=  add_date   7
+    ${DAY7}=  db.add_timezone_date  ${tz}   7
     ${limit}=   Evaluate  ${minQuantity3} - 1
     ${quantity1}=  FakerLibrary.Random Int  min=1   max=${limit}
     ${quantity1}=  Convert To Number  ${quantity1}  1
@@ -504,11 +513,11 @@ JD-TC-CreateOrderByProviderForPickUp-UH6
 JD-TC-CreateOrderByProviderForPickUp-UH7
     [Documentation]    Place an order By Provider for Store pickup with item quantity greater than that of maximum quantity in catalog.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${limit}=   Evaluate  ${maxQuantity3} + 1
     ${quantity1}=  FakerLibrary.Random Int  min=${limit}   max=100
     ${quantity1}=  Convert To Number  ${quantity1}  1
@@ -548,11 +557,11 @@ JD-TC-CreateOrderByProviderForPickUp-UH7
 
 JD-TC-CreateOrderByProviderForPickUp-UH8
     [Documentation]    Place an order By Provider for Store PickUp with Store_pickup as false.
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -565,11 +574,11 @@ JD-TC-CreateOrderByProviderForPickUp-UH8
 
 JD-TC-CreateOrderByProviderForPickUp-UH9
     [Documentation]   place an order by provider without item.
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -582,11 +591,11 @@ JD-TC-CreateOrderByProviderForPickUp-UH9
 
 JD-TC-CreateOrderByProviderForPickUp-UH10
     [Documentation]   place an order by provider for zero items.
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   9
+    ${DAY1}=  db.add_timezone_date  ${tz}  9
     ${MIN_QUANTITY_REQUIRED}=  Format String   ${MIN_QUANTITY_REQUIRED}   ${minQuantity3}
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
@@ -627,7 +636,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${c_cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME10}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -640,7 +649,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH11
 
 JD-TC-CreateOrderByProviderForPickUp-UH12
     [Documentation]    Create Order without login.
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${empty_cookie}=  Create Dictionary
     ${resp}=   Create Order By Provider For Pickup    ${empty_cookie}   ${cid20}   ${cid20}   ${CatalogId1}   ${boolean[1]}    ${sTime3}    ${eTime3}   ${DAY1}    ${CUSERNAME20}    ${email}  ${orderNote}  ${countryCodes[1]}  ${item_id3}   ${item_quantity1}  ${item_id4}   ${item_quantity1}
     Log   ${resp.json()}
@@ -651,7 +660,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH12
 JD-TC-CreateOrderByProviderForPickUp-UH13
     [Documentation]    Place an order By provider for store pickup for disabled item.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -659,7 +668,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13  
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -688,7 +697,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH13
 JD-TC-CreateOrderByProviderForPickUp-UH14
     [Documentation]    Place an order By provider for store pickup for removed item.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -696,7 +705,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -711,11 +720,11 @@ JD-TC-CreateOrderByProviderForPickUp-UH14
 
 JD-TC-CreateOrderByProviderForPickUp-UH15
     [Documentation]   place an order by provider  without any timings.
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -730,7 +739,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH15
 JD-TC-CreateOrderByProviderForPickUp-UH16
     [Documentation]   place an order by provider without enable order settings.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -739,7 +748,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableOrder']}==${bool[1]}   Disable Order Settings
 
-    ${DAY1}=  add_date   8
+    ${DAY1}=  db.add_timezone_date  ${tz}   8
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -767,7 +776,7 @@ JD-TC-CreateOrderByProviderForPickUp-3
     clear_service  ${PUSERNAME119}
     # clear_customer   ${PUSERNAME119}
     clear_Item   ${PUSERNAME119}
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -804,17 +813,17 @@ JD-TC-CreateOrderByProviderForPickUp-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable    ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime2}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -894,7 +903,7 @@ JD-TC-CreateOrderByProviderForPickUp-3
     # Should Be Equal As Strings      ${resp.status_code}  200
 
  
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity2}   max=${maxQuantity2}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity1}
@@ -955,7 +964,7 @@ JD-TC-CreateOrderByProviderForPickUp-4
     clear_service  ${PUSERNAME119}
     # clear_customer   ${PUSERNAME119}
     clear_Item   ${PUSERNAME119}
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -966,17 +975,17 @@ JD-TC-CreateOrderByProviderForPickUp-4
     Run Keyword If  ${resp.json()['enableOrder']}==${bool[0]}   Enable Order Settings
 
     
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable    ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime2}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -1062,7 +1071,7 @@ JD-TC-CreateOrderByProviderForPickUp-4
     # Should Be Equal As Strings      ${resp.status_code}  200
 
  
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity2}   max=${maxQuantity2}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity1}

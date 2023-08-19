@@ -25,10 +25,14 @@ JD-TC-Getorderbyenclosedid-1
     clear_service  ${PUSERNAME104}
     clear_customer   ${PUSERNAME104}
     clear_Item   ${PUSERNAME104}
-    ${resp}=  ProviderLogin  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid}  ${resp.json()['id']}
 
     ${accId}=  get_acc_id  ${PUSERNAME104}
     Set Suite Variable  ${accId} 
@@ -73,17 +77,22 @@ JD-TC-Getorderbyenclosedid-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30 
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -155,7 +164,7 @@ JD-TC-Getorderbyenclosedid-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -168,7 +177,7 @@ JD-TC-Getorderbyenclosedid-1
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
 
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}  max=${maxQuantity}
@@ -192,7 +201,7 @@ JD-TC-Getorderbyenclosedid-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -214,10 +223,14 @@ JD-TC-Getorderbyenclosedid-2
     clear_customer   ${PUSERNAME105}
     clear_Item   ${PUSERNAME105}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid2}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid2}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid2}  ${resp.json()['id']}
     
     ${accId2}=  get_acc_id  ${PUSERNAME105}
 
@@ -261,16 +274,21 @@ JD-TC-Getorderbyenclosedid-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -318,11 +336,11 @@ JD-TC-Getorderbyenclosedid-2
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -345,7 +363,7 @@ JD-TC-Getorderbyenclosedid-2
     Set Test Variable  ${fname}  ${resp.json()['firstName']}
     Set Test Variable  ${lname}  ${resp.json()['lastName']}
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -358,7 +376,7 @@ JD-TC-Getorderbyenclosedid-2
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
 
-    # ${sTime11}=  add_time  0  15
+    # ${sTime11}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime11}=  add_two   ${sTime11}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
@@ -376,7 +394,7 @@ JD-TC-Getorderbyenclosedid-2
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid2}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -405,7 +423,7 @@ JD-TC-Getorderbyenclosedid-2
     Should Be Equal As Strings  ${resp.json()['catalog']['id']}                                        ${CatalogId2}
     Should Be Equal As Strings  ${resp.json()['catalog']['catalogName']}                               ${catalogName}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -426,10 +444,14 @@ JD-TC-Getorderbyenclosedid-3
     clear_service  ${PUSERNAME145}
     clear_customer   ${PUSERNAME145}
     clear_Item   ${PUSERNAME145}
-    ${resp}=  ProviderLogin  ${PUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid0}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid0}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid0}  ${resp.json()['id']}
     
     ${accId0}=  get_acc_id  ${PUSERNAME145}
 
@@ -473,16 +495,21 @@ JD-TC-Getorderbyenclosedid-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id0}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime0}=  add_time  0  15
-    ${eTime0}=  add_time   3  30   
+    ${sTime0}=  add_timezone_time  ${tz}  0  15  
+    ${eTime0}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -559,7 +586,7 @@ JD-TC-Getorderbyenclosedid-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id}  ${resp.json()}
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -572,7 +599,7 @@ JD-TC-Getorderbyenclosedid-3
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
 
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity0}   max=${maxQuantity0}
@@ -594,7 +621,7 @@ JD-TC-Getorderbyenclosedid-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -615,10 +642,14 @@ JD-TC-Getorderbyenclosedid-4
     clear_service  ${PUSERNAME145}
     clear_customer   ${PUSERNAME145}
     clear_Item   ${PUSERNAME145}
-    ${resp}=  ProviderLogin  ${PUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid0}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid0}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid0}  ${resp.json()['id']}
     
     ${accId0}=  get_acc_id  ${PUSERNAME145}
 
@@ -649,16 +680,21 @@ JD-TC-Getorderbyenclosedid-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id0}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime0}=  add_time  0  15
-    ${eTime0}=  add_time   3  30   
+    ${sTime0}=  add_timezone_time  ${tz}  0  15  
+    ${eTime0}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -727,7 +763,7 @@ JD-TC-Getorderbyenclosedid-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -740,7 +776,7 @@ JD-TC-Getorderbyenclosedid-4
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
 
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity0}   max=${maxQuantity0}
@@ -762,7 +798,7 @@ JD-TC-Getorderbyenclosedid-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -778,7 +814,7 @@ JD-TC-Getorderbyenclosedid-4
 JD-TC-Getorderbyenclosedid-UH1
     [Documentation]    Get an order details with invalid id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -810,7 +846,7 @@ JD-TC-Getorderbyenclosedid-UH3
 JD-TC-Getorderbyenclosedid-UH4
     [Documentation]    Get an order details with another provider order id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

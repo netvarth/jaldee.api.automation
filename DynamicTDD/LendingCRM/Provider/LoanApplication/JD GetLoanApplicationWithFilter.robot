@@ -60,7 +60,7 @@ JD-TC-LoanApplication-1
                                   
     [Documentation]               Create Loan Application  
 
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -701,7 +701,7 @@ JD-TC-GetLoanApplicationwithFilter-2
                                   
     [Documentation]               Create Loan Application and get the loan with id filter.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -728,7 +728,7 @@ JD-TC-GetLoanApplicationwithFilter-3
                                   
     [Documentation]               Create Loan Application and get the loan with uid filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -745,7 +745,7 @@ JD-TC-GetLoanApplicationwithFilter-4
                                   
     [Documentation]               Create Loan Application and get the loan with customer filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -762,7 +762,7 @@ JD-TC-GetLoanApplicationwithFilter-5
                                   
     [Documentation]               Create Loan Application and get the loan with customerFirstName filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -779,7 +779,7 @@ JD-TC-GetLoanApplicationwithFilter-6
                                   
     [Documentation]               Create Loan Application and get the loan with customerLastName filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -796,7 +796,7 @@ JD-TC-GetLoanApplicationwithFilter-7
                                   
     [Documentation]               Create Loan Application and get the loan with location filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -814,7 +814,7 @@ JD-TC-GetLoanApplicationwithFilter-8
                                   
     [Documentation]               Create Loan Application and get the loan with locationName filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -832,7 +832,7 @@ JD-TC-GetLoanApplicationwithFilter-9
                                   
     [Documentation]               Create Loan Application and get the loan with category filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -858,7 +858,7 @@ JD-TC-GetLoanApplicationwithFilter-10
                                   
     [Documentation]               Create Loan Application and get the loan with categoryName filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -888,7 +888,7 @@ JD-TC-GetLoanApplicationwithFilter-11
                                   
     [Documentation]               Create Loan Application and get the loan with type filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -921,7 +921,7 @@ JD-TC-GetLoanApplicationwithFilter-12
                                   
     [Documentation]               Create Loan Application and get the loan with typeName filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -956,7 +956,7 @@ JD-TC-GetLoanApplicationwithFilter-13
                                   
     [Documentation]               Create Loan Application and get the loan with status filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -995,7 +995,7 @@ JD-TC-GetLoanApplicationwithFilter-14
                                   
     [Documentation]               Create Loan Application and get the loan with statusName filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1056,7 +1056,7 @@ JD-TC-GetLoanApplicationwithFilter-15
                                   
     [Documentation]               Create Loan Application and get the loan with isActionRequired-eq filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1068,7 +1068,7 @@ JD-TC-GetLoanApplicationwithFilter-16
                                   
     [Documentation]               Create Loan Application and get the loan with isActionRequired-eq filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1082,7 +1082,7 @@ JD-TC-GetLoanApplicationwithFilter-17
 
     
     
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1094,7 +1094,7 @@ JD-TC-GetLoanApplicationwithFilter-18
                                   
     [Documentation]               Create Loan Application and get the loan with spInternalStatus-eq filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1120,7 +1120,7 @@ JD-TC-GetLoanApplicationwithFilter-19
                                   
     [Documentation]               Create Loan Application and get the loan with spInternalStatus-eq filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1144,7 +1144,7 @@ JD-TC-GetLoanApplicationwithFilter-20
                                   
     [Documentation]               Create Loan Application and get the loan with spInternalStatus-eq filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1169,7 +1169,7 @@ JD-TC-GetLoanApplicationwithFilter-21
                                   
     [Documentation]               Create Loan Application and get the loan with spInternalStatus-eq filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1190,7 +1190,7 @@ JD-TC-GetLoanApplicationwithFilter-22
                                   
     [Documentation]               Create Loan Application and get the loan with spInternalStatus-eq filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1213,7 +1213,7 @@ JD-TC-GetLoanApplicationwithFilter-23
                                   
     [Documentation]               Create Loan Application and get the loan with spInternalStatus-eq filter.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1226,7 +1226,7 @@ JD-TC-GetLoanApplicationwithFilter-16
                                   
     [Documentation]               Create Loan Application and get the loan with referenceNo filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1238,7 +1238,7 @@ JD-TC-GetLoanApplicationwithFilter-17
                                   
     [Documentation]               Create Loan Application and get the loan with title filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1250,7 +1250,7 @@ JD-TC-GetLoanApplicationwithFilter-18
                                   
     [Documentation]               Create Loan Application and get the loan with description filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1262,7 +1262,7 @@ JD-TC-GetLoanApplicationwithFilter-19
                                   
     [Documentation]               Create Loan Application and get the loan with originFrom filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1274,7 +1274,7 @@ JD-TC-GetLoanApplicationwithFilter-20
                                   
     [Documentation]               Create Loan Application and get the loan with originId filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1286,7 +1286,7 @@ JD-TC-GetLoanApplicationwithFilter-21
                                   
     [Documentation]               Create Loan Application and get the loan with originUid filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1298,7 +1298,7 @@ JD-TC-GetLoanApplicationwithFilter-22
                                   
     [Documentation]               Create Loan Application and get the loan with internalStatus filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

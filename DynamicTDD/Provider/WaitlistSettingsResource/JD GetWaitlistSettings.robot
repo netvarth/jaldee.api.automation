@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-ViewWaitlistSettings-1
     [Documentation]  View Waitlist Settings of a valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
   
    
@@ -25,6 +25,7 @@ JD-TC-ViewWaitlistSettings-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  calculationMode=${calc_mode[0]}  trnArndTime=0  futureDateWaitlist=True  showTokenId=True  onlineCheckIns=True    maxPartySize=1
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${Empty}  
     Log  ${resp.json()}
@@ -36,6 +37,8 @@ JD-TC-ViewWaitlistSettings-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[0]}  trnArndTime=0  futureDateWaitlist=True  showTokenId=True  onlineCheckIns=True    maxPartySize=1
     
 

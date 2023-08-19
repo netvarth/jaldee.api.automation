@@ -21,7 +21,7 @@ ${C_PASSWORD}        Netvarth009
 JD-TC-ResetPassword-1
     [Documentation]    Reset provider login  password with valid mobile number and new valid password
 
-    ${resp}=  ProviderLogin  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -31,7 +31,7 @@ JD-TC-ResetPassword-1
     @{resp}=  ResetProviderPassword  ${PUSERNAME23}  ${P_PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME23}  ${P_PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${P_PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  ConsumerLogin  ${PUSERNAME23}  ${P_PASSWORD}
@@ -47,16 +47,16 @@ JD-TC-ResetPassword-2
     @{resp}=  ResetProviderPassword  ${PUSERNAME23}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME23}  ${P_PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${P_PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}  ${LOGIN_INVALID_USERID_PASSWORD}
-    ${resp}=  ProviderLogin  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-ResetPassword-3
     [Documentation]    Reset provider login  password with email and new valid password
-    ${resp}=  ProviderLogin  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${mail}=   FakerLibrary.word
     ${PUSEREMAIL24}=  Set Variable  ${P_Email}${mail}.ynwtest@netvarth.com
@@ -72,7 +72,7 @@ JD-TC-ResetPassword-3
     @{resp}=  ResetProviderPassword  ${PUSEREMAIL24}  ${P_PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME24}  ${P_PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${P_PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Provider Change Password  ${P_PASSWORD}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -126,7 +126,7 @@ JD-TC-ResetPassword-UH5
     # Should Be Equal As Strings  ${resp[1].status_code}  404
 
 *** Comment ***
-YNW-TC-ResetPassword-UH5
+JD-TC-ResetPassword-UH5
     Comment    Reset password using non verified email
     ${resp}=  SendProviderResetMail  ${PUSERNAME3} 
     Should Be Equal As Strings  ${resp.status_code}  401

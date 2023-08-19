@@ -23,7 +23,7 @@ JD-TC-AddItemsToItemGroup-1
 
     [Documentation]  Create an item and add that item to an item group.
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -108,7 +108,7 @@ JD-TC-AddItemsToItemGroup-2
 
     [Documentation]  Create multiple items and add that items to an item group.
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -223,7 +223,7 @@ JD-TC-AddItemsToItemGroup-3
 
     [Documentation]  Create 4 items and add 3 items in one group and one item in another group.
 
-    ${resp}=  Provider Login  ${PUSERNAME182}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME182}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -381,7 +381,7 @@ JD-TC-AddItemsToItemGroup-4
     [Documentation]  Create 4 items and add 3 items in one group and one item in another group.
     ...   and add all these items to a catalog and verify the group details in catalog
 
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -404,6 +404,10 @@ JD-TC-AddItemsToItemGroup-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableItemGroup']}  ${bool[1]}
 
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+  
     clear_Item  ${PUSERNAME183}
 
     ${itemdata}=   FakerLibrary.words    	nb=8
@@ -537,19 +541,19 @@ JD-TC-AddItemsToItemGroup-4
     Should Be Equal As Strings  ${resp.status_code}  200   
     Should Be Equal As Strings  ${resp.json()['groupIds'][0]}  ${item_group_id2}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
    
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
-    ${eTime3}=  add_time   1  00 
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -623,7 +627,7 @@ JD-TC-AddItemsToItemGroup-5
 
     [Documentation]  add items to item group with empty list of item ids.
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -678,7 +682,7 @@ JD-TC-AddItemsToItemGroup-6
 
     [Documentation]  add a disabled item to a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME184}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME184}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -767,7 +771,7 @@ JD-TC-AddItemsToItemGroup-UH1
 
     [Documentation]  add a deleted item to a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -843,7 +847,7 @@ JD-TC-AddItemsToItemGroup-UH2
 
     [Documentation]  add another providers item to a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -877,7 +881,7 @@ JD-TC-AddItemsToItemGroup-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -924,7 +928,7 @@ JD-TC-AddItemsToItemGroup-UH3
 
     [Documentation]  try to add items to a group with another providers item group id.
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -958,7 +962,7 @@ JD-TC-AddItemsToItemGroup-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -997,7 +1001,7 @@ JD-TC-AddItemsToItemGroup-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1036,7 +1040,7 @@ JD-TC-AddItemsToItemGroup-UH6
 
     [Documentation]  Add same items multiple times to a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1116,7 +1120,7 @@ JD-TC-AddItemsToItemGroup-UH7
 
     [Documentation]  try to add items to a deleted item group.
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

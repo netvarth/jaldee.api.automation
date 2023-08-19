@@ -62,7 +62,7 @@ JD-TC-Update JDN Settings-1
 
     END
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -83,11 +83,11 @@ JD-TC-Update JDN Settings-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERPH0}
     
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+851
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
@@ -102,14 +102,16 @@ JD-TC-Update JDN Settings-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -165,7 +167,7 @@ JD-TC-Update JDN Settings-1
 
 JD-TC-Update JDN Settings-2
     [Documentation]  Update maximum discount amount in JDN Settings of a valid provider with billable domain
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -209,7 +211,7 @@ JD-TC-Update JDN Settings-3
 
     END
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -230,11 +232,11 @@ JD-TC-Update JDN Settings-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERPH3}
     
-    ${resp}=  Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+861
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
@@ -249,14 +251,16 @@ JD-TC-Update JDN Settings-3
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -310,7 +314,7 @@ JD-TC-Update JDN Settings-3
 JD-TC-Update JDN Settings-4
     [Documentation]  check if already created bill is updated when jdn settings is updated 
     clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -343,9 +347,9 @@ JD-TC-Update JDN Settings-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
-    ${DAY}=  get_date
-    ${sTime}=  add_time   0  15
-    ${eTime}=  add_time   0  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  ${capacity}  ${p1_l1}  ${p1_s1} 
@@ -366,7 +370,6 @@ JD-TC-Update JDN Settings-4
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
@@ -419,7 +422,7 @@ JD-TC-Update JDN Settings-4
 JD-TC-Update JDN Settings-5
     [Documentation]  check if bill is updated when jdn settings is updated and bill is recalculated
     [Setup]  Run Keywords  clear_jdn  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}   AND  clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -449,9 +452,9 @@ JD-TC-Update JDN Settings-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
-    ${DAY}=  get_date
-    ${sTime}=  add_time   0  15
-    ${eTime}=  add_time   0  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  ${capacity}  ${p1_l1}  ${p1_s1} 
@@ -466,7 +469,6 @@ JD-TC-Update JDN Settings-5
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
@@ -552,7 +554,7 @@ JD-TC-Update JDN Settings-6
     [Documentation]  check if GST bill is updated when jdn settings is updated and bill is recalculated
 
     Run Keywords   clear_queue  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}  AND  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -595,9 +597,9 @@ JD-TC-Update JDN Settings-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
-    ${DAY}=  get_date
-    ${sTime}=  add_time   0  15
-    ${eTime}=  add_time   0  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  ${capacity}  ${p1_l1}  ${p1_s1} 
@@ -618,7 +620,6 @@ JD-TC-Update JDN Settings-6
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
@@ -704,7 +705,7 @@ JD-TC-Update JDN Settings-6
 JD-TC-Update JDN Settings-7
     [Documentation]  check if discounted amount is that of updated discount maximum when jdn settings is updated and bill is recalculated.
     [Setup]  Run Keywords  clear_jdn  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}  AND  clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -737,9 +738,9 @@ JD-TC-Update JDN Settings-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
-    ${DAY}=  get_date
-    ${sTime}=  add_time   0  15
-    ${eTime}=  add_time   0  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2}
@@ -754,7 +755,6 @@ JD-TC-Update JDN Settings-7
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
@@ -838,7 +838,7 @@ JD-TC-Update JDN Settings-7
 JD-TC-Update JDN Settings-8
     [Documentation]  check if discounted amount in bill is updated when updated discount maximum in jdn settings is greater than discounted amount and bill is recalculated.
     [Setup]  Run Keywords  clear_jdn  ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}  AND  clear_queue  ${PUSERPH0}  AND   clear_service   ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -882,9 +882,9 @@ JD-TC-Update JDN Settings-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_s2}  ${resp.json()}
 
-    ${DAY}=  get_date
-    ${sTime}=  add_time   0  15
-    ${eTime}=  add_time   0  45
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2}
@@ -899,7 +899,6 @@ JD-TC-Update JDN Settings-8
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
@@ -977,7 +976,7 @@ JD-TC-Update JDN Settings-8
 JD-TC-Update JDN Settings-UH1
     [Documentation]  Update label as empty in JDN Settings of a valid provider with non billable domain
     
-    ${resp}=  Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -990,7 +989,7 @@ JD-TC-Update JDN Settings-UH1
 JD-TC-Update JDN Settings-UH2
     [Documentation]  Update discount percentage as empty in JDN Settings of a valid provider with billable domain
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1014,7 +1013,7 @@ JD-TC-Update JDN Settings-UH2
 JD-TC-Update JDN Settings-UH3
     [Documentation]  Update discount percentage as something other than standart 5,10,20 in JDN Settings of a valid provider with billable domain
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1040,7 +1039,7 @@ JD-TC-Update JDN Settings-UH4
     [Documentation]  Update maximun discount for 5% discount as less than 100 in JDN Settings of a valid provider with billable domain
 
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1067,7 +1066,7 @@ JD-TC-Update JDN Settings-UH5
     [Documentation]  Update maximun discount for 10% discount as less than 200 in JDN Settings of a valid provider with billable domain
 
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1094,7 +1093,7 @@ JD-TC-Update JDN Settings-UH6
     [Documentation]  Update maximun discount for 20% discount as less than 300 in JDN Settings of a valid provider with billable domain
 
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1120,7 +1119,7 @@ JD-TC-Update JDN Settings-UH6
 JD-TC-Update JDN Settings-UH7
     [Documentation]  Update label in JDN Settings of a valid provider with billable domain
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1145,7 +1144,7 @@ JD-TC-Update JDN Settings-UH8
     [Documentation]  Update discount percentage in JDN Settings of a valid provider with non billable domain
 
     [Setup]  clear_jdn  ${PUSERPH3}
-    ${resp}=  Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1169,7 +1168,7 @@ JD-TC-Update JDN Settings-UH8
 JD-TC-Update JDN Settings-UH9
     [Documentation]  Update discount percentage in JDN Settings of a valid provider with billable domain without discount maximum.
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1193,7 +1192,7 @@ JD-TC-Update JDN Settings-UH9
 JD-TC-Update JDN Settings-UH10
     [Documentation]  Update JDN Settings of a valid provider with billable domain without discount maximum and discount percentage
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1217,7 +1216,7 @@ JD-TC-Update JDN Settings-UH10
 JD-TC-Update JDN Settings-UH11
     [Documentation]   try to Update jdn after disabling jdn.
 
-    ${resp}=  Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1246,7 +1245,7 @@ JD-TC-Update JDN Settings-UH11
 JD-TC-Update JDN Settings-UH12
     [Documentation]   update jdn max discount to over 100000.
     [Setup]  clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

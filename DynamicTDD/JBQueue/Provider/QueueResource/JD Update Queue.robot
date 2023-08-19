@@ -28,38 +28,47 @@ ${start}        90
 
 JD-TC-UpdateQueue-1
     [Documentation]    Update a queue in a location with  new services
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME110}
     clear_location  ${PUSERNAME110}
     clear_queue  ${PUSERNAME110}
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
-    Set Suite Variable  ${DAY2}  ${DAY2}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
-    Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
-    Set Suite Variable   ${eTime1}
+
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id1}
+    ${s_id2}=  Create Sample Service  ${SERVICE3}
+    Set Suite Variable  ${s_id2}
+    ${s_id3}=  Create Sample Service  ${SERVICE4}
+    Set Suite Variable  ${s_id3}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY2}  ${DAY2}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  ${list}
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
+    Set Suite Variable   ${eTime1}
+    
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid}  ${resp.json()}
-    ${s_id2}=  Create Sample Service  ${SERVICE3}
-    Set Suite Variable  ${s_id2}
-    ${s_id3}=  Create Sample Service  ${SERVICE4}
-    Set Suite Variable  ${s_id3}
+    
     ${resp}=  Update Queue  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id2}  ${s_id3}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Queue ById  ${qid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}  ${queue_name} 
@@ -78,10 +87,12 @@ JD-TC-UpdateQueue-1
 
 JD-TC-UpdateQueue-2
     [Documentation]    Update a queue in a location without location id and verify location id is the previous one
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+    
     ${resp}=  Update Queue  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${EMPTY}  ${s_id2}  ${s_id3}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Get Queue ById  ${qid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}  ${queue_name} 
@@ -100,10 +111,12 @@ JD-TC-UpdateQueue-2
     
 JD-TC-UpdateQueue-3
     [Documentation]    Update a queue in a location without service id and verify service id is the previous one
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+    
     ${resp}=  Update Queue without service  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  3  ${EMPTY}  
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Get Queue ById  ${qid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -123,25 +136,32 @@ JD-TC-UpdateQueue-3
 
 JD-TC-UpdateQueue-4
     [Documentation]    Update a queue in a location with  a service used in another disbled queue
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME178}
     clear_location  ${PUSERNAME178}
     clear_queue  ${PUSERNAME178}
+    
     ${lid1}=  Create Sample Location
     Set Suite Variable   ${lid1}
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id4}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id4}
     ${s_id5}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id5}
+
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid1}  ${s_id4}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
-    ${sTime2}=  add_time  1  15
+    
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   1  30
+    ${eTime2}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${eTime2}
     ${queue_name1}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name1}
@@ -172,14 +192,14 @@ JD-TC-UpdateQueue-4
 
 JD-TC-UpdateQueue-5
     [Documentation]  check overlapping of schedules in same location with disabled queue
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue   ${qid1}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}   ${EMPTY}  ${sTime2}  ${eTime2}  2  3  ${lid1}  ${s_id4}  ${s_id5}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-UpdateQueue-UH1
     [Documentation]  Update queue to an already existing name in same location
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue   ${qid1}  ${queue_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}   ${EMPTY}  ${sTime2}  ${eTime2}  2  3  ${lid1}  ${s_id4}  ${s_id5}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -187,11 +207,11 @@ JD-TC-UpdateQueue-UH1
     
 JD-TC-UpdateQueue-UH2
     [Documentation]  check overlapping of schedules in same location with enabled queue
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${sTime3}=  add_time  3  15
+    ${sTime3}=  add_timezone_time  ${tz}  3  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   3  30
+    ${eTime3}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable   ${eTime3}
     ${queue_name2}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name2}
@@ -212,13 +232,18 @@ JD-TC-UpdateQueue-UH3
     ${length}=  Get Length   ${len}
     
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Domain Settings    ${domain}  
     Should Be Equal As Strings    ${resp.status_code}    200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${check}  ${resp2.json()['multipleLocation']}
     Exit For Loop IF     "${check}"=="True"
     END
@@ -226,38 +251,47 @@ JD-TC-UpdateQueue-UH3
     clear_service   ${PUSERNAME${a}}
     clear_location  ${PUSERNAME${a}}
     clear_queue  ${PUSERNAME${a}}
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
-    Set Suite Variable  ${DAY2}  ${DAY2}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
-    Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
-    Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY2}  ${DAY2}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  ${list}
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
+    Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid}  ${resp.json()}
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
 	${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime3}=  add_time  3  15
-    ${eTime3}=  add_time   3  30
+    ${sTime3}=  add_timezone_time  ${tz}  3  15  
+    ${eTime3}=  add_timezone_time  ${tz}  3  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -268,7 +302,7 @@ JD-TC-UpdateQueue-UH3
 
 JD-TC-UpdateQueue-UH4
     [Documentation]    Update a queue without queue id and queue name
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue  ${EMPTY}  ${EMPTY}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id2}  ${s_id3}
     Should Be Equal As Strings  ${resp.status_code}  422  
@@ -276,14 +310,14 @@ JD-TC-UpdateQueue-UH4
 
 JD-TC-UpdateQueue-6
     [Documentation]  check overlapping of schedules in different locations with disabled queue
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Disable Queue  ${qid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${sTime5}=  add_time  5  15
+    ${sTime5}=  add_timezone_time  ${tz}  5  15  
     Set Suite Variable   ${sTime5}
-    ${eTime5}=  add_time   5  30
+    ${eTime5}=  add_timezone_time  ${tz}   5  30
     Set Suite Variable   ${eTime5}
     ${queue_name5}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name5}
@@ -296,7 +330,7 @@ JD-TC-UpdateQueue-6
 
 JD-TC-UpdateQueue-UH5
     [Documentation]  Update another provider's queue
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid3}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -318,7 +352,7 @@ JD-TC-UpdateQueue-UH7
     
 JD-TC-UpdateQueue-UH8
     [Documentation]  Update queue with another provider's location
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid1}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -326,7 +360,7 @@ JD-TC-UpdateQueue-UH8
 
 JD-TC-UpdateQueue-UH9
     [Documentation]  Update queue with another provider's services
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid3}  ${s_id4}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -336,14 +370,14 @@ JD-TC-UpdateQueue-UH9
 JD-TC-UpdateQueue-7
     [Documentation]  Update Queue for Branch
 
-    ${resp}=  Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-UpdateQueue-8
     [Documentation]  Update Queue for User
 
-    ${resp}=  Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
@@ -352,25 +386,30 @@ JD-TC-UpdateQueue-8
 
 JD-TC-Update Queue with timeinterval-7
     [Documentation]    Update Queue with timeInterval value when Appointment is Enable in the Create Queue and Update Queue
-    ${resp}=  Provider Login  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME173}
     clear_location  ${PUSERNAME173}
     clear_queue  ${PUSERNAME173}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10
@@ -412,25 +451,32 @@ JD-TC-Update Queue with timeinterval-7
 
 JD-TC-Update Queue with timeinterval-8
     [Documentation]    Update Queue with timeInterval value when Appointment is Disable in the Create Queue and Then Appointment is Enable in the Update Queue
-    ${resp}=  Provider Login  ${PUSERNAME177}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME177}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME177}
     clear_location  ${PUSERNAME177}
     clear_queue  ${PUSERNAME177}
-    ${DAY1}=  get_date
+    
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
+    
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10
@@ -473,25 +519,31 @@ JD-TC-Update Queue with timeinterval-8
 
 JD-TC-Update Queue with timeinterval-9
     [Documentation]    Create Queue Appointment is Disable and Update Queue Appointment also Disable
-    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME174}
     clear_location  ${PUSERNAME174}
     clear_queue  ${PUSERNAME174}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
+    
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10
@@ -533,25 +585,31 @@ JD-TC-Update Queue with timeinterval-9
 
 JD-TC-Update Queue with timeinterval-10
     [Documentation]    Create Queue Appointment is Disable and Update Queue Appointment also Enable and with Negative TimeInterval value
-    ${resp}=  Provider Login  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME175}
     clear_location  ${PUSERNAME175}
     clear_queue  ${PUSERNAME175}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
+    
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=-10   max=-5
@@ -595,25 +653,31 @@ JD-TC-Update Queue with timeinterval-10
 
 JD-TC-Update Queue with timeinterval-11
     [Documentation]    Create Queue Appointment is Disable and Update Queue with Empty Timeinterval and Appointment is Enable and Taking turnAroundTime Value
-    ${resp}=  Provider Login  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME171}
     clear_location  ${PUSERNAME171}
     clear_queue  ${PUSERNAME171}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
+    
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${turnAroundTime}=   Random Int  min=5   max=10
@@ -657,25 +721,31 @@ JD-TC-Update Queue with timeinterval-11
 
 JD-TC-Update Queue with timeinterval-12
     [Documentation]    Calculation Mode is ML, Update Queue with timeInterval value when Appointment is Enable Update Queue
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME181}
     clear_location  ${PUSERNAME181}
     clear_queue  ${PUSERNAME181}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
+    
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10
@@ -717,25 +787,31 @@ JD-TC-Update Queue with timeinterval-12
 
 JD-TC-Update Queue with timeinterval-13
     [Documentation]    Calculation Mode is NoCal, Update Queue with timeInterval value when Appointment is Enable Update Queue
-    ${resp}=  Provider Login  ${PUSERNAME189}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME189}
     clear_location  ${PUSERNAME189}
     clear_queue  ${PUSERNAME189}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
+    
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10

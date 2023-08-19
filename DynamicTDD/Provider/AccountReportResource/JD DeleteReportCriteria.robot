@@ -40,7 +40,7 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 
 JD-TC-Save_Report_Criteria-1
     [Documentation]  Save report and delete report 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME13}
     Set Suite Variable  ${pid}
@@ -52,6 +52,8 @@ JD-TC-Save_Report_Criteria-1
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}  maxPartySize=1
     
     clear_queue     ${PUSERNAME13}
@@ -108,7 +110,7 @@ JD-TC-Save_Report_Criteria-UH2
 
 JD-TC-Save_Report_Criteria-UH3
     [Documentation]   A provider try to Delete Report without saving any report
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

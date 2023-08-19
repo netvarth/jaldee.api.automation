@@ -26,7 +26,7 @@ JD-TC-UpdateItemGroupforUser-1
 
     [Documentation]  Create Item Group for a provider then update the item group name.
 
-    ${resp}=  Provider Login  ${MUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME150}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -76,7 +76,7 @@ JD-TC-UpdateItemGroupforUser-2
 
     [Documentation]  Create Item Group for a provider then update the item group description.
 
-    ${resp}=  Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -126,7 +126,7 @@ JD-TC-UpdateItemGroupforUser-3
 
     [Documentation]  update item group without Group ame.
 
-    ${resp}=  Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -161,7 +161,7 @@ JD-TC-UpdateItemGroupforUser-4
 
     [Documentation]  update item group without Group description.
 
-    ${resp}=  Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -210,7 +210,7 @@ JD-TC-UpdateItemGroupforUser-5
 
     [Documentation]  Create Item Group by a user and update it.
 
-    ${resp}=  Provider Login  ${MUSERNAME146}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME146}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -291,7 +291,7 @@ JD-TC-UpdateItemGroupforUser-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -313,7 +313,7 @@ JD-TC-UpdateItemGroupforUser-UH1
 
     [Documentation]  update item group with another providers item group id.
 
-    ${resp}=  Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -335,7 +335,7 @@ JD-TC-UpdateItemGroupforUser-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

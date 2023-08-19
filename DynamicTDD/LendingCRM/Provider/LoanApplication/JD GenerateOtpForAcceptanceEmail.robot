@@ -61,7 +61,7 @@ JD-TC-GenerateOtpForAcceptanceEmail-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME102}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -385,7 +385,7 @@ JD-TC-GenerateOtpForAcceptanceEmail-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME102}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -631,7 +631,7 @@ JD-TC-GenerateOtpForAcceptanceEmail-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME102}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -922,7 +922,7 @@ JD-TC-GenerateOtpForAcceptanceEmail-UH1
                                   
     [Documentation]               Generate Otp For Acceptance Email   invalid mail id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME102}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -961,7 +961,7 @@ JD-TC-GenerateOtpForAcceptanceEmail-4
                                   
     [Documentation]               Generate Otp For Acceptance Email another provider login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME68}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

@@ -26,12 +26,15 @@ JD-TC-ConsumerGetApptRequest-1
 
     [Documentation]   Consumer create an appt request and verify it.
 
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    Set Test Variable   ${lic_name}   ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable   ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
     clear_appt_schedule   ${PUSERNAME36}
 
@@ -39,9 +42,14 @@ JD-TC-ConsumerGetApptRequest-1
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
 
-    ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
-    Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
+    # Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -49,8 +57,7 @@ JD-TC-ConsumerGetApptRequest-1
     Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
 
     ${SERVICE1}=    FakerLibrary.word
-    ${DAY1}=  get_date
-    Set Suite Variable   ${DAY1}
+    
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -75,7 +82,15 @@ JD-TC-ConsumerGetApptRequest-1
     ELSE
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
     END
-
+    
+    ${resp}=   Get Location By Id   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    
     ${resp}=  Create Sample Schedule   ${lid}   ${sid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -100,7 +115,7 @@ JD-TC-ConsumerGetApptRequest-1
     ${apptfor1}=  Create Dictionary  id=${self}   
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cons_note}=    FakerLibrary.word
     Set Suite Variable   ${cons_note}
     ${coupons}=  Create List
@@ -135,7 +150,7 @@ JD-TC-ConsumerGetApptRequest-2
     ${apptfor1}=  Create Dictionary  id=${self}   
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
     ${cons_note1}=    FakerLibrary.word
     ${coupons}=  Create List
     ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY2}  ${cons_note1}  ${countryCodes[0]}  ${CUSERNAME10}  ${coupons}  ${apptfor}
@@ -177,7 +192,7 @@ JD-TC-ConsumerGetApptRequest-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${family_fname2}=  FakerLibrary.first_name
     Set Suite Variable   ${family_fname2}
     ${family_lname2}=  FakerLibrary.last_name
@@ -249,7 +264,7 @@ JD-TC-ConsumerGetApptRequest-UH2
 
     [Documentation]    get an appt request by provider login.
 
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

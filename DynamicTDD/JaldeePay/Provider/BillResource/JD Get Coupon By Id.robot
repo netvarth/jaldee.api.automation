@@ -22,12 +22,12 @@ JD-TC-Get Coupon By Id-1
 
     [Documentation]   Provider check to get Coupon By Id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME172}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME172}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_Coupon   ${PUSERNAME172}
     clear_service       ${PUSERNAME172}
-    clear_location   ${PUSERNAME172}
+    # clear_location   ${PUSERNAME172}
     clear_Item    ${PUSERNAME172}
     clear_customer   ${PUSERNAME172}
     # ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -63,16 +63,20 @@ JD-TC-Get Coupon By Id-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
-    
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+      
     ${coupon}=    FakerLibrary.firstname
     ${desc}=  FakerLibrary.Sentence   nb_words=2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${min_bill_amount}=   Convert To Number   ${min_bill_amount}
 
@@ -94,10 +98,10 @@ JD-TC-Get Coupon By Id-1
     ${amount2}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code2}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount2}=   Random Int   min=10   max=100
     ${max_disc_val2}=   Random Int   min=100   max=500
     ${max_prov_use2}=   Random Int   min=10   max=20
@@ -164,7 +168,7 @@ JD-TC-Get Coupon By Id-UH3
 
     [Documentation]   Provider check  get Coupon By Id of invalid id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Coupon By Id  0 
@@ -175,7 +179,7 @@ JD-TC-Get Coupon By Id-UH4
 
     [Documentation]   Provider check to get Coupon By Id another providr's coupon id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
 
     ${resp}=  Get Coupon By Id  ${coupid2} 

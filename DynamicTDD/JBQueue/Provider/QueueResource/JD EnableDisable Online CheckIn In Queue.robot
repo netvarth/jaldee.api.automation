@@ -23,24 +23,30 @@ ${SERVICE2}    Bridal
 
 JD-TC-Online CheckIn In Queue-1
     [Documentation]  Enable  Online checkin in queuelevel
-    ${resp}=  Provider Login  ${PUSERNAME126}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME126}
     clear_location  ${PUSERNAME126}
     clear_queue  ${PUSERNAME126}
-    ${DAY1}=  get_date
+    
+    ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -90,12 +96,16 @@ JD-TC-Online CheckIn In Queue-1
 
 JD-TC-Online CheckIn In Queue-2
     [Documentation]  Enable  Online checkin in accountlevel when queue level is false
-    ${resp}=  Provider Login  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME127}  
     clear_location  ${PUSERNAME127}  
     clear_queue  ${PUSERNAME127}  
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name}=  FakerLibrary.bs
@@ -112,12 +122,16 @@ JD-TC-Online CheckIn In Queue-2
 
 JD-TC-Online CheckIn In Queue-3
     [Documentation]  Enable  Online checkin in accountlevel when queue level is true
-    ${resp}=  Provider Login  ${PUSERNAME139}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME139}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME139}
     clear_location  ${PUSERNAME139}
     clear_queue  ${PUSERNAME139}
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name}=  FakerLibrary.bs
@@ -134,12 +148,16 @@ JD-TC-Online CheckIn In Queue-3
 
 JD-TC-Online CheckIn In Queue-UH1
     [Documentation]  Enable  Online checkin in accountlevel when queue level is false
-    ${resp}=  Provider Login  ${PUSERNAME240}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME240}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME240}
     clear_location  ${PUSERNAME240}
     clear_queue  ${PUSERNAME240}
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     clear_queue  ${PUSERNAME240}
@@ -150,6 +168,8 @@ JD-TC-Online CheckIn In Queue-UH1
     ${resp}=  Disable Online Checkin
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=False
 
     ${resp}=  Online Checkin In Queue  ${qid3}  True
@@ -178,7 +198,7 @@ JD-TC-Online CheckIn In Queue-UH3
     
 JD-TC-Online CheckIn In Queue-UH4
     [Documentation]  Enable Online CheckIn In Queue by another  provider
-    ${resp}=  ProviderLogin  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     clear_queue  ${PUSERNAME23}
     ${resp}=  Online CheckIn In Queue  ${qid}  True
@@ -188,7 +208,7 @@ JD-TC-Online CheckIn In Queue-UH4
     
 JD-TC-Online CheckIn In Queue-UH5
     [Documentation]  Enable Online CheckIn In Queue using Invalid queue id
-    ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Online CheckIn In Queue  0  True
     Should Be Equal As Strings  ${resp.status_code}  404   
@@ -196,9 +216,11 @@ JD-TC-Online CheckIn In Queue-UH5
 
 JD-TC-Verify Online CheckIn In Queue-2
     [Documentation]  Verification of case 2
-    ${resp}=  Provider Login  ${PUSERNAME127}    ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}    ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=False
     ${resp}=  Get Queue ById  ${qid1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -209,6 +231,8 @@ JD-TC-Verify Online CheckIn In Queue-2
     ${resp}=  Enable Online Checkin
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
     ${resp}=  Get Queue ById  ${qid1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -218,9 +242,11 @@ JD-TC-Verify Online CheckIn In Queue-2
 
 JD-TC-Verify Online CheckIn In Queue-3
     [Documentation]  Verification of case 3
-    ${resp}=  Provider Login  ${PUSERNAME139}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME139}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=False
     ${resp}=  Get Queue ById  ${qid2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -232,6 +258,8 @@ JD-TC-Verify Online CheckIn In Queue-3
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  01s
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=True
     ${resp}=  Get Queue ById  ${qid2}
     Log  ${resp.json()}

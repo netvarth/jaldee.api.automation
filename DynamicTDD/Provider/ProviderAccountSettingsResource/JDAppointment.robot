@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-EnableDisableAppointmentStatus-1
     [Documentation]   Enabling Appointmentstatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Appointment Status   ${toggle[1]}
     Log  ${resp.json()}
@@ -41,7 +41,7 @@ JD-TC-EnableDisableAppointmentStatus-UH1
 JD-TC-EnableDisableAppointmentStatus-UH2
     [Documentation]  Enable already enabled Appointmentstatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Appointment Status   ${toggle[0]}
     Log  ${resp.json()}
@@ -50,7 +50,7 @@ JD-TC-EnableDisableAppointmentStatus-UH2
 JD-TC-EnableDisableAppointmentStatus-2
     [Documentation]   disabling Appointmentstatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Appointment Status   ${toggle[1]}
     Log  ${resp.json()}
@@ -63,7 +63,7 @@ JD-TC-EnableDisableAppointmentStatus-2
 JD-TC-EnableDisableAppointmentStatus-UH3 
     [Documentation]  Disable already Disabled Appointmentstatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Appointment Status   ${toggle[1]}
     Log  ${resp.json()}

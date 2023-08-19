@@ -19,22 +19,23 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-UpdateBusinessProfile-1
     [Documentation]  Update  business profile for a valid provider without schedule
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${d}  ${resp.json()['sector']}
     Set Suite Variable  ${sd}  ${resp.json()['subSector']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${ph1}=  Evaluate  ${PUSERNAME}+11001
     Set Suite Variable  ${ph1}
     ${ph2}=  Evaluate  ${PUSERNAME}+11002
@@ -86,7 +87,7 @@ JD-TC-UpdateBusinessProfile-1
 
 JD-TC-UpdateBusinessProfile-2
     [Documentation]  Update  business profile with no details of provider
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -107,7 +108,7 @@ JD-TC-UpdateBusinessProfile-2
 
 JD-TC-UpdateBusinessProfile-3
     [Documentation]  Update  business profile with no base location details
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -116,12 +117,13 @@ JD-TC-UpdateBusinessProfile-3
     Set Test Variable  ${createdDAY}  ${resp.json()['createdDate']}
 
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${emails1}=  Set Variable  ${P_Email}${bs}.ynwtest@netvarth.com  
     ${resp}=  Update Business Profile without details  ${bs}  ${bs}Desc   ${companySuffix}  ${ph1}   ${emails1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -152,33 +154,35 @@ JD-TC-UpdateBusinessProfile-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${resp}=  Update Business Profile with location only   ${bs}  ${bs}Desc   ${companySuffix}  ${city}  ${longi}  ${latti}  www.${bs}.com  free  True  ${postcode}  ${address}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()['baseLocation']['id']}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  add_time  1  0
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${sTime}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   1  50
+    ${eTime}=  add_timezone_time  ${tz}  1  50  
     Set Suite Variable   ${eTime}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.ynwtest@netvarth.com  ${views}
     ${resp}=  Update Business Profile with schedule  ${bs}  ${bs}Desc   ${companySuffix}  ${city}  ${longi}  ${latti}  www.${bs}.com  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${lid}
@@ -205,19 +209,20 @@ JD-TC-UpdateBusinessProfile-4
 
 JD-TC-UpdateBusinessProfile-5
     [Documentation]  Update  business profile with alredy existing location schedule with different details
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.ynwtest@netvarth.com  ${views}
-    ${sTime1}=  add_time  2  0
+    ${sTime1}=  add_timezone_time  ${tz}  2  0  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  50
+    ${eTime1}=  add_timezone_time  ${tz}  2  50  
     Set Suite Variable   ${eTime1}
     ${resp}=  Update Business Profile with schedule  ${bs}  ${bs}Desc   ${companySuffix}  ${city}  ${longi}  ${latti}  www.${bs}.com  paid  false  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${lid}
     Log  ${resp.json()}
@@ -249,7 +254,7 @@ JD-TC-UpdateBusinessProfile-5
  
 JD-TC-UpdateBusinessProfile-6
     [Documentation]  Update  business profile with alredy existing location schedule with different details when queue waitlisted
-    ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     clear_customer   ${PUSERNAME_B}
     
@@ -312,9 +317,15 @@ JD-TC-UpdateBusinessProfile-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid}   ${resp['queue_id']}
     Set Suite Variable  ${sid}   ${resp['service_id']}
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME1}  
     Log   ${resp.json()}
@@ -330,7 +341,6 @@ JD-TC-UpdateBusinessProfile-6
     ${resp}=  Add To Waitlist  ${cid}  ${sid}  ${qid}  ${DAY1}   ${cnote}   ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 

@@ -23,7 +23,7 @@ JD-TC-CreateUser-1
 
     [Documentation]   create 10 users by a multi user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -32,9 +32,14 @@ JD-TC-CreateUser-1
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
 
-    ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
-    Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
+    # Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -84,7 +89,7 @@ JD-TC-CreateUser-1
 
     FOR   ${i}  IN RANGE   0   10
 
-        ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -107,7 +112,7 @@ JD-TC-CreateUser-1
         Should Be Equal As Strings  ${resp[0].status_code}  200
         Should Be Equal As Strings  ${resp[1].status_code}  200
 
-        ${resp}=  Provider Login  ${BUSER_U1${i}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${BUSER_U1${i}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 

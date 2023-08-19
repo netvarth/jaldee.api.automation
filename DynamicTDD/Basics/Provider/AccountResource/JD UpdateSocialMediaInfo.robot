@@ -14,7 +14,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-UpdateSocialMediaInfo-1
     [Documentation]  Update social media info of a service provider
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${fb}=  Create SocialMedia  facebook  https://facebook.com/netvarth
     ${tw}=  Create SocialMedia  twitter  https://twitter.com/netvarth
@@ -37,7 +37,7 @@ JD-TC-UpdateSocialMediaInfo-1
 
 JD-TC-UpdateSocialMediaInfo-2
     [Documentation]  Update social media info of a service provider by one field
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${fb}=  Create SocialMedia  facebook  https://facebook.com/Jaldee    
     ${resp}=  Update Social Media Info  ${fb}    

@@ -31,10 +31,14 @@ JD-TC-UpdateDeliveryCharge-1
     clear_service  ${PUSERNAME130}
     # clear_customer   ${PUSERNAME130}
     clear_Item   ${PUSERNAME130}
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId1}=  get_acc_id  ${PUSERNAME130}
     Set Suite Variable  ${accId1} 
@@ -104,17 +108,22 @@ JD-TC-UpdateDeliveryCharge-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30 
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -221,7 +230,7 @@ JD-TC-UpdateDeliveryCharge-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${DAY1}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -254,7 +263,7 @@ JD-TC-UpdateDeliveryCharge-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -364,7 +373,7 @@ JD-TC-UpdateDeliveryCharge-1
 JD-TC-UpdateDeliveryCharge-2
     [Documentation]    Update Delivery Charge by reducing the charge
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -418,7 +427,7 @@ JD-TC-UpdateDeliveryCharge-2
 JD-TC-UpdateDeliveryCharge-3
     [Documentation]    Update Delivery Charge after change status to order confirmed
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -473,7 +482,7 @@ JD-TC-UpdateDeliveryCharge-3
 JD-TC-UpdateDeliveryCharge-4
     [Documentation]    Update Delivery Charge after change status to order shipped and update delivery chanrge to zero
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -528,7 +537,7 @@ JD-TC-UpdateDeliveryCharge-4
 JD-TC-UpdateDeliveryCharge-5
     [Documentation]    Update Delivery Charge after change status to order completed
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -588,10 +597,14 @@ JD-TC-UpdateDeliveryCharge-6
     clear_customer   ${PUSERNAME122}
     clear_Item   ${PUSERNAME122}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid2}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid2}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid2}  ${resp.json()['id']}
     
     ${accId2}=  get_acc_id  ${PUSERNAME122}
 
@@ -639,16 +652,21 @@ JD-TC-UpdateDeliveryCharge-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   3  30   
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -698,11 +716,11 @@ JD-TC-UpdateDeliveryCharge-6
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -725,7 +743,7 @@ JD-TC-UpdateDeliveryCharge-6
     Set Test Variable  ${fname}  ${resp.json()['firstName']}
     Set Test Variable  ${lname}  ${resp.json()['lastName']}
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -765,7 +783,7 @@ JD-TC-UpdateDeliveryCharge-6
     Should Be Equal As Strings  ${resp.json()['catalog']['id']}                                        ${CatalogId2}
     Should Be Equal As Strings  ${resp.json()['catalog']['catalogName']}                               ${catalogName}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -865,21 +883,24 @@ JD-TC-UpdateDeliveryCharge-7
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid3}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid3}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid3}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME_C}
     Set Suite Variable  ${accId3} 
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_C}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_C}+25566122
@@ -891,18 +912,22 @@ JD-TC-UpdateDeliveryCharge-7
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz3}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz3}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz3}
+    ${sTime}=  add_timezone_time  ${tz3}  0  15  
+    ${eTime}=  add_timezone_time  ${tz3}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -937,7 +962,7 @@ JD-TC-UpdateDeliveryCharge-7
     # clear_service  ${PUSERNAME_C}
     # clear_customer   ${PUSERNAME_C}
     # clear_Item   ${PUSERNAME_C}
-    # ${resp}=  ProviderLogin  ${PUSERNAME_C}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${pid3}  ${resp.json()['id']}
@@ -1013,17 +1038,17 @@ JD-TC-UpdateDeliveryCharge-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz3}
+    ${endDate}=  db.add_timezone_date  ${tz3}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz3}
+    ${endDate1}=  db.add_timezone_date  ${tz3}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
+    ${sTime3}=  add_timezone_time  ${tz3}  0  15  
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   3  30 
+    ${eTime3}=  add_timezone_time  ${tz3}  3  30   
     Set Suite Variable    ${eTime3}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -1124,7 +1149,7 @@ JD-TC-UpdateDeliveryCharge-7
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz3}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1157,7 +1182,7 @@ JD-TC-UpdateDeliveryCharge-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1228,10 +1253,14 @@ JD-TC-UpdateDeliveryCharge-8
     clear_service  ${PUSERNAME124}
     clear_customer   ${PUSERNAME124}
     clear_Item   ${PUSERNAME124}
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME124}
     
@@ -1313,16 +1342,21 @@ JD-TC-UpdateDeliveryCharge-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id01}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   3  30 
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  3  30   
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -1394,7 +1428,7 @@ JD-TC-UpdateDeliveryCharge-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1432,7 +1466,7 @@ JD-TC-UpdateDeliveryCharge-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1509,11 +1543,15 @@ JD-TC-UpdateDeliveryCharge-9
     clear_service  ${PUSERNAME124}
     clear_customer   ${PUSERNAME124}
     clear_Item   ${PUSERNAME124}
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
-    Set Test Variable  ${pkgid}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    Set Test Variable  ${pkgid}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
     
     ${accId}=  get_acc_id  ${PUSERNAME124}
     
@@ -1538,9 +1576,14 @@ JD-TC-UpdateDeliveryCharge-9
     ${resp}=  Enable Tax
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+     ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log    ${resp.json()}
@@ -1573,7 +1616,7 @@ JD-TC-UpdateDeliveryCharge-9
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code}
@@ -1645,16 +1688,16 @@ JD-TC-UpdateDeliveryCharge-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id91}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   3  30 
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  3  30   
 
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -1730,10 +1773,10 @@ JD-TC-UpdateDeliveryCharge-9
     ${coupon_amount}=  Set Variable    10.0
     Set Suite Variable    ${coupon_amount}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${cpn_sTime}=  db.get_time
-    ${cpn_eTime}=  add_time   3  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${cpn_sTime}=  db.get_time_by_timezone  ${tz}
+    ${cpn_eTime}=  add_timezone_time  ${tz}  3  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -1755,7 +1798,7 @@ JD-TC-UpdateDeliveryCharge-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   9
+    ${DAY1}=  db.add_timezone_date  ${tz}  9
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1789,7 +1832,7 @@ JD-TC-UpdateDeliveryCharge-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1915,7 +1958,7 @@ JD-TC-UpdateDeliveryCharge-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1949,7 +1992,7 @@ JD-TC-UpdateDeliveryCharge-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2047,10 +2090,14 @@ JD-TC-UpdateDeliveryCharge-11
     clear_service  ${PUSERNAME137}
     clear_customer   ${PUSERNAME137}
     clear_Item   ${PUSERNAME137}
-    ${resp}=  ProviderLogin  ${PUSERNAME137}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME137}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid2}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid2}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid2}  ${resp.json()['id']}
     
     ${accId11}=  get_acc_id  ${PUSERNAME137}
     Set Suite Variable  ${accId11}
@@ -2121,17 +2168,22 @@ JD-TC-UpdateDeliveryCharge-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz11}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz11}
+    ${endDate}=  db.add_timezone_date  ${tz11}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz11}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz11}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz11}  0  15  
     Set Suite Variable    ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz11}  3  30   
     Set Suite Variable    ${eTime2}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -2206,7 +2258,7 @@ JD-TC-UpdateDeliveryCharge-11
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY11}=  add_date   12
+    ${DAY11}=  db.add_timezone_date  ${tz11}  12  
     Set Suite Variable  ${DAY11}
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
@@ -2237,7 +2289,7 @@ JD-TC-UpdateDeliveryCharge-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY12}=  add_date   14
+    ${DAY12}=  db.add_timezone_date  ${tz11}   14
     ${address}=  get_address
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERPH0}.ynwtest@netvarth.com
@@ -2253,7 +2305,7 @@ JD-TC-UpdateDeliveryCharge-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    # ${resp}=  ProviderLogin  ${PUSERNAME137}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME137}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2300,7 +2352,7 @@ JD-TC-UpdateDeliveryCharge-11
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['uid']}        ${orderid11}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME137}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME137}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2376,7 +2428,7 @@ JD-TC-UpdateDeliveryCharge-11
 JD-TC-UpdateDeliveryCharge-12
     [Documentation]    Update Delivery Charge by increasing the charge
 
-    ${resp}=  ProviderLogin  ${PUSERNAME137}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME137}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2433,7 +2485,7 @@ JD-TC-UpdateDeliveryCharge-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz3}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -2468,7 +2520,7 @@ JD-TC-UpdateDeliveryCharge-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_C}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2527,7 +2579,7 @@ JD-TC-UpdateDeliveryCharge-UH1
 JD-TC-UpdateDeliveryCharge-UH2
     [Documentation]    Update Delivery Charge after change status to order canceled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2545,7 +2597,7 @@ JD-TC-UpdateDeliveryCharge-UH2
 JD-TC-UpdateDeliveryCharge-UH3
     [Documentation]    Update Delivery Charge for another provider orderid .
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2572,7 +2624,7 @@ JD-TC-UpdateDeliveryCharge-UH4
 JD-TC-UpdateDeliveryCharge-UH5
     [Documentation]    Update Delivery Charge for negative number.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2595,14 +2647,21 @@ JD-TC-UpdateDeliveryCharge-UH6
 
 JD-TC-UpdateDeliveryCharge-13
     [Documentation]   place an order by consumer using SHOPPINGLIST  and add items to bill. After that Provider update delivery charge
+
     clear_customer   ${PUSERNAME122}
     clear_Item   ${PUSERNAME122}
     clear_Coupon   ${PUSERNAME122}
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${domain}    ${resp.json()['sector']}
-    Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    # Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Test Variable   ${domain}    ${decrypted_data['sector']}
+    Set Test Variable   ${subDomain}    ${decrypted_data['subSector']}
+
     ${accId2}=  get_acc_id  ${PUSERNAME122}
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2610,17 +2669,22 @@ JD-TC-UpdateDeliveryCharge-13
     ${domains}=  Jaldee Coupon Target Domains   ${domain}    
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -2698,7 +2762,7 @@ JD-TC-UpdateDeliveryCharge-13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -2727,7 +2791,7 @@ JD-TC-UpdateDeliveryCharge-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2760,15 +2824,21 @@ JD-TC-UpdateDeliveryCharge-13
 
 JD-TC-UpdateDeliveryCharge-14
     [Documentation]   place an order by consumer using SHOPPINGLIST  and add items to bill.Consumer completes bill payment, after that Provider update delivery charge
+    
     clear_customer   ${PUSERNAME122}
     clear_Item   ${PUSERNAME122}
     clear_Coupon   ${PUSERNAME122}
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid122}  ${resp.json()['id']}
-    Set Test Variable   ${domain}    ${resp.json()['sector']}
-    Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid122}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pid122}  ${resp.json()['id']}
+    Set Test Variable   ${domain}    ${decrypted_data['sector']}
+    Set Test Variable   ${subDomain}    ${decrypted_data['subSector']}
     ${accId2}=  get_acc_id  ${PUSERNAME122}
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2776,17 +2846,22 @@ JD-TC-UpdateDeliveryCharge-14
     ${domains}=  Jaldee Coupon Target Domains   ${domain}    
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -2864,7 +2939,7 @@ JD-TC-UpdateDeliveryCharge-14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -2893,7 +2968,7 @@ JD-TC-UpdateDeliveryCharge-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2930,7 +3005,7 @@ JD-TC-UpdateDeliveryCharge-14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2965,7 +3040,7 @@ JD-TC-UpdateDeliveryCharge-14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2977,14 +3052,19 @@ JD-TC-UpdateDeliveryCharge-14
 
 JD-TC-UpdateDeliveryCharge-15
     [Documentation]   place an order by consumer using SHOPPINGLIST  and add items to bill. After that Provider update delivery charge
+
     clear_customer   ${PUSERNAME122}
     clear_Item   ${PUSERNAME122}
     clear_Coupon   ${PUSERNAME122}
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${domain}    ${resp.json()['sector']}
-    Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${domain}    ${decrypted_data['sector']}
+    Set Test Variable   ${subDomain}    ${decrypted_data['subSector']}
+
     ${accId2}=  get_acc_id  ${PUSERNAME122}
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2992,17 +3072,22 @@ JD-TC-UpdateDeliveryCharge-15
     ${domains}=  Jaldee Coupon Target Domains   ${domain}    
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -3055,8 +3140,8 @@ JD-TC-UpdateDeliveryCharge-15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date 
-    ${DAY2}=  add_date  30
+    ${DAY1}=  db.get_date_by_timezone  ${tz} 
+    ${DAY2}=  db.add_timezone_date  ${tz}  30
 
     ${cupn_code1}=    FakerLibrary.word
     ${cupn_name_C1}=   FakerLibrary.name
@@ -3086,7 +3171,7 @@ JD-TC-UpdateDeliveryCharge-15
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3134,7 +3219,7 @@ JD-TC-UpdateDeliveryCharge-15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -3164,7 +3249,7 @@ JD-TC-UpdateDeliveryCharge-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3203,12 +3288,21 @@ JD-TC-UpdateDeliveryCharge-16
     clear_customer   ${PUSERNAME122}
     clear_Item   ${PUSERNAME122}
     clear_Coupon   ${PUSERNAME122}
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid122}  ${resp.json()['id']}
-    Set Test Variable   ${domain}    ${resp.json()['sector']}
-    Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    # Set Suite Variable  ${pid122}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pid122}  ${resp.json()['id']}
+    Set Test Variable   ${domain}    ${decrypted_data['sector']}
+    Set Test Variable   ${subDomain}    ${decrypted_data['subSector']}
+
+    # Set Suite Variable  ${pid122}  ${resp.json()['id']}
+    # Set Test Variable   ${domain}    ${resp.json()['sector']}
+    # Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
     ${accId2}=  get_acc_id  ${PUSERNAME122}
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3216,17 +3310,22 @@ JD-TC-UpdateDeliveryCharge-16
     ${domains}=  Jaldee Coupon Target Domains   ${domain}    
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -3283,8 +3382,8 @@ JD-TC-UpdateDeliveryCharge-16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date 
-    ${DAY2}=  add_date  30
+    ${DAY1}=  db.get_date_by_timezone  ${tz} 
+    ${DAY2}=  db.add_timezone_date  ${tz}  30
 
     ${cupn_code1}=    FakerLibrary.word
     ${cupn_name_C1}=   FakerLibrary.name
@@ -3314,7 +3413,7 @@ JD-TC-UpdateDeliveryCharge-16
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3362,7 +3461,7 @@ JD-TC-UpdateDeliveryCharge-16
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -3392,7 +3491,7 @@ JD-TC-UpdateDeliveryCharge-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3429,7 +3528,7 @@ JD-TC-UpdateDeliveryCharge-16
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3460,7 +3559,7 @@ JD-TC-UpdateDeliveryCharge-16
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3476,12 +3575,21 @@ JD-TC-UpdateDeliveryCharge-17
     clear_customer   ${PUSERNAME122}
     clear_Item   ${PUSERNAME122}
     clear_Coupon   ${PUSERNAME122}
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid122}  ${resp.json()['id']}
-    Set Test Variable   ${domain}    ${resp.json()['sector']}
-    Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    # Set Suite Variable  ${pid122}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pid122}  ${resp.json()['id']}
+    Set Test Variable   ${domain}    ${decrypted_data['sector']}
+    Set Test Variable   ${subDomain}    ${decrypted_data['subSector']}
+
+    # Set Suite Variable  ${pid122}  ${resp.json()['id']}
+    # Set Test Variable   ${domain}    ${resp.json()['sector']}
+    # Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
     ${accId2}=  get_acc_id  ${PUSERNAME122}
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3489,17 +3597,22 @@ JD-TC-UpdateDeliveryCharge-17
     ${domains}=  Jaldee Coupon Target Domains   ${domain}    
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -3556,8 +3669,8 @@ JD-TC-UpdateDeliveryCharge-17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date 
-    ${DAY2}=  add_date  30
+    ${DAY1}=  db.get_date_by_timezone  ${tz} 
+    ${DAY2}=  db.add_timezone_date  ${tz}  30
 
     ${cupn_code1}=    FakerLibrary.word
     ${cupn_name_C1}=   FakerLibrary.name
@@ -3587,7 +3700,7 @@ JD-TC-UpdateDeliveryCharge-17
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3656,7 +3769,7 @@ JD-TC-UpdateDeliveryCharge-17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -3686,7 +3799,7 @@ JD-TC-UpdateDeliveryCharge-17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3734,7 +3847,7 @@ JD-TC-UpdateDeliveryCharge-17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3786,7 +3899,7 @@ JD-TC-UpdateDeliveryCharge-17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -3801,12 +3914,21 @@ JD-TC-UpdateDeliveryCharge-18
     clear_customer   ${PUSERNAME122}
     clear_Item   ${PUSERNAME122}
     clear_Coupon   ${PUSERNAME122}
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid122}  ${resp.json()['id']}
-    Set Test Variable   ${domain}    ${resp.json()['sector']}
-    Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    # Set Suite Variable  ${pid122}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pid122}  ${resp.json()['id']}
+    Set Test Variable   ${domain}    ${decrypted_data['sector']}
+    Set Test Variable   ${subDomain}    ${decrypted_data['subSector']}
+
+    # Set Suite Variable  ${pid122}  ${resp.json()['id']}
+    # Set Test Variable   ${domain}    ${resp.json()['sector']}
+    # Set Test Variable   ${subDomain}    ${resp.json()['subSector']}
     ${accId2}=  get_acc_id  ${PUSERNAME122}
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3815,12 +3937,17 @@ JD-TC-UpdateDeliveryCharge-18
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date 
-    ${DAY2}=  add_date  30
+    ${DAY1}=  db.get_date_by_timezone  ${tz} 
+    ${DAY2}=  db.add_timezone_date  ${tz}  30
 
     ${cupn_code1}=    FakerLibrary.word
     ${cupn_name_C1}=   FakerLibrary.name
@@ -3850,7 +3977,7 @@ JD-TC-UpdateDeliveryCharge-18
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3934,19 +4061,19 @@ JD-TC-UpdateDeliveryCharge-18
     ${catalogItemList2}=  Create List   ${catalogItem3}
 
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   3  30 
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime3}=  add_time   2  30
-    ${eTime3}=  add_time   2  40 
+    ${sTime3}=  add_timezone_time  ${tz}  2  30  
+    ${eTime3}=  add_timezone_time  ${tz}  2  40   
 
     ${deliveryCharge}=  Random Int  min=50   max=100
     ${deliveryCharge}=  Convert To Number  ${deliveryCharge}  1
@@ -4013,7 +4140,7 @@ JD-TC-UpdateDeliveryCharge-18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -4049,7 +4176,7 @@ JD-TC-UpdateDeliveryCharge-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4097,7 +4224,7 @@ JD-TC-UpdateDeliveryCharge-18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -4154,7 +4281,7 @@ JD-TC-UpdateDeliveryCharge-18
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -4173,7 +4300,7 @@ JD-TC-Get_Cart_Details-13
     clear_customer   ${PUSERNAME59}
     clear_Item   ${PUSERNAME59}
     clear_Coupon   ${PUSERNAME59}
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid9}  ${resp.json()['id']}
@@ -4239,19 +4366,20 @@ JD-TC-Get_Cart_Details-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id9}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
   
     ${noOfOccurance}=  Random Int  min=0   max=0
    
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  15 
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  15   
 
-    ${sTime2}=  add_time  0  17
-    ${eTime2}=  add_time   0  30
+    ${sTime2}=  add_timezone_time  ${tz}  0  17
+    ${eTime2}=  add_timezone_time  ${tz}  0  30  
   
     ${list}=  Create List  1  2  3  4  5  6  7
 
@@ -4317,9 +4445,9 @@ JD-TC-Get_Cart_Details-13
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}
 
 
@@ -4366,7 +4494,7 @@ JD-TC-Get_Cart_Details-13
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4389,7 +4517,7 @@ JD-TC-Get_Cart_Details-13
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity5}   5
     ${Coupon1_list}=  Create List   ${cupn_code1}   ${cupn_code2}
     
@@ -4397,7 +4525,7 @@ JD-TC-Get_Cart_Details-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY2}=  add_date   12
+    ${DAY2}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -4443,7 +4571,7 @@ JD-TC-Get_Cart_Details-13
     ${netTotal}=  Evaluate  ${item_one} + ${Del_Charge2} - ${totalDiscount}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -4495,7 +4623,7 @@ JD-TC-Get_Cart_Details-13
 #     clear_service  ${PUSERNAME124}
 #     clear_customer   ${PUSERNAME124}
 #     clear_Item   ${PUSERNAME124}
-#     ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -4580,16 +4708,16 @@ JD-TC-Get_Cart_Details-13
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${item_id01}  ${resp.json()}
 
-#     ${startDate}=  get_date
-#     ${endDate}=  add_date  10      
+#     ${startDate}=  db.get_date_by_timezone  ${tz}
+#     ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-#     ${startDate1}=  get_date
-#     ${endDate1}=  add_date  15      
+#     ${startDate1}=  db.get_date_by_timezone  ${tz}
+#     ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
 #     ${noOfOccurance}=  Random Int  min=0   max=0
 
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   3  30 
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  3  30   
 
 #     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -4663,7 +4791,7 @@ JD-TC-Get_Cart_Details-13
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
     
-#     ${DAY1}=  add_date   12
+#     ${DAY1}=  db.add_timezone_date  ${tz}  12  
 #     ${address}=  get_address
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=90
 #     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
@@ -4682,7 +4810,7 @@ JD-TC-Get_Cart_Details-13
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 

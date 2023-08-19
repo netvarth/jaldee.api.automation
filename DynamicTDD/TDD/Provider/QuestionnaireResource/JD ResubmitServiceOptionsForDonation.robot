@@ -86,7 +86,7 @@ JD-TC-ResubmitServiceOptionsForDonation-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -95,6 +95,7 @@ JD-TC-ResubmitServiceOptionsForDonation-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -136,7 +137,7 @@ JD-TC-ResubmitServiceOptionsForDonation-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -149,6 +150,7 @@ JD-TC-ResubmitServiceOptionsForDonation-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -206,7 +208,7 @@ JD-TC-ResubmitServiceOptionsForDonation-1
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}    uid=${don_id}
 
-    ${resp}=  Provider Login  ${PUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

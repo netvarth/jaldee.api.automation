@@ -77,7 +77,7 @@ Get branch by license
     FOR   ${a***}  IN RANGE  ${length}
             
         ${Branch_PH}=  Set Variable  ${MUSERNAME${a}}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -101,9 +101,12 @@ Billable
      
     FOR   ${a}  IN RANGE  ${start}   ${length}
             
-        ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Suite Variable  ${PUSERNAME_PH}  ${decrypted_data['primaryPhoneNumber']}
+        # Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
         clear_location   ${ConsMobilenum}
         clear_service    ${ConsMobilenum}
         ${acc_id}=  get_acc_id  ${ConsMobilenum}
@@ -245,7 +248,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${PASSWORD2}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  ProviderLogin  ${ConsMobilenum}  ${PASSWORD2}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD2}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
 
@@ -310,7 +313,7 @@ Billable
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -365,7 +368,7 @@ Billable
 
 
     
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
 #     ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -387,8 +390,8 @@ Billable
 #     ${24hours}    Random Element    ${bool}
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}   ${address}   ${ph_nos1}   ${ph_nos2}   ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -439,7 +442,7 @@ Billable
 
 # JD-TC-AddCustomer- With email 2
 #      [Documentation]  Add a new valid customer with email
-#      ${resp}=  ProviderLogin  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#      ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #      Should Be Equal As Strings  ${resp.status_code}  200
 #      Set Test Variable  ${p_id}  ${resp.json()['id']}
 
@@ -507,7 +510,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -633,7 +636,7 @@ Billable
 
 # # JD-TC-Update CustomerDetails-4
 # # 	[Documentation]  Update a valid customer here add a new consumer number(new keyword)
-# #     ${resp}=  ProviderLogin  ${ConsMobilenum}  ${PASSWORD2}
+# #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD2}
 # #     Should Be Equal As Strings  ${resp.status_code}  200
 # #     Set Test Variable  ${p_id}  ${resp.json()['id']}
 # #     # ${firstname}=  FakerLibrary.first_name
@@ -695,7 +698,7 @@ Billable
 # #     ${resp}=  Account Set Credential Notification   ${conEmail1simi}  ${PASSWORD2}  0   ${internatcountryCode}
 # #     Should Be Equal As Strings    ${resp.status_code}    200
 # #     Log  ${resp.content}
-# #     ${resp}=  ProviderLogin Notification   ${conEmail1simi}  ${PASSWORD2}  ${internatcountryCode}
+# #     ${resp}=  Encrypted Provider Login Notification   ${conEmail1simi}  ${PASSWORD2}  ${internatcountryCode}
 # #     Should Be Equal As Strings    ${resp.status_code}    200
 # #     Log  ${resp.content}
 # #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${conEmail1simi}${\n}
@@ -734,7 +737,7 @@ Billable
 #     ${resp}=  Account Set Credential Notification   ${conEmail1simi}  ${PASSWORD2}  0   ${countryCode}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Log  ${resp.content}
-#     ${resp}=  ProviderLogin Notification   ${conEmail1simi}  ${PASSWORD2}  ${countryCode}
+#     ${resp}=  Encrypted Provider Login Notification   ${conEmail1simi}  ${PASSWORD2}  ${countryCode}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Log  ${resp.content}
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${conEmail1simi}${\n}
@@ -777,14 +780,14 @@ Billable
 #     ${resp}=  Account Set Credential Notification   ${conEmail1simi}  ${PASSWORD2}  0   ${countryCode}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Log  ${resp.content}
-#     ${resp}=  ProviderLogin Notification   ${conEmail1simi}  ${PASSWORD2}  ${countryCode}
+#     ${resp}=  Encrypted Provider Login Notification   ${conEmail1simi}  ${PASSWORD2}  ${countryCode}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Log  ${resp.content}
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${conEmail1simi}${\n}
 
 # JD-TC-providerConsumerSignup-1
 #     [Documentation]    Provider Consumer Signup with phonne num
-#     ${resp}=   ProviderLogin  ${ConsMobilenum}  ${PASSWORD2} 
+#     ${resp}=   Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD2} 
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${accountId}=    get_acc_id       ${ConsMobilenum}
@@ -829,7 +832,7 @@ Billable
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=   ProviderLogin  ${ConsMobilenum}  ${PASSWORD2} 
+#     ${resp}=   Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD2} 
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -840,7 +843,7 @@ Billable
 
 # JD-TC-providerConsumerSignup-3
 #     [Documentation]    Provider Consumer Signup with email
-#     ${resp}=   ProviderLogin  ${ConsMobilenum}  ${PASSWORD2} 
+#     ${resp}=   Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD2} 
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${accountId}=    get_acc_id       ${ConsMobilenum}
@@ -885,7 +888,7 @@ Billable
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=   ProviderLogin  ${ConsMobilenum}  ${PASSWORD2} 
+#     ${resp}=   Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD2} 
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -911,21 +914,21 @@ Billable
 # JD-TC-ProviderChangePassword-1
 #     [Documentation]    Provider Change password
 
-#     ${resp}=  ProviderLogin  ${ConsMobilenum}  ${PASSWORD2}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD2}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Provider Change Password  ${PASSWORD2}  ${NEW_PASSWORD12}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  ProviderLogin  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 # JD-TC-ProviderChangePassword-2
 #     [Documentation]    Provider Change password  with email
 
-#     ${resp}=  ProviderLogin  ${consEmail}  ${PASSWORD2}
+#     ${resp}=  Encrypted Provider Login  ${consEmail}  ${PASSWORD2}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Provider Change Password  ${PASSWORD2}  ${NEW_PASSWORD12}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  ProviderLogin  ${consEmail}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${consEmail}  ${NEW_PASSWORD12}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 
@@ -933,12 +936,12 @@ Billable
 # *** comment ***
 # JD-TC-UpdateBusinessProfile-1
 #     [Documentation]  Update  business profile for a valid provider without schedule
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Suite Variable  ${d}  ${resp.json()['sector']}
 #     Set Suite Variable  ${sd}  ${resp.json()['subSector']}
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${DAY1}  ${DAY1}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     Set Suite Variable  ${list}  ${list}
@@ -1022,7 +1025,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -1036,7 +1039,7 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     sleep  2s
 #     clear_customer   ${ConsMobilenum}
-#     ${resp}=  ProviderLogin  ${ConsMobilenum}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1064,7 +1067,7 @@ Billable
 
 #     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH0}${\n}
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1104,7 +1107,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -1137,7 +1140,7 @@ Billable
 
     
     
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
 #     ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -1159,8 +1162,8 @@ Billable
 #     ${24hours}    Random Element    ${bool}
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}   ${address}   ${ph_nos1}   ${ph_nos2}   ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1222,11 +1225,11 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     Set Suite Variable   ${pid}
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable   ${DAY1}
-#     ${DAY2}=  add_date  10      
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10        
 #     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${sTime1}=  add_time  0  15
+#     ${sTime1}=  add_timezone_time  ${tz}  0  15  
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime1}=  add_two   ${sTime1}  ${delta}
 #     ${lid}=  Create Sample Location
@@ -1272,7 +1275,7 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-#     ${sTime2}=  add_time  1  15
+#     ${sTime2}=  add_timezone_time  ${tz}  1  15  
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime2}=  add_two   ${sTime2}  ${delta}   
 
@@ -1429,7 +1432,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -1437,7 +1440,7 @@ Billable
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
 #     Set Suite Variable  ${id}
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1487,7 +1490,7 @@ Billable
 
 
     
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
 #     ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -1509,8 +1512,8 @@ Billable
 #     ${24hours}    Random Element    ${bool}
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}   ${address}   ${ph_nos1}   ${ph_nos2}   ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1528,10 +1531,11 @@ Billable
 #     ${lid}=  Create Sample Location  
 #     clear_appt_schedule   ${ConsMobilenum}
     
-#     ${DAY1}=  get_date
-#     ${DAY2}=  add_date  10      
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10        
 #     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${sTime1}=  db.get_time
+#   # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime1}=  add_two   ${sTime1}  ${delta}
 #     ${SERVICE1}=   FakerLibrary.name
@@ -1567,9 +1571,9 @@ Billable
 #     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
 #     ${apptfor}=   Create List  ${apptfor1}
 
-#     ${apptTime}=  db.get_time_secs
+#     ${apptTime}=  db.get_tz_time_secs  ${tz} 
 #     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-#     ${UpdatedTime}=  db.get_date_time
+#     ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
 #     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
 #     ${cnote}=   FakerLibrary.word
@@ -1679,17 +1683,17 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
 #     ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -1711,8 +1715,8 @@ Billable
 #     ${24hours}    Random Element    ${bool}
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1769,11 +1773,11 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     Set Suite Variable   ${pid}
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable   ${DAY1}
-#     ${DAY2}=  add_date  10      
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10        
 #     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${sTime1}=  add_time  0  15
+#     ${sTime1}=  add_timezone_time  ${tz}  0  15  
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime1}=  add_two   ${sTime1}  ${delta}
 #     ${lid}=  Create Sample Location
@@ -1800,7 +1804,7 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-#     ${sTime2}=  add_time  1  15
+#     ${sTime2}=  add_timezone_time  ${tz}  1  15  
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime2}=  add_two   ${sTime2}  ${delta}   
 
@@ -1949,7 +1953,7 @@ Billable
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings   ${resp.status_code}   200
 
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1994,7 +1998,7 @@ Billable
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2033,14 +2037,14 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     Set Suite Variable  ${old_pkgid}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
 #     ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -2062,8 +2066,8 @@ Billable
 #     ${24hours}    Random Element    ${bool}
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2193,7 +2197,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -2201,7 +2205,7 @@ Billable
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
 #     Set Suite Variable  ${id}
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2251,7 +2255,7 @@ Billable
 
 
     
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
 #     ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -2273,8 +2277,8 @@ Billable
 #     ${24hours}    Random Element    ${bool}
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}   ${address}   ${ph_nos1}   ${ph_nos2}   ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2312,9 +2316,9 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${cid}   ${resp.json()}
 
-#     ${CUR_DAY}=  get_date
+#     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${CUR_DAY}
-#     ${DAY3}=  add_date  4
+#     ${DAY3}=  db.add_timezone_date  ${tz}  4  
 #     ${resp}=   Create Sample Location
 #     Set Suite Variable    ${loc_id1}    ${resp}  
 #     ${resp}=   Create Sample Location
@@ -2327,9 +2331,9 @@ Billable
 #     Set Suite Variable    ${q_name}
 #     ${list}=  Create List   1  2  3  4  5  6  7
 #     Set Suite Variable    ${list}
-#     ${strt_time}=   add_time  1  00
+#     ${strt_time}=   add_timezone_time  ${tz}  1  00  
 #     Set Suite Variable    ${strt_time}
-#     ${end_time}=    add_time  3  00 
+#     ${end_time}=    add_timezone_time  ${tz}  3  00   
 #     Set Suite Variable    ${end_time}  
 #     ${parallel}=   Random Int  min=1   max=2
 #     Set Suite Variable   ${parallel}
@@ -2465,7 +2469,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -2473,7 +2477,7 @@ Billable
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
 #     Set Suite Variable  ${id}
-#     ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+#     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2508,7 +2512,7 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${pid}  ${resp.json()['id']} 
     
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
 #     ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -2530,8 +2534,8 @@ Billable
 #     ${24hours}    Random Element    ${bool}
 #     ${desc}=   FakerLibrary.sentence
 #     ${url}=   FakerLibrary.url
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  45
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  45  
 #     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}   ${address}   ${ph_nos1}   ${ph_nos2}   ${emails1}   ${EMPTY}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2569,17 +2573,17 @@ Billable
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${cid}   ${resp.json()}
 
-#     # ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+#     # ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
 #     # Should Be Equal As Strings    ${resp.status_code}    200
-#     ${CUR_DAY}=  get_date
+#     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${CUR_DAY}
-#     ${DAY2}=  add_date  4
+#     ${DAY2}=  db.add_timezone_date  ${tz}  4  
 #     # clear_service   ${PUSERNAME180}
 #     # clear_location  ${PUSERNAME180}
 #     # clear_queue  ${PUSERNAME180}
-#     ${sTime1}=  add_time  0  15
+#     ${sTime1}=  add_timezone_time  ${tz}  0  15  
 #     Set Suite Variable   ${sTime1}
-#     ${eTime1}=  add_time   0  30
+#     ${eTime1}=  add_timezone_time  ${tz}  0  30  
 #     Set Suite Variable   ${eTime1}
 #     ${lid}=  Create Sample Location
 #      ${SERVICE1}=   FakerLibrary.word
@@ -2613,8 +2617,8 @@ Billable
 #     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
 #     Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1}
 
-#     ${sTime5}=  add_time  1  15
-#     ${eTime5}=  add_time   1  30
+#     ${sTime5}=  add_timezone_time  ${tz}  1  15  
+#     ${eTime5}=  add_timezone_time  ${tz}  1  30  
 #     ${token_start}=   Random Int  min=45   max=60
 #     ${queue_capacity}=   Random Int  min=1000   max=2000
 #     ${queue_name}=  FakerLibrary.bs
@@ -2641,8 +2645,8 @@ Billable
 
 #     ${queue_start}=  Evaluate  ${token_start}+${queue_capacity}
 #     ${next_queue_start}=  Evaluate  (${queue_start}/100+1)*100
-#     ${sTime5}=  add_time  2  15
-#     ${eTime5}=  add_time   2  30
+#     ${sTime5}=  add_timezone_time  ${tz}  2  15  
+#     ${eTime5}=  add_timezone_time  ${tz}  2  30  
 #     ${queue_name}=  FakerLibrary.bs
 #     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime5}  ${eTime5}  1  5  ${lid}  ${s_id1}
 #     Log  ${resp.json()}
@@ -2726,7 +2730,7 @@ Billable
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+    # ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -2734,7 +2738,7 @@ Billable
     # ${pid}=  get_acc_id  ${ConsMobilenum}
     # ${id}=  get_id  ${ConsMobilenum}
     # Set Suite Variable  ${id}
-    # ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+    # ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2784,7 +2788,7 @@ Billable
 
 
     
-    # ${DAY1}=  get_date
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     # ${list}=  Create List  1  2  3  4  5  6  7
     # ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
     # ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -2806,8 +2810,8 @@ Billable
     # ${24hours}    Random Element    ${bool}
     # ${desc}=   FakerLibrary.sentence
     # ${url}=   FakerLibrary.url
-    # ${sTime}=  add_time  0  15
-    # ${eTime}=  add_time   0  45
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}   ${address}   ${ph_nos1}   ${ph_nos2}   ${emails1}   ${EMPTY}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -2825,10 +2829,11 @@ Billable
 #     ${lid}=  Create Sample Location  
 #     clear_appt_schedule   ${ConsMobilenum}
     
-#     ${DAY1}=  get_date
-#     ${DAY2}=  add_date  10      
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10        
 #     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${sTime1}=  db.get_time
+#   # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime1}=  add_two   ${sTime1}  ${delta}
 #     ${SERVICE1}=   FakerLibrary.name
@@ -2870,10 +2875,11 @@ Billable
 #     ${lid}=  Create Sample Location  
 #     clear_appt_schedule   ${ConsMobilenum}
     
-#     ${DAY1}=  get_date
-#     ${DAY2}=  add_date  10      
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10        
 #     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${sTime1}=  db.get_time
+#   # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime1}=  add_two   ${sTime1}  ${delta}
 #     ${SERVICE1}=   FakerLibrary.name
@@ -2905,9 +2911,9 @@ Billable
 #     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
 #     ${apptfor}=   Create List  ${apptfor1}
 
-#     ${apptTime}=  db.get_time_secs
+#     ${apptTime}=  db.get_tz_time_secs  ${tz} 
 #     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-#     ${UpdatedTime}=  db.get_date_time
+#     ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
 #     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
 #     ${cnote}=   FakerLibrary.word
@@ -3037,7 +3043,7 @@ Billable
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+    # ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -3092,7 +3098,7 @@ Billable
 
 
     
-    # ${DAY1}=  get_date
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     # ${list}=  Create List  1  2  3  4  5  6  7
     # ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
     # ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -3114,8 +3120,8 @@ Billable
     # ${24hours}    Random Element    ${bool}
     # ${desc}=   FakerLibrary.sentence
     # ${url}=   FakerLibrary.url
-    # ${sTime}=  add_time  0  15
-    # ${eTime}=  add_time   0  45
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}   ${address}   ${ph_nos1}   ${ph_nos2}   ${emails1}   ${EMPTY}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -3253,12 +3259,12 @@ Billable
     #  Should Be Equal As Strings    ${resp.status_code}    200
     #  ${resp}=  Account Set Credential  ${ConsMobilenum}  ${PASSWORD}  0
     #  Should Be Equal As Strings    ${resp.status_code}    200
-    #  ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+    #  ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
     #  Log  ${resp.json()}
     #  Should Be Equal As Strings    ${resp.status_code}    200
     #  Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
     #  Set Suite Variable  ${ConsMobilenum}
-    #  ${DAY1}=  get_date
+    #  ${DAY1}=  db.get_date_by_timezone  ${tz}
     #  Set Suite Variable  ${DAY1}  ${DAY1}
     #  ${list}=  Create List  1  2  3  4  5  6  7
     #  Set Suite Variable  ${list}  ${list}
@@ -3282,9 +3288,9 @@ Billable
     #  ${24hours}    Random Element    ${bool}
     #  ${desc}=   FakerLibrary.sentence
     #  ${url}=   FakerLibrary.url
-    #  ${sTime}=  add_time  0  15
+    #  ${sTime}=  add_timezone_time  ${tz}  0  15  
     #  Set Suite Variable   ${sTime}
-    #  ${eTime}=  add_time   0  45
+    #  ${eTime}=  add_timezone_time  ${tz}  0  45  
     #  Set Suite Variable   ${eTime}
     #  ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     #  Log  ${resp.json()}
@@ -3373,10 +3379,10 @@ Billable
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     
-    # ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     # ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     # # ${SERVICE1}=  FakerLibrary.word
@@ -3453,8 +3459,8 @@ Billable
 
     #  ${q_name}=    FakerLibrary.name
     # # ${list2}=  Create List   1  2  3  4  5  6  7
-    # ${strt_time}=   add_time  1  00
-    # ${end_time}=    add_time  2  00 
+    # ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    # ${end_time}=    add_timezone_time  ${tz}  2  00   
     # ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     # ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     # ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${s_id}
@@ -3569,7 +3575,7 @@ Billable
     # Should Be Equal As Strings  ${resp[0].status_code}  200
     # Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    # ${resp}=  ProviderLogin  ${MobilenumHi122}  ${PASSWORDuser1}
+    # ${resp}=  Encrypted Provider Login  ${MobilenumHi122}  ${PASSWORDuser1}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3593,7 +3599,7 @@ Billable
     # Should Be Equal As Strings  ${resp[0].status_code}  200
     # Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    # ${resp}=  ProviderLogin  ${MobilenumRIA}  ${PASSWORDuser2}
+    # ${resp}=  Encrypted Provider Login  ${MobilenumRIA}  ${PASSWORDuser2}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3670,12 +3676,12 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
      ${resp}=  Account Set Credential  ${ConsMobilenum}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
      Set Suite Variable  ${ConsMobilenum}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
@@ -3690,19 +3696,22 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
      ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
      ${bs}=  FakerLibrary.bs
-     ${city}=   get_place
-     ${latti}=  get_latitude
-     ${longi}=  get_longitude
      ${companySuffix}=  FakerLibrary.companySuffix
-     ${postcode}=  FakerLibrary.postcode
-     ${address}=  get_address
+     # ${city}=   get_place
+     # ${latti}=  get_latitude
+     # ${longi}=  get_longitude
+     # ${postcode}=  FakerLibrary.postcode
+     # ${address}=  get_address
+     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+     Set Suite Variable  ${tz}
      ${parking}   Random Element   ${parkingType}
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
+     ${sTime}=  add_timezone_time  ${tz}  0  15  
      Set Suite Variable   ${sTime}
-     ${eTime}=  add_time   0  45
+     ${eTime}=  add_timezone_time  ${tz}  0  45  
      Set Suite Variable   ${eTime}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
@@ -3764,12 +3773,14 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
      Set Suite Variable  ${bs}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -3792,7 +3803,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     
     
-        # ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
         # Log  ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
         # delete_donation_service  ${PUSERNAME51}
@@ -3813,7 +3824,12 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
         Should Be Equal As Strings  ${resp.status_code}  200
          ${resp}=   Billable
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -3845,7 +3861,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${ConsMobilenum}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         # ${don_amt}=  Evaluate  ${min_don_amt}*${multiples[0]}
         # ${don_amt_float}=  twodigitfloat  ${don_amt}
@@ -3941,7 +3957,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
         Should Be Equal As Strings    ${resp.status_code}   200
 
 # ........................ order by consumer ................................  okey
-    ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -3990,16 +4006,16 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -4074,7 +4090,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${C_firstName}=   FakerLibrary.first_name 
     # ${C_lastName}=   FakerLibrary.name 
      ${C_num1}    Random Int  min=123456   max=999999
@@ -4190,12 +4206,12 @@ JD-TC-Order_MassCommunication-1
     #  ${resp}=  Account Set Credential  ${ConsMobilenum}  ${PASSWORD}  0
     #  Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
      Set Suite Variable  ${ConsMobilenum}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      ${accId3}=  get_acc_id  ${ConsMobilenum}
       clear_Consumermsg  ${CUSERNAME29}
     clear_Providermsg  ${ConsMobilenum}
@@ -4227,9 +4243,9 @@ JD-TC-Order_MassCommunication-1
     #  ${24hours}    Random Element    ${bool}
     #  ${desc}=   FakerLibrary.sentence
     #  ${url}=   FakerLibrary.url
-    #  ${sTime}=  add_time  0  15
+    #  ${sTime}=  add_timezone_time  ${tz}  0  15  
     #  Set Suite Variable   ${sTime}
-    #  ${eTime}=  add_time   0  45
+    #  ${eTime}=  add_timezone_time  ${tz}  0  45  
     #  Set Suite Variable   ${eTime}
     #  ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     #  Log  ${resp.json()}
@@ -4291,12 +4307,14 @@ JD-TC-Order_MassCommunication-1
      Set Suite Variable  ${bs}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -4319,7 +4337,7 @@ JD-TC-Order_MassCommunication-1
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     
     
-        # ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
         # Log  ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
         # delete_donation_service  ${PUSERNAME51}
@@ -4402,22 +4420,22 @@ JD-TC-Order_MassCommunication-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00 
+    ${eTime1}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime1}
 
-    ${sTime2}=  add_time  1  05
+    ${sTime2}=  add_timezone_time  ${tz}  1  05  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   2  15 
+    ${eTime2}=  add_timezone_time  ${tz}  2  15   
     Set Suite Variable    ${eTime2}
 
 
@@ -4527,7 +4545,7 @@ JD-TC-Order_MassCommunication-1
     Should Be Equal As Strings      ${resp.status_code}  200
 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${DAY1}
     ${DATE12}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
     Set Suite Variable  ${DATE12}
@@ -4578,7 +4596,7 @@ JD-TC-Order_MassCommunication-1
 
     # --------------------------------------------------------------------------
 
-    ${resp}=  ProviderLogin  ${ConsMobilenum}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4767,21 +4785,22 @@ JD-TC-Payment By Consumer-1
     #  ${resp}=  Account Set Credential  ${ConsMobilenum}  ${PASSWORD}  0
     #  Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
      Set Suite Variable  ${ConsMobilenum}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      ${accId3}=  get_acc_id  ${ConsMobilenum}
      
      ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}  
     # ${list}=  Create List  1  2  3  4  5  6  7
     # Set Suite Variable  ${list}  
@@ -4806,9 +4825,9 @@ JD-TC-Payment By Consumer-1
     # ${24hours}    Random Element    ['True','False']
     # ${desc}=   FakerLibrary.sentence
     # ${url}=   FakerLibrary.url
-    # ${sTime}=  add_time  0  15
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
     # Set Suite Variable   ${sTime}
-    # ${eTime}=  add_time   0  45
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # Set Suite Variable   ${eTime}
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     # Log  ${resp.content}
@@ -4910,8 +4929,8 @@ JD-TC-Payment By Consumer-1
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  add_time  2   00
-    ${eTime}=  add_time   2   15
+    ${sTime}=  add_timezone_time  ${tz}  2  00  
+    ${eTime}=  add_timezone_time  ${tz}  2  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${p1_lid}  ${p1_sid1}  ${p1_sid2}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4978,7 +4997,7 @@ JD-TC-Payment By Consumer-1
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-     ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5025,7 +5044,7 @@ JD-TC-Payment By Consumer-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5085,12 +5104,12 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     #  Should Be Equal As Strings    ${resp.status_code}    200
     #  ${resp}=  Account Set Credential  ${ConsMobilenum}  ${PASSWORD}  0
     #  Should Be Equal As Strings    ${resp.status_code}    200
-    #  ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+    #  ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
     #  Log  ${resp.json()}
     #  Should Be Equal As Strings    ${resp.status_code}    200
     # #  Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
     #  Set Suite Variable  ${ConsMobilenum}
-    #  ${DAY1}=  get_date
+    #  ${DAY1}=  db.get_date_by_timezone  ${tz}
     #  Set Suite Variable  ${DAY1}  ${DAY1}
     #  ${list}=  Create List  1  2  3  4  5  6  7
     #  Set Suite Variable  ${list}  ${list}
@@ -5114,9 +5133,9 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     #  ${24hours}    Random Element    ${bool}
     #  ${desc}=   FakerLibrary.sentence
     #  ${url}=   FakerLibrary.url
-    #  ${sTime}=  add_time  0  15
+    #  ${sTime}=  add_timezone_time  ${tz}  0  15  
     #  Set Suite Variable   ${sTime}
-    #  ${eTime}=  add_time   0  45
+    #  ${eTime}=  add_timezone_time  ${tz}  0  45  
     #  Set Suite Variable   ${eTime}
     #  ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     #  Log  ${resp.json()}
@@ -5145,7 +5164,7 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     #  Should Be Equal As Strings  ${resp.status_code}  200
      
 
-    ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  Enable Waitlist
@@ -5182,12 +5201,14 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
      Set Suite Variable  ${bs}
 
      ${resp}=  View Waitlist Settings
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
      sleep  2s
      ${resp}=  Get Departments
      Log   ${resp.json()}
@@ -5209,10 +5230,11 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${SERVICE1}=  FakerLibrary.word
@@ -5289,8 +5311,8 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
 
      ${q_name}=    FakerLibrary.name
     # ${list2}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
-    ${end_time}=    add_time  2  00 
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${lid}  ${s_id}
@@ -5405,7 +5427,7 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${MobilenumHi122}  ${PASSWORDuser1}
+    ${resp}=  Encrypted Provider Login  ${MobilenumHi122}  ${PASSWORDuser1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -5429,7 +5451,7 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${MobilenumRIA}  ${PASSWORDuser2}
+    ${resp}=  Encrypted Provider Login  ${MobilenumRIA}  ${PASSWORDuser2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -5512,7 +5534,7 @@ Appointment Cancellation-8
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  Account Set Credential  ${ConsMobilenum}  ${NEW_PASSWORD12}  0
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=  Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
+    # ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
@@ -5520,7 +5542,7 @@ Appointment Cancellation-8
     # ${pid}=  get_acc_id  ${ConsMobilenum}
     # ${id}=  get_id  ${ConsMobilenum}
     # Set Suite Variable  ${id}
-    ${resp}=  Provider Login  ${ConsMobilenum}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -5570,7 +5592,7 @@ Appointment Cancellation-8
 
 
     
-    # ${DAY1}=  get_date
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     # ${list}=  Create List  1  2  3  4  5  6  7
     # ${ph1}=  Evaluate  ${ConsMobilenum}+15566122
     # ${ph2}=  Evaluate  ${ConsMobilenum}+25566122
@@ -5592,8 +5614,8 @@ Appointment Cancellation-8
     # ${24hours}    Random Element    ${bool}
     # ${desc}=   FakerLibrary.sentence
     # ${url}=   FakerLibrary.url
-    # ${sTime}=  add_time  0  15
-    # ${eTime}=  add_time   0  45
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}   ${address}   ${ph_nos1}   ${ph_nos2}   ${emails1}   ${EMPTY}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -5609,12 +5631,17 @@ Appointment Cancellation-8
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${ConsMobilenum}
     
-    # ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     # ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${SERVICE1}=   FakerLibrary.name
@@ -5635,10 +5662,11 @@ Appointment Cancellation-8
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${p1_sid1}  ${resp.json()}
 
-      ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${SERVICE1}=  FakerLibrary.word
@@ -5698,12 +5726,18 @@ Appointment Cancellation-8
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${ConsMobilenum}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=   FakerLibrary.name
@@ -5735,9 +5769,9 @@ Appointment Cancellation-8
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${apptTime}=  db.get_time_secs
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
     ${apptTakenTime}=  db.remove_secs   ${apptTime}
-    ${UpdatedTime}=  db.get_date_time
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
     ${cnote}=   FakerLibrary.word

@@ -15,14 +15,14 @@ ${SERVICE2}  pedicure
 *** Test Cases ***
 JD-TC-Get schedule By Date-1
     [Documentation]  Get schedule for today's date
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME183}
     clear_location  ${PUSERNAME183}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -77,16 +77,16 @@ JD-TC-Get schedule By Date-1
 
 JD-TC-Get schedule By Date-2
     [Documentation]  Get schedule for future date
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME183}
     clear_location  ${PUSERNAME183}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
-    ${DAY3}=  add_date  5
-    ${DAY4}=  add_date  15      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    ${DAY3}=  db.add_timezone_date  ${tz}  5  
+    ${DAY4}=  db.add_timezone_date  ${tz}  15        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -143,15 +143,15 @@ JD-TC-Get schedule By Date-2
 
 JD-TC-Get schedule By Date-3
     [Documentation]  Get schedule for past date
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME183}
     clear_location  ${PUSERNAME183}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
-    ${DAY3}=  subtract_date  5
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.subtract_timezone_date  ${tz}   5
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -172,14 +172,14 @@ JD-TC-Get schedule By Date-3
 
 JD-TC-Get schedule By Date-4
     [Documentation]  Get schedule for End date
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME183}
     clear_location  ${PUSERNAME183}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10     
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10       
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -208,15 +208,15 @@ JD-TC-Get schedule By Date-4
 
 JD-TC-Get schedule By Date-5
     [Documentation]  Get schedule for a future date outside start and end date
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME183}
     clear_location  ${PUSERNAME183}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10   
-    ${DAY3}=  add_date  15  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
+    ${DAY3}=  db.add_timezone_date  ${tz}  15    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -237,14 +237,14 @@ JD-TC-Get schedule By Date-5
 
 JD-TC-Get schedule By Date-UH1
     [Documentation]  Get schedule by date without login
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME183}
     clear_location  ${PUSERNAME183}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10     
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10       
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location

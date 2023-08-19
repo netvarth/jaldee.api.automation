@@ -27,11 +27,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
 
     [Documentation]  Get Avaliable Providers In A Time Range
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -39,11 +43,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  10
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -53,7 +61,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=  add_time  11  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -63,8 +71,8 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
     
-    ${DAY3}=  add_date  15 
-    ${sTime3}=  add_time  16  20
+    ${DAY3}=  db.add_timezone_date  ${tz}  15 
+    ${sTime3}=  db.add_timezone_time  ${tz}  16  20
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime3}  ${delta}
     ${schedule_name3}=  FakerLibrary.bs
@@ -74,8 +82,8 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
     
-    ${DAY4}=  add_date  20 
-    ${sTime4}=  add_time  21  23
+    ${DAY4}=  db.add_timezone_date  ${tz}  20 
+    ${sTime4}=  db.add_timezone_time  ${tz}  21  23
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${schedule_name4}=  FakerLibrary.bs

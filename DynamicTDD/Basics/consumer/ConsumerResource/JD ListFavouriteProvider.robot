@@ -104,7 +104,7 @@ JD-TC-ListFavouriteProvider-Clear
 ***Comment***
 JD-TC-ListFavouriteProvider-UH2
      [Documentation]  List favourite provider by provider login
-     ${resp}=  ProviderLogin  ${PUSERNAME21}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}   200 
      ${resp}=  List Favourite Provider 
      Log  ${resp.json()}

@@ -35,18 +35,20 @@ JD-TC-Communication Between Provider And Consumer-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_P}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_P}${\n}
     Set Suite Variable  ${PUSERNAME_P}
 
-    ${resp}=  Provider Login  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${a_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${a_id}  ${decrypted_data['id']}
+    # Set Suite Variable  ${a_id}  ${resp.json()['id']}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_P}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_P}+25566128
@@ -58,18 +60,22 @@ JD-TC-Communication Between Provider And Consumer-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_P}.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule    ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -123,10 +129,13 @@ JD-TC-Communication Between Provider And Consumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    ${CUR_DAY}=  get_date
-    Set Suite Variable  ${CUR_DAY}
+    
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -139,9 +148,11 @@ JD-TC-Communication Between Provider And Consumer-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   Subtract_time     3   00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY}
+    ${strt_time}=   subtract_timezone_time   ${tz}     3   00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  0  30 
+    ${end_time}=    db.add_timezone_time  ${tz}  0  30 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -154,9 +165,9 @@ JD-TC-Communication Between Provider And Consumer-1
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
+    
     clear_Consumermsg  ${CUSERNAME1}
     clear_Providermsg  ${PUSERNAME_P}
    
@@ -195,8 +206,9 @@ JD-TC-Communication Between Provider And Consumer-1
 JD-TC-Communication Between Provider And Consumer-2
 	[Documentation]  Communication Between Provider And Consumer after Done a waitlist
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${wid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -226,7 +238,7 @@ JD-TC-Communication Between Provider And Consumer-2
     # ${resp}=  Imageupload.providercomupload   ${wid}  ${msg}  ${caption}
     # Log  ${resp}
     # Should Be Equal As Strings  ${resp[1]}  200
-    ${time}=  db.get_time
+    ${time}=  db.get_time_by_timezone   ${tz}
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -246,12 +258,11 @@ JD-TC-Communication Between Provider And Consumer-2
 JD-TC-Communication Between Provider And Consumer-3
 	[Documentation]  Communication Between Provider And Consumer after cancel a waitlist
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_P}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[0]}   ${desc}

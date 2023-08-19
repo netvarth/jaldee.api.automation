@@ -101,12 +101,10 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
@@ -119,20 +117,27 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  
+
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -209,7 +214,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-1
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-2
     [Documentation]   Create virtual service for a provider in billable domain with skype only active in Global level
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -287,7 +292,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-2
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-3
     [Documentation]   Create virtual service for a provider in billable domain with whatsapp only active in Global level
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -363,7 +368,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-3
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-4
     [Documentation]   Create two virtual services for a provider in billable domain with and without prepayment using same virtual calling mode
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -471,7 +476,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-4
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-5
     [Documentation]   Use different Zoom_id and  Different service type to create different Virtual services
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -587,7 +592,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-5
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-6
     [Documentation]   Use different Zoom_id and  Same service type to create different Virtual services
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -702,7 +707,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-6
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-7
     [Documentation]   Use TWO virtual calling modes to create a single virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -792,7 +797,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-7
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-N1
     [Documentation]   Use TWO virtual calling modes to create a single virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -880,7 +885,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-N1
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-8
     [Documentation]   Use Google_meet and Whatsapp virtual calling modes to create a video services
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -969,7 +974,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-8
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-9
     [Documentation]   Use Phone_call and Whatsapp virtual calling modes to create a audio services
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -1100,11 +1105,11 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1118,19 +1123,23 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-10
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -1213,7 +1222,7 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-10
 
 JD-TC-CreateVirtualService-(Non-Billable Subdomain)-11
     [Documentation]   Create virtual service for a provider in Non-billable domain  with Zoom only active in Global level
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH2}
@@ -1309,7 +1318,7 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-11
 
 JD-TC-CreateVirtualService-(Non-Billable Subdomain)-12
     [Documentation]   Create virtual service for a provider in Non-billable domain with whatsapp only active in Global level
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH2}
@@ -1412,7 +1421,7 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-12
 
 JD-TC-CreateVirtualService-(Non-Billable Subdomain)-13
     [Documentation]   Use different zoom_id and Different service type to create different Virtual services
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH2}
@@ -1531,7 +1540,7 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-13
 
 JD-TC-CreateVirtualService-(Non-Billable Subdomain)-14
     [Documentation]   Use different  Zoom_id and Same service type to create different Virtual services
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH2}
@@ -1679,7 +1688,7 @@ JD-TC-CreateVirtualService-UH1
 
 JD-TC-CreateVirtualService-UH2
     [Documentation]   Use Virtual calling mode as EMPTY while the creation of a Virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -1737,7 +1746,7 @@ JD-TC-CreateVirtualService-UH2
 
 JD-TC-CreateVirtualService-UH3
     [Documentation]   Use Virtual calling mode VALUE of ZOOM as EMPTY while the creation of a Virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1763,7 +1772,7 @@ JD-TC-CreateVirtualService-UH3
 
 JD-TC-CreateVirtualService-UH4
     [Documentation]   Use Virtual calling mode VALUE of WHATSAPP as EMPTY while the creation of a Virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1791,7 +1800,7 @@ JD-TC-CreateVirtualService-UH4
 
 JD-TC-CreateVirtualService-UH5
     [Documentation]   Use Virtual calling mode VALUE of PHONE as EMPTY while the creation of a Virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1819,7 +1828,7 @@ JD-TC-CreateVirtualService-UH5
 
 JD-TC-CreateVirtualService-UH6
     [Documentation]   Use Virtual calling mode VALUE of GOOGLE_MEET as EMPTY while the creation of a Virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1847,7 +1856,7 @@ JD-TC-CreateVirtualService-UH6
 
 JD-TC-CreateVirtualService-UH7
     [Documentation]   Create Virtual Service for provider in billable domain without enabling virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -1892,7 +1901,7 @@ JD-TC-CreateVirtualService-UH7
 
 JD-TC-CreateVirtualService-UH9
     [Documentation]   Use Zoom (Video Service Type) to create an Audio service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -1964,7 +1973,7 @@ JD-TC-CreateVirtualService-UH9
 JD-TC-CreateVirtualService-UH10
     [Documentation]   Use Phone_or_Whatsapp (Audio Service Type) to create a Video service
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -2033,7 +2042,7 @@ JD-TC-CreateVirtualService-UH10
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-15
     [Documentation]   Use Google_meet and Whatsapp virtual calling modes to create a video services with lead time
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -2123,7 +2132,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-15
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-16
     [Documentation]   Use Phone_call and Whatsapp virtual calling modes to create a audio services with lead time
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -2212,7 +2221,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-16
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-17
     [Documentation]   create virtual service for a user
-    ${resp}=   ProviderLogin  ${MUSERNAME27}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2220,6 +2229,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=   Get License UsageInfo 
@@ -2281,7 +2291,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${USER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USER_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Enable Disable Virtual Service  Enable
@@ -2358,9 +2368,13 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
 JD-TC-CreateVirtualService-(Billable Subdomain)-18
     [Documentation]   create virtual service for a user with lead time
     
-    ${resp}=  ProviderLogin  ${USER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USER_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+    # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -2409,7 +2423,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-18
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-19
     [Documentation]   Use Google_meet and Whatsapp virtual calling modes to create a video services with internationalAmount with prepayment
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -2495,7 +2509,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-19
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-20
     [Documentation]   Use Google_meet and Whatsapp virtual calling modes to create a video services with internationalAmount without prepayment
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -2584,7 +2598,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-20
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-21
     [Documentation]   Use Phone_call and Whatsapp virtual calling modes to create a audio services with internationalAmount with prepayment
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -2670,7 +2684,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-21
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-22
     [Documentation]   Use Phone_call and Whatsapp virtual calling modes to create a audio services with internationalAmount without prepayment
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -2759,9 +2773,13 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-22
 JD-TC-CreateVirtualService-(Billable Subdomain)-23
     [Documentation]   create virtual service for a user with internationalAmount with prepayment
     
-    ${resp}=  ProviderLogin  ${USER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USER_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+    # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -2810,9 +2828,13 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-23
 JD-TC-CreateVirtualService-(Billable Subdomain)-24
     [Documentation]   create virtual service for a user with internationalAmount without prepayment
     
-    ${resp}=  ProviderLogin  ${USER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USER_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${u_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${u_id1}  ${decrypted_data['id']}
+    # Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -2865,7 +2887,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-24
 
 JD-TC-CreateVirtualService-UH8
     [Documentation]   Use invalid zoom url for the creation of a Virtual service
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     delete_virtual_service  ${PUSERPH0}
@@ -2932,7 +2954,7 @@ JD-TC-CreateVirtualService-UH8
 
 # JD-TC-CreateVirtualService-UH6
 #     [Documentation]   Use virtual calling modes not present in Global level to create virtual service
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     delete_virtual_service  ${PUSERPH0}

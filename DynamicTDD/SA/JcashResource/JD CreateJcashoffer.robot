@@ -45,6 +45,8 @@ ${jcash_name23}   JCash22_offer23
 ${jcash_name24}   JCash22_offer24
 ${jcash_name25}   JCash22_offer25
 
+${tz}   Asia/Kolkata
+
 
 *** Test Cases ***
 JD-TC-Create_JCash_Offer-1
@@ -61,11 +63,11 @@ JD-TC-Create_JCash_Offer-1
     Set Suite Variable   ${global_max_limit}
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -117,11 +119,11 @@ JD-TC-Create_JCash_Offer-2
     # Set Suite Variable   ${global_max_limit}
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -242,11 +244,11 @@ JD-TC-Create_JCash_Offer-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -317,11 +319,11 @@ JD-TC-Create_JCash_Offer-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -398,11 +400,11 @@ JD-TC-Create_JCash_Offer-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -450,11 +452,11 @@ JD-TC-Create_JCash_Offer-6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -506,11 +508,11 @@ JD-TC-Create_JCash_Offer-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -537,11 +539,11 @@ JD-TC-Create_JCash_Offer-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -573,11 +575,11 @@ JD-TC-Create_JCash_Offer-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12   
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12     
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -594,11 +596,11 @@ JD-TC-Create_JCash_Offer-UH2
 JD-TC-Create_JCash_Offer-UH3
     [Documentation]   Create a Jaldee Cash Offer without login  
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -617,11 +619,11 @@ JD-TC-Create_JCash_Offer-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -636,15 +638,15 @@ JD-TC-Create_JCash_Offer-UH4
 
 JD-TC-Create_JCash_Offer-UH5
     [Documentation]   Create a Jaldee Cash Offer by provider login
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -670,11 +672,11 @@ JD-TC-Create_JCash_Offer-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=2   max=10
     ${maxSpendLimit}=  Random Int  min=20   max=${global_max_limit}
@@ -701,11 +703,11 @@ JD-TC-Create_JCash_Offer-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=2   max=10
     ${maxSpendLimit}=  Random Int  min=${global_max_limit+1}   max=${global_max_limit+100}
@@ -727,11 +729,11 @@ JD-TC-Create_JCash_Offer-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     Set Test Variable   ${maxSpendLimit}   50
@@ -754,11 +756,11 @@ JD-TC-Create_JCash_Offer-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     Set Test Variable   ${maxSpendLimit}   0
@@ -781,11 +783,11 @@ JD-TC-Create_JCash_Offer-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -808,11 +810,11 @@ JD-TC-Create_JCash_Offer-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -835,11 +837,11 @@ JD-TC-Create_JCash_Offer-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  subtract_date  2  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.subtract_timezone_date  ${tz}   2  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -862,11 +864,11 @@ JD-TC-Create_JCash_Offer-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  subtract_date  2  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.subtract_timezone_date  ${tz}   2  
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -888,9 +890,9 @@ JD-TC-Create_JCash_Offer-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  add_date   3  
-    ${end_date}=  add_date   10  
-    ${maxValidUntil}=  add_date   2 
+    ${start_date}=  db.add_timezone_date  ${tz}   3  
+    ${end_date}=  db.add_timezone_date  ${tz}   10  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   2 
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1 
     ${validForDays}=  Random Int  min=5   max=10   
@@ -915,11 +917,11 @@ JD-TC-Create_JCash_Offer-UH14
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
 #     ${EMPTY_List}=  Create List
-#     ${start_date}=  get_date  
-#     ${end_date}=  add_date   12  
+#     ${start_date}=  db.get_date_by_timezone  ${tz}  
+#     ${end_date}=  db.add_timezone_date  ${tz}  12    
 #     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
 #     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-#     ${maxValidUntil}=  add_date   26  
+#     ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
 #     ${validForDays}=  Random Int  min=5   max=10   
 #     Set Test Variable   ${issueLimit}   -1   
 #     Set Test Variable   ${maxSpendLimit}   -1
@@ -941,11 +943,11 @@ JD-TC-Create_JCash_Offer-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -973,11 +975,11 @@ JD-TC-Create_JCash_Offer-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -1006,11 +1008,11 @@ JD-TC-Create_JCash_Offer-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -1039,11 +1041,11 @@ JD-TC-Create_JCash_Offer-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -1069,11 +1071,11 @@ JD-TC-Create_JCash_Offer-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -1098,11 +1100,11 @@ JD-TC-Create_JCash_Offer-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -1130,11 +1132,11 @@ JD-TC-Create_JCash_Offer-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}

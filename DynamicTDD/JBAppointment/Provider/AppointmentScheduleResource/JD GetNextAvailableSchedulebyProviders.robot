@@ -26,7 +26,7 @@ ${pid5}          0
 JD-TC-NextAvailableSchedule By Providers-1
     [Documentation]   Appointment Schedyle NextAvailbleSchedule By Providers with single Schedule
     
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME110}
@@ -48,11 +48,11 @@ JD-TC-NextAvailableSchedule By Providers-1
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME110}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -74,6 +74,7 @@ JD-TC-NextAvailableSchedule By Providers-1
     ${resp}=    Get NextAvailableSchedule By Provider Location    ${pid}   ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}                                                 ${pid}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['id']}                                        ${sch_id}
     Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['name']}                                      ${schedule_name}
@@ -97,7 +98,7 @@ JD-TC-NextAvailableSchedule By Providers-1
 JD-TC-NextAvailableSchedule By Providers-2
     [Documentation]   NextAvailbleSchedule By Providers with Appointment is Disable
     
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME111}
@@ -131,11 +132,11 @@ JD-TC-NextAvailableSchedule By Providers-2
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME111}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -167,7 +168,7 @@ JD-TC-NextAvailableSchedule By Providers-2
 JD-TC-NextAvailableSchedule By Providers-3
     [Documentation]   NextAvailbleSchedule By Providers with Location is not Found
     
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME110}
@@ -190,7 +191,7 @@ JD-TC-NextAvailableSchedule By Providers-3
 JD-TC-NextAvailableSchedule By Providers-4
     [Documentation]   NextAvailbleSchedule By Providers with TodayAppmt is Disable
     
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME111}
@@ -212,11 +213,11 @@ JD-TC-NextAvailableSchedule By Providers-4
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME111}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -264,7 +265,7 @@ JD-TC-NextAvailableSchedule By Providers-4
 JD-TC-NextAvailableSchedule By Providers-5
     [Documentation]   NextAvailbleSchedule By Providers when FutureAppt is Disable
     
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME111}
@@ -286,11 +287,11 @@ JD-TC-NextAvailableSchedule By Providers-5
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME111}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -342,7 +343,7 @@ JD-TC-NextAvailableSchedule By Providers-5
 JD-TC-NextAvailableSchedule By Providers-6
     [Documentation]   NextAvailbleSchedule By Providers with Available Now
     
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME111}
@@ -366,12 +367,13 @@ JD-TC-NextAvailableSchedule By Providers-6
     Set Suite Variable   ${s_id}
 
     clear_appt_schedule   ${PUSERNAME111}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -413,7 +415,7 @@ JD-TC-NextAvailableSchedule By Providers-6
 JD-TC-NextAvailableSchedule By Providers-7
     [Documentation]   NextAvailbleSchedule By Providers with AccountId is Zero
     
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -433,14 +435,15 @@ JD-TC-NextAvailableSchedule By Providers-7
     Set Suite Variable   ${s_id}
 
     clear_appt_schedule   ${PUSERNAME111}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10   
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     Set Suite Variable   ${DAY2}   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  60
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     Set Suite Variable   ${eTime1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
@@ -470,7 +473,7 @@ JD-TC-NextAvailableSchedule By Providers-8
     [Documentation]   With Another Provider Login
     
     ${pid1}=  get_acc_id  ${PUSERNAME111}
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -530,7 +533,7 @@ JD-TC-NextAvailableSchedule By Providers-UH1
     [Documentation]   with invalid account id
     
     ${pid1}=  get_acc_id  ${PUSERNAME111}
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -547,7 +550,7 @@ JD-TC-NextAvailableSchedule By Providers-UH2
     [Documentation]   with invalid location id
     
     ${pid1}=  get_acc_id  ${PUSERNAME111}
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -563,7 +566,7 @@ JD-TC-NextAvailableSchedule By Providers-UH2
 JD-TC-NextAvailableSchedule By Providers-UH3
     [Documentation]   when appointment is disabled
     ${pid1}=  get_acc_id  ${PUSERNAME111}
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -605,7 +608,7 @@ JD-TC-NextAvailableSchedule By Providers-UH4
     [Documentation]   when today appointment is disabled
 
     ${pid1}=  get_acc_id  ${PUSERNAME111}
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -627,7 +630,7 @@ JD-TC-NextAvailableSchedule By Providers-UH4
 
     sleep  01s
 
-    ${DAY3}=   add_date  1
+    ${DAY3}=   db.add_timezone_date  ${tz}  1  
 
     ${resp}=    Get NextAvailableSchedule By Provider Location    ${pid1}   ${lid1}
     Log  ${resp.json()}
@@ -658,7 +661,7 @@ JD-TC-NextAvailableSchedule By Providers-UH5
     [Documentation]   when schedule is disabled
 
     ${pid1}=  get_acc_id  ${PUSERNAME111}
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -694,7 +697,7 @@ JD-TC-NextAvailableSchedule By Providers-UH5
 JD-TC-NextAvailableSchedule By Providers-UH6
     [Documentation]   when location is disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME110}
@@ -708,14 +711,22 @@ JD-TC-NextAvailableSchedule By Providers-UH6
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${PUSERNAME110}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -765,7 +776,7 @@ JD-TC-NextAvailableSchedule By Providers-UH6
 
 JD-TC-NextAvailableSchedule By Providers-UH7
     [Documentation]   when start date and end date is same day and today appointment is disabled
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME110}
@@ -782,10 +793,10 @@ JD-TC-NextAvailableSchedule By Providers-UH7
     ${s_id}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${PUSERNAME110}
 
-    ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -819,7 +830,7 @@ JD-TC-NextAvailableSchedule By Providers-UH7
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[0]}
 
-    # ${DAY3}=   add_date  1
+    # ${DAY3}=   db.add_timezone_date  ${tz}  1  
     sleep   01s
 
     ${resp}=    Get NextAvailableSchedule By Provider Location    ${pid1}   ${lid}

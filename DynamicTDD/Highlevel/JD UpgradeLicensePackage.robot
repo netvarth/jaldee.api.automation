@@ -87,9 +87,9 @@ Jaldee-TC-Upgrade License Package-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -132,7 +132,7 @@ Jaldee-TC-Upgrade License Package-1
 	Should Be Equal As Integers  ${count}  2
 
 
-YNW-TC-Upgrade License Package-2
+JD-TC-Upgrade License Package-2
     comment  Change Package from Trial to Gold
     Comment   Trial package have addon adword-10. total 9 adword added. when Upgradee to gold no addword will be removed
     ${resp}=  Get BusinessDomainsConf
@@ -145,9 +145,9 @@ YNW-TC-Upgrade License Package-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL2}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -205,7 +205,7 @@ YNW-TC-Upgrade License Package-2
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  6
     
-YNW-TC-Upgrade License Package-3  
+JD-TC-Upgrade License Package-3  
     comment  Change Package from Trial to Gold
     Comment   Trial package have addon adword-10. total 10 adword added. when Upgradee to basic no addword will be removed all will be in basic package
     ${resp}=  Get BusinessDomainsConf
@@ -218,10 +218,10 @@ YNW-TC-Upgrade License Package-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL3}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -284,7 +284,7 @@ YNW-TC-Upgrade License Package-3
 
 
     
-YNW-TC-Upgrade License Package-4
+JD-TC-Upgrade License Package-4
     comment  Change Package from Trial to Gold
     Comment    Trial package have addon adword-10. total 13 adword added. when Upgrade to basic. Not remove adwords
     ${resp}=  Get BusinessDomainsConf
@@ -297,9 +297,9 @@ YNW-TC-Upgrade License Package-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL4}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -371,7 +371,7 @@ YNW-TC-Upgrade License Package-4
 	Should Be Equal As Integers  ${count}  13
 
 
-YNW-TC-Upgrade License Package-5
+JD-TC-Upgrade License Package-5
     comment  Change Package from Trial to Gold
     Comment    Trial package have addon Upload-5 GB. total 3 adword added. nothing will remove
     ${resp}=  Get BusinessDomainsConf
@@ -384,9 +384,9 @@ YNW-TC-Upgrade License Package-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL5}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -436,7 +436,7 @@ YNW-TC-Upgrade License Package-5
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  2
       
-YNW-TC-Upgrade License Package-6
+JD-TC-Upgrade License Package-6
     comment  Change Package from Trial to Gold
     Comment   Trial package have addon adword-2. total 5 adword added. noting will remove
     ${resp}=  Get BusinessDomainsConf
@@ -449,9 +449,9 @@ YNW-TC-Upgrade License Package-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL6}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL6}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -506,7 +506,7 @@ YNW-TC-Upgrade License Package-6
 	Should Be Equal As Integers  ${count}  5
 
 
-YNW-TC-Upgrade License Package-7
+JD-TC-Upgrade License Package-7
     comment  Change Package from Trial to Gold
     Comment   Trial package have addon adword-50. total 53 adword added. when Upgrade to basic nothing will be removed 
     ${resp}=  Get BusinessDomainsConf
@@ -519,9 +519,9 @@ YNW-TC-Upgrade License Package-7
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL7}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -611,7 +611,7 @@ YNW-TC-Upgrade License Package-7
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  22
 
-YNW-TC-Upgrade License Package-8
+JD-TC-Upgrade License Package-8
     comment  Change Package from Trial to Silver
     Comment  Trial package have No addon . total 3 adword added. when Upgrade to basic 3 addword remove
     ${resp}=  Get BusinessDomainsConf
@@ -624,9 +624,9 @@ YNW-TC-Upgrade License Package-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL8}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL8}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -670,7 +670,7 @@ YNW-TC-Upgrade License Package-8
 	Should Be Equal As Integers  ${count}  0
 
 
-YNW-TC-Upgrade License Package-9
+JD-TC-Upgrade License Package-9
     comment  Change Package from Trial to Silver
     Comment   Trial package have addon adword-10. total 9 adword added. when Upgrade to silver no addword will be removed
     ${resp}=  Get BusinessDomainsConf
@@ -683,9 +683,9 @@ YNW-TC-Upgrade License Package-9
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL9}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL9}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -739,7 +739,7 @@ YNW-TC-Upgrade License Package-9
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  4
     
-YNW-TC-Upgrade License Package-10
+JD-TC-Upgrade License Package-10
     comment  Change Package from Trial to Silver
     Comment   Trial package have addon adword-10. total 10 adword added. when Upgrade to silver no addword will be removed all will be in basic package
     ${resp}=  Get BusinessDomainsConf
@@ -752,10 +752,10 @@ YNW-TC-Upgrade License Package-10
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL10}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL10}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -810,7 +810,7 @@ YNW-TC-Upgrade License Package-10
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  5
    
-YNW-TC-Upgrade License Package-11
+JD-TC-Upgrade License Package-11
     comment  Change Package from Trial to Silver
     Comment    Trial package have addon adword-10. total 13 adword added. when Upgrade to basic. 3 addword will remove remaining 10 adword will in account
     ${resp}=  Get BusinessDomainsConf
@@ -823,9 +823,9 @@ YNW-TC-Upgrade License Package-11
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL11}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -896,7 +896,7 @@ YNW-TC-Upgrade License Package-11
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  13
 
-YNW-TC-Upgrade License Package-12
+JD-TC-Upgrade License Package-12
     comment  Change Package from Trial to Silver
     Comment    Trial package have addon Upload-5 GB. total 3 adword added. when Upgrade to basic 3 addword remove 
     ${resp}=  Get BusinessDomainsConf
@@ -909,9 +909,9 @@ YNW-TC-Upgrade License Package-12
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL12}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL12}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -960,7 +960,7 @@ YNW-TC-Upgrade License Package-12
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  0
       
-YNW-TC-Upgrade License Package-13
+JD-TC-Upgrade License Package-13
     comment  Change Package from Trial to Silver
     Comment   Trial package have addon adword-2. total 5 adword added. when Upgrade to silver 3 adword removed  
     ${resp}=  Get BusinessDomainsConf
@@ -973,9 +973,9 @@ YNW-TC-Upgrade License Package-13
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL13}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL13}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1029,7 +1029,7 @@ YNW-TC-Upgrade License Package-13
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  5
 
-YNW-TC-Upgrade License Package-14
+JD-TC-Upgrade License Package-14
     comment  Change Package from Trial to Silver
     Comment   Trial package have addon adword-50. total 20 adword added. when Upgrade to basic nothing will be removed 
     ${resp}=  Get BusinessDomainsConf
@@ -1042,9 +1042,9 @@ YNW-TC-Upgrade License Package-14
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL14}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL14}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1128,7 +1128,7 @@ YNW-TC-Upgrade License Package-14
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  20
 
-YNW-TC-Upgrade License Package-15
+JD-TC-Upgrade License Package-15
     comment  Change Package from Trial to Basic
     Comment  Trial package have No addon. total 3 adword added. when Upgrade to basic 3 addword remove
     ${resp}=  Get BusinessDomainsConf
@@ -1141,9 +1141,9 @@ YNW-TC-Upgrade License Package-15
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL15}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL15}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1186,7 +1186,7 @@ YNW-TC-Upgrade License Package-15
 	Should Be Equal As Integers  ${count}  0
 
 
-YNW-TC-Upgrade License Package-16
+JD-TC-Upgrade License Package-16
     comment  Change Package from Trial to Basic
     Comment   Trial package have addon adword-10. total 9 adword added. when Upgradee to basic no addword will be removed
     ${resp}=  Get BusinessDomainsConf
@@ -1199,9 +1199,9 @@ YNW-TC-Upgrade License Package-16
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL16}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL16}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1264,7 +1264,7 @@ YNW-TC-Upgrade License Package-16
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  9
     
-YNW-TC-Upgrade License Package-17
+JD-TC-Upgrade License Package-17
     comment  Change Package from Trial to Basic 
     Comment   Trial package have addon adword-10. total 10 adword added. when Upgradee to basic no addword will be removed all will be in basic package
     ${resp}=  Get BusinessDomainsConf
@@ -1277,10 +1277,10 @@ YNW-TC-Upgrade License Package-17
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL17}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL17}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1345,7 +1345,7 @@ YNW-TC-Upgrade License Package-17
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  10
 
-YNW-TC-Upgrade License Package-18
+JD-TC-Upgrade License Package-18
     comment  Change Package from Trial to Basic
     Comment    Trial package have addon adword-10. total 13 adword added. when Upgrade to basic. 3 addword will remove remaining 10 adword will in account
     ${resp}=  Get BusinessDomainsConf
@@ -1358,9 +1358,9 @@ YNW-TC-Upgrade License Package-18
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL18}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL18}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1431,7 +1431,7 @@ YNW-TC-Upgrade License Package-18
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  13
 
-YNW-TC-Upgrade License Package-19
+JD-TC-Upgrade License Package-19
     comment  Change Package from Trial to Basic
     Comment    Trial package have addon Upload-5 GB. total 3 adword added. when Upgrade to basic 3 addword remove 
     ${resp}=  Get BusinessDomainsConf
@@ -1444,9 +1444,9 @@ YNW-TC-Upgrade License Package-19
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL19}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL19}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1496,7 +1496,7 @@ YNW-TC-Upgrade License Package-19
     ${count}=  Get Length  ${resp.json()} 
 	Should Be Equal As Integers  ${count}  0
       
-YNW-TC-Upgrade License Package-20
+JD-TC-Upgrade License Package-20
     comment  Change Package from Trial to Basic
     Comment   Trial package have addon adword-2. total 5 adword added. when Upgrade to basic 3 adword removed  
     ${resp}=  Get BusinessDomainsConf
@@ -1509,9 +1509,9 @@ YNW-TC-Upgrade License Package-20
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL20}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL20}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1566,7 +1566,7 @@ YNW-TC-Upgrade License Package-20
 	Should Be Equal As Integers  ${count}  5
 
 
-YNW-TC-Upgrade License Package-21
+JD-TC-Upgrade License Package-21
     comment  Change Package from Trial to Basic
     Comment   Trial package have addon adword-50. total 20 adword added. when Upgrade to basic nothing will be removed 
     ${resp}=  Get BusinessDomainsConf
@@ -1579,9 +1579,9 @@ YNW-TC-Upgrade License Package-21
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAMETRIAL21}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAMETRIAL21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMETRIAL21}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}

@@ -35,7 +35,7 @@ JD-TC-Updateuserprofile-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -44,9 +44,16 @@ JD-TC-Updateuserprofile-1
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -109,7 +116,7 @@ JD-TC-Updateuserprofile-1
 JD-TC-Updateuserprofile-2
     [Documentation]  Update a user profile with all details
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -142,7 +149,7 @@ JD-TC-Updateuserprofile-2
 
 JD-TC-Updateuserprofile-3
     [Documentation]  Update businessName and businessDesc of user profile with other details
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Should Be Equal As Strings    ${resp.status_code}    200
     
     ${bs1}=  FakerLibrary.bs
@@ -160,7 +167,7 @@ JD-TC-Updateuserprofile-3
 
 JD-TC-Updateuserprofile-UH1
      [Documentation]  Update a user profile with another sub domain id
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Set Suite Variable  ${sub_domain_id1}   ${iscorp_subdomains[1]['subdomainId']}
@@ -172,7 +179,7 @@ JD-TC-Updateuserprofile-UH1
 
 JD-TC-Updateuserprofile-UH2
     [Documentation]  Update a user profile with invalid user id
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -184,7 +191,7 @@ JD-TC-Updateuserprofile-UH2
 
 JD-TC-Updateuserprofile-UH3
      [Documentation]  Update a user profile with invalid sub domain id
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -195,7 +202,7 @@ JD-TC-Updateuserprofile-UH3
 
 JD-TC-Updateuserprofile-UH4
      [Documentation]  Update a user profile for INACTIVE user
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+3836855

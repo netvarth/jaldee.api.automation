@@ -42,7 +42,7 @@ JD-TC-Change Department Status-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_G}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_G}${\n}
@@ -81,7 +81,7 @@ JD-TC-Change Department Status-1
 JD-TC-Change Department Status-UH1
     [Documentation]  Change Department Status of another provider
    
-    ${resp}=  Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -94,7 +94,7 @@ JD-TC-Change Department Status-UH1
 JD-TC-Change Department Status-UH2
     [Documentation]  Change department status of Invalid department
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200      
     ${resp}=  Change Department Status  0  ${dep_status[0]}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -103,7 +103,7 @@ JD-TC-Change Department Status-UH2
 JD-TC-Change Department Status-UH3
     [Documentation]  Change department status to same status
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200      
     ${resp}=  Change Department Status  ${depid1}  ${dep_status[0]}
     Should Be Equal As Strings  ${resp.status_code}  422

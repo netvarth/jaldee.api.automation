@@ -24,7 +24,7 @@ JD-TC-GetAuditlogsForTask-1
 
     [Documentation]  Create a task and get auditlog.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -40,8 +40,13 @@ JD-TC-GetAuditlogsForTask-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -91,7 +96,7 @@ JD-TC-GetAuditlogsForTask-2
 
     [Documentation]  Create a task for a provider and get auditlog with account filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -111,7 +116,7 @@ JD-TC-GetAuditlogsForTask-3
 
     [Documentation]  Create a task for a provider and get auditlog with task filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -130,7 +135,7 @@ JD-TC-GetAuditlogsForTask-4
 
     [Documentation]  update the task and get auditlog.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -191,11 +196,11 @@ JD-TC-GetAuditlogsForTask-5
 
     [Documentation]  Create a task for a provider and get auditlog with location filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=   Get Task Audit Logs   ${task_id1}  auditlog-eq=subCategory::PROGRESS_UPDATION
     Log   ${resp.json()}
@@ -220,7 +225,7 @@ JD-TC-GetAuditlogsForTask-6
 
     [Documentation]  Create a task for a provider and get auditlog with action ADD filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -237,7 +242,7 @@ JD-TC-GetAuditlogsForTask-7
 
     [Documentation]  Create a task for a provider and get auditlog with catogory task filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -254,7 +259,7 @@ JD-TC-GetAuditlogsForTask-8
 
     [Documentation]  Create a task for a provider and get auditlog with localuserid filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -22,7 +22,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 #     [Documentation]  Get default jaldee finance status of an existing provider.
 
-#     ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -35,7 +35,7 @@ JD-TC-EnableDisableFinanceManager-2
 
     [Documentation]  enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -60,7 +60,7 @@ JD-TC-EnableDisableFinanceManager-3
 
     [Documentation]  disable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +93,7 @@ JD-TC-EnableDisableFinanceManager-4
 
     [Documentation]  enable jaldee finance  which is disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +135,7 @@ JD-TC-EnableDisableFinanceManager-UH1
 
     [Documentation]  enable already enabled jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -188,7 +188,7 @@ JD-TC-EnableDisableFinanceManager-UH4
 
     [Documentation]  disable jaldee finance which is already disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

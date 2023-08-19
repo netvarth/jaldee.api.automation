@@ -15,7 +15,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-CreateLabel-1
 	[Documentation]  Create a label for a valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Label  ${PUSERNAME5}
     ${Values}=  FakerLibrary.Words  	nb=9
@@ -49,7 +49,7 @@ JD-TC-CreateLabel-1
 
 JD-TC-CreateLabel-2
 	[Documentation]  Create more labels for a single provider
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${Values}=  FakerLibrary.Words  nb=3
     ${ValueSet}=  Create ValueSet For Label  ${Values[0]}  ${Values[1]}
@@ -78,7 +78,7 @@ JD-TC-CreateLabel-2
 
 JD-TC-CreateLabel-3
 	[Documentation]  Create a label with integer valueSet
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Label  ${PUSERNAME6}
     ${IntegerValue}=   Random Int   min=10   max=20
@@ -105,7 +105,7 @@ JD-TC-CreateLabel-3
 
 JD-TC-CreateLabel-UH1
     [Documentation]  Create a label with name in integer
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${integer_lname}=   Random Int   min=10   max=20
     ${IntegerValue}=   Random Int   min=10   max=20
@@ -146,7 +146,7 @@ JD-TC-CreateLabel -UH3
 
 JD-TC-CreateLabel-UH4
     [Documentation]  Create a label which is already created
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Label  ${l_name[0]}  ${l_name[1]}  ${l_desc}  ${ValueSet}  ${NotificationSet}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -155,7 +155,7 @@ JD-TC-CreateLabel-UH4
 
 JD-TC-CreateLabel-UH5
     [Documentation]  Create a label using notification set for a invalid value set
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Label  ${PUSERNAME5}
     ${Values}=  FakerLibrary.Words  	nb=10

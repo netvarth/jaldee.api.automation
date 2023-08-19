@@ -45,18 +45,30 @@ JD-TC-Submit_Member_QNR-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     ${accountId}=    get_acc_id       ${PUSERNAME62}
     Set Suite Variable    ${accountId}
 
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=    add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10   
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -118,7 +130,7 @@ JD-TC-Submit_Member_QNR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -241,7 +253,7 @@ JD-TC-Submit_Member_QNR-UH1
 
     [Documentation]  Submit Member QNR which is already submited
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -256,7 +268,7 @@ JD-TC-Submit_Member_QNR-UH2
 
     [Documentation]  Submit Member QNR where memberid is invalid
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -271,7 +283,7 @@ JD-TC-Submit_Member_QNR-UH3
 
     [Documentation]  Submit Member QNR where member is is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -283,7 +295,7 @@ JD-TC-Submit_Member_QNR-UH4
 
     [Documentation]  Submit Member QNR where data is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -295,7 +307,7 @@ JD-TC-Submit_Member_QNR-UH5
 
     [Documentation]  Submit Member QNR with another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -67,7 +67,7 @@ JD-TC-Loan Application Manual Approval-1
                                   
     [Documentation]               Create Loan Application and Loan Application Approval.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -122,18 +122,21 @@ JD-TC-Loan Application Manual Approval-1
         ${resp}=   Get Location ById  ${locId}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
         Set Suite Variable  ${locname}  ${resp.json()['place']}
         Set Suite Variable  ${address1}  ${resp.json()['address']}
-        ${address2}    FakerLibrary.Street name
-        Set Suite Variable    ${address2}
-        
+
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
         Set Suite Variable  ${locname}  ${resp.json()[0]['place']}
         Set Suite Variable  ${address1}  ${resp.json()[0]['address']}
-        ${address2}    FakerLibrary.Street name
-        Set Suite Variable    ${address2}
+       
+
     END
+    ${address2}    FakerLibrary.Street name
+    Set Suite Variable    ${address2}
 
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
@@ -665,7 +668,7 @@ JD-TC-Loan Application Manual Approval-2
                                   
     [Documentation]               Create Loan Application and Loan Application Approval with branch login.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -685,6 +688,20 @@ JD-TC-Loan Application Manual Approval-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -695,10 +712,12 @@ JD-TC-Loan Application Manual Approval-2
 
     END
 
+
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
+
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -707,7 +726,9 @@ JD-TC-Loan Application Manual Approval-2
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${dep_id}  ${resp1.json()}
     ELSE
+
         Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
     END
 
 
@@ -717,6 +738,34 @@ JD-TC-Loan Application Manual Approval-2
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
     Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+3367857
+    clear_users  ${PUSERNAME_U3}
+    Set Suite Variable  ${PUSERNAME_U3}
+   
+    ${whpnum}=  Evaluate  ${PUSERNAME}+346973
+    ${tlgnum}=  Evaluate  ${PUSERNAME}+346913
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id3}  ${resp.json()}
+
+    ${resp}=  Get User By Id  ${u_id3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  SendProviderResetMail   ${PUSERNAME_U3}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${PUSERNAME_U3}  ${PASSWORD}  2
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
     ${resp}=  GetCustomer  phoneNo-eq=${phone1} 
     Log  ${resp.content}
@@ -729,6 +778,7 @@ JD-TC-Loan Application Manual Approval-2
     ELSE
         Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
+
     ${resp}=  GetCustomer  phoneNo-eq=${phone1}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -1128,7 +1178,7 @@ JD-TC-Loan Application Manual Approval-2
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1144,7 +1194,7 @@ JD-TC-Loan Application Manual Approval-3
     [Documentation]               Create a less than 50000 requested Loan Application and Loan Application Approval with .
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${account_id}  ${resp.json()['id']}
@@ -1153,8 +1203,13 @@ JD-TC-Loan Application Manual Approval-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
 
@@ -1314,7 +1369,7 @@ JD-TC-Loan Application Manual Approval-3
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1333,7 +1388,7 @@ JD-TC-Loan Application Manual Approval-4
     [Documentation]               Create a Loan Application and manual approval with different scheme .
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${account_id}  ${resp.json()['id']}
@@ -1342,8 +1397,13 @@ JD-TC-Loan Application Manual Approval-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
 
@@ -1536,7 +1596,7 @@ JD-TC-Loan Application Manual Approval-4
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1552,7 +1612,7 @@ JD-TC-Loan Application Manual Approval-UH1
     [Documentation]               Create a Loan Application and manual approval with invalid scheme .
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${account_id}  ${resp.json()['id']}
@@ -1561,8 +1621,13 @@ JD-TC-Loan Application Manual Approval-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
 
@@ -1755,7 +1820,7 @@ JD-TC-Loan Application Manual Approval-UH1
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1772,7 +1837,7 @@ JD-TC-Loan Application Manual Approval-UH2
                                   
     [Documentation]               Create a Loan Application and manual approval with EMPTY invoiceAmount .
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1788,7 +1853,7 @@ JD-TC-Loan Application Manual Approval-UH3
     [Documentation]               Create a Loan Application and manual approval with EMPTY downpaymentAmount.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1804,7 +1869,7 @@ JD-TC-Loan Application Manual Approval-UH4
     [Documentation]               Create a Loan Application and manual approval with EMPTY requestedAmount.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1820,7 +1885,7 @@ JD-TC-Loan Application Manual Approval-UH5
     [Documentation]               Create a Loan Application and manual approval with EMPTY sanctionedAmount.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1836,7 +1901,7 @@ JD-TC-Loan Application Manual Approval-UH6
     [Documentation]               Create a Loan Application and manual approval with invalid loanUid.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1852,7 +1917,7 @@ JD-TC-Loan Application Manual Approval-UH7
     [Documentation]               Create a Loan Application and manual approval with invalid loanProduct.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

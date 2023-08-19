@@ -20,14 +20,14 @@ ${SERVICE3}     Radio Repdca222
 *** Test Cases ***
 JD-TC-JD DeleteWaitlistQueueSet-1
 	[Documentation]  Delete a QueueSet by provider
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME114}
     clear_location  ${PUSERNAME114}
     clear_queue   ${PUSERNAME114}
     clear_Statusboard  ${PUSERNAME114}
     clear_Addon  ${PUSERNAME114}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -80,7 +80,7 @@ JD-TC-JD DeleteWaitlistQueueSet -UH2
 
 JD-TC-JD DeleteWaitlistQueueSet-UH3
     [Documentation]  Delete a Waitlist QueueSet by id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Delete WaitlistQueueSet By Id  ${invalid_id}
@@ -90,7 +90,7 @@ JD-TC-JD DeleteWaitlistQueueSet-UH3
 
 JD-TC-JD DeleteWaitlistQueueSet-UH4
     [Documentation]  Delete a QueueSet by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${order1}=   Random Int   min=0   max=1
     ${Values}=  FakerLibrary.Words  	nb=3
@@ -111,7 +111,7 @@ JD-TC-JD DeleteWaitlistQueueSet-UH4
     Set Test Variable  ${sbq_id}  ${resp.json()}
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Delete WaitlistQueueSet By Id   ${sbq_id}
     Should Be Equal As Strings  ${resp.status_code}  422

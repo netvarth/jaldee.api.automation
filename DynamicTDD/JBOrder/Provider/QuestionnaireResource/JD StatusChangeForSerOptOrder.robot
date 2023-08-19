@@ -112,13 +112,14 @@ JD-TC-StatusChangeForServiceOptionForOrder-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id}  ${resp.json()['id']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -163,7 +164,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-1
     #     Log  ${ttype}
     #     ${u_ttype}=    Remove Duplicates    ${ttype}
     #     Log  ${u_ttype}
-    #     ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}  ${item_id1}  
+    #     ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}  ${item_id1}  
     # END
     FOR  ${i}  IN RANGE   ${c_len}
         IF   '${resp.json()[${i}]['catalogName']}' in @{unique_cnames} and '${resp.json()[${i}]['orderType']}' == '${OrderTypes[0]}'
@@ -186,7 +187,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-1
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -212,7 +213,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -255,7 +256,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-1
         Set Suite Variable  ${proconid}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME39}.ynwtest@netvarth.com
@@ -358,13 +359,14 @@ JD-TC-StatusChangeForServiceOptionForOrder-2
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -460,7 +462,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-2
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
@@ -482,7 +484,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -570,13 +572,14 @@ JD-TC-StatusChangeForServiceOptionForOrder-3
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -672,7 +675,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-3
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
@@ -694,7 +697,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-3
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -783,13 +786,14 @@ JD-TC-StatusChangeForServiceOptionForOrder-4
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -837,7 +841,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-4
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -910,7 +914,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-4
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
@@ -1000,7 +1004,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-4
 JD-TC-StatusChangeForServiceOptionForOrder-5
     [Documentation]  complete already completed order
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1103,7 +1107,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-5
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
@@ -1190,7 +1194,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-5
 JD-TC-StatusChangeForServiceOptionForOrder-UH1
     [Documentation]   change answer status with invalid order id.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1293,7 +1297,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-UH1
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com
@@ -1378,7 +1382,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-UH1
 JD-TC-StatusChangeForServiceOptionForOrder-UH2
     [Documentation]   change answer status with invalid file id.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1482,7 +1486,7 @@ JD-TC-StatusChangeForServiceOptionForOrder-UH2
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.ynwtest@netvarth.com

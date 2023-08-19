@@ -42,21 +42,22 @@ JD-TC-Get Waiting time of queue-1
     ${resp}=  Account Set Credential  ${PUSERNAME_W}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_W}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_W}${\n}
     Set Suite Variable  ${PUSERNAME_W}
-    Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${resp}=  Provider Login  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${pid_12}=  get_acc_id  ${PUSERNAME_W}
     ${cid4}=  get_id  ${CUSERNAME4}
     
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_W}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_W}+25566122
@@ -68,18 +69,22 @@ JD-TC-Get Waiting time of queue-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_W}.ynwtest@netvarth.com  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -136,7 +141,7 @@ JD-TC-Get Waiting time of queue-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_W}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Get Business Profile
@@ -149,18 +154,17 @@ JD-TC-Get Waiting time of queue-1
 
     ${pid}=  get_acc_id  ${PUSERNAME_W}
     Set Suite Variable  ${pid} 
-    ${DAY}=  db.get_date    
+    ${DAY}=  db.get_date_by_timezone  ${tz}    
     Set Suite Variable  ${DAY} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
 
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -209,8 +213,9 @@ JD-TC-Get Waiting time of queue-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s4}  ${resp.json()}
 
-    ${sTime1}=  db.get_time  
-    ${eTime1}=  add_time  1  00
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable   ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -329,7 +334,7 @@ JD-TC-Get Waiting time of queue-1
     ${resp}=  ConsumerLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
@@ -351,7 +356,7 @@ JD-TC-Get Waiting time of queue-1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${DAY1}=  add_date  1
+    # ${DAY1}=  db.add_timezone_date  ${tz}  1  
     # Set Suite Variable  ${DAY1}
     ${resp}=  ConsumerLogin  ${CUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -368,11 +373,12 @@ JD-TC-Get Waiting time of queue-1
 JD-TC-Get Waiting time of queue-2
 	[Documentation]  call url when queue is full
     clear_queue  ${PUSERNAME_W}
-    ${resp}=  ProviderLogin  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${sTime2}=  db.get_time
-    ${eTime2}=  add_time  1  05
+    # ${sTime2}=  db.get_time_by_timezone   ${tz}  
+    ${sTime2}=  db.get_time_by_timezone  ${tz1}  
+    ${eTime2}=  add_timezone_time   1  05  ${tz1}
     Log    ${sTime2}
     Log    ${eTime2}
     ${p1queue2}=    FakerLibrary.word
@@ -403,7 +409,6 @@ JD-TC-Get Waiting time of queue-2
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s2}  ${p1_q2}  ${DAY}  ${cnote}  ${bool[1]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
 
@@ -417,7 +422,6 @@ JD-TC-Get Waiting time of queue-2
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s3}  ${p1_q2}  ${DAY}  ${cnote}  ${bool[1]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid2}  ${wid[0]}
     
@@ -449,12 +453,11 @@ JD-TC-Get Waiting time of queue-2
 
 JD-TC-Get Waiting time of queue-3
 	[Documentation]  call url when today queue is full and tommorrow waiting time
-    ${resp}=  ProviderLogin  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
-    ${DAY1}=  add_date  1
+    ${DAY1}=  db.add_timezone_date  ${tz1}  1 
     Set Suite Variable  ${DAY1}
-
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
     Log   ${resp.json()}
@@ -487,16 +490,16 @@ JD-TC-Get Waiting time of queue-3
 JD-TC-Get Waiting time of queue-4
 	[Documentation]  create queue and waitlist consumer for coming 2 days
     clear_queue  ${PUSERNAME_W}
-    ${resp}=  ProviderLogin  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date  1  
-    ${DAY2}=  add_date  2
-    ${DAY3}=  add_date  3  
+    ${DAY1}=  db.add_timezone_date  ${tz1}  1   
+    ${DAY2}=  db.add_timezone_date  ${tz1}  2 
+    ${DAY3}=  db.add_timezone_date  ${tz1}  3   
     Set Suite Variable  ${DAY3}
     Set Suite Variable  ${DAY2}
-    ${sTime3}=  add_time  2  30
-    ${eTime3}=  add_time  3  0
+    ${sTime3}=  add_timezone_time  ${tz1}  2  30  
+    ${eTime3}=  add_timezone_time  ${tz1}  3  0  
     ${p1queue3}=    FakerLibrary.word
     Set Suite Variable   ${p1queue3}
     ${resp}=  Create Queue  ${p1queue3}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  1  1  ${p1_l1}  ${p1_s1}  ${p1_s2}  ${p1_s3}  ${p1_s4}
@@ -513,7 +516,6 @@ JD-TC-Get Waiting time of queue-4
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q3}  ${DAY}  ${cnote}  ${bool[1]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
 
@@ -542,7 +544,7 @@ JD-TC-Get Waiting time of queue-4
      
 JD-TC-Get Waiting time of queue-5
 	[Documentation]  one consumer is cancel from the queue  ${p1_q3} and call url
-    ${resp}=  ProviderLogin  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cnote}=   FakerLibrary.word
@@ -568,14 +570,14 @@ JD-TC-Get Waiting time of queue-6
     Comment  queue f or upcoming saturday and sunday are filled
     Comment  calling url 
     clear_queue  ${PUSERNAME_W}
-    ${resp}=  Provider Login  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${pid}=  get_acc_id  ${PUSERNAME_W}
     ${cid}=  get_id  ${CUSERNAME0}
-    ${d1}=  get_weekday     
-    ${sTime3}=  add_time  3  35
-    ${eTime3}=  add_time  4  0
+    ${d1}=  get_timezone_weekday  ${tz1}     
+    ${sTime3}=  add_timezone_time   3  35  ${tz1}
+    ${eTime3}=  add_timezone_time   4  0  ${tz1}
     ${list1}=  Create List  1  7
     ${p1queue4}=    FakerLibrary.word
     Set Suite Variable   ${p1queue4}
@@ -601,21 +603,21 @@ JD-TC-Get Waiting time of queue-6
 JD-TC-Get Waiting time of queue-7
 	[Documentation]  queue is not availble  for next seven days
     clear_queue  ${PUSERNAME_W}
-    ${resp}=  ProviderLogin  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pid}=  get_acc_id  ${PUSERNAME_W}
-    ${DAY}=  db.get_date
-    ${DAY1}=  add_date  1 
-    ${DAY2}=  add_date  2
-    ${DAY3}=  add_date  3  
-    ${DAY4}=  add_date  4  
-    ${DAY5}=  add_date  5 
-    ${DAY6}=  add_date  6  
-    ${DAY7}=  add_date  7 
+    ${DAY}=  db.get_date_by_timezone  ${tz1}
+    ${DAY1}=  db.add_timezone_date  ${tz1}  1  
+    ${DAY2}=  db.add_timezone_date  ${tz1}  2 
+    ${DAY3}=  db.add_timezone_date  ${tz1}  3   
+    ${DAY4}=  db.add_timezone_date  ${tz1}  4  
+    ${DAY5}=  db.add_timezone_date  ${tz1}  5 
+    ${DAY6}=  db.add_timezone_date  ${tz1}  6  
+    ${DAY7}=  db.add_timezone_date  ${tz1}  7 
     Set Suite Variable  ${DAY3}                                 
-    ${sTime3}=  add_time  4  5
-    ${eTime3}=  add_time  5  30
+    ${sTime3}=  add_timezone_time  ${tz1}  4  5
+    ${eTime3}=  add_timezone_time  ${tz1}  5  30
     ${p1queue5}=    FakerLibrary.word
     Set Suite Variable   ${p1queue5}
     ${resp}=  Create Queue  ${p1queue5}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  1  1  ${p1_l1}  ${p1_s1}  ${p1_s2}  ${p1_s3}  ${p1_s4}
@@ -677,12 +679,12 @@ JD-TC-Get Waiting time of queue-8
     Comment  queue for upcoming saturday and sunday are filled
     Comment  calling url   
     clear_queue  ${PUSERNAME_W}  
-    ${resp}=  Provider Login  ${PUSERNAME_W}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime3}=  add_time  0  5
-    ${eTime3}=  add_time  0  30
+    ${sTime3}=  add_timezone_time   0  5  ${tz1}
+    ${eTime3}=  add_timezone_time  ${tz1}  0  30
     ${p1queue6}=    FakerLibrary.word
     Set Suite Variable   ${p1queue6}
     ${resp}=  Create Queue  ${p1queue6}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  1  1  ${p1_l1}  ${p1_s1}  ${p1_s2}  ${p1_s3}  ${p1_s4}
@@ -691,7 +693,7 @@ JD-TC-Get Waiting time of queue-8
     Set Suite Variable  ${p1_q6}  ${resp.json()}
 
     ${cid}=  get_id  ${CUSERNAME0}
-    ${d1}=  get_weekday     
+    ${d1}=  get_timezone_weekday  ${tz1}     
     ${list1}=  Create List  1  7
     ${resp}=  Update Queue  ${p1_q6}  ${p1queue6}  ${recurringtype[1]}  ${list1}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  1  1  ${EMPTY}  ${p1_s1}  ${p1_s2}  ${p1_s4}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -738,10 +740,10 @@ Add Waitlist MonToFri
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${d1}=  get_weekday     
+    ${d1}=  get_timezone_weekday  ${tz1}     
     ${d}=  Evaluate  7-${d1}      
-    ${Date}=  add_date  ${d}
-    ${Date1}=  add_date  ${d+1}  
+    ${Date}=  db.add_timezone_date  ${tz1}  ${d}
+    ${Date1}=  db.add_timezone_date  ${tz1}  ${d+1}  
     ${cnote}=   FakerLibrary.word   
     ${resp}=  Add To Waitlist  ${cid}  ${s}  ${q}  ${Date}  ${cnote}  ${bool[1]}  ${self}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -759,13 +761,13 @@ Add Waitlist Saturday
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${d1}=  get_weekday     
+    ${d1}=  get_timezone_weekday  ${tz1}     
     ${d}=  Evaluate  7-${d1}      
-    ${Date}=  add_date  ${d}
-    ${Date1}=  add_date  ${d+1}
-    ${Date2}=  add_date  7
-    ${Date3}=  add_date  8
-    ${Date4}=  add_date  0
+    ${Date}=  db.add_timezone_date  ${tz1}  ${d}
+    ${Date1}=  db.add_timezone_date  ${tz1}  ${d+1}
+    ${Date2}=  db.add_timezone_date  ${tz1}  7
+    ${Date3}=  db.add_timezone_date  ${tz1}  8
+    ${Date4}=  db.get_date_by_timezone  ${tz1}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s}  ${q}  ${Date}  ${cnote}  ${bool[1]}  ${self}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -791,11 +793,11 @@ Add Waitlist Sunday
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
 
-    ${d1}=  get_weekday     
+    ${d1}=  get_timezone_weekday  ${tz}     
     ${d}=  Evaluate  7-${d1}      
-    ${Date}=  add_date  ${d}
-    ${Date1}=  add_date  ${d+1}
-    ${Date4}=  db.get_date 
+    ${Date}=  db.add_timezone_date  ${tz}  ${d}  
+    ${Date1}=  db.add_timezone_date  ${tz}  ${d+1}  
+    ${Date4}=  db.get_date_by_timezone  ${tz} 
 
     ${cnote}=   FakerLibrary.word
     ${resp}=   Add To Waitlist  ${cid}  ${s}  ${q}  ${Date4}  ${cnote}  ${bool[1]}  ${self}  

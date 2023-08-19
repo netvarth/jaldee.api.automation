@@ -30,7 +30,7 @@ JD-TC-RejectEnquiry-1
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_customer   ${PUSERNAME10}
     
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -45,8 +45,13 @@ JD-TC-RejectEnquiry-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
@@ -128,7 +133,7 @@ JD-TC-RejectEnquiry-2
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_customer   ${PUSERNAME10}
    
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -143,8 +148,13 @@ JD-TC-RejectEnquiry-2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
    
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
@@ -231,7 +241,7 @@ JD-TC-RejectEnquiry-3
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_customer   ${PUSERNAME10}
    
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -246,8 +256,13 @@ JD-TC-RejectEnquiry-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
    
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}  
@@ -341,7 +356,7 @@ JD-TC-RejectEnquiry-3
 JD-TC-RejectEnquiry-UH1
     [Documentation]   reject enquiry invalid enquiry id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -353,7 +368,7 @@ JD-TC-RejectEnquiry-UH1
 JD-TC-RejectEnquiry-UH2
     [Documentation]   already  rejected enquiry  again reject
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    
@@ -377,7 +392,7 @@ JD-TC-RejectEnquiry-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -392,8 +407,13 @@ JD-TC-RejectEnquiry-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  

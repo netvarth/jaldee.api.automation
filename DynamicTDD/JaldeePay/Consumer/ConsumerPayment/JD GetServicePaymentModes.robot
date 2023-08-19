@@ -42,7 +42,7 @@ JD-TC-GetServicePaymentModes-1
     
     clear_queue    ${PUSERNAME123}
     clear_service  ${PUSERNAME123}
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -117,7 +117,7 @@ JD-TC-GetServicePaymentModes-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -159,7 +159,7 @@ JD-TC-GetServicePaymentModes-UH1
     
     clear_queue    ${PUSERNAME124}
     clear_service  ${PUSERNAME124}
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -198,7 +198,7 @@ JD-TC-GetServicePaymentModes-UH3
     
     clear_queue    ${PUSERNAME124}
     clear_service  ${PUSERNAME124}
-    ${resp}=  ProviderLogin  ${PUSERNAME124}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME124}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -229,7 +229,7 @@ JD-TC-GetServicePaymentModes-UH4
     
     clear_queue    ${PUSERNAME124}
     clear_service  ${PUSERNAME124}
-    ${resp}=  ProviderLogin  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

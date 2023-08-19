@@ -27,7 +27,7 @@ JD-TC-GetGroupBy Id-1
     
     [Documentation]  Get Group By Id
     
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${account_id}=    get_acc_id       ${PUSERNAME22}
@@ -152,7 +152,7 @@ JD-TC-GetGroupBy Id-UH3
     
     [Documentation]  Get Group with another provider consumer
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=    get_acc_id       ${PUSERNAME77}

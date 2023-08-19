@@ -48,7 +48,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -182,7 +182,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-1
 JD-TC-GetNotificationSettings_of_ConsumerByUser-2
     [Documentation]   Update Early Notification and Get Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -210,7 +210,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-2
 JD-TC-GetNotificationSettings_of_ConsumerByUser-3
     [Documentation]   Update Prefinal Notification and Get Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -238,7 +238,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-3
 JD-TC-GetNotificationSettings_of_ConsumerByUser-4
     [Documentation]   Update Final Notification and Get Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +266,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-4
 JD-TC-GetNotificationSettings_of_ConsumerByUser-5
     [Documentation]   Update WaitlistAdd and Get Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -293,7 +293,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-5
 JD-TC-GetNotificationSettings_of_ConsumerByUser-6
     [Documentation]   Update AppointmentAdd and Get Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -318,7 +318,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-6
 JD-TC-GetNotificationSettings_of_ConsumerByUser-7
     [Documentation]   Update WaitlistAdd and Get Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -345,7 +345,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-7
 JD-TC-GetNotificationSettings_of_ConsumerByUser-8
     [Documentation]   Update WaitlistAdd and Get Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -370,7 +370,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-8
 
 JD-TC-GetNotificationSettings_of_ConsumerByUser-9
     [Documentation]   Updated all notification settings of one USER u_id1, then Get Notification Settings of Consumer By another USER u_id2
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -455,7 +455,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser -UH1
 JD-TC-GetNotificationSettings_of_ConsumerByUser -10
     [Documentation]   Use provider_id (default provider) to Get Notification Settings
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -505,7 +505,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser -UH3
 JD-TC-GetNotificationSettings_of_ConsumerByUser -UH4
 	[Documentation]  invalid provider
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -518,7 +518,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser -UH4
 
 JD-TC-GetNotificationSettings_of_ConsumerByUser -UH5
     [Documentation]  Get Consumer Notification Settings using Disabled USER_id
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -589,7 +589,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-UH6
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E2}${\n}
@@ -633,7 +633,7 @@ JD-TC-GetNotificationSettings_of_ConsumerByUser-UH6
     Set Suite Variable   ${p1_id40}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p0_id40}   ${resp.json()[1]['id']}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

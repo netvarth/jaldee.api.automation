@@ -27,18 +27,31 @@ JD-TC-Update_Member-1
 
     [Documentation]  Update Member
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     ${accountId}=    get_acc_id       ${PUSERNAME67}
     Set Suite Variable    ${accountId}
 
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=      add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10   
+
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -106,7 +119,7 @@ JD-TC-Update_Member-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -131,7 +144,7 @@ JD-TC-Update_Member-2
 
     [Documentation]  Update Member with firstname
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -156,7 +169,7 @@ JD-TC-Update_Member-3
 
     [Documentation]  Update Member with lastname
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -181,7 +194,7 @@ JD-TC-Update_Member-4
 
     [Documentation]  Update Member with number
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -207,7 +220,7 @@ JD-TC-Update_Member-5
 
     [Documentation]  Update Member with first name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -229,7 +242,7 @@ JD-TC-Update_Member-6
 
     [Documentation]  Update Member with last name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -251,7 +264,7 @@ JD-TC-Update_Member-7
 
     [Documentation]  Update Member with number is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -273,7 +286,7 @@ JD-TC-Update_Member-8
 
     [Documentation]  Update Member with country code is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -295,7 +308,7 @@ JD-TC-Update_Member-9
 
     [Documentation]  Update Member with remarks is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -317,7 +330,7 @@ JD-TC-Update_Member-10
 
     [Documentation]  Update Member with memberid is invalid
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -332,7 +345,7 @@ JD-TC-Update_Member-11
 
     [Documentation]  Update Member with memberid is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -354,7 +367,7 @@ JD-TC-Update_Member-13
 
     [Documentation]  Update Member with another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
