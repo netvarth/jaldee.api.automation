@@ -416,7 +416,7 @@ JD-TC-UpdateTask-UH2
     ${p_id1}=  get_acc_id  ${PUSERNAME88}
     Set Suite Variable  ${p_id1} 
 
-${resp}=    Get Locations
+    ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'

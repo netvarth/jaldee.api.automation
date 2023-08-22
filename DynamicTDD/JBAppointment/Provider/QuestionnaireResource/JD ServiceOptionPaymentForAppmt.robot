@@ -855,10 +855,13 @@ JD-TC-ServiceOptionsPaymentForAppointment-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}   ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}   ${decrypted_data['lastName']}
+    Set Suite Variable   ${domain}    ${decrypted_data['sector']}
+    Set Suite Variable   ${subDomain}    ${decrypted_data['subSector']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -904,7 +907,7 @@ JD-TC-ServiceOptionsPaymentForAppointment-4
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
     ${terminator}=  Create Dictionary  endDate=${EMPTY}  noOfOccurance=${EMPTY}
-    ${targetDate}=  Create Dictionary  startDate=${EMPTY}   timeSlots=${timeslot}  terminator=${terminator}  recurringType=${recurringtype[1]}   repeatIntervals=${list}
+    ${targetDate}=  Create Dictionary  startDate=${DAY1}   timeSlots=${timeslot}  terminator=${terminator}  recurringType=${recurringtype[1]}   repeatIntervals=${list}
     ${targetDate}=  Create List   ${targetDate}
     ${resp}=   Create Jaldee Coupon   ${cupn_codeG}  ${cupn_name}  ${cupn_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  100  100  1000  10  10  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}   ${domains}   ${sub_domains}   ALL  ${licenses}     targetDate=${targetDate}
     LOg   ${resp.json()}
@@ -1190,10 +1193,18 @@ JD-TC-ServiceOptionsPaymentForAppointment-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}   ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}   ${decrypted_data['lastName']}
+    Set Suite Variable   ${domain}    ${decrypted_data['sector']}
+    Set Suite Variable   ${subDomain}    ${decrypted_data['subSector']}
+
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Suite Variable   ${domain}    ${resp.json()['sector']}
+    # Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1239,7 +1250,7 @@ JD-TC-ServiceOptionsPaymentForAppointment-5
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
     ${terminator}=  Create Dictionary  endDate=${EMPTY}  noOfOccurance=${EMPTY}
-    ${targetDate}=  Create Dictionary  startDate=${EMPTY}   timeSlots=${timeslot}  terminator=${terminator}  recurringType=${recurringtype[1]}   repeatIntervals=${list}
+    ${targetDate}=  Create Dictionary  startDate=${DAY1}   timeSlots=${timeslot}  terminator=${terminator}  recurringType=${recurringtype[1]}   repeatIntervals=${list}
     ${targetDate}=  Create List   ${targetDate}
     ${resp}=   Create Jaldee Coupon   ${cupn_codeG}  ${cupn_name}  ${cupn_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  100  100  1000  10  10  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}   ${domains}   ${sub_domains}   ALL  ${licenses}     targetDate=${targetDate}
     LOg   ${resp.json()}

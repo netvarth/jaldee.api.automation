@@ -1251,8 +1251,8 @@ JD-TC-UpdateMRprescription-UH1
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_tz_time_secs  ${tz}
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${apptTime}=  db.get_date_time_by_timezone  ${tz}
+    ${apptTakenTime}=  db.remove_date_time_secs   ${apptTime}
     ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
@@ -1283,7 +1283,7 @@ JD-TC-UpdateMRprescription-UH1
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
@@ -1358,7 +1358,7 @@ JD-TC-UpdateMRprescription-UH1
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}

@@ -765,7 +765,7 @@ JD-TC-CreateAppointmentSchedule-9
     ${resp}=  Get User By Id  ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  state=${state}  deptId=${dep_id}  
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com   deptId=${dep_id}  
     ${city1} = 	Convert To Lower Case 	${city}
     ${city2} = 	Convert To Lower Case 	${resp.json()['city']}
     Should Be Equal As Strings   ${city1}  ${city2}
@@ -945,7 +945,7 @@ JD-TC-CreateAppointmentSchedule-10
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool1}
+    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool[0]}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[4]}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${ri_today}

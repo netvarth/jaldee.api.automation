@@ -51,7 +51,9 @@ JD-TC-Get_partner_Count-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
    ${resp}=  Get Business Profile
     Log  ${resp.content}

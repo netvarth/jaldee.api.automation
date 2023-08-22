@@ -726,7 +726,11 @@ JD-TC-ActivateVacation-4
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -1256,7 +1260,11 @@ JD-TC-ActivateVacation-6
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pro_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${pro_id}  ${resp.json()['id']}
 
     ${pid_B}=  get_acc_id  ${HLMUSERNAME7}
     Set Suite Variable  ${pid_B}
@@ -1271,11 +1279,7 @@ JD-TC-ActivateVacation-6
     clear_appt_schedule   ${HLMUSERNAME7}
     clear_customer   ${HLMUSERNAME7}
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
-
+    
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1285,6 +1289,11 @@ JD-TC-ActivateVacation-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  ${list}
 
     ${resp}=  Get Departments
     Log  ${resp.content}
@@ -1301,7 +1310,6 @@ JD-TC-ActivateVacation-6
         Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  db.get_time_by_timezone   ${tz}

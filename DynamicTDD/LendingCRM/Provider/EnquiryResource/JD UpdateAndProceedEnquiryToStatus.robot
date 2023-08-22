@@ -34,7 +34,9 @@ JD-TC-UpdateandProceedEnquiry-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -129,7 +131,9 @@ JD-TC-UpdateandProceedEnquiry-2
     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -228,7 +232,9 @@ JD-TC-UpdateandProceedEnquiry-UH1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -314,7 +320,9 @@ JD-TC-UpdateandProceedEnquiry-UH2
     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -406,7 +414,9 @@ JD-TC-UpdateandProceedEnquiry-UH3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Enquiry by Uuid  ${en_uid}  
     Log  ${resp.content}
@@ -432,7 +442,9 @@ JD-TC-UpdateandProceedEnquiry-UH4
     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

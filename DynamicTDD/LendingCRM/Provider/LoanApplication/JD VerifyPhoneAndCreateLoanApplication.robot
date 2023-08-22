@@ -397,7 +397,9 @@ JD-TC-CreateLoanApplication-3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
    ${PH_Number}    Random Number 	digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -456,7 +458,9 @@ JD-TC-CreateLoanApplication-4
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${PH_Number}    Random Number 	digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'

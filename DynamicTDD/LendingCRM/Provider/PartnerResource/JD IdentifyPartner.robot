@@ -49,8 +49,10 @@ JD-TC-Identify Partner-1
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -431,7 +433,9 @@ JD-TC-Identify-Partner-UH2
     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Partner-With Filter
     Log  ${resp.content}
@@ -449,7 +453,9 @@ JD-TC-Identify-Partner-UH3
     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Partner-With Filter
     Log  ${resp.content}

@@ -399,8 +399,8 @@ JD-TC-CreateReminder-UH4
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${EMPTY}  ${eTime1} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${rem_id}  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   "${INVALID_TIMESLOT}"
 
 JD-TC-CreateReminder-UH5
 
@@ -418,8 +418,8 @@ JD-TC-CreateReminder-UH5
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${EMPTY} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${rem_id}  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   "${INVALID_TIMESLOT}"
 
 JD-TC-CreateReminder-UH6
 
@@ -533,9 +533,10 @@ JD-TC-CreateReminder-UH11
     ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     
-    ${resp}=  Create Reminder    ${EMPTY}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    ${resp}=  Create Reminder    ${NULL}  ${pcid19}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.content}  "${INVALID_PROVIDER_ID}"
 
 JD-TC-CreateReminder-UH12
 
@@ -552,9 +553,10 @@ JD-TC-CreateReminder-UH12
     ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
     
-    ${resp}=  Create Reminder    ${prov_id1}  ${EMPTY}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    ${resp}=  Create Reminder    ${prov_id1}  ${NULL}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.content}  "${INVALID_CONSUMER_ID}"
 
 JD-TC-CreateReminder-UH13
 

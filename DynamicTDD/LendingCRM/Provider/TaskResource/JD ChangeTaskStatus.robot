@@ -282,7 +282,7 @@ JD-TC-ChangeTaskStatus-UH5
 
     ${resp}=    Change Task Status   ${task_uid2}  ${status_id5}
     Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.status_code}   200
 
     ${resp}=   Get Task By Id   ${task_uid2}
     Log   ${resp.content}

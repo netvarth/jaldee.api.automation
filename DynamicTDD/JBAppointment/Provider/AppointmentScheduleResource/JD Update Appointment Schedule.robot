@@ -3604,9 +3604,9 @@ JD-TC-Update schedule-30
     ${eTime2}=  Set Variable   11:59 PM
     ${converted_eTime2}=  db.convert_time   ${eTime2}
 
-    ${resp}=  Update Appointment Schedule  ${sch_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Update Appointment Schedule  ${sch_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  "${resp.json()}"   "${REDUCE_SCHEDULE_TIME}"
 
     ${resp}=  Disable Appointment Schedule  ${sch_id}
@@ -3618,7 +3618,7 @@ JD-TC-Update schedule-30
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[1]}
 
-    ${resp}=  Update Appointment Schedule  ${sch_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Update Appointment Schedule  ${sch_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${converted_sTime2}  ${converted_eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

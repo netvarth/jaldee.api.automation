@@ -79,7 +79,7 @@ JD-TC-UpdateQueueByUserLogin-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
-
+    Set Suite Variable      ${dep_id}     ${resp.json()['deptId']} 
 
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
     Should Be Equal As Strings  ${resp.status_code}  200

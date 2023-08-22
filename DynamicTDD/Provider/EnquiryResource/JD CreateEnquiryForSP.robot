@@ -35,7 +35,9 @@ JD-TC-Create Enquiry For SP-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1115,7 +1117,9 @@ JD-TC-Create Enquiry For SP-10
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1428,7 +1432,9 @@ JD-TC-Create Enquiry For SP-11
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1695,7 +1701,9 @@ JD-TC-Create Enquiry For SP-12
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1759,7 +1767,9 @@ JD-TC-Create Enquiry For SP-13
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1824,7 +1834,9 @@ JD-TC-Create Enquiry For SP-14
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1892,7 +1904,9 @@ JD-TC-Create Enquiry For SP-15
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2066,7 +2080,9 @@ JD-TC-Create Enquiry For SP-UH3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2273,7 +2289,9 @@ JD-TC-Create Enquiry For SP-UH6
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2323,7 +2341,9 @@ JD-TC-Create Enquiry For SP-UH7
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2382,7 +2402,9 @@ JD-TC-Create Enquiry For SP-UH8
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2442,7 +2464,9 @@ JD-TC-Create Enquiry For SP-16
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2518,7 +2542,9 @@ JD-TC-Create Enquiry For SP-UH9
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2586,7 +2612,9 @@ JD-TC-Create Enquiry For SP-UH10
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2647,7 +2675,9 @@ JD-TC-Create Enquiry For SP-UH11
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2706,7 +2736,9 @@ JD-TC-Create Enquiry For SP-UH12
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2774,7 +2806,9 @@ JD-TC-Create Enquiry For SP-UH13
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -2836,7 +2870,9 @@ JD-TC-Create Enquiry For SP-UH14
     ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -3053,7 +3089,9 @@ JD-TC-Create Enquiry For SP-UH17
     ${resp}=   Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -3160,7 +3198,9 @@ JD-TC-Create Enquiry For SP-UH18
     ${resp}=   Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

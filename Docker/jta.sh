@@ -76,49 +76,55 @@ checkInputArgs()
 # Shows usage of the script. used when this script is run without a parameter.
 checkSysType()
 {
-    uname -r >> /logs/jtacheck.log
-    uname -a >> /logs/jtacheck.log
-    if [[ $(uname -r | grep -iE 'Microsoft|Windows') ]]; then
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> /logs/jtacheck.log
-        echo "Bash is running on WSL" >> /logs/jtacheck.log
-    else
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> /logs/jtacheck.log
-        echo "native Linux" >> /logs/jtacheck.log
-    fi
-    cat /proc/version >> /logs/jtacheck.log
-    if grep -qi microsoft /proc/version; then
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> /logs/jtacheck.log
-        echo "Ubuntu on Windows- Windows Subsystem for Linux" >> /logs/jtacheck.log
-    else
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> /logs/jtacheck.log
-        echo "native Linux" >> /logs/jtacheck.log
-    fi
-    if [[ $(lscpu | grep -iE 'Microsoft|Windows') ]]; then
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> /logs/jtacheck.log
-        echo "Bash is running on WSL" >> /logs/jtacheck.log
-    else
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> /logs/jtacheck.log
-        echo "native Linux" >> /logs/jtacheck.log
-    fi
-    if [[ -f "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> /logs/jtacheck.log
-        echo "Windows Subsystem for Linux"
-    else
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> /logs/jtacheck.log
-        echo "native Linux"
-    fi
-    cat /proc/sys/kernel/osrelease >> /logs/jtacheck.log
+    # cat /proc/sys/kernel/osrelease >> $LogFileName
 	if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" | tee -a /logs/jtacheck.log
-        echo "Ubuntu on Windows- Windows Subsystem for Linux"
+        LogFileName='/mnt/d/LOGS/jtacheck.log'
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" | tee -a $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
         MYSQL_HOST="$(hostname).local"
         CONF_DIR='/mnt/d/ebs/ynwconf'
+        
         # CONF_DIR="$(find $BASE_DIR -type d -name "ynwconf" -print0 2>/dev/null | tr -d '\0')"
     else 
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" | tee -a /logs/jtacheck.log
-        echo "native Linux"
+        LogFileName='/logs/jtacheck.log'
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" | tee -a $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux"
         MYSQL_HOST='localhost'
         CONF_DIR='/ebs/ynwconf'
+        
+    fi
+    # cat /proc/sys/kernel/osrelease >> $LogFileName
+    cat /proc/sys/kernel/osrelease | tee -a $LogFileName
+    uname -r >> $LogFileName
+    uname -a >> $LogFileName
+    if [[ $(uname -r | grep -iE 'Microsoft|Windows') ]]; then
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> $LogFileName
+        echo "Bash is running on WSL" >> $LogFileName
+    else
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    fi
+    cat /proc/version >> $LogFileName
+    if grep -qi microsoft /proc/version; then
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux" >> $LogFileName
+    else
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    fi
+    if [[ $(lscpu | grep -iE 'Microsoft|Windows') ]]; then
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> $LogFileName
+        echo "Bash is running on WSL" >> $LogFileName
+    else
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    fi
+    if [[ -f "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> $LogFileName
+        echo "Windows Subsystem for Linux" >> $LogFileName
+    else
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
     fi
 }
 
@@ -944,8 +950,8 @@ if [ "$parallelContainers" -gt "1" ]; then
         variablelogs "$inputPath" "$newoutputPath" "$c"
 
         if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
-            echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" >> /logs/jtacheck.log
-            echo "Ubuntu on Windows- Windows Subsystem for Linux"
+            echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" >> $LogFileName
+            echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
             winInputPath=$(wslpath -w "$inputPath")
             winOutputPath=$(wslpath -w "$newoutputPath")
             winDockerPath=$(wslpath -w "$defaultDockerPath")
@@ -954,8 +960,8 @@ if [ "$parallelContainers" -gt "1" ]; then
             time docker run --rm --network="host" -v $winConfPath:/ebs/ynwconf -v "$winInputPath:/ebs/TDD" -v "$winInputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "$winDockerPath/config:/ebs/conf" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
             
         else 
-            echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" >> /logs/jtacheck.log
-            echo "native Linux"
+            echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" >> $LogFileName
+            echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux"
             echo -e "SYSTEM_ENV=LINUX" >> env$c.list
             time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf -v "$inputPath:/ebs/TDD" -v "$inputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$newoutputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
         fi
@@ -989,22 +995,27 @@ else
     setUserAndIP 0
     variablelogs "$inputPath" "$outputPath"
     if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" >> /logs/jtacheck.log
-        echo "Ubuntu on Windows- Windows Subsystem for Linux"
-        winInputPath=$(wslpath -w "$inputPath")
-        winOutputPath=$(wslpath -w "$outputPath")
-        winDockerPath=$(wslpath -w "$defaultDockerPath")
-        winConfPath=$(wslpath -w "$CONF_DIR")
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
+        # winInputPath=$(wslpath -w "$inputPath")
+        # winOutputPath=$(wslpath -w "$outputPath")
+        # winDockerPath=$(wslpath -w "$defaultDockerPath")
+        # winConfPath=$(wslpath -w "$CONF_DIR")
         echo -e "SYSTEM_ENV=Microsoft WSL" >> env.list
-        time docker run --rm --network="host" -v $winConfPath:/ebs/ynwconf/:ro -v "$winInputPath:/ebs/TDD"  -v "$winInputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "$winDockerPath"/config:/ebs/conf:ro -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        # time docker run --rm --network="host" -v "${winConfPath}:/ebs/ynwconf/:ro" -v "${winInputPath}:/ebs/TDD"  -v "${winInputPath}\\$VAR_DIR:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "${winDockerPath}\\config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        # time docker run --rm --network="host" -v "${winInputPath}:/ebs/TDD"  -v "${winInputPath}\\$VAR_DIR:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" --mount "source=${winConfPath},destination=/ebs/ynwconf/,readonly" --mount "source=${winDockerPath}\\config,destination=/ebs/conf,readonly" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        time docker run --rm --network="host" -v "${CONF_DIR}:/ebs/ynwconf/:ro" -v "${inputPath}:/ebs/TDD"  -v "${inputPath}/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "${defaultDockerPath}/config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        # setDateTimeSync 1
+        # echo -n > "$inputPath/$TIME_FILE"
     else 
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" >> /logs/jtacheck.log
-        echo "native Linux"
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux"
         echo -e "SYSTEM_ENV=LINUX" >> env.list
-        time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf/:ro -v "$inputPath:/ebs/TDD"  -v "$inputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "$defaultDockerPath"/config:/ebs/conf:ro -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd   
+        time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf/:ro -v "$inputPath:/ebs/TDD"  -v "$inputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd   
+        # setDateTimeSync 1
+        # echo -n > "$inputPath/$TIME_FILE"
     fi
     setDateTimeSync 1
-    # echo "" > "$inputPath/time.txt"
     echo -n > "$inputPath/$TIME_FILE"
 
 fi

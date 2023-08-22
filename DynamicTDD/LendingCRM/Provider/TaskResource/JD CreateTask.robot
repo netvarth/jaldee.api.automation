@@ -237,7 +237,7 @@ JD-TC-CreateTask-6
 
     [Documentation]  Create a task without title.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -252,7 +252,7 @@ JD-TC-CreateTask-7
 
     [Documentation]  Create a task without description.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -267,7 +267,7 @@ JD-TC-CreateTask-8
 
     [Documentation]  Create a task without giving user type.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -284,7 +284,7 @@ JD-TC-CreateTask-9
 
     [Documentation]  Create a task with status as empty.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -302,7 +302,7 @@ JD-TC-CreateTask-10
 
     [Documentation]  Create a task with priority as empty.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -335,7 +335,7 @@ JD-TC-CreateTask-UH1
 JD-TC-CreateTask-UH2
     [Documentation]  Create a task without category.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -351,7 +351,7 @@ JD-TC-CreateTask-UH2
 JD-TC-CreateTask-UH3
     [Documentation]  Create a task without task type.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

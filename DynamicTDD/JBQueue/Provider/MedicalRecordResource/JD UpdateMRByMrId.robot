@@ -1863,7 +1863,7 @@ JD-TC-UpdateMR-9
     Should Be Equal As Strings  ${resp.json()['bookingType']}                       ${bookingType[1]}
     Should Be Equal As Strings  ${resp.json()['consultationMode']}                  ${consultationMode_verify[3]}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                     ${ser_id2}
-    Should Be Equal As Strings  ${resp.json()['mrConsultationDate']}                ${C_date} ${statusUpdatedTime1}
+    Should Be Equal As Strings  ${resp.json()['mrConsultationDate']}                ${statusUpdatedTime1}
     Should Be Equal As Strings  ${resp.json()['prescriptionCreated']}               ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['mrCreatedDate']}                     ${C_date} ${ctime}
     Should Be Equal As Strings  ${resp.json()['mrCreatedBy']}                       ${id1}
@@ -2225,6 +2225,7 @@ JD-TC-UpdateMR-UH1
     ${duration1}=      FakerLibrary.sentence
     ${instrn1}=        FakerLibrary.sentence
     ${dosage1}=        FakerLibrary.sentence
+    ${Pres_notes}=         FakerLibrary.sentence
 
     # ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
 
@@ -2334,6 +2335,7 @@ JD-TC-UpdateMR-UH4
     ${duration1}=      FakerLibrary.sentence
     ${instrn1}=        FakerLibrary.sentence
     ${dosage1}=        FakerLibrary.sentence
+    ${Pres_notes}=         FakerLibrary.sentence
 
     ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     ${prescriptionsList}=  Create List   ${pre_list1}
@@ -2371,6 +2373,7 @@ JD-TC-UpdateMR-UH5
     ${duration1}=      FakerLibrary.sentence
     ${instrn1}=        FakerLibrary.sentence
     ${dosage1}=        FakerLibrary.sentence
+    ${Pres_notes}=         FakerLibrary.sentence
 
     ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     ${prescriptionsList}=  Create List   ${pre_list1}
@@ -2474,6 +2477,7 @@ JD-TC-UpdateMR-UH6
     ${duration1}=      FakerLibrary.sentence
     ${instrn1}=        FakerLibrary.sentence
     ${dosage1}=        FakerLibrary.sentence
+    ${Pres_notes}=         FakerLibrary.sentence
 
     ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     ${prescriptionsList}=  Create List   ${pre_list1}
