@@ -477,7 +477,7 @@ JD-TC-Incall_IVR-UH1
     
 #.......   Incoming call on server    ..........
 
-    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${Past_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.status_code}  422
@@ -571,7 +571,7 @@ JD-TC-Incall_IVR-UH2
     
 #.......   Incoming call on server    ..........
 
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${empty}    $${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${Past_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${empty}    $${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_UID}
@@ -666,7 +666,7 @@ JD-TC-Incall_IVR-UH3
     
 #.......   Incoming call on server    ..........
 
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_id}    ${empty}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${Past_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_id}    ${empty}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
    
@@ -716,7 +716,7 @@ JD-TC-Incall_IVR-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Incall_IVR-UH1
+JD-TC-Incall_IVR-UH4
 
     [Documentation]   Incall IVR with another provider login
     
@@ -754,7 +754,7 @@ JD-TC-Incall_IVR-UH1
     
 #.......   Incoming call on server    ..........
 
-    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${Past_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_UID}
@@ -801,5 +801,761 @@ JD-TC-Incall_IVR-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Incall_IVR-UH5
+
+    [Documentation]   Incall IVR with consumer login
+    
+ 
+
+    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable    ${user_id1}    ${resp.json()['id']}
+    Set Test Variable    ${user_name1}    ${resp.json()['userName']}
+
+    ${acc_id_consumer}=  get_acc_id  ${CUSERNAME6}
+    Set Suite Variable   ${acc_id_consumer} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings    ${resp.json()}    ${NoAccess}
+
+JD-TC-Incall_IVR-UH6
+
+    [Documentation]   Incall IVR without login
+
+
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${Past_date}=     add_date  -10
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+
+    
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_id}    ${empty}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+
+
+    ${current_time}=    Get Current Date
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Incall_IVR-UH7
+
+    [Documentation]   Passing empty call state id on "Incoming call on server" 
+    
+    clear_queue      ${PUSERNAME143}
+    clear_location   ${PUSERNAME143}
+    clear_service    ${PUSERNAME143}
+    clear_customer   ${PUSERNAME143}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    Set Suite Variable   ${acc_id} 
+
+    ${acc_ids}=  get_acc_id  ${PUSERNAME1}
+    Set Suite Variable   ${acc_ids} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${Past_date}=     add_date  -10
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+
+    
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${empty}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${Past_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+   
+
+
+    ${current_time}=    Get Current Date
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Incall_IVR-UH8
+
+    [Documentation]   Passing empty call time on Incoming call on server
+    
+    clear_queue      ${PUSERNAME143}
+    clear_location   ${PUSERNAME143}
+    clear_service    ${PUSERNAME143}
+    clear_customer   ${PUSERNAME143}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${future_date}=     add_date  +10
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+
+    
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${empty}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+
+    ${current_time}=    Get Current Date
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${empty}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${empty}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${empty}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Incall_IVR-UH9
+
+    [Documentation]   Given Future date on Incoming call on server
+    
+    clear_queue      ${PUSERNAME143}
+    clear_location   ${PUSERNAME143}
+    clear_service    ${PUSERNAME143}
+    clear_customer   ${PUSERNAME143}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${future_date}=     add_date  +10
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+
+    
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${future_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+
+    ${current_time}=    Get Current Date
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${future_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${future_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${future_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Incall_IVR-UH10
+
+    [Documentation]   Passing empty reference id on "Incoming call on server" 
+    
+    clear_queue      ${PUSERNAME143}
+    clear_location   ${PUSERNAME143}
+    clear_service    ${PUSERNAME143}
+    clear_customer   ${PUSERNAME143}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    Set Suite Variable   ${acc_id} 
+
+    ${acc_ids}=  get_acc_id  ${PUSERNAME1}
+    Set Suite Variable   ${acc_ids} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${Past_date}=     add_date  -10
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+
+    
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_id}    ${empty}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+   
+
+
+    ${current_time}=    Get Current Date
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Incall_IVR-UH11
+
+    [Documentation]   Incall IVR with empty company id
+    
+ 
+
+    clear_queue      ${PUSERNAME143}
+    clear_location   ${PUSERNAME143}
+    clear_service    ${PUSERNAME143}
+    clear_customer   ${PUSERNAME143}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    Set Suite Variable   ${acc_id} 
+
+    ${acc_ids}=  get_acc_id  ${PUSERNAME1}
+    Set Suite Variable   ${acc_ids} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${Past_date}=     add_date  -10
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+
+    
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_id}    ${reference_id}    ${empty}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_UID}
+
+
+    ${current_time}=    Get Current Date
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+    
+    ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${empty}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${empty}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${empty}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Incall_IVR-UH12
+
+    [Documentation]   Incall IVR with empty client number(with country code)
+    
+ 
+
+    clear_queue      ${PUSERNAME143}
+    clear_location   ${PUSERNAME143}
+    clear_service    ${PUSERNAME143}
+    clear_customer   ${PUSERNAME143}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    Set Suite Variable   ${acc_id} 
+
+    ${acc_ids}=  get_acc_id  ${PUSERNAME1}
+    Set Suite Variable   ${acc_ids} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${Past_date}=     add_date  -10
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+
+    
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${empty}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_UID}
+
+
+    ${current_time}=    Get Current Date
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+    
+    ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${empty}   ${clid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${empty}   ${clid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${empty}   ${clid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_ids}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Incall_IVR-UH13
+
+    [Documentation]   Passing invalid client number
+    
+ 
+
+    clear_queue      ${PUSERNAME143}
+    clear_location   ${PUSERNAME143}
+    clear_service    ${PUSERNAME143}
+    clear_customer   ${PUSERNAME143}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    Set Suite Variable   ${acc_id} 
+
+    ${acc_ids}=  get_acc_id  ${PUSERNAME1}
+    Set Suite Variable   ${acc_ids} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${Past_date}=     add_date  -10
+    ${call_time}=    db.get_time_secs
+    ${cclid}    Random Number 	digits=2 
+    ${cclid}=    Evaluate    f'{${cclid}:0>9d}'
+    Log  ${cclid}
+    Set Suite Variable  ${cclid}  ${cclid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${cclid}
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+
+    
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_PHONE}
+
+
+    ${current_time}=    Get Current Date
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# ........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
