@@ -28,7 +28,10 @@ JD-TC-Future Checkin In Queue-1
     clear_service   ${PUSERNAME141}
     clear_location  ${PUSERNAME141}
     clear_queue  ${PUSERNAME141}
+
     ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid} 
+
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -37,11 +40,11 @@ JD-TC-Future Checkin In Queue-1
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}  ${DAY1}
+    Set Suite Variable  ${DAY1}  
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    Set Suite Variable  ${DAY2}  ${DAY2}
+    Set Suite Variable  ${DAY2}  
     ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
+    Set Suite Variable  ${list}  
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  0  30  
