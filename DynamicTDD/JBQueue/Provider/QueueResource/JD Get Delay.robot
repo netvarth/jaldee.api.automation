@@ -46,7 +46,7 @@ JD-TC-GetDelay-1
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      
       ${list}=  Create List  1  2  3  4  5  6  7
       ${ph1}=  Evaluate  ${PUSERNAME_G}+15566124
       ${ph2}=  Evaluate  ${PUSERNAME_G}+25566128
@@ -72,7 +72,9 @@ JD-TC-GetDelay-1
       ${desc}=   FakerLibrary.sentence
       ${url}=   FakerLibrary.url
       ${sTime}=  add_timezone_time  ${tz}  0  15  
-      ${eTime}=  add_timezone_time  ${tz}  0  45  
+      ${eTime}=  add_timezone_time  ${tz}  0  45 
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+
       ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
