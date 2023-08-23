@@ -79,3 +79,49 @@ JD-Get_schedules_Using_Id-1
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-Get_schedules_Using_Id-UH1
+
+    [Documentation]  Tried to enable already enabled schedule
+
+    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${lid}=  Create Sample Location  
+    Set Suite Variable  ${lid}
+
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10  
+    ${DAY3}=  add_date  20 
+    ${DAY4}=  add_date  25     
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_time  0  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id1}  ${resp.json()}
+
+    ${resp}=    Get Scheduled Using Id    ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Enable And Disable A Schedule    ${JCstatus[0]}    ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Scheduled Using Id    ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   
