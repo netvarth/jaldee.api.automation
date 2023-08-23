@@ -41,6 +41,7 @@ ${SERVICE5}  Hair remove
 ${SERVICE6}  Bleach
 ${SERVICE7}  Hair cut
 
+${service_duration}     30
 
 
 *** Test Cases ***
@@ -272,6 +273,36 @@ JD-TC-DepartmentWiseAnalytics-1
     # Verify Response List  ${resp}  2  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}   primaryMobileNo=${PUSERNAME_U2}  dob=${dob1}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U2}.${test_mail}   state=${state1}
     # Should Be Equal As Strings  ${resp.json()[2]['city']}      ${city1}    ignore_case=True
 
+    FOR  ${i}  IN RANGE   5
+        ${ser_names}=  FakerLibrary.Words  	nb=30
+        ${kw_status}=  Run Keyword And Return Status   List Should Not Contain Duplicates   ${ser_names}
+        Exit For Loop If  '${kw_status}'=='True'
+    END
+
+    Set Suite Variable  ${ser_names}
+
+    ${SERVICE3}=    Set Variable  ${ser_names[0]}
+    # ${SERVICE3}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE3}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}    department=${depid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid3}  ${resp.json()}
+
+    ${SERVICE4}=    Set Variable  ${ser_names[1]}
+    # ${SERVICE3}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE4}
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=52
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}    department=${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid4}  ${resp.json()}
+
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
     Should Be Equal As Strings  ${resp.status_code}  200
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
@@ -319,7 +350,7 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dur1}=  FakerLibrary.Random Int  min=10  max=20
     Set Suite Variable  ${dur1}
-    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
+    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${depid1}  ${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
@@ -328,7 +359,7 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
-    ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  20  20  ${lid}  ${u_id}  ${s_id}  ${s_id2}
+    ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  20  20  ${lid}  ${u_id}  ${s_id}  ${s_id2}   ${s_id3}   ${s_id4}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id}  ${resp.json()}
@@ -386,11 +417,14 @@ JD-TC-DepartmentWiseAnalytics-1
 
     END
 
+    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     FOR   ${a}  IN RANGE   ${count}
             
         ${desc}=   FakerLibrary.word
 
-        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid${a}} 
+        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id4}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid${a}} 
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -433,7 +467,7 @@ JD-TC-DepartmentWiseAnalytics-1
 
     # sleep  05s
 
-    ${resp}=  Get Account Level Analytics  ${DeptWiseMetric['TOTAL_FOR_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
+    ${resp}=  Get Account Level Analytics   ${DeptWiseMetric['TOTAL_FOR_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}  deptId=${dep_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
@@ -442,7 +476,7 @@ JD-TC-DepartmentWiseAnalytics-1
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
 
-    ${resp}=  Get Account Level Analytics  ${DeptWiseMetric['TOTAL_ON_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
+    ${resp}=  Get Account Level Analytics  ${DeptWiseMetric['TOTAL_ON_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}  deptId=${dep_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
