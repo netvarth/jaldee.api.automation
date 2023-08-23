@@ -59,7 +59,7 @@ JD-TC-ResetPassword-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${mail}=   FakerLibrary.word
-    ${PUSEREMAIL24}=  Set Variable  ${P_Email}${mail}.ynwtest@netvarth.com
+    ${PUSEREMAIL24}=  Set Variable  ${P_Email}${mail}.${test_mail}
     Set Suite Variable  ${PUSEREMAIL24}
     ${resp}=  Send Verify Login   ${PUSEREMAIL24}
     Log   ${resp.json()}

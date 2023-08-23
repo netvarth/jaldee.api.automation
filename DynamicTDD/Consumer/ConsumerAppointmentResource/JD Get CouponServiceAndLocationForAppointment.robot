@@ -94,7 +94,7 @@ JD-TC-Get coupon list by service and location id for appointment-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -138,7 +138,7 @@ JD-TC-Get coupon list by service and location id for appointment-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_B}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_B}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -417,7 +417,7 @@ JD-TC-ApplyJaldeeCoupon-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state

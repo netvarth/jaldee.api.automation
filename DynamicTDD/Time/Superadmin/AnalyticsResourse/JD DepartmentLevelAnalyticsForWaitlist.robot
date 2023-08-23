@@ -87,7 +87,7 @@ JD-TC-DepartmentLevelAnalytics-1
      ${name3}=  FakerLibrary.name
      ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
      ${bs}=  FakerLibrary.bs
      ${companySuffix}=  FakerLibrary.companySuffix
      # ${city}=   get_place
@@ -181,7 +181,7 @@ JD-TC-DepartmentLevelAnalytics-1
      ${user_dis_name}=  FakerLibrary.last_name
      ${employee_id}=  FakerLibrary.last_name
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1170,7 +1170,7 @@ JD-TC-DepartmentLevelAnalytics-8
      ${name3}=  FakerLibrary.name
      ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
      ${bs}=  FakerLibrary.bs
      ${companySuffix}=  FakerLibrary.companySuffix
      # ${city}=   get_place
@@ -1257,7 +1257,7 @@ JD-TC-DepartmentLevelAnalytics-8
      ${user_dis_name}=  FakerLibrary.last_name
      ${employee_id}=  FakerLibrary.last_name
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -1330,7 +1330,7 @@ JD-TC-DepartmentLevelAnalytics-8
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76061
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Activation  ${PUSERNAME_N}  1
@@ -1413,7 +1413,7 @@ JD-TC-DepartmentLevelAnalytics-9
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76068
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${PUSERNAME_N}  1

@@ -72,7 +72,7 @@ JD-TC-GetBranchSP-1
 
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+7711
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
 
@@ -136,7 +136,7 @@ JD-TC-GetBranchSP-UH1
 
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_A}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+7721
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
     

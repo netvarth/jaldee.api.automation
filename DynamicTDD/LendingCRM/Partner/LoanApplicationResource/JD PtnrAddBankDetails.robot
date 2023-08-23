@@ -111,7 +111,7 @@ JD-TC-Partner Add Bank Details-1
     ${dob}=  Convert To String  ${dob}
     ${firstName}=    FakerLibrary.firstName
     ${lastName}=    FakerLibrary.lastName
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
@@ -250,7 +250,7 @@ JD-TC-Partner Add Bank Details-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${P_phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${P_phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -522,7 +522,7 @@ JD-TC-Partner Add Bank Details-1
     Set Suite Variable  ${loanid}    ${resp.json()['id']}
     Set Suite Variable  ${loanuid}    ${resp.json()['uid']}
 
-    Set Test Variable  ${email}  ${consnum}.${Custlname}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${consnum}.${Custlname}.${test_mail}
     
     ${resp}=    Partner Otp For Email    ${email}
     Log  ${resp.content}
@@ -647,7 +647,7 @@ JD-TC-Partner Add Bank Details-2
     ${dob}=  Convert To String  ${dob}
     ${firstName}=    FakerLibrary.firstName
     ${lastName}=    FakerLibrary.lastName
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
@@ -760,7 +760,7 @@ JD-TC-Partner Add Bank Details-2
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${P_phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${P_phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -1032,7 +1032,7 @@ JD-TC-Partner Add Bank Details-2
     Set Suite Variable  ${loanid}    ${resp.json()['id']}
     Set Suite Variable  ${loanuid}    ${resp.json()['uid']}
 
-    Set Test Variable  ${email}  ${consnum}.${Custlname}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${consnum}.${Custlname}.${test_mail}
     
     ${resp}=    Partner Otp For Email    ${email}
     Log  ${resp.content}
@@ -1246,7 +1246,7 @@ JD-TC-Partner Add Bank Details-11
     Set Suite Variable  ${loanid}    ${resp.json()['id']}
     Set Suite Variable  ${loanuid}    ${resp.json()['uid']}
 
-    Set Test Variable  ${email}  ${consnum}.${Custlname}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${consnum}.${Custlname}.${test_mail}
     
     ${resp}=    Partner Otp For Email    ${email}
     Log  ${resp.content}
@@ -1336,7 +1336,7 @@ JD-TC-Partner Add Bank Details-12
     Set Suite Variable  ${loanid}    ${resp.json()['id']}
     Set Suite Variable  ${loanuid}    ${resp.json()['uid']}
 
-    Set Test Variable  ${email}  ${consnum}.${Custlname}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${consnum}.${Custlname}.${test_mail}
     
     ${resp}=    Partner Otp For Email    ${email}
     Log  ${resp.content}
@@ -1424,7 +1424,7 @@ JD-TC-Partner Add Bank Details-13
     Set Suite Variable  ${loanid}    ${resp.json()['id']}
     Set Suite Variable  ${loanuid}    ${resp.json()['uid']}
     
-    Set Test Variable  ${email}  ${consnum}.${Custlname}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${consnum}.${Custlname}.${test_mail}
 
     ${resp}=    Partner Otp For Email    ${email}
     Log  ${resp.content}
@@ -1512,7 +1512,7 @@ JD-TC-Partner Add Bank Details-14
     Set Suite Variable  ${loanid}    ${resp.json()['id']}
     Set Suite Variable  ${loanuid}    ${resp.json()['uid']}
 
-    Set Test Variable  ${email}  ${consnum}.${Custlname}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${consnum}.${Custlname}.${test_mail}
     
     ${resp}=    Partner Otp For Email    ${email}
     Log  ${resp.content}
@@ -1602,7 +1602,7 @@ JD-TC-Partner Add Bank Details-15
     Set Suite Variable  ${loanid}    ${resp.json()['id']}
     Set Suite Variable  ${loanuid}    ${resp.json()['uid']}
 
-    Set Test Variable  ${email}  ${consnum}.${Custlname}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${consnum}.${Custlname}.${test_mail}
     
     ${resp}=    Partner Otp For Email    ${email}
     Log  ${resp.content}

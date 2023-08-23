@@ -54,7 +54,7 @@ JD-TC-Invoice-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -177,7 +177,7 @@ JD-TC-Invoice-2
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -301,7 +301,7 @@ JD-TC-Invoice-3
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -429,9 +429,9 @@ JD-TC-Invoice-4
     ${providerDiscFromJaldee}=  Convert To Number  ${providerDiscFromJaldee}  0 
     ${commissionPct}=  Convert To Number  ${commissionPct}  0
     clear_ScTable  ${primaryPhoneNo} 
-    Set Test Variable  ${PrimaryEmail}    ${primaryPhoneNo}.ynwtest@netvarth.com
-    Set Test Variable  ${altEmail2}   ${altPhoneNo2}.ynwtest@netvarth.com
-    Set Test Variable  ${altEmail1}   ${altPhoneNo1}.ynwtest@netvarth.com
+    Set Test Variable  ${PrimaryEmail}    ${primaryPhoneNo}.${test_mail}
+    Set Test Variable  ${altEmail2}   ${altPhoneNo2}.${test_mail}
+    Set Test Variable  ${altEmail1}   ${altPhoneNo1}.${test_mail}
     
     ${resp}=  Create SA SalesChannel  ${scId}  ${providerDiscFromJaldee}  ${providerDiscDuration}  ${scName}   ${contactFirstName}  ${contactLastName}  ${address}   ${city}  ${metro}   ${state}   ${latitude}   ${longitude}   ${radiusCoverage}   ${pincodesCoverage}   ${scType}   ${primaryPhoneNo}   ${altPhoneNo1}   ${altPhoneNo2}   ${commissionDuration}   ${commissionPct}   ${PrimaryEmail}   ${altEmail1}   ${altEmail2}   ${bonusPeriod}   ${id}  ${targetCount}   ${rate}  ${privateNote}
     Log  ${resp.json()}
@@ -478,7 +478,7 @@ JD-TC-Invoice-4
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -598,9 +598,9 @@ JD-TC-Invoice-5
     ${providerDiscFromJaldee}=  Convert To Number  ${providerDiscFromJaldee}  0 
     ${commissionPct}=  Convert To Number  ${commissionPct}  0
     clear_ScTable  ${primaryPhoneNo} 
-    Set Test Variable  ${PrimaryEmail}    ${primaryPhoneNo}.ynwtest@netvarth.com
-    Set Test Variable  ${altEmail2}   ${altPhoneNo2}.ynwtest@netvarth.com
-    Set Test Variable  ${altEmail1}   ${altPhoneNo1}.ynwtest@netvarth.com
+    Set Test Variable  ${PrimaryEmail}    ${primaryPhoneNo}.${test_mail}
+    Set Test Variable  ${altEmail2}   ${altPhoneNo2}.${test_mail}
+    Set Test Variable  ${altEmail1}   ${altPhoneNo1}.${test_mail}
     
     ${resp}=  Create SA SalesChannel  ${scId}  ${providerDiscFromJaldee}  ${providerDiscDuration}  ${scName}   ${contactFirstName}  ${contactLastName}  ${address}   ${city}  ${metro}   ${state}   ${latitude}   ${longitude}   ${radiusCoverage}   ${pincodesCoverage}   ${scType}   ${primaryPhoneNo}   ${altPhoneNo1}   ${altPhoneNo2}   ${commissionDuration}   ${commissionPct}   ${PrimaryEmail}   ${altEmail1}   ${altEmail2}   ${bonusPeriod}   ${id}  ${targetCount}   ${rate}  ${privateNote}
     Log  ${resp.json()}
@@ -651,7 +651,7 @@ JD-TC-Invoice-5
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -789,9 +789,9 @@ JD-TC-Invoice-6
     ${providerDiscFromJaldee}=  Convert To Number  ${providerDiscFromJaldee}  0 
     ${commissionPct}=  Convert To Number  ${commissionPct}  0
     clear_ScTable  ${primaryPhoneNo} 
-    Set Test Variable  ${PrimaryEmail}    ${primaryPhoneNo}.ynwtest@netvarth.com
-    Set Test Variable  ${altEmail2}   ${altPhoneNo2}.ynwtest@netvarth.com
-    Set Test Variable  ${altEmail1}   ${altPhoneNo1}.ynwtest@netvarth.com
+    Set Test Variable  ${PrimaryEmail}    ${primaryPhoneNo}.${test_mail}
+    Set Test Variable  ${altEmail2}   ${altPhoneNo2}.${test_mail}
+    Set Test Variable  ${altEmail1}   ${altPhoneNo1}.${test_mail}
     
     ${resp}=  Create SA SalesChannel  ${scId}  ${providerDiscFromJaldee}  ${providerDiscDuration}  ${scName}   ${contactFirstName}  ${contactLastName}  ${address}   ${city}  ${metro}   ${state}   ${latitude}   ${longitude}   ${radiusCoverage}   ${pincodesCoverage}   ${scType}   ${primaryPhoneNo}   ${altPhoneNo1}   ${altPhoneNo2}   ${commissionDuration}   ${commissionPct}   ${PrimaryEmail}   ${altEmail1}   ${altEmail2}   ${bonusPeriod}   ${id}  ${targetCount}   ${rate}  ${privateNote}
     Log  ${resp.json()}
@@ -840,7 +840,7 @@ JD-TC-Invoice-6
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -982,7 +982,7 @@ JD-TC-Invoice-7
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${ph}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state

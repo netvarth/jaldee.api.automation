@@ -167,7 +167,7 @@ JD-TC-Get Lucene Search Documentation-2
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email2}  ${firstname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME4}  ${EMPTY}
@@ -198,7 +198,7 @@ JD-TC-Get Lucene Search Documentation-3
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email2}  ${firstname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME4}  ${EMPTY}

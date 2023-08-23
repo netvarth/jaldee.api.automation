@@ -64,7 +64,7 @@ JD-TC-GetFutureAppointment-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_Q}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_Q}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -108,7 +108,7 @@ JD-TC-GetFutureAppointment-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_Q}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_Q}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1230,7 +1230,7 @@ JD-TC-GetFutureAppointment-10
     # Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_C}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_C}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1245,7 +1245,7 @@ JD-TC-GetFutureAppointment-10
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_C}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_C}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state

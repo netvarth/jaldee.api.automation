@@ -93,7 +93,7 @@ JD-TC-GenerateOtpForAcceptanceEmail-1
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -407,7 +407,7 @@ JD-TC-GenerateOtpForAcceptanceEmail-2
 
     clear Customer  ${PUSERNAME102}
 
-    Set Suite Variable  ${email23}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email23}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -667,7 +667,7 @@ JD-TC-GenerateOtpForAcceptanceEmail-3
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}

@@ -49,7 +49,7 @@ JD-TC-Update Email-1
     # Should Be Equal As Strings  ${resp.json()['basicInfo']['phoneVerified']}   ${bool[1]} 
 
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${pro_id}   ${firstname}   ${lastname}   ${email}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -152,7 +152,7 @@ JD-TC-Update Email-2
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${highest_package}=  get_highest_license_pkg
-    Set Suite Variable  ${e-mail}  ${firstname}${PUSERNAME_0}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${e-mail}  ${firstname}${PUSERNAME_0}${C_Email}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${e-mail}  ${d1}  ${sd}  ${PUSERNAME_0}   ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -182,7 +182,7 @@ JD-TC-Update Email-2
     Set Suite Variable  ${firstname0}
     ${lastname0}=  FakerLibrary.last_name
     Set Suite Variable   ${lastname0}
-    Set Test Variable  ${email_0}  ${firstname0}${PUSERNAME_0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email_0}  ${firstname0}${PUSERNAME_0}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${pro_id1}   ${firstname0}   ${lastname0}   ${email_0}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -322,7 +322,7 @@ JD-TC-Update Email-3
 
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
-    Set Test Variable  ${email_1}  ${firstname1}${MUSERNAME_K}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email_1}  ${firstname1}${MUSERNAME_K}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${pro_id2}   ${firstname1}   ${lastname1}   ${email_1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -425,7 +425,7 @@ JD-TC-Update Email-4
     ${lastname_B}=  FakerLibrary.last_name
     ${MUSERNAME_L}=  Evaluate  ${MUSERNAME}+407016222
     ${highest_package}=  get_highest_license_pkg
-    Set Test Variable  ${email_2}  ${firstname_B}${MUSERNAME_L}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email_2}  ${firstname_B}${MUSERNAME_L}${C_Email}.${test_mail}
     ${resp}=  Account SignUp  ${firstname_B}  ${lastname_B}  ${email_2}  ${domains}  ${sub_domains}  ${MUSERNAME_L}    ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -459,7 +459,7 @@ JD-TC-Update Email-4
 
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_1}  ${firstname1}${MUSERNAME_L}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_1}  ${firstname1}${MUSERNAME_L}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${pro_id3}   ${firstname1}   ${lastname1}   ${email_1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -700,14 +700,14 @@ JD-TC-Update Email-5
     ${whpnum}=  Evaluate  ${PUSERNAME_U1}+335241
     ${tlgnum}=  Evaluate  ${PUSERNAME_U1}+335142
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname2}  lastName=${lastname2}  address=${address2}  mobileNo=${PUSERNAME_U1}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${location2}  state=${state2}  deptId=${dep_id}  subdomain=${sub_domain_id}
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname2}  lastName=${lastname2}  address=${address2}  mobileNo=${PUSERNAME_U1}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${location2}  state=${state2}  deptId=${dep_id}  subdomain=${sub_domain_id}
 
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -730,31 +730,31 @@ JD-TC-Update Email-5
     comment   WAITLISTADD
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}   ${EventType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}    ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}    ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]}      ${PUSERNAME_U1}
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]}  ${PUSERNAME_U1}
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}     ${EventType[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}      ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}      ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]}        ${PUSERNAME_U1}
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]}    ${PUSERNAME_U1}
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[2]['eventType']}    ${EventType[7]}
-    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}     ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}     ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]}       ${PUSERNAME_U1}
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]}   ${PUSERNAME_U1}
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp.json()[3]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}     ${EventType[8]}
-    Should Be Equal As Strings  ${resp.json()[3]['email'][0]}      ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[3]['email'][0]}      ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]}        ${PUSERNAME_U1}
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]}    ${PUSERNAME_U1}
     ${pid5}=  get_acc_id  ${PUSERNAME_U1} 
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
-    Set Test Variable  ${email_1}  ${firstname1}${MUSERNAME_M}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email_1}  ${firstname1}${MUSERNAME_M}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${u_id}   ${firstname1}   ${lastname1}   ${email_1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

@@ -99,7 +99,7 @@ JD-TC-UserLoginwithEmployeeid-1
      ${whpnum}=  Evaluate  ${PUSERNAME}+336245
      ${tlgnum}=  Evaluate  ${PUSERNAME}+336345
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum} 
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum} 
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -123,7 +123,7 @@ JD-TC-UserLoginwithEmployeeid-1
      ${tlgnum1}=  Evaluate  ${PUSERNAME}+336545
      Set Suite Variable  ${tlgnum1}
 
-     ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${countryCodes[1]}  ${whpnum1}  ${countryCodes[1]}  ${tlgnum1}    employeeId=${employee_id}
+     ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${countryCodes[1]}  ${whpnum1}  ${countryCodes[1]}  ${tlgnum1}    employeeId=${employee_id}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -164,7 +164,7 @@ JD-TC-UserLoginwithEmployeeid-2
 
     ${employee_id}=   Random Int  min=1   max=10
 
-    ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${countryCodes[1]}  ${whpnum1}  ${countryCodes[1]}  ${tlgnum1}    employeeId=${employee_id}
+    ${resp}=  Update User  ${u_id}  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${countryCodes[1]}  ${whpnum1}  ${countryCodes[1]}  ${tlgnum1}    employeeId=${employee_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -195,7 +195,7 @@ JD-TC-UserLoginwithEmployeeid-3
     ${whpnum}=  Evaluate  ${PUSERNAME}+336245
     ${tlgnum}=  Evaluate  ${PUSERNAME}+336345
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum} 
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U2}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum} 
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -245,7 +245,7 @@ JD-TC-UserLoginwithEmployeeid-4
 
     ${employeeId}=    Random Int  min=10   max=100
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}    employeeId=${employeeId}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}    employeeId=${employeeId}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id2}  ${resp.json()}

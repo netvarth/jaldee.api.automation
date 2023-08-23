@@ -63,7 +63,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -156,7 +156,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-1
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${ph1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${ph1}  ${countryCodes[1]}  ${ph1}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${ph1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${ph1}  ${countryCodes[1]}  ${ph1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -272,14 +272,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  city=${city}  state=${state}  pincode=${pin}  deptId=${dep_id}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  pincode=${pin}  deptId=${dep_id}  subdomain=${userSubDomain}
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -379,14 +379,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-3
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com   deptId=${dep_id1}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}   deptId=${dep_id1}  subdomain=${userSubDomain}
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -495,14 +495,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-4
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
    
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id2}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id2}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${userSubDomain}
+    # Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${userSubDomain}
     
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -622,7 +622,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id3}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id3}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -631,7 +631,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Suite Variable  ${sub_domain_id1}  ${resp.json()['subdomain']}
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id3}  
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id3}  
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -756,14 +756,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id4}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id4}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id4}  
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id4}  
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -870,14 +870,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id3}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id3}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id3} 
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id3} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -991,14 +991,14 @@ JD-TC-Is AvailableQueueNow ByProviderId-8
     Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id3}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH0}  ${dep_id3}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${PUSERPH0}  ${countryCodes[1]}  ${PUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com  city=${city}  state=${state}  deptId=${dep_id3}  
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id3}  
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 

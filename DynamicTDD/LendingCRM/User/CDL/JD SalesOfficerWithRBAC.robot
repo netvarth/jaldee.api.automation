@@ -881,7 +881,7 @@ JD-TC-SalesOfficerWithRBAC-2
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -1110,7 +1110,7 @@ JD-TC-SalesOfficerWithRBAC-5
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${consumernumber}  555${PH_Number}
-    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${firstname_A}${C_Email}.${test_mail}
     
     ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
     Log  ${resp.content}
@@ -1344,8 +1344,8 @@ JD-TC-SalesOfficerWithRBAC-9
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    # Set Test Variable  ${email}  ${phone}${partownername}.ynwtest@netvarth.com
-    Set Test Variable  ${email}  ${dealerlname}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${phone}${partownername}.${test_mail}
+    Set Test Variable  ${email}  ${dealerlname}.${test_mail}
 
     ${resp}=    Generate OTP for partner Email    ${email}
     Log  ${resp.content}

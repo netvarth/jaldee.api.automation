@@ -115,7 +115,7 @@ JD-TC-Update Account Payment Settings-3
        
        ${lastname}=  FakerLibrary.last_name
        ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+510154
-       ${email}=  Set Variable  ${P_Email}${PUSERNAME_B}.ynwtest@netvarth.com
+       ${email}=  Set Variable  ${P_Email}${PUSERNAME_B}.${test_mail}
        ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${email}  ${d1}  ${sd}  ${PUSERNAME_B}    4
        Log  ${resp.json()}
        #Set Test Variable  ${fname}  ${resp.json()['userProfile']['firstName']}
@@ -271,7 +271,7 @@ JD-TC-Update Account Payment Settings-UH12
        Set Test Variable  ${sd1}  ${resp.json()[0]['subDomains'][0]['subDomain']}
        ${first_name}=   FakerLibrary.first_name
        ${last_name}=    FakerLibrary.last_name
-       ${email}=  Set Variable  ${P_Email}${first_name}.ynwtest@netvarth.com
+       ${email}=  Set Variable  ${P_Email}${first_name}.${test_mail}
        ${pkg_id}=   get_highest_license_pkg
        ${PUSERNAME}=  Evaluate  ${PUSERNAME}+51160
        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n} 

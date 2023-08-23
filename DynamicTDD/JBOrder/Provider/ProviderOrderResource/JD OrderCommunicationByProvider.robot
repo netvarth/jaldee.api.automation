@@ -55,7 +55,7 @@ JD-TC-Upload_ShoppingList_Image_for_StorePickup
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME37}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME37}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -266,7 +266,7 @@ JD-TC-Upload_ShoppingList_Image_for_StorePickup
     
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.${test_mail}
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
     Log  ${resp.json()}
@@ -326,7 +326,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 

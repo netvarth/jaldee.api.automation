@@ -85,7 +85,7 @@ JD-TC-Create Payment-1
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
     
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -691,7 +691,7 @@ JD-TC-Create Payment-4
     ${firstname}=  FakerLibrary.first_name   
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+5101138
-    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_B}.ynwtest@netvarth.com
+    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_B}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${PUSEREMAIL}  ${d1}  ${sd}  ${PUSERNAME_B}    4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -756,7 +756,7 @@ JD-TC-Create Payment-5
     ${firstname}=  FakerLibrary.first_name   
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+5101134
-    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_B}.ynwtest@netvarth.com
+    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_B}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${PUSEREMAIL}  ${d1}  ${sd}  ${PUSERNAME_B}    4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -781,7 +781,7 @@ JD-TC-Create Payment-5
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -935,7 +935,7 @@ JD-TC-Create Payment-6
     ${firstname}=  FakerLibrary.first_name   
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+5101139
-    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_C}.ynwtest@netvarth.com
+    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_C}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${PUSEREMAIL}  ${d1}  ${sd}  ${PUSERNAME_C}    9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -991,7 +991,7 @@ JD-TC-Create Payment-6
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -1144,7 +1144,7 @@ JD-TC-Create Payment-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    Set Test Variable  ${email}  ${firstname}${phone}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${phone}${C_Email}.${test_mail}
     ${resp}=  Update Consumer Profile With Emailid    ${firstname}  ${lastname}  ${address}   ${dob}  ${gender}  ${email}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1210,7 +1210,7 @@ JD-TC-Create Payment-9
     ${firstname}=  FakerLibrary.first_name   
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+5101475
-    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_C}.ynwtest@netvarth.com
+    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_C}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${PUSEREMAIL}  ${d1}  ${sd}  ${PUSERNAME_C}    9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1266,7 +1266,7 @@ JD-TC-Create Payment-9
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -1361,7 +1361,7 @@ JD-TC-Create Payment-10
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+5101775
     Set Suite Variable  ${PUSERNAME_C}
-    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_C}.ynwtest@netvarth.com
+    ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_C}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${PUSEREMAIL}  ${d1}  ${sd}  ${PUSERNAME_C}    9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1387,7 +1387,7 @@ JD-TC-Create Payment-10
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name

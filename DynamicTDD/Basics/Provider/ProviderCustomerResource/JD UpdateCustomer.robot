@@ -92,7 +92,7 @@ JD-TC-Update CustomerDetails-2
     ${gender}=  Random Element    ${Genderlist}
     Set Test Variable   ${gender}
     ${ph2}=  Evaluate  ${PUSERNAME230}+71013
-    Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email  ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph2}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}  
@@ -103,7 +103,7 @@ JD-TC-Update CustomerDetails-2
     ${dob1}=  FakerLibrary.Date
     # ${gender1}=  Random Element    ${Genderlist}
     ${ph3}=  Evaluate  ${PUSERNAME230}+71014
-    Set Suite Variable  ${email3}  ${lastname}${ph3}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email3}  ${lastname}${ph3}${C_Email}.${test_mail}
     ${resp}=  UpdateCustomer with email  ${cid2}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email3}  ${gender}  ${dob1}  ${ph3}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ncid}  ${resp.json()}
@@ -123,7 +123,7 @@ JD-TC-Update CustomerDetails-3
     ${gender}=  Random Element    ${Genderlist}
     ${ph2}=  Evaluate  ${PUSERNAME231}+71015
     Set Test Variable  ${ph2}
-    Set Test Variable  ${email8}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email8}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email8}  ${gender}  ${dob}  ${ph2}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
@@ -133,7 +133,7 @@ JD-TC-Update CustomerDetails-3
     ${dob2}=  FakerLibrary.Date
     ${gender2}=  Random Element    ${Genderlist}
     ${ph0}=  Evaluate  ${PUSERNAME231}+71016
-    Set Test Variable  ${email9}  ${firstname2}${ph0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email9}  ${firstname2}${ph0}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname2}  ${lastname2}  ${EMPTY}  ${email9}  ${gender2}  ${dob2}  ${ph0}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
@@ -182,7 +182,7 @@ JD-TC-Update CustomerDetails-UH3
     ${gender}=  Random Element    ${Genderlist}
     ${ph5}=  Evaluate  ${PUSERNAME230}+71013
     Set Test Variable  ${ph5}
-    Set Test Variable  ${email5}  ${firstname}${ph5}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email5}  ${firstname}${ph5}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email5}  ${gender}  ${dob}  ${ph5}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
@@ -197,7 +197,7 @@ JD-TC-Update CustomerDetails-UH3
     ${gender1}=  Random Element    ${Genderlist}
     Set Test Variable  ${gender1}
     ${ph3}=  Evaluate  ${PUSERNAME230}+71017
-    Set Test Variable  ${email}  ${firstname1}${ph3}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname1}${ph3}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname1}  ${lastname1}  ${EMPTY}  ${email}  ${gender1}  ${dob1}  ${ph3}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
@@ -223,7 +223,7 @@ JD-TC-Update CustomerDetails-UH4
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     ${ph2}=  Evaluate  ${PUSERNAME230}+71016
-    Set Test Variable  ${email4}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email4}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email  ${firstname}  ${lastname}  ${EMPTY}  ${email4}  ${gender}  ${dob}  ${ph2}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
@@ -1232,7 +1232,7 @@ JD-TC-Update CustomerDetails-12
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element   ${Genderlist}
-    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.ynwtest@netvarth.com
+    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1324,7 +1324,7 @@ JD-TC-Update CustomerDetails-13
     Set Test Variable   ${gender}
     ${phone1}=  Evaluate  ${PUSERNAME23}+73009
     ${ph2}=  Evaluate  ${PUSERNAME230}+71013
-    Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()} 
@@ -1335,8 +1335,8 @@ JD-TC-Update CustomerDetails-13
     ${dob1}=  FakerLibrary.Date
     # ${gender1}=  Random Element    ${Genderlist}
     ${ph3}=  Evaluate  ${PUSERNAME230}+71014
-    Set Suite Variable  ${email3}  ${lastname}${ph3}${C_Email}.ynwtest@netvarth.com
-    ${resp}=  UpdateCustomer with email  ${cid2}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email3}  ${gender}  ${dob1}  ${ph3}  ${EMPTY}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
+    Set Suite Variable  ${email3}  ${lastname}${ph3}${C_Email}.${test_mail}
+    ${resp}=   UpdateCustomer with email  ${cid2}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email3}  ${gender}  ${dob1}  ${ph3}  ${EMPTY}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ncid}  ${resp.json()}
     Log  ${resp.json()}
@@ -1427,7 +1427,7 @@ JD-TC-Update CustomerDetails-UH7
     Remove Values From List  ${unique_ccodes}  ${country_code1}
     ${country_code2}=  Evaluate  random.choice($unique_ccodes)  random
     Remove Values From List  ${unique_ccodes}  ${country_code2}
-     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
+    ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
 
 
 
@@ -1458,5 +1458,32 @@ JD-TC-Update CustomerDetails-UH7
   
      
 
-
+JD-TC-Update CustomerDetails-UH8
+	[Documentation]  Try to Update a  customer with invalid second number
+    ${resp}=  ProviderLogin  ${PUSERNAME234}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable   ${gender}
+    ${phone1}=  Evaluate  ${PUSERNAME23}+73009
+    Set Suite Variable    ${phone1}  
+    ${ph2}=  Evaluate  ${PUSERNAME230}+71013
+    Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
+    ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Log  ${resp.json()} 
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
+    Set Test Variable  ${cid2}  ${resp.json()}
+    ${firstname1}=  FakerLibrary.first_name
+    ${lastname1}=  FakerLibrary.last_name
+    ${dob1}=  FakerLibrary.Date
+    # ${gender1}=  Random Element    ${Genderlist}
+    ${ph3}=  FakerLibrary.RandomNumber  digits=9
+    Set Suite Variable  ${email3}  ${lastname}${ph3}${C_Email}.${test_mail}
+    ${resp}=   UpdateCustomer with email  ${cid2}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email3}  ${gender}  ${dob1}  ${ph2}  ${EMPTY}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph3}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_SPHONE}
      

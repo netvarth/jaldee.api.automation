@@ -51,7 +51,7 @@ JD-TC-Get Account Payment Settings of an account-1
         
 
        
-       ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_B}.ynwtest@netvarth.com
+       ${PUSEREMAIL}=  Set Variable  ${P_Email}${PUSERNAME_B}.${test_mail}
        ${resp}=  Send Verify Login   ${PUSEREMAIL}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Verify Login   ${PUSEREMAIL}  4

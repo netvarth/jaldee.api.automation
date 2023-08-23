@@ -1759,7 +1759,7 @@ JD-TC-GetAppointmentToday-10
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
 
-    Set Test Variable  ${email_id}  ${PUSERNAME_H}.${P_EMAIL}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${PUSERNAME_H}.${P_EMAIL}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}

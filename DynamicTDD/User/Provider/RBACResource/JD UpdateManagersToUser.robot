@@ -135,7 +135,7 @@ JD-TC-UpdateManagersToUser-1
     ${user_roles}=  Create List   ${role1}
 
     ${resp}=  Create User With Roles And Scope  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  
-    ...   ${P_Email}${USERNAME1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  
+    ...   ${P_Email}${USERNAME1}.${test_mail}   ${userType[0]}  ${pin1}  
     ...   ${countryCodes[0]}  ${USERNAME1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
     Log   ${resp.json()}

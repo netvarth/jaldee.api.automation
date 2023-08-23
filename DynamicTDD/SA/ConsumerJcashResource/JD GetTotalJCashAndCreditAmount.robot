@@ -160,7 +160,7 @@ JD-TC-GetTotalJCashAndCreditAmount-2
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+76068
-    Set Test Variable  ${email}  ${firstname_C0}${CUSERPH0}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname_C0}${CUSERPH0}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname_C0}  ${lastname_C0}  ${address}  ${CUSERPH0}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH0}  1
@@ -255,7 +255,7 @@ JD-TC-GetTotalJCashAndCreditAmount-3
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${CUSERPH}+76068
-    Set Test Variable  ${email}  ${firstname_C0}${CUSERPH2}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname_C0}${CUSERPH2}${CUSERPH}.${test_mail}
     ${resp}=  Android App Consumer SignUp  ${firstname_C0}  ${lastname_C0}  ${address}  ${CUSERPH2}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Android App Consumer Activation  ${CUSERPH2}  1

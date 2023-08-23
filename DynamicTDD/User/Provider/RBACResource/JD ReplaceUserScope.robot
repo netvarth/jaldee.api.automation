@@ -465,7 +465,7 @@ JD-TC-ReplaceUserScope-2
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable   ${custid}    ${resp.json()[0]['id']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${lastname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${lastname}${C_Email}.${test_mail}
 
     ${resp}=    Generate Loan Application Otp for Phone Number    ${phone}  ${countryCodes[0]}
     Log  ${resp.content}

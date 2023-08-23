@@ -79,7 +79,7 @@ JD-TC-Token_Report-1
     Set Suite Variable   ${description}
     ${firstname1}=  FakerLibrary.first_name
     Set Test Variable  ${firstname1}
-    set Suite Variable  ${email}  ${firstname1}${cid}${C_Email}.ynwtest@netvarth.com
+    set Suite Variable  ${email}  ${firstname1}${cid}${C_Email}.${test_mail}
 
     ${P1SERVICE1}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE1}
@@ -3152,7 +3152,7 @@ JD-TC-Token_Report-13
  
 
     
-        ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_U1}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  ${location}  ${state}  ${dep_id}  ${sub_domain_id}
+        ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_U1}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}  ${location}  ${state}  ${dep_id}  ${sub_domain_id}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${u_id}  ${resp.json()}
@@ -3564,7 +3564,7 @@ JD-TC-Token_Report-14
  
 
     
-        ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_U32}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${PUSERNAME_U32}.ynwtest@netvarth.com  ${location}  ${state}  ${dep_id}  ${sub_domain_id}
+        ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_U32}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${PUSERNAME_U32}.${test_mail}  ${location}  ${state}  ${dep_id}  ${sub_domain_id}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${u_id32}  ${resp.json()}

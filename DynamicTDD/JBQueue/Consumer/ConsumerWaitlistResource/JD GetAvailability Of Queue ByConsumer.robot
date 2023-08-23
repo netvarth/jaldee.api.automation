@@ -57,7 +57,7 @@ JD-TC-Get Next Available Dates-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_P}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_P}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -105,7 +105,7 @@ JD-TC-Get Next Available Dates-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_P}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_P}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${f_name}  ${l_name}   ${email_id}
     Log  ${resp.json()}
@@ -681,7 +681,7 @@ JD-TC-Get Next Available Dates-8
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -728,7 +728,7 @@ JD-TC-Get Next Available Dates-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${MUSERNAME_L}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${MUSERNAME_L}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname_B}  ${lastname_B}   ${email_id}
     Log  ${resp.json()}
@@ -785,7 +785,7 @@ JD-TC-Get Next Available Dates-8
     ${whpnum}=  Evaluate  ${PUSERNAME_U1}+335245
     ${tlgnum}=  Evaluate  ${PUSERNAME_U1}+335345
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -936,7 +936,7 @@ JD-TC-Get Next Available Dates-UH1
     ${whpnum}=  Evaluate  ${PUSERNAME_U2}+335243
     ${tlgnum}=  Evaluate  ${PUSERNAME_U2}+335343
 
-    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname3}  ${lastname3}  ${dob3}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id1}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}

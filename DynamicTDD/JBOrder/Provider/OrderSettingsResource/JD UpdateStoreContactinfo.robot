@@ -96,9 +96,9 @@ JD-TC-UpdateStoreContactinfo-1
     Set Suite Variable  ${ph4}
     ${whatsappNo2}=  Evaluate  ${PUSERPH0}+3000000002
     Set Suite Variable  ${whatsappNo2}
-    ${Email3}=   Set Variable  ${fName2}${ph3}.ynwtest@netvarth.com
+    ${Email3}=   Set Variable  ${fName2}${ph3}.${test_mail}
     Set Suite Variable  ${Email3}
-    ${Email4}=   Set Variable  ${fName2}${ph4}.ynwtest@netvarth.com
+    ${Email4}=   Set Variable  ${fName2}${ph4}.${test_mail}
     Set Suite Variable  ${Email4}
     ${address2}=  get_address
     Set Suite Variable  ${address2}

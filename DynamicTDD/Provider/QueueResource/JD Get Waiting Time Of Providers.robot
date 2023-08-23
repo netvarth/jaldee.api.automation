@@ -280,7 +280,7 @@ JD-TC-GetWaitingTimeOfProviders-5
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
     
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name

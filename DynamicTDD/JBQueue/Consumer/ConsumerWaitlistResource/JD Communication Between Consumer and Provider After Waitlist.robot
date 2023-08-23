@@ -85,7 +85,7 @@ JD-TC-Communication Between Consumer and Provider-1
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100603
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
     
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph601.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph601.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -141,7 +141,7 @@ JD-TC-Communication Between Consumer and Provider-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
 
     ${resp}=  Update Email   ${pro_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}

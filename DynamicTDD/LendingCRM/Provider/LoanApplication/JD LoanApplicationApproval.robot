@@ -117,7 +117,7 @@ JD-TC-LoanApplication-1
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -506,7 +506,7 @@ JD-TC-ProceedLoanApplication-2
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -878,7 +878,7 @@ JD-TC-ProceedLoanApplication-3
     Set Suite Variable   ${custid}    ${resp.json()[0]['id']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1200,7 +1200,7 @@ JD-TC-ProceedLoanApplication-5
     Set Suite Variable   ${custid}    ${resp.json()[0]['id']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1378,7 +1378,7 @@ JD-TC-ProceedLoanApplication-6
     Set Suite Variable   ${custid}    ${resp.json()[0]['id']}
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1762,7 +1762,7 @@ JD-TC-ProceedLoanApplication-4
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}

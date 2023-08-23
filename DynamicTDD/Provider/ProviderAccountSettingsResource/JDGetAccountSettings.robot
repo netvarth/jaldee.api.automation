@@ -60,7 +60,7 @@ JD-TC-GetorderAccountSettings-3
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME106}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME106}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}

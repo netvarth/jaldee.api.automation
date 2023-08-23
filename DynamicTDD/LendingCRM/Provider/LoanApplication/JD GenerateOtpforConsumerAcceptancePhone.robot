@@ -93,7 +93,7 @@ JD-TC-GenerateOtpforConsumerAcceptancePhone-1
 
     clear Customer  ${PUSERNAME63}
 
-    # Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    # Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}

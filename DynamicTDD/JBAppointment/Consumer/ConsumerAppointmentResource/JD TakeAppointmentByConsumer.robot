@@ -110,7 +110,7 @@ JD-TC-Take Appointment-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -154,7 +154,7 @@ JD-TC-Take Appointment-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_B}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_B}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -930,7 +930,7 @@ JD-TC-Take Appointment-9
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -974,7 +974,7 @@ JD-TC-Take Appointment-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_X}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_X}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -3533,7 +3533,7 @@ JD-TC-Take Appointment-UH12
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -3577,7 +3577,7 @@ JD-TC-Take Appointment-UH12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_W}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_W}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -4376,7 +4376,7 @@ JD-TC-Take Appointment-21
         Exit For Loop IF  '${iscorp_subdomains[${i}]['subdomains']}' == '${P_Sector}'
     END
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${B_Email}${BUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${BUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${B_Email}${BUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${BUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -4529,7 +4529,7 @@ JD-TC-Take Appointment-UH14
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -4573,7 +4573,7 @@ JD-TC-Take Appointment-UH14
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_D}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_D}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}

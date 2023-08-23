@@ -77,7 +77,7 @@ JD-TC-OnlinePresence1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -363,7 +363,7 @@ JD-TC-OnlinePresence4
     Set Suite Variable  ${ph_nos1}  ${ph_nos1}
     ${ph_nos2}=  Phone Numbers  ${name2}  Phoneno  ${ph2}  all
     Set Suite Variable  ${ph_nos2}  ${ph_nos2}
-    ${emails1}=  Emails  ${name3}  Email   ${P_Email}${bs1}.ynwtest@netvarth.com  all
+    ${emails1}=  Emails  ${name3}  Email   ${P_Email}${bs1}.${test_mail}  all
     Set Suite Variable  ${emails1}  ${emails1}    
     ${bs_name}=  FakerLibrary.bs
     Set Suite Variable   ${bs_name}
@@ -465,7 +465,7 @@ JD-TC-OnlinePresence5
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     # ${ph1}=  Evaluate  ${CUSERNAME2}+123
-    Set Test Variable  ${email2}  ${firstname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME4}  ${EMPTY}
@@ -540,7 +540,7 @@ JD-TC-OnlinePresence6
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     # ${ph1}=  Evaluate  ${CUSERNAME2}+123
-    Set Test Variable  ${email2}  ${firstname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME3}  ${EMPTY}

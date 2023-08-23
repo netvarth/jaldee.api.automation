@@ -132,7 +132,7 @@ JD-TC-GetJcashOfferStatCount-2
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -256,7 +256,7 @@ JD-TC-GetJcashOfferStatCount-3
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -424,7 +424,7 @@ JD-TC-GetJcashOfferStatCount-6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL3}=   Set Variable  ${C_Email}ph${CUSERPH3}.ynwtest@netvarth.com
+    ${CUSERMAIL3}=   Set Variable  ${C_Email}ph${CUSERPH3}.${test_mail}
     Set Suite Variable   ${CUSERMAIL3}
     ${resp}=  Consumer SignUp  ${firstname2}  ${lastname2}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL3}
     Log   ${resp.json()}
@@ -628,7 +628,7 @@ JD-TC-GetJcashOfferStatCount-7
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL5}=   Set Variable  ${C_Email}ph${CUSERPH5}.ynwtest@netvarth.com
+    ${CUSERMAIL5}=   Set Variable  ${C_Email}ph${CUSERPH5}.${test_mail}
     Set Suite Variable   ${CUSERMAIL5} 
     ${resp}=  Consumer SignUp  ${firstname5}  ${lastname5}  ${address}  ${CUSERPH5}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL5}
     Log   ${resp.json()}
@@ -848,7 +848,7 @@ JD-TC-GetJcashOfferStatCount-10
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL7}=   Set Variable  ${C_Email}ph${CUSERPH7}.ynwtest@netvarth.com
+    ${CUSERMAIL7}=   Set Variable  ${C_Email}ph${CUSERPH7}.${test_mail}
     Set Suite Variable   ${CUSERMAIL7} 
     ${resp}=  Consumer SignUp  ${firstname7}  ${lastname7}  ${address}  ${CUSERPH7}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL7}
     Log   ${resp.json()}
@@ -1056,7 +1056,7 @@ JD-TC-GetJcashOfferStatCount-11
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL8}=   Set Variable  ${C_Email}ph${CUSERPH8}.ynwtest@netvarth.com
+    ${CUSERMAIL8}=   Set Variable  ${C_Email}ph${CUSERPH8}.${test_mail}
     Set Suite Variable   ${CUSERMAIL8} 
     ${resp}=  Consumer SignUp  ${firstname8}  ${lastname8}  ${address}  ${CUSERPH8}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL8}
     Log   ${resp.json()}

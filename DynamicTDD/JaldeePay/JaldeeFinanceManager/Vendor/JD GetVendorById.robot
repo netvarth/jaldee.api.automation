@@ -67,7 +67,7 @@ JD-TC-GetVendorById-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place

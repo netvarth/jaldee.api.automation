@@ -84,7 +84,7 @@ JD-TC-GetUserById-1
      ${whpnum}=  Evaluate  ${PUSERNAME}+346245
      ${tlgnum}=  Evaluate  ${PUSERNAME}+346345
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -101,7 +101,7 @@ JD-TC-GetUserById-1
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
-     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  state=${state}  deptId=${dep_id}   admin=${bool[0]}  
+     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  state=${state}  deptId=${dep_id}   admin=${bool[0]}  
      
 JD-TC-GetUserById -UH1
      [Documentation]   Provider get a User without login      

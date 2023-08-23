@@ -44,7 +44,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME110}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME110}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -215,7 +215,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -224,7 +224,7 @@ JD-TC-CreateOrderForElectronicDelivery-1
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -294,7 +294,7 @@ JD-TC-CreateOrderForElectronicDelivery-3
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Test Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Test Variable  ${orderNote}
 
@@ -323,7 +323,7 @@ JD-TC-CreateOrderForElectronicDelivery-4
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     ${resp}=   Create Order For HomeDelivery   ${cookie}   ${accId}    ${self}    ${CatalogId3}   ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1}   ${item_id2}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -360,7 +360,7 @@ JD-TC-CreateOrderForElectronicDelivery-5
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
    
     ${resp}=   Create Order For Electronic Delivery   ${cookie}   ${accId}    ${cidfor}    ${CatalogId1}   ${DAY1}    ${CUSERNAME21}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -388,7 +388,7 @@ JD-TC-CreateOrderForElectronicDelivery-6
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
    
     ${resp}=   Create Order For Electronic Delivery   ${cookie}   ${accId}    ${self}    ${CatalogId1}  ${EMPTY}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -452,7 +452,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH3
     ${DAY1}=  db.add_timezone_date  ${tz}   16
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
    
     ${resp}=   Create Order For Electronic Delivery   ${cookie}   ${accId}    ${self}    ${CatalogId1}  ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -474,7 +474,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH4
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     ${INVALID_ITEM_ADDED}=   Format String  ${INVALID_ITEM_ADDED}  ${displayName2}  
    
@@ -610,7 +610,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH8
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
    
     ${resp}=   Create Order For Electronic Delivery   ${cookie}   ${accId}    ${self}    ${CatalogId3}  ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id2}    ${item_quantity1}    ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -648,7 +648,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH10
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
    
     ${resp}=   Create Order For Electronic Delivery   ${cookie}   ${accId}    ${self}    ${CatalogId2}  ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id2}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -670,7 +670,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH11
     
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     ${resp}=   Create Order For HomeDelivery   ${cookie}   ${accId}    ${self}    ${CatalogId3}   ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -693,7 +693,7 @@ JD-TC-CreateOrderForElectronicDelivery-UH12
     ${DAY1}=  db.subtract_timezone_date  ${tz}    1
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
    
     ${resp}=   Create Order For Electronic Delivery   ${cookie}   ${accId}    ${self}    ${CatalogId1}   ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}

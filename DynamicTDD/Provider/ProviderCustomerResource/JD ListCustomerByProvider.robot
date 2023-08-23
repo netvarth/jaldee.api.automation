@@ -24,7 +24,7 @@ JD-TC-ListCustomerByProvider-1
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME23}+73003
-      Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+      Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME18}  ${EMPTY}
@@ -66,7 +66,7 @@ JD-TC-ListCustomerByProvider-3
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME23}+73003
-      Set Suite Variable  ${email}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+      Set Suite Variable  ${email}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${PUSERNAME3}  ${EMPTY}

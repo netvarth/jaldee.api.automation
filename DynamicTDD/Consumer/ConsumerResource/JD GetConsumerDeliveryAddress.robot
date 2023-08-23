@@ -24,7 +24,7 @@ JD-TC-GetConsumerDeliveryAddress-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${city}=   get_place
     ${address}=  get_address
     ${landmark}=   FakerLibrary.sentence
@@ -57,7 +57,7 @@ JD-TC-GetConsumerDeliveryAddress-2
     ${new_no}=  Evaluate  ${CUSERNAME21}+257831
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME11}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME11}.${test_mail}
     ${city}=   get_place
     ${address}=  get_address
     ${landmark}=   FakerLibrary.sentence

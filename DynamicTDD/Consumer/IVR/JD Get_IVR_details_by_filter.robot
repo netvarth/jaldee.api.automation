@@ -269,7 +269,7 @@ JD-TC-Get_IVR_Details_By_Filter-1
     ${agent_id}    FakerLibrary.Random Number
     ${agent_id}=  Convert To String  ${agent_id}
     ${agent_name}    FakerLibrary.firstName
-    Set Test Variable  ${email}  ${agent_name}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${agent_name}.${test_mail}
     ${agent_ex}    FakerLibrary.Random Number
     ${numb}    Random Number 	digits=5 
     ${numb}=    Evaluate    f'{${numb}:0>9d}'

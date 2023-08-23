@@ -429,10 +429,17 @@ JD-TC-AddLoanBankDetails-1
         Set Suite Variable                 ${address2}
     END                         
 
-    ${resp}=   Get Location ById           ${locid}  
+    ${gender}=  Random Element    ${Genderlist}
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+    ${fname}=    FakerLibrary.firstName
+    ${lname}=    FakerLibrary.lastName
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
-    Set Suite Variable                     ${locname1}              ${resp.json()['place']}
+
     
 # .... Create Branch1....
 
@@ -1297,6 +1304,202 @@ JD-TC-AddLoanBankDetails-1
     ${resp}=    Provider Logout
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-AddLoanBankDetails-2
+                                  
+    [Documentation]               Create Loan Application and add loan bank Details without Requst For Aadhar Validation and pan.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PH_Number}    Random Number 	digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${consumernumber}  555${PH_Number}
+    ${gender}    Random Element    ${Genderlist}
+    ${firstName}=  FakerLibrary.name
+    ${lastName}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+    ${resp}=  GetCustomer  phoneNo-eq=${consumernumber}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        Set Test Variable  ${custid}   0
+    ELSE
+        Set Suite Variable  ${custid}      ${resp.json()[0]['id']}
+        Set Suite Variable  ${Custfname}  ${resp.json()[0]['firstname']}
+        Set Suite Variable  ${Custlname}  ${resp.json()[0]['lastname']}
+    END
+
+
+    ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${kyc_list1}=           Create Dictionary  isCoApplicant=${bool[0]}
+    
+    # ${resp}=    Verify Phone Otp and Create Loan Application   ${consumernumber}   ${OtpPurpose['ConsumerVerifyPhone']}   ${custid}    ${firstName}    ${lastName}    ${consumernumber}    ${countryCodes[0]}    ${locId}    ${kyc_list1}
+    ${resp}=    Verify Phone and Create Loan Application with customer details  ${consumernumber}  ${OtpPurpose['ConsumerVerifyPhone']}  ${custid}  ${locId}    ${CustomerPhoto}  ${kyc_list1}  firstName=${firstName}  lastName=${lastName}  phoneNo=${consumernumber}  countryCode=${countryCodes[0]}  gender=${gender}  dob=${dob}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+    Set Suite Variable  ${loanid1}    ${resp.json()['id']}
+    Set Suite Variable  ${loanuid1}    ${resp.json()['uid']}
+
+    ${resp}=    Get Loan Application By uid  ${loanuid1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+    Set Suite Variable  ${kycid}     ${resp.json()["loanApplicationKycList"][0]["id"]}
+
+    ${bankName}       FakerLibrary.name
+    ${bankAddress1}   FakerLibrary.Street name
+    ${bankAddress2}   FakerLibrary.Street name
+    ${bankCity}       FakerLibrary.word
+    ${bankState}      FakerLibrary.state
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${custid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    4    ${loanuid1}    ${loanuid1}    ${bankName}    ${bankAccountNo}    ${bankIfsc}    ${bankAddress1}    ${bankAddress2}    ${bankCity}    ${bankState}   ${bankPin}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${resp}=    Get Loan Application By uid  ${loanuid1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-AddLoanBankDetails-3
+                                  
+    [Documentation]               Create Loan Application and add loan bank Details invalid orginfrom.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PH_Number}    Random Number 	digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable  ${consumernumber}  555${PH_Number}
+    ${gender}    Random Element    ${Genderlist}
+    ${firstName}=  FakerLibrary.name
+    ${lastName}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumernumber}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        Set Test Variable  ${custid}   0
+    ELSE
+        Set Suite Variable  ${custid}      ${resp.json()[0]['id']}
+        Set Suite Variable  ${Custfname}  ${resp.json()[0]['firstname']}
+        Set Suite Variable  ${Custlname}  ${resp.json()[0]['lastname']}
+    END
+
+    ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${kyc_list1}=           Create Dictionary  isCoApplicant=${bool[0]}
+    
+    # ${resp}=    Verify Phone Otp and Create Loan Application   ${consumernumber}   ${OtpPurpose['ConsumerVerifyPhone']}   ${custid}    ${firstName}    ${lastName}    ${consumernumber}    ${countryCodes[0]}    ${locId}    ${kyc_list1}
+    ${resp}=    Verify Phone and Create Loan Application with customer details  ${consumernumber}  ${OtpPurpose['ConsumerVerifyPhone']}  ${custid}  ${locId}    ${CustomerPhoto}  ${kyc_list1}  firstName=${firstName}  lastName=${lastName}  phoneNo=${consumernumber}  countryCode=${countryCodes[0]}  gender=${gender}  dob=${dob}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+    Set Suite Variable  ${loanid2}    ${resp.json()['id']}
+    Set Suite Variable  ${loanuid2}    ${resp.json()['uid']}
+
+    ${resp}=    Get Loan Application By uid  ${loanuid2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+    Set Suite Variable  ${kycid}     ${resp.json()["loanApplicationKycList"][0]["id"]}
+
+    ${bankName}       FakerLibrary.name
+    ${bankAddress1}   FakerLibrary.Street name
+    ${bankAddress2}   FakerLibrary.Street name
+    ${bankCity}       FakerLibrary.word
+    ${bankState}      FakerLibrary.state
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${custid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    ${bankCity}    ${loanuid2}    ${loanuid2}    ${bankName}    ${bankAccountNo}    ${bankIfsc}    ${bankAddress1}    ${bankAddress2}    ${bankCity}    ${bankState}   ${bankPin}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    500
+    Should Be Equal As Strings    ${resp.json()}   ${JALDEE_OUT_OF_REACH_PROBLEM}
+
+    ${resp}=    Get Loan Application By uid  ${loanuid2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-AddLoanBankDetails-4
+                                  
+    [Documentation]               Create Loan Application and add loan bank Details with another provider loan id.
+
+    ${resp}=  Consumer Login  ${CUSERNAME35}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=  Consumer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+
+    ${fname}=  FakerLibrary.name
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
+    ${gender}=  Random Element    ${Genderlist}
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer with email   ${fname}  ${lname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${phone}  ${EMPTY}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcid14}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcid14}  ${resp.json()[0]['id']}
+    END
+    ${resp}=  GetCustomer  phoneNo-eq=${phone}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+
+    ${bankName}    FakerLibrary.name
+    ${bankAddress1}   FakerLibrary.Street name
+    ${bankAddress2}   FakerLibrary.Street name
+    ${bankCity}       FakerLibrary.word
+    ${bankState}      FakerLibrary.state
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pcid14}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details   4    ${loanuid1}    ${loanuid1}    ${bankName}    ${bankAccountNo}    ${bankIfsc}    ${bankAddress1}    ${bankAddress2}    ${bankCity}    ${bankState}   ${bankPin}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}    ${NO_PERMISSION}
 
 
 JD-TC-AddLoanBankDetails-UH1

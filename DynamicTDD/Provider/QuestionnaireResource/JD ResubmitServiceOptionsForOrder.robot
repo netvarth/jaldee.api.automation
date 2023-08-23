@@ -273,7 +273,7 @@ JD-TC-ProviderResubmitServiceOptionForOrder-1
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME23}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME23}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME23}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -522,7 +522,7 @@ JD-TC-ResubmitServiceoptionsForOrder-2
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME26}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME26}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME26}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -781,7 +781,7 @@ JD-TC-ResubmitServiceoptionsForOrder-3
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME28}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME28}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME28}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}
@@ -1047,7 +1047,7 @@ JD-TC-ResubmitServiceoptionsForOrder-UH1
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME33}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME33}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME33}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem}

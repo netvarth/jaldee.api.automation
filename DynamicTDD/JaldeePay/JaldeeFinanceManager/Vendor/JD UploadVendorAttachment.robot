@@ -85,7 +85,7 @@ JD-TC-UploadAttachment-1
     Set Suite Variable  ${PO_Number}
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     Set Suite Variable  ${vendor_phno}
-    Set Suite Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
 

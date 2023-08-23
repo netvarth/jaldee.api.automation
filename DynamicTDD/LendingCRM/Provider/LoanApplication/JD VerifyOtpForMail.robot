@@ -98,7 +98,7 @@ JD-TC-VerifyOtpForEmail-1
 
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -277,7 +277,7 @@ JD-TC-VerifyOtpForEmail-2
 
     clear Customer  ${PUSERNAME83}
 
-    # Set Suite Variable  ${emai22}  ${lname}${C_Email}.ynwtest@netvarth.com
+    # Set Suite Variable  ${emai22}  ${lname}${C_Email}.${test_mail}
     # ${gender}=  Random Element    ${Genderlist}
     # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -392,7 +392,7 @@ JD-TC-VerifyOtpForEmail-UH
 
     clear Customer  ${PUSERNAME83}
 
-    Set Suite Variable  ${emai22}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${emai22}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}
@@ -506,7 +506,7 @@ JD-TC-VerifyOtpForEmail-UH1
 
     clear Customer  ${PUSERNAME83}
 
-    Set Suite Variable  ${emai22}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${emai22}  ${lname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
     ${dob}=  Convert To String  ${dob}

@@ -43,7 +43,7 @@ JD-TC-Check Provider Signup-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${bs}${P_Email}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${bs}${P_Email}.${test_mail}  ${views}
     ${licresp}=   Get Licensable Packages
     Should Be Equal As Strings   ${licresp.status_code}   200
     Set Test Variable  ${pkgId}  ${licresp.json()[0]['pkgId']}
@@ -102,7 +102,7 @@ JD-TC-Check Provider Signup-1
         Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${domain}
         Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sub_domain}
         Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${bs}${P_Email}.ynwtest@netvarth.com
+        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${bs}${P_Email}.${test_mail}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}

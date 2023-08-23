@@ -215,7 +215,7 @@ JD-TC-Get Customers-6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.ynwtest@netvarth.com
+    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -306,7 +306,7 @@ JD-TC-Get Customers-7
     #Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
    # Set Suite Variable   ${CUSERPH3}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH75}+1000
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph9o9j.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph9o9j.${test_mail}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address

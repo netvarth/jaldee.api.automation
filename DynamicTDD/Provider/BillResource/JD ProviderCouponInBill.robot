@@ -1493,7 +1493,7 @@ JD-TC-ProviderCouponBill-10
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
 
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name

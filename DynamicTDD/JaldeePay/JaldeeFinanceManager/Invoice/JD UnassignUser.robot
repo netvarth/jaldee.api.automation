@@ -57,7 +57,7 @@ JD-TC-UnAssign User-1
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -114,7 +114,7 @@ JD-TC-UnAssign User-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 

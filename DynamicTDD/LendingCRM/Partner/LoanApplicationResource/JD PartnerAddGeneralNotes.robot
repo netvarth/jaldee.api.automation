@@ -104,7 +104,7 @@ JD-TC-PartnerAddGeneralNotes-1
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -273,7 +273,7 @@ JD-TC-PartnerAddGeneralNotes-2
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -441,7 +441,7 @@ JD-TC-PartnerAddGeneralNotes-UH1
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -610,7 +610,7 @@ JD-TC-PartnerAddGeneralNotes-UH2
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -779,7 +779,7 @@ JD-TC-PartnerAddGeneralNotes-UH3
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}

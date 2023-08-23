@@ -513,7 +513,7 @@ JD-TC-GetFileByCriteria-11
     clear_appt_schedule             ${PUSERPH0}
 
 
-    ${resp}=  Create User           ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User           ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable              ${u_id}  ${resp.json()}
@@ -522,7 +522,7 @@ JD-TC-GetFileByCriteria-11
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable              ${sub_domain_id}  ${resp.json()['subdomain']}
-    Verify Response                 ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.ynwtest@netvarth.com    deptId=${dep_id} 
+    Verify Response                 ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}    deptId=${dep_id} 
     #  city=${city}      state=${state}
     # Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
     # Should Be Equal As Strings  ${resp.json()['state']}      ${state}    ignore_case=True
@@ -752,7 +752,7 @@ JD-TC-GetFileByCriteria-14
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -817,7 +817,7 @@ JD-TC-GetFileByCriteria-14
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     # ${ph3}=  Evaluate  ${PUSERNAME230}+72002
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME1}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1269,7 +1269,7 @@ JD-TC-GetFileByCriteria-16
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state

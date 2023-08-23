@@ -39,7 +39,7 @@ JD-TC-Getorderbyenclosedid-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME104}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME104}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -170,7 +170,7 @@ JD-TC-Getorderbyenclosedid-1
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -182,7 +182,7 @@ JD-TC-Getorderbyenclosedid-1
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}  max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME10}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -236,7 +236,7 @@ JD-TC-Getorderbyenclosedid-2
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME105}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME105}.${test_mail}
 
     ${resp}=  Update Email   ${pid2}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -369,7 +369,7 @@ JD-TC-Getorderbyenclosedid-2
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -381,7 +381,7 @@ JD-TC-Getorderbyenclosedid-2
     # ${eTime11}=  add_two   ${sTime11}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME21}   ${PASSWORD}
     Log   ${resp.json()}
@@ -457,7 +457,7 @@ JD-TC-Getorderbyenclosedid-3
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME142}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME142}.${test_mail}
 
     ${resp}=  Update Email   ${pid0}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -592,7 +592,7 @@ JD-TC-Getorderbyenclosedid-3
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -604,7 +604,7 @@ JD-TC-Getorderbyenclosedid-3
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity0}   max=${maxQuantity0}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME1}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME1}   ${PASSWORD}
     Log   ${resp.json()}
@@ -769,7 +769,7 @@ JD-TC-Getorderbyenclosedid-4
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -781,7 +781,7 @@ JD-TC-Getorderbyenclosedid-4
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity0}   max=${maxQuantity0}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME5}.${test_mail}
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME5}   ${PASSWORD}
     Log   ${resp.json()}

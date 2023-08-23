@@ -89,7 +89,7 @@ JD-TC-CreateBranchSP-1
     Set Suite Variable  ${depid1}  ${resp.json()}
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name	
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+7777 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE1}   ${email}  ${subdomain}  ${PASSWORD}  ${dep_code1}
@@ -109,7 +109,7 @@ JD-TC-CreateBranchSP-2
 
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME2}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME2}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7710    
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain}  ${PASSWORD}  ${dep_code1}
@@ -142,7 +142,7 @@ JD-TC-CreateBranchSP-3
 
     ${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7720    
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}   ${dep_code1}
@@ -191,7 +191,7 @@ JD-TC-CreateBranchSP-4
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PHONE1}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PHONE1}.${test_mail}
     
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE1}  ${email}  ${subdomain}  ${PASSWORD}  ${dep_code2}
 	Log  ${resp.json()}
@@ -284,7 +284,7 @@ JD-TC-CreateBranchSP-5
     ${l_name}=  	 FakerLibrary.last_name
     ${PHONE1}=  Evaluate  ${PUSERNAME}+3147
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
-	${email}=   Set Variable  ${P_Email}${PHONE1}.ynwtest@netvarth.com
+	${email}=   Set Variable  ${P_Email}${PHONE1}.${test_mail}
     
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE1}  ${email}  ${subdomain}  ${PASSWORD}  ${dep_code3}
 	Log  ${resp.json()}
@@ -345,7 +345,7 @@ JD-TC-CreateBranchSP-UH1
 
     ${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME10}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME10}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7720    
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain2}  ${PASSWORD}   ${dep_code4}
@@ -367,7 +367,7 @@ JD-TC-CreateBranchSP-UH2
 
     ${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME3}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME3}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7731    
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${sd1}  ${PASSWORD}  ${dep_code1}
@@ -383,7 +383,7 @@ JD-TC-CreateBranchSP-UH3
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME4}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME4}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7777    
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}  ${dep_code1}
@@ -399,7 +399,7 @@ JD-TC-CreateBranchSP-UH4
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7751    
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}   ${dep_code1}
@@ -414,7 +414,7 @@ JD-TC-CreateBranchSP-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7751    
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
     ${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}  ${dep_code1}
@@ -427,7 +427,7 @@ JD-TC-CreateBranchSP-UH6
 
     ${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7751    
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
     ${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}  ${dep_code1}
@@ -445,7 +445,7 @@ JD-TC-CreateBranchSP-UH7
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
-	${email}=   	 Set Variable  ${P_Email}${PHONE2}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PHONE2}.${test_mail}
     
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain}  ${PASSWORD}  ${EMPTY}
 	Log  ${resp.json()}
@@ -494,7 +494,7 @@ JD-TC-CreateBranchSP-UH8
 	Set Suite Variable  ${branch_id}  ${resp.json()}
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name	
-	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com
+	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+7637 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE1}   ${email}  ${subdomain}  ${PASSWORD}   ${dep_code1}

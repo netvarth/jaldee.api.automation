@@ -129,7 +129,7 @@ JD-TC-Consumer Signup-3
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
     Set Suite Variable   ${CUSERPH3}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph203.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph203.${test_mail}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
@@ -216,7 +216,7 @@ JD-TC-Consumer Signup-4
 #     ${CUSERPH4}=  Evaluate  ${CUSERPH}+100100205
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH4}${\n}
 #     Set Suite Variable   ${CUSERPH4}
-#     ${CUSERMAIL0}=   Set Variable  ${C_Email}ph201.ynwtest@netvarth.com
+#     ${CUSERMAIL0}=   Set Variable  ${C_Email}ph201.${test_mail}
 #     ${views}=  Evaluate  random.choice($Views)  random
 #     ${name1}=  FakerLibrary.name
 #     ${name2}=  FakerLibrary.name
@@ -325,7 +325,7 @@ JD-TC-Consumer Signup-5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${CUSERPH3}.ynwtest@netvarth.com
+    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${CUSERPH3}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH3_EMAIL}  countryCode=+${country_code}
     Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -419,7 +419,7 @@ JD-TC-Consumer Signup-6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH4_EMAIL1}=   Set Variable  ${C_Email}${lastname}${country_code1}.ynwtest@netvarth.com
+    ${CUSERPH4_EMAIL1}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH4_EMAIL1}   countryCode=+${country_code1}
     Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -442,7 +442,7 @@ JD-TC-Consumer Signup-6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH4_EMAIL2}=   Set Variable  ${C_Email}${lastname}${country_code2}.ynwtest@netvarth.com
+    ${CUSERPH4_EMAIL2}=   Set Variable  ${C_Email}${lastname}${country_code2}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH4_EMAIL2}   countryCode=+${country_code2}
     Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -617,7 +617,7 @@ JD-TC-Consumer Signup-8
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lname}${country_code}.ynwtest@netvarth.com
+    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lname}${country_code}.${test_mail}
     ${resp}=  Consumer SignUp  ${fname}  ${lname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH0_EMAIL}   countryCode=+${country_code}
     Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -718,7 +718,7 @@ JD-TC-Consumer Signup-9
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lname}${country_code}.ynwtest@netvarth.com
+    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lname}${country_code}.${test_mail}
     ${resp}=  Consumer SignUp  ${fname}  ${lname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH0_EMAIL}   countryCode=+${country_code}
     Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -810,7 +810,7 @@ JD-TC-Consumer Signup-10
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -861,7 +861,7 @@ JD-TC-Consumer Signup-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -880,7 +880,7 @@ JD-TC-Consumer Signup-10
     ${gender}    Random Element    ${Genderlist}
     # ${country_code}    Generate random string    2    0123456789
     # ${country_code}    Convert To Integer  ${country_code}
-    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code}.ynwtest@netvarth.com
+    ${CUSERPH0_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH0_EMAIL}  countryCode=+${country_code}
     Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -906,7 +906,7 @@ JD-TC-Consumer Signup-UH3
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+${PO_Number}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH2}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph${CUSERPH2}.${test_mail}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
@@ -946,7 +946,7 @@ JD-TC-Consumer Signup-UH4
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    # ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.ynwtest@netvarth.com
+    # ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}  countryCode=+${country_code}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -1116,7 +1116,7 @@ JD-TC-Consumer Signup-12
     ${whpnum}=  Evaluate  ${PUSERPH0}+336245
     ${tlgnum}=  Evaluate  ${PUSERPH0}+336345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1222,7 +1222,7 @@ JD-TC-Consumer Signup-13
     ${whpnum}=  Evaluate  ${PUSERPH0}+336245
     ${tlgnum}=  Evaluate  ${PUSERPH0}+336345
     
-    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${u_id}  ${resp.json()}
@@ -1240,7 +1240,7 @@ JD-TC-Consumer Signup-13
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+${PO_Number}
     clear_users  ${PUSERPH1}
 
-    ${resp}=  Update User  ${u_id}  ${firstname}  ${lastname}   ${dob}  ${gender}   ${P_Email}${PUSERPH1}.ynwtest@netvarth.com  ${userType[0]}  ${pin}  ${countryCodes[0]}   ${PUSERPH1}  ${dep_id}  ${sub_domain_id}   ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Update User  ${u_id}  ${firstname}  ${lastname}   ${dob}  ${gender}   ${P_Email}${PUSERPH1}.${test_mail}  ${userType[0]}  ${pin}  ${countryCodes[0]}   ${PUSERPH1}  ${dep_id}  ${sub_domain_id}   ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

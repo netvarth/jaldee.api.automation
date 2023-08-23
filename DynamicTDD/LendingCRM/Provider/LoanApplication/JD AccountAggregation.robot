@@ -439,10 +439,19 @@ JD-TC-Account Aggregation-1
         Set Suite Variable                 ${address2}
     END                         
 
-    ${resp}=   Get Location ById           ${locid}  
+    clear Customer  ${PUSERNAME87}
+
+    ${fname}=  FakerLibrary.name
+    ${lname}=  FakerLibrary.last_name
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
+    ${gender}=  Random Element    ${Genderlist}
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
-    Set Suite Variable                     ${locname1}              ${resp.json()['place']}
+    
     
 # .... Create Branch1....
 

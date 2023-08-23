@@ -84,7 +84,7 @@ JD-TC-GetExpenseWithFilter-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 

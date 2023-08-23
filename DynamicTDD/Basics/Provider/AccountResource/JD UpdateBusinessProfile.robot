@@ -58,7 +58,7 @@ JD-TC-UpdateBusinessProfile-1
     Set Suite Variable  ${ph_nos1}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     Set Suite Variable  ${ph_nos2}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.${test_mail}  ${views}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
     
@@ -80,7 +80,7 @@ JD-TC-UpdateBusinessProfile-1
     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${bs}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${bs}.${test_mail}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
@@ -133,7 +133,8 @@ JD-TC-UpdateBusinessProfile-3
     # ${postcode}=  FakerLibrary.postcode
     # ${address}=  get_address
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${emails1}=  Set Variable  ${P_Email}${bs}.ynwtest@netvarth.com  
+    ${emails1}=  Set Variable  ${P_Email}${bs}.${test_mail}  
+     
     ${resp}=  Update Business Profile without details  ${bs}  ${bs}Desc   ${companySuffix}  ${ph1}   ${emails1}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
@@ -141,7 +142,7 @@ JD-TC-UpdateBusinessProfile-3
     Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs}Desc  shortName=${companySuffix}  status=ACTIVE  createdDate=${createdDAY}  updatedDate=${DAY1}
     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
-    Should Be Equal As Strings  ${resp.json()['emails']}  ${P_Email}${bs}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['emails']}  ${P_Email}${bs}.${test_mail}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers']}  ${ph1}
    
 JD-TC-UpdateBusinessProfile-4
@@ -193,7 +194,7 @@ JD-TC-UpdateBusinessProfile-4
     Set Suite Variable   ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  1  50  
     Set Suite Variable   ${eTime}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.${test_mail}  ${views}
     ${resp}=  Update Business Profile with schedule  ${bs}  ${bs}Desc   ${companySuffix}  ${city}  ${longi}  ${latti}  www.${bs}.com  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -228,7 +229,7 @@ JD-TC-UpdateBusinessProfile-5
     # ${postcode}=  FakerLibrary.postcode
     # ${address}=  get_address
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.${test_mail}  ${views}
     ${sTime1}=  add_timezone_time  ${tz}  2  0  
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  2  50  
@@ -243,7 +244,7 @@ JD-TC-UpdateBusinessProfile-5
     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d1}
     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd1}
     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${bs}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${bs}.${test_mail}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}
@@ -375,7 +376,7 @@ JD-TC-UpdateBusinessProfile-6
     Set Suite Variable  ${postcode}
     ${address}=  get_address
     Set Suite Variable  ${address}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs}.${test_mail}  ${views}
     Set Suite Variable  ${emails1}
     ${resp}=  Update Business Profile with schedule  ${bs}  ${bs}Desc   ${companySuffix}  ${city}  ${longi}  ${latti}  www.${bs}.com  paid  false  Monthly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${lid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -386,7 +387,7 @@ JD-TC-UpdateBusinessProfile-6
     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d1}
     Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd1}
     Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${bs}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${P_Email}${bs}.${test_mail}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}

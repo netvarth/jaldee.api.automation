@@ -198,7 +198,7 @@ JD-TC-Get Partner loan Bank Details-1
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype           ${account_id}
@@ -271,7 +271,7 @@ JD-TC-Get Partner loan Bank Details-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -640,7 +640,7 @@ JD-TC-Get Partner loan Bank Details-2
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -871,7 +871,7 @@ JD-TC-Get Partner loan Bank Details-3
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -902,7 +902,7 @@ JD-TC-Get Partner loan Bank Details-3
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${phone2}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${phone2}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -1277,7 +1277,7 @@ JD-TC-Get Partner loan Bank Details-UH1
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1510,7 +1510,7 @@ JD-TC-Get Partner loan Bank Details-UH2
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1743,7 +1743,7 @@ JD-TC-Get Partner loan Bank Details-UH3
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}

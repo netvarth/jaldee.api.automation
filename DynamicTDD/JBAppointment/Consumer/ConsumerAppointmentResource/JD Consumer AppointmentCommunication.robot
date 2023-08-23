@@ -75,7 +75,7 @@ JD-TC-ConsumerAppointmentCommunication-1
 
     # Set Suite Variable  ${p_id2}  ${resp.json()['id']}
 
-    Set Test Variable  ${email_id}  ${PUSERNAME_H}.${P_EMAIL}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${PUSERNAME_H}.${P_EMAIL}.${test_mail}
 
     ${resp}=  Update Email   ${p_id2}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -92,7 +92,7 @@ JD-TC-ConsumerAppointmentCommunication-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bsname}=  FakerLibrary.bs
     Set Suite Variable   ${bsname}
     ${city}=   get_place

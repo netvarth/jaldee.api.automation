@@ -48,7 +48,7 @@ JD-TC-Upload_ShoppingList_By_Provider-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME73}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME73}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -260,7 +260,7 @@ JD-TC-Upload_ShoppingList_By_Provider-1
     
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME32}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME32}.${test_mail}
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
@@ -319,7 +319,7 @@ JD-TC-Upload_ShoppingList_By_Provider-2
     Set Suite Variable  ${C_num1}
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
     Set Suite Variable  ${CUSERPH}
-    Set Suite Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Suite Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     Set Suite Variable  ${homeDeliveryAddress}
     ${city}=  FakerLibrary.city

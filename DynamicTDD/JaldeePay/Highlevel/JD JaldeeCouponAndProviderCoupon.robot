@@ -359,7 +359,7 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
     
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERPH0}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -411,7 +411,7 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}  ${lastname}   ${email_id}
     Log  ${resp.json()}

@@ -281,7 +281,7 @@ JD-TC-RBAC-CDL-1
     Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}
 
     ${resp}=  Create User With Roles And Scope  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  
-    ...   ${P_Email}${User1_SO}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  
+    ...   ${P_Email}${User1_SO}.${test_mail}   ${userType[0]}  ${pin}  
     ...   ${countryCodes[1]}  ${User1_SO}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  
     ...   ${countryCodes[1]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
     Log  ${resp.content}
@@ -308,7 +308,7 @@ JD-TC-RBAC-CDL-1
     ${tlgnum1}=  Set Variable  ${User2_CO}
     
     ${resp}=  Create User With Roles And Scope  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  
-    ...   ${P_Email}${User2_CO}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  
+    ...   ${P_Email}${User2_CO}.${test_mail}   ${userType[0]}  ${pin}  
     ...   ${countryCodes[1]}  ${User2_CO}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[1]}  ${whpnum1}  ${countryCodes[0]}  ${tlgnum1}  ${user_roles5}
     Log  ${resp.content}
@@ -993,8 +993,8 @@ JD-TC-RBAC-CDL-2
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    # Set Test Variable  ${email}  ${partnernum}${partownername}.ynwtest@netvarth.com
-    Set Test Variable  ${email}  ${partownername}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${partnernum}${partownername}.${test_mail}
+    Set Test Variable  ${email}  ${partownername}.${test_mail}
 
     ${resp}=    Generate OTP for partner Email    ${email}
     Log  ${resp.content}
@@ -1202,7 +1202,7 @@ JD-TC-Cases-2
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1389,7 +1389,7 @@ JD-TC-Cases-2
     ${tlgnum}=  Evaluate  ${PUSERNAME}+447913
 
     ${resp}=  Create User With Roles And Scope  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  
-    ...   ${P_Email}${PUSERNAME_U5}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  
+    ...   ${P_Email}${PUSERNAME_U5}.${test_mail}   ${userType[0]}  ${pin}  
     ...   ${countryCodes[1]}  ${PUSERNAME_U5}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[1]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles7}
     Log   ${resp.json()}
@@ -1483,7 +1483,7 @@ JD-TC-Cases-3
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  partnercategorytype   ${account_id}
     ${resp}=  partnertype       ${account_id}
@@ -1679,7 +1679,7 @@ JD-TC-Cases-3
 
 
     ${resp}=  Create User With Roles And Scope  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  
-    ...   ${P_Email}${PUSERNAME_U6}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  
+    ...   ${P_Email}${PUSERNAME_U6}.${test_mail}   ${userType[0]}  ${pin}  
     ...   ${countryCodes[1]}  ${PUSERNAME_U6}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
     ...   ${countryCodes[1]}  ${whpnum1}  ${countryCodes[0]}  ${tlgnum1}  ${user_roles5}
     Log   ${resp.json()}
@@ -1742,7 +1742,7 @@ JD-TC-Case-5
     ${whpnum}=  Evaluate  ${PUSERNAME}+458792
     ${tlgnum}=  Evaluate  ${PUSERNAME}+845962
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U10}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U10}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U10}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U10}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${branch_credithead}  ${resp.json()}
@@ -1753,7 +1753,7 @@ JD-TC-Case-5
     Set Suite Variable   ${firstName}    ${resp.json()['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()['mobileNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${user_scope}=  Create Dictionary
     ${capabilities}=  Create List
@@ -1777,7 +1777,7 @@ JD-TC-Case-5
     # ${whpnum}=  Evaluate  ${PUSERNAME}+458792
     # ${tlgnum}=  Evaluate  ${PUSERNAME}+845962
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U7}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U7}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U7}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U7}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -1788,7 +1788,7 @@ JD-TC-Case-5
     Set Suite Variable   ${firstName}    ${resp.json()['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()['mobileNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
  
 
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U10}
@@ -1832,7 +1832,7 @@ JD-TC-Case-5
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     # ${user_ids}=  Create List   ${u_id1}  
 
@@ -2057,7 +2057,7 @@ JD-TC-Case-5
     ${whpnum}=  Evaluate  ${PUSERNAME}+458792
     ${tlgnum}=  Evaluate  ${PUSERNAME}+845962
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U8}.ynwtest@netvarth.com   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U8}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U8}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U8}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -2096,7 +2096,7 @@ JD-TC-Case-5
     ${whpnum}=  Evaluate  ${PUSERNAME}+458792
     ${tlgnum}=  Evaluate  ${PUSERNAME}+845962
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U9}.ynwtest@netvarth.com   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U9}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U9}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U9}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id9}  ${resp.json()}
@@ -2188,7 +2188,7 @@ JD-TC-Case-6
     ${whpnum}=  Evaluate  ${PUSERNAME}+458799
     ${tlgnum}=  Evaluate  ${PUSERNAME}+456698
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U8}.ynwtest@netvarth.com   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U8}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U8}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U8}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -2250,7 +2250,7 @@ JD-TC-Case-8
     ${whpnum}=  Evaluate  ${PUSERNAME}+458792
     ${tlgnum}=  Evaluate  ${PUSERNAME}+845962
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.ynwtest@netvarth.com   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U3}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U3}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id3}  ${resp.json()}
@@ -2276,7 +2276,7 @@ JD-TC-Case-8
     clear_users  ${PUSERNAME_U1}
     Set Suite Variable  ${PUSERNAME_U1}
    
-    ${resp}=  Create User    ${lastname}  ${firstname}    ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User    ${lastname}  ${firstname}    ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -2297,7 +2297,7 @@ JD-TC-Case-8
     ${whpnum}=  Evaluate  ${PUSERNAME}+458792
     ${tlgnum}=  Evaluate  ${PUSERNAME}+845962
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U10}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U10}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U10}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U10}  ${dep_id}  ${EMPTY}  ${bool[1]}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${branch_credithead}  ${resp.json()}
@@ -2308,7 +2308,7 @@ JD-TC-Case-8
     Set Suite Variable   ${firstName}    ${resp.json()['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()['mobileNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${user_scope}=  Create Dictionary
     ${capabilities}=  Create List
@@ -2371,7 +2371,7 @@ JD-TC-Case-8
     Set Suite Variable   ${firstName}    ${resp.json()[0]['firstName']}
     Set Suite Variable   ${lastName}    ${resp.json()[0]['lastName']}
     Set Suite Variable   ${phoneNo}    ${resp.json()[0]['phoneNo']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     
     ${resp}=    Get Loan Application Category

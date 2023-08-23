@@ -86,7 +86,7 @@ JD-TC-Get ReimbursereportsCount-1
     # ${name3}=  FakerLibrary.name
     # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.ynwtest@netvarth.com  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.${test_mail}  ${views}
     # ${bs}=  FakerLibrary.bs
     # ${city}=   get_place
     # ${latti}=  get_latitude
@@ -124,7 +124,7 @@ JD-TC-Get ReimbursereportsCount-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state

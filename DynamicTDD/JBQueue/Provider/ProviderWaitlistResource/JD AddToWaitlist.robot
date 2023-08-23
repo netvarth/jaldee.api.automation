@@ -474,7 +474,7 @@ JD-TC-AddToWaitlist-11
       ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
 
-      ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.ynwtest@netvarth.com
+      ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
       ${views}=  Evaluate  random.choice($Views)  random
       Log   ${views}
       ${name1}=  FakerLibrary.name
@@ -771,7 +771,7 @@ JD-TC-AddToWaitlist-UH7
       ${name3}=  FakerLibrary.name
       ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
       ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-      ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+      ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
       ${bs}=  FakerLibrary.bs
       ${companySuffix}=  FakerLibrary.companySuffix
       # ${city}=   get_place

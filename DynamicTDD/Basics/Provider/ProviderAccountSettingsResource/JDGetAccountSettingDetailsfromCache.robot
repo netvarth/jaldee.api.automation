@@ -84,7 +84,7 @@ JD-TC-GetAccountSettingsfromCache-2
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     Set Suite Variable  ${pid}
     
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME_A}${P_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME_A}${P_Email}.${test_mail}
 
     ${resp}=  Update Email   ${acc_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -99,7 +99,7 @@ JD-TC-GetAccountSettingsfromCache-2
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_A}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_A}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state

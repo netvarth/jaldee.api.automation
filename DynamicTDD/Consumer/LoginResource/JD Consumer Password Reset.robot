@@ -90,7 +90,7 @@ JD-TC-ResetPassword-UH4
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
     Set Suite Variable   ${CUSERPH1}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1000
-    ${CUSERMAIL1}=   Set Variable  ${C_Email}ph601.ynwtest@netvarth.com
+    ${CUSERMAIL1}=   Set Variable  ${C_Email}ph601.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL1}
@@ -144,7 +144,7 @@ JD-TC-ResetPassword-4
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}ph605.ynwtest@netvarth.com
+    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}ph605.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH3_EMAIL}  countryCode=+${country_code}
     Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -229,7 +229,7 @@ JD-TC-ResetPassword-UH6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.ynwtest@netvarth.com
+    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH4_EMAIL}   countryCode=+${country_code1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -275,7 +275,7 @@ JD-TC-ResetPassword-6
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${email}  Set Variable  ${lastname}${CUSERPH5}${C_Email}.ynwtest@netvarth.com
+    ${email}  Set Variable  ${lastname}${CUSERPH5}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH5}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${email}  countryCode=+${country_code}
     Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -329,7 +329,7 @@ JD-TC-ResetPassword-7
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${email}  Set Variable  ${lastname}${CUSERPH5}${C_Email}.ynwtest@netvarth.com
+    ${email}  Set Variable  ${lastname}${CUSERPH5}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH5}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${email}  countryCode=+${country_code}
     Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -375,7 +375,7 @@ JD-TC-ResetPassword-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${PUSEREMAIL6}=  Set Variable  ${P_Email}206.ynwtest@netvarth.com
+    ${PUSEREMAIL6}=  Set Variable  ${P_Email}206.${test_mail}
     Set Suite Variable  ${PUSEREMAIL6}
     ${resp}=  Send Verify Login   ${PUSEREMAIL6}
     Log   ${resp.content}
@@ -495,7 +495,7 @@ JD-TC-ResetPassword-5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.ynwtest@netvarth.com
+    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH4_EMAIL}   countryCode=+${country_code1}
     Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    422
@@ -516,7 +516,7 @@ JD-TC-ResetPassword-5
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code2}.ynwtest@netvarth.com
+    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code2}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH4_EMAIL}   countryCode=+${country_code2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422

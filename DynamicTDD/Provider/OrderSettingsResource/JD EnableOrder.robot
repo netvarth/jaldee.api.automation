@@ -48,7 +48,7 @@ JD-TC-EnableOrderSettings-1
     # Set Suite Variable  ${firstname2}
     # ${lastname2}=  FakerLibrary.last_name
     # Set Suite Variable  ${lastname2}
-    Set Suite Variable  ${email_id71}  ${PUSERNAME71}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id71}  ${PUSERNAME71}${C_Email}.${test_mail}
 
     ${resp}=  Update Email   ${pid71}   ${P71_fName}   ${P71_lName}   ${email_id71}
     Log  ${resp.json()}
@@ -111,7 +111,7 @@ JD-TC-EnableOrderSettings-2
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${Ph29}
     Should Not Contain    ${resp.json()}   ${Email}
 
-    Set Suite Variable  ${email_id29}  ${PUSERNAME29}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id29}  ${PUSERNAME29}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${pid29}   ${P29_fName}   ${P29_lName}   ${email_id29}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -181,8 +181,8 @@ JD-TC-EnableOrderSettings-3
     ${ph1}=  Evaluate  ${PUSERNAME29}+1000000000
     ${ph2}=  Evaluate  ${PUSERNAME29}+2000000000
     ${whatsappNo}=  Evaluate  ${PUSERNAME29}+3000000000
-    ${Email1}=   Set Variable  ${fName}${ph1}.ynwtest@netvarth.com
-    ${Email2}=   Set Variable  ${fName}${ph2}.ynwtest@netvarth.com
+    ${Email1}=   Set Variable  ${fName}${ph1}.${test_mail}
+    ${Email2}=   Set Variable  ${fName}${ph2}.${test_mail}
     ${address}=  get_address
 
     ${storeContactInfo}=  Create Dictionary  firstName=${fName}  lastName=${lName}  primCountryCode=+91  phone=${ph1}  secCountryCode=+91   alternatePhone=${ph2}  email=${Email1}  alternateEmail=${Email2}  address=${address}  whatsAppCountryCode=+91  whatsappNo=${whatsappNo} 
@@ -248,7 +248,7 @@ JD-TC-EnableOrderSettings-4
     ${fName}=    FakerLibrary.word
     ${lName}=    FakerLibrary.word
     ${ph1}=  Evaluate  ${PUSERNAME79}+1000000000
-    ${Email1}=   Set Variable  ${fName}${ph1}.ynwtest@netvarth.com
+    ${Email1}=   Set Variable  ${fName}${ph1}.${test_mail}
     ${address}=  get_address
 
     ${storeContactInfo}=  Create Dictionary  firstName=${fName}  lastName=${lName}  primCountryCode=+91  phone=${ph1}  email=${Email1}
@@ -325,7 +325,7 @@ JD-TC-EnableOrderSettings-UH3
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${Ph13}
     Should Not Contain    ${resp.json()}   ${Email}
 
-    Set Suite Variable  ${email_id13}  ${PUSERNAME13}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id13}  ${PUSERNAME13}${C_Email}.${test_mail}
     ${resp}=  Update Email   ${pid13}   ${P13_fName}   ${P13_lName}   ${email_id13}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

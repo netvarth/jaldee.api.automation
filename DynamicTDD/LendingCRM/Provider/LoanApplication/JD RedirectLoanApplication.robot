@@ -110,7 +110,7 @@ JD-TC-RedirectLoanApplication-1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -318,7 +318,7 @@ JD-TC-RedirectLoanApplication-2
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -606,7 +606,7 @@ JD-TC-RedirectLoanApplication-4
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -834,7 +834,7 @@ JD-TC-RedirectLoanApplication-5
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1078,7 +1078,7 @@ JD-TC-RedirectLoanApplication-6
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Suite Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1294,7 +1294,7 @@ JD-TC-RedirectLoanApplication-7
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1464,7 +1464,7 @@ JD-TC-RedirectLoanApplication-8
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1691,7 +1691,7 @@ JD-TC-RedirectLoanApplication-8
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}

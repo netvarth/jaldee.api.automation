@@ -162,6 +162,7 @@ SignUp Account
         END
         ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
         Set Global Variable  ${BR}
+
         sleep  01s
 
         ${resp}=  Encrypted Provider Login   ${BUSER}  ${PASSWORD}
@@ -173,7 +174,7 @@ SignUp Account
         Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
         Append To File  ${EXECDIR}/TDD/numbers.txt   ${BUSER}${\n}
         
-        Set Test Variable  ${email_id}  ${B_Email}${BUSER}.ynwtest@netvarth.com
+        Set Test Variable  ${email_id}  ${B_Email}${BUSER}.${test_mail}
         ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
@@ -196,7 +197,7 @@ SignUp Account
         ${name3}=  FakerLibrary.name
         ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-        ${emails1}=  Emails  ${name3}  Email  ${B_EMAIL}${US}.ynwtest@netvarth.com  ${views}
+        ${emails1}=  Emails  ${name3}  Email  ${B_EMAIL}${US}.${test_mail}  ${views}
         ${bs}=  FakerLibrary.bs
         ${companySuffix}=  FakerLibrary.companySuffix
         # ${city}=   get_place
@@ -231,7 +232,7 @@ SignUp Account
         Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
         Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
         Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
-        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${B_EMAIL}${US}.ynwtest@netvarth.com
+        Should Be Equal As Strings  ${resp.json()['emails'][0]['instance']}  ${B_EMAIL}${US}.${test_mail}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['label']}  ${name1}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['instance']}  ${ph1}
         Should Be Equal As Strings  ${resp.json()['phoneNumbers'][1]['label']}  ${name2}

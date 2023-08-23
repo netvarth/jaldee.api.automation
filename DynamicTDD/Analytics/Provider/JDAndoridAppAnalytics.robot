@@ -106,7 +106,7 @@ JD-TC-AndroidLevelAnalytics-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -701,7 +701,7 @@ JD-TC-AndroidLevelAnalytics-3
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -709,7 +709,7 @@ JD-TC-AndroidLevelAnalytics-3
         Set Test Variable  ${address}
 
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
         ${resp}=   App Create Order For HomeDelivery   ${androidcons_headers}  ${cookie}   ${pid}    ${self}    ${CatalogId1}   ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${FUTDAY1}    ${CUSERNAME${a}}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
         Log   ${resp.json()}
@@ -1241,7 +1241,7 @@ JD-TC-AndroidLevelAnalytics-8
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
         ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+        Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
         ${homeDeliveryAddress}=   FakerLibrary.name 
         ${city}=  FakerLibrary.city
         ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1249,7 +1249,7 @@ JD-TC-AndroidLevelAnalytics-8
         Set Test Variable  ${address}
 
         ${firstname}=  FakerLibrary.first_name
-        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+        Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
         ${orderNote}=  FakerLibrary.Sentence   nb_words=5
         Set Test Variable  ${orderNote}
 

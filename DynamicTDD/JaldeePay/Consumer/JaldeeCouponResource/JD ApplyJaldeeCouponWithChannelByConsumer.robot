@@ -111,7 +111,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}200.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}200.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   get_place
@@ -212,7 +212,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}  ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -280,7 +280,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${email}=   FakerLibrary.word
-    Set Test Variable  ${email2}  ${email}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${email}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  Enable Waitlist
@@ -1220,7 +1220,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH1
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code06}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[0]}
-    ${CUSERMAIL14}=   Set Variable  ${C_Email}ph411.ynwtest@netvarth.com
+    ${CUSERMAIL14}=   Set Variable  ${C_Email}ph411.${test_mail}
     ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200     
     ${cid}=  get_id  ${CUSERNAME14}    
@@ -1294,7 +1294,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH3
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code09}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
-    ${CUSERMAIL26}=   Set Variable  ${C_Email}ph111.ynwtest@netvarth.com
+    ${CUSERMAIL26}=   Set Variable  ${C_Email}ph111.${test_mail}
     ${resp}=  Consumer Login  ${CUSERNAME26}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200     
     ${cid}=  get_id  ${CUSERNAME26}  
@@ -1484,7 +1484,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH5
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
     Set Suite Variable   ${CUSERPH2}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph205.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph205.${test_mail}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
@@ -1610,7 +1610,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH6
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code2028}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
-    ${CUSERMAIL1}=   Set Variable  ${C_Email}ph307.ynwtest@netvarth.com
+    ${CUSERMAIL1}=   Set Variable  ${C_Email}ph307.${test_mail}
     ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200     
     ${cid}=  get_id  ${CUSERNAME1}   
@@ -1725,7 +1725,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH7
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code2029}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
-    ${CUSERMAIL1}=   Set Variable  ${C_Email}ph208.ynwtest@netvarth.com
+    ${CUSERMAIL1}=   Set Variable  ${C_Email}ph208.${test_mail}
     ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200     
     ${cid}=  get_id  ${CUSERNAME1}    
@@ -1824,7 +1824,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH8
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${email}=   FakerLibrary.word
-    Set Test Variable  ${email2}  ${email}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${email}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     

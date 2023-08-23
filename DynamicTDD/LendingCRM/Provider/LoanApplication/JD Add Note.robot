@@ -438,10 +438,22 @@ JD-TC-AddGeneralNotes-1
         Set Suite Variable                 ${address2}
     END                         
 
-    ${resp}=   Get Location ById           ${locid}  
+    clear Customer  ${PUSERNAME87}
+
+    ${gender}=  Random Element    ${Genderlist}
+    Set Suite Variable  ${gender}
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+    Set Suite Variable  ${dob}
+
+    ${fname}=    FakerLibrary.firstName
+    ${lname}=    FakerLibrary.lastName
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
-    Set Suite Variable                     ${locname1}              ${resp.json()['place']}
+    
     
 # .... Create Branch1....
 

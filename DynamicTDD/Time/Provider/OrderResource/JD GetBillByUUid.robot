@@ -42,7 +42,7 @@ JD-TC-GetBillByUUid-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME120}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME120}.${test_mail}
 
     ${resp}=  Update Email   ${pid3}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -212,7 +212,7 @@ JD-TC-GetBillByUUid-1
     # ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     # Set Suite Variable  ${item_quantity1}
     # ${firstname}=  FakerLibrary.first_name
-    # Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    # Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     # ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME20}   ${PASSWORD}
     # Log   ${resp.json()}
@@ -230,7 +230,7 @@ JD-TC-GetBillByUUid-1
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Suite Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Suite Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 

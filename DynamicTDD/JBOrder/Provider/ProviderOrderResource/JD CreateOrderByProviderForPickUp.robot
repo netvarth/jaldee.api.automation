@@ -52,7 +52,7 @@ JD-TC-CreateOrderByProviderForPickUp-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME119}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME119}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -274,7 +274,7 @@ JD-TC-CreateOrderByProviderForPickUp-1
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Suite Variable  ${orderNote}
 
@@ -908,7 +908,7 @@ JD-TC-CreateOrderByProviderForPickUp-3
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Suite Variable  ${orderNote}
 
@@ -1076,7 +1076,7 @@ JD-TC-CreateOrderByProviderForPickUp-4
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Suite Variable  ${orderNote}
 

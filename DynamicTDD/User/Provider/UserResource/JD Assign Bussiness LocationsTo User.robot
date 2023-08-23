@@ -105,7 +105,7 @@ JD-TC-AssignBussinessLocationsToUser-1
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -134,7 +134,7 @@ JD-TC-AssignBussinessLocationsToUser-1
     Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -152,10 +152,10 @@ JD-TC-AssignBussinessLocationsToUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     
 
-    # Verify Response List  ${resp}  0  id=${u_id2}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   state=${state2}  pincode=${pin2}
+    # Verify Response List  ${resp}  0  id=${u_id2}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.${test_mail}   state=${state2}  pincode=${pin2}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}   bussLocations=${bussLocations}   
     # Variable Should Exist   ${resp.content}  ${city2}
-    # Verify Response List  ${resp}  1  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city1}  state=${state1}  pincode=${pin1}
+    # Verify Response List  ${resp}  1  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}   bussLocations=${bussLocations}   
     # Variable Should Exist   ${resp.content}  ${city1}
    
@@ -224,7 +224,7 @@ JD-TC-AssignBussinessLocationsToUser-2
     Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin3}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin3}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -236,7 +236,7 @@ JD-TC-AssignBussinessLocationsToUser-2
     ${address2}=  get_address
     ${dob2}=  FakerLibrary.Date
     
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id4}  ${resp.json()}
@@ -258,7 +258,7 @@ JD-TC-AssignBussinessLocationsToUser-2
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id4}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com  city=${city1}  state=${state1}  pincode=${pin1}
+    # Verify Response List  ${resp}  0  id=${u_id4}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   teams=${team} 
    
     ${userIds}=  Create List   ${u_id3}
@@ -272,9 +272,9 @@ JD-TC-AssignBussinessLocationsToUser-2
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id4}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com  city=${city1}  state=${state1}  pincode=${pin1}
+    # Verify Response List  ${resp}  0  id=${u_id4}  firstName=${firstname2}  lastName=${lastname2}  mobileNo=${PUSERNAME_U2}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U2}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   teams=${team} 
-    # Verify Response List  ${resp}  1  id=${u_id3}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  pincode=${pin3}
+    # Verify Response List  ${resp}  1  id=${u_id3}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  pincode=${pin3}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations1}   teams=${team}
 
 
@@ -309,7 +309,7 @@ JD-TC-AssignBussinessLocationsToUser-3
     Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -325,7 +325,7 @@ JD-TC-AssignBussinessLocationsToUser-3
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city}  state=${state}  pincode=${pin}
+    # Verify Response List  ${resp}  0  id=${u_id3}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  pincode=${pin}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   
 
   
@@ -364,7 +364,7 @@ JD-TC-AssignBussinessLocationsToUser-4
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[1]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[1]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
@@ -391,7 +391,7 @@ JD-TC-AssignBussinessLocationsToUser-4
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['gender']}                          ${Genderlist[0]}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[1]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       0
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['admin']}                           ${bool[0]}
@@ -434,7 +434,7 @@ JD-TC-AssignBussinessLocationsToUser-5
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
@@ -458,7 +458,7 @@ JD-TC-AssignBussinessLocationsToUser-5
     # ${resp}=  Get User
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city1}  state=${state1}  pincode=${pin1}
+    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   
 
    
@@ -505,7 +505,7 @@ JD-TC-AssignBussinessLocationsToUser-UH1
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -534,7 +534,7 @@ JD-TC-AssignBussinessLocationsToUser-UH1
     Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id4}  ${resp.json()}
@@ -611,7 +611,7 @@ JD-TC-AssignBussinessLocationsToUser-UH4
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
@@ -655,7 +655,7 @@ JD-TC-AssignBussinessLocationsToUser-UH4
     # ${resp}=  Get User
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city1}  state=${state1}  pincode=${pin1}
+    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  bussLocations=${bussLocations}   teams=[] 
 
     # ${resp}=  Get User By Id  ${u_id}
@@ -708,7 +708,7 @@ JD-TC-AssignBussinessLocationsToUser-UH5
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -737,7 +737,7 @@ JD-TC-AssignBussinessLocationsToUser-UH5
     Set Suite Variable  ${state2}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin2}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
@@ -784,7 +784,7 @@ JD-TC-AssignBussinessLocationsToUser-UH6
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
@@ -806,7 +806,7 @@ JD-TC-AssignBussinessLocationsToUser-UH6
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com  city=${city1}  state=${state1}  pincode=${pin1}
+    # Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERNAME_U1}  dob=${dob1}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city1}  state=${state1}  pincode=${pin1}
     # ...    deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}  
     
 JD-TC-AssignBussinessLocationsToUser-UH7
@@ -844,7 +844,7 @@ JD-TC-AssignBussinessLocationsToUser-UH7
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
@@ -920,7 +920,7 @@ JD-TC-AssignBussinessLocationsToUser-UH8
     Set Suite Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
     Set Suite Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}

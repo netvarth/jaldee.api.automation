@@ -106,7 +106,7 @@ JD-TC-update_partner_user-1
     Set Suite Variable    ${firstName}
     ${lastName}=    FakerLibrary.lastName
     Set Suite Variable    ${lastName}
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
@@ -485,7 +485,7 @@ JD-TC-update_partner_user-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Set Suite Variable  ${email2}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=    Update Partner User    ${userId}   ${Pid1}   ${Puid1}    ${fname}     ${countryCodes[0]}     ${mobileNo}    ${email2}    ${bool[0]}    ${bool[0]}     ${bool[1]}
     Log  ${resp.content}

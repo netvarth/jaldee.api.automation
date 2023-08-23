@@ -58,7 +58,7 @@ JD-TC-GetOrderSettingsStatus-2
     # Set Suite Variable  ${firstname2}
     # ${lastname2}=  FakerLibrary.last_name
     # Set Suite Variable  ${lastname2}
-    Set Suite Variable  ${email_id225}  ${PUSERNAME225}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id225}  ${PUSERNAME225}${C_Email}.${test_mail}
 
 
     ${resp}=  Update Email   ${pid225}   ${P225_fName}   ${P225_lName}   ${email_id225}
@@ -109,9 +109,9 @@ JD-TC-GetOrderSettingsStatus-4
     Set Suite Variable  ${ph2}
     ${whatsappNo}=  Evaluate  ${PUSERNAME225}+3000000000
     Set Suite Variable  ${whatsappNo}
-    ${Email1}=   Set Variable  ${fName}${ph1}.ynwtest@netvarth.com
+    ${Email1}=   Set Variable  ${fName}${ph1}.${test_mail}
     Set Suite Variable  ${Email1}
-    ${Email2}=   Set Variable  ${fName}${ph2}.ynwtest@netvarth.com
+    ${Email2}=   Set Variable  ${fName}${ph2}.${test_mail}
     Set Suite Variable  ${Email2}
     ${address}=  get_address
     Set Suite Variable  ${address}
@@ -144,9 +144,9 @@ JD-TC-GetOrderSettingsStatus-5
     Set Suite Variable  ${ph4}
     ${whatsappNo2}=  Evaluate  ${PUSERNAME225}+3000000002
     Set Suite Variable  ${whatsappNo2}
-    ${Email3}=   Set Variable  ${fName}${ph3}.ynwtest@netvarth.com
+    ${Email3}=   Set Variable  ${fName}${ph3}.${test_mail}
     Set Suite Variable  ${Email3}
-    ${Email4}=   Set Variable  ${fName}${ph4}.ynwtest@netvarth.com
+    ${Email4}=   Set Variable  ${fName}${ph4}.${test_mail}
     Set Suite Variable  ${Email4}
     ${address2}=  get_address
     Set Suite Variable  ${address2}

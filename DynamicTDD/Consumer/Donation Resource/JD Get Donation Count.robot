@@ -178,7 +178,7 @@ JD-TC-GetDonationsCount-1
         ${don_amt2}=  Evaluate  ${don_amt2}-${mod}
         ${don_amt2}=  Convert To Number  ${don_amt2}  1
         Set Suite Variable  ${don_amt2}
-        ${resp}=  Donation By Consumer  ${con_id}  ${sid2}  ${loc_id1}  ${don_amt2}  ${donar_fname}  ${donar_lname}  ${address}  ${ph1}  ${P_Email}${donar_fname}.ynwtest@netvarth.com  ${acc_id}
+        ${resp}=  Donation By Consumer  ${con_id}  ${sid2}  ${loc_id1}  ${don_amt2}  ${donar_fname}  ${donar_lname}  ${address}  ${ph1}  ${P_Email}${donar_fname}.${test_mail}  ${acc_id}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200  
         

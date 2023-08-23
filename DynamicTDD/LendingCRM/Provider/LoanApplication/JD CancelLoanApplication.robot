@@ -142,7 +142,7 @@ JD-TC-CancelLoanApplication-1
     ${dob}=  Convert To String  ${dob}
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${resp}=  GetCustomer  phoneNo-eq=${phone} 
     Log  ${resp.content}
@@ -321,7 +321,7 @@ JD-TC-CancelLoanApplication-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${P_phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${P_phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'
@@ -719,7 +719,7 @@ JD-TC-CancelLoanApplication-2
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -954,7 +954,7 @@ JD-TC-CancelLoanApplication-3
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1206,7 +1206,7 @@ JD-TC-CancelLoanApplication-4
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1467,7 +1467,7 @@ JD-TC-CancelLoanApplication-5
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -1761,7 +1761,7 @@ JD-TC-CancelLoanApplication-8
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}
@@ -2024,7 +2024,7 @@ JD-TC-CancelLoanApplication-9
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Suite Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Suite Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}

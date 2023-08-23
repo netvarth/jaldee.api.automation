@@ -65,7 +65,7 @@ JD-TC-Get Queue By Location and Service By Date-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -88,7 +88,7 @@ JD-TC-Get Queue By Location and Service By Date-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_P}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_P}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${f_name}   ${l_name}   ${email_id}
     Log  ${resp.json()}

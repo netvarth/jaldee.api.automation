@@ -1437,7 +1437,7 @@ JD-TC-GenerateReimburseReport-9
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME130}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME130}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1589,7 +1589,7 @@ JD-TC-GenerateReimburseReport-9
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERMAIL2}=   Set Variable  ${C_Email}${CUSERPH1}.ynwtest@netvarth.com
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}${CUSERPH1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1619,7 +1619,7 @@ JD-TC-GenerateReimburseReport-9
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1631,7 +1631,7 @@ JD-TC-GenerateReimburseReport-9
     ${item_quantity11}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity11} 
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERPH1}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH1}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -1782,7 +1782,7 @@ JD-TC-GenerateReimburseReport-10
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME131}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME131}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1938,7 +1938,7 @@ JD-TC-GenerateReimburseReport-10
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERNAME20}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1948,7 +1948,7 @@ JD-TC-GenerateReimburseReport-10
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
    
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME131}  ${PASSWORD}
@@ -2135,7 +2135,7 @@ JD-TC-GenerateReimburseReport-11
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME132}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME132}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -2289,7 +2289,7 @@ JD-TC-GenerateReimburseReport-11
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERNAME12}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERNAME12}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERNAME12}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2301,7 +2301,7 @@ JD-TC-GenerateReimburseReport-11
     ${item_quantity11}=  Convert To Number  ${item_quantity1}  1
     Set Suite Variable  ${item_quantity11} 
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERPH1}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERPH1}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 

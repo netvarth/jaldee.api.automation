@@ -39,7 +39,7 @@ JD-TC-GetOrderSetings-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME140}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME140}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -125,7 +125,7 @@ JD-TC-GetOrderSetings-3
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME143}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME143}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}

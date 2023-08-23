@@ -55,7 +55,7 @@ JD-TC-Order_MassCommunication-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME127}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME127}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -269,7 +269,7 @@ JD-TC-Order_MassCommunication-1
     ${DATE12}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
     Set Suite Variable  ${DATE12}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME29}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME29}.${test_mail}
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
@@ -483,7 +483,7 @@ JD-TC-Order_MassCommunication-2
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -705,7 +705,7 @@ JD-TC-Order_MassCommunication-3
     ${country_code}    Generate random string    2    0123456789
     ${country_code}    Convert To Integer  ${country_code}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${caption}=  FakerLibrary.Sentence   nb_words=4
     ${Coupon_list}=  Create List
 
@@ -911,7 +911,7 @@ JD-TC-Order_MassCommunication-4
 
     ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${caption}=  FakerLibrary.Sentence   nb_words=4
 
     ${resp}=   Upload ShoppingList Image for Pickup    ${cookie}   ${accId3}   ${caption}   ${self}    ${CatalogId1}   ${bool[1]}   ${DAY12}    ${sTime1}    ${eTime1}    ${CUSERNAME20}    ${email} 

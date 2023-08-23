@@ -50,7 +50,7 @@ JD-TC-CloudSearch-1
     Set Suite Variable  ${ph_nos1}  ${ph_nos1}
     ${ph_nos2}=  Phone Numbers  ${name2}  Phoneno  ${ph2}  all
     Set Suite Variable  ${ph_nos2}  ${ph_nos2}
-    ${emails1}=  Emails  ${name3}  Email   ${P_Email}${bs1}.ynwtest@netvarth.com  all
+    ${emails1}=  Emails  ${name3}  Email   ${P_Email}${bs1}.${test_mail}  all
     Set Suite Variable  ${emails1}  ${emails1}    
     ${bs_name}=  FakerLibrary.bs
     Set Suite Variable   ${bs_name}
@@ -129,7 +129,7 @@ JD-TC-CloudSearch-2
     Set Suite Variable  ${ph_nos1}  ${ph_nos1}
     ${ph_nos2}=  Phone Numbers  ${name2}  Phoneno  ${ph2}  all
     Set Suite Variable  ${ph_nos2}  ${ph_nos2}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs1}.ynwtest@netvarth.com  all
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${bs1}.${test_mail}  all
     Set Suite Variable  ${emails1}  ${emails1}
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -668,7 +668,7 @@ JD-TC-CloudSearch-20
     Set Suite Variable   ${ph_nos1}
     ${ph_nos2}=  Evaluate  ${PUSERNAME}+0070073011
     Set Suite Variable   ${ph_nos2}
-    ${emails1}=  Emails  ${name3}  Email   ${P_Email}${bs1}.ynwtest@netvarth.com  all
+    ${emails1}=  Emails  ${name3}  Email   ${P_Email}${bs1}.${test_mail}  all
     Set Suite Variable  ${emails1}  ${emails1}
     ${resp}=  Update Business Profile without details  ${bName}  ${city}  ${shname}  ${ph_nos1}  ${ph_nos2}  ${emails1}
     Should Be Equal As Strings  ${resp.status_code}  200

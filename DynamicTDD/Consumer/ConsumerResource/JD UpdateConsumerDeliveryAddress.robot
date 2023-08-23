@@ -26,7 +26,7 @@ JD-TC-UpdateConsumerDeliveryAddress-1
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -46,7 +46,7 @@ JD-TC-UpdateConsumerDeliveryAddress-2
       ${new_no}=  Evaluate  ${CUSERNAME21}+257831
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME21}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -65,7 +65,7 @@ JD-TC-UpdateConsumerDeliveryAddress-3
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${postcode}=  FakerLibrary.postcode
@@ -83,7 +83,7 @@ JD-TC-UpdateConsumerDeliveryAddress-4
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -106,7 +106,7 @@ JD-TC-UpdateConsumerDeliveryAddress-5
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -140,7 +140,7 @@ JD-TC-UpdateConsumerDeliveryAddress-7
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
 
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${landmark}=   FakerLibrary.sentence
       ${postcode}=  FakerLibrary.postcode
@@ -157,7 +157,7 @@ JD-TC-UpdateConsumerDeliveryAddress-8
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -177,7 +177,7 @@ JD-TC-UpdateConsumerDeliveryAddress-UH1
     
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -197,7 +197,7 @@ JD-TC-UpdateConsumerDeliveryAddress-UH2
     
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -237,7 +237,7 @@ JD-TC-UpdateConsumerDeliveryAddress-UH4
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
       ${postcode}=  FakerLibrary.postcode
@@ -256,7 +256,7 @@ JD-TC-UpdateConsumerDeliveryAddress-UH5
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -275,7 +275,7 @@ JD-TC-UpdateConsumerDeliveryAddress-UH6
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -295,7 +295,7 @@ JD-TC-UpdateConsumerDeliveryAddress-UH7
     
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence
@@ -311,7 +311,7 @@ JD-TC-UpdateConsumerDeliveryAddress-UH8
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.first_name
-      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
       ${city}=   get_place
       ${address}=  get_address
       ${landmark}=   FakerLibrary.sentence

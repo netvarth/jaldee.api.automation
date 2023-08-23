@@ -72,7 +72,7 @@ JD-TC-JDN Highlevel-1
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -113,7 +113,7 @@ JD-TC-JDN Highlevel-1
     ${resp}=  Update Specialization  ${spec}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_Z}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_Z}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}  ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -655,7 +655,7 @@ JD-TC-JDN Highlevel-4
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+1506
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.ynwtest@netvarth.com
+    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -695,7 +695,7 @@ JD-TC-JDN Highlevel-4
     ${resp}=  Update Specialization  ${spec}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_Y}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_Y}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}  ${lastname}   ${email_id}
     Log  ${resp.json()}

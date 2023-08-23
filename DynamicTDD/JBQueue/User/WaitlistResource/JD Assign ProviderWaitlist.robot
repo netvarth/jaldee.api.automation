@@ -166,7 +166,7 @@ JD-TC-AssignproviderWaitlist-1
     ${whpnum}=  Evaluate  ${HLMUSERNAME4}+336245
     ${tlgnum}=  Evaluate  ${HLMUSERNAME4}+336345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -207,7 +207,7 @@ JD-TC-AssignproviderWaitlist-1
     ${dob1}=  FakerLibrary.Date
     ${pin}=  get_pincode
     
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -236,7 +236,7 @@ JD-TC-AssignproviderWaitlist-1
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph3}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph3}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph3}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
@@ -403,7 +403,7 @@ JD-TC-AssignproviderWaitlist-2
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -435,7 +435,7 @@ JD-TC-AssignproviderWaitlist-2
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -577,7 +577,7 @@ JD-TC-AssignproviderWaitlist-3
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -682,7 +682,7 @@ JD-TC-AssignproviderWaitlist-4
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -714,7 +714,7 @@ JD-TC-AssignproviderWaitlist-4
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -880,7 +880,7 @@ JD-TC-AssignproviderWaitlist-5
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -912,7 +912,7 @@ JD-TC-AssignproviderWaitlist-5
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
     
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -1144,7 +1144,7 @@ JD-TC-AssignproviderWaitlist-6
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -1176,7 +1176,7 @@ JD-TC-AssignproviderWaitlist-6
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -1418,7 +1418,7 @@ JD-TC-AssignproviderWaitlist-7
     ${whpnum}=  Evaluate  ${HLMUSERNAME11}+336945
     ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+336845
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -1682,7 +1682,7 @@ JD-TC-AssignproviderWaitlist-8
     ${whpnum}=  Evaluate  ${HLMUSERNAME11}+336745
     ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+336645
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[1]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -1887,7 +1887,7 @@ JD-TC-AssignproviderWaitlist-9
     ${whpnum}=  Evaluate  ${HLMUSERNAME11}+336245
     ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+336345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -2104,7 +2104,7 @@ JD-TC-AssignproviderWaitlist-10
     ${whpnum}=  Evaluate  ${HLMUSERNAME11}+335745
     ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+335645
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[2]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[2]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -2198,7 +2198,7 @@ JD-TC-AssignproviderWaitlist-UH1
     ${dob}=  FakerLibrary.Date
     ${pin}=  get_pincode
     
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -2266,7 +2266,7 @@ JD-TC-AssignproviderWaitlist-UH1
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -2364,7 +2364,7 @@ JD-TC-AssignproviderWaitlist-UH3
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -2462,7 +2462,7 @@ JD-TC-AssignproviderWaitlist-UH4
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -2569,7 +2569,7 @@ JD-TC-AssignproviderWaitlist-UH5
     ${pin}=  get_pincode
     ${dob}=  FakerLibrary.Date
    
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id1}  ${sud_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id1}  ${sud_domain_id1}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id5}  ${resp.json()}
@@ -2667,7 +2667,7 @@ JD-TC-AssignproviderWaitlist-UH5
     ${lastname2}=  FakerLibrary.last_name
     ${dob2}=  FakerLibrary.Date
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -2770,7 +2770,7 @@ JD-TC-AssignproviderWaitlist-UH6
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
    
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -2869,7 +2869,7 @@ JD-TC-AssignproviderWaitlist-UH7
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id6}  ${resp.json()}
@@ -3046,7 +3046,7 @@ JD-TC-AssignproviderWaitlist-UH9
     ${whpnum}=  Evaluate  ${HLMUSERNAME11}+336545
     ${tlgnum}=  Evaluate  ${HLMUSERNAME11}+336445
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph1}  ${dep_id3}  ${sud_domain_id3}  ${bool[0]}  ${countryCode[1]}  ${whpnum}  ${countryCode[1]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -3230,7 +3230,7 @@ JD-TC-CreateUser -0
         ${dob}=  FakerLibrary.Date
         ${pin}=  get_pincode
                 
-        ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1${a}}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1${a}}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${ph1${a}}  ${countryCodes[0]}  ${ph1${a}}
+        ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1${a}}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1${a}}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${ph1${a}}  ${countryCodes[0]}  ${ph1${a}}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${uid${a}}  ${resp.json()}
@@ -3366,7 +3366,7 @@ JD-TC-CreateUser -01
         ${dob}=  FakerLibrary.Date
         ${pin}=  get_pincode
                 
-        ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1${a}}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1${a}}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${ph1${a}}  ${countryCodes[0]}  ${ph1${a}}
+        ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1${a}}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1${a}}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${ph1${a}}  ${countryCodes[0]}  ${ph1${a}}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${uid${a}}  ${resp.json()}
@@ -3468,7 +3468,7 @@ JD-TC-AssignproviderWaitlist-4
     ${dob}=  FakerLibrary.Date
     ${location}=  FakerLibrary.city
     ${state}=  FakerLibrary.state
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${ph1}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${ph1}.ynwtest@netvarth.com  ${location}  ${state}  ${dep_id}  ${sub_domain_id}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${address}  ${ph1}  ${dob}    ${Genderlist[0]}  ${userType[0]}  ${P_Email}${ph1}.${test_mail}  ${location}  ${state}  ${dep_id}  ${sub_domain_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id1}  ${resp.json()}
@@ -3501,7 +3501,7 @@ JD-TC-AssignproviderWaitlist-4
     ${dob2}=  FakerLibrary.Date
     ${location2}=  FakerLibrary.city
     ${state2}=  FakerLibrary.state
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${address2}  ${ph2}  ${dob2}  ${Genderlist[0]}  ${userType[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com  ${location2}  ${state2}  ${dep_id}  ${sub_domain_id}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${address2}  ${ph2}  ${dob2}  ${Genderlist[0]}  ${userType[0]}  ${P_Email}${ph2}.${test_mail}  ${location2}  ${state2}  ${dep_id}  ${sub_domain_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}
@@ -3602,7 +3602,7 @@ JD-TC-AssignproviderWaitlist-UH2
     ${dob2}=  FakerLibrary.Date
     ${pin}=  get_pincode
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${ph2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCode[1]}  ${ph2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id2}  ${resp.json()}

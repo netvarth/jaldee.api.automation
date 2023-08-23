@@ -116,7 +116,7 @@ JD-TC-Consumer Login-2
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.ynwtest@netvarth.com
+    ${CUSERPH3_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH3}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH3_EMAIL}  countryCode=+${country_code}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -158,7 +158,7 @@ JD-TC-Consumer Login-3
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH2_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.ynwtest@netvarth.com
+    ${CUSERPH2_EMAIL}=   Set Variable  ${C_Email}${lastname}${PO_Number}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH2}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH2_EMAIL}  countryCode=${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   422
@@ -215,7 +215,7 @@ JD-TC-Consumer Login-4
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.ynwtest@netvarth.com
+    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH4_EMAIL}   countryCode=+${country_code1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -236,7 +236,7 @@ JD-TC-Consumer Login-4
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code2}.ynwtest@netvarth.com
+    ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code2}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH4_EMAIL}   countryCode=+${country_code2}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422

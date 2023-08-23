@@ -103,7 +103,7 @@ JD-TC-GetLoanApplicationCountwithFilter-1
     ${dob}=  Convert To String  ${dob}
     ${fname}=    FakerLibrary.firstName
     ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -281,7 +281,7 @@ JD-TC-GetLoanApplicationCountwithFilter-1
     Set Suite Variable  ${gstin}  55555${gstin}
 
     
-    Set Test Variable  ${email}  ${P_phone}.${partnerName}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${P_phone}.${partnerName}.${test_mail}
 
     ${bankAccountNo}    Random Number 	digits=5 
     ${bankAccountNo}=    Evaluate    f'{${bankAccountNo}:0>7d}'

@@ -57,7 +57,7 @@ JD-TC-Send Bill Email -1
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME7}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME7}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${CUSERNAME7}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

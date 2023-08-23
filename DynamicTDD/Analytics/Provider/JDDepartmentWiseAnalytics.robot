@@ -100,7 +100,7 @@ JD-TC-DepartmentWiseAnalytics-1
      ${name3}=  FakerLibrary.name
      ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
      ${bs}=  FakerLibrary.bs
      ${city}=   get_place
      ${latti}=  get_latitude
@@ -183,10 +183,19 @@ JD-TC-DepartmentWiseAnalytics-1
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-    ${resp}=  Create Department For Branch  ${acc_id}  Bridal Department  Dep001  Bridal Makeups  ACTIVE  
-    Log To Console  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${depid1}  ${resp.content}
+#     ${resp}=  Create Department For Branch  ${acc_id}  Bridal Department  Dep001  Bridal Makeups  ACTIVE  
+#     Log To Console  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Set Test Variable  ${depid1}  ${resp.content}
+
+      ${dep_name1}=  FakerLibrary.bs
+      ${dep_code1}=   Random Int  min=100   max=999
+      ${dep_desc1}=   FakerLibrary.word  
+      ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+      Log  ${resp1.content}
+      Should Be Equal As Strings  ${resp1.status_code}  200
+      Set Test Variable  ${depid1}  ${resp.json()['departments'][0]['departmentId']}
+
 
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+226445
      clear_users  ${PUSERNAME_U1}
@@ -216,7 +225,7 @@ JD-TC-DepartmentWiseAnalytics-1
      Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
+     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
@@ -249,7 +258,7 @@ JD-TC-DepartmentWiseAnalytics-1
      Set Test Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${depid1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -258,9 +267,9 @@ JD-TC-DepartmentWiseAnalytics-1
     ${resp}=  Get Users By Department  ${dep_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List  ${resp}  1  id=${u_id}  firstName=${firstname}  lastName=${lastname}   primaryMobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com    state=${state}
+    # Verify Response List  ${resp}  1  id=${u_id}  firstName=${firstname}  lastName=${lastname}   primaryMobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U1}.${test_mail}    state=${state}
     # Should Be Equal As Strings  ${resp.json()[1]['city']}      ${city}    ignore_case=True
-    # Verify Response List  ${resp}  2  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}   primaryMobileNo=${PUSERNAME_U2}  dob=${dob1}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U2}.ynwtest@netvarth.com   state=${state1}
+    # Verify Response List  ${resp}  2  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}   primaryMobileNo=${PUSERNAME_U2}  dob=${dob1}  gender=${Genderlist[0]}  email=${P_Email}${PUSERNAME_U2}.${test_mail}   state=${state1}
     # Should Be Equal As Strings  ${resp.json()[2]['city']}      ${city1}    ignore_case=True
 
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
@@ -310,7 +319,7 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dur1}=  FakerLibrary.Random Int  min=10  max=20
     Set Suite Variable  ${dur1}
-    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${depid1}  ${u_id}
+    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
@@ -319,7 +328,149 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
-    ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id}  ${s_id}  ${s_id2}
+    ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  20  20  ${lid}  ${u_id}  ${s_id}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id}  ${resp.json()}
+
+    ${resp}=  Get Queue ById  ${q_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    
+
+    # ------------------- Add customers and take checkin  -------------------
+    # comment  Add customers and take check-ins
+
+     FOR   ${a}  IN RANGE   ${count}
+            
+        ${PO_Number}    Generate random string    7    0123456789
+        ${cons_num}    Convert To Integer  ${PO_Number}
+        ${CUSERPH}=  Evaluate  ${CUSERNAME}+${cons_num}
+        ${firstname}=  FakerLibrary.name    
+        ${lastname}=  FakerLibrary.last_name
+        Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
+        ${resp}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${cid${a}}  ${resp.json()}
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${a}}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${a}}
+
+    END
+
+    ${walkin_waitlist_ids}=  Create List
+    Set Suite Variable   ${walkin_waitlist_ids}
+
+    ${service_count}=  Create List
+    Set Suite Variable   ${service_count}
+    
+    FOR   ${a}  IN RANGE   ${count}
+            
+        ${desc}=   FakerLibrary.word
+
+        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid${a}} 
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${wid}=  Get Dictionary Values  ${resp.json()}
+        Set Test Variable  ${wid${a}}  ${wid[0]}
+
+        ${resp}=  Get Waitlist By Id  ${wid${a}}
+        Log  ${resp.json()} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        Append To List   ${walkin_waitlist_ids}  ${wid${a}}
+        Append To List   ${service_count}  ${wid${a}}
+
+    END
+
+    FOR   ${a}  IN RANGE   ${count}
+            
+        ${desc}=   FakerLibrary.word
+
+        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid${a}} 
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${wid}=  Get Dictionary Values  ${resp.json()}
+        Set Test Variable  ${wid${a}}  ${wid[0]}
+
+        ${resp}=  Get Waitlist By Id  ${wid${a}}
+        Log  ${resp.json()} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        Append To List   ${walkin_waitlist_ids}  ${wid${a}}
+        Append To List   ${service_count}  ${wid${a}}
+
+    END
+
+    ${resp}=  GetCustomer
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_cust}=  Get Length  ${resp.json()}
+
+    Log List   ${walkin_waitlist_ids}
+
+    ${walkin_token_len}=   Evaluate  len($walkin_waitlist_ids)
+    Set Suite Variable   ${walkin_token_len}
+
+    ${service_count_len}=   Evaluate  len($service_count)
+    Set Suite Variable   ${service_count_len}
+
+    sleep  01s
+    # sleep  05m
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+
+    # sleep  05s
+
+    ${resp}=  Get Account Level Analytics  ${DeptWiseMetric['TOTAL_FOR_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${DeptWiseMetric['TOTAL_FOR_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${service_count_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+    ${resp}=  Get Account Level Analytics  ${DeptWiseMetric['TOTAL_ON_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${DeptWiseMetric['TOTAL_ON_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${service_count_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+    ${resp}=  Get Account Level Analytics  ${tokenAnalyticsMetrics['WALK_IN_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${tokenAnalyticsMetrics['WALK_IN_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${walkin_token_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+    ${resp}=  Get Account Level Analytics  ${tokenAnalyticsMetrics['ARRIVED_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${tokenAnalyticsMetrics['ARRIVED_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${walkin_token_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+    ${resp}=  Get Account Level Analytics  ${tokenAnalyticsMetrics['CHECKED_IN_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues']}   ${empty_list}

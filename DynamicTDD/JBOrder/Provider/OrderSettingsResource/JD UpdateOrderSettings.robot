@@ -56,9 +56,9 @@ JD-TC-UpdateOrderSettings-1
     Set Suite Variable  ${ph2}
     ${whatsappNo}=  Evaluate  ${PUSERNAME110}+3000000000
     Set Suite Variable  ${whatsappNo}
-    ${Email1}=   Set Variable  ${fName}${ph1}.ynwtest@netvarth.com
+    ${Email1}=   Set Variable  ${fName}${ph1}.${test_mail}
     Set Suite Variable  ${Email1}
-    ${Email2}=   Set Variable  ${fName}${ph2}.ynwtest@netvarth.com
+    ${Email2}=   Set Variable  ${fName}${ph2}.${test_mail}
     Set Suite Variable  ${Email2}
     ${address}=  get_address
     Set Suite Variable  ${address}
@@ -321,7 +321,7 @@ JD-TC-UpdateOrderSettings-UH7
     
     ${whatsappNo118}=  Evaluate  ${PUSERNAME118}+3000000000
     Set Suite Variable  ${whatsappNo118}
-    ${Email118}=   Set Variable  ${fName}${ph118}.ynwtest@netvarth.com
+    ${Email118}=   Set Variable  ${fName}${ph118}.${test_mail}
     Set Suite Variable  ${Email118}
     
     ${address118}=  get_address

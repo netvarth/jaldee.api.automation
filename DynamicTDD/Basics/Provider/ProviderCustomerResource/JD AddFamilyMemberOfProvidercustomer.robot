@@ -29,7 +29,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-1
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME23}+76003
       Set Suite Variable  ${ph2}
-      Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+      Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME18}  ${EMPTY}
@@ -105,7 +105,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-3
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME23}+76004
-      Set Test Variable  ${email}  ${firstname}${ph2}${C_Email}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${PUSERNAME18}  ${EMPTY}
@@ -163,7 +163,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-4
       Set Test Variable  ${dob}
       ${gender}=  Random Element    ${Genderlist}
       Set Test Variable  ${gender}
-      Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+      Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.${test_mail}
       ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${pcid1}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${Familymember_ph}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  ProviderLogout
@@ -241,7 +241,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-6
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
       ${ph3}=  Evaluate  ${PUSERNAME23}+76005
-      Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.ynwtest@netvarth.com
+      Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
       ${gender}=  Random Element    ${Genderlist}
@@ -321,7 +321,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-7
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
       ${ph4}=  Evaluate  ${PUSERNAME23}+76007
-      Set Test Variable  ${email4}  ${firstname}${ph4}${C_Email}.ynwtest@netvarth.com
+      Set Test Variable  ${email4}  ${firstname}${ph4}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
       ${gender}=  Random Element    ${Genderlist}
@@ -435,7 +435,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-8
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
       ${ph4}=  Evaluate  ${PUSERNAME23}+77001
-      Set Test Variable  ${email4}  ${firstname}${ph4}${C_Email}.ynwtest@netvarth.com
+      Set Test Variable  ${email4}  ${firstname}${ph4}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
       ${gender}=  Random Element    ${Genderlist}
@@ -717,7 +717,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-UH2
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph5}=  Evaluate  ${PUSERNAME23}+76009
-      Set Test Variable  ${email5}  ${firstname}${ph5}${C_Email}.ynwtest@netvarth.com
+      Set Test Variable  ${email5}  ${firstname}${ph5}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email5}  ${gender}  ${dob}   ${ph5}  ${EMPTY}

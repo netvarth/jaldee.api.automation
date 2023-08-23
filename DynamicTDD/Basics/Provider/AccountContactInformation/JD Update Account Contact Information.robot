@@ -141,8 +141,8 @@ JD-TC-Update Account Contact information-1
     Set Suite Variable   ${whatsapp1} 
     ${secondary-phone}=  Evaluate  ${PUSERNAME}+406000222
     Set Suite Variable   ${secondary-phone} 
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
-    Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.${test_mail}
+    Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME}   ${email}  ${secondary-phone}   ${whatsapp1}  ${email0}  ${salutation}  ${firstname1}  ${lastname1}  ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -294,7 +294,7 @@ JD-TC-Update Account Contact information-2
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    # Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    # Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id0}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -329,8 +329,8 @@ JD-TC-Update Account Contact information-2
     ${lastname2}=  FakerLibrary.last_name
     ${whatsapp2}=   Evaluate  ${PUSERNAME}+406400222
     ${secondary-phone}=  Evaluate  ${PUSERNAME}+406700223
-    Set Test Variable  ${email2}  ${firstname2}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
-    # Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname2}${PUSERNAME0}${C_Email}.${test_mail}
+    # Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME0}   ${email2}  ${secondary-phone}   ${whatsapp2}  ${EMPTY}  ${salutation}  ${firstname2}  ${lastname2}  ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -483,7 +483,7 @@ JD-TC-Update Account Contact information-3
     ${lastname1}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id00}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${email}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -519,8 +519,8 @@ JD-TC-Update Account Contact information-3
     ${lastname2}=  FakerLibrary.last_name
     ${whatsapp2}=   Evaluate  ${PUSERNAME}+406400222
     ${secondary-phone}=  Evaluate  ${PUSERNAME}+406700223
-    Set Test Variable  ${email2}  ${firstname2}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
-    # Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname2}${PUSERNAME0}${C_Email}.${test_mail}
+    # Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME_00}   ${email2}  ${secondary-phone}   ${whatsapp2}  ${EMPTY}  ${salutation}  ${firstname2}  ${lastname2}  ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -566,7 +566,7 @@ JD-TC-Update Account Contact information-4
     ${lastname}=  FakerLibrary.last_name
     Set Suite Variable   ${lastname}
     ${highest_package}=  get_highest_license_pkg
-    Set Suite Variable  ${e-mail}  ${firstname}${PUSERNAME1}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${e-mail}  ${firstname}${PUSERNAME1}${C_Email}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${e-mail}  ${d1}  ${sd}  ${PUSERNAME1}   ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -675,7 +675,7 @@ JD-TC-Update Account Contact information-4
     ${lastname1}=  FakerLibrary.last_name
     ${whatsapp}=   Evaluate  ${PUSERNAME}+406000223
     ${secondary-phone}=  Evaluate  ${PUSERNAME}+406056222
-    Set Suite Variable  ${email1}  ${firstname1}${PUSERNAME1}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email1}  ${firstname1}${PUSERNAME1}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME1}   ${email1}  ${secondary-phone}   ${whatsapp}  ${None}  ${salutation}  ${firstname1}  ${lastname1}  ${country_code}  ${country_code}  ${country_code} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -750,7 +750,7 @@ JD-TC-Update Account Contact information-5
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
     ${whatsapp2}=   Evaluate  ${PUSERNAME}+406000224
-    Set Test Variable  ${email2}  ${firstname2}${MUSERNAME_K}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname2}${MUSERNAME_K}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${MUSERNAME_K}   ${email2}  ${None}   ${whatsapp2}  ${None}  ${salutation}  ${firstname2}  ${lastname2}  ${country_code}   ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -874,7 +874,7 @@ JD-TC-Update Account Contact information-6
     ${whpnum}=  Evaluate  ${PUSERNAME_U1}+335241
     ${tlgnum}=  Evaluate  ${PUSERNAME_U1}+335142
 
-    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    ${resp}=  Create User  ${firstname2}  ${lastname2}  ${dob2}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin2}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id}  ${resp.json()}
@@ -882,7 +882,7 @@ JD-TC-Update Account Contact information-6
     ${resp}=  Get User By Id  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname2}  lastName=${lastname2}   mobileNo=${PUSERNAME_U1}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   deptId=${dep_id}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname2}  lastName=${lastname2}   mobileNo=${PUSERNAME_U1}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}   deptId=${dep_id}  subdomain=${userSubDomain}
 
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -905,7 +905,7 @@ JD-TC-Update Account Contact information-6
     comment   WAITLISTADD
     Should Be Equal As Strings  ${resp.json()[0]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['eventType']}   ${EventType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}    ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[0]['email'][0]}    ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['number']}           ${PUSERNAME_U1} 
     Should Be Equal As Strings  ${resp.json()[0]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]['number']}       ${PUSERNAME_U1} 
@@ -915,7 +915,7 @@ JD-TC-Update Account Contact information-6
     comment   WAITLIST-CANCEL
     Should Be Equal As Strings  ${resp.json()[1]['resourceType']}  ${NotificationResourceType[0]}
     Should Be Equal As Strings  ${resp.json()[1]['eventType']}     ${EventType[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}      ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[1]['email'][0]}      ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['number']}           ${PUSERNAME_U1} 
     Should Be Equal As Strings  ${resp.json()[1]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[1]['pushMsg'][0]['number']}       ${PUSERNAME_U1} 
@@ -925,7 +925,7 @@ JD-TC-Update Account Contact information-6
     comment   APPOINTMENTADD
     Should Be Equal As Strings  ${resp.json()[2]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[2]['eventType']}    ${EventType[7]}
-    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}     ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[2]['email'][0]}     ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['number']}           ${PUSERNAME_U1} 
     Should Be Equal As Strings  ${resp.json()[2]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[2]['pushMsg'][0]['number']}       ${PUSERNAME_U1} 
@@ -935,7 +935,7 @@ JD-TC-Update Account Contact information-6
     comment   APPOINTMENT-CANCEL
     Should Be Equal As Strings  ${resp.json()[3]['resourceType']}  ${NotificationResourceType[1]}
     Should Be Equal As Strings  ${resp.json()[3]['eventType']}     ${EventType[8]}
-    Should Be Equal As Strings  ${resp.json()[3]['email'][0]}      ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()[3]['email'][0]}      ${P_Email}${PUSERNAME_U1}.${test_mail}
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['number']}           ${PUSERNAME_U1} 
     Should Be Equal As Strings  ${resp.json()[3]['sms'][0]['countryCode']}      ${countryCode_CC0}
     Should Be Equal As Strings  ${resp.json()[3]['pushMsg'][0]['number']}       ${PUSERNAME_U1} 
@@ -946,7 +946,7 @@ JD-TC-Update Account Contact information-6
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
     ${whatsapp3}=   Evaluate  ${PUSERNAME}+407000225
-    Set Test Variable  ${email2}  ${firstname3}${MUSERNAME_L}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname3}${MUSERNAME_L}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME_U1}   ${email2}  ${None}   ${whatsapp3}  ${None}  ${salutation}  ${firstname3}  ${lastname3}  ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -992,7 +992,7 @@ JD-TC-Update Account Contact information-7
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
     ${whatsapp3}=   Evaluate  ${PUSERNAME}+406000225
-    # Set Test Variable  ${email2}  ${firstname1}${MUSERNAME_K}${C_Email}.ynwtest@netvarth.com
+    # Set Test Variable  ${email2}  ${firstname1}${MUSERNAME_K}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME5}   ${email1}  ${None}   ${whatsapp3}  ${None}  ${salutation}  ${firstname3}  ${lastname3}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1083,7 +1083,7 @@ JD-TC-Update Account Contact information-9
 
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
-    Set Test Variable  ${email}  ${firstname3}${PUSERNAME9}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname3}${PUSERNAME9}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME9}   ${email}  ${None}   ${whatsapp1}  ${None}  ${salutation}  ${firstname3}  ${lastname3}  ${country_code}   ${country_code}  ${country_code} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1129,7 +1129,7 @@ JD-TC-Update Account Contact information-10
 
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
-    Set Test Variable  ${email}  ${firstname3}${PUSERNAME6}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname3}${PUSERNAME6}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME6}   ${email}  ${secondary-phone}   ${None}  ${None}  ${salutation}  ${firstname3}  ${lastname3}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1175,7 +1175,7 @@ JD-TC-Update Account Contact information-11
 
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
-    Set Test Variable  ${email}  ${firstname3}${PUSERNAME7}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname3}${PUSERNAME7}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME7}   ${email}  ${None}   ${None}  ${email0}  ${salutation}  ${firstname3}  ${lastname3}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1218,7 +1218,7 @@ JD-TC-Update Account Contact information-12
     Should Be Equal As Strings  ${resp.json()['phoneVerified']}     ${bool[1]} 
     Set Test Variable  ${country_code}   ${resp.json()['countryCode']} 
 
-    Set Test Variable  ${email}  ${last-name1}${PUSERNAME11}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${last-name1}${PUSERNAME11}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME11}   ${None}  ${None}   ${None}  ${None}  ${salutation}  ${firstname}  ${lastname}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1290,7 +1290,7 @@ JD-TC-Update Account Contact information-13
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76068
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Activation  ${PUSERNAME_N}  1
@@ -1342,7 +1342,7 @@ JD-TC-Update Account Contact information-14
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${highest_package}=  get_highest_license_pkg
-    Set Test Variable  ${e-mail}  ${firstname}${PUSERNAME_C}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${e-mail}  ${firstname}${PUSERNAME_C}${C_Email}.${test_mail}
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${e-mail}  ${d1}  ${sd}  ${PUSERNAME_C}   ${highest_package[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1397,7 +1397,7 @@ JD-TC-Update Account Contact information-14
     ${lastname2}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email_n}  ${firstname2}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email_n}  ${firstname2}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id}  ${firstName2}  ${lastName2}  ${gender}  ${dob}  ${email_n}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1471,7 +1471,7 @@ JD-TC-Update Account Contact information-15
 
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
-    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME0}   ${email}  ${PUSERNAME0}   ${None}  ${email}  ${salutation}  ${firstname1}  ${lastname1}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1492,7 +1492,7 @@ JD-TC-Update Account Contact information-15
     ${lastname2}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email_n}  ${firstname2}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email_n}  ${firstname2}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id0}  ${firstName2}  ${lastName2}  ${gender}  ${dob}  ${email_n}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1605,7 +1605,7 @@ JD-TC-Update Account Contact information-UH3
     ${firstname5}=  FakerLibrary.first_name
     ${lastname5}=  FakerLibrary.last_name
     ${whatsapp5}=   Evaluate  ${PUSERNAME}+406054222
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME5}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME5}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME}   ${email}  ${None}   ${None}  ${None}  ${salutation}  ${firstname5}  ${lastname5}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -1648,7 +1648,7 @@ JD-TC-Update Account Contact information-UH4
 
     ${firstname5}=  FakerLibrary.first_name
     ${lastname5}=  FakerLibrary.last_name
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME}${C_Email}.${test_mail}
     ${PUSERNAME1}=  Evaluate  678954327
     ${resp}=  Update Account contact information   ${PUSERNAME1}   ${email}  ${None}   ${None}  ${None}  ${salutation}  ${firstname5}  ${lastname5}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
@@ -1686,7 +1686,7 @@ JD-TC-Update Account Contact information-UH5
     Should Be Equal As Strings  ${resp.json()['phoneVerified']}     ${bool[1]} 
     ${firstname3}=  FakerLibrary.first_name
     ${lastname3}=  FakerLibrary.last_name
-    Set Test Variable  ${email}  ${firstname3}${PUSERNAME12}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname3}${PUSERNAME12}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME12}   ${email}  ${None}   00  ${None}  ${salutation}  ${firstname3}  ${lastname3}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -1718,7 +1718,7 @@ JD-TC-Update Account Contact information-UH6
     Should Be Equal As Strings  ${resp.json()['emailVerified']}     ${bool[0]} 
     Should Be Equal As Strings  ${resp.json()['phoneVerified']}     ${bool[1]} 
     ${lastname3}=  FakerLibrary.last_name
-    Set Test Variable  ${email}  ${lastname3}${PUSERNAME19}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${lastname3}${PUSERNAME19}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME19}   ${email}  ${None}   ${None}  ${None}  ${salutation}  ${None}  ${lastname3}   ${country_code}  ${country_code}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -1824,8 +1824,8 @@ JD-TC-Update Account Contact information-3
     ${lastname1}=  FakerLibrary.last_name
     ${whatsapp1}=   Evaluate  ${PUSERNAME}+406100222
     ${secondary-phone}=  Evaluate  ${PUSERNAME}+406000223
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
-    Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.${test_mail}
+    Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME0}   ${email}  ${secondary-phone}   ${whatsapp1}  ${EMPTY}  ${salutation}  ${firstname1}  ${lastname1}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1856,7 +1856,7 @@ JD-TC-Update Account Contact information-3
     ${lastname2}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${firstname2}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname2}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id0}  ${firstName2}  ${lastName2}  ${gender}  ${dob}  ${None}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1972,8 +1972,8 @@ JD-TC-Update Account Contact information-2
     ${lastname1}=  FakerLibrary.last_name
     ${whatsapp1}=   Evaluate  ${PUSERNAME}+406100222
     ${secondary-phone}=  Evaluate  ${PUSERNAME}+406000223
-    Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
-    Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.${test_mail}
+    Set Suite Variable  ${email0}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=  Update Account contact information   ${PUSERNAME0}   ${email}  ${secondary-phone}   ${whatsapp1}  ${email0}  ${salutation}  ${firstname1}  ${lastname1}   
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2005,7 +2005,7 @@ JD-TC-Update Account Contact information-2
     ${lastname2}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email_1}  ${firstname2}${PUSERNAME0}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email_1}  ${firstname2}${PUSERNAME0}${C_Email}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${pro_id0}  ${firstName2}  ${lastName2}  ${gender}  ${dob}  ${email_1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

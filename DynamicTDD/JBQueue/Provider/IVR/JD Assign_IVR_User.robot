@@ -113,7 +113,7 @@ JD-TC-Assign_IVR_User-1
     ${dob}=  Convert To String  ${dob}
     ${firstName}=    FakerLibrary.firstName
     ${lastName}=    FakerLibrary.lastName
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
@@ -334,7 +334,7 @@ JD-TC-Assign_IVR_User-1
     ${agent_id}    FakerLibrary.Random Number
     ${agent_id}=  Convert To String  ${agent_id}
     ${agent_name}    FakerLibrary.firstName
-    Set Test Variable  ${email}  ${agent_name}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${agent_name}.${test_mail}
     ${agent_ex}    FakerLibrary.Random Number
     ${numb}    Random Number 	digits=5 
     ${numb}=    Evaluate    f'{${numb}:0>9d}'

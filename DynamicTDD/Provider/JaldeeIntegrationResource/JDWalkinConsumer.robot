@@ -58,7 +58,7 @@ JD-TC-WalkinConsumer1
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${ph1}=  Evaluate  ${CUSERNAME2}+123
-    Set Test Variable  ${email2}  ${firstname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph1}  ${EMPTY}
@@ -138,7 +138,7 @@ JD-TC-WalkinConsumer2
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${ph1}=  Evaluate  ${CUSERNAME2}+114
-    Set Test Variable  ${email2}  ${firstname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable  ${email2}  ${firstname}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph1}  ${EMPTY}

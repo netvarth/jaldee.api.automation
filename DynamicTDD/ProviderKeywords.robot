@@ -6576,7 +6576,7 @@ Create Sample User
     ${whpnum}=  Evaluate  ${PUSERNAME}+${random_ph}
     ${tlgnum}=  Evaluate  ${PUSERNAME}+${random_ph}
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.ynwtest@netvarth.com   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${admin}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}  
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${admin}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}  
     Should Be Equal As Strings  ${resp.status_code}  200
     [Return]  ${resp.json()}
 

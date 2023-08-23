@@ -323,7 +323,7 @@ JD-TC-QuestionnaireHighlevel-1
     ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME30}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME30}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERNAME30}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem-1}
@@ -550,7 +550,7 @@ JD-TC-questionnaire highlevel - service and order
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PO_Number}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PO_Number}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -600,7 +600,7 @@ JD-TC-questionnaire highlevel - service and order
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}  ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -878,7 +878,7 @@ JD-TC-questionnaire highlevel - service and order
     ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
-    Set Test Variable  ${C_email}  ${first[0]}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${first[0]}${CUSERPH}.${test_mail}
     ${landMark}=  FakerLibrary.street name 
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${fname}   lastName=${lname}   email=${C_email}    address=${district}   city=${city}   postalCode=${pin}    landMark=${landMark}   countryCode=${countryCodes[0]}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minNumberItem}  max=${maxNumberItem-1}

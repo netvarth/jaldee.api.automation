@@ -84,8 +84,8 @@ JD-TC-UpdateWaitlistSettings-8
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${description}=     FakerLibrary.sentence
     Set Suite Variable   ${description}
-    Set Suite Variable  ${email}  ${P_Email}${cid}.ynwtest@netvarth.com
-    # ${email}=    ${P_Email}${cid}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${P_Email}${cid}.${test_mail}
+    # ${email}=    ${P_Email}${cid}.${test_mail}
     # set Suite Variable    ${email}
 
     # ${SERVICE1}=   FakerLibrary.name

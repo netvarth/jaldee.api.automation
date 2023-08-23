@@ -134,7 +134,7 @@ JD-TC-ChangeLoanApplication-1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable    ${phone}   ${resp.json()[0]['phoneNo']}
     Set Test Variable    ${cc}   ${resp.json()[0]['countryCode']}
-    Set Test Variable    ${email}  ${fname}${C_Email}.ynwtest@netvarth.com
+    Set Test Variable    ${email}  ${fname}${C_Email}.${test_mail}
 
     ${resp}=  categorytype   ${account_id}
     ${resp}=  tasktype       ${account_id}

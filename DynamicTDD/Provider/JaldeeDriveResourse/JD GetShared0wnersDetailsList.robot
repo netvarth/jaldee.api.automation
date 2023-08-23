@@ -1343,7 +1343,7 @@ JD-TC-GetSharedOnwnersDetailsList-15
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME127}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME127}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1560,7 +1560,7 @@ JD-TC-GetSharedOnwnersDetailsList-15
     ${DATE12}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
     Set Test Variable  ${DATE12}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME29}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME29}.${test_mail}
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1679,7 +1679,7 @@ JD-TC-GetSharedOnwnersDetailsList-16
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME73}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME73}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -1886,7 +1886,7 @@ JD-TC-GetSharedOnwnersDetailsList-16
     
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME32}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME32}.${test_mail}
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}

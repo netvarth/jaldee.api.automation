@@ -50,19 +50,19 @@ JD-TC-Consumer Signup-1
         ${resp}=  Consumer Login  ${CUSERNAME}  ${PASSWORD} 
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Send Verify Login Consumer   ${C_Email}${CUSERNAME}.ynwtest@netvarth.com
+        ${resp}=  Send Verify Login Consumer   ${C_Email}${CUSERNAME}.${test_mail}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
-        ${resp}=  Verify Login Consumer  ${C_Email}${CUSERNAME}.ynwtest@netvarth.com  5
+        ${resp}=  Verify Login Consumer  ${C_Email}${CUSERNAME}.${test_mail}  5
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Append To File  ${EXECDIR}/TDD/varfiles/consumermail.py  CUSEREMAIL${US}="${C_Email}${CUSERNAME}.ynwtest@netvarth.com"${\n}
+        Append To File  ${EXECDIR}/TDD/varfiles/consumermail.py  CUSEREMAIL${US}="${C_Email}${CUSERNAME}.${test_mail}"${\n}
         Append To File  ${EXECDIR}/TDD/varfiles/consumerlist.py  CUSERNAME${US}=${CUSERNAME}${\n}
         Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERNAME}${\n}
         ${US} =  Evaluate  ${US}+1
         Set Global Variable  ${US}
 
-        ${resp}=  Update Consumer Profile  ${firstname}  ${lastname}  ${address}  ${dob}  ${gender}   email=${C_Email}${CUSERNAME}.ynwtest@netvarth.com
+        ${resp}=  Update Consumer Profile  ${firstname}  ${lastname}  ${address}  ${dob}  ${gender}   email=${C_Email}${CUSERNAME}.${test_mail}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -42,7 +42,7 @@ JD-TC-Update Service Provider-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${firstname}${PUSERNAME6}.ynwtest@netvarth.com
+    ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${firstname}${PUSERNAME6}.${test_mail}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Details  ${id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -52,7 +52,7 @@ JD-TC-Update Service Provider-2
     Should Be Equal As Strings  ${resp.json()['basicInfo']['dob']}  ${dob}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['gender']}  ${gender}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}  ${PUSERNAME6}
-    Should Be Equal As Strings  ${resp.json()['basicInfo']['email']}  ${firstname}${PUSERNAME6}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['email']}  ${firstname}${PUSERNAME6}.${test_mail}
 
 JD-TC-Update Service Provider-3
     [Documentation]   Update provider details with empty email id
@@ -73,7 +73,7 @@ JD-TC-Update Service Provider-4
     [Documentation]   Update provider details with another email id
     ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.ynwtest@netvarth.com
+    ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.${test_mail}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Details  ${id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -83,7 +83,7 @@ JD-TC-Update Service Provider-4
     Should Be Equal As Strings  ${resp.json()['basicInfo']['dob']}  ${dob}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['gender']}  ${gender}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}  ${PUSERNAME6}
-    Should Be Equal As Strings  ${resp.json()['basicInfo']['email']}  ${lastname}${P_Email}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['email']}  ${lastname}${P_Email}.${test_mail}
 
 JD-TC-Update Service Provider-5
     [Documentation]   Update provider details when an email exists
@@ -94,7 +94,7 @@ JD-TC-Update Service Provider-5
     Set Suite Variable  ${lastname}
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.ynwtest@netvarth.com
+    ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.${test_mail}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Provider Details  ${id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -104,14 +104,14 @@ JD-TC-Update Service Provider-5
     Should Be Equal As Strings  ${resp.json()['basicInfo']['dob']}  ${dob}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['gender']}  ${gender}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}  ${PUSERNAME6}
-    Should Be Equal As Strings  ${resp.json()['basicInfo']['email']}  ${lastname}${P_Email}.ynwtest@netvarth.com
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['email']}  ${lastname}${P_Email}.${test_mail}
 
 JD-TC-Update Service Provider-UH1
     [Documentation]   Update provider details with already used provider email id
     ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${id}  ${resp.json()['id']}
-    ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.ynwtest@netvarth.com
+    ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.${test_mail}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${EMAIL_EXISTS}"
 

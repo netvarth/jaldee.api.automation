@@ -81,7 +81,7 @@ JD-TC-OrderReport-1
     ${accId3}=  get_acc_id  ${PUSERNAME179}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME179}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME179}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -369,7 +369,7 @@ JD-TC-OrderReport-1
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email1}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email1}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -380,7 +380,7 @@ JD-TC-OrderReport-1
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -436,7 +436,7 @@ JD-TC-OrderReport-1
     ${C_lastName2}=   FakerLibrary.name 
     ${C_num2}    Random Int  min=123456   max=999999
     ${CUSERPH2}=  Evaluate  ${CUSERNAME}+${C_num2}
-    Set Test Variable  ${C_email2}  ${C_firstName2}${CUSERPH2}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email2}  ${C_firstName2}${CUSERPH2}.${test_mail}
     ${homeDeliveryAddress2}=   FakerLibrary.name 
     ${city2}=  FakerLibrary.city
     ${landMark2}=  FakerLibrary.Sentence   nb_words=2 
@@ -447,7 +447,7 @@ JD-TC-OrderReport-1
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME17}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME17}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -485,7 +485,7 @@ JD-TC-OrderReport-1
     ${C_lastName3}=   FakerLibrary.name 
     ${C_num3}    Random Int  min=123456   max=999999
     ${CUSERPH3}=  Evaluate  ${CUSERNAME}+${C_num3}
-    Set Test Variable  ${C_email3}  ${C_firstName3}${CUSERPH3}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email3}  ${C_firstName3}${CUSERPH3}.${test_mail}
     ${homeDeliveryAddress3}=   FakerLibrary.name 
     ${city3}=  FakerLibrary.city
     ${landMark3}=  FakerLibrary.Sentence   nb_words=2 
@@ -496,7 +496,7 @@ JD-TC-OrderReport-1
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME15}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME15}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -989,7 +989,7 @@ JD-TC-OrderReport-2
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -1479,7 +1479,7 @@ JD-TC-OrderReport-3
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2031,7 +2031,7 @@ JD-TC-OrderReport-4
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email1}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email1}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -2042,7 +2042,7 @@ JD-TC-OrderReport-4
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
     ${caption}=  FakerLibrary.Sentence   nb_words=4
@@ -2083,7 +2083,7 @@ JD-TC-OrderReport-4
     ${C_lastName2}=   FakerLibrary.name 
     ${C_num2}    Random Int  min=123456   max=999999
     ${CUSERPH2}=  Evaluate  ${CUSERNAME}+${C_num2}
-    Set Test Variable  ${C_email2}  ${C_firstName2}${CUSERPH2}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email2}  ${C_firstName2}${CUSERPH2}.${test_mail}
     ${homeDeliveryAddress2}=   FakerLibrary.name 
     ${city2}=  FakerLibrary.city
     ${landMark2}=  FakerLibrary.Sentence   nb_words=2 
@@ -2094,7 +2094,7 @@ JD-TC-OrderReport-4
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME17}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME17}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -2132,7 +2132,7 @@ JD-TC-OrderReport-4
     ${C_lastName3}=   FakerLibrary.name 
     ${C_num3}    Random Int  min=123456   max=999999
     ${CUSERPH3}=  Evaluate  ${CUSERNAME}+${C_num3}
-    Set Test Variable  ${C_email3}  ${C_firstName3}${CUSERPH3}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email3}  ${C_firstName3}${CUSERPH3}.${test_mail}
     ${homeDeliveryAddress3}=   FakerLibrary.name 
     ${city3}=  FakerLibrary.city
     ${landMark3}=  FakerLibrary.Sentence   nb_words=2 
@@ -2143,7 +2143,7 @@ JD-TC-OrderReport-4
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME15}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME15}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -3561,7 +3561,7 @@ JD-TC-OrderReport-8
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email1}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email1}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -3572,7 +3572,7 @@ JD-TC-OrderReport-8
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
     ${caption}=  FakerLibrary.Sentence   nb_words=4
@@ -3623,7 +3623,7 @@ JD-TC-OrderReport-8
     ${C_lastName2}=   FakerLibrary.name 
     ${C_num2}    Random Int  min=123456   max=999999
     ${CUSERPH2}=  Evaluate  ${CUSERNAME}+${C_num2}
-    Set Test Variable  ${C_email2}  ${C_firstName2}${CUSERPH2}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email2}  ${C_firstName2}${CUSERPH2}.${test_mail}
     ${homeDeliveryAddress2}=   FakerLibrary.name 
     ${city2}=  FakerLibrary.city
     ${landMark2}=  FakerLibrary.Sentence   nb_words=2 
@@ -3634,7 +3634,7 @@ JD-TC-OrderReport-8
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME17}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME17}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -7373,7 +7373,7 @@ JD-TC-OrderReport-22
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
     ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
-    Set Test Variable  ${C_email1}  ${C_firstName}${CUSERPH}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email1}  ${C_firstName}${CUSERPH}.${test_mail}
     ${homeDeliveryAddress}=   FakerLibrary.name 
     ${city}=  FakerLibrary.city
     ${landMark}=  FakerLibrary.Sentence   nb_words=2 
@@ -7384,7 +7384,7 @@ JD-TC-OrderReport-22
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
     ${caption}=  FakerLibrary.Sentence   nb_words=4
@@ -7636,7 +7636,7 @@ JD-TC-OrderReport-22
     ${C_lastName2}=   FakerLibrary.name 
     ${C_num2}    Random Int  min=123456   max=999999
     ${CUSERPH2}=  Evaluate  ${CUSERNAME}+${C_num2}
-    Set Test Variable  ${C_email2}  ${C_firstName2}${CUSERPH2}.ynwtest@netvarth.com
+    Set Test Variable  ${C_email2}  ${C_firstName2}${CUSERPH2}.${test_mail}
     ${homeDeliveryAddress2}=   FakerLibrary.name 
     ${city2}=  FakerLibrary.city
     ${landMark2}=  FakerLibrary.Sentence   nb_words=2 
@@ -7647,7 +7647,7 @@ JD-TC-OrderReport-22
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     Set Suite Variable  ${item_quantity1}
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME17}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME17}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 

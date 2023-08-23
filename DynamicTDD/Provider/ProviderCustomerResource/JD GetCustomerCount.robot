@@ -30,7 +30,7 @@ JD-TC-Get Customer count-1
     ${dob}=      FakerLibrary.date
     ${phoneno}=    FakerLibrary.Random Int    min=1000000000   max=9999999999
     Set Suite Variable   ${phoneno}
-    Set Suite Variable  ${email}  ${f_name1}${phoneno}${C_Email}.ynwtest@netvarth.com
+    Set Suite Variable  ${email}  ${f_name1}${phoneno}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${f_name1}  ${l_name1}  ${EMPTY}  ${email}  ${Genderlist[1]}  ${dob}  ${phoneno}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

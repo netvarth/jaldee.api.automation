@@ -279,7 +279,7 @@ JD-TC-Create_Catalog_For_ShoppingList-5
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id2}  ${firstname}${PUSERNAME60}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id2}  ${firstname}${PUSERNAME60}.${test_mail}
 
     ${resp}=  Update Email   ${pid2}   ${firstname}   ${lastname}   ${email_id2}
     Log  ${resp.json()}
@@ -422,7 +422,7 @@ JD-TC-Create_Catalog_For_ShoppingList-6
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id2}  ${firstname}${PUSERNAME60}.ynwtest@netvarth.com
+    Set Suite Variable  ${email_id2}  ${firstname}${PUSERNAME60}.${test_mail}
 
     ${resp}=  Update Email   ${pid2}   ${firstname}   ${lastname}   ${email_id2}
     Log  ${resp.json()}

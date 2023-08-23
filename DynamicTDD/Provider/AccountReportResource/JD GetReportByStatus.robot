@@ -74,7 +74,7 @@ JD-TC-Get_Report_ByStatus-1
     Set Suite Variable   ${description}
     ${firstname1}=  FakerLibrary.first_name
     Set Test Variable  ${firstname1}
-    set Suite Variable  ${email}  ${firstname1}${CUSERNAME7}${C_Email}.ynwtest@netvarth.com
+    set Suite Variable  ${email}  ${firstname1}${CUSERNAME7}${C_Email}.${test_mail}
 
     ${P1SERVICE1}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE1}
@@ -895,7 +895,7 @@ JD-TC-Get_Report_ByStatus-2
     Set Suite Variable   ${description}
     ${firstname1}=  FakerLibrary.first_name
     Set Test Variable  ${firstname1}
-    set Suite Variable  ${email}  ${firstname1}${CUSERNAME7}${C_Email}.ynwtest@netvarth.com
+    set Suite Variable  ${email}  ${firstname1}${CUSERNAME7}${C_Email}.${test_mail}
 
     ${P1SERVICE1}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE1}

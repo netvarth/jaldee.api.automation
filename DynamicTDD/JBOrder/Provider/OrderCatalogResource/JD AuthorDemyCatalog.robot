@@ -231,7 +231,7 @@ JD-TC-CreateCatalogForAuthorDemy-2
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -285,7 +285,7 @@ JD-TC-CreateCatalogForAuthorDemy-3
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
 
@@ -363,7 +363,7 @@ JD-TC-CreateCatalogForAuthorDemy-5
 
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME12}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME12}.${test_mail}
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
 
     ${resp}=   Create Order By Provider For AuthorDemy    ${cookie}  ${cid2}   ${cid2}   ${CatalogId1}   ${DAY1}    ${CUSERNAME12}    ${email}  ${orderNote}  ${countryCodes[1]}  ${item_id1}   ${item_quantity1} 
@@ -444,7 +444,7 @@ JD-TC-CreateCatalogForAuthorDemy-7
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
 
     ${resp}=   Create Order For Pickup  ${cookie}  ${accId}    ${self}    ${CatalogId1}    ${bool[1]}    ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -597,7 +597,7 @@ JD-TC-CreateCatalogForAuthorDemy-9
     ${C_num1}    Random Int  min=123456   max=999999
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${firstname}=  FakerLibrary.first_name
-    Set Test Variable  ${email}  ${firstname}${CUSERNAME23}.ynwtest@netvarth.com
+    Set Test Variable  ${email}  ${firstname}${CUSERNAME23}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
