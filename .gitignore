@@ -1,0 +1,11 @@
+/*.pyc
+/DynamicTDD/*.pyc
+/Docker/env.list
+/DynamicTDD/testdb.py
+/DynamicTDD/consumernumbers.txt
+/DynamicTDD/Output/*
+/DynamicTDD/varfiles/*
+/DynamicTDD/varfiles/__pycache__/*
+/DynamicTDD/numbers.txt
+/DynamicTDD/time.txt
+/Docker/docker-variables.log
