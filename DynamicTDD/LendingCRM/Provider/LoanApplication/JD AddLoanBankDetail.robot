@@ -704,7 +704,7 @@ JD-TC-AddLoanBankDetails-1
     ${dealername}=                         FakerLibrary.bs
     ${dealerlname}=                        FakerLibrary.last_name
     ${dob}=                                FakerLibrary.Date
-    Set Test Variable                      ${email}  ${phone}.${dealerfname}.ynwtest@netvarth.com
+    Set Test Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
    
     ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
     Log  ${resp.content}

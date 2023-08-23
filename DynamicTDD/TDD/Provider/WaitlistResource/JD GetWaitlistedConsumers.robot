@@ -72,7 +72,7 @@ JD-TC-Get Waitlist Consumer-1
     ${dob}=      FakerLibrary.date
     ${phoneno}=    FakerLibrary.Random Int    min=1000000000   max=9999999999
     Set Suite Variable   ${phoneno}  
-    set Suite Variable    ${email}   ${P_Email}${phoneno}.ynwtest@netvarth.com
+    set Suite Variable    ${email}   ${P_Email}${phoneno}.${test_mail}
     ${resp}=  AddCustomer with email  ${f_name1}  ${l_name}  ${EMPTY}  ${email}   ${gender[1]}  ${dob}  ${phoneno}  ${EMPTY} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

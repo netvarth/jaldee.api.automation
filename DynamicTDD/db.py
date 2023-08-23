@@ -6219,24 +6219,30 @@ def decrypt_data(data):
 def Set_TZ_Header(**kwargs):
     tzheaders= {} 
     locparam= {}
+    rem_list= []
     print("kwargs: ",kwargs)
-    if kwargs=={} or kwargs.get("timeZone")== None or kwargs.get("location") == None :
+    print("kwargs key: ",kwargs.get("timeZone"))
+    print("location key: ",kwargs.get("location"))
+    if kwargs=={} or (kwargs.get("timeZone")== None and kwargs.get("location") == None) :
         tzheaders.update({'timeZone':'Asia/Kolkata'})
         print("default time zone set: ",tzheaders)
     else:
         for key, value in kwargs.items():
             if key == 'timeZone':
                 tzheaders.update({'timeZone':value})
-                removed_value = kwargs.pop(key, 'No Key found')
-                print(key," Removed from kwargs -", removed_value)
+                rem_list.append(key)
+                # removed_value = kwargs.pop(key, 'No Key found')
+                # print(key," Removed from kwargs -", removed_value)
                 # print(tzheaders)
                 print("user provided time zone set: ",tzheaders)
             elif key == 'location':
                 locparam.update({key:value})
-                removed_value = kwargs.pop(key, 'No Key found')
-                print(key," Removed from kwargs -", removed_value)
+                # removed_value = kwargs.pop(key, 'No Key found')
+                rem_list.append(key)
+                # print(key," Removed from kwargs -", removed_value)
                 # print(locparam)
                 print("user provided location param set: ",locparam)
+    [kwargs.pop(key) for key in rem_list]
     print("Final kwargs: ",kwargs)
     return  tzheaders, kwargs, locparam
 

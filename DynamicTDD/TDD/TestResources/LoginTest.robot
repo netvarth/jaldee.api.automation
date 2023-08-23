@@ -78,13 +78,13 @@ Consumer_Signup
     ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Send Verify Login Consumer   ${C_Email}${CUSERPH0}.ynwtest@netvarth.com
+    ${resp}=  Send Verify Login Consumer   ${C_Email}${CUSERPH0}.${test_mail}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=  Verify Login Consumer  ${C_Email}${CUSERPH0}.ynwtest@netvarth.com  5
+    ${resp}=  Verify Login Consumer  ${C_Email}${CUSERPH0}.${test_mail}  5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Update Consumer Profile  ${firstname}  ${lastname}  ${address}  ${EMPTY}  ${gender}   email=${C_Email}${CUSERPH0}.ynwtest@netvarth.com
+    ${resp}=  Update Consumer Profile  ${firstname}  ${lastname}  ${address}  ${EMPTY}  ${gender}   email=${C_Email}${CUSERPH0}.${test_mail}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

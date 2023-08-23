@@ -85,7 +85,7 @@ JD-TC-Take Appointment in Different Timezone-1
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     ${city}=   FakerLibrary.state
@@ -101,8 +101,8 @@ JD-TC-Take Appointment in Different Timezone-1
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_timezone_time  ${tz}  0  15  
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${sTime}=  db.get_time_by_timezone  ${tz}  
+    ${eTime}=  db.add_timezone_time  ${tz}  0  15  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -129,7 +129,7 @@ JD-TC-Take Appointment in Different Timezone-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_X}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_X}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -214,28 +214,28 @@ JD-TC-Take Appointment in Different Timezone-1
 
     ${DAY1}=  db.get_date_by_timezone  ${tz2}
     ${DAY2}=  db.add_timezone_date  ${tz2}  10     
-    ${sTime2}=  add_timezone_time  ${tz2}  0  30  
-    ${eTime2}=  add_timezone_time  ${tz2}  5  00  
+    ${sTime1}=  add_timezone_time  ${tz2}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz2}  1  00  
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l2}  ${resp.json()}
 
-    clear_appt_schedule   ${PUSERNAME_X}
+    # clear_appt_schedule   ${PUSERNAME_X}
 
     ${DAY3}=  db.get_date_by_timezone  ${tz1}
     ${DAY4}=  db.add_timezone_date  ${tz1}  10  
-    ${sTime1}=  add_timezone_time  ${tz1}  0  30  
-    ${eTime1}=  add_timezone_time  ${tz1}  5  00  
+    ${sTime2}=  add_timezone_time  ${tz1}  1  00  
+    ${eTime2}=  add_timezone_time  ${tz1}  1  30  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}  ${p1_s1}   ${p1_s2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l1}  ${duration}  ${bool1}  ${p1_s1}   ${p1_s2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id11}  ${resp.json()}
@@ -245,10 +245,10 @@ JD-TC-Take Appointment in Different Timezone-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id11}   name=${schedule_name}  apptState=${Qstate[0]}
     
-    ${sTime1}=  add_timezone_time  ${tz2}  0  30
+    ${sTime3}=  add_timezone_time  ${tz2}  0  30
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_time   ${sTime1}  ${delta}
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${eTime3}=  add_two   ${sTime3}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -440,7 +440,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERPH0}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     # ${city}=   FakerLibrary.state
@@ -459,8 +459,8 @@ JD-TC-Take Appointment in Different Timezone-2
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_timezone_time  ${tz}  0  15  
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${sTime}=  db.get_time_by_timezone  ${tz}  
+    ${eTime}=  db.add_timezone_time  ${tz}  0  15  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -491,7 +491,7 @@ JD-TC-Take Appointment in Different Timezone-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${email_id}
     Log  ${resp.json()}

@@ -172,7 +172,7 @@ JD-TC-Add To WaitlistByConsumer-25
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
     
-    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.ynwtest@netvarth.com
+    ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     Log   ${views}
     ${name1}=  FakerLibrary.name
@@ -224,7 +224,7 @@ JD-TC-Add To WaitlistByConsumer-25
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.ynwtest@netvarth.com
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
