@@ -1595,7 +1595,7 @@ JD-TC-AdvancePaymentcalculation-19
 
 
 
-#  <<<<<<<<<<<<<<<<<<<  SERVICE OPTIONS  >>>>>>>>>>>>>>>>>
+#  -------------------  SERVICE OPTIONS  -----------------
 
 
 JD-TC-AdvancePaymentcalculation-20
