@@ -2015,6 +2015,7 @@ PLEASE_DISABLE_SCHEDULE ="please disable schedule to reduce consumer parallel se
 #............  IVR   ...............
 
 IVR_Already_Disabled= "IVR already disabled"
+IVR_SETTING_NOt_FOUND= "Ivr setting not found"	
 
 
 TOOTH_ID_CANNOT_BE_NULL= "Tooth Id cannot be null"

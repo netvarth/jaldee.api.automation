@@ -360,3 +360,13 @@ JD-TC-GET_All_IVR_USer_Details-1
     ${resp}=    Get All IVR User Details
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-GET_All_IVR_USer_Details-UH1
+
+    [Documentation]   Get all IVR user details without login
+   
+    ${resp}=    Get All IVR User Details
+    Log  ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"   "${SESSION_EXPIRED}"
+   
