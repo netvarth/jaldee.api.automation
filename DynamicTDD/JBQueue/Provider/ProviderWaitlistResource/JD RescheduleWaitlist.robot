@@ -36,8 +36,11 @@ Multiloc and Billable Providers
     FOR   ${a}  IN RANGE   ${length-1}    
         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
         Log  ${dom_list}
         ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
         Log Many  ${status} 	${value}
@@ -794,6 +797,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
+    sleep   2s
     ${resp}=  Get Bill By consumer  ${wid4}  ${pid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -326,7 +326,7 @@ JD-TC-ConfirmBlockWaitlist-2
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname1}
 # *** comment ***
-JD-TC-ConfirmBlockWaitlist-1
+JD-TC-ConfirmBlockWaitlist-3
     [Documentation]   Confirm a blocked check in for future date.
 
     clear_queue      ${PUSERNAME131}
@@ -400,11 +400,11 @@ JD-TC-ConfirmBlockWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${wid}  ${wid[0]}
+    Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[8]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby[1]}   
+    Verify Response  ${resp}  date=${FUT_DAY}  waitlistStatus=${wl_status[8]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby[1]}   
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}
@@ -417,6 +417,7 @@ JD-TC-ConfirmBlockWaitlist-1
 
     ${wt_for1}=  Create Dictionary   id=${cid}   firstName=${fname}   lastName=${lname}
     ${wt_for11}=   Create List  ${wt_for1}
+    Set Suite Variable  ${wt_for11} 
 
     ${resp}=   Confirm Wailtlist Block   ${cid}   ${wid}   ${wt_for11}
     Log   ${resp.json()}
@@ -425,13 +426,14 @@ JD-TC-ConfirmBlockWaitlist-1
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[0]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby[1]}  
+    Verify Response  ${resp}  date=${FUT_DAY}  waitlistStatus=${wl_status[0]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby[1]}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname}
 
-JD-TC-AddToWaitlist-UH1
+JD-TC-ConfirmBlockWaitlist-UH1
+
       [Documentation]   Confirm blocked Waitlist by Consumer login
 
       ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
@@ -441,7 +443,8 @@ JD-TC-AddToWaitlist-UH1
       Should Be Equal As Strings  ${resp.status_code}  401
       Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
  
-JD-TC-AddToWaitlist-UH2
+JD-TC-ConfirmBlockWaitlist-UH2
+
       [Documentation]   Confirm blocked waitlist without login
 
       ${resp}=   Confirm Wailtlist Block   ${cid}   ${wid}   ${wt_for11}
