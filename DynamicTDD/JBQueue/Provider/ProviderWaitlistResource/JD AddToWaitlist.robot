@@ -1119,9 +1119,9 @@ JD-TC-AddToWaitlist-UH17
       Set Test Variable  ${cid0}  ${resp.json()}
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME1}${\n}
       
-      ${resp}=  Add To Waitlist  ${cid0}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid0} 
-      Log   ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  200
+      # ${resp}=  Add To Waitlist  ${cid0}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid0} 
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Update Queue  ${que_id8}  ${queue4}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}  1  4  ${loc_id1}  ${ser_id3}  ${ser_id4}
       Log   ${resp.json()}
@@ -1136,8 +1136,12 @@ JD-TC-AddToWaitlist-UH17
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid1}  ${resp.json()}
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME3}${\n}
-     
-      ${resp}=  Add To Waitlist  ${cid1}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1} 
+      
+      ${resp}=  Add To Waitlist  ${cid0}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid0}   location=${loc_id1}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Add To Waitlist  ${cid1}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}   location=${loc_id1}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
@@ -1151,15 +1155,15 @@ JD-TC-AddToWaitlist-UH17
       Set Test Variable  ${cid2}  ${resp.json()}
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME6}${\n}
       
-      ${resp}=  Add To Waitlist  ${cid2}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2} 
+      ${resp}=  Add To Waitlist  ${cid2}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}  location=${loc_id1}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
 
      
-      ${resp}=  Add To Waitlist  ${cid1}   ${ser_id4}   ${que_id8}   ${DAY1}   ${desc}  ${bool[1]}  ${cid1} 
+      ${resp}=  Add To Waitlist  ${cid1}   ${ser_id4}   ${que_id8}   ${DAY1}   ${desc}  ${bool[1]}  ${cid1}  location=${loc_id1}
       Should Be Equal As Strings  ${resp.status_code}  200 
      
-      ${resp}=  Add To Waitlist  ${cid2}  ${ser_id4}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2} 
+      ${resp}=  Add To Waitlist  ${cid2}  ${ser_id4}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}  location=${loc_id1}
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"    "${WATLIST_MAX_LIMIT_REACHED}"
 
