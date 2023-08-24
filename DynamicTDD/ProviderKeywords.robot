@@ -1865,7 +1865,7 @@ Confirm Wailtlist Block
     [Return]  ${resp}
 
 Waitlist Unblock
-    [Arguments]    ${wid}  
+    [Arguments]    ${wid}  &{kwargs} 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set TZ Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
