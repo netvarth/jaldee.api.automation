@@ -52,7 +52,8 @@ if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then
     echo "Ubuntu on Windows"
     # DB_HOST='host.docker.internal'
     DB_HOST="$(hostname).local"
-    sed -i /ebs/VariablesForLocalServer.py -e 's/localhost:8080/host.docker.internal:8080/g'
+    # sed -i /ebs/VariablesForLocalServer.py -e 's/localhost:8080/host.docker.internal:8080/g'
+    sed -i /ebs/VariablesForLocalServer.py -e "s/localhost:8080/$DB_HOST:8080/g"
 else 
     echo "native Linux"
     DB_HOST='127.0.0.1'
