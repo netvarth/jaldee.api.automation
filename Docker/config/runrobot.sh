@@ -50,6 +50,7 @@ cp /ebs/conf/VariablesFor*.py /ebs/
 
 if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
     echo "Ubuntu on Windows"
+    cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2
     # DB_HOST='host.docker.internal'
     DB_HOST="$(hostname).local"
     # sed -i /ebs/VariablesForLocalServer.py -e 's/localhost:8080/host.docker.internal:8080/g'

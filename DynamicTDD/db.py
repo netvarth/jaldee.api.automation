@@ -40,7 +40,7 @@ import socket
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
     # db_host = "host.docker.internal"
-    db_host = socket.gethostbyaddr(socket.gethostname())[0]+".local"
+    db_host = subprocess.getoutput("cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2 | tr -d '\n'")
 else:
     db_host = "127.0.0.1"
 

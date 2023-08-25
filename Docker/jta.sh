@@ -81,6 +81,7 @@ checkSysType()
         LogFileName='/mnt/d/LOGS/jtacheck.log'
         echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" | tee -a $LogFileName
         echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
+        cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2
         MYSQL_HOST="$(hostname).local"
         CONF_DIR='/mnt/d/ebs/ynwconf'
         
