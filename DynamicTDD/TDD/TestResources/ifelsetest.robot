@@ -9,7 +9,7 @@ Library     requests
 Library     RequestLibrary
 # Library     FakerLibrary
 Library    FakerLibrary    locale=en_IN
-# Library     /ebs/TDD/db.py
+Library     /ebs/TDD/db.py
 # Resource    /ebs/TDD/ProviderKeywords.robot
 # Resource    /ebs/TDD/ConsumerKeywords.robot
 # Resource    /ebs/TDD/SuperAdminKeywords.robot
@@ -26,6 +26,12 @@ ${latti1}         ${0.190822}
 ${longi1}    ${68.031759}
 
 *** Test Cases ***  
+
+Testing py fn
+
+    db.get_Host_name_IP
+
+***Comment***
 Testing named arguments
 
     ${auth} =    Create List    Mark    SuperSecret
@@ -36,14 +42,11 @@ Testing named arguments
     Log  \n${json}  console=yes
 
 
-***Comment***
+
 Testing named arguments
-
     
-
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
-
 
 
     ${zone} 	${loc}=  Split String    Pacific/Apia   /

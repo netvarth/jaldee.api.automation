@@ -88,7 +88,8 @@ JD-TC-Take Appointment in Different Timezone-1
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${city}=   FakerLibrary.state
+    # ${city}=   FakerLibrary.state
+    ${city}=   FakerLibrary.City
     ${latti}=  get_latitude
     ${longi}=  get_longitude
     ${postcode}=  FakerLibrary.postcode
@@ -199,9 +200,10 @@ JD-TC-Take Appointment in Different Timezone-1
 
     # ${sTime1}=  add_timezone_time  ${tz}  0  30  
     # ${eTime1}=  add_timezone_time  ${tz}  5  00  
-    ${city}=   FakerLibrary.state
+    # ${city}=   FakerLibrary.state
     # ${latti}=  get_latitude
     # ${longi}=  get_longitude
+    ${city}=   FakerLibrary.City
     ${postcode}=  FakerLibrary.postcode
     ${address}=  get_address
     ${latti}=  FakerLibrary.latitude
@@ -308,7 +310,7 @@ JD-TC-Take Appointment in Different Timezone-1
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Take Appointment For Provider   ${pid01}  ${p1_s1}  ${sch_id11}  ${DAY3}  ${cnote}   ${apptfor}   timeZone=${tz1}
+    ${resp}=   Take Appointment For Provider   ${pid01}  ${p1_s1}  ${sch_id11}  ${DAY3}  ${cnote}   ${apptfor}   location=${{str('${p1_l1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -431,6 +433,10 @@ JD-TC-Take Appointment in Different Timezone-2
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERPH0}+15566122
     ${ph2}=  Evaluate  ${PUSERPH0}+25566122
@@ -460,7 +466,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${sTime}=  db.get_time_by_timezone  ${tz}  
-    ${eTime}=  db.add_timezone_time  ${tz}  0  15  
+    ${eTime}=  db.add_timezone_time  ${tz}  0  30  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -505,6 +511,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -519,3 +526,15 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz2}
+    ${DAY2}=  db.add_timezone_date  ${tz2}  10     
+    ${sTime1}=  add_timezone_time  ${tz2}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz2}  1  00  
+    ${parking}    Random Element     ${parkingType} 
+    ${24hours}    Random Element    ['True','False']
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_l1}  ${resp.json()}

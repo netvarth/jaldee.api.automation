@@ -23,6 +23,7 @@ JD-TC-GetWaitingTimeOfProviders-1
     [Documentation]  Get Waiting Time Of 3 Providers with Provider Login
     ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+    get_Host_name_IP
     clear_service   ${PUSERNAME155}
     clear_location  ${PUSERNAME155}
     clear_queue  ${PUSERNAME155}

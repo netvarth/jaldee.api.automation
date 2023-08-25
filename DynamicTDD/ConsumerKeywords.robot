@@ -1348,10 +1348,13 @@ Take Appointment For Provider
     ${schedule}=  Create Dictionary  id=${schedule}    
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
     ${data}=  json.dumps  ${data}
+    Log  ${cons_headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Log  ${cons_headers}
     Set To Dictionary  ${params}   &{locparam}
+    Log  ${params}
     Check And Create YNW Session
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
     # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}

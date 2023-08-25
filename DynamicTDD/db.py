@@ -35,10 +35,12 @@ from robot.api import logger
 from base64 import b64encode, b64decode
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
+import socket
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
-    db_host = "host.docker.internal"
+    # db_host = "host.docker.internal"
+    db_host = "127.0.0.1"
 else:
     db_host = "127.0.0.1"
 
@@ -67,6 +69,18 @@ multiuser_metric_id=21
 #     except MySQLdb.Error as e:
 #         print ("Exception:", e)
         # print ("Exception at line no:", e.__traceback__.tb_lineno)
+
+
+def get_Host_name_IP():
+    try:
+        host_name = socket.gethostname()
+        host_ip = socket.gethostbyname(host_name)
+        print("Hostname :  ", host_name)
+        print("IP : ", host_ip)
+        print(socket.gethostbyaddr(socket.gethostname())[0])
+    except:
+        print("Unable to get Hostname and IP")
+
 
 def log_response(response):
     logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
@@ -6315,3 +6329,4 @@ def CDLEnqStatus(account):
     finally:
         if dbconn is not None:
             dbconn.close()
+
