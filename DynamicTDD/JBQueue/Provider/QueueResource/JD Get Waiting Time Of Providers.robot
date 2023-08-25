@@ -165,11 +165,33 @@ JD-TC-GetWaitingTimeOfProviders-1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id1}  ${resp.json()['id']}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id3}  ${resp.json()['id']}
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${id1}=  get_acc_id  ${PUSERNAME155}
-    ${id2}=  get_acc_id  ${PUSERNAME156}
-    ${id3}=  get_acc_id  ${PUSERNAME157}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id2}  ${resp.json()['id']}
+
+    # ${id1}=  get_acc_id  ${PUSERNAME155}
+    # ${id2}=  get_acc_id  ${PUSERNAME156}
+    # ${id3}=  get_acc_id  ${PUSERNAME157}
     ${resp}=  Get Waiting Time Of Providers  ${id1}-${lid1}  ${id2}-${lid2}  ${id3}-${lid3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}  ${id1}

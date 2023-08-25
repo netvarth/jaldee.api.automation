@@ -800,7 +800,19 @@ JD-TC-AddToWaitlistBlock-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${appxWaitingTime}=  Evaluate   ${srv_duration} * 9
+
+    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[8]}  partySize=1  appxWaitingTime=${appxWaitingTime}  waitlistedBy=${waitlistedby[1]}  
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname51}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname51}
+
     ${appxWaitingTime}=  Evaluate   ${srv_duration} * 5
+
+    ${resp}=  Get Waitlist By Id  ${wid21} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[8]}  partySize=1  appxWaitingTime=${appxWaitingTime}  waitlistedBy=${waitlistedby[1]}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
@@ -810,7 +822,7 @@ JD-TC-AddToWaitlistBlock-6
 
     ${appxWaitingTime}=  Evaluate   ${srv_duration} * 6
 
-    ${resp}=  Get Waitlist By Id  ${wid21} 
+    ${resp}=  Get Waitlist By Id  ${wid31} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -822,7 +834,7 @@ JD-TC-AddToWaitlistBlock-6
 
     ${appxWaitingTime}=  Evaluate   ${srv_duration} * 7
 
-    ${resp}=  Get Waitlist By Id  ${wid31} 
+    ${resp}=  Get Waitlist By Id  ${wid41} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -834,7 +846,7 @@ JD-TC-AddToWaitlistBlock-6
 
     ${appxWaitingTime}=  Evaluate   ${srv_duration} * 8
 
-    ${resp}=  Get Waitlist By Id  ${wid41} 
+    ${resp}=  Get Waitlist By Id  ${wid51} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -843,18 +855,6 @@ JD-TC-AddToWaitlistBlock-6
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname41}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname41}
-
-    ${appxWaitingTime}=  Evaluate   ${srv_duration} * 9
-
-    ${resp}=  Get Waitlist By Id  ${wid51} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[8]}  partySize=1  appxWaitingTime=${appxWaitingTime}  waitlistedBy=${waitlistedby[1]}  
-    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname51}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname51}
 
 JD-TC-AddToWaitlistBlock-7
     [Documentation]   Block two waitlist for multple users with different service in same queue.
@@ -960,7 +960,7 @@ JD-TC-AddToWaitlistBlock-7
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
-    ${srv_duration}=   Random Int   min=10   max=20
+    ${srv_duration}=   Random Int   min=5   max=15
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -978,8 +978,8 @@ JD-TC-AddToWaitlistBlock-7
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
-    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  30
+    ${end_time}=    db.add_timezone_time  ${tz}  4  00 
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}   ${ser_id2} 
@@ -1113,13 +1113,15 @@ JD-TC-AddToWaitlistBlock-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[8]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby[1]}  
+    ${appxWaitingTime}=  Evaluate   ${srv_duration1} * 5
+
+    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[8]}  partySize=1  appxWaitingTime=${appxWaitingTime}  waitlistedBy=${waitlistedby[1]}  
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id2}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname11}
-    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname11}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname51}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname51}
 
-    ${appxWaitingTime}=  Evaluate   ${srv_duration1} * 1
+    ${appxWaitingTime}=  Evaluate   ${srv_duration1} * 4
 
     ${resp}=  Get Waitlist By Id  ${wid21} 
     Log  ${resp.json()}
