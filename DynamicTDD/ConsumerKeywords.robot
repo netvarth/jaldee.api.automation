@@ -10,7 +10,7 @@ Resource          Keywords.robot
 
 &{cons_headers}                Content-Type=application/json
 &{form_headers}		    
-&{params}       
+&{cons_params}       
 
 *** Keywords ***
 
