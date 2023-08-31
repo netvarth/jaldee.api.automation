@@ -2016,6 +2016,7 @@ PLEASE_DISABLE_SCHEDULE ="please disable schedule to reduce consumer parallel se
 
 IVR_Already_Disabled= "IVR already disabled"
 IVR_SETTING_NOt_FOUND= "Ivr setting not found"	
+NO_ACTIVE_SCHEDULES_FOUND="No active schedules found"
 
 
 TOOTH_ID_CANNOT_BE_NULL= "Tooth Id cannot be null"
