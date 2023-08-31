@@ -171,7 +171,7 @@ JD-TC-GetMRprescription-1
     Set Suite Variable  ${que_id1}   ${resp.json()}
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
+    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1}  location=${loc_id1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -1555,8 +1555,8 @@ JD-TC-GetMRprescription-11
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_tz_time_secs  ${tz}
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${apptTime}=  db.get_date_time_by_timezone  ${tz}
+    ${apptTakenTime}=  db.remove_date_time_secs   ${apptTime}
     ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
 
@@ -1588,7 +1588,7 @@ JD-TC-GetMRprescription-11
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
@@ -1673,7 +1673,7 @@ JD-TC-GetMRprescription-11
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id2}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_secs   ${appttime1}
+    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
     Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
     ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
