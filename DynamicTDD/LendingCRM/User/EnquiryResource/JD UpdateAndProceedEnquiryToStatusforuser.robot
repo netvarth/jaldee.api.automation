@@ -70,6 +70,8 @@ JD-TC-UpdateandProceedEnquiry-1
     ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable    ${BUSER} 
 
     ${resp}=   Get Active License
@@ -143,8 +145,10 @@ JD-TC-UpdateandProceedEnquiry-1
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable    ${BUSER_U1}
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -237,7 +241,9 @@ JD-TC-UpdateandProceedEnquiry-2
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -340,7 +346,9 @@ JD-TC-UpdateandProceedEnquiry-UH1
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -472,7 +480,9 @@ JD-TC-UpdateandProceedEnquiry-UH2
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -565,7 +575,6 @@ JD-TC-UpdateandProceedEnquiry-UH3
     ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
 
 
     ${resp}=    Get Locations
@@ -582,10 +591,6 @@ JD-TC-UpdateandProceedEnquiry-UH3
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    # ${resp}=  Get Enquiry by Uuid  ${en_uid12}  
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}   200
-    # Set Suite Variable  ${resp}   ${resp.json()}
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -624,7 +629,7 @@ JD-TC-UpdateandProceedEnquiry-UH4
     ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -639,27 +644,31 @@ JD-TC-UpdateandProceedEnquiry-UH4
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
-    clear_customer   ${BUSER}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME14}  firstName=${fname}   lastName=${lname}
+        ${resp1}=  AddCustomer  ${CUSERNAME10}  firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${pcid14}   ${resp1.json()}
     ELSE
-        Set Test Variable  ${pcid14}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${pcid14}  ${resp.json()[0]['id']}
     END
-
-
+    
     ${resp}=  Get Enquiry by Uuid  ${en_uid}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
+    Set Suite Variable  ${resp}   ${resp.json()}
+  
+    # ${resp}=  Update and Proceed Enquiry to Status  ${en_uid1}  ${status_id0}  ${locId}  ${pcid14}  &{resp.json()}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}   401
+    # Should Be Equal As Strings  ${resp.json()}              ${NoAccess}
     
 
-    ${resp}=  Update and Proceed Enquiry to Status  fhd5  ${status_id0}  ${locId}  ${pcid14}  &{resp.json()}
+    ${resp}=  Update and Proceed Enquiry to Status  fhd5  ${status_id0}  ${locId}  ${pcid14}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   422
     Should Be Equal As Strings  ${resp.json()}              ${INV_ENQ_ID}
@@ -752,7 +761,9 @@ JD-TC-UpdateandProceedEnquiry-UH5
     ${resp}=   Encrypted Provider Login  ${BUSER_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id2}  ${decrypted_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -859,7 +870,9 @@ JD-TC-UpdateandProceedEnquiry-UH5
     ${resp}=   Encrypted Provider Login  ${BUSER_U3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id3}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id3}  ${decrypted_data['id']}
 
     ${resp}=  Update and Proceed Enquiry to Status  ${en_uid1}  ${status_id0}  ${locId}  ${pcid14}  &{resp.json()}
     Log  ${resp.content}

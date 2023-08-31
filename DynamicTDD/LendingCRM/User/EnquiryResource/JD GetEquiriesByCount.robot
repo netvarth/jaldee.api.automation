@@ -70,7 +70,11 @@ JD-TC-Get Enquiries For Branch-1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -576,9 +580,11 @@ JD-TC-Get Enquiries For Branch-6
     ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${p_fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${p_lname1}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${p_fname1}   ${decrypted_data['firstName']}
+    Set Suite Variable  ${p_lname1}   ${decrypted_data['lastName']}
 
     ${resp}=   Get Active License
     Log  ${resp.content}
@@ -805,9 +811,11 @@ JD-TC-Get Enquiries For Branch-6
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
-    Set Suite Variable  ${p_fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${p_lname2}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id2}  ${decrypted_data['id']}
+    Set Suite Variable  ${p_fname2}   ${decrypted_data['firstName']}
+    Set Suite Variable  ${p_lname2}   ${decrypted_data['lastName']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
