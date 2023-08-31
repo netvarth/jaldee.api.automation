@@ -21,8 +21,8 @@ Consumer Login
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    POST On Session    ynw    /consumer/login    data=${log}   params=${params}   expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    POST On Session    ynw    /consumer/login    data=${log}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -40,14 +40,14 @@ Send Reset Email
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${data}=    json.dumps    ${countryCode}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    POST On Session    ynw   /consumer/login/reset/${email}   data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    POST On Session    ynw   /consumer/login/reset/${email}   data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -57,7 +57,7 @@ Reset Password
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw    /consumer/login/reset/${key}/validate  expected_status=any   headers=${cons_headers}  
     ${login}=    Create Dictionary    loginId=${email}  password=${pswd}  countryCode=${countryCode}
@@ -80,9 +80,9 @@ Consumer SignUp
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /consumer   data=${apple}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session    ynw    /consumer   data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -92,11 +92,11 @@ Consumer Activation
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     
     Check And Create YNW Session
     ${key}=   verify accnt  ${email}  ${purpose}
-    ${resp_val}=  POST On Session   ynw  /consumer/${key}/verify   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp_val}=  POST On Session   ynw  /consumer/${key}/verify   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp_val}
 
 
@@ -108,19 +108,19 @@ Consumer Set Credential
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    PUT On Session    ynw    /consumer/${key}/activate   data=${apple}  params=${params}  expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    PUT On Session    ynw    /consumer/${key}/activate   data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Send Verify Login Consumer
     [Arguments]  ${loginid}  ${countryCode}=+91  &{kwargs}  #${timeZone}=Asia/Kolkata
     Check And Create YNW Session
-    ${params}=     Create Dictionary   countryCode=${countryCode}
+    ${cons_params}=     Create Dictionary   countryCode=${countryCode}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=  POST On Session    ynw  /consumer/login/verifyLogin/${loginid}   params=${params}   expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=  POST On Session    ynw  /consumer/login/verifyLogin/${loginid}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Check Consumer Exists
@@ -131,8 +131,8 @@ Check Consumer Exists
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=  GET On Session    ynw  /consumer/${loginid}/check    data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=  GET On Session    ynw  /consumer/${loginid}/check    data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Verify Login Consumer
@@ -144,8 +144,8 @@ Verify Login Consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    PUT On Session    ynw    /consumer/login/${key}/verifyLogin    data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    PUT On Session    ynw    /consumer/login/${key}/verifyLogin    data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -157,9 +157,9 @@ Update Consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PATCH On Session    ynw    /consumer/signUp    data=${apple}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    PATCH On Session    ynw    /consumer/signUp    data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Consumer By Id
@@ -169,8 +169,8 @@ Get Consumer By Id
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    GET On Session    ynw   /consumer/${id}  params=${params}  expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    GET On Session    ynw   /consumer/${id}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Consumer Change Password
@@ -181,8 +181,8 @@ Consumer Change Password
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    PUT On Session   ynw    /consumer/login/chpwd  data=${apple}  params=${params}  expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    PUT On Session   ynw    /consumer/login/chpwd  data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -195,17 +195,17 @@ Consumer Waitlist
 
 # Add To Waitlist Consumer
 #     [Arguments]   ${service_id}  ${partySize}  ${consumerNote}  ${acct_id}
-#     ${params}=  Create Dictionary  account=${acct_id}
+#     ${cons_params}=  Create Dictionary  account=${acct_id}
 #     ${apple}=   Consumer Waitlist  ${service_id}  ${partySize}  ${consumerNote}
 #     ${apple}=    json.dumps    ${apple}
 #     Check And Create YNW Session
-#     ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${params}   expected_status=any   headers=${cons_headers}
+#     ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
 #     [Return]  ${resp}
     
 
 Consumer Add To Waitlist with Phone no
     [Arguments]   ${acct_id}  ${service_id}  ${queueId}  ${date}  ${waitlistPhoneNumber}  ${country_code}  @{vargs}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${service}=     Create Dictionary    id=${service_id}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${len}=  Get Length  ${vargs}
@@ -220,15 +220,15 @@ Consumer Add To Waitlist with Phone no
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Consumer Add To WL With Virtual Service
     [Arguments]  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  ${virtualService}  @{vargs}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}
     ${len}=  Get Length  ${vargs}
@@ -243,15 +243,15 @@ Consumer Add To WL With Virtual Service
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}   params=${params}   expected_status=any   headers=${cons_headers} 
+    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers} 
     [Return]  ${resp}
 
 
 Virtual Service Checkin with Mode
     [Arguments]  ${waitlistMode}  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  ${virtualService}  @{vargs}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}
     ${len}=  Get Length  ${vargs}
@@ -266,16 +266,16 @@ Virtual Service Checkin with Mode
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}
 
 
 
 Consumer Add To WL With Virtual Service For User
     [Arguments]  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  ${virtualService}  ${u_id}  @{vargs}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${user_id}=  Create Dictionary  id=${u_id}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}
@@ -293,15 +293,15 @@ Consumer Add To WL With Virtual Service For User
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}
 
 
 Add To Waitlist Children Consumer
     [Arguments]   ${service_id}  ${partySize}  ${consumerNote}  ${acct_id}   @{vargs}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${apple}=   Consumer Waitlist  ${service_id}  ${partySize}  ${consumerNote}
     ${len}=  Get Length  ${vargs}
     ${child}=  Create Dictionary  name=${vargs[0]}
@@ -314,18 +314,18 @@ Add To Waitlist Children Consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 # View Waitlistee <-> Get consumer Waitlist By Id
 # View Waitlistee
 #     [Arguments]  ${id}  ${acct_id}
-#     ${params}=  Create Dictionary  account=${acct_id}
+#     ${cons_params}=  Create Dictionary  account=${acct_id}
 #     Check And Create YNW Session
 #     Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-#     ${resp}=  GET On Session  ynw  /consumer/waitlist/${id}    params=${params}   expected_status=any   headers=${cons_headers}
+#     ${resp}=  GET On Session  ynw  /consumer/waitlist/${id}    params=${cons_params}   expected_status=any   headers=${cons_headers}
 #     [Return]  ${resp}
 
 Get Waitlist Consumer
@@ -340,7 +340,7 @@ Get Waitlist Consumer
 
 Cancel Waitlist
     [Arguments]  ${id}  ${acct_id}    ${CancelReason}=${waitlist_cancl_reasn[4]}    ${CommunicationMessage}=other  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${auth}=  Create Dictionary   cancelReason=${CancelReason}    communicationMessage=${CommunicationMessage}
     ${auth}=    json.dumps    ${auth}
     Check And Create YNW Session
@@ -348,19 +348,19 @@ Cancel Waitlist
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=  PUT On Session  ynw  /consumer/waitlist/cancel/${id}  data=${auth}   params=${params}   expected_status=any  headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=  PUT On Session  ynw  /consumer/waitlist/cancel/${id}  data=${auth}   params=${cons_params}   expected_status=any  headers=${cons_headers}
     [Return]  ${resp}
 
 Approximate Waiting Time Consumer
     [Arguments]  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    GET On Session    ynw  /consumer/waitlist/appxWaitingTime  params=${params}   expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    GET On Session    ynw  /consumer/waitlist/appxWaitingTime  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Update Consumer Profile
@@ -368,7 +368,7 @@ Update Consumer Profile
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     ${phone_numbers}=  Get Dictionary items  ${kwargs}
     ${usp}=    Create Dictionary   firstName=${firstname}  lastName=${lastname}  address=${address}  dob=${dob}  gender=${gender}
     FOR  ${key}  ${value}  IN  @{phone_numbers}
@@ -377,7 +377,7 @@ Update Consumer Profile
     Log  ${usp}
     ${apple}=    json.dumps    ${usp}
     Check And Create YNW Session
-    ${resp}=    PATCH On Session    ynw    /consumer    data=${apple}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    PATCH On Session    ynw    /consumer    data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -388,20 +388,20 @@ Update Consumer Profile With Emailid
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PATCH On Session    ynw    /consumer    data=${apple}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    PATCH On Session    ynw    /consumer    data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Waitlist Id Consumer
     [Arguments]   ${date}  ${id}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/waitlist/${id}/${date}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/${id}/${date}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 Reveal Phone Number
@@ -409,36 +409,36 @@ Reveal Phone Number
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/providers/revealPhoneNo/${accid}/${status}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw  /consumer/providers/revealPhoneNo/${accid}/${status}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
     
 Add Rating
 	[Arguments]  ${accid}  ${uuid}  ${stars}  ${feedback}  &{kwargs}  #${timeZone}=Asia/Kolkata
-	${params}=  Create Dictionary  account=${accid}  
+	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uuid=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
 	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/waitlist/rating  params=${params}  data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw  /consumer/waitlist/rating  params=${cons_params}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp} 
     
 Update Rating Waitlist
 	[Arguments]  ${accid}  ${uuid}  ${stars}  ${feedback}  &{kwargs}  #${timeZone}=Asia/Kolkata
-	${params}=  Create Dictionary  account=${accid}  
+	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uuid=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
 	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/waitlist/rating  params=${params}  data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw  /consumer/waitlist/rating  params=${cons_params}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp} 
 
 Verify Consumer Profile
@@ -462,9 +462,9 @@ AddFamilyMember
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 DeleteFamilyMember
@@ -472,9 +472,9 @@ DeleteFamilyMember
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    DELETE On Session  ynw  /consumer/familyMember/${id}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    DELETE On Session  ynw  /consumer/familyMember/${id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 ListFamilyMember
@@ -496,15 +496,15 @@ ConsumerFamilyMember Waitlist
 
 Add To Waitlist ConsumerFamilyMember
     [Arguments]   ${service_id}  ${partySize}  ${consumerNote}  ${mem_id}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${apple}=   ConsumerFamilyMember Waitlist  ${service_id}  ${partySize}  ${consumerNote}  ${mem_id}
     ${apple}=    json.dumps    ${apple}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 UpdateFamilymember Creation
@@ -521,14 +521,14 @@ UpdateFamilyMember
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/familyMember   data=${data}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw  /consumer/familyMember   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 Add To Waitlist Consumer FamilymemberChildren
     [Arguments]   ${service_id}  ${partySize}  ${consumerNote}  ${mem_id}  ${acct_id}  @{vargs}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${apple}=   Consumer FamilyMemberWaitlist  ${service_id}  ${partySize}  ${consumerNote}  ${mem_id}
     ${len}=  Get Length  ${vargs}
     ${child}=  Create Dictionary  name=${vargs[0]}
@@ -542,9 +542,9 @@ Add To Waitlist Consumer FamilymemberChildren
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 Get Waitlist Consumer Count
@@ -552,7 +552,7 @@ Get Waitlist Consumer Count
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/count  params=${kwargs}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}  
@@ -560,14 +560,14 @@ Get Waitlist Consumer Count
 CommunicationBetweenConsumerAndProvider
 	[Arguments]  ${aid}  ${uuid}  ${msg}  &{kwargs}  #${timeZone}=Asia/Kolkata
 	${data}=  Create Dictionary  communicationMessage=${msg}
-	${params}=  Create Dictionary  account=${aid}
+	${cons_params}=  Create Dictionary  account=${aid}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/waitlist/communicate/${uuid}  data=${data}  params=${params}   expected_status=any   headers=${cons_headers} 
+    ${resp}=  POST On Session  ynw  /consumer/waitlist/communicate/${uuid}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers} 
     [Return]  ${resp}
 
     
@@ -576,9 +576,9 @@ List Favourite Provider
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/providers   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/providers   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Add Favourite Provider
@@ -586,9 +586,9 @@ Add Favourite Provider
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/providers/${provider_id}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw  /consumer/providers/${provider_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Remove Favourite Provider
@@ -596,20 +596,20 @@ Remove Favourite Provider
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  DELETE On Session  ynw  /consumer/providers/${provider_id}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  DELETE On Session  ynw  /consumer/providers/${provider_id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 Get Bill By Consumer
     [Arguments]  ${id}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   GET On Session  ynw  /consumer/bill/${id}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=   GET On Session  ynw  /consumer/bill/${id}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
  
  
@@ -618,9 +618,9 @@ Get S3 Url
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/login/s3Url   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/login/s3Url   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 Get Consumer Communications
@@ -628,9 +628,9 @@ Get Consumer Communications
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/communications   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/communications   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 # Reading Provider Communications
@@ -644,15 +644,15 @@ Get Consumer Communications
 
 Reading Provider Communications
     [Arguments]   ${providerId}   ${acc_id}  ${messageIds}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acc_id}
+    ${cons_params}=  Create Dictionary  account=${acc_id}
     ${data}=  Create Dictionary  providerId=${providerId}  messageIds=${messageIds}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/communications/readMessages/${providerId}/${messageIds}   data=${data}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw  /consumer/communications/readMessages/${providerId}/${messageIds}   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -661,9 +661,9 @@ Get Consumer Communications Unread Count
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/communications/unreadCount   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/communications/unreadCount   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -672,42 +672,42 @@ Get Consumer Communications Unread Messages
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/communications/unreadMessages   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/communications/unreadMessages   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 General Communication with Provider
     [Arguments]    ${communicationMessage}   ${acc_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acc_id}
+    ${cons_params}=  Create Dictionary  account=${acc_id}
     ${data}=  Create Dictionary  communicationMessage=${communicationMessage}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/communications   data=${data}   params=${params}   expected_status=any   headers=${cons_headers}  
+    ${resp}=  POST On Session  ynw  /consumer/communications   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}  
     [Return]  ${resp}  	
 
 
 General Communication with User
     [Arguments]    ${communicationMessage}   ${acc_id}   ${U_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acc_id}
+    ${cons_params}=  Create Dictionary  account=${acc_id}
     ${data}=  Create Dictionary  provider=${U_id}   communicationMessage=${communicationMessage}
     ${data}=  json.dumps  ${data}   
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/communications   data=${data}   params=${params}   expected_status=any   headers=${cons_headers}  
+    ${resp}=  POST On Session  ynw  /consumer/communications   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}  
     [Return]  ${resp}  	
 
     
 Add To Waitlist Consumers
     [Arguments]  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  @{vargs}  &{kwargs}
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}  
     
@@ -726,15 +726,15 @@ Add To Waitlist Consumers
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}
 
 
 Add To Waitlist Consumers with mode
     [Arguments]  ${waitlistMode}  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  @{vargs}  &{kwargs}
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}  
     
@@ -753,15 +753,15 @@ Add To Waitlist Consumers with mode
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}
 
 
 Add To Waitlist Consumer For User
     [Arguments]  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  ${user_id}  @{vargs}  &{kwargs} 
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}  
     ${uid}=  Create Dictionary  id=${user_id}
@@ -781,14 +781,14 @@ Add To Waitlist Consumer For User
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}
     
 # Delete Waitlist Consumer
 #     [Arguments]  ${uuid}  ${accId}  ${CancelReason}=${waitlist_cancl_reasn[4]}    ${CommunicationMessage}=other   &{kwargs}  #${timeZone}=Asia/Kolkata
-#     ${params}=  Create Dictionary  account=${accId}
+#     ${cons_params}=  Create Dictionary  account=${accId}
 #     ${auth}=  Create Dictionary   cancelReason=${CancelReason}    communicationMessage=${CommunicationMessage}
 #     ${auth}=    json.dumps    ${auth}
 #     Check And Create YNW Session
@@ -796,66 +796,66 @@ Add To Waitlist Consumer For User
 #     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
 #     Log  ${kwargs}
 #     Set To Dictionary  ${cons_headers}   &{tzheaders}
-#     Set To Dictionary  ${params}   &{locparam}
+#     Set To Dictionary  ${cons_params}   &{locparam}
     
-#     ${resp}=  DELETE On Session  ynw  /consumer/waitlist/${uuid}  data=${auth}  params=${params}   expected_status=any   headers=${cons_headers}
+#     ${resp}=  DELETE On Session  ynw  /consumer/waitlist/${uuid}  data=${auth}  params=${cons_params}   expected_status=any   headers=${cons_headers}
 #     [Return]  ${resp} 
 
 
 Get consumer Waitlist By Id
     [Arguments]  ${uuid}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}  params=${params}   expected_status=any   headers=${cons_headers} 
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}  params=${cons_params}   expected_status=any   headers=${cons_headers} 
     [Return]  ${resp}
 
 Get consumer Waitlist 
     [Arguments]   &{params} 
     # &{params}=  db.Set_TZ_Header  &{params}
-    ${headers}  ${params}  ${locparam}=  db.Set_TZ_Header  &{params}
-    Log  ${params}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/waitlist/  params=${params}   expected_status=any   headers=${cons_headers}   
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/  params=${cons_params}   expected_status=any   headers=${cons_headers}   
     [Return]  ${resp}   
 
 Get Future Waitlist 
     [Arguments]  &{params} 
     # &{params}=  db.Set_TZ_Header  &{params}
-    ${headers}  ${params}  ${locparam}=  db.Set_TZ_Header  &{params}
-    Log  ${params}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/waitlist/future  params=${params}   expected_status=any   headers=${cons_headers}   
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/future  params=${cons_params}   expected_status=any   headers=${cons_headers}   
     [Return]  ${resp}            
     
     
 Get Future Waitlist Count   
     [Arguments]   &{params} 
     # &{params}=  db.Set_TZ_Header  &{params}
-    ${headers}  ${params}  ${locparam}=  db.Set_TZ_Header  &{params}
-    Log  ${params}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/waitlist/future/count  params=${params}   expected_status=any   headers=${cons_headers}   
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/future/count  params=${cons_params}   expected_status=any   headers=${cons_headers}   
     [Return]  ${resp} 
     
 Get Waiting Time Of queues
     [Arguments]  ${locationId}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  consumer/waitlist/${locationId}/waitingTime  params=${params}   expected_status=any   headers=${cons_headers}   
+    ${resp}=  GET On Session  ynw  consumer/waitlist/${locationId}/waitingTime  params=${cons_params}   expected_status=any   headers=${cons_headers}   
     [Return]  ${resp}
 
 Make Payment Consumer
@@ -864,11 +864,11 @@ Make Payment Consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${data}=  Create Dictionary  amount=${amount}  paymentMode=${mode}  uuid=${uuid}  accountId=${accid}  purpose=${purpose}  custId=${c_id}
     ${data}=  json.dumps  ${data}
-    ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 # Make Payment Consumer Mock
@@ -889,13 +889,13 @@ Make Payment Consumer Mock
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -904,33 +904,33 @@ Get Payment Consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/payment/${uuid}  params=${params}  expected_status=any   headers=${cons_headers}     
+    ${resp}=    GET On Session    ynw  /consumer/payment/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}     
     [Return]  ${resp}
 
 
 Get conspayment profiles
     [Arguments]   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     Check And Create YNW Session
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=   GET On Session  ynw  /consumer/payment/paymentProfiles   params=${params}   expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=   GET On Session  ynw  /consumer/payment/paymentProfiles   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get conspayment profiles By Id
     [Arguments]   ${accId}  ${profileId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     Check And Create YNW Session
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=   GET On Session  ynw  /consumer/payment/paymentProfiles/${profileId}   params=${params}   expected_status=any   headers=${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=   GET On Session  ynw  /consumer/payment/paymentProfiles/${profileId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Rating
@@ -938,7 +938,7 @@ Get Rating
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/waitlist/rating  params=${kwargs}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -946,12 +946,12 @@ Get Rating
 Get Queue By Location and service 
     [Arguments]  ${locationId}  ${serviceId}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     Check And Create YNW Session
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    GET On Session    ynw  /consumer/waitlist/queues/${locationId}/${serviceId}    params=${params}   expected_status=any   headers=${cons_headers}     
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    GET On Session    ynw  /consumer/waitlist/queues/${locationId}/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}     
     [Return]  ${resp}
 
 Get Service By Location   
@@ -959,19 +959,19 @@ Get Service By Location
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/waitlist/services/${locationId}   params=${params}   expected_status=any   headers=${cons_headers}     
+    ${resp}=    GET On Session    ynw  /consumer/waitlist/services/${locationId}   params=${cons_params}   expected_status=any   headers=${cons_headers}     
     [Return]  ${resp} 
 
 Get history Waitlist 
     [Arguments]  &{params} 
-    ${headers}  ${params}  ${locparam}=  db.Set_TZ_Header  &{params}
-    Log  ${params}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/waitlist/history  params=${params}   expected_status=any   headers=${cons_headers}   
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/history  params=${cons_params}   expected_status=any   headers=${cons_headers}   
     [Return]  ${resp}      
 
 AddFamilyMemberWithPhNo
@@ -983,30 +983,30 @@ AddFamilyMemberWithPhNo
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session  
-    ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}    
 
 Get history Waitlist Count
     [Arguments]   &{params} 
-    ${headers}  ${params}  ${locparam}=  db.Set_TZ_Header  &{params}
-    Log  ${params}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  consumer/waitlist/history/count  params=${params}   expected_status=any   headers=${cons_headers}   
+    ${resp}=  GET On Session  ynw  consumer/waitlist/history/count  params=${cons_params}   expected_status=any   headers=${cons_headers}   
     [Return]  ${resp}          
 
 Get Queue By Location and service By Date 
     [Arguments]  ${locationId}  ${serviceId}  ${Date}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/waitlist/queues/${locationId}/${serviceId}/${Date}  params=${params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    GET On Session    ynw  /consumer/waitlist/queues/${locationId}/${serviceId}/${Date}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}   
 
 Send Bill Email
@@ -1014,26 +1014,26 @@ Send Bill Email
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/bill/email/${uuid}   params=${params}  expected_status=any   headers=${cons_headers}  
+    ${resp}=  POST On Session  ynw  /provider/bill/email/${uuid}   params=${cons_params}  expected_status=any   headers=${cons_headers}  
     [Return]  ${resp} 
 
 Apply Jaldee Coupon At Selfpay
     [Arguments]   ${uuid}  ${coupon_code}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/jaldee/coupons/${coupon_code}/${uuid}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw  /consumer/jaldee/coupons/${coupon_code}/${uuid}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp} 
 
 
 Add To Waitlist Consumers with JCoupon
     [Arguments]  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  ${coupons}  @{vargs}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}  
     
@@ -1049,45 +1049,45 @@ Add To Waitlist Consumers with JCoupon
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}
 
 Get Services in Department By Consumer
     [Arguments]   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/waitlist/department/services  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/department/services  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Enable location sharing by consumer
     [Arguments]  ${pId}   ${waitlist_id}  ${Phonenumber}  ${travelMode}  ${startTimeMode}  ${lattitude}  ${longitude}   ${shareLocStatus}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${pId}
+    ${cons_params}=  Create Dictionary  account=${pId}
     ${geolocation}=  Create Dictionary   latitude=${lattitude}   longitude=${longitude}
     ${data}=   Create Dictionary   waitlistPhonenumber=${Phonenumber}   jaldeeGeoLocation=${geolocation}   travelMode=${travelMode}   shareLocStatus=${shareLocStatus}   jaldeeStartTimeMod=${startTimeMode}
     ${data}=   json.dumps   ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session  
-    ${resp}=    POST On Session    ynw  /consumer/waitlist/saveMyLoc/${waitlist_id}   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session    ynw  /consumer/waitlist/saveMyLoc/${waitlist_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Disable location sharing by consumer
     [Arguments]  ${waitlist_id}   ${accid}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw  /consumer/waitlist/unshareMyLoc/${waitlist_id}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    DELETE On Session    ynw  /consumer/waitlist/unshareMyLoc/${waitlist_id}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 # Enable tracking by consumer
@@ -1098,164 +1098,164 @@ Disable location sharing by consumer
 
 Enable tracking by consumer
     [Arguments]    ${waitlist_id}   ${accid}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /consumer/waitlist/start/mytracking/${waitlist_id}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw  /consumer/waitlist/start/mytracking/${waitlist_id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}    
 
 Update consumer location
     [Arguments]   ${pId}  ${waitlist_id}  ${lattitude}  ${longitude}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${pId}
+    ${cons_params}=  Create Dictionary  account=${pId}
     ${data}=  Create Dictionary   latitude=${lattitude}   longitude=${longitude}
     ${data}=   json.dumps   ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /consumer/waitlist/update/latlong/${waitlist_id}   data=${data}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw  /consumer/waitlist/update/latlong/${waitlist_id}   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 update consumer travelmode
     [Arguments]   ${pId}  ${waitlist_id}  ${travelMode}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${pId}
+    ${cons_params}=  Create Dictionary  account=${pId}
     ${data}=   Create Dictionary   travelMode=${travelMode}
     ${data}=   json.dumps   ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /consumer/waitlist/update/travelmode/${waitlist_id}   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw  /consumer/waitlist/update/travelmode/${waitlist_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 check start status
     [Arguments]   ${pId}  ${waitlist_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    # ${params}=  Create Dictionary  account=${pId}
+    # ${cons_params}=  Create Dictionary  account=${pId}
     # ${data}=   Create Dictionary   travelMode=${travelMode}
     # ${data}=   json.dumps   ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session   ynw  /consumer/waitlist/status/mytracking/${waitlist_id}   params=${params}  expected_status=any   headers=${cons_headers}  
+    ${resp}=    GET On Session   ynw  /consumer/waitlist/status/mytracking/${waitlist_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}  
     [Return]  ${resp}
 
 Get Appointment Schedules Consumer
     [Arguments]  ${acct_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id} 
+    ${cons_params}=  Create Dictionary  account=${acct_id} 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}  
+    Set To Dictionary  ${cons_params}   &{locparam}  
     Check And Create YNW Session
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Appointment Schedule ById Consumer
     [Arguments]  ${scheduleId}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Appointment Slots By Schedule and Date
     [Arguments]  ${scheduleId}  ${date}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}/${date}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}/${date}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get All Schedule Slots Today By Location and Service
     [Arguments]  ${acct_id}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/today/location/${locationId}/service/${serviceId}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/today/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get All Schedule Slots By Date Location and Service
     [Arguments]  ${acct_id}  ${date}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/date/${date}/location/${locationId}/service/${serviceId}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/date/${date}/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get Next Available Appointment Slots By ScheduleId
     [Arguments]  ${scheduleId}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/nextAvailable/${scheduleId}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/nextAvailable/${scheduleId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get Next Available Appointment Time
     [Arguments]  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/nextAvailableApptTime    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/nextAvailableApptTime    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get Appmt Schedule By ServiceId and LocationId
     [Arguments]   ${acct_id}    ${locationId}   ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}  
+    ${cons_params}=  Create Dictionary  account=${acct_id}  
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/appointment/schedule/location/${locationId}/service/${serviceId}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/appointment/schedule/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get Appmt Schedule By ServiceId_LocationId and Date
     [Arguments]   ${acct_id}  ${locationId}  ${serviceId}  ${DATE}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}  
+    ${cons_params}=  Create Dictionary  account=${acct_id}  
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/appointment/schedule/location/${locationId}/service/${serviceId}/date/${DATE}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/appointment/schedule/location/${locationId}/service/${serviceId}/date/${DATE}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Donation By Consumer
     [Arguments]  ${c_id}  ${s_id}  ${loc_id}  ${amt}  ${d_fname}  ${d_lname}  ${d_add}  ${d_ph}  ${d_email}  ${acct_id}  ${countryCode}=+91  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${con_id}=  Create Dictionary  id=${c_id}
     ${ser_id}=  Create Dictionary  id=${s_id}
     ${location_id}=  Create Dictionary  id=${loc_id}
@@ -1265,9 +1265,9 @@ Donation By Consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw  /consumer/donation   data=${data}  expected_status=any   headers=${cons_headers}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session    ynw  /consumer/donation   data=${data}  expected_status=any   headers=${cons_headers}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Consumer Donation By Id
@@ -1275,9 +1275,9 @@ Get Consumer Donation By Id
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/donation/${id}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw   /consumer/donation/${id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Donations By Consumer
@@ -1285,7 +1285,7 @@ Get Donations By Consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/donation   params=${kwargs}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -1295,30 +1295,30 @@ Get Donation Count By Consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/donation/count  params=${kwargs}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Donation Service By Consumer
     [Arguments]  ${acct_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/donation/services    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/donation/services    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Payment Details
     [Arguments]   &{params}
-    ${headers}  ${params}  ${locparam}=  db.Set_TZ_Header  &{params}
-    Log  ${params}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/payment     params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw   /consumer/payment     params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Payment Details By UUId
@@ -1326,9 +1326,9 @@ Get Payment Details By UUId
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/payment/details/${uuid}  params=${params}  expected_status=any   headers=${cons_headers} 
+    ${resp}=  GET On Session  ynw   /consumer/payment/details/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers} 
     [Return]  ${resp}
 
 Get Individual Payment Records
@@ -1336,14 +1336,14 @@ Get Individual Payment Records
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/payment/${id}   params=${params}   expected_status=any   headers=${cons_headers}   
+    ${resp}=  GET On Session  ynw   /consumer/payment/${id}   params=${cons_params}   expected_status=any   headers=${cons_headers}   
     [Return]  ${resp}
     
 Take Appointment For Provider 
     [Arguments]    ${accid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     ${sid}=  Create Dictionary  id=${service_id}
     ${schedule}=  Create Dictionary  id=${schedule}    
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
@@ -1353,12 +1353,12 @@ Take Appointment For Provider
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Log  ${cons_headers}
-    Set To Dictionary  ${params}   &{locparam}
-    Log  ${params}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Log  ${cons_params}
     Check And Create YNW Session
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
     # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
-    ${resp}=  POST On Session  ynw   url=/consumer/appointment  params=${params}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Take Phonein Appointment For Provider 
@@ -1370,9 +1370,9 @@ Take Phonein Appointment For Provider
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1386,9 +1386,9 @@ Take Appointment For User
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1401,9 +1401,9 @@ Take Appointment For Provider with Phone no
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1418,9 +1418,9 @@ Take Virtual Service Appointment For Provider
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1434,9 +1434,9 @@ Phone-in Virtual Service Appointment For Provider
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1452,9 +1452,9 @@ Take Virtual Service Appointment For User
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1467,9 +1467,9 @@ Take Appointment with ApptMode For Provider
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get consumer Appointment By Id
@@ -1477,9 +1477,9 @@ Get consumer Appointment By Id
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  url=/consumer/appointment/${appmntId}?account=${accId}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  url=/consumer/appointment/${appmntId}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Consumer Waitlist By EncodedId
@@ -1487,9 +1487,9 @@ Get Consumer Waitlist By EncodedId
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /consumer/waitlist/enc/${W_Enc_id}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session     ynw   /consumer/waitlist/enc/${W_Enc_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 Get Consumer Appointment By EncodedId
@@ -1497,20 +1497,20 @@ Get Consumer Appointment By EncodedId
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /consumer/appointment/enc/${A_Enc_id}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session     ynw   /consumer/appointment/enc/${A_Enc_id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp} 
   
 Cancel Appointment By Consumer
     [Arguments]  ${appmntId}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${cons_params}=  Create Dictionary  account=${acct_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/appointment/cancel/${appmntId}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw  /consumer/appointment/cancel/${appmntId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Consumer Appointments Today
@@ -1518,7 +1518,7 @@ Get Consumer Appointments Today
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/appointment/today  params=${kwargs}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -1528,9 +1528,9 @@ Get Appmt Service By LocationId
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}   params=${params}  expected_status=any   headers=${cons_headers} 
+    ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}   params=${cons_params}  expected_status=any   headers=${cons_headers} 
     [Return]  ${resp}
 
 Get Consumer Appmt Today Count
@@ -1548,7 +1548,7 @@ Get Consumer Appointments
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/appointment  params=${kwargs}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -1556,16 +1556,16 @@ Get Consumer Appointments
 #Livetracking
 Enable apptment SaveMyLocation by consumer
     [Arguments]  ${pId}   ${Appmt_id}  ${Phonenumber}  ${travelMode}  ${startTimeMode}  ${lattitude}  ${longitude}   ${shareLocStatus}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${pId}
+    ${cons_params}=  Create Dictionary  account=${pId}
     ${geolocation}=  Create Dictionary   latitude=${lattitude}   longitude=${longitude}
     ${data}=   Create Dictionary   apptPhonenumber=${Phonenumber}   jaldeeGeoLocation=${geolocation}   travelMode=${travelMode}   shareLocStatus=${shareLocStatus}   jaldeeStartTimeMod=${startTimeMode}
     ${data}=   json.dumps   ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw     /consumer/appointment/saveMyLoc/${Appmt_id}   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session    ynw     /consumer/appointment/saveMyLoc/${Appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Locate apptment consumer
@@ -1573,9 +1573,9 @@ Locate apptment consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /consumer/appointment/live/locate/distance/time/${appmt_id}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw  /consumer/appointment/live/locate/distance/time/${appmt_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1584,9 +1584,9 @@ Start apptment tracking by consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  url=/consumer/appointment/start/mytracking/${appmt_id}?account=${accId}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw  url=/consumer/appointment/start/mytracking/${appmt_id}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Stop apptment tracking by consumer
@@ -1594,9 +1594,9 @@ Stop apptment tracking by consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw  /consumer/appointment/stop/mytracking/${appmt_id}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    DELETE On Session    ynw  /consumer/appointment/stop/mytracking/${appmt_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get apptment Livetrack Status
@@ -1604,9 +1604,9 @@ Get apptment Livetrack Status
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/appointment/status/mytracking/${appmt_id}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/appointment/status/mytracking/${appmt_id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1615,49 +1615,49 @@ Disable apptment unshareMylocation by consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw  url=/consumer/appointment/unshareMyLoc/${appmt_id}?account=${accId}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    DELETE On Session    ynw  url=/consumer/appointment/unshareMyLoc/${appmt_id}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Update Consumer apptment latlong
     [Arguments]   ${pId}  ${appmt_id}  ${lattitude}  ${longitude}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${pId}
+    ${cons_params}=  Create Dictionary  account=${pId}
     ${data}=  Create Dictionary   latitude=${lattitude}   longitude=${longitude}
     ${data}=   json.dumps   ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw   /consumer/appointment/update/latlong/${appmt_id}   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw   /consumer/appointment/update/latlong/${appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 Update Consumer apptment MyLocation
     [Arguments]   ${pId}  ${appmt_id}  ${lattitude}  ${longitude}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${pId}
+    ${cons_params}=  Create Dictionary  account=${pId}
     ${data}=  Create Dictionary   latitude=${lattitude}   longitude=${longitude}
     ${data}=   json.dumps   ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw   /consumer/appointment/updateMyLoc/${appmt_id}   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw   /consumer/appointment/updateMyLoc/${appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Update consumer apptment tavelmode
     [Arguments]   ${pId}  ${appmt_id}  ${travelMode}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${pId}
+    ${cons_params}=  Create Dictionary  account=${pId}
     ${data}=   Create Dictionary   travelMode=${travelMode}
     ${data}=   json.dumps   ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw  /consumer/appointment/update/travelmode/${appmt_id}   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw  /consumer/appointment/update/travelmode/${appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Consumer Future Appointments
@@ -1682,28 +1682,28 @@ Get Consumer Future Appointments Count
 
 Add Appointment Rating
 	[Arguments]  ${accid}  ${uuid}  ${stars}  ${feedback}  &{kwargs}  #${timeZone}=Asia/Kolkata
-	${params}=  Create Dictionary  account=${accid}  
+	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uuid=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
 	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/appointment/rating  params=${params}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw  /consumer/appointment/rating  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Update Appointment Rating
 	[Arguments]  ${accid}  ${uuid}  ${stars}  ${feedback}  &{kwargs}  #${timeZone}=Asia/Kolkata
-	${params}=  Create Dictionary  account=${accid}  
+	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uuid=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
 	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/appointment/rating  params=${params}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw  /consumer/appointment/rating  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp} 
 
 Get Appointment Rating
@@ -1738,11 +1738,11 @@ Get Consumer Appointments History Count
 
 Get Waitlist Meeting Details
     [Arguments]  ${uid}  ${mode}  ${acc}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acc}
+    ${cons_params}=  Create Dictionary  account=${acc}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/waitlist/${uid}/meetingDetails/${mode}?account=${acc}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -1752,48 +1752,48 @@ Get Appointment Meeting Details
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/appointment/${uid}/meetingDetails/${mode}?account=${acc}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Availability Of Queue By Consumer
     [Arguments]  ${locationId}  ${serviceId}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary   account=${accId}
+    ${cons_params}=  Create Dictionary   account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /consumer/waitlist/queues/available/${locationId}/${serviceId}   params=${params}   expected_status=any   headers=${cons_headers}     
+    ${resp}=  GET On Session  ynw   /consumer/waitlist/queues/available/${locationId}/${serviceId}   params=${cons_params}   expected_status=any   headers=${cons_headers}     
     [Return]  ${resp}
 
 
 Reschedule Appointment
     [Arguments]  ${acc_id}   ${appt_id}   ${time_slot}   ${date}  ${sch_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acc_id}
+    ${cons_params}=  Create Dictionary  account=${acc_id}
     ${data}=  Create Dictionary  uid=${appt_id}   time=${time_slot}  date=${date}   schedule=${sch_id}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw   /consumer/appointment/reschedule   params=${params}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session   ynw   /consumer/appointment/reschedule   params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
     
 
 Reschedule Waitlist
     [Arguments]  ${acc_id}   ${wl_id}   ${date}   ${q_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${acc_id}
+    ${cons_params}=  Create Dictionary  account=${acc_id}
     ${data}=  Create Dictionary   ynwUuid=${wl_id}  date=${date}  queue=${q_id} 
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw   /consumer/waitlist/reschedule   params=${params}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session   ynw   /consumer/waitlist/reschedule   params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1802,9 +1802,9 @@ Get consumer Appointment MR By Id
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/appointment/mr/${appmntId}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/appointment/mr/${appmntId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1813,9 +1813,9 @@ Get consumer Waitlist MR By Id
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/waitlist/mr/${uuid}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/mr/${uuid}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1827,9 +1827,9 @@ Update Consumer Delivery Address
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /consumer/deliveryAddress    data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    PUT On Session    ynw    /consumer/deliveryAddress    data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1838,9 +1838,9 @@ Get Consumer Delivery Address
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/deliveryAddress   params=${kwargs}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/deliveryAddress   params=${kwargs}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 # -------------------------
@@ -1864,7 +1864,7 @@ Create Order For HomeDelivery
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
-    # Set To Dictionary  ${params}   &{locparam}
+    # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}   ${accId}   ${order}  ${form_headers}  &{kwargs}
     [Return]  ${resp} 
 
@@ -1889,7 +1889,7 @@ Create Order For Pickup
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
-    # Set To Dictionary  ${params}   &{locparam}
+    # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}   ${accId}   ${order}  ${form_headers}  &{kwargs}
     [Return]  ${resp} 
 
@@ -1912,14 +1912,14 @@ Create Order For Electronic Delivery
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
-    # Set To Dictionary  ${params}   &{locparam}
+    # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}   ${accId}   ${order}  ${form_headers}  &{kwargs}
     [Return]  ${resp} 
 
 
 Get Cart Details
     [Arguments]   ${accId}   ${CatalogId}   ${homeDelivery}  ${orderDate}   ${coupons}  @{vargs}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${catalog}=  Create Dictionary  id=${CatalogId}
     ${len}=  Get Length  ${vargs}
     ${items}=  Create Dictionary  id=${vargs[0]}  quantity=${vargs[1]}
@@ -1934,9 +1934,9 @@ Get Cart Details
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   url=/consumer/orders/amount  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw   url=/consumer/orders/amount  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1951,7 +1951,7 @@ Upload ShoppingList Image for Pickup
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  OrderImageUpload   ${Cookie}   ${accId}   ${caption}   ${order}  ${form_headers}  &{kwargs}
     [Return]  ${resp} 
 
@@ -1971,20 +1971,20 @@ Upload ShoppingList Image for HomeDelivery
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  OrderImageUpload   ${Cookie}   ${accId}   ${caption}   ${order}  ${form_headers}  &{kwargs}
     [Return]  ${resp} 
 
 
 Get Order By Id
     [Arguments]    ${accId}   ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  url=/consumer/orders/${uuid}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  url=/consumer/orders/${uuid}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -1993,7 +1993,7 @@ Get Order By Criteria
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/orders  params=${kwargs}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -2004,7 +2004,7 @@ Get Consumer Order Count By Criteria
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/orders/count  params=${kwargs}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -2012,37 +2012,37 @@ Get Consumer Order Count By Criteria
 
 Get Catalog By AccId
     [Arguments]    ${accId}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    # ${params}=  Create Dictionary  account=${accId}
+    # ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/orders/catalogs/${accId}   params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/orders/catalogs/${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get Pickup Dates By Catalog
     [Arguments]   ${accId}   ${catalogId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   url=/consumer/orders/catalogs/pickUp/dates/${catalogId}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw   url=/consumer/orders/catalogs/pickUp/dates/${catalogId}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get HomeDelivery Dates By Catalog
     [Arguments]   ${accId}  ${catalogId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   url=/consumer/orders/catalogs/delivery/dates/${catalogId}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw   url=/consumer/orders/catalogs/delivery/dates/${catalogId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2073,9 +2073,9 @@ Get StoreContact Info
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/orders/settings/store/contact/info/${accId}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/orders/settings/store/contact/info/${accId}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2084,22 +2084,22 @@ Get Order Settings of Provider
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  url=/consumer/orders/settings?account=${accId}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  url=/consumer/orders/settings?account=${accId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Update Email For Order
     [Arguments]  ${accId}   ${uid}   ${email}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${email}=  json.dumps  ${email} 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw   url=/consumer/orders/${uid}/email   params=${params}   data=${email}   expected_status=any   headers=${cons_headers} 
+    ${resp}=  PUT On Session   ynw   url=/consumer/orders/${uid}/email   params=${cons_params}   data=${email}   expected_status=any   headers=${cons_headers} 
     [Return]  ${resp}
 
 
@@ -2108,22 +2108,22 @@ Get Item By Catalog
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/orders/catalog/${catalogId}/item/${itemId}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/orders/catalog/${catalogId}/item/${itemId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
 
     [Return]  ${resp}
 
 
 Cancel Order By Consumer
     [Arguments]  ${accountId}   ${uid}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accountId}
+    ${cons_params}=  Create Dictionary  account=${accountId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw   url=/consumer/orders/${uid}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session   ynw   url=/consumer/orders/${uid}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2132,59 +2132,59 @@ Get Order By EncodedId
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /consumer/orders/enc/${encId}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session     ynw   /consumer/orders/enc/${encId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp} 
 
  
 Get Consumer Order History 
     [Arguments]   &{params}
-    ${tzheaders}  ${params}  ${locparam}=  db.Set_TZ_Header  &{params}
-    Log  ${params}
+    ${tzheaders}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   GET On Session  ynw  /consumer/orders/history  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=   GET On Session  ynw  /consumer/orders/history  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get Consumer Order History Count
     [Arguments]  &{params}
-    ${tzheaders}  ${params}  ${locparam}=  db.Set_TZ_Header  &{params}
-    Log  ${params}
+    ${tzheaders}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/orders/history/count  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/orders/history/count  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Add Order Rating
 	[Arguments]  ${accid}  ${uuid}  ${stars}  ${feedback}  &{kwargs}  #${timeZone}=Asia/Kolkata
-	${params}=  Create Dictionary  account=${accid}  
+	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uId=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
 	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/orders/rating  params=${params}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw  /consumer/orders/rating  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Update Order Rating
 	[Arguments]  ${accid}  ${uuid}  ${stars}  ${feedback}  &{kwargs}  #${timeZone}=Asia/Kolkata
-	${params}=  Create Dictionary  account=${accid}  
+	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uId=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
 	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/orders/rating  params=${params}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw  /consumer/orders/rating  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp} 
 
 
@@ -2201,13 +2201,13 @@ Get Order Rating
 
 Get Consumer Waitlist Attachment
    [Arguments]    ${accid}   ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
-   ${params}=  Create Dictionary  account=${accid}
+   ${cons_params}=  Create Dictionary  account=${accid}
    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
    Log  ${kwargs}
    Set To Dictionary  ${cons_headers}   &{tzheaders}
-   Set To Dictionary  ${params}   &{locparam}
+   Set To Dictionary  ${cons_params}   &{locparam}
    Check And Create YNW Session
-   ${resp}=    GET On Session    ynw  /consumer/waitlist/attachment/${uuid}   params=${params}   expected_status=any   headers=${cons_headers}
+   ${resp}=    GET On Session    ynw  /consumer/waitlist/attachment/${uuid}   params=${cons_params}   expected_status=any   headers=${cons_headers}
    [Return]  ${resp}
 
 
@@ -2216,9 +2216,9 @@ Get Consumer Wallet
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/wallet/eligible  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/wallet/eligible  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2227,9 +2227,9 @@ Get All Jaldee Cash Available
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/wallet/cash/available  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/wallet/cash/available  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2238,9 +2238,9 @@ Get Jaldee Cash Available By Id
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/wallet/cash/${jcashid}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/wallet/cash/${jcashid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2249,9 +2249,9 @@ Get Jaldee Cash Details
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/wallet/cash/info  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/wallet/cash/info  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2260,20 +2260,20 @@ Get Jaldee Cash Expired
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/wallet/cash/expired  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/wallet/cash/expired  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
 Get Remaining Amount To Pay
     [Arguments]  ${useJcash}   ${useJcredit}   ${AdvanceAmt}  &{kwargs}  #${timeZone}=Asia/Kolkata
     
-    ${params}=  Create Dictionary  useJcash=${useJcash}  useJcredit=${useJcredit}  advancePayAmount=${AdvanceAmt}
+    ${cons_params}=  Create Dictionary  useJcash=${useJcash}  useJcredit=${useJcredit}  advancePayAmount=${AdvanceAmt}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/consumer/wallet/redeem/remaining/amt?useJcash=${useJcash}&useJcredit=${useJcredit}&advancePayAmount=${AdvanceAmt}     expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -2284,7 +2284,7 @@ Get Total JCash And Credit Amount
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/redeem/eligible/amt     expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -2295,7 +2295,7 @@ Get Total Credit Available
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/credit     expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -2308,7 +2308,7 @@ Make Jcash Payment Consumer Mock
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session    ynw  /consumer/payment/wallet  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -2316,7 +2316,7 @@ Make Jcash Payment Consumer Mock
 
 Waitlist AdvancePayment Details
     [Arguments]  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  ${coupons}  @{vargs}  &{kwargs}  #${timeZone}=Asia/Kolkata 
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${queueId}=  Create Dictionary  id=${queueId}
     ${serviceId}=  Create Dictionary  id=${service_id}  
     
@@ -2332,9 +2332,9 @@ Waitlist AdvancePayment Details
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    PUT On Session  ynw  /consumer/waitlist/advancePayment   data=${data}  params=${params}   expected_status=any   headers=${cons_headers}    
+    ${resp}=    PUT On Session  ynw  /consumer/waitlist/advancePayment   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}
 
 
@@ -2347,7 +2347,7 @@ Appointment AdvancePayment Details
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/consumer/appointment/advancePayment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -2362,7 +2362,7 @@ Appointment AdvancePayment Details without Coupon
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/consumer/appointment/advancePayment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
@@ -2370,43 +2370,43 @@ Appointment AdvancePayment Details without Coupon
 
 Consumer View Questionnaire
     [Arguments]    ${accid}   ${serviceId}  ${consumerId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session   ynw  /consumer/questionnaire/service/${serviceId}/consumer/${consumerId}   params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session   ynw  /consumer/questionnaire/service/${serviceId}/consumer/${consumerId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Donation Questionnaire By Id    
     [Arguments]  ${accid}   ${don_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/questionnaire/donation/${don_id}  params=${params}   expected_status=any   headers=${cons_headers}   
+    ${resp}=    GET On Session    ynw  /consumer/questionnaire/donation/${don_id}  params=${cons_params}   expected_status=any   headers=${cons_headers}   
     [Return]  ${resp}
 
 
 Consumer Validate Questionnaire
     [Arguments]  ${accid}   ${data}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     # ${data}=  json.dumps  ${data}
     Log  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /consumer/questionnaire/validate  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw   /consumer/questionnaire/validate  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Consumer Change Answer Status for Waitlist
     [Arguments]  ${accid}   ${wlId}  ${fileId}  ${labelname}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     ${filedata}=  Create Dictionary  uid=${fileId}  labelName=${labelname}  
     ${filedata}=  Create List  ${filedata}
     ${data}=  Create Dictionary  urls=${filedata} 
@@ -2414,15 +2414,15 @@ Consumer Change Answer Status for Waitlist
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /consumer/waitlist/questionnaire/upload/status/${wlId}  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw   /consumer/waitlist/questionnaire/upload/status/${wlId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}    
 
 
 Consumer Change Answer Status for Appointment
     [Arguments]  ${accid}   ${apptId}  ${fileId}  ${labelname}   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     ${filedata}=  Create Dictionary  uid=${fileId}  labelName=${labelname}
     ${filedata}=  Create List  ${filedata}
     ${data}=  Create Dictionary  urls=${filedata} 
@@ -2430,44 +2430,44 @@ Consumer Change Answer Status for Appointment
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /consumer/appointment/questionnaire/upload/status/${apptId}  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw   /consumer/appointment/questionnaire/upload/status/${apptId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}  
 
 
 Consumer Revalidate Questionnaire
     [Arguments]  ${accid}   ${data}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accid}
     Log  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /consumer/questionnaire/resubmit/validate  data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw   /consumer/questionnaire/resubmit/validate  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Consumer Questionnaire By uuid For Waitlist
     [Arguments]  ${uuid}   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session  ynw  url=/consumer/waitlist/questionnaire/${uuid}   params=${params}   expected_status=any   headers=${cons_headers}     
+    ${resp}=    GET On Session  ynw  url=/consumer/waitlist/questionnaire/${uuid}   params=${cons_params}   expected_status=any   headers=${cons_headers}     
     [Return]  ${resp}
 
 Get Consumer Questionnaire By uuid For Appmnt
     [Arguments]  ${uuid}   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session  ynw  url=/consumer/appointment/questionnaire/${uuid}   params=${params}  expected_status=any   headers=${cons_headers}     
+    ${resp}=    GET On Session  ynw  url=/consumer/appointment/questionnaire/${uuid}   params=${cons_params}  expected_status=any   headers=${cons_headers}     
     [Return]  ${resp}
 
 Consumer SignUp Via QRcode
@@ -2478,9 +2478,9 @@ Consumer SignUp Via QRcode
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /consumer   data=${data}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    POST On Session    ynw    /consumer   data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2489,9 +2489,9 @@ Get NextAvailableSchedule appt consumer
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   /consumer/appointment/schedule/nextAvailableSchedule/${pid}-${lid}-${u_id}    params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session     ynw   /consumer/appointment/schedule/nextAvailableSchedule/${pid}-${lid}-${u_id}    params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2500,31 +2500,31 @@ Get payment modes
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   GET On Session  ynw  /consumer/payment/modes/${accountId}/${serviceId}/${paymentPurpose}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=   GET On Session  ynw  /consumer/payment/modes/${accountId}/${serviceId}/${paymentPurpose}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Questionnaire By CatalogID    
     [Arguments]  ${catalogId1}  ${account_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${account_id}
+    ${cons_params}=  Create Dictionary  account=${account_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  url=/consumer/questionnaire/order/${catalogId1}  params=${params}  expected_status=any   headers=${cons_headers}     
+    ${resp}=    GET On Session    ynw  url=/consumer/questionnaire/order/${catalogId1}  params=${cons_params}  expected_status=any   headers=${cons_headers}     
     [Return]  ${resp}
 
 Consumer Get Order Questionnaire By uuid 
     [Arguments]  ${uuid}  ${account_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${account_id}
+    ${cons_params}=  Create Dictionary  account=${account_id}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/orders/questionnaire/${uuid}  params=${params}  expected_status=any   headers=${cons_headers}     
+    ${resp}=    GET On Session    ynw  /consumer/orders/questionnaire/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}     
     [Return]  ${resp}
 
 Consumer Upload Status for Appnt
@@ -2532,126 +2532,126 @@ Consumer Upload Status for Appnt
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /consumer/appointment/serviceoption/upload/status/${uuid}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  PUT On Session  ynw   /consumer/appointment/serviceoption/upload/status/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get service options for an item
     [Arguments]  ${item}  ${accountId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     comment    login bypassed url
-    ${params}=  Create Dictionary  account=${accountId}
+    ${cons_params}=  Create Dictionary  account=${accountId}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   url=/consumer/questionnaire/serviceoptions/order/item/${item}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session    ynw   url=/consumer/questionnaire/serviceoptions/order/item/${item}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]    ${resp} 
 
 Get Service Options By Service
     [Arguments]      ${ser_id}  ${consumer}   ${accountId}   &{kwargs}  #${timeZone}=Asia/Kolkata 
     comment    login bypassed url
-    ${params}=  Create Dictionary  account=${accountId} 
+    ${cons_params}=  Create Dictionary  account=${accountId} 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/${ser_id}/${consumer}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/${ser_id}/${consumer}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Service Options By Order
     [Arguments]      ${catalogid}   ${accountId}  &{kwargs}  #${timeZone}=Asia/Kolkata 
-    ${params}=  Create Dictionary  account=${accountId} 
+    ${cons_params}=  Create Dictionary  account=${accountId} 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/order/${catalogid}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/order/${catalogid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Get Service Options By Donation
     [Arguments]   ${uuid}   ${accountId}  &{kwargs}  #${timeZone}=Asia/Kolkata 
-    ${params}=  Create Dictionary  account=${accountId} 
+    ${cons_params}=  Create Dictionary  account=${accountId} 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/donation/${uuid}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/donation/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Change Status Of Service Option Item
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accountId} 
+    ${cons_params}=  Create Dictionary  account=${accountId} 
     ${data}=    Create Dictionary   urls=${filedata}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   PUT On Session  ynw  url=/consumer/orders/item/serviceoption/upload/status/${uuid}  params=${params}  data=${data}   expected_status=any   headers=${cons_headers}
+    ${resp}=   PUT On Session  ynw  url=/consumer/orders/item/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
     [Return]    ${resp}
 
 Change Status Of Service Option Appmt
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accountId} 
+    ${cons_params}=  Create Dictionary  account=${accountId} 
     ${data}=    Create Dictionary   urls=${filedata}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   PUT On Session  ynw  url=/consumer/appointment/serviceoption/upload/status/${uuid}  params=${params}  data=${data}   expected_status=any   headers=${cons_headers}
+    ${resp}=   PUT On Session  ynw  url=/consumer/appointment/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
     [Return]    ${resp}
 
 Change Status Of Service Option Waitlist
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accountId}
+    ${cons_params}=  Create Dictionary  account=${accountId}
     ${data}=    Create Dictionary   urls=${filedata}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   PUT On Session  ynw  url=/consumer/waitlist/serviceoption/upload/status/${uuid}  params=${params}  data=${data}   expected_status=any   headers=${cons_headers}
+    ${resp}=   PUT On Session  ynw  url=/consumer/waitlist/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
     [Return]    ${resp}
 
 Change Status Of Service Option Order
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accountId}
+    ${cons_params}=  Create Dictionary  account=${accountId}
     ${data}=    Create Dictionary   urls=${filedata}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   PUT On Session  ynw  url=/consumer/orders/serviceoption/upload/status/${uuid}  params=${params}  data=${data}   expected_status=any   headers=${cons_headers}
+    ${resp}=   PUT On Session  ynw  url=/consumer/orders/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
     [Return]    ${resp}
 
 Change Status Of Service Option Donation
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accountId}
+    ${cons_params}=  Create Dictionary  account=${accountId}
     ${data}=    Create Dictionary   urls=${filedata}
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   PUT On Session  ynw  url=/consumer/donation/serviceoption/upload/status/${uuid}  params=${params}  data=${data}   expected_status=any   headers=${cons_headers}
+    ${resp}=   PUT On Session  ynw  url=/consumer/donation/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
     [Return]    ${resp}
 
 
 Create Payment Link For Donation
     [Arguments]  ${con_id}  ${countryCode}  ${CUR_DAY}  ${don_amt1}  ${donar_fname}  ${donar_lname}  ${donorEmail}  ${ph1}  ${loc_id1}  ${note}  ${sid1}  ${acc_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary  account=${accId}
     ${consumer_id}=  Create Dictionary  id=${con_id}
     ${donor_data}=  Create Dictionary  firstName=${donar_fname}  lastName=${donar_lname}
     ${location_data}=  Create Dictionary  id=${loc_id1}
@@ -2663,9 +2663,9 @@ Create Payment Link For Donation
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  url=/consumer/payment/generate/paylink   params=${params}  data=${data}  expected_status=any   headers=${cons_headers}    
+    ${resp}=    POST On Session  ynw  url=/consumer/payment/generate/paylink   params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}    
     [Return]  ${resp}
 
 Get Donation Details
@@ -2673,9 +2673,9 @@ Get Donation Details
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/payment/paylink/donation/${uuid}  params=${params}  expected_status=any   headers=${cons_headers}
+    ${resp}=  GET On Session  ynw  /consumer/payment/paylink/donation/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Donation Payment Via Link
@@ -2687,9 +2687,9 @@ Donation Payment Via Link
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session   
-    ${resp}=  POST On Session  ynw  /consumer/payment/paylink/donation  params=${params}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw  /consumer/payment/paylink/donation  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
 Add Family
@@ -2702,9 +2702,9 @@ Add Family
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=                      POST On Session  ynw   /consumer/familyMember    json=${data}  params=${params}   expected_status=any   headers=${cons_headers}
+    ${resp}=                      POST On Session  ynw   /consumer/familyMember    json=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
     [Return]                      ${resp}
 
 Get Seropt By CatalogId
@@ -2713,7 +2713,7 @@ Get Seropt By CatalogId
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/questionnaire/serviceoption/order/catalog/item/${catalogId}/${channel}?account=${accid}    expected_status=any   headers=${cons_headers}
 
@@ -2751,7 +2751,7 @@ Create Order With Service Options Consumer
     # ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     # Log  ${kwargs}
     # Set To Dictionary  ${form_headers}   &{tzheaders}
-    # Set To Dictionary  ${params}   &{locparam}
+    # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}  ${account_id}   ${order}  ${form_headers}  &{kwargs}
     [Return]  ${resp}
 
@@ -2777,7 +2777,7 @@ Create Order For AuthorDemy
     # ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     # Log  ${kwargs}
     # Set To Dictionary  ${form_headers}   &{tzheaders}
-    # Set To Dictionary  ${params}   &{locparam}
+    # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}   ${accId}   ${order}  ${form_headers}  &{kwargs}
     [Return]  ${resp} 
 
@@ -2801,8 +2801,8 @@ Get Users By Loc and AccId
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=    GET On Session     ynw   /consumer/users/${accountId}/${locationId}  params=${params}  expected_status=any   headers=${form_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=    GET On Session     ynw   /consumer/users/${accountId}/${locationId}  params=${cons_params}  expected_status=any   headers=${form_headers}
     [Return]  ${resp}
 
 
@@ -2822,8 +2822,8 @@ Consumer Create Appt Service Request
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    ${resp}=  POST On Session  ynw  url=/consumer/appointment/service/request?account=${accId}  params=${params}  data=${data}  expected_status=any   headers=${form_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    ${resp}=  POST On Session  ynw  url=/consumer/appointment/service/request?account=${accId}  params=${cons_params}  data=${data}  expected_status=any   headers=${form_headers}
     [Return]  ${resp}
 
 
@@ -2862,9 +2862,9 @@ Consumer Video Call ready
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/waitlist/videocall/ready   data=${data}  params=${params}  expected_status=any   headers=${form_headers}
+    ${resp}=  PUT On Session  ynw  /consumer/waitlist/videocall/ready   data=${data}  params=${cons_params}  expected_status=any   headers=${form_headers}
     Log  ${resp.content}
     [Return]  ${resp}
 
@@ -2877,9 +2877,9 @@ Get convenienceFee Details
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=   PUT On Session  ynw  /consumer/payment/modes/MockConvenienceFee/${accountId}   params=${params}  data=${data}   expected_status=any  headers=${cons_headers}
+    ${resp}=   PUT On Session  ynw  /consumer/payment/modes/MockConvenienceFee/${accountId}   params=${cons_params}  data=${data}   expected_status=any  headers=${cons_headers}
     [Return]  ${resp}
 
 
@@ -2888,9 +2888,9 @@ Get Service By Location Appoinment
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
+    Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}  params=${params}  expected_status=any  headers=${cons_headers}
+    ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}  params=${cons_params}  expected_status=any  headers=${cons_headers}
     [Return]  ${resp} 
 
 

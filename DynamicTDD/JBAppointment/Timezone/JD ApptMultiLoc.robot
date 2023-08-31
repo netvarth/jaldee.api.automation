@@ -242,7 +242,7 @@ JD-TC-Take Appointment in Different Timezone-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id11}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id11}
+    ${resp}=  Get Appointment Schedule ById  ${sch_id11}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id11}   name=${schedule_name}  apptState=${Qstate[0]}
@@ -286,14 +286,14 @@ JD-TC-Take Appointment in Different Timezone-1
 
     ${cid}=  get_id  ${CUSERNAME9}   
 
-    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id11}   ${pid01}
+    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id11}   ${pid01}  
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id11}   ${pid01}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id11}    ${DAY1}   ${pid01}    
+    ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id11}    ${DAY1}   ${pid01}    location=${{str('${p1_l1}')}}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Verify Response  ${resp}  scheduleId=${sch_id11}
@@ -344,7 +344,7 @@ JD-TC-Take Appointment in Different Timezone-1
     # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id21}   ${pid01}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id21}    ${DAY1}   ${pid01}    
+    ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id21}    ${DAY1}   ${pid01}    location=${{str('${p1_l2}')}}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Verify Response  ${resp}  scheduleId=${sch_id21}
@@ -527,6 +527,9 @@ JD-TC-Take Appointment in Different Timezone-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${latti1}  ${longi1}  ${city1}  ${country_abbr1}  ${tz1}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${address1} =  FakerLibrary.address
+    ${postcode1}=  FakerLibrary.postcode
     ${DAY1}=  db.get_date_by_timezone  ${tz2}
     ${DAY2}=  db.add_timezone_date  ${tz2}  10     
     ${sTime1}=  add_timezone_time  ${tz2}  0  30  
@@ -534,7 +537,55 @@ JD-TC-Take Appointment in Different Timezone-2
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  ${url}  ${postcode1}  ${address1}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_l1}  ${resp.json()}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
+    ${DAY4}=  db.add_timezone_date  ${tz}  10  
+    ${sTime2}=  add_timezone_time  ${tz}  1  00  
+    ${eTime2}=  add_timezone_time  ${tz}  1  30  
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    # ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=5
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l1}  ${duration}  ${bool1}  ${p1_s1}   ${p1_s2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id11}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id11}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id11}   name=${schedule_name}  apptState=${Qstate[0]}
+    
+    ${sTime3}=  add_timezone_time  ${tz2}  0  30
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_time   ${sTime1}  ${delta}
+    ${eTime3}=  add_two   ${sTime3}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY1}=  db.get_date_by_timezone  ${tz2}
+    ${DAY2}=  db.add_timezone_date  ${tz2}  10       
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l2}  ${duration}  ${bool1}  ${p1_s2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id21}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id21}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id21}   name=${schedule_name}  apptState=${Qstate[0]}
+    
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
