@@ -1927,18 +1927,22 @@ JD-TC-ShareprescriptionThirdparty-9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${ctime}=         db.get_time_by_timezone   ${tz}
-    ${complaints}=     FakerLibrary.word
-    ${symptoms}=      FakerLibrary.sentence
-    ${allergies}=     FakerLibrary.sentence
-    ${vacc_history}=  FakerLibrary.sentence
-    ${observations}=  FakerLibrary.sentence
-    ${diagnosis}=     FakerLibrary.sentence
-    ${misc_notes}=    FakerLibrary.sentence
-    ${clinicalNotes}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}  diagnosis=${diagnosis}  complaints=${complaints}   misc_notes=${misc_notes}  observations=${observations}  vaccinationHistory=${vacc_history}  
-   
-    ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   clinicalNotes=${clinicalNotes}
+    # ${complaints}=     FakerLibrary.word
+    # ${symptoms}=      FakerLibrary.sentence
+    # ${allergies}=     FakerLibrary.sentence
+    # ${vacc_history}=  FakerLibrary.sentence
+    # ${observations}=  FakerLibrary.sentence
+    # ${diagnosis}=     FakerLibrary.sentence
+    # ${misc_notes}=    FakerLibrary.sentence
+    # ${clinicalNotes}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}  diagnosis=${diagnosis}  complaints=${complaints}   misc_notes=${misc_notes}  observations=${observations}  vaccinationHistory=${vacc_history}  
+    
+    ${resp}=  Create MR With uuid  ${wid}  ${bookingType[0]}  ${consultationMode[3]}      ${CUR_DAY}    ${status[0]}     prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   clinicalNotes=${clinicalNotes}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${mr_id4}   ${resp.json()}
 
     ${resp}=  Get MR By Id  ${mr_id4} 
@@ -1952,7 +1956,7 @@ JD-TC-ShareprescriptionThirdparty-9
     Should Be Equal As Strings  ${resp.json()['consultationMode']}                  ${consultationMode_verify[3]}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                     ${ser_id1}
     Should Be Equal As Strings  ${resp.json()['mrConsultationDate']}                ${C_date} ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['prescriptionCreated']}               ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['prescriptionCreated']}               ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['mrCreatedDate']}                     ${C_date} ${ctime}
     Should Be Equal As Strings  ${resp.json()['mrCreatedBy']}                       ${id}
    
@@ -2013,18 +2017,22 @@ JD-TC-ShareprescriptionThirdparty-10
 
 
     ${ctime}=         db.get_time_by_timezone   ${tz}
-    ${complaints}=     FakerLibrary.word
-    ${symptoms}=      FakerLibrary.sentence
-    ${allergies}=     FakerLibrary.sentence
-    ${vacc_history}=  FakerLibrary.sentence
-    ${observations}=  FakerLibrary.sentence
-    ${diagnosis}=     FakerLibrary.sentence
-    ${misc_notes}=    FakerLibrary.sentence
-    ${clinicalNotes}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}  diagnosis=${diagnosis}  complaints=${complaints}   misc_notes=${misc_notes}  observations=${observations}  vaccinationHistory=${vacc_history}  
-   
-    ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   clinicalNotes=${clinicalNotes}
+    # ${complaints}=     FakerLibrary.word
+    # ${symptoms}=      FakerLibrary.sentence
+    # ${allergies}=     FakerLibrary.sentence
+    # ${vacc_history}=  FakerLibrary.sentence
+    # ${observations}=  FakerLibrary.sentence
+    # ${diagnosis}=     FakerLibrary.sentence
+    # ${misc_notes}=    FakerLibrary.sentence
+    # ${clinicalNotes}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}  diagnosis=${diagnosis}  complaints=${complaints}   misc_notes=${misc_notes}  observations=${observations}  vaccinationHistory=${vacc_history}  
+    
+    ${resp}=  Create MR With uuid  ${wid}  ${bookingType[0]}  ${consultationMode[3]}      ${CUR_DAY}    ${status[0]}     prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Create MR   ${wid}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   clinicalNotes=${clinicalNotes}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mr_id}   ${resp.json()}
 
     ${resp}=  Get MR By Id  ${mr_id} 
@@ -2038,7 +2046,7 @@ JD-TC-ShareprescriptionThirdparty-10
     Should Be Equal As Strings  ${resp.json()['consultationMode']}                  ${consultationMode_verify[3]}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                     ${ser_id1}
     Should Be Equal As Strings  ${resp.json()['mrConsultationDate']}                ${C_date} ${strt_time}
-    Should Be Equal As Strings  ${resp.json()['prescriptionCreated']}               ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['prescriptionCreated']}               ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['mrCreatedDate']}                     ${C_date} ${ctime}
     Should Be Equal As Strings  ${resp.json()['mrCreatedBy']}                       ${id}
    

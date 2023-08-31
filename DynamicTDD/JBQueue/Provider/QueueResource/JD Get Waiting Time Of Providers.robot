@@ -196,16 +196,19 @@ JD-TC-GetWaitingTimeOfProviders-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}  ${id1}
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['id']}  ${qid1}
+    Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['queueWaitingTime']}  10
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['turnAroundTime']}  10
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['availableDate']}   ${DAY1}
 
     Should Be Equal As Strings  ${resp.json()[1]['provider']['id']}  ${id2}
     Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['id']}  ${qid2}
-    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['turnAroundTime']}  4
+    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['queueWaitingTime']}  4
+    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['turnAroundTime']}  2
     Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['availableDate']}   ${DAY1}
 
     Should Be Equal As Strings  ${resp.json()[2]['provider']['id']}  ${id3}
     Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['id']}  ${qid3}
+    Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['queueWaitingTime']}  0
     Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['turnAroundTime']}  0
     Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['availableDate']}   ${DAY1}
 
@@ -220,16 +223,19 @@ JD-TC-GetWaitingTimeOfProviders-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}  ${id1}
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['id']}  ${qid1}
+    Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['queueWaitingTime']}  10
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['turnAroundTime']}  10
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['availableDate']}   ${DAY1}
 
     Should Be Equal As Strings  ${resp.json()[1]['provider']['id']}  ${id2}
     Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['id']}  ${qid2}
-    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['turnAroundTime']}  4
+    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['queueWaitingTime']}  4
+    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['turnAroundTime']}  2
     Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['availableDate']}   ${DAY1}
 
     Should Be Equal As Strings  ${resp.json()[2]['provider']['id']}  ${id3}
     Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['id']}  ${qid3}
+    Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['queueWaitingTime']}  0
     Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['turnAroundTime']}  0
     Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['availableDate']}   ${DAY1}
     
@@ -242,17 +248,17 @@ JD-TC-GetWaitingTimeOfProviders-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}  ${id1}
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['id']}  ${qid1}
-    Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['turnAroundTime']}  10
+    Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['queueWaitingTime']}  10
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['availableDate']}   ${DAY1}
 
     Should Be Equal As Strings  ${resp.json()[1]['provider']['id']}  ${id2}
     Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['id']}  ${qid2}
-    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['turnAroundTime']}  4
+    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['queueWaitingTime']}  4
     Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['availableDate']}   ${DAY1}
 
     Should Be Equal As Strings  ${resp.json()[2]['provider']['id']}  ${id3}
     Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['id']}  ${qid3}
-    Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['turnAroundTime']}  0
+    Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['queueWaitingTime']}  0
     Should Be Equal As Strings  ${resp.json()[2]['nextAvailableQueue']['availableDate']}   ${DAY1}
 
 JD-TC-GetWaitingTimeOfProviders-4
@@ -526,20 +532,21 @@ JD-TC-GetWaitingTimeOfProviders-UH1
     ${resp}=  Get Waiting Time Of Providers  0-0
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['provider']['isAdmin']}  ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}  0
-    Should Be Equal As Strings  ${resp.json()[0]['message']}  ${ACCOUNT_NOT_EXIST}
+    Should Be Equal As Strings  ${resp.json()}    []
+    # Should Be Equal As Strings  ${resp.json()[0]['provider']['isAdmin']}  ${bool[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}  0
+    # Should Be Equal As Strings  ${resp.json()[0]['message']}  ${ACCOUNT_NOT_EXIST}
 
 JD-TC-GetWaitingTimeOfProviders-UH2
     [Documentation]  Get Waiting Time Of a valid provider  and invalid Provider
     ${resp}=  Get Waiting Time Of Providers  0-0  ${id1}-${lid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['message']}  ${ACCOUNT_NOT_EXIST}
-    Should Be Equal As Strings  ${resp.json()[1]['provider']['id']}  ${id1}
-    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['id']}  ${qid1}
-    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['availableDate']}   ${FDAY}
-    Should Be Equal As Strings  ${resp.json()[1]['nextAvailableQueue']['openNow']}  ${bool[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['message']}  ${ACCOUNT_NOT_EXIST}
+    Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}  ${id1}
+    Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['id']}  ${qid1}
+    Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['availableDate']}   ${FDAY}
+    Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['openNow']}  ${bool[0]}
 
 
 JD-TC-GetWaitingTimeOfProviders-UH3

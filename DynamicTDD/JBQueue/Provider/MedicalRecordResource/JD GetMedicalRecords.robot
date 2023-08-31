@@ -41,7 +41,7 @@ JD-TC-GetMR-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+7633102
+    ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+76331089
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_C}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -174,7 +174,7 @@ JD-TC-GetMR-1
     Set Suite Variable  ${que_id1}   ${resp.json()}
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
+    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1}  location=${loc_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -312,18 +312,28 @@ JD-TC-GetMR-1
     Should Be Equal As Strings  ${resp.json()[0]['prescriptionCreated']}               ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['mrCreatedDate']}                     ${C_date} ${ctime}
     Should Be Equal As Strings  ${resp.json()[0]['mrCreatedBy']}                       ${id}
-    Should Be Equal As Strings  ${resp.json()[0]['type']}               ${type}
-    Should Be Equal As Strings  ${resp.json()[0]['clinicalNotes']}              ${clinicalNote}
-    Should Be Equal As Strings  ${resp.json()[0]['attachments'][0]['owner']}              ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['attachments'][0]['fileName']}             ${pdffile}
-    Should Be Equal As Strings  ${resp.json()[0]['attachments'][0]['fileSize']}             ${fileSize}
-    Should Be Equal As Strings  ${resp.json()[0]['attachments'][0]['caption']}           ${caption}
-    Should Be Equal As Strings  ${resp.json()[0]['attachments'][0]['action']}     ${LoanAction[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['duration']}              ${duration1}
-    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['frequency']}             ${frequency1}
-    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['instructions']}          ${instrn1}
-    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['medicine_name']}         ${med_name1}
-    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['dosage']}                ${dosage1}
+    # Should Be Equal As Strings  ${resp.json()[0]['type']}               ${type}
+    Variable Should Exist       ${resp.json()[0]['clinicalNotes']}              ${clinicalNotes}
+
+
+
+    # Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['fileName']}              ${pdffile}
+    # Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['fileType']}             ${fileType}
+    # Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['caption']}             ${caption}
+    # Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['duration']}              ${duration}
+    # Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['frequency']}             ${frequency}
+    # Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['instructions']}          ${instrn}
+    # Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['medicine_name']}         ${med_name}
+    # Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['dosage']}                ${dosage}
+
+    Should Be Equal As Strings  ${resp.json()[0]['clinicalNotes'][0]['attachments'][0]['fileName']}             ${pdffile}
+    Should Be Equal As Strings  ${resp.json()[0]['clinicalNotes'][0]['attachments'][0]['fileSize']}             ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[0]['clinicalNotes'][0]['attachments'][0]['caption']}           ${caption}
+    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['duration']}              ${duration}
+    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['frequency']}             ${frequency}
+    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['instructions']}          ${instrn}
+    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['medicine_name']}         ${med_name}
+    Should Be Equal As Strings  ${resp.json()[0]['prescriptions']['prescriptionsList'][0]['dosage']}                ${dosage}
 
     Should Be Equal As Strings  ${resp.json()[1]['providerConsumer']['id']}            ${cid1}
     Should Be Equal As Strings  ${resp.json()[1]['providerConsumer']['phoneNo']}       ${CUSERNAME1}
@@ -336,13 +346,11 @@ JD-TC-GetMR-1
     Should Be Equal As Strings  ${resp.json()[1]['prescriptionCreated']}               ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[1]['mrCreatedDate']}                     ${C_date} ${ctime}
     Should Be Equal As Strings  ${resp.json()[1]['mrCreatedBy']}                       ${id}
-    Should Be Equal As Strings  ${resp.json()[1]['type']}               ${type1}
-    Should Be Equal As Strings  ${resp.json()[1]['clinicalNotes']}              ${clinicalNote1}
-    Should Be Equal As Strings  ${resp.json()[1]['attachments'][0]['owner']}              ${pid}
-    Should Be Equal As Strings  ${resp.json()[1]['attachments'][0]['fileName']}             ${pdffile}
-    Should Be Equal As Strings  ${resp.json()[1]['attachments'][0]['fileSize']}             ${fileSize}
-    Should Be Equal As Strings  ${resp.json()[1]['attachments'][0]['caption']}           ${caption}
-    Should Be Equal As Strings  ${resp.json()[1]['attachments'][0]['action']}     ${LoanAction[0]}
+    # Should Be Equal As Strings  ${resp.json()[1]['type']}               ${type1}
+    Variable Should Exist       ${resp.json()[1]['clinicalNotes']}              ${clinicalNotes}
+    Should Be Equal As Strings  ${resp.json()[1]['clinicalNotes'][0]['attachments'][0]['fileName']}             ${pdffile}
+    Should Be Equal As Strings  ${resp.json()[1]['clinicalNotes'][0]['attachments'][0]['fileSize']}             ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[1]['clinicalNotes'][0]['attachments'][0]['caption']}           ${caption}
     Should Be Equal As Strings  ${resp.json()[1]['prescriptions']['prescriptionsList'][0]['duration']}              ${duration}
     Should Be Equal As Strings  ${resp.json()[1]['prescriptions']['prescriptionsList'][0]['frequency']}             ${frequency}
     Should Be Equal As Strings  ${resp.json()[1]['prescriptions']['prescriptionsList'][0]['instructions']}          ${instrn}

@@ -94,8 +94,8 @@ JD-TC-Available Queues-2
     Set Suite Variable  ${longi}
     Set Suite Variable  ${postcode}
     Set Suite Variable  ${address}
-    ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
-    Set Suite Variable  ${parking_type}
+    ${parking_type1}    Random Element     ['none','free','street','privatelot','valet','paid']
+    Set Suite Variable  ${parking_type1}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
     ${DAY}=  db.get_date_by_timezone  ${tz}
@@ -106,7 +106,7 @@ JD-TC-Available Queues-2
     Set Suite Variable   ${sTime}
     ${eTime}=  subtract_timezone_time  ${tz}   0  30
     Set Suite Variable   ${eTime}
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type1}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
