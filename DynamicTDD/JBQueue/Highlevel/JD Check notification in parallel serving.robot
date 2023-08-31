@@ -232,9 +232,12 @@ JD-TC-Check Notification-1
     ${a_id}=  get_acc_id  ${PUSERNAME141}
 
     ${resp}=  Consumer Login  ${CUSERPH2}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
     ${resp}=  Cancel Waitlist  ${wid2}  ${a_id}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     Sleep  2s
