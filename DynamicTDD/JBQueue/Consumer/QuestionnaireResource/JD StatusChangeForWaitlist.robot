@@ -256,7 +256,7 @@ JD-TC-StatusChangeForServiceOptionWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${Questionnaireid}  ${mp4file}  ${mp3file}
     Log  ${fudata}
     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
     Log  ${data}
@@ -406,7 +406,7 @@ JD-TC-StatusChangeForServiceOptionWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${Questionnaireid}  ${mp4file}  ${mp3file}
     Log  ${fudata}
     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
     Log  ${data}
@@ -571,7 +571,7 @@ JD-TC-StatusChangeForServiceOptionWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${Questionnaireid}  ${mp4file}  ${mp3file}
     Log  ${fudata}
     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
     Log  ${data}
@@ -745,7 +745,7 @@ JD-TC-StatusChangeForServiceOptionWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${Questionnaireid}  ${mp4file}  ${mp3file}
     Log  ${fudata}
     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
     Log  ${data}
@@ -902,7 +902,7 @@ JD-TC-StatusChangeForServiceOptionWaitlist-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${Questionnaireid}  ${mp4file}  ${mp3file}
     Log  ${fudata}
     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
     Log  ${data}
