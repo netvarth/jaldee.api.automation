@@ -23,12 +23,15 @@ ${self}      0
 
 JD-TC-Approximate Waiting Time-1
     [Documentation]   Add a consumer to the waitlist for the current day when calculation mode as Fixed Then Verify all consumers approximate waiting time
-    ${resp}=  ProviderLogin  ${PUSERNAME40}  ${PASSWORD}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_service   ${PUSERNAME40}
     clear_location  ${PUSERNAME40}
     clear_queue  ${PUSERNAME40}
     clear_customer   ${PUSERNAME40}
+
     ${resp}=   Get upgradable license
     Should Be Equal As Strings    ${resp.status_code}   200
     ${len}=  Get Length  ${resp.json()}
@@ -47,18 +50,35 @@ JD-TC-Approximate Waiting Time-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  70      
-    Set Suite Variable  ${DAY2}  ${DAY2}
+    # ${DAY1}=  get_date
+    # Set Suite Variable  ${DAY1}  ${DAY1}
+    # ${DAY2}=  add_date  70      
+    # Set Suite Variable  ${DAY2}  ${DAY2}
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # Set Suite Variable  ${list}  ${list}
+    # ${sTime1}=  add_time  2  00
+    # Set Suite Variable   ${sTime1}
+    # ${eTime1}=  add_time   3  30
+    # Set Suite Variable   ${eTime1}
+
+    ${resp}=   Create Sample Location
+    Set Suite Variable    ${lid1}    ${resp}  
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
+    ${DAY2}=  add_timezone_date  ${tz}  7      
+    Set Suite Variable  ${DAY2}  
     ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  2  00
+    Set Suite Variable  ${list}  
+    ${sTime1}=  add_timezone_time  ${tz}  2  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30
+    ${eTime1}=  add_timezone_time   ${tz}  3  30
     Set Suite Variable   ${eTime1}
-    ${lid1}=  Create Sample Location
-    Set Suite Variable  ${lid1}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -111,15 +131,19 @@ JD-TC-Approximate Waiting Time-1
     ${resp}=  Get Waitlist By Id  ${wid3} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  appxWaitingTime=${fixed_time}
-      
+ 
 JD-TC-Approximate Waiting Time-2
+
     [Documentation]   Add a consumer to the waitlist for future when calculation mode as Fixed Then Verify all consumers approximate waiting time
-    ${resp}=  ProviderLogin  ${PUSERNAME41}  ${PASSWORD}
+   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_service   ${PUSERNAME41}
     clear_location  ${PUSERNAME41}
     clear_queue  ${PUSERNAME41}
     clear_customer   ${PUSERNAME41}
+
     ${resp}=   Get upgradable license
     Should Be Equal As Strings    ${resp.status_code}   200
     ${len}=  Get Length  ${resp.json()}
@@ -137,10 +161,28 @@ JD-TC-Approximate Waiting Time-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
 
-    ${DAY1}=  add_date  30
-    Set Test Variable  ${DAY1}  ${DAY1}
-    ${lid1}=  Create Sample Location
-    Set Suite Variable  ${lid1}
+    ${resp}=   Create Sample Location
+    Set Suite Variable    ${lid1}    ${resp}  
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
+    ${DAY2}=  add_timezone_date  ${tz}  7      
+    Set Suite Variable  ${DAY2}  
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  
+    ${sTime1}=  add_timezone_time  ${tz}  2  00
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time   ${tz}  3  30
+    Set Suite Variable   ${eTime1}
+
+
+    # ${DAY1}=  add_date  30
+    # Set Test Variable  ${DAY1}  ${DAY1}
+    
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -199,8 +241,10 @@ JD-TC-Approximate Waiting Time-2
 
 JD-TC-Approximate Waiting Time-3
     [Documentation]   Add a consumer to the waitlist for the current day when calculation mode as NoCalc and verify all consumers approximate waiting time
-    ${resp}=  ProviderLogin  ${PUSERNAME42}  ${PASSWORD}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_service   ${PUSERNAME42}
     clear_location  ${PUSERNAME42}
     clear_queue  ${PUSERNAME42}
@@ -221,10 +265,17 @@ JD-TC-Approximate Waiting Time-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${lid1}=  Create Sample Location
-    Set Suite Variable  ${lid1}
+
+    ${resp}=   Create Sample Location
+    Set Suite Variable    ${lid1}    ${resp}  
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  
+    
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -282,8 +333,10 @@ JD-TC-Approximate Waiting Time-3
 
 JD-TC-Approximate Waiting Time-4
     [Documentation]   Add a consumer to the waitlist for the future when calculation mode as NoCalc and verify all consumers approximate waiting time
-    ${resp}=  ProviderLogin  ${PUSERNAME43}  ${PASSWORD}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_service   ${PUSERNAME43}
     clear_location  ${PUSERNAME43}
     clear_queue  ${PUSERNAME43}
@@ -301,10 +354,19 @@ JD-TC-Approximate Waiting Time-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
-    ${DAY1}=  add_date  20
-    Set Test Variable  ${DAY1}  ${DAY1}
-    ${lid1}=  Create Sample Location
-    Set Suite Variable  ${lid1}
+
+    ${resp}=   Create Sample Location
+    Set Suite Variable    ${lid1}    ${resp}  
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+    ${DAY2}=  db.add_timezone_date  ${tz}  20
+    
+    # ${DAY1}=  add_date  20
+    # Set Test Variable  ${DAY1}  ${DAY1}
+    
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
