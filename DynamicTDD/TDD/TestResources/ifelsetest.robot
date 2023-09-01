@@ -6,7 +6,7 @@ Library     Collections
 Library     String
 Library     json
 Library     requests
-Library     RequestLibrary
+Library     RequestsLibrary
 # Library     FakerLibrary
 Library    FakerLibrary    locale=en_IN
 Library     /ebs/TDD/db.py
@@ -30,6 +30,7 @@ ${longi1}    ${68.031759}
 Testing py fn
 
     db.get_Host_name_IP
+    ${rand_tz}=  FakerLibrary.Timezone
 
 ***Comment***
 Testing named arguments
@@ -45,6 +46,8 @@ Testing named arguments
 
 Testing named arguments
     
+    ${rand_tz}=  FakerLibrary.Timezone
+
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
 

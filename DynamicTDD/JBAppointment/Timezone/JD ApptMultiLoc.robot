@@ -458,8 +458,8 @@ JD-TC-Take Appointment in Different Timezone-2
     ${address} =  FakerLibrary.address
     ${postcode}=  FakerLibrary.postcode
     ${latti}  ${longi}  ${city}  ${country_abbr}  ${tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Test Variable  ${tz}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
@@ -475,9 +475,10 @@ JD-TC-Take Appointment in Different Timezone-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
     ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
     Log  ${fields.json()}
@@ -526,8 +527,16 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
-    ${latti1}  ${longi1}  ${city1}  ${country_abbr1}  ${tz1}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    FOR   ${i}  IN RANGE   5
+        ${latti1}  ${longi1}  ${city1}  ${country_abbr1}  ${tz1}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+        IF  '${tz}' == '${tz1}'
+            Continue For Loop
+        ELSE
+            Exit For Loop
+        END
+    END
     ${address1} =  FakerLibrary.address
     ${postcode1}=  FakerLibrary.postcode
     ${DAY1}=  db.get_date_by_timezone  ${tz2}
@@ -540,36 +549,44 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  ${url}  ${postcode1}  ${address1}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p1_l1}  ${resp.json()}
+    Set Test Variable  ${p1_l2}  ${resp.json()}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${SERVICE1}=   FakerLibrary.job
+    ${p1_s1}=  Create Sample Service  ${SERVICE1}
+    Set Suite Variable   ${p1_s1}
+
+    ${SERVICE2}=   FakerLibrary.job
+    ${p1_s2}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable   ${p1_s2}
+
     ${DAY3}=  db.get_date_by_timezone  ${tz}
     ${DAY4}=  db.add_timezone_date  ${tz}  10  
     ${sTime2}=  add_timezone_time  ${tz}  1  00  
     ${eTime2}=  add_timezone_time  ${tz}  1  30  
-    ${schedule_name}=  FakerLibrary.bs
+    ${schedule_name}=  FakerLibrary.administrative unit
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l1}  ${duration}  ${bool1}  ${p1_s1}   ${p1_s2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l1}  ${duration}  ${bool1}  ${p1_s1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sch_id11}  ${resp.json()}
+    Set Suite Variable  ${p1_sch1}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id11}  
+    ${resp}=  Get Appointment Schedule ById  ${p1_sch1}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id11}   name=${schedule_name}  apptState=${Qstate[0]}
+    Verify Response  ${resp}  id=${p1_sch1}   name=${schedule_name}  apptState=${Qstate[0]}
     
     ${sTime3}=  add_timezone_time  ${tz2}  0  30
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_time   ${sTime1}  ${delta}
     ${eTime3}=  add_two   ${sTime3}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
+    ${schedule_name}=  FakerLibrary.administrative unit
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
@@ -580,12 +597,12 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l2}  ${duration}  ${bool1}  ${p1_s2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sch_id21}  ${resp.json()}
+    Set Suite Variable  ${p1_sch2}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id21}
+    ${resp}=  Get Appointment Schedule ById  ${p1_sch2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id21}   name=${schedule_name}  apptState=${Qstate[0]}
+    Verify Response  ${resp}  id=${p1_sch2}   name=${schedule_name}  apptState=${Qstate[0]}
     
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200

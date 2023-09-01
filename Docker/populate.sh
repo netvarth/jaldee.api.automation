@@ -5,14 +5,14 @@
 # set -x
 
 # MYSQL_HOST='localhost'
-uname -r
-cat /proc/version
-if grep -qi microsoft /proc/version; then
-  echo "Ubuntu on Windows"
-else
-  echo "native Linux"
-fi
-cat /proc/sys/kernel/osrelease
+# uname -r
+# cat /proc/version
+# if grep -qi microsoft /proc/version; then
+#   echo "Ubuntu on Windows"
+# else
+#   echo "native Linux"
+# fi
+# cat /proc/sys/kernel/osrelease
 if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
     echo "Ubuntu on Windows"
 	# host_ip=$(cat /etc/resolv.conf| grep nameserver | cut -d " " -f 2)

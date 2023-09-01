@@ -10,7 +10,7 @@ Resource          Keywords.robot
 
 &{cons_headers}                Content-Type=application/json
 &{form_headers}		    
-&{cons_params}       
+# &{cons_params}       
 
 *** Keywords ***
 
@@ -18,6 +18,7 @@ Consumer Login
     [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91   &{kwargs}  #${timeZone}=Asia/Kolkata
     ${log}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
     # ${kwargs}=  db.Set_TZ_Header  &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -37,16 +38,13 @@ Consumer Logout
 Send Reset Email
     [arguments]  ${email}  ${countryCode}=+91  &{kwargs}  #${timeZone}=Asia/Kolkata
     
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${data}=    json.dumps    ${countryCode}
-    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    POST On Session    ynw   /consumer/login/reset/${email}   data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
 
@@ -54,15 +52,16 @@ Send Reset Email
 Reset Password
     [Arguments]    ${email}  ${pswd}  ${purpose}  ${countryCode}=+91  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${key}=  verify accnt  ${email}   ${purpose}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw    /consumer/login/reset/${key}/validate  expected_status=any   headers=${cons_headers}  
+    ${resp}=  POST On Session  ynw    /consumer/login/reset/${key}/validate  params=${cons_params}  expected_status=any   headers=${cons_headers}  
     ${login}=    Create Dictionary    loginId=${email}  password=${pswd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
-    ${respk}=  PUT On Session  ynw  /consumer/login/reset/${key}  data=${log}  expected_status=any   headers=${cons_headers}
+    ${respk}=  PUT On Session  ynw  /consumer/login/reset/${key}  data=${log}  params=${cons_params}  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}  ${respk}
 
     
@@ -77,6 +76,7 @@ Consumer Creation
 Consumer SignUp
     [Arguments]  ${firstname}  ${lastname}  ${address}  ${primaryNo}  ${alternativeNo}  ${dob}  ${gender}  ${email}   ${countryCode}=+91  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${apple}=  Consumer Creation  ${firstname}  ${lastname}  ${address}  ${primaryNo}  ${alternativeNo}  ${dob}  ${gender}  ${email}   countryCode=${countryCode}    
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -89,6 +89,7 @@ Consumer SignUp
 Consumer Activation
     [Arguments]  ${email}  ${purpose}  &{kwargs}  #${timeZone}=Asia/Kolkata
     
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -105,6 +106,7 @@ Consumer Set Credential
     ${auth}=     Create Dictionary   password=${password}  countryCode=${countryCode}
     ${key}=   verify accnt  ${email}  ${purpose}
     ${apple}=    json.dumps    ${auth}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -128,6 +130,7 @@ Check Consumer Exists
     Check And Create YNW Session
     ${body}=     Create Dictionary   countryCode=${countryCode}
     ${data}=    json.dumps    ${body}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -141,6 +144,7 @@ Verify Login Consumer
     ${auth}=     Create Dictionary   loginId=${loginid}  countryCode=${countryCode}
     ${key}=   verify accnt  ${loginid}  ${purpose}
     ${data}=    json.dumps    ${auth}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -154,6 +158,7 @@ Update Consumer
     ${usp}=    Create Dictionary   firstName=${firstname}  lastName=${lastname}  address=${address}  primaryMobileNo=${primaryNo}  alternativePhoneNo=${alternativeNo}  dob=${dob}  gender=${gender}  email=${email}  countryCode=${countryCode}
     ${auth}=    Create Dictionary    userProfile    ${usp}  
     ${apple}=    json.dumps    ${auth}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -166,6 +171,7 @@ Get Consumer By Id
     [Arguments]  ${email}  &{kwargs}  #${timeZone}=Asia/Kolkata
     Check And Create YNW Session
     ${id}=  get_id  ${email}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -178,6 +184,7 @@ Consumer Change Password
     ${auth}=     Create Dictionary   oldpassword=${old_password}  password=${new_password}
     Check And Create YNW Session
     ${apple}=    json.dumps    ${auth}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -240,6 +247,7 @@ Consumer Add To WL With Virtual Service
     END 
     ${data}=  Create Dictionary  queue=${queueId}  date=${date}  service=${serviceId}  consumerNote=${consumerNote}  waitlistingFor=${consumerlist}  revealPhone=${revealPhone}   virtualService=${virtualService} 
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -331,6 +339,7 @@ Add To Waitlist Children Consumer
 Get Waitlist Consumer
     [Arguments]    &{kwargs}
     Check And Create YNW Session
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -365,6 +374,7 @@ Approximate Waiting Time Consumer
 
 Update Consumer Profile
     [Arguments]  ${firstname}  ${lastname}  ${address}  ${dob}  ${gender}  &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -385,6 +395,7 @@ Update Consumer Profile With Emailid
     [Arguments]  ${firstname}  ${lastname}  ${address}  ${dob}  ${gender}  ${email}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${usp}=    Create Dictionary   firstName=${firstname}  lastName=${lastname}  address=${address}  dob=${dob}  gender=${gender}  email=${email}
     ${apple}=    json.dumps    ${usp}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -406,6 +417,7 @@ Get Waitlist Id Consumer
     
 Reveal Phone Number
 	[Arguments]  ${accid}  ${status}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -420,7 +432,7 @@ Add Rating
 	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uuid=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
-	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -433,7 +445,7 @@ Update Rating Waitlist
 	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uuid=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
-	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -459,6 +471,7 @@ Familymember Creation
 AddFamilyMember
     [Arguments]   ${firstname}  ${lastname}  ${dob}  ${gender}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${data}=  Familymember Creation   ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -469,6 +482,7 @@ AddFamilyMember
 
 DeleteFamilyMember
     [Arguments]  ${id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -479,6 +493,7 @@ DeleteFamilyMember
 
 ListFamilyMember
     [Arguments]    &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -518,6 +533,7 @@ UpdateFamilyMember
     [Arguments]   ${mem_id}  ${firstname}  ${lastname}  ${dob}  ${gender}  &{kwargs}  #${timeZone}=Asia/Kolkata
     
     ${data}=  UpdateFamilymember Creation   ${mem_id}  ${firstname}  ${lastname}  ${dob}  ${gender}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -549,6 +565,7 @@ Add To Waitlist Consumer FamilymemberChildren
     
 Get Waitlist Consumer Count
     [Arguments]    &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -573,6 +590,7 @@ CommunicationBetweenConsumerAndProvider
     
 List Favourite Provider
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -583,6 +601,7 @@ List Favourite Provider
 
 Add Favourite Provider
     [Arguments]  ${provider_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -593,6 +612,7 @@ Add Favourite Provider
 
 Remove Favourite Provider
     [Arguments]  ${provider_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -615,6 +635,7 @@ Get Bill By Consumer
  
 Get S3 Url
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -625,6 +646,7 @@ Get S3 Url
     
 Get Consumer Communications
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -658,6 +680,7 @@ Reading Provider Communications
 
 Get Consumer Communications Unread Count
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -669,6 +692,7 @@ Get Consumer Communications Unread Count
 
 Get Consumer Communications Unread Messages
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -793,6 +817,7 @@ Add To Waitlist Consumer For User
 #     ${auth}=    json.dumps    ${auth}
 #     Check And Create YNW Session
 
+#     ${cons_params}=  Create Dictionary
 #     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
 #     Log  ${kwargs}
 #     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -861,6 +886,7 @@ Get Waiting Time Of queues
 Make Payment Consumer
     [Arguments]  ${amount}  ${mode}  ${uuid}  ${accid}  ${purpose}  ${c_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
     
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -886,6 +912,7 @@ Make Payment Consumer Mock
     ${data}=  Create Dictionary  accountId=${accid}  amount=${amount}  paymentMode=Mock  purpose=${purpose}  uuid=${uuid}  
     ...    serviceId=${serviceId}   isInternational=${international}   mockResponse=${response}  custId=${c_id}
     
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -901,6 +928,7 @@ Make Payment Consumer Mock
 
 Get Payment Consumer
     [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -935,6 +963,7 @@ Get conspayment profiles By Id
 
 Get Rating
     [Arguments]   ${timeZone}=Asia/Kolkata  &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -956,6 +985,7 @@ Get Queue By Location and service
 
 Get Service By Location   
     [Arguments]  ${locationId}   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -980,6 +1010,7 @@ AddFamilyMemberWithPhNo
     ${up}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  primaryMobileNo=${Mobile}  dob=${dob}  gender=${gender}
     ${data}=  Create Dictionary   userProfile=${up}
     ${data}=  json.dumps  ${data} 
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -989,8 +1020,8 @@ AddFamilyMemberWithPhNo
     [Return]  ${resp}    
 
 Get history Waitlist Count
-    [Arguments]   &{params} 
-    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    [Arguments]   &{cons_params} 
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}
     Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -1011,6 +1042,7 @@ Get Queue By Location and service By Date
 
 Send Bill Email
     [Arguments]   ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1046,6 +1078,7 @@ Add To Waitlist Consumers with JCoupon
     END 
     ${data}=  Create Dictionary  queue=${queueId}  date=${date}  service=${serviceId}  consumerNote=${consumerNote}  waitlistingFor=${consumerlist}  revealPhone=${revealPhone}  coupons=${coupons} 
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1057,6 +1090,7 @@ Add To Waitlist Consumers with JCoupon
 Get Services in Department By Consumer
     [Arguments]   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1138,6 +1172,7 @@ check start status
     # ${cons_params}=  Create Dictionary  account=${pId}
     # ${data}=   Create Dictionary   travelMode=${travelMode}
     # ${data}=   json.dumps   ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1272,6 +1307,7 @@ Donation By Consumer
 
 Get Consumer Donation By Id
     [Arguments]  ${id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1282,6 +1318,7 @@ Get Consumer Donation By Id
 
 Get Donations By Consumer
     [Arguments]    &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1292,6 +1329,7 @@ Get Donations By Consumer
 
 Get Donation Count By Consumer
     [Arguments]    &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1312,8 +1350,8 @@ Get Donation Service By Consumer
     [Return]  ${resp}
 
 Get Payment Details
-    [Arguments]   &{params}
-    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    [Arguments]   &{cons_params}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}
     Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -1323,6 +1361,7 @@ Get Payment Details
 
 Get Payment Details By UUId
     [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1333,6 +1372,7 @@ Get Payment Details By UUId
 
 Get Individual Payment Records
     [Arguments]  ${id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1367,6 +1407,7 @@ Take Phonein Appointment For Provider
     ${schedule}=  Create Dictionary  id=${schedule}    
     ${data}=    Create Dictionary    appointmentMode=PHONE_IN_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1383,6 +1424,7 @@ Take Appointment For User
     ${uid}=  Create Dictionary  id=${u_id}    
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   provider=${uid}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1398,6 +1440,7 @@ Take Appointment For Provider with Phone no
     ${schedule}=  Create Dictionary  id=${schedule}    
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  phoneNumber=${phoneNumber}  countryCode=${country_code}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1415,6 +1458,7 @@ Take Virtual Service Appointment For Provider
     ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}    
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1431,6 +1475,7 @@ Phone-in Virtual Service Appointment For Provider
     ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}    
     ${data}=    Create Dictionary    appointmentMode=PHONE_IN_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1449,6 +1494,7 @@ Take Virtual Service Appointment For User
     ${virtualService}=  Create Dictionary   ${CallingModes}=${CallingModes_id1}    
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}   virtualService=${virtualService}  provider=${user_id}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1464,6 +1510,7 @@ Take Appointment with ApptMode For Provider
     ${schedule}=  Create Dictionary  id=${schedule}    
     ${data}=    Create Dictionary    appointmentMode=${apptMode}   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1474,6 +1521,7 @@ Take Appointment with ApptMode For Provider
 
 Get consumer Appointment By Id
     [Arguments]   ${accId}  ${appmntId}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1484,6 +1532,7 @@ Get consumer Appointment By Id
 
 Get Consumer Waitlist By EncodedId
     [Arguments]    ${W_Enc_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1494,6 +1543,7 @@ Get Consumer Waitlist By EncodedId
     
 Get Consumer Appointment By EncodedId
     [Arguments]    ${A_Enc_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1515,6 +1565,7 @@ Cancel Appointment By Consumer
 
 Get Consumer Appointments Today
     [Arguments]  ${timeZone}=Asia/Kolkata  &{kwargs}  #&{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1525,6 +1576,7 @@ Get Consumer Appointments Today
 
 Get Appmt Service By LocationId
     [Arguments]   ${locationId}   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1535,6 +1587,7 @@ Get Appmt Service By LocationId
 
 Get Consumer Appmt Today Count
     [Arguments]   &{kwargs}  
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1545,6 +1598,7 @@ Get Consumer Appmt Today Count
 
 Get Consumer Appointments 
     [Arguments]   &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1570,6 +1624,7 @@ Enable apptment SaveMyLocation by consumer
 
 Locate apptment consumer
     [Arguments]   ${appmt_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1581,6 +1636,7 @@ Locate apptment consumer
 
 Start apptment tracking by consumer
     [Arguments]   ${accId}   ${appmt_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1591,6 +1647,7 @@ Start apptment tracking by consumer
 
 Stop apptment tracking by consumer
     [Arguments]   ${appmt_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1601,6 +1658,7 @@ Stop apptment tracking by consumer
 
 Get apptment Livetrack Status
     [Arguments]   ${appmt_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1612,6 +1670,7 @@ Get apptment Livetrack Status
 
 Disable apptment unshareMylocation by consumer
     [Arguments]  ${accId}   ${appmt_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1662,6 +1721,7 @@ Update consumer apptment tavelmode
 
 Get Consumer Future Appointments
     [Arguments]    &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1672,6 +1732,7 @@ Get Consumer Future Appointments
     
 Get Consumer Future Appointments Count
     [Arguments]    &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1685,7 +1746,7 @@ Add Appointment Rating
 	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uuid=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
-	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -1698,7 +1759,7 @@ Update Appointment Rating
 	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uuid=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
-	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -1708,6 +1769,7 @@ Update Appointment Rating
 
 Get Appointment Rating
     [Arguments]    &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1718,6 +1780,7 @@ Get Appointment Rating
    
 Get Consumer Appointments History
     [Arguments]     &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1728,6 +1791,7 @@ Get Consumer Appointments History
     
 Get Consumer Appointments History Count
     [Arguments]     &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1749,6 +1813,7 @@ Get Waitlist Meeting Details
 
 Get Appointment Meeting Details
     [Arguments]  ${uid}  ${mode}  ${acc}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1799,6 +1864,7 @@ Reschedule Waitlist
 
 Get consumer Appointment MR By Id
     [Arguments]     ${appmntId}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1810,6 +1876,7 @@ Get consumer Appointment MR By Id
 
 Get consumer Waitlist MR By Id
     [Arguments]     ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1824,6 +1891,7 @@ Update Consumer Delivery Address
     ${deliveryaddress}=    Create Dictionary  phoneNumber=${phoneNumber}  firstName=${firstName}  lastName=${lastName}  email=${email}  address=${address}  city=${city}  postalCode=${postalCode}  landMark=${landMark}  countryCode=${countryCode}
     ${data}=  Create List   ${deliveryaddress}
     ${data}=   json.dumps    ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1835,6 +1903,7 @@ Update Consumer Delivery Address
 
 Get Consumer Delivery Address
     [Arguments]     &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1861,6 +1930,7 @@ Create Order For HomeDelivery
     END
     ${order}=  Create Dictionary  homeDelivery=${homeDelivery}  homeDeliveryAddress=${homeDeliveryAddress}   catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -1886,6 +1956,7 @@ Create Order For Pickup
 
     ${order}=  Create Dictionary  storePickup=${storePickup}   catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -1909,6 +1980,7 @@ Create Order For Electronic Delivery
     
     ${order}=  Create Dictionary    catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}   phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -1948,6 +2020,7 @@ Upload ShoppingList Image for Pickup
     ${timeSlot}=  Create Dictionary  sTime=${sTime1}   eTime=${eTime1}
     ${order}=  Create Dictionary  storePickup=${storePickup}  catalog=${catalog}  orderFor=${orderFor}  orderDate=${Date}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=+91  email=${email}
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1968,6 +2041,7 @@ Upload ShoppingList Image for HomeDelivery
     END
     ${order}=  Create Dictionary  homeDelivery=${homeDelivery}  homeDeliveryAddress=${homeDeliveryAddress}   catalog=${catalog}  orderFor=${orderFor}  orderDate=${Date}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=+91  email=${email}  coupons=${coupons}
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1990,6 +2064,7 @@ Get Order By Id
 
 Get Order By Criteria
     [Arguments]   &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2001,6 +2076,7 @@ Get Order By Criteria
 
 Get Consumer Order Count By Criteria
     [Arguments]   &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2013,6 +2089,7 @@ Get Consumer Order Count By Criteria
 Get Catalog By AccId
     [Arguments]    ${accId}   &{kwargs}  #${timeZone}=Asia/Kolkata
     # ${cons_params}=  Create Dictionary  account=${accId}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2048,6 +2125,7 @@ Get HomeDelivery Dates By Catalog
 
 Get Future Order 
     [Arguments]   &{kwargs} 
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2059,6 +2137,7 @@ Get Future Order
     
 Get Future Order Count 
     [Arguments]   &{kwargs} 
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2070,6 +2149,7 @@ Get Future Order Count
 
 Get StoreContact Info
     [Arguments]  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2081,6 +2161,7 @@ Get StoreContact Info
 
 Get Order Settings of Provider
     [Arguments]  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2105,6 +2186,7 @@ Update Email For Order
 
 Get Item By Catalog
     [Arguments]    ${catalogId}  ${itemId}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2129,6 +2211,7 @@ Cancel Order By Consumer
 
 Get Order By EncodedId
     [Arguments]    ${encId}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2165,7 +2248,7 @@ Add Order Rating
 	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uId=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
-	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -2179,7 +2262,7 @@ Update Order Rating
 	${cons_params}=  Create Dictionary  account=${accid}  
 	${data}=  Create Dictionary  uId=${uuid}  stars=${stars}  feedback=${feedback}
     ${data}=  json.dumps  ${data}
-	${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -2190,6 +2273,7 @@ Update Order Rating
 
 Get Order Rating
     [Arguments]    &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2202,7 +2286,7 @@ Get Order Rating
 Get Consumer Waitlist Attachment
    [Arguments]    ${accid}   ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
    ${cons_params}=  Create Dictionary  account=${accid}
-   ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
    Log  ${kwargs}
    Set To Dictionary  ${cons_headers}   &{tzheaders}
    Set To Dictionary  ${cons_params}   &{locparam}
@@ -2213,6 +2297,7 @@ Get Consumer Waitlist Attachment
 
 Get Consumer Wallet
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2224,6 +2309,7 @@ Get Consumer Wallet
 
 Get All Jaldee Cash Available
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2235,6 +2321,7 @@ Get All Jaldee Cash Available
 
 Get Jaldee Cash Available By Id 
     [Arguments]  ${jcashid}   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2246,6 +2333,7 @@ Get Jaldee Cash Available By Id
 
 Get Jaldee Cash Details
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2257,6 +2345,7 @@ Get Jaldee Cash Details
 
 Get Jaldee Cash Expired
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2281,6 +2370,7 @@ Get Remaining Amount To Pay
 
 Get Total JCash And Credit Amount
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2292,6 +2382,7 @@ Get Total JCash And Credit Amount
 
 Get Total Credit Available
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2305,6 +2396,7 @@ Make Jcash Payment Consumer Mock
     [Arguments]  ${amount}  ${response}  ${uuid}  ${accid}  ${purpose}  ${isJcashUsed}  ${isreditUsed}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${data}=  Create Dictionary  amountToPay=${amount}  paymentMode=Mock  uuid=${uuid}  mockResponse=${response}  accountId=${accid}  paymentPurpose=${purpose}  isJcashUsed=${isJcashUsed}  isreditUsed=${isreditUsed}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2344,6 +2436,7 @@ Appointment AdvancePayment Details
     ${schedule}=  Create Dictionary  id=${schedule}    
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  coupons=${coupons}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2359,6 +2452,7 @@ Appointment AdvancePayment Details without Coupon
     ${schedule}=  Create Dictionary  id=${schedule}    
     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2475,6 +2569,7 @@ Consumer SignUp Via QRcode
     ${usp}=   Create Dictionary   firstName=${firstname}  lastName=${lastname}  primaryMobileNo=${primaryNo}  countryCode=${countryCode}    email=${email}
     ${data}=  Create Dictionary    userProfile=${usp}    accountId=${aacid}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2486,6 +2581,7 @@ Consumer SignUp Via QRcode
 
 Get NextAvailableSchedule appt consumer
     [Arguments]      ${pid}    ${lid}   ${u_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2497,6 +2593,7 @@ Get NextAvailableSchedule appt consumer
 
 Get payment modes
     [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2529,6 +2626,7 @@ Consumer Get Order Questionnaire By uuid
 
 Consumer Upload Status for Appnt
     [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2670,6 +2768,7 @@ Create Payment Link For Donation
 
 Get Donation Details
     [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2684,6 +2783,7 @@ Donation Payment Via Link
     ...   paymentMode=${paymentMode}  purpose=${purpose}  serviceId=${serviceId}  source=${source}  uuid=${pay_link}
     ...    mockResponse=${response}
     ${data}=   json.dumps   ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2699,6 +2799,7 @@ Add Family
     ${headers}=                   Create Dictionary    Content-Type=application/json
     ${userProfile}=               Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   email=${email}   city=${city}  state=${state}   address=${address}  primaryMobileNo=${primarynum}   alternativePhoneNo=${alternativenum}   countryCode=${countrycode}  telegramNum=${telegramNum}   whatsAppNum=${whatsAppNum}
     ${data}=                      Create Dictionary    userProfile=${userProfile}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2710,6 +2811,7 @@ Add Family
 Get Seropt By CatalogId
     [Arguments]    ${catalogId}  ${channel}  ${accid}  &{kwargs}  #${timeZone}=Asia/Kolkata
     comment    login bypassed url
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2748,6 +2850,7 @@ Create Order With Service Options Consumer
     ${order}=  Set Variable  ${kwargs['order']}
     # Log  ${order} 
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    # ${cons_params}=  Create Dictionary
     # ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     # Log  ${kwargs}
     # Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -2774,6 +2877,7 @@ Create Order For AuthorDemy
 
     ${order}=  Create Dictionary   catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}  phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    # ${cons_params}=  Create Dictionary
     # ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     # Log  ${kwargs}
     # Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -2786,6 +2890,7 @@ Get Consumer
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -2798,6 +2903,7 @@ Get Users By Loc and AccId
     [Arguments]  ${accountId}  ${locationId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     Check And Create YNW Session
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -2819,6 +2925,7 @@ Consumer Create Appt Service Request
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -2831,6 +2938,7 @@ Consumer Get Appt Service Request
     [Arguments]     &{kwargs}
     Check And Create YNW Session
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -2843,6 +2951,7 @@ Consumer Get Appt Service Request Count
     [Arguments]     &{kwargs}
     Check And Create YNW Session
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -2859,6 +2968,7 @@ Consumer Video Call ready
     ${data}=  Create Dictionary   uuid=${uuid}    recordingFlag=${recordingFlag}
     ${data}=    json.dumps    ${data}
     # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${form_headers}   &{tzheaders}
@@ -2874,6 +2984,7 @@ Get convenienceFee Details
     [Arguments]  ${accountId}  ${profileId}  ${amount}  &{kwargs}
     ${data}=    Create Dictionary    profileId=${profileId}  amount=${amount}
     ${data}=  json.dumps  ${data}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2885,6 +2996,7 @@ Get convenienceFee Details
 
 Get Service By Location Appoinment   
     [Arguments]  ${locationId}   &{kwargs}
+    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}

@@ -96,37 +96,37 @@ checkSysType()
     fi
     # cat /proc/sys/kernel/osrelease >> $LogFileName
     cat /proc/sys/kernel/osrelease | tee -a $LogFileName
-    uname -r >> $LogFileName
-    uname -a >> $LogFileName
-    if [[ $(uname -r | grep -iE 'Microsoft|Windows') ]]; then
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> $LogFileName
-        echo "Bash is running on WSL" >> $LogFileName
-    else
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> $LogFileName
-        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
-    fi
-    cat /proc/version >> $LogFileName
-    if grep -qi microsoft /proc/version; then
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> $LogFileName
-        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux" >> $LogFileName
-    else
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> $LogFileName
-        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
-    fi
-    if [[ $(lscpu | grep -iE 'Microsoft|Windows') ]]; then
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> $LogFileName
-        echo "Bash is running on WSL" >> $LogFileName
-    else
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> $LogFileName
-        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
-    fi
-    if [[ -f "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> $LogFileName
-        echo "Windows Subsystem for Linux" >> $LogFileName
-    else
-        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> $LogFileName
-        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
-    fi
+    # uname -r >> $LogFileName
+    # uname -a >> $LogFileName
+    # if [[ $(uname -r | grep -iE 'Microsoft|Windows') ]]; then
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> $LogFileName
+    #     echo "Bash is running on WSL" >> $LogFileName
+    # else
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    # fi
+    # cat /proc/version >> $LogFileName
+    # if grep -qi microsoft /proc/version; then
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux" >> $LogFileName
+    # else
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    # fi
+    # if [[ $(lscpu | grep -iE 'Microsoft|Windows') ]]; then
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> $LogFileName
+    #     echo "Bash is running on WSL" >> $LogFileName
+    # else
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    # fi
+    # if [[ -f "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> $LogFileName
+    #     echo "Windows Subsystem for Linux" >> $LogFileName
+    # else
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    # fi
 }
 
 # Sets default environment to dev for develpment, jenkins for jenkins server or scale for scale server
