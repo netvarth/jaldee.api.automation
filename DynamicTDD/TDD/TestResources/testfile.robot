@@ -4,6 +4,7 @@ Test Teardown     Run Keywords  Delete All Sessions
 Force Tags        ENQUIRY
 Library           Collections
 Library           FakerLibrary
+Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
@@ -11,153 +12,189 @@ Variables         /ebs/TDD/varfiles/providers.py
 
 
 *** Variables ***
-${self}      0
-@{emptylist}
-${en_temp_name}   EnquiryName
-${consumernumber}     55500000032
-${locId}  207
-@{custdeets}  firstname  lastname  phoneNo  countryCode  gender
-${p1_l2}   ${425}
 
 
-*** Keywords ***
-
-# test Keyword
-# Set TZ Header
-#     [Arguments]    &{kwargs}
-#     # ${params}=  Create Dictionary  account=${accid}
-#     ${tzheaders}=    Create Dictionary  
-#     Log  ${kwargs}
-#     ${x} =    Get Variable Value    ${kwargs}   
-#     # ${value}=   Evaluate   $kwargs.get("timeZone")
-#     # ${value}=   Evaluate   $kwargs.get("location")
-#     IF  ${x}=={} or '${kwargs.get("timeZone")}'=='${None}' or '${kwargs.get("location")}'=='${None}'
-#         Set To Dictionary 	${tzheaders} 	timeZone=Asia/Kolkata
-#         Log  ${tzheaders}
-#     ELSE
-#         FOR    ${key}    ${value}    IN    &{kwargs}
-#             # IF  '${key}' in 'timeZone', 'timezone'
-#             # IF  '${kwargs.get("timeZone")}'!='${None}' or '${kwargs.get("timezone")}'!='${None}'
-#             # IF  '${key}'=='timeZone' or '${key}'=='timezone'
-#             IF  "${key}".lower()=="timezone"
-#                 Set To Dictionary 	${tzheaders} 	timeZone=${value}
-#                 Remove From Dictionary 	&{kwargs} 	${key}
-#                 Log  ${tzheaders}
-#             ELSE IF  '${key}' == 'location'
-#                 Set To Dictionary 	${params}   ${key}=${value}
-#                 Remove From Dictionary 	&{kwargs} 	${key}
-#                 Log  ${params}
-#             END
-#         END
-#     END
-    
-    
-#     Log  ${kwargs}
-#     [Return]  ${tzheaders}  ${kwargs}
-
-# ${data}= | Create dictionary | key1=one | key2=two
-    # ${value}= | Evaluate | $data.get("key3", "default value")
-
-    # ${x} =    Get Variable Value    ${kwargs}   
-    # IF  ${x}=={} 
-    #     Set To Dictionary 	${cons_headers} 	timeZone=Asia/Kolkata
-    # END
-    # FOR    ${key}    ${value}    IN    &{kwargs}
-    #     IF  '${key}' in 'timeZone', 'timezone'
-    #         Set To Dictionary 	${cons_headers} 	timeZone=${value}
-    #     ELSE IF  '${key}' == 'location'
-    #         Set To Dictionary 	${params}   ${key}=${value}
-    #     END
-    # END
-
-Get Consumer test
-    [Arguments]    &{params}
-    Check And Create YNW Session
-    # Set To Dictionary  ${form_headers}   timeZone=${timeZone}
-    # ${headers}  ${params}=  Set TZ Header  &{params}
-    ${tzheaders}  ${params}  ${locparam}=  Set TZ Header  &{params}
-    Set To Dictionary  ${cons_headers}   &{headers}
-    Set To Dictionary  ${params}   &{locparam}
-    Log   ${cons_headers}
-    ${resp}=    GET On Session    ynw   /consumer    params=${params}    expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
-
-    
-
-Get Consumer Communications test
-    [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata
-    ${tzheaders}  ${kwargs}  ${locparam}=  Set TZ Header  &{kwargs}
-    Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
-    Set To Dictionary  ${params}   &{locparam}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/communications   params=${params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
 
 
-*** Test Cases ***
 
-# Login test
-#     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME7}  ${PASSWORD}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200 
-
-    
+*** Test Cases ***   
 TC-1
+    [Documentation]   Create Location with timezone=Asia/Dubai
+    Comment  Provider in Middle East (UAE)
+    ${PO_Number}=  FakerLibrary.Numerify  %#####
+    ${MEProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
 
-    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    # ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
+
+    ${resp}=  Get BusinessDomainsConf
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${dom_len}=  Get Length  ${resp.json()}
+    ${dom}=  random.randint  ${0}  ${dom_len-1}
+    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+    Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+    Log   ${domain}
     
-    # test Keyword   456  
-    # test Keyword   456  timeZone=${tz1}
-    # test Keyword   456  account=456
-    # test Keyword   456  account=456   location=${{str('${p1_l2}')}}  timezone=${tz1}
-    # test Keyword   456  account=456   location=${{str('${p1_l2}')}}  timeZone=${tz1}
-    # test Keyword   456  location=${{str('${p1_l2}')}}
-    
-    ${resp}=  Consumer Login  5550075595  ${PASSWORD}
-    Log  ${resp.content}
+    FOR  ${subindex}  IN RANGE  ${sdom_len}
+        ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+        Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+        ${is_corp}=  check_is_corp  ${subdomain}
+        Exit For Loop If  '${is_corp}' == 'False'
+    END
+    Log   ${subdomain}
+
+    ${fname}=  FakerLibrary.name
+    ${lname}=  FakerLibrary.lastname
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${MEProvider}  ${licpkgid}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${a_id}=  get_acc_id  ${PUSERNAME2}
-    # ${msg}=  Fakerlibrary.sentence
-    # ${resp}=  General Communication with Provider   ${msg}   ${a_id}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=  Account Activation  ${MEProvider}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Consumer Communications test
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=  Account Set Credential  ${MEProvider}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
-    Log   ${resp.json()}
+    sleep  01s
+    ${resp}=  Encrypted Provider Login  ${MEProvider}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
+    Set Test Variable  ${pid1}  ${decrypted_data['id']}
 
-    ${resp}=  Get Consumer test  primaryMobileNo-eq=5550075595   location=${{str('${p1_l2}')}}
-    Log  ${resp.content} 
+    ${resp}=   Get Service
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    # test Keyword   456  location=422
-    # test Keyword   456  location=422  timeZone=${tz1}
-    # ${gender}    Random Element    ${Genderlist}
-    # ${profile}=  FakerLibrary.profile   sex=female
-    # Set Test Variable  ${custid}   0
-    # ${Custfname}=  FakerLibrary.name
-    # ${Custlname}=  FakerLibrary.last_name
-    # # ${gender}    Random Element    ${Genderlist}
-    # ${kyc_list1}=  Create Dictionary  isCoApplicant=${bool[0]}
-    
-    # Verify Phone and Create Loan Application with customer details  ${consumernumber}  ${OtpPurpose['ConsumerVerifyPhone']}  ${custid}  ${locId}  ${kyc_list1}  firstname=${Custfname}  lastname=${Custlname}  phoneNo=${consumernumber}  countryCode=${countryCodes[0]}  gender=${gender}
 
-*** Comment ***
-JD-TC-ChangeEnqStatus-1
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${ph1}=  Evaluate  ${MEProvider}+15566122
+    # ${ph2}=  Evaluate  ${MEProvider}+25566122
+    # ${views}=  Random Element    ${Views}
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}${MEProvider}.${test_mail}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # ${address} =  FakerLibrary.address
+    # ${postcode}=  FakerLibrary.postcode
+    # # ${latti}  ${longi}  ${city}  ${country_abbr}  ${AE_tz}=  FakerLibrary.Local Latlng  country_code=AE  coords_only=False
+    # ${latti}  ${longi}  ${city}  ${country_abbr}  ${AE_tz}=  FakerLibrary.Local Latlng
+    # ${AE_tz}=  Set Variable  Asia/Dubai  
+    # ${DAY}=  db.get_date_by_timezone  ${AE_tz}
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ${bool}
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
+    # ${sTime}=  db.get_time_by_timezone  ${AE_tz}  
+    # ${eTime}=  db.add_timezone_time  ${AE_tz}  0  30  
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}  timezone=${AE_tz}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD} 
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${AE_tz}=  FakerLibrary.Local Latlng
+    ${AE_tz}=  Set Variable  Asia/Dubai
+    ${latti}=  Set Variable  25.243183780208067
+    ${longi}=  Set Variable  55.480148092471524
+    # ${AE_tz}=  FakerLibrary.Timezone
+    ${address1} =  FakerLibrary.address
+    ${postcode1}=  FakerLibrary.postcode
+    ${DAY1}=  db.get_date_by_timezone  ${AE_tz}
+    ${DAY2}=  db.add_timezone_date  ${AE_tz}  10     
+    ${sTime1}=  add_timezone_time  ${AE_tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${AE_tz}  1  00  
+    ${parking}    Random Element     ${parkingType} 
+    ${24hours}    Random Element    ['True','False']
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode1}  ${address1}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  timezone=${AE_tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p2_l1}  ${resp.json()}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${p2_l1}   ${resp.json()[0]['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+***COMMENT***
+
+    ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    ${resp}=  Update Specialization  ${spec}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Leads With Filter    
-    Log   ${resp.content}
+    Set Test Variable  ${email_id}  ${P_Email}${MEProvider}.${test_mail}
+
+    ${resp}=  Update Email   ${pid1}   ${fname}  ${lname}   ${email_id}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Enable Appointment
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep   01s
+    
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+    ${resp}=  Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${p2_l1}   ${resp.json()[0]['id']}
+
+    ${SERVICE1}=   FakerLibrary.job
+    ${p2_s1}=  Create Sample Service  ${SERVICE1}
+
+    ${DAY3}=  db.get_date_by_timezone  ${AE_tz}
+    ${DAY4}=  db.add_timezone_date  ${AE_tz}  10  
+    ${sTime2}=  add_timezone_time  ${AE_tz}  1  00  
+    ${eTime2}=  add_timezone_time  ${AE_tz}  1  30  
+    ${schedule_name}=  FakerLibrary.administrative unit
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    # ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=5
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p2_l1}  ${duration}  ${bool1}  ${p2_s1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p2_sch1}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${p2_sch1}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${p2_sch1}   name=${schedule_name}  apptState=${Qstate[0]}
+    
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
 
