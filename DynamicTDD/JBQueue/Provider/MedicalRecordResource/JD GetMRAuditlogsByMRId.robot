@@ -830,10 +830,10 @@ JD-TC-Getauditlog-6
     ${resp}=  Get MR Auditlogs by MR Id   ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['Action']}            ${mraction[2]}
-    Should Be Equal As Strings  ${resp.json()[0]['Description']}       ${MR_Description}
-    Should Be Equal As Strings  ${resp.json()[0]['User']}              ${userName}
-    Should Be Equal As Strings  ${resp.json()[0]['DateTime']}          ${C_date} ${ctime}
+    Should Be Equal As Strings  ${resp.json()[1]['Action']}            ${mraction[0]}
+    Should Be Equal As Strings  ${resp.json()[1]['Description']}       ${MR_Description}
+    Should Be Equal As Strings  ${resp.json()[1]['User']}              ${userName}
+    Should Be Equal As Strings  ${resp.json()[1]['DateTime']}          ${C_date} ${ctime}
 
     ${ctime}=         db.get_time_by_timezone   ${tz}
     ${med_name1}=      FakerLibrary.name

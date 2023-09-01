@@ -442,8 +442,8 @@ JD-TC-AddDelay-3
       ${provider_msg}=   Replace String  ${provider_msg}  [providerName]   ${buss_name}
       ${provider_msg}=   Replace String  ${provider_msg}  [message]        ${desc}
 
-      ${time_delay}=  Evaluate  ${delay_time}-${delay_time2}
-      ${hrs}  ${mins}=   Convert_hour_mins   ${time_delay}
+      # ${time_delay}=  Evaluate  ${delay_time}-${delay_time2}
+      ${hrs}  ${mins}=   Convert_hour_mins   ${delay_time}
 
       ${bookingid}=  Format String  ${bookinglink}  ${W_encId4}  ${W_encId4}
       ${defconfirm_msg}=  Replace String  ${confirmwl_push}  [consumer]   ${consumername}
