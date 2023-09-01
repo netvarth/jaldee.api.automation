@@ -179,7 +179,7 @@ JD-TC-ShareprescriptionThirdparty-1
     Set Suite Variable  ${que_id1}   ${resp.json()}
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
+    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1}  location=${loc_id1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -434,7 +434,7 @@ JD-TC-ShareprescriptionThirdparty-2
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  location=${loc_id2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -519,7 +519,7 @@ JD-TC-ShareprescriptionThirdparty-3
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  location=${loc_id2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -1535,7 +1535,7 @@ JD-TC-ShareprescriptionThirdparty-UH2
     Should Be Equal As Strings      ${resp.status_code}  200
     ${desc}=   FakerLibrary.word
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}   
-    ${resp}=  Add To Waitlist  ${cid3}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid3} 
+    ${resp}=  Add To Waitlist  ${cid3}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid3}   location=${loc_id2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -2088,7 +2088,7 @@ JD-TC-ShareprescriptionThirdparty-11
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}   location=${loc_id2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2169,7 +2169,7 @@ JD-TC-ShareprescriptionThirdparty-12
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}  
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}   location=${loc_id2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -2257,7 +2257,7 @@ JD-TC-ShareprescriptionThirdparty-13
        
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${cidfor}  
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${cidfor}   location=${loc_id2} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     

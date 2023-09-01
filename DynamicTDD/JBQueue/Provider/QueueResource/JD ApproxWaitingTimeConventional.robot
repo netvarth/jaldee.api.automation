@@ -20,7 +20,7 @@ ${SERVICE4}   Hair makeup2S
 ${SERVICE5}    Hair makeup3SS
 ${self}        0
 ${capacity}    15
-@{parallel}    1   2  3
+@{parallel}    1   2   3
 @{new}        20.75   20.65   20.50
 
 
@@ -900,10 +900,10 @@ JD-TC-Approximate Waiting Time Conventional-3
     Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   0
     ${resp}=  Get Waitlist By Id  ${wid3} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   0
+    Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   ${wait_time1}
     ${resp}=  Get Waitlist By Id  ${wid4} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   0
+    Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   ${wait_time1}
     
 JD-TC-Approximate Waiting Time Conventional-4
     [Documentation]   Check queue waiting time when token1 is started after token3
@@ -1553,8 +1553,8 @@ JD-TC-Approximate Waiting Time Conventional-6
     Verify Response List  ${resp}  2  ynwUuid=${wid3}  appxWaitingTime=0  waitlistStatus=${wl_status[0]}
     Verify Response List  ${resp}  3  ynwUuid=${wid4}  appxWaitingTime=${wait_time}  waitlistStatus=${wl_status[0]}
     Verify Response List  ${resp}  4  ynwUuid=${wid5}  appxWaitingTime=0  waitlistStatus=${wl_status[2]}
-    Verify Response List  ${resp}  5  ynwUuid=${wid6}  appxWaitingTime=${wait_time}
-    Verify Response List  ${resp}  6  ynwUuid=${wid7}  appxWaitingTime=${wait_time1}
+    Verify Response List  ${resp}  5  ynwUuid=${wid6}  appxWaitingTime=${wait_time1}
+    Verify Response List  ${resp}  6  ynwUuid=${wid7}  appxWaitingTime=${wait_time2}
       
 
 *** comment ***
