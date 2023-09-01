@@ -168,21 +168,26 @@ JD-TC-DepartmentWiseAnalytics-1
      Set Suite Variable  ${id}
     ${acc_id}=  get_acc_id  ${MUSERNAME_E}
     
-     ${bs}=  FakerLibrary.bs
-     Set Suite Variable  ${bs}
+    ${bs}=  FakerLibrary.bs
+    Set Suite Variable  ${bs}
 
-     ${resp}=  View Waitlist Settings
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-     sleep  2s
-     ${resp}=  Get Departments
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
+    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
 #     ${resp}=  Create Department For Branch  ${acc_id}  Bridal Department  Dep001  Bridal Makeups  ACTIVE  
 #     Log To Console  ${resp.content}
@@ -195,10 +200,10 @@ JD-TC-DepartmentWiseAnalytics-1
       ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
       Log  ${resp1.content}
       Should Be Equal As Strings  ${resp1.status_code}  200
-      Set Test Variable  ${depid1}  ${resp.json()['departments'][0]['departmentId']}
+      Set Suite Variable  ${depid1}  ${resp1.json()}
 
 
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+226445
+     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+226445
      clear_users  ${PUSERNAME_U1}
      Set Suite Variable  ${PUSERNAME_U1}
      ${firstname}=  FakerLibrary.name
@@ -259,7 +264,7 @@ JD-TC-DepartmentWiseAnalytics-1
      Set Test Variable  ${state1}  ${resp.json()[0]['PostOffice'][0]['State']}      
      Set Test Variable  ${pin1}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
 
-     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${depid1}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U2}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U2}  ${depid1}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id1}  ${resp.json()}
@@ -280,6 +285,12 @@ JD-TC-DepartmentWiseAnalytics-1
     END
 
     Set Suite Variable  ${ser_names}
+
+    # ${SERVICE2}=    Set Variable  ${ser_names[5]}
+    # ${min_pre}=   Random Int   min=10   max=50
+    # ${servicecharge}=   Random Int  min=100  max=200
+    # ${s_id1}=  Create Sample Service with Prepayment   ${SERVICE2}  ${min_pre}  ${servicecharge}  maxBookingsAllowed=10
+    # Set Suite Variable  ${s_id1}
 
     ${SERVICE3}=    Set Variable  ${ser_names[0]}
     # ${SERVICE3}=    FakerLibrary.word
@@ -302,6 +313,15 @@ JD-TC-DepartmentWiseAnalytics-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid4}  ${resp.json()}
+
+    ${resp}=  Sample Queue   ${lid}   ${sid3}   ${sid4} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id1}  ${resp.json()}
+
+    ${resp}=  Get Queue ById  ${q_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
 
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -350,7 +370,11 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dur1}=  FakerLibrary.Random Int  min=10  max=20
     Set Suite Variable  ${dur1}
-    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${depid1}  ${u_id}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${depid1}  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
@@ -359,7 +383,8 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
-    ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  20  20  ${lid}  ${u_id}  ${s_id}  ${s_id2}   ${s_id3}   ${s_id4}
+    ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  20  20  ${lid}  ${u_id1}    ${s_id2}   
+    # ${sid3}   ${sid4}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id}  ${resp.json()}
@@ -367,6 +392,26 @@ JD-TC-DepartmentWiseAnalytics-1
     ${resp}=  Get Queue ById  ${q_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Get Queues
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+
+    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${queue_name1}=  FakerLibrary.bs
+    Set Suite Variable  ${queue_name}
+    ${resp}=  Create Queue For User  ${queue_name1}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  20  20  ${lid}  ${u_id}    ${s_id}   
+    # ${sid3}   ${sid4}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id1}  ${resp.json()}
+
+    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
     
 
     # ------------------- Add customers and take checkin  -------------------
@@ -392,6 +437,9 @@ JD-TC-DepartmentWiseAnalytics-1
 
     END
 
+    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${walkin_waitlist_ids}=  Create List
     Set Suite Variable   ${walkin_waitlist_ids}
 
@@ -402,7 +450,7 @@ JD-TC-DepartmentWiseAnalytics-1
             
         ${desc}=   FakerLibrary.word
 
-        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid${a}} 
+        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id2}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id1}  ${cid${a}} 
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -417,14 +465,14 @@ JD-TC-DepartmentWiseAnalytics-1
 
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     FOR   ${a}  IN RANGE   ${count}
             
         ${desc}=   FakerLibrary.word
 
-        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id4}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid${a}} 
+        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid${a}} 
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -508,3 +556,72 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues']}   ${empty_list}
+
+JD-TC-DepartmentWiseAnalytics-2
+    [Documentation]   take prepayment checkin for a provider and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
+
+    ${resp}=   Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    
+    ${SERVICE2}=    Set Variable  ${ser_names[5]}
+    ${min_pre}=   Random Int   min=10   max=50
+    ${servicecharge}=   Random Int  min=100  max=200
+    ${s_id1}=  Create Sample Service with Prepayment   ${SERVICE2}  ${min_pre}  ${servicecharge}  maxBookingsAllowed=10    department=${depid1}
+    Set Suite Variable  ${s_id1}
+
+    ${resp}=  Get Queue ById  ${q_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${time_now}=  db.get_time
+    ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
+    ${eTime1}=  add_two   ${etime}  120
+    ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
+    ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
+    ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}  ${s_id1}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Queue ById  ${q_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${prepay_walkin_waitlist_ids}=  Create List
+    Set Suite Variable   ${prepay_walkin_waitlist_ids}
+    FOR   ${a}  IN RANGE   ${count}
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME${a}}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${cid${a}}   ${resp.json()[0]['id']}
+        
+        ${desc}=   FakerLibrary.word
+        ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id1}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        
+        ${wid}=  Get Dictionary Values  ${resp.json()}
+        Set Test Variable  ${wid${a}}  ${wid[0]}
+
+        Append To List   ${prepay_walkin_waitlist_ids}  ${wid${a}}
+
+    END
+
+    Log List   ${prepay_walkin_waitlist_ids}
+
+    ${walkin_token_len}=   Evaluate  len($walkin_waitlist_ids) + len($prepay_walkin_waitlist_ids)
+    Set Suite Variable   ${walkin_token_len}
+
+    sleep  01s
+    # sleep  05m
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
