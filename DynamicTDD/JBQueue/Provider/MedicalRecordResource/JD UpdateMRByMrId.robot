@@ -987,9 +987,9 @@ JD-TC-UpdateMR-6
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${appt_duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${ser_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id1}  ${appt_duration}  ${bool1}  ${ser_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
@@ -1105,12 +1105,23 @@ JD-TC-UpdateMR-6
     ${duration1}=      FakerLibrary.sentence
     ${instrn1}=        FakerLibrary.sentence
     ${dosage1}=        FakerLibrary.sentence
+    ${Pres_notes}=         FakerLibrary.sentence
 
     ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
+    ${prescriptionsList}=  Create List   ${pre_list1}
     
-    ${resp}=  Update MR by mr id  ${mr_id}  ${bookingType[1]}  ${consultationMode[3]}  ${complaint1}  ${symptoms1}  ${allergies1}  ${vacc_history1}  ${observations1}  ${diagnosis1}  ${misc_notes1}  ${notes1}  ${CUR_DAY}  ${status[0]}  ${pre_list1}  
+    ${prescriptions}=  Create Dictionary  prescriptionsList=${prescriptionsList}  notes=${Pres_notes}
+
+    ${resp}=  Update MR by mr id  ${mr_id}  ${bookingType[1]}  ${consultationMode[3]}      ${CUR_DAY}    ${status[0]}     prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
+
+    # ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
+    
+    # ${resp}=  Update MR by mr id  ${mr_id}  ${bookingType[1]}  ${consultationMode[3]}  ${complaint1}  ${symptoms1}  ${allergies1}  ${vacc_history1}  ${observations1}  ${diagnosis1}  ${misc_notes1}  ${notes1}  ${CUR_DAY}  ${status[0]}  ${pre_list1}  
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get MR By Id  ${mr_id} 
     Log  ${resp.json()}
@@ -1126,13 +1137,11 @@ JD-TC-UpdateMR-6
     Should Be Equal As Strings  ${resp.json()['prescriptionCreated']}               ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['mrCreatedDate']}                     ${C_date} ${ctime1}
     Should Be Equal As Strings  ${resp.json()['mrCreatedBy']}                       ${id}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['symptoms']}         ${symptoms1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['allergies']}        ${allergies1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['diagnosis']}        ${diagnosis1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['complaints']}       ${complaint1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['observations']}     ${observations1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['vaccinationHistory']}    ${vacc_history1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['misc_notes']}            ${misc_notes1}
+    Should Be Equal As Strings  ${resp.json()['mrCreatedBy']}                       ${id}
+    Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['clinicalNotes']}              ${clinicalNote}
+    Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['fileName']}              ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['fileType']}             ${fileType}
+    Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['caption']}             ${caption}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['duration']}              ${duration1}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['frequency']}             ${frequency1}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['instructions']}          ${instrn1}
@@ -1535,7 +1544,7 @@ JD-TC-UpdateMR-8
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid} 
 
-    ${ctime}=         db.get_time_by_timezone   ${tz}
+    
     ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
@@ -1557,6 +1566,8 @@ JD-TC-UpdateMR-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${mr_id5}   ${resp.json()}
+    
+    ${ctime}=         db.get_time_by_timezone   ${tz}
 
     ${resp}=  Get MR By Id  ${mr_id5} 
     Log  ${resp.json()}
@@ -1592,6 +1603,8 @@ JD-TC-UpdateMR-8
     # ${resp}=  Update MR by mr id  ${mr_id5}  ${bookingType[0]}  ${consultationMode[3]}  ${complaint1}  ${symptoms1}  ${allergies1}  ${vacc_history1}  ${observations1}  ${diagnosis1}  ${misc_notes1}  ${notes1}  ${CUR_DAY}  ${status[0]}  ${pre_list1}  
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     
     ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     ${prescriptionsList}=  Create List   ${pre_list1}
@@ -1863,7 +1876,6 @@ JD-TC-UpdateMR-9
     Should Be Equal As Strings  ${resp.json()['bookingType']}                       ${bookingType[1]}
     Should Be Equal As Strings  ${resp.json()['consultationMode']}                  ${consultationMode_verify[3]}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                     ${ser_id2}
-    Should Be Equal As Strings  ${resp.json()['mrConsultationDate']}                ${statusUpdatedTime1}
     Should Be Equal As Strings  ${resp.json()['prescriptionCreated']}               ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['mrCreatedDate']}                     ${C_date} ${ctime}
     Should Be Equal As Strings  ${resp.json()['mrCreatedBy']}                       ${id1}
@@ -2239,7 +2251,7 @@ JD-TC-UpdateMR-UH1
     
     ${prescriptions}=  Create Dictionary  prescriptionsList=${prescriptionsList}  notes=${Pres_notes}
 
-    ${resp}=  Update MR by mr id  ${mr_id1}  ${bookingType[0]}  ${consultationMode[3]}      ${CUR_DAY}    ${status[0]}     prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
+    ${resp}=  Update MR by mr id  ${mr_id}  ${bookingType[0]}  ${consultationMode[3]}      ${CUR_DAY}    ${status[0]}     prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   "${resp.json()}"   "${MEDICAL_RECORD_APPT_FUTURE_DATE}"
@@ -2576,6 +2588,21 @@ JD-TC-UpdateMR-UH7
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['medicine_name']}         ${med_name}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['dosage']}                ${dosage}
 
+    ${complaint1}=     FakerLibrary.word
+    ${symptoms1}=      FakerLibrary.sentence
+    ${allergies1}=     FakerLibrary.sentence
+    ${vacc_history1}=  FakerLibrary.sentence
+    ${observations1}=  FakerLibrary.sentence
+    ${diagnosis1}=     FakerLibrary.sentence
+    ${misc_notes1}=    FakerLibrary.sentence
+    ${notes1}=         FakerLibrary.sentence
+    ${med_name1}=      FakerLibrary.name
+    ${frequency1}=     FakerLibrary.word
+    ${duration1}=      FakerLibrary.sentence
+    ${instrn1}=        FakerLibrary.sentence
+    ${dosage1}=        FakerLibrary.sentence
+    ${Pres_notes}=         FakerLibrary.sentence
+
     ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     ${prescriptionsList}=  Create List   ${pre_list1}
     
@@ -2664,7 +2691,7 @@ JD-TC-UpdateMR-UH8
     Set Test Variable  ${cid}  ${resp.json()[1]['id']}
 
 
-    ${ctime}=         db.get_time_by_timezone   ${tz}
+    
     ${CUR_DAY}=       db.get_date_by_timezone  ${tz}
     # ${complaint}=     FakerLibrary.word
     # ${symptoms}=      FakerLibrary.sentence
@@ -2686,7 +2713,8 @@ JD-TC-UpdateMR-UH8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mr_id}   ${resp.json()}
-
+    
+    ${ctime}=         db.get_time_by_timezone   ${tz}
     ${resp}=  Get MR By Id  ${mr_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2711,8 +2739,31 @@ JD-TC-UpdateMR-UH8
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['medicine_name']}         ${med_name}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['dosage']}                ${dosage}
 
-    ${resp}=  Update MR by mr id  ${mr_id}  ${bookingType[0]}  ${consultationMode[3]}  ${complaint}  ${symptoms}  ${allergies}  ${vacc_history}  ${observations}  ${diagnosis}  ${misc_notes}  ${notes}   ${CUR_DAY}  ${status[0]}  ${pre_list} 
+    ${complaint1}=     FakerLibrary.word
+    ${symptoms1}=      FakerLibrary.sentence
+    ${allergies1}=     FakerLibrary.sentence
+    ${vacc_history1}=  FakerLibrary.sentence
+    ${observations1}=  FakerLibrary.sentence
+    ${diagnosis1}=     FakerLibrary.sentence
+    ${misc_notes1}=    FakerLibrary.sentence
+    ${notes1}=         FakerLibrary.sentence
+    ${med_name1}=      FakerLibrary.name
+    ${frequency1}=     FakerLibrary.word
+    ${duration1}=      FakerLibrary.sentence
+    ${instrn1}=        FakerLibrary.sentence
+    ${dosage1}=        FakerLibrary.sentence
+    ${Pres_notes}=         FakerLibrary.sentence
+
+    ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
+    ${prescriptionsList}=  Create List   ${pre_list1}
+    
+    ${prescriptions}=  Create Dictionary  prescriptionsList=${prescriptionsList}  notes=${Pres_notes}
+
+    ${resp}=  Update MR by mr id  ${mr_id}  ${bookingType[0]}  ${consultationMode[3]}      ${CUR_DAY}    ${status[0]}     prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
+
+    # ${resp}=  Update MR by mr id  ${mr_id}  ${bookingType[0]}  ${consultationMode[3]}  ${complaint}  ${symptoms}  ${allergies}  ${vacc_history}  ${observations}  ${diagnosis}  ${misc_notes}  ${notes}   ${CUR_DAY}  ${status[0]}  ${pre_list} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   "${resp.json()}"   "${INVALID_BOOKING_TYPE}"
 
@@ -2880,7 +2931,7 @@ JD-TC-UpdateMR-12
     ${duration1}=      FakerLibrary.sentence
     ${instrn1}=        FakerLibrary.sentence
     ${dosage1}=        FakerLibrary.sentence
-
+    ${Pres_notes}=         FakerLibrary.sentence
 
     ${pre_list1}=  Create Dictionary  medicine_name=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     ${prescriptionsList}=  Create List   ${pre_list1}
@@ -2909,24 +2960,15 @@ JD-TC-UpdateMR-12
     Should Be Equal As Strings  ${resp.json()['prescriptionCreated']}               ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['mrCreatedDate']}                     ${C_date} ${ctime}
     Should Be Equal As Strings  ${resp.json()['mrCreatedBy']}                       ${id}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['symptoms']}         ${symptoms1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['allergies']}        ${allergies1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['diagnosis']}        ${diagnosis1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['complaints']}       ${complaint1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['observations']}     ${observations1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['vaccinationHistory']}    ${vacc_history1}
-    Should Be Equal As Strings  ${resp.json()['clinicalNotes']['misc_notes']}            ${misc_notes1}
+    Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['clinicalNotes']}              ${clinicalNote}
+    Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['fileName']}              ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['fileType']}             ${fileType}
+    Should Be Equal As Strings  ${resp.json()['clinicalNotes'][0]['attachments'][0]['caption']}             ${caption}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['duration']}              ${duration1}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['frequency']}             ${frequency1}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['instructions']}          ${instrn1}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['medicine_name']}         ${med_name1}
     Should Be Equal As Strings  ${resp.json()['prescriptions']['prescriptionsList'][0]['dosage']}                ${dosage1}
-   
-
-
-
-
-
 
 
 

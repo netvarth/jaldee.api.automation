@@ -170,7 +170,11 @@ JD-TC-UpdateOrder-1
 
     ${resp}=  Get Order Catalog    ${CatalogId1}  
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+154687
     Set Suite Variable   ${CUSERPH0}
@@ -410,7 +414,7 @@ JD-TC-UpdateOrder-1
     Should Be Equal As Strings  ${resp.json()['orderDate']}              ${DAY2}
     Should Be Equal As Strings  ${resp.json()['phoneNumber']}               ${CUSERPH0}
     Should Be Equal As Strings  ${resp.json()['email']}                     ${email1}
-    
+
 
 JD-TC-UpdateOrder-2
     [Documentation]    update an order By provider for today.
