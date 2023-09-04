@@ -62,6 +62,8 @@ JD-TC-Available Queues-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
 
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+
     ${resp}=  Is Available Queue Now
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -158,8 +160,8 @@ JD-TC-Available Queues-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
     
-    # ${Time}=  db.get_time_by_timezone   ${tz}
-    ${Time}=  db.get_time_by_timezone  ${tz}
+    ${sTime1}=  db.get_time_by_timezone   ${tz}
+    # ${Time}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Is Available Queue Now
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
