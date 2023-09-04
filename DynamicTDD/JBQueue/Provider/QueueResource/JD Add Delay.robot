@@ -1029,7 +1029,7 @@ JD-TC-AddDelay-5
       ${provider_msg}=   Replace String  ${provider_msg}  [providerName]   ${buss_name}
       ${provider_msg}=   Replace String  ${provider_msg}  [message]        ${prov_msg}
    
-      ${hrs}  ${mins}=   Convert_hour_mins   ${delay_time}
+      ${hrs}  ${mins}=   Convert_hour_mins   0
 
       ${bookingid}=  Format String  ${bookinglink}  ${Wl_encId1}  ${Wl_encId1}
       ${defconfirm_msg}=  Replace String  ${confirmwl_push}  [consumer]   ${consumername}
@@ -1038,8 +1038,8 @@ JD-TC-AddDelay-5
       ${msg}=  Replace String  ${defDelayAdd_msg}  [consumer]   ${consumername}
       ${msg}=  Replace String  ${msg}  [providerMessage]   ${provider_msg}
       ${msg}=  Replace String  ${msg}  [bookingId]   ${Wl_encId1}
-      ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[1]}
-      ${msg}=  Replace String  ${msg}  [delaytime]   ${mins}${SPACE}mins
+      ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[0]}
+      ${msg}=  Replace String  ${msg}  [delaytime]   ${mins}
 
       ${resp}=  Get Consumer Communications
       Log   ${resp.json()}
@@ -1067,7 +1067,7 @@ JD-TC-AddDelay-5
       # ${msg}=  Replace String  ${msg}  [wait/service]  service
       # ${msg}=  Replace String  ${msg}  [time]  ${time_after_cancel}
 
-      ${hrs}  ${mins}=   Convert_hour_mins   ${delay_time}
+      ${hrs}  ${mins}=   Convert_hour_mins   0
 
       ${bookingid}=  Format String  ${bookinglink}  ${Wl_encId2}  ${Wl_encId2}
       ${defconfirm_msg}=  Replace String  ${confirmwl_push}  [consumer]   ${consumername}
@@ -1105,7 +1105,7 @@ JD-TC-AddDelay-5
       # ${msg}=  Replace String  ${msg}  [wait/service]  service
       # ${msg}=  Replace String  ${msg}  [time]  ${time_after_cancel}
 
-      ${hrs}  ${mins}=   Convert_hour_mins   ${delay_time}
+      ${hrs}  ${mins}=   Convert_hour_mins   0
 
       ${bookingid}=  Format String  ${bookinglink}  ${Wl_encId3}  ${Wl_encId3}
       ${defconfirm_msg}=  Replace String  ${confirmwl_push}  [consumer]   ${consumername}
@@ -1143,7 +1143,7 @@ JD-TC-AddDelay-5
       # ${msg}=  Replace String  ${msg}  [wait/service]  service
       # ${msg}=  Replace String  ${msg}  [time]  ${time_after_cancel}
 
-      ${hrs}  ${mins}=   Convert_hour_mins   ${delay_time}
+      ${hrs}  ${mins}=   Convert_hour_mins   0
 
       ${bookingid}=  Format String  ${bookinglink}  ${Wl_encId4}  ${Wl_encId4}
       ${defconfirm_msg}=  Replace String  ${confirmwl_push}  [consumer]   ${consumername}

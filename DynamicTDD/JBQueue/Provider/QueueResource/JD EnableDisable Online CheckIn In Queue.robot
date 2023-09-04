@@ -28,7 +28,8 @@ JD-TC-Online CheckIn In Queue-1
     clear_service   ${PUSERNAME126}
     clear_location  ${PUSERNAME126}
     clear_queue  ${PUSERNAME126}
-    
+
+    ${pid}=  get_acc_id  ${PUSERNAME126}
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -200,6 +201,7 @@ JD-TC-Online CheckIn In Queue-UH4
     [Documentation]  Enable Online CheckIn In Queue by another  provider
     ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
+    ${pid1}=  get_acc_id  ${PUSERNAME23}
     clear_queue  ${PUSERNAME23}
     ${resp}=  Online CheckIn In Queue  ${qid}  True
     Log  ${resp.json()}
