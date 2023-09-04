@@ -1039,7 +1039,7 @@ JD-TC-AddDelay-5
       ${msg}=  Replace String  ${msg}  [providerMessage]   ${provider_msg}
       ${msg}=  Replace String  ${msg}  [bookingId]   ${Wl_encId1}
       ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[0]}
-      ${msg}=  Replace String  ${msg}  [delaytime]   ${mins}
+      ${msg}=  Replace String  ${msg}  [delaytime]   0
 
       ${resp}=  Get Consumer Communications
       Log   ${resp.json()}
@@ -1076,8 +1076,8 @@ JD-TC-AddDelay-5
       ${msg}=  Replace String  ${defDelayAdd_msg}  [consumer]   ${consumername}
       ${msg}=  Replace String  ${msg}  [providerMessage]   ${provider_msg}
       ${msg}=  Replace String  ${msg}  [bookingId]   ${Wl_encId2}
-      ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[1]}
-      ${msg}=  Replace String  ${msg}  [delaytime]   ${mins}${SPACE}mins
+      ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[0]}
+      ${msg}=  Replace String  ${msg}  [delaytime]   0
 
       ${resp}=  Get Consumer Communications
       Log   ${resp.json()}
@@ -1114,8 +1114,8 @@ JD-TC-AddDelay-5
       ${msg}=  Replace String  ${defDelayAdd_msg}  [consumer]   ${consumername}
       ${msg}=  Replace String  ${msg}  [providerMessage]   ${provider_msg}
       ${msg}=  Replace String  ${msg}  [bookingId]   ${Wl_encId3}
-      ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[1]}
-      ${msg}=  Replace String  ${msg}  [delaytime]   ${mins}${SPACE}mins
+      ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[0]}
+      ${msg}=  Replace String  ${msg}  [delaytime]   0
 
       ${resp}=  Get Consumer Communications
       Log   ${resp.json()}
@@ -1152,8 +1152,8 @@ JD-TC-AddDelay-5
       ${msg}=  Replace String  ${defDelayAdd_msg}  [consumer]   ${consumername}
       ${msg}=  Replace String  ${msg}  [providerMessage]   ${provider_msg}
       ${msg}=  Replace String  ${msg}  [bookingId]   ${Wl_encId4}
-      ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[1]}
-      ${msg}=  Replace String  ${msg}  [delaytime]   ${mins}${SPACE}mins    
+      ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[0]}
+      ${msg}=  Replace String  ${msg}  [delaytime]   0  
 
       ${resp}=  Get Consumer Communications
       Log   ${resp.json()}
