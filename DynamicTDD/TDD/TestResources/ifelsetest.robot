@@ -7,8 +7,9 @@ Library     String
 Library     json
 Library     requests
 Library     RequestsLibrary
-# Library     FakerLibrary
-Library    FakerLibrary    locale=en_IN
+Library     FakerLibrary
+# Library    FakerLibrary    locale=en_IN
+# Library   FakerLibrary   WITH NAME   faker
 Library     /ebs/TDD/db.py
 # Resource    /ebs/TDD/ProviderKeywords.robot
 # Resource    /ebs/TDD/ConsumerKeywords.robot
@@ -30,7 +31,12 @@ ${longi1}    ${68.031759}
 Testing py fn
 
     db.get_Host_name_IP
-    ${rand_tz}=  FakerLibrary.Timezone
+    ${rand_ph}=  FakerLibrary.Phone Number
+    ${Locale} =  FakerLibrary.Locale
+    # ${output}   FakerLibrary.Init 	locale=${Locale}  providers=None   seed=None
+    # ${output}   FakerLibrary.Init 	locale=en_IN
+    ${rand_ph}=  FakerLibrary.Phone Number
+    
 
 ***Comment***
 Testing named arguments
