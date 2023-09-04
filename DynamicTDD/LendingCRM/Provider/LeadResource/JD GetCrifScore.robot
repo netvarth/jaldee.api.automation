@@ -244,7 +244,9 @@ JD-TC_GetCrifScore-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -726,7 +728,9 @@ JD-TC_GetCrifScore-UH3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     # ${resp}=   Process CRIF Inquiry with kyc   ${leUid1}    ${idkyc}
     # Log  ${resp.content}
@@ -748,7 +752,9 @@ JD-TC_GetCrifScore-UH4
     ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     # ${resp}=   Process CRIF Inquiry with kyc   ${leUid1}    ${idkyc}
     # Log  ${resp.content}
@@ -770,7 +776,9 @@ JD-TC_GetCrifScore-UH5
     ${resp}=   Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
     # ${resp}=   Process CRIF Inquiry with kyc   ${leUid1}    ${idkyc}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  401

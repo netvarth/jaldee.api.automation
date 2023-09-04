@@ -60,6 +60,8 @@ JD-TC-Update Enquiry For User-1
     ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
     clear_customer   ${BUSER}
     ${resp}=   Get Active License
     Log  ${resp.content}
@@ -132,7 +134,9 @@ JD-TC-Update Enquiry For User-1
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

@@ -29,9 +29,11 @@ JD-TC-AddLeadAppoinment-1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME59}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${p_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${p_id}    ${decrypted_data['id']}
     # ${p_id}=  get_acc_id  ${MUSERNAME61}
-*** comment ***
+ 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

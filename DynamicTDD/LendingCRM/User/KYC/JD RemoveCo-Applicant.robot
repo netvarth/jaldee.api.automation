@@ -107,7 +107,9 @@ JD-TC-Remove Co-Applicant -1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=   Get Active License
     Log  ${resp.content}
@@ -477,7 +479,9 @@ JD-TC-Remove Co-Applicant -2
     ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
     clear_customer   ${HLMUSERNAME4}
 
     ${resp}=    Get Locations

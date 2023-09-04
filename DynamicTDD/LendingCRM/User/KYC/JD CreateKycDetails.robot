@@ -108,7 +108,9 @@ JD-TC-CreateKyc-1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -468,7 +470,9 @@ JD-TC-CreateKyc-3
     ${resp}=   Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -607,7 +611,9 @@ JD-TC-CreateKyc-4
     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
     clear_customer   ${HLMUSERNAME6}
     ${resp}=   Get Active License
     Log  ${resp.content}
@@ -931,7 +937,9 @@ JD-TC-CreateKyc-UH1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id3}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id3}  ${decrypted_data['id']}
 
     ${resp}=   Get Active License
     Log  ${resp.content}
@@ -1159,7 +1167,9 @@ JD-TC-CreateKyc-UH4
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_idu1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_idu1}  ${decrypted_data['id']}
     clear_customer   ${HLMUSERNAME6}
     ${resp}=    Get Locations
     Log  ${resp.content}

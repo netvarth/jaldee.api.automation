@@ -166,7 +166,9 @@ JD-TC-UpdateKyc-1
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -406,7 +408,9 @@ JD-TC-UpdateKyc-2
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
     clear_customer   ${HLMUSERNAME5}
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
@@ -621,7 +625,9 @@ JD-TC-UpdateKyc-3
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     clear_customer   ${HLMUSERNAME5}
 
@@ -927,7 +933,9 @@ JD-TC-UpdateKyc-4
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
 
     ${resp}=  Update KYC    ${id}        ${en_uid6}        ${EMPTY}    ${dob}        ${relationType[1]}    ${relationName}    ${telephoneType[2]}    ${phoneNo}  ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}    ${permanentState}    ${permanentPinCode}    ${panNumber}    ${bool[1]}    customer=${pcid15}
@@ -1686,7 +1694,9 @@ JD-TC-UpdateKyc-8
     ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
    clear_customer   ${HLMUSERNAME5}
 

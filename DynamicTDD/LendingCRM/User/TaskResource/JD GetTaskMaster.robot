@@ -29,7 +29,9 @@ JD-TC-GetTaskMaster-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -146,7 +148,9 @@ JD-TC-GetTaskMaster-4
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id2}  ${decrypted_data['id']}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}

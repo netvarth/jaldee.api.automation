@@ -134,6 +134,9 @@ JD-TC-LeadStatus-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${resp}=   Create Sample Location
+    Set Suite Variable    ${loc_id1}    ${resp}
  
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -342,7 +345,9 @@ JD-TC-LeadStatus-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -387,20 +392,18 @@ JD-TC-LeadStatus-1
     Log   ${status_Lid1}
     Log   ${status_Lname1}
 
-    # ${resp}=    Get Lead Status
-    # Log   ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${status_Lid}    ${resp.json()[0]['id']}
-    # Set Suite Variable  ${status_Lid1}    ${resp.json()[1]['id']}
-    # Set Suite Variable  ${status_Lid2}    ${resp.json()[2]['id']}
-    # Set Suite Variable  ${status_Lid3}    ${resp.json()[3]['id']}
-    # Set Suite Variable  ${status_Lid4}    ${resp.json()[4]['id']}
-    # Set Suite Variable  ${status_Lid5}    ${resp.json()[5]['id']}
-    # Set Suite Variable  ${status_id6}    ${resp.json()[6]['id']}
-    # Set Suite Variable  ${status_id7}    ${resp.json()[7]['id']}
-    # Set Suite Variable  ${status_id8}    ${resp.json()[8]['id']}
-    # Set Suite Variable  ${status_id9}    ${resp.json()[9]['id']}
-    # Set Suite Variable  ${status_id10}    ${resp.json()[10]['id']}
+    ${resp}=    Get Lead Status
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${status_Lid}    ${resp.json()[0]['id']}
+    Set Suite Variable  ${status_Lid1}    ${resp.json()[1]['id']}
+    Set Suite Variable  ${status_Lid2}    ${resp.json()[2]['id']}
+    Set Suite Variable  ${status_Lid3}    ${resp.json()[3]['id']}
+    Set Suite Variable  ${status_Lid4}    ${resp.json()[4]['id']}
+    Set Suite Variable  ${status_Lid5}    ${resp.json()[5]['id']}
+    Set Suite Variable  ${status_id6}    ${resp.json()[6]['id']}
+    Set Suite Variable  ${status_id7}    ${resp.json()[7]['id']}
+    Set Suite Variable  ${status_id8}    ${resp.json()[8]['id']}
     # Set Suite Variable  ${statusName_id6}    ${resp.json()[5]['name']}
 
     # ${resp}=   leadStatus  ${account_id}

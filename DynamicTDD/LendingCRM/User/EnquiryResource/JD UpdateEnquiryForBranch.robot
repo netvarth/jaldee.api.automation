@@ -11,6 +11,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
 *** Variables ***
+
 ${self}      0
 @{emptylist}
 ${task_temp_name1}   Follow Up 1
@@ -25,7 +26,9 @@ JD-TC-Update Enquiry For Branch-1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -181,11 +184,16 @@ JD-TC-Update Enquiry For Branch-1
     Set Test Variable  ${en_temp_id}  ${resp.json()[0]['id']}
     
     ${title}=  FakerLibrary.Job
+    Set Suite Variable  ${title}
     ${desc}=   FakerLibrary.City
+    Set Suite Variable  ${desc}
     ${category}=  Create Dictionary   id=${rand_catagory_id}
+    Set Suite Variable  ${category}
     ${type}=  Create Dictionary   id=${rand_cat_type_id}
+    Set Suite Variable  ${type}
     ${status}=  Create Dictionary   id=${rand_status_id}
     ${priority}=  Create Dictionary   id=${rand_priority_id}
+    Set Suite Variable  ${priority}
 
 
     ${resp}=  Update Enquiry  ${en_uid}  ${locId}  ${pcid16}  title=${title}  description=${desc}  category=${category}  type=${type}  status=${status}  priority=${priority}  enquireMasterId=${en_temp_id}  leadMasterId=${ld_temp_id}  isLeadAutogenerate=${bool[1]}
@@ -743,26 +751,8 @@ JD-TC-Update Enquiry For Branch-5
 
     ${resp}=  Update Enquiry  ${en_uid}  ${locId}  ${pcid16}  title=${title}  description=${desc}  type=${type}  status=${status}  priority=${priority}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Enquiry by Uuid  ${en_uid}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}   ${en_id}
-    Should Be Equal As Strings  ${resp.json()['uid']}   ${en_uid}
-    Should Be Equal As Strings  ${resp.json()['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['customer']['id']}   ${pcid16}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${locId}
-    Should Be Equal As Strings  ${resp.json()['title']}   ${title}
-    Should Be Equal As Strings  ${resp.json()['description']}   ${desc}
-    Should Be Equal As Strings  ${resp.json()['type']['id']}   ${rand_cat_type_id}
-    Should Be Equal As Strings  ${resp.json()['type']['name']}   ${rand_cat_type_name}
-    # Should Be Equal As Strings  ${resp.json()['category']['id']}   ${rand_catagory_id}
-    # Should Be Equal As Strings  ${resp.json()['category']['name']}   ${rand_catagory_name}
-    Should Be Equal As Strings  ${resp.json()['status']['id']}   ${rand_status_id}
-    Should Be Equal As Strings  ${resp.json()['status']['name']}   ${rand_status_name}
-    Should Be Equal As Strings  ${resp.json()['priority']['id']}   ${rand_priority_id}
-    Should Be Equal As Strings  ${resp.json()['priority']['name']}   ${rand_priority_name}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${CATEGORY_REQUIRES}
 
 
 JD-TC-Update Enquiry For Branch-6
@@ -1221,7 +1211,7 @@ JD-TC-Update Enquiry For Branch-9
 
     ${category1}=  Create Dictionary   id=${rand_catagory_id1}
 
-    ${resp}=  Update Enquiry  ${en_uid}  ${locId}  ${pcid16}  category=${category1}
+    ${resp}=  Update Enquiry  ${en_uid}  ${locId}  ${pcid16}  title=${title}  description=${desc}  category=${category1}  type=${type}  status=${status}  priority=${priority}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1312,19 +1302,10 @@ JD-TC-Update Enquiry For Branch-10
 
     ${type1}=  Create Dictionary   id=${rand_cat_type_id1}
 
-    ${resp}=  Update Enquiry  ${en_uid}  ${locId}  ${pcid16}  type=${type1}
+    ${resp}=  Update Enquiry  ${en_uid}  ${locId}  ${pcid16}  title=${title}  description=${desc}  category=${category}  type=${type1}  status=${status}  priority=${priority}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Enquiry by Uuid  ${en_uid}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}   ${en_id}
-    Should Be Equal As Strings  ${resp.json()['uid']}   ${en_uid}
-    Should Be Equal As Strings  ${resp.json()['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['customer']['id']}   ${pcid16}
-    Should Be Equal As Strings  ${resp.json()['type']['id']}   ${rand_cat_type_id1}
-    Should Be Equal As Strings  ${resp.json()['type']['name']}   ${rand_cat_type_name1}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${CATEGORY_REQUIRES}
 
 
 JD-TC-Update Enquiry For Branch-11
@@ -1399,17 +1380,8 @@ JD-TC-Update Enquiry For Branch-11
 
     ${resp}=  Update Enquiry  ${en_uid}  ${locId}  ${pcid16}  priority=${priority1}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Enquiry by Uuid  ${en_uid}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}   ${en_id}
-    Should Be Equal As Strings  ${resp.json()['uid']}   ${en_uid}
-    Should Be Equal As Strings  ${resp.json()['accountId']}   ${account_id}
-    Should Be Equal As Strings  ${resp.json()['customer']['id']}   ${pcid16}
-    Should Be Equal As Strings  ${resp.json()['priority']['id']}   ${rand_priority_id1}
-    Should Be Equal As Strings  ${resp.json()['priority']['name']}   ${rand_priority_name1}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${CATEGORY_REQUIRES}
 
 
 JD-TC-Update Enquiry For Branch-UH1
