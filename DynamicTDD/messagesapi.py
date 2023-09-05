@@ -1964,7 +1964,7 @@ UNABLE_TO_SUSPEND = "Unable to suspend. Current Partner internal status is Suspe
 
 INVALID_PARTNER_UID = "Invalid Dealer"
 DOB_REQUIRED = "DoB required"
-
+STATUS_IS_APPROVALREQUIRED = "Unable to change internal status. Current Loan Application internal status is ApprovalRequired"
 
 # Branch Master
 

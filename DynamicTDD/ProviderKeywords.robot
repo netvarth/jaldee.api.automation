@@ -11019,6 +11019,18 @@ Cibil Score
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/cibilscore   data=${data}  expected_status=any
     [Return]  ${resp}
 
+Retainrejected Loan Application
+
+    [Arguments]    ${loanApplicationUid}  ${note}
+
+    ${data}=  Create Dictionary    note=${note}
+    ${data}=  json.dumps  ${data}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/retainrejected  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
 Perfios Score
 
     [Arguments]  ${loanuid}   ${kycid}   ${phone}
