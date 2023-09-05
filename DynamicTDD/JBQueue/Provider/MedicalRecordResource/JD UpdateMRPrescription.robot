@@ -172,7 +172,7 @@ JD-TC-UpdateMRprescription-1
     Set Suite Variable  ${que_id1}   ${resp.json()}
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
+    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1}  location=${loc_id1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -460,7 +460,7 @@ JD-TC-UpdateMRprescription-2
 
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
-    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
+    ${resp}=  Add To Waitlist  ${cid1}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1}   location=${loc_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}

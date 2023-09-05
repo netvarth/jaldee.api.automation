@@ -1061,7 +1061,11 @@ JD-TC-ConsumerOrderCommunication-8
     ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
     ${resp}=  Change Order Status   ${orderid11}   ${orderStatuses[12]}
     Log   ${resp.json()}
