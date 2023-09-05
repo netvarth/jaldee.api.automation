@@ -192,7 +192,10 @@ JD-TC-UpdateDeliveryCharge-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+154686
     Set Suite Variable   ${CUSERPH1}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
@@ -1119,6 +1122,10 @@ JD-TC-UpdateDeliveryCharge-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+1546005
     Set Suite Variable   ${CUSERPH0}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
@@ -1794,6 +1801,10 @@ JD-TC-UpdateDeliveryCharge-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1941,6 +1952,10 @@ JD-TC-UpdateDeliveryCharge-9
     # Should Be Equal As Strings  ${resp.json()['items'][0]['netRate']}          ${totalPrice1} 
     # # Should Be Equal As Strings  ${resp.json()['createdDate']}                  ${bool[0]} 
 
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2611,7 +2626,7 @@ JD-TC-UpdateDeliveryCharge-UH3
 JD-TC-UpdateDeliveryCharge-UH4
     [Documentation]    Update Delivery Charge with consumer login
 
-    ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

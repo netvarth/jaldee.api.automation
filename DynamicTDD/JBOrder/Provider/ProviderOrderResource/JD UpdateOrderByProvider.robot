@@ -1009,7 +1009,10 @@ JD-TC-UpdateOrder-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
-
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+154685
     Set Suite Variable   ${CUSERPH3}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
@@ -1303,6 +1306,10 @@ JD-TC-UpdateOrder-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Consumer Login  ${CUSERPH3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2181,6 +2188,10 @@ JD-TC-UpdateOrder-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${CUSERPH4}=  Evaluate  ${CUSERPH}+154684
     Set Suite Variable   ${CUSERPH4}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH4}${\n}
@@ -2587,6 +2598,10 @@ JD-TC-UpdateOrder-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
+    ${resp}=  ProviderLogout 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Consumer Login  ${CUSERPH3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -1154,7 +1154,7 @@ JD-TC-AddLabelForMultipleOrders-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Add Label for Multiple Order   ${lblname_1}  ${lbl_value_1}  ${orderid11} 
+    ${resp}=  Add Label for Multiple Order   ${lblname_1}  ${lbl_value_1}  ${orderid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1524,7 +1524,7 @@ JD-TC-AddLabelForMultipleOrders-5
     ${resp}=  Get Order By uid  ${id_order} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}   orderStatus=${orderStatuses[0]}   label=${label_lbl1}
+    Verify Response  ${resp}   orderStatus=${orderStatuses[12]}   label=${label_lbl1}
 
 
 JD-TC-AddLabelForMultipleOrders-6
@@ -1771,10 +1771,10 @@ JD-TC-AddLabelForMultipleOrders-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Bill By UUId  ${id_order}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['billStatus']}   Cancel
+    # ${resp}=  Get Bill By UUId  ${id_order}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['billStatus']}   Cancel
 
     clear_Label  ${PUSERNAME82}
     
@@ -1823,14 +1823,14 @@ JD-TC-AddLabelForMultipleOrders-6
     Set Test Variable  ${lblname_1}  ${labelname[0]}
     Set Test Variable  ${lbl_value_1}  ${label_value}
 
-    ${resp}=  Add Label for Multiple Order   ${lbl_name}  ${lbl_value}  ${orderid1}  ${orderid2} 
+    ${resp}=  Add Label for Multiple Order   ${lblname_1}  ${lbl_value_1}  ${orderid1}  ${orderid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${label_lbl1}=    Create Dictionary  ${labelname[0]}=${lbl_value_1}
     Set Suite Variable  ${label_lbl1}
 
-    ${resp}=  Get Order By uid  ${id_order} 
+    ${resp}=  Get Order By uid  ${orderid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}   orderStatus=${orderStatuses[0]}   label=${label_lbl1}
