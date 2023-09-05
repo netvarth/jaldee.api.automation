@@ -311,13 +311,13 @@ JD-TC-AccountLevelAnalyticsAccToConfig-1
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['value']}     ${token_len}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['amount']}    ${def_amt}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['value']}     ${user_count}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['value']}     ${user_count}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['amount']}    ${def_amt}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['value']}     ${no_of_cust}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['value']}     ${no_of_cust}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['amount']}    ${def_amt}
 
     #  ....with datefrom and dateto , frequency=daily filters ....
     
@@ -336,15 +336,15 @@ JD-TC-AccountLevelAnalyticsAccToConfig-1
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['amount']}    ${def_amt}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['dateFor']}   ${DAY1}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['value']}     ${user_count}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['amount']}    ${def_amt}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['dateFor']}   ${DAY1}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['value']}     ${user_count}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['dateFor']}   ${DAY1}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['value']}     ${no_of_cust}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['amount']}    ${def_amt}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['dateFor']}   ${DAY1}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['value']}     ${no_of_cust}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['dateFor']}   ${DAY1}
 
     #  ....with datefrom and dateto , frequency=none filters ....
     
@@ -363,14 +363,14 @@ JD-TC-AccountLevelAnalyticsAccToConfig-1
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['amount']}    ${def_amt}
     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['dateFor']}   ${DAY1}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['value']}     ${user_count}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['value']}     ${user_count}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['amount']}    ${def_amt}
     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['dateFor']}   ${DAY1}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['value']}     ${no_of_cust}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['value']}     ${no_of_cust}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['amount']}    ${def_amt}
     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['dateFor']}   ${DAY1}
 
 JD-TC-AccountLevelAnalyticsAccToConfig-2
@@ -506,13 +506,13 @@ JD-TC-AccountLevelAnalyticsAccToConfig-2
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['value']}     ${token_len}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['amount']}    ${def_amt}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['value']}     ${user_count}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['value']}     ${user_count}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['amount']}    ${def_amt}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['value']}     ${no_of_cust}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['value']}     ${no_of_cust}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['amount']}    ${def_amt}
 
     #  ....with datefrom and dateto , frequency=daily filters ....
     
@@ -536,13 +536,13 @@ JD-TC-AccountLevelAnalyticsAccToConfig-2
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['amount']}    ${def_amt}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][2]['dateFor']}   ${DAY1}
 
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['value']}     ${user_count}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['amount']}    ${def_amt}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][25]['dateFor']}   ${DAY1}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['metricId']}  ${SPUserAnalyticsMetrics['SP_USER_LOGIN_WEB_COUNT']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['value']}     ${user_count}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][27]['dateFor']}   ${DAY1}
    
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['value']}     ${no_of_cust}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['amount']}    ${def_amt}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][28]['dateFor']}   ${DAY1}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['metricId']}  ${consumerAnalyticsMetrics['NEW_CONSUMER_TOTAL']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['value']}     ${no_of_cust}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['amount']}    ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][30]['dateFor']}   ${DAY1}
    

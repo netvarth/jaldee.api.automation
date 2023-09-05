@@ -1230,3 +1230,423 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues']}   ${empty_list}
+
+
+
+JD-TC-DepartmentWiseAnalytics-2
+    [Documentation]   take walkin checkins for an another user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
+
+    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    Set Suite Variable  ${description}
+    ${dur}=  FakerLibrary.Random Int  min=05  max=10
+    Set Suite Variable  ${dur}
+    ${amt}=  FakerLibrary.Random Int  min=200  max=500
+    ${amt}=  Convert To Number  ${amt}  1
+    Set Suite Variable  ${amt}
+    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${depid1}  ${u_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${s_id2}  ${resp.json()}
+    ${resp}=   Get Service By Id  ${s_id2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${dur1}=  FakerLibrary.Random Int  min=10  max=20
+    Set Suite Variable  ${dur1}
+
+    ${queue_name}=  FakerLibrary.bs
+    Set Suite Variable  ${queue_name}
+    ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  20  20  ${lid}  ${u_id1}    ${s_id2}   
+    # ${sid3}   ${sid4}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id1}  ${resp.json()}
+
+    ${resp}=  Get Queue ById  ${q_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Get Queues
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+    
+
+    # ------------------- Add customers and take checkin  -------------------
+    # comment  Add customers and take check-ins
+
+     FOR   ${a}  IN RANGE   ${count}
+            
+        ${PO_Number}    Generate random string    7    0123456789
+        ${cons_num}    Convert To Integer  ${PO_Number}
+        ${CUSERPH}=  Evaluate  ${CUSERNAME}+${cons_num}
+        ${firstname}=  FakerLibrary.name    
+        ${lastname}=  FakerLibrary.last_name
+        Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
+        ${resp}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${cid${a}}  ${resp.json()}
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${a}}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${a}}
+
+    END
+
+    ${walkin_waitlist_ids}=  Create List
+    Set Suite Variable   ${walkin_waitlist_ids}
+
+    ${service_count}=  Create List
+    Set Suite Variable   ${service_count}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    FOR   ${a}  IN RANGE   ${count}
+            
+        ${desc}=   FakerLibrary.word
+
+        ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id2}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id1}  ${cid${a}} 
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${wid}=  Get Dictionary Values  ${resp.json()}
+        Set Test Variable  ${wid${a}}  ${wid[0]}
+
+        ${resp}=  Get Waitlist By Id  ${wid${a}}
+        Log  ${resp.json()} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        Append To List   ${walkin_waitlist_ids}  ${wid${a}}
+        Append To List   ${service_count}  ${wid${a}}
+
+    END
+
+    ${resp}=  GetCustomer
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_cust}=  Get Length  ${resp.json()}
+
+    Log List   ${walkin_waitlist_ids}
+
+    ${walkin_token_len}=   Evaluate  len($walkin_waitlist_ids)
+    Set Suite Variable   ${walkin_token_len}
+
+    ${service_count_len}=   Evaluate  len($service_count)
+    Set Suite Variable   ${service_count_len}
+
+    sleep  01s
+    # sleep  05m
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+
+    # sleep  05s
+
+    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Level Analytics   ${DeptWiseMetric['TOTAL_FOR_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}  deptId=${depid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${DeptWiseMetric['TOTAL_FOR_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${service_count_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+    ${resp}=  Get Account Level Analytics  ${DeptWiseMetric['TOTAL_ON_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}  deptId=${depid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${DeptWiseMetric['TOTAL_ON_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${service_count_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+JD-TC-DepartmentWiseAnalytics-3
+    [Documentation]   take checkins for teleservice for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
+
+    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME_U2}
+    Set Suite Variable   ${ZOOM_id0}
+
+    ${instructions1}=   FakerLibrary.sentence
+    ${instructions2}=   FakerLibrary.sentence
+
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_U2}   status=ACTIVE    instructions=${instructions2} 
+    ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
+
+    # ${resp}=  Update Virtual Calling Mode   ${CallingModes[0]}  ${ZOOM_id0}   ACTIVE  ${instructions1}   ${CallingModes[1]}  ${PUSERNAME_U2}   ACTIVE   ${instructions2}
+
+    ${resp}=  Update Virtual Calling Mode   ${vcm1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Virtual Calling Mode
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['callingMode']}     ${CallingModes[0]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['value']}           ${ZOOM_id0}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['status']}          ACTIVE
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][0]['instructions']}    ${instructions1}
+
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['callingMode']}     ${CallingModes[1]}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['value']}           ${PUSERNAME_U2}
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
+    Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
+
+    ${PUSERPH_id0}=  Evaluate  ${PUSERNAME}+10101
+    ${ZOOM_accid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
+    Set Suite Variable   ${ZOOM_accid0}
+
+    comment  Services for check-ins
+    
+    Set Test Variable  ${callingMode1}     ${CallingModes[0]}
+    Set Test Variable  ${ModeId1}          ${ZOOM_accid0}
+    Set Test Variable  ${ModeStatus1}      ACTIVE
+    ${Description1}=    FakerLibrary.sentence
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Description1}
+    ${virtualCallingModes}=  Create List  ${VScallingMode1}
+
+    ${Total1}=   Random Int   min=100   max=500
+    ${Total1}=  Convert To Number  ${Total1}  1
+    ${description}=    FakerLibrary.word
+    Set Test Variable  ${vstype}  ${vservicetype[1]}
+    ${resp}=  Create Virtual Service For User  ${SERVICE3}   ${description}   2   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes}  ${depid1}  ${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Suite Variable  ${v_s1}  ${resp.json()}
+
+    comment  queue 1 for checkins
+
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time
+    ${eTime1}=  add_time   1  30
+    ${queue_name}=  FakerLibrary.bs
+    ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  25  ${lid}  ${u_id1}  ${v_s1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id2}  ${resp.json()}
+
+    comment  Add customers
+
+    FOR   ${a}  IN RANGE   10
+            
+        ${PO_Number}    Generate random string    7    0123456789
+        ${cons_num}    Convert To Integer  ${PO_Number}
+        ${CUSERPH}=  Evaluate  ${CUSERNAME}+${cons_num}
+        ${firstname}=  FakerLibrary.name    
+        ${lastname}=  FakerLibrary.last_name
+        Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
+        ${resp}=  AddCustomer  ${CUSERPH${a}}   firstName=${firstname}   lastName=${lastname}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${cid${a}}  ${resp.json()}
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${a}}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${a}}
+
+    END
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${a}}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    comment  take check-ins
+
+    ${walkin_vertual_ids}=  Create List
+    Set Suite Variable   ${walkin_vertual_ids}
+
+    FOR   ${a}  IN RANGE   10
+            
+        ${desc}=   FakerLibrary.word
+        ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id0}
+        Set Suite Variable  ${WHATSAPP_id2}   ${CUSERNAME0}
+        ${virtualService2}=  Create Dictionary   ${CallingModes[1]}=${WHATSAPP_id2}
+
+        ${resp}=  Provider Add To WL With Virtual Service For User   ${u_id1}   ${cid${a}}  ${v_s1}  ${q_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${waitlistMode[0]}  ${virtualService}   ${cid${a}}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        
+        ${wid}=  Get Dictionary Values  ${resp.json()}
+        Set Test Variable  ${wid${a}}  ${wid[0]}
+
+        ${resp}=  Get Waitlist By Id  ${wid${a}}
+        Log  ${resp.json()} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        Append To List   ${walkin_vertual_ids}  ${wid${a}}
+
+    END
+    
+    Log List   ${walkin_vertual_ids}
+    ${walkin_vertual_len}=   Evaluate  len($walkin_vertual_ids)
+    Set Suite Variable   ${walkin_vertual_len}
+    ${walkin_token_len1}=   Evaluate  ${walkin_token_len}+${walkin_vertual_len}
+    Set Suite Variable   ${walkin_token_len1}
+
+    sleep  01s
+    # sleep  05m
+    
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+
+    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Level Analytics   ${DeptWiseMetric['TOTAL_FOR_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}  deptId=${depid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${DeptWiseMetric['TOTAL_FOR_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${service_count_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+    ${resp}=  Get Account Level Analytics  ${DeptWiseMetric['TOTAL_ON_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}  deptId=${depid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${DeptWiseMetric['TOTAL_ON_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${service_count_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+JD-TC-DepartmentWiseAnalytics-4
+    [Documentation]   take online checkins for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
+
+    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    comment  Services for check-ins and appointments
+
+    ${SERVICE4}=    Set Variable  ${ser_names[3]}
+    ${s_id4}=  Create Sample Service  ${SERVICE4}  maxBookingsAllowed=10    department=${dep_id}
+    Set Suite Variable  ${s_id4}
+
+    comment  queue 1 for checkins
+
+    ${resp}=  Sample Queue   ${lid}   ${s_id4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id3}  ${resp.json()}
+
+    ${resp}=  Get Queue ById  ${q_id3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${time_now}=  db.get_time
+    ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
+    ${eTime1}=  add_two   ${etime}  120
+    ${resp}=  Update Queue  ${q_id3}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
+    ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${time_now}  ${eTime1}
+    ...  ${resp.json()['parallelServing']}   500  ${lid}  ${s_id4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Queue ById  ${q_id3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${online_waitlist_ids}=  Create List
+    FOR   ${a}  IN RANGE   ${count}
+    
+        ${resp}=  Consumer Login  ${CUSERNAME${a}}  ${PASSWORD}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        
+        ${DAY}=  get_date
+        ${cnote}=   FakerLibrary.word
+        ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id4}  ${cnote}  ${bool[0]}  ${self} 
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${wid}=  Get Dictionary Values  ${resp.json()}
+        Set Suite Variable  ${cwid${a}}  ${wid[0]}
+
+        Append To List   ${online_waitlist_ids}  ${cwid${a}}
+
+        ${resp}=  Consumer Logout
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+    END
+
+    Log List   ${online_waitlist_ids}
+    Set Suite Variable   ${online_waitlist_ids}
+    # change_system_time  1  30
+
+    ${online_token_len}=  Evaluate  len($online_waitlist_ids) 
+    Set Suite Variable   ${online_token_len}
+
+    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  01s
+    # sleep  05m
+
+    FOR   ${a}  IN RANGE   15
+       
+        ${resp}=  Flush Analytics Data to DB
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        sleep  1s
+        Exit For Loop If    ${resp.content}=="FREE"
+    
+    END
+
+    ${resp}=  Get Account Level Analytics   ${DeptWiseMetric['TOTAL_FOR_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}  deptId=${depid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${DeptWiseMetric['TOTAL_FOR_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${service_count_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
+
+    ${resp}=  Get Account Level Analytics  ${DeptWiseMetric['TOTAL_ON_TOKEN']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}  deptId=${depid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['frequency']}   ${analyticsFrequency[0]}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${DeptWiseMetric['TOTAL_ON_TOKEN']}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${service_count_len}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
