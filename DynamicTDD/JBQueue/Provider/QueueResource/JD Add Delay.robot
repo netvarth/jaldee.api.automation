@@ -1179,7 +1179,7 @@ JD-TC-AddDelay-6
       Set Suite Variable   ${duration}
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${duration}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[1]}   ${Empty}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
+      sleep  2s 
       ${resp}=  Create Sample Queue
       Set Suite Variable  ${qid}   ${resp['queue_id']}
       Set Suite Variable  ${s_id1}   ${resp['service_id']}

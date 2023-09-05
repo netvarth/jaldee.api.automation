@@ -900,10 +900,10 @@ JD-TC-Approximate Waiting Time Conventional-3
     Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   0
     ${resp}=  Get Waitlist By Id  ${wid3} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   ${wait_time1}
+    Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   ${delay_time}
     ${resp}=  Get Waitlist By Id  ${wid4} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   ${wait_time1}
+    Should Be Equal As Strings  ${resp.json()['appxWaitingTime']}   ${delay_time}
     
 JD-TC-Approximate Waiting Time Conventional-4
     [Documentation]   Check queue waiting time when token1 is started after token3

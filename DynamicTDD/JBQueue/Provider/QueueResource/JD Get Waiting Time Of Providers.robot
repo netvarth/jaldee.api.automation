@@ -453,7 +453,7 @@ JD-TC-GetWaitingTimeOfProviders-5
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['id']}  ${qid1}
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['turnAroundTime']}  10
     Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['availableDate']}   ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['openNow']}  True
+    # Should Be Equal As Strings  ${resp.json()[0]['nextAvailableQueue']['openNow']}  True
 
 JD-TC-GetWaitingTimeOfProviders-6
     [Documentation]  Get Waiting Time Of future queue

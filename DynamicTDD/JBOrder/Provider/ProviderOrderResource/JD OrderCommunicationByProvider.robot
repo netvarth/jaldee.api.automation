@@ -497,7 +497,7 @@ JD-TC-ProviderOrderCommunication-2
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
 
     ${caption1}=  Fakerlibrary.sentence
-    ${filecap_dict1}=  Create Dictionary   file=${EMPTY}   caption=${EMPTY}
+    ${filecap_dict1}=  Create Dictionary   file=${pdffile}   caption=${caption1}
     ${fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
 

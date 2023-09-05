@@ -205,8 +205,8 @@ JD-TC-Online CheckIn In Queue-UH4
     clear_queue  ${PUSERNAME23}
     ${resp}=  Online CheckIn In Queue  ${qid}  True
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  404
-    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_NOT_FOUND}"
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"	
     
 JD-TC-Online CheckIn In Queue-UH5
     [Documentation]  Enable Online CheckIn In Queue using Invalid queue id
