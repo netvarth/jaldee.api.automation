@@ -183,7 +183,7 @@ JD-TC-Uploadprescription-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time_by_timezone   ${tz}
+
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -191,12 +191,69 @@ JD-TC-Uploadprescription-1
     ${observations}=  FakerLibrary.sentence
     ${diagnosis}=     FakerLibrary.sentence
     ${misc_notes}=    FakerLibrary.sentence
-    ${clinicalNotes}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}  diagnosis=${diagnosis}  complaints=${complaint}   misc_notes=${misc_notes}  observations=${observations}  vaccinationHistory=${vacc_history}  
+    ${Pres_notes}=         FakerLibrary.sentence
+    ${med_name}=      FakerLibrary.name
+    ${frequency}=     FakerLibrary.word
+    ${duration}=      FakerLibrary.sentence
+    ${instrn}=        FakerLibrary.sentence
+    ${dosage}=        FakerLibrary.sentence
+    ${type}=     FakerLibrary.word
+    ${clinicalNote}=     FakerLibrary.word
+    ${clinicalNote1}=        FakerLibrary.sentence
+    ${type1}=        FakerLibrary.sentence
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+
+    ${aadhaarAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${aadhaarAttachments}
+
+    ${aadhaarAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${aadhaarAttachments1}
+
+    ${Notes}=    clinical Notes Attachments    ${type}  ${clinicalNote}    ${aadhaarAttachments}    ${aadhaarAttachments}
+
+    ${Notes1}=    clinical Notes Attachments    ${type1}  ${clinicalNote1}    ${aadhaarAttachments}    ${aadhaarAttachments1}
+
+    ${clinicalNotes}=  Create List   ${Notes}    ${Notes1}
    
-    ${resp}=  Create MR   ${wid1}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   clinicalNotes=${clinicalNotes}
+    ${pre_list}=  Create Dictionary  medicine_name=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
+
+    ${prescriptionsList}=  Create List   ${pre_list}
+
+    ${prescriptions}=  Create Dictionary  prescriptionsList=${prescriptionsList}  notes=${Pres_notes}
+    
+    ${resp}=  Create MR With uuid  ${wid1}  ${bookingType[0]}  ${consultationMode[3]}      ${CUR_DAY}    ${status[0]}     prescriptions=${prescriptions}    clinicalNotes=${clinicalNotes}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${mr_id1}   ${resp.json()}
+
+
+    # ${ctime}=         db.get_time_by_timezone   ${tz}
+    # ${complaint}=     FakerLibrary.word
+    # ${symptoms}=      FakerLibrary.sentence
+    # ${allergies}=     FakerLibrary.sentence
+    # ${vacc_history}=  FakerLibrary.sentence
+    # ${observations}=  FakerLibrary.sentence
+    # ${diagnosis}=     FakerLibrary.sentence
+    # ${misc_notes}=    FakerLibrary.sentence
+    # ${clinicalNotes}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}  diagnosis=${diagnosis}  complaints=${complaint}   misc_notes=${misc_notes}  observations=${observations}  vaccinationHistory=${vacc_history}  
+   
+    # ${resp}=  Create MR   ${wid1}  ${bookingType[0]}  ${consultationMode[3]}  ${CUR_DAY}  ${status[0]}   clinicalNotes=${clinicalNotes}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${mr_id1}   ${resp.json()}
 
     ${resp}=  Get MR By Id  ${mr_id1} 
     Log  ${resp.json()}

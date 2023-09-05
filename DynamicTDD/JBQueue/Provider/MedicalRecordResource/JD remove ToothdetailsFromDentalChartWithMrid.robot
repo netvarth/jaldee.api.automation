@@ -788,6 +788,25 @@ JD-TC-RemoveToothDetailsFromdentalchart-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}   
+    ${complaint}=     FakerLibrary.word
+    ${symptoms}=      FakerLibrary.sentence
+    ${allergies}=     FakerLibrary.sentence
+    ${vacc_history}=  FakerLibrary.sentence
+    ${observations}=  FakerLibrary.sentence
+    ${diagnosis}=     FakerLibrary.sentence
+    ${misc_notes}=    FakerLibrary.sentence
+    ${Pres_notes}=         FakerLibrary.sentence
+    ${med_name}=      FakerLibrary.name
+    ${frequency}=     FakerLibrary.word
+    ${duration}=      FakerLibrary.sentence
+    ${instrn}=        FakerLibrary.sentence
+    ${dosage}=        FakerLibrary.sentence
+    ${type}=     FakerLibrary.word
+    ${clinicalNote}=     FakerLibrary.word
+    ${clinicalNote1}=        FakerLibrary.sentence
+    ${type1}=        FakerLibrary.sentence
+
     ${aadhaarAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${aadhaarAttachments}
 
