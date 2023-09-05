@@ -9951,7 +9951,7 @@ Get Ivr By reference id
 
     [Arguments]    ${Refr_id}
     Check And Create YNW Session
-    ${resp}=    Get On Session    ynw   /provider/ivr/reference/${Refr_id}
+    ${resp}=    Get On Session    ynw   /provider/ivr/reference/${Refr_id}     expected_status=any
     [Return]    ${resp}
 
 Unassign IVR User

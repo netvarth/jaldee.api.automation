@@ -339,6 +339,14 @@ JD-Get_all_schedules_of_an_account-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+JD-Get_all_schedules_of_an_account-UH7
+
+    [Documentation]   Get all schedule of an account without login
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED}
 
 
 
