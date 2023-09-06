@@ -12,6 +12,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Variables ***
 
@@ -299,3 +300,392 @@ JD-TC-Get_IVR_USER_DETAILS-1
     ${resp}=    Get IVR User Details    ${userType[0]}    ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+JD-TC-Get_IVR_USER_DETAILS-2
+
+    [Documentation]   Delete users from ivr table ang get ivr details
+    
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${user_id3}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+
+    ${gender}=  Random Element    ${Genderlist}
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+    ${firstName}=    FakerLibrary.firstName
+    ${lastName}=    FakerLibrary.lastName
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
+    ${numbers}=     Random Int   min=100   max=5000
+    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME}+${numbers}
+    clear_users  ${PUSERNAME_U1}
+    ${random_ph}=   Random Int   min=20000   max=30000
+    ${whpnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+    ${tlgnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+
+    
+    
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id3}  ${user_name}
+
+   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
+
+
+    ${resp}=    Get All IVR User Details
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${user_id}   ${resp.json()[0]['id']}
+
+    ${resp}=    Delete User Details   ${user_id}
+    Log  ${resp.json()}
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_IVR_USER_DETAILS-3
+
+    [Documentation]  already deleted user details update  and get ivr details
+    
+    ${resp}=  Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+
+
+    ${resp}=    Get All IVR User Details
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${id}   ${resp.json()[0]['id']}
+    Set Test Variable  ${userId}   ${resp.json()[0]['userId']}
+
+    ${resp}=    Delete User Details   ${id}
+    Log  ${resp.json()}
+
+    ${resp}=    Update User Availability   ${userId}  ${Availability[0]}
+    Log  ${resp.json()}
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_IVR_USER_DETAILS-UH1
+
+    [Documentation]   Get IVR user details another provider login
+
+    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_IVR_USER_DETAILS-UH2
+
+    [Documentation]    Get IVR user details Without login
+
+    ${resp}=    Get IVR User Avaliability
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED} 
+
+JD-TC-Get_IVR_USER_DETAILS-UH3
+
+    [Documentation]   Get IVR user details where user type is assistant
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=    Get IVR User Details    ${userType[1]}    ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-Get_IVR_USER_DETAILS-UH4
+
+    [Documentation]   Get IVR user details where user type is empty
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=    Get IVR User Details    ${empty}    ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_IVR_USER_DETAILS-UH5
+
+    [Documentation]   Get IVR user details where user id is empty
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_IVR_USER_DETAILS-UH6
+
+    [Documentation]   Get IVR user details where user id is invalid
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${invalid_id}    FakerLibrary.Random Number
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${invalid_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+*** comment ***
+
+JD-TC-Get_IVR_USER_DETAILS-UH7
+
+    [Documentation]   Create sample user -that not add to ivr table and get the user details
+    
+    ${resp}=  Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+     ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+    ELSE
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${pin}  ${resp.json()[0]['pinCode']}
+    END
+
+
+    
+    ${gender}=  Random Element    ${Genderlist}
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+    ${firstName}=    FakerLibrary.firstName
+    ${lastName}=    FakerLibrary.lastName
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
+    ${numbers}=     Random Int   min=100   max=5000
+    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME}+${numbers}
+    clear_users  ${PUSERNAME_U1}
+    ${random_ph}=   Random Int   min=20000   max=30000
+    ${whpnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+    ${tlgnum}=  Evaluate  ${MUSERNAME}+${random_ph}
+
+    ${so_id1}=  Create Sample User   
+    Set Suite Variable  ${so_id1}
+
+   
+    ${resp}=  Get User By Id  ${so_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${SOUSERNAME1}  ${resp.json()['mobileNo']}
+    Set Suite Variable  ${name}  ${resp.json()['firstName']}
+    
+ 
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${CUR_DAY}=  get_date
+    ${resp}=   Create Sample Location
+    Set Suite Variable    ${loc_id1}    ${resp}  
+
+    
+    
+    ${myoperator_id}    FakerLibrary.Random Number
+    ${incall_id}    FakerLibrary.Random Number
+    ${incall_uid}    FakerLibrary.Random Number
+    ${reference_id}    FakerLibrary.Random Number
+    ${company_id}    FakerLibrary.Random Number
+    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
+    ${clid}    Random Number 	digits=5 
+    ${clid}=    Evaluate    f'{${clid}:0>9d}'
+    Log  ${clid}
+    Set Suite Variable  ${clid}  9${clid}
+    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+
+     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+
+    # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
+
+
+#.......   Incoming call on server    ..........
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${current_time}=    Get Current Date    result_format=%s
+    Log    Current Time: ${current_time}
+
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  dialing users    .......
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#........  user answered    ........
+    
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    
+    ${user}=    Create List    ${clid_user}
+    ${user}=    json.dumps    ${user}
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#.......  call finished      .........                                                                                                                                                                                                                                                                                                   
+
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${in_uid}=  Convert To String  ${incall_uid}
+
+    ${pm}=    after_call_primary_value    ${in_uid}  ${ivr_inputValue[0]}  ${ivr_inputValue[2]}  ${ivr_inputValue[0]}  ${ivr_inputValue[0]}  ${ivr_inputValue[1]}            
+    
+    ${ring_start_time}=  Get Current date
+    ${ring_start_time}=    DateTime.Convert Date    ${ring_start_time}    exclude_millis=yes
+
+    ${last_caller_id}    FakerLibrary.Random Number
+    ${agent_id}    FakerLibrary.Random Number
+    ${agent_id}=  Convert To String  ${agent_id}
+    ${agent_name}    FakerLibrary.firstName
+    Set Test Variable  ${email}  ${agent_name}.${test_mail}
+    ${agent_ex}    FakerLibrary.Random Number
+    ${numb}    Random Number 	digits=5 
+    ${numb}=    Evaluate    f'{${numb}:0>9d}'
+    Log  ${numb}
+    Set Suite Variable  ${agent_contact}  9${numb}
+    Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
+    
+    ${dates}=    get_date
+    ${start}=    Get Current Date    result_format=%H:%M:%S
+    ${start1}=    Get Current Date
+    ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
+    ${start_time_in_milli_sec}=    Evaluate    int(float(${start_time}) * 1000)
+
+    ${end_tym} =  Add Time To Date  ${start1}  30 minutes
+    ${end}=    DateTime.Convert Date    ${end_tym}    result_format=%H:%M:%S      
+    ${end_time}=    DateTime.Convert Date    ${end_tym}    result_format=%s
+
+    ${difference}=    time_difference    ${start}    ${end}
+    ${dur_min}=    DateTime.Convert Date    ${dates},${difference}    result_format=%M:%S
+    ${timestamp}=    DateTime.Convert Date    ${dates},${difference}    result_format=%s
+
+    ${call_log}=    after_call_log_details      ${ring_start_time}  ${ivr_dial_string[0]}  ${last_caller_id}  ${agent_id}  ${agent_name}  ${email}  ${agent_ex}  ${agent_contact}  ${agent_contact_with_cc}  ${ivr_inputValue[1]}  ${start_time}  ${end_time}  ${timestamp}  ${ivr_call_status[0]}
+
+    ${file_name}    FakerLibrary.firstName
+    ${file_link}    FakerLibrary.firstName
+    ${comp_id}    FakerLibrary.Random Number
+    ${caller_name}    FakerLibrary.firstName
+
+    ${resp}=    Aftercall IVR    ${acc_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${end_time}    ${difference}    ${dur_min}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${file_name}    ${file_link}    ${ivr_inputValue[0]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${call_log}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By reference id    ${incall_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${ivruid}    ${resp.json()['uid']}   
+    Set Suite Variable    ${ivrconsumerId}     ${resp.json()['consumerId']}
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${so_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422

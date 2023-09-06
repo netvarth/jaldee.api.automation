@@ -43,7 +43,7 @@ ${loc}    AP, IN
 
 *** Test Cases ***
 
-JD-TC-GET_All_IVR_USer_Details-1
+JD-TC-Get_User_Specified_Schedules-1
 
     [Documentation]   Get all IVR user details
     
@@ -145,3 +145,156 @@ JD-TC-GET_All_IVR_USer_Details-1
     ${resp}=    Get User-Specific Schedules     ${so_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_User_Specified_Schedules-2
+
+    [Documentation]  Get schedules using id  ,without creating schedule for same provider
+
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${lid}=  Create Sample Location  
+    Set Suite Variable  ${lid}
+
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_time  0  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=    Get Scheduled Using Id    ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get User-Specific Schedules     ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Get_User_Specified_Schedules-3
+
+    [Documentation]   Get user specified schedules where the user schedule is disabled
+
+    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${lid}=  Create Sample Location  
+    Set Suite Variable  ${lid}
+
+    ${DAY1}=  add_date  20      
+    ${DAY2}=  add_date  30
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_time  0  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id1}  ${resp.json()}
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Enable And Disable A Schedule    ${JCstatus[1]}    ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get User-Specific Schedules     ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_User_Specified_Schedules-UH1
+
+    [Documentation]   Get user specified schedules where user id is invalid
+    
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${so_id2}    FakerLibrary.Random Number
+
+    ${resp}=    Get User-Specific Schedules     ${so_id2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-Get_User_Specified_Schedules-UH2
+
+    [Documentation]  Get user specified schedules using another provider details
+
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id1}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${lid}=  Create Sample Location  
+    Set Suite Variable  ${lid}
+
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_time  0  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  "${resp.json()}"   "[]"
+
+    ${resp}=    Get User-Specific Schedules     ${user_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-Get_User_Specified_Schedules-UH3
+
+    [Documentation]   Get user specified schedules where user id is empty
+    
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${so_id2}    FakerLibrary.Random Number
+
+    ${resp}=    Get User-Specific Schedules     ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
