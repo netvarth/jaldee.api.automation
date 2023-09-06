@@ -326,6 +326,118 @@ JD-TC-Update_IVR_Call_Status-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[4]}
 
+JD-TC-Update_IVR_Call_Status-3
+
+    [Documentation]   Update IVR Call Status to Incall
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[4]}
+
+    ${resp}=    Update IVR Call Status    ${ivr_uid}    ${ivr_status[5]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[5]}
+
+JD-TC-Update_IVR_Call_Status-4
+
+    [Documentation]   Update IVR Call Status to Connected
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[5]}
+
+    ${resp}=    Update IVR Call Status    ${ivr_uid}    ${ivr_status[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[0]}
+
+JD-TC-Update_IVR_Call_Status-5
+
+    [Documentation]   Update IVR Call Status to Missed
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[0]}
+
+    ${resp}=    Update IVR Call Status    ${ivr_uid}    ${ivr_status[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[1]}
+
+JD-TC-Update_IVR_Call_Status-6
+
+    [Documentation]   Update IVR Call Status to Voicemail
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[1]}
+
+    ${resp}=    Update IVR Call Status    ${ivr_uid}    ${ivr_status[2]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[2]}
+
+JD-TC-Update_IVR_Call_Status-7
+
+    [Documentation]   Update IVR Call Status to Call completed
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[2]}
+
+    ${resp}=    Update IVR Call Status    ${ivr_uid}    ${ivr_status[6]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"    "${PLEASE_FILL_THE_FORM_TO_COMPLETE}"
+
+    ${resp}=    Get Ivr By Uid    ${ivr_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['callStatus']}    ${ivr_status[2]}
+
+
 JD-TC-Update_IVR_Call_Status-UH1
 
     [Documentation]   Update IVR Call Status where uid is invalid
@@ -367,7 +479,7 @@ JD-TC-Update_IVR_Call_Status-UH3
 
 JD-TC-Update_IVR_Call_Status-UH4
 
-    [Documentation]   Update IVR Call Status where uid is invalid
+    [Documentation]   Update IVR Call Status using another provider login
 
     ${resp}=  ProviderLogin  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.content}
