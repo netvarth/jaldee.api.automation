@@ -976,13 +976,13 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${primaryMobileNo}  ${OtpPurpose['ConsumerSignUp']}
+    ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${primaryMobileNo}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
+    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${email}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1177,13 +1177,13 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${primaryMobileNo}  ${OtpPurpose['ConsumerSignUp']}
+    ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${primaryMobileNo}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
+    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${email}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1379,13 +1379,13 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${primaryMobileNo}  ${OtpPurpose['ConsumerSignUp']}
+    ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${primaryMobileNo}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
+    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${email}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
