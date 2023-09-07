@@ -1094,7 +1094,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=   Get consumer Appointment By Id   ${acc_id2}  ${c1_apptid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Should Be Equal As Strings  ${resp.json()['uid']}   ${c1_apptid2}
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${c1_apptid3}
 
     ############################## Take appt for INProvider ##############################
     # INProvider- acc_id3, IN_tz, p3_l1, p3_s1, p3_sch1
