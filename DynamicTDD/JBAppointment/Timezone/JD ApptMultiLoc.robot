@@ -982,7 +982,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${email}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1183,7 +1183,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${email}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1385,7 +1385,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${email}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
