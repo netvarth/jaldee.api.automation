@@ -10145,10 +10145,13 @@ Get all schedules of an account
 
 Update Provider Schedule
 
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}
+    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}  &{kwargs}
 
-    ${data}=  Provider Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}
+    ${data}=  Provider Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}  
     Check And Create YNW Session
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END 
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/schedule  data=${data}  expected_status=any
     [Return]  ${resp}
