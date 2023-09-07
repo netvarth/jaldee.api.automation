@@ -356,7 +356,7 @@ JD-TC-GetCatalogItem-3
     ${note1}=  FakerLibrary.Sentence   
 
     ${itemCode1}=   FakerLibrary.word 
-    ${itemCode2}=   FakerLibrary.word 
+    ${itemCode2}=   FakerLibrary.first_name
 
     ${promoLabel1}=   FakerLibrary.word 
 

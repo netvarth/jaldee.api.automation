@@ -836,8 +836,9 @@ JD-TC-Get_Cart_Details-UH1
 
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${item_quantity3}   5
-    ${item3_total}=  Evaluate  ${item_quantity3} * ${promoPrice2}
+    ${item3_total}=  Evaluate  ${item_quantity3} * ${promoPrice2}   
     ${item3_total}=  Convert To twodigitfloat  ${item3_total}
+    ${item3_total1}=  Evaluate  ${item_quantity3} / 10.0
     ${Coupon4_list}=  Create List   ${cupn_code2018_4}  ${cupn_code2018_3}   
 
     ${resp}=   Get Cart Details    ${accId3}   ${CatalogId3}   ${boolean[0]}   ${DAY1}    ${Coupon4_list}    ${item_id1}   ${item_quantity3}
@@ -1349,14 +1350,14 @@ JD-TC-Get_Cart_Details-11
     ${cid8}=  get_id  ${CUSERNAME27}
     Set Suite Variable   ${cid8}
 
-    ${resp}=  Make payment Consumer Mock  ${pid1}  ${prepayAmt}  ${purpose[0]}  ${orderid2}  ${EMPTY}  ${bool[0]}   ${bool[1]}  ${cid8}
+    ${resp}=  Make payment Consumer Mock  ${accId3}  ${prepayAmt}  ${purpose[0]}  ${orderid2}  ${EMPTY}  ${bool[0]}   ${bool[1]}  ${cid8}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
     sleep   02s
-    ${resp}=  Get Bill By consumer  ${orderid2}  ${pid1}
+    ${resp}=  Get Bill By consumer  ${orderid2}  ${accId3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${orderid2}  netTotal=${item_one}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[0]}  netRate=${netTotal}  billPaymentStatus=${paymentStatus[2]}  totalAmountPaid=${netTotal}  amountDue=0.0    totalTaxAmount=0.0

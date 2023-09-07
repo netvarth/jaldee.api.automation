@@ -31,8 +31,8 @@ JD-TC-GetOrderSetings-1
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
-    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${fname1}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname1}  ${decrypted_data['lastName']}
     
     ${accId}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable  ${accId}
@@ -59,8 +59,8 @@ JD-TC-GetOrderSetings-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
     Should Be Equal As Strings  ${resp.json()['enableOrder']}                    ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}  ${fname1}
+    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}   ${lname1}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}      ${PUSERNAME140}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['email']}      ${email_id}
    
@@ -154,8 +154,8 @@ JD-TC-GetOrderSetings-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     Should Be Equal As Strings  ${resp.json()['enableOrder']}                    ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}  ${fname1}
+    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}   ${lname1}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}      ${PUSERNAME140}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['email']}      ${email_id}
    
