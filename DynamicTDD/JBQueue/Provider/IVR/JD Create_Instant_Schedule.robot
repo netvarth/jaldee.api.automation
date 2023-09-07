@@ -81,7 +81,8 @@ JD-TC-Create_Instant_Schedule-UH1
 
     ${resp}=  Create Provider Schedule  ${empty}  ${recurringtype[4]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600    
+    Should Be Equal As Strings  ${resp.status_code}  422  
+    Should Be Equal As Strings  "${resp.json()}"   "${NECESSARY_FIELD_MISSING}" 
 
 JD-TC-Create_Instant_Schedule-UH2
 
@@ -97,7 +98,7 @@ JD-TC-Create_Instant_Schedule-UH2
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600 
+    Should Be Equal As Strings  ${resp.status_code}  500 
 
 JD-TC-Create_Instant_Schedule-UH3
 
@@ -116,7 +117,7 @@ JD-TC-Create_Instant_Schedule-UH3
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600
+    Should Be Equal As Strings  ${resp.status_code}  500
 
 JD-TC-Create_Instant_Schedule-UH4
 
@@ -240,7 +241,7 @@ JD-TC-Create_Instant_Schedule-UH10
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[1]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600 
+    Should Be Equal As Strings  ${resp.status_code}  500
 
 JD-TC-Create_Instant_Schedule-UH11
 
@@ -252,7 +253,7 @@ JD-TC-Create_Instant_Schedule-UH11
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${empty}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600 
+    Should Be Equal As Strings  ${resp.status_code}  500 
 
 JD-TC-Create_Instant_Schedule-UH12
 
@@ -264,7 +265,7 @@ JD-TC-Create_Instant_Schedule-UH12
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_Instant_Schedule-UH13
 
