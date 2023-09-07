@@ -1091,7 +1091,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${c1_apptid3}  ${apptid[0]}
 
-    ${resp}=   Get consumer Appointment By Id   ${acc_id2}  ${c1_apptid2}
+    ${resp}=   Get consumer Appointment By Id   ${acc_id2}  ${c1_apptid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}   ${c1_apptid2}

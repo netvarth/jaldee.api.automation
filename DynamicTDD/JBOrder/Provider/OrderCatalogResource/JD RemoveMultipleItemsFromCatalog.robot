@@ -21,8 +21,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-Remove_Multiple_Items_From_Catalog-1
     [Documentation]  Create order catalog and Remove Items From Catalog after that
-    clear_Item  ${PUSERNAME56}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    clear_Item  ${PUSERNAME48}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
@@ -184,7 +184,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-1
 
 JD-TC-Remove_Multiple_Items_From_Catalog-2
     [Documentation]  Create order catalog using mandatory fields and Remove Items From Catalog after that
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName2}=   FakerLibrary.word 
@@ -212,7 +212,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-3
 
     [Documentation]  Remove multiple items from catalog
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${itemName3}=   FakerLibrary.lastname 
@@ -288,7 +288,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-3
 JD-TC-Remove_Multiple_Items_From_Catalog-4
     [Documentation]  Remove items form catalog, when Catalog status is INACTIVE
    
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName3}=   FakerLibrary.name 
@@ -323,7 +323,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-4
 
 JD-TC-Remove_Multiple_Items_From_Catalog-UH1
     [Documentation]  Remove items from catalog using invalid catalog_id
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +337,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-UH1
 
 JD-TC-Remove_Multiple_Items_From_Catalog-UH2
     [Documentation]  Remove items from catalog using invalid item_id
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

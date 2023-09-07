@@ -400,19 +400,8 @@ JD-TC-UploadItemGroupImageforUser-9
 
     ${resp}=   uploadItemGroupImages   ${item_group_id}  ${bool[1]}  ${shfile}  ${cookie}  
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME67}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Item Group By Id  ${item_group_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['itemGroupId']}  ${item_group_id}
-    Should Be Equal As Strings  ${resp.json()['groupName']}    ${groupName}
-    Should Be Equal As Strings  ${resp.json()['groupDesc']}    ${groupDesc}
-    Should Be Equal As Strings  ${resp.json()['itemGroupImages'][0]['type']}    sh
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}   ${IMAGE_TYPE_NOT_SUPPORTED}
 
 
 JD-TC-UploadItemGroupImageforUser-10
