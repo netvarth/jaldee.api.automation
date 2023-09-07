@@ -1916,7 +1916,7 @@ JD-TC-UpdateDeliveryCharge-9
     ${amount}=  Evaluate  ${net_rate1} - ${amount}
     ${amount1}=  Evaluate  ${amount} + ${totalTaxAmount} + ${deliveryCharge}
     ${net_rate2}=           Evaluate   ${amount1} - ${jaldee_amt}
-
+    ${net_rate2}=  Convert To twodigitfloat  ${net_rate2}
     sleep  1s
     ${resp}=  Get Bill By UUId  ${orderid9}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -1114,7 +1114,7 @@ JD-TC-AddItemsToItemGroup-UH6
     ${resp}=  Add Items To Item Group   ${item_group_id1}    ${Items_list}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-
+    Should Be Equal As Strings  ${resp.json()}  ${ITEM_ALREADY_ADDED}
 
 JD-TC-AddItemsToItemGroup-UH7
 

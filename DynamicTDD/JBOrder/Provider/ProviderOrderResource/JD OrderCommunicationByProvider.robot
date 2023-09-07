@@ -27,20 +27,20 @@ ${pdffile}     /ebs/TDD/sample.pdf
 JD-TC-Upload_ShoppingList_Image_for_StorePickup
     [Documentation]    Place an order By Provider for pickup.
     
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
     Set Suite Variable  ${c15_Uid}     ${resp.json()['id']}
     Set Suite Variable  ${c15_UName}   ${resp.json()['userName']}
-    clear_Consumermsg  ${CUSERNAME19}
-    clear_Providermsg  ${PUSERNAME37}
-    clear_queue    ${PUSERNAME37}
-    clear_service  ${PUSERNAME37}
-    clear_customer   ${PUSERNAME37}
-    clear_Item   ${PUSERNAME37}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    clear_Consumermsg  ${CUSERNAME29}
+    clear_Providermsg  ${PUSERNAME67}
+    clear_queue    ${PUSERNAME67}
+    clear_service  ${PUSERNAME67}
+    clear_customer   ${PUSERNAME67}
+    clear_Item   ${PUSERNAME67}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -50,12 +50,12 @@ JD-TC-Upload_ShoppingList_Image_for_StorePickup
     Set Suite Variable  ${pid1}  ${decrypted_data['id']}
     # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
-    ${accId3}=  get_acc_id  ${PUSERNAME37}
+    ${accId3}=  get_acc_id  ${PUSERNAME67}
     Set Suite Variable  ${accId3} 
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME37}.${test_mail}
+    Set Suite Variable  ${email_id}  ${firstname}${PUSERNAME67}.${test_mail}
 
     ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -245,12 +245,12 @@ JD-TC-Upload_ShoppingList_Image_for_StorePickup
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  AddCustomer  ${CUSERNAME19}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${CUSERNAME29}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid15}   ${resp.json()}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME29}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -266,15 +266,15 @@ JD-TC-Upload_ShoppingList_Image_for_StorePickup
     
     ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
-    Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.${test_mail}
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME29}.${test_mail}
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${caption}=  FakerLibrary.Sentence   nb_words=4
 
                                                
-    ${resp}=   Upload ShoppingList By Provider for Pickup    ${cookie}   ${cid15}   ${caption}   ${cid15}    ${CatalogId1}   ${bool[1]}   ${DAY1}    ${sTime1}    ${eTime1}    ${CUSERNAME19}    ${email} 
+    ${resp}=   Upload ShoppingList By Provider for Pickup    ${cookie}   ${cid15}   ${caption}   ${cid15}    ${CatalogId1}   ${bool[1]}   ${DAY1}    ${sTime1}    ${eTime1}    ${CUSERNAME29}    ${email} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -299,7 +299,7 @@ JD-TC-Upload_ShoppingList_Image_for_StorePickup
     Set Suite Variable  ${orderid12}  ${orderid[0]}
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -317,7 +317,7 @@ JD-TC-Upload_ShoppingList_Image_for_StorePickup
 JD-TC-Upload_ShoppingList_Image_for_HomeDelivery
     [Documentation]    Place an order By Provider for Home Delivery.           
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -333,13 +333,13 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Suite Variable  ${address}
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${caption}=  FakerLibrary.Sentence   nb_words=4
 
                                                
-    ${resp}=   Upload ShoppingList By Provider for HomeDelivery    ${cookie}   ${cid15}   ${caption}   ${cid15}    ${CatalogId1}   ${bool[1]}   ${address}   ${DAY10}    ${sTime1}    ${eTime1}    ${CUSERNAME19}    ${email} 
+    ${resp}=   Upload ShoppingList By Provider for HomeDelivery    ${cookie}   ${cid15}   ${caption}   ${cid15}    ${CatalogId1}   ${bool[1]}   ${address}   ${DAY10}    ${sTime1}    ${eTime1}    ${CUSERNAME29}    ${email} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -357,7 +357,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery
     Set Suite Variable  ${orderid22}  ${orderid[0]}
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -376,9 +376,9 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery
 JD-TC-ProviderOrderCommunication-1
     [Documentation]  Send order comunication message to consumer without attachment
 
-    clear_consumer_msgs  ${CUSERNAME19}
-    clear_provider_msgs  ${PUSERNAME37}
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    clear_consumer_msgs  ${CUSERNAME29}
+    clear_provider_msgs  ${PUSERNAME67}
+    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -390,7 +390,7 @@ JD-TC-ProviderOrderCommunication-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${p_id}  ${resp.json()['id']}
@@ -401,11 +401,11 @@ JD-TC-ProviderOrderCommunication-1
     Set Suite Variable  ${bs_id}  ${resp.json()['id']}
     Set Suite Variable  ${bsname}  ${resp.json()['businessName']}
 
-    # ${resp}=  pyproviderlogin   ${PUSERNAME37}  ${PASSWORD}
+    # ${resp}=  pyproviderlogin   ${PUSERNAME67}  ${PASSWORD}
     # Log  ${resp}
     # Should Be Equal As Strings  ${resp}  200
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -443,7 +443,7 @@ JD-TC-ProviderOrderCommunication-1
     Set Test Variable  ${messageId1}    ${resp.json()[0]['messageId']}
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}   ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME29}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Consumer Communications
@@ -470,9 +470,9 @@ JD-TC-ProviderOrderCommunication-1
 JD-TC-ProviderOrderCommunication-2
     [Documentation]  Send order comunication message to consumer with attachment
     
-    clear_consumer_msgs  ${CUSERNAME19}
-    clear_provider_msgs  ${PUSERNAME37}
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    clear_consumer_msgs  ${CUSERNAME29}
+    clear_provider_msgs  ${PUSERNAME67}
+    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -485,13 +485,13 @@ JD-TC-ProviderOrderCommunication-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${p_id}  ${resp.json()['id']}
     
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME29}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
@@ -501,7 +501,7 @@ JD-TC-ProviderOrderCommunication-2
     ${fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -543,7 +543,7 @@ JD-TC-ProviderOrderCommunication-2
     Set Test Variable  ${messageId2}    ${resp.json()[0]['messageId']}
 
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}   ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME29}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Consumer Communications
@@ -575,9 +575,9 @@ JD-TC-ProviderOrderCommunication-2
 JD-TC-ProviderOrderCommunication-3
     [Documentation]  Send order comunication message to consumer with multiple files using file types jpeg, png and pdf
     
-    clear_consumer_msgs  ${CUSERNAME19}
-    clear_provider_msgs  ${PUSERNAME37}
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    clear_consumer_msgs  ${CUSERNAME29}
+    clear_provider_msgs  ${PUSERNAME67}
+    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -589,19 +589,19 @@ JD-TC-ProviderOrderCommunication-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${p_id}  ${resp.json()['id']}
    
    
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME29}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
     
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -671,7 +671,7 @@ JD-TC-ProviderOrderCommunication-3
     # Should Contain  ${resp.json()[0]['attachements'][1]['s3path']}   .jpg
     # Should Be Equal As Strings  ${resp.json()[0]['attachements'][1]['caption']}     ${caption3}
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}   ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME29}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Consumer Communications
@@ -712,9 +712,9 @@ JD-TC-ProviderOrderCommunication-3
 JD-TC-ProviderOrderCommunication-4
     [Documentation]  Send order comunication message to consumer with attachment but without caption
     
-    clear_consumer_msgs  ${CUSERNAME19}
-    clear_provider_msgs  ${PUSERNAME37}
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    clear_consumer_msgs  ${CUSERNAME29}
+    clear_provider_msgs  ${PUSERNAME67}
+    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -726,17 +726,17 @@ JD-TC-ProviderOrderCommunication-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${p_id}  ${resp.json()['id']}
     
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME29}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
     
-    # ${resp}=  pyproviderlogin   ${PUSERNAME37}  ${PASSWORD}
+    # ${resp}=  pyproviderlogin   ${PUSERNAME67}  ${PASSWORD}
     # Log  ${resp}
     # Should Be Equal As Strings  ${resp}  200
 
@@ -749,7 +749,7 @@ JD-TC-ProviderOrderCommunication-4
     # Should Be Equal As Strings  ${resp[1]}  200
    
     
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
@@ -789,7 +789,7 @@ JD-TC-ProviderOrderCommunication-4
     Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .jpg
     # Should Be Equal As Strings  ${resp.json()[0]['attachements'][0]['caption']}     ${None}
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}   ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME29}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Consumer Communications
@@ -817,9 +817,9 @@ JD-TC-ProviderOrderCommunication-4
 JD-TC-ProviderOrderCommunication-7
     [Documentation]  Send order comunication message to consumer after cancelling order
     
-    clear_consumer_msgs  ${CUSERNAME19}
-    clear_provider_msgs  ${PUSERNAME37}
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    clear_consumer_msgs  ${CUSERNAME29}
+    clear_provider_msgs  ${PUSERNAME67}
+    ${resp}=  Consumer Login  ${CUSERNAME29}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
@@ -841,7 +841,7 @@ JD-TC-ProviderOrderCommunication-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${p_id}  ${resp.json()['id']}
@@ -852,12 +852,12 @@ JD-TC-ProviderOrderCommunication-7
     Set Test Variable  ${bname}   ${resp.json()['businessName']}
     
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME19}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME29}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()[0]['id']}
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
    
@@ -895,7 +895,7 @@ JD-TC-ProviderOrderCommunication-7
     Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .jpg
     # Should Be Equal As Strings  ${resp.json()[0]['attachements'][0]['caption']}     ${caption1}
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}   ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME29}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Consumer Communications
@@ -953,7 +953,7 @@ JD-TC-ProviderOrderCommunication-UH2
 
 JD-TC-ProviderOrderCommunication-UH3
     [Documentation]  Send order comunication message using invalid Order id
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME37}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
