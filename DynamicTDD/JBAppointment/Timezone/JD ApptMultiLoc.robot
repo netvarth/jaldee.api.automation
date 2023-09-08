@@ -947,44 +947,44 @@ JD-TC-Take Appointment in Different Timezone-2
     ${primaryMobileNo}=  Set Variable  ${Number.national_number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
-    # ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    # ${resp}=    Customer Logout 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable  ${token}  ${resp.json()['token']}
-
-    # # ${resp}=    Customer Logout 
-    # # Log   ${resp.content}
-    # # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200    
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
    
-    # ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=18   maximum_age=55
-    ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${address}=  FakerLibrary.address
+    # ${dob}=  FakerLibrary.Date
+    # # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=18   maximum_age=55
+    # ${gender}    Random Element    ${Genderlist}
+    # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ############################## Take appt for USProvider ##############################
     # USProvider- acc_id1, US_tz, p1_l1, p1_l2, p1_s1, p1_s2, p1_sch1, p1_sch2
@@ -1148,44 +1148,44 @@ JD-TC-Take Appointment in Different Timezone-2
     ${primaryMobileNo}=  Set Variable  ${Number.national_number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
-    # ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    # ${resp}=    Customer Logout 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable  ${token}  ${resp.json()['token']}
-
-    # # ${resp}=    Customer Logout 
-    # # Log   ${resp.content}
-    # # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200    
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
    
-    # ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
 
-    ${address}=  FakerLibrary.address
-    # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=18   maximum_age=55
-    ${gender}    Random Element    ${Genderlist}
-    ${dob}=  FakerLibrary.Date
-    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${address}=  FakerLibrary.address
+    # # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=18   maximum_age=55
+    # ${gender}    Random Element    ${Genderlist}
+    # ${dob}=  FakerLibrary.Date
+    # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ############################## Take appt for USProvider ##############################
     # USProvider- acc_id1, US_tz, p1_l1, p1_l2, p1_s1, p1_s2, p1_sch1, p1_sch2
@@ -1349,45 +1349,45 @@ JD-TC-Take Appointment in Different Timezone-2
     ${primaryMobileNo}=  Set Variable  ${Number.national_number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
-    # ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    # ${resp}=    Customer Logout 
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable  ${token}  ${resp.json()['token']}
-
-    # # ${resp}=    Customer Logout 
-    # # Log   ${resp.content}
-    # # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}   200    
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
    
-    # ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Set Test Variable    ${cid2}    ${resp.json()['providerConsumer']}
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid2}    ${resp.json()['providerConsumer']}
 
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=18   maximum_age=55
-    # ${dob}=  Convert To String  ${dob}
-    ${gender}    Random Element    ${Genderlist}
-    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${address}=  FakerLibrary.address
+    # ${dob}=  FakerLibrary.Date
+    # # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=18   maximum_age=55
+    # # ${dob}=  Convert To String  ${dob}
+    # ${gender}    Random Element    ${Genderlist}
+    # ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${primaryMobileNo}  ${EMPTY}  ${dob}  ${gender}  ${email}  countryCode=+${CountryCode}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Consumer Login  ${primaryMobileNo}  ${PASSWORD}   countryCode=+${CountryCode}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ############################## Take appt for USProvider ##############################
     # USProvider- acc_id1, US_tz, p1_l1, p1_l2, p1_s1, p1_s2, p1_sch1, p1_sch2
@@ -1540,3 +1540,108 @@ JD-TC-Take Appointment in Different Timezone-2
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}   ${c3_apptid4}
 
+
+JD-TC-Take Appointment in Different Timezone-3
+    [Documentation]   Take appointment for a provider and rechedule the appointment to a different timezone.
+
+    ${PO_Number}=  FakerLibrary.Numerify  %#####
+    ${SProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
+
+    ${resp}=  Get BusinessDomainsConf
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${dom_len}=  Get Length  ${resp.json()}
+    ${dom}=  random.randint  ${0}  ${dom_len-1}
+    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+    Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+    Log   ${domain}
+    
+    FOR  ${subindex}  IN RANGE  ${sdom_len}
+        ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+        Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+        ${is_corp}=  check_is_corp  ${subdomain}
+        Exit For Loop If  '${is_corp}' == 'False'
+    END
+    Log   ${subdomain}
+
+    ${fname}=  FakerLibrary.name
+    ${lname}=  FakerLibrary.lastname
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${SProvider}  ${licpkgid}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Account Activation  ${SProvider}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Account Set Credential  ${SProvider}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    sleep  01s
+    ${resp}=  Encrypted Provider Login  ${SProvider}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${ph1}=  Evaluate  ${SProvider}+1
+    ${ph2}=  Evaluate  ${SProvider}+2
+    ${views}=  Random Element    ${Views}
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    Set Test Variable  ${email_id}  ${P_Email}${SProvider}.${test_mail}
+    ${emails1}=  Emails  ${name3}  Email  ${email_id}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    ${address} =  FakerLibrary.address
+    ${postcode}=  FakerLibrary.postcode
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${DAY}=  db.get_date_by_timezone  ${US_tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ${bool}
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  db.get_time_by_timezone  ${US_tz}  
+    ${eTime}=  db.add_timezone_time  ${US_tz}  0  30  
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    # Set Test Variable  ${email_id}  ${P_Email}${SProvider}.${test_mail}
+
+    ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${email_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    
