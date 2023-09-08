@@ -465,6 +465,9 @@ JD-TC-ProviderOrderCommunication-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200 
 
+    ${resp}=  ProviderLogout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-ProviderOrderCommunication-2
@@ -569,7 +572,6 @@ JD-TC-ProviderOrderCommunication-2
     Should Be Equal As Strings  ${resp.json()[0]['read']}           ${bool[0]}
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200 
-
 
 
 JD-TC-ProviderOrderCommunication-3
