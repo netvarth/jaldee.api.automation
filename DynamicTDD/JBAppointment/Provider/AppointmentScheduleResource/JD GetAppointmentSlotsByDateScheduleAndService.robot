@@ -2439,10 +2439,10 @@ JD-TC-GetSlots By Date and service -11
     ${description}=  FakerLibrary.sentence
     ${Total}=   Random Int   min=500   max=500
     ${Total}=  Convert To Number  ${Total}  1
-    ${minpre}=   Random Int   min=250   max=250
+    ${minpre}=   Random Int   min=50   max=50
     ${minpre}=  Convert To Number  ${minpre}  1
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service   ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${minpre}  ${Total}  ${bool[1]}   ${bool[0]}  maxBookingsAllowed=2  resoucesRequired=2   priceDynamic=true
+    ${resp}=  Create Service   ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${minpre}  ${Total}  ${bool[1]}   ${bool[0]}  maxBookingsAllowed=2  resoucesRequired=2   priceDynamic=true  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id1}  ${resp.json()} 
@@ -2527,7 +2527,7 @@ JD-TC-GetSlots By Date and service -11
 
     ${percentage}=  Evaluate  ${minpre} / ${Total} * 100
     ${totalamt}=  Evaluate   ${Total} + ${Total2}
-    ${amountRequiredNow}=  Evaluate  ${totalamt} * ${percentage} / 100
+    ${amountRequiredNow}=  Evaluate  ${totalamt} * ${minpre} / 100
 
     ${cnote}=   FakerLibrary.name
     ${EMPTY_List}=  Create List
@@ -3173,10 +3173,10 @@ JD-TC-GetSlots By Date and service -14
     ${description}=  FakerLibrary.sentence
     ${Total}=   Random Int   min=500   max=500
     ${Total}=  Convert To Number  ${Total}  1
-    ${minpre}=   Random Int   min=250   max=250
+    ${minpre}=   Random Int   min=50   max=50
     ${minpre}=  Convert To Number  ${minpre}  1
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service   ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${minpre}  ${Total}  ${bool[1]}   ${bool[0]}  maxBookingsAllowed=2  resoucesRequired=2   priceDynamic=true
+    ${resp}=  Create Service   ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${minpre}  ${Total}  ${bool[1]}   ${bool[0]}  maxBookingsAllowed=2  resoucesRequired=2   priceDynamic=true  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id1}  ${resp.json()} 
@@ -3286,9 +3286,9 @@ JD-TC-GetSlots By Date and service -14
     Should Be Equal As Strings  ${resp.json()[1]['service']['id']}               ${s_id1}
     Should Be Equal As Strings  ${resp.json()[1]['price']}                       ${Total2}
 
-    ${percentage}=  Evaluate  ${minpre} / ${Total} * 100
+    ${percentage}=  Evaluate  ${Total} * ${minpre} / 100
     ${totalamt}=  Evaluate   ${Total} + ${Total2}
-    ${amountRequiredNow}=  Evaluate  ${totalamt} * ${percentage} / 100
+    ${amountRequiredNow}=  Evaluate  ${totalamt} * ${minpre} / 100
 
     ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3310,7 +3310,7 @@ JD-TC-GetSlots By Date and service -14
     Should Be Equal As Strings  ${resp.json()['eligibleJcashAmt']['jCashAmt']}          0.0
     Should Be Equal As Strings  ${resp.json()['eligibleJcashAmt']['creditAmt']}         0.0
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${percentage}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Make payment Consumer Mock  ${min_pre}  ${bool[1]}  ${apptid1}  ${pid}  ${purpose[0]}  ${cid1}
@@ -3341,7 +3341,7 @@ JD-TC-GetSlots By Date and service -14
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   03s
 
-    ${amtdue}=  Evaluate   ${totalamt} - ${min_pre}
+    ${amtdue}=  Evaluate   ${totalamt} - ${percentage}
     
     ${resp}=  ConsumerLogout
     Log  ${resp.json()}
@@ -3367,7 +3367,7 @@ JD-TC-GetSlots By Date and service -14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response   ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot2}
-    ...  apptStatus=${apptStatus[1]}    amountPaid=${min_pre}  amountDue=${amtdue}
+    ...  apptStatus=${apptStatus[1]}    amountPaid=${percentage}  amountDue=${amtdue}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.json()}
@@ -3377,12 +3377,12 @@ JD-TC-GetSlots By Date and service -14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot2}
-    ...  apptStatus=${apptStatus[1]}    amountPaid=${min_pre}  amountDue=${amtdue}
+    ...  apptStatus=${apptStatus[1]}    amountPaid=${percentage}  amountDue=${amtdue}
 
     ${resp}=  Get Bill By UUId  ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  uuid=${apptid1}  netTotal=${totalamt}  billStatus=New  billViewStatus=Notshow  netRate=${totalamt}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre}  amountDue=${amtdue}
+    Verify Response  ${resp}  uuid=${apptid1}  netTotal=${totalamt}  billStatus=New  billViewStatus=Notshow  netRate=${totalamt}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${percentage}  amountDue=${amtdue}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}  
 
@@ -3604,7 +3604,7 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable   ${amountRequiredNow}    ${resp.json()['amountRequiredNow']}
     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${totalamt}
-    Should Be Equal As Numbers  ${resp.json()['amountRequiredNow']}                     ${amt_float}
+    Should Be Equal As Numbers  ${resp.json()['amountRequiredNow']}                     ${minpre}
     Should Be Equal As Strings  ${resp.json()['jdnDiscount']}                           0.0
     Should Be Equal As Strings  ${resp.json()['couponDiscount']}                        0.0
     Should Be Equal As Strings  ${resp.json()['providerCouponDiscount']}                0.0
@@ -3635,7 +3635,7 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${amt_float}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${minpre}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Make payment Consumer Mock  ${amt_float}  ${bool[1]}  ${apptid1}  ${pid}  ${purpose[0]}  ${cid1}
@@ -3665,13 +3665,13 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Strings  ${resp.status_code}  200
    
     sleep   02s
-    ${amtdue}=  Evaluate   ${totalamt} - ${amt_float}
+    ${amtdue}=  Evaluate   ${totalamt} - ${minpre}
     ${amtdue}=  twodigitfloat  ${amtdue} 
     ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${apptid1}   billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  billPaymentStatus=${paymentStatus[1]}   
-    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
+    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${minpre} 
     Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${amtdue}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
@@ -3712,8 +3712,8 @@ JD-TC-GetSlots By Date and service -15
     Verify Response  ${resp}  uuid=${apptid1}  netTotal=0.0  billStatus=Cancel  billViewStatus=Notshow  netRate=0.0  billPaymentStatus=${paymentStatus[3]}   
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}  
-    Should Be Equal As Numbers  ${resp.json()['amountDue']}    -${amt_float}
-    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}    ${amt_float}
+    Should Be Equal As Numbers  ${resp.json()['amountDue']}    -${minpre}
+    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}    ${minpre}
 
 JD-TC-GetSlots By Date and service -16
     [Documentation]  provider ser price variation for second schedule and cancel appmnt then check bill(doing old prepayment amount)
@@ -4165,9 +4165,9 @@ JD-TC-GetSlots By Date and service -17
     Should Be Equal As Strings  ${resp.json()[1]['price']}                       ${Total2}
 
 
-    ${percentage}=  Evaluate  ${minpre} / ${Total} * 100
+    ${percentage}=  Evaluate  ${Total} * ${minpre} / 100
     ${totalamt}=  Evaluate   ${Total} + ${Total2}
-    ${amountRequiredNow}=  Evaluate  ${totalamt} * ${percentage} / 100
+    ${amountRequiredNow}=  Evaluate   ${totalamt} * ${minpre} / 100
     ${amt_float}=  twodigitfloat  ${amountRequiredNow} 
 
     ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
@@ -4367,10 +4367,10 @@ JD-TC-GetSlots By Date and service -18
     ${description}=  FakerLibrary.sentence
     ${Total}=   Random Int   min=500   max=500
     ${Total}=  Convert To Number  ${Total}  1
-    ${minpre}=   Random Int   min=250   max=250
+    ${minpre}=   Random Int   min=50   max=50
     ${minpre}=  Convert To Number  ${minpre}  1
     ${SERVICE1}=    FakerLibrary.word
-    ${resp}=  Create Service   ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${minpre}  ${Total}  ${bool[1]}   ${bool[0]}  maxBookingsAllowed=2  resoucesRequired=2   priceDynamic=true
+    ${resp}=  Create Service   ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${minpre}  ${Total}  ${bool[1]}   ${bool[0]}  maxBookingsAllowed=2  resoucesRequired=2   priceDynamic=true  prePaymentType=${advancepaymenttype[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id1}  ${resp.json()} 
@@ -4411,7 +4411,7 @@ JD-TC-GetSlots By Date and service -18
     
     ${Total2}=   Random Int   min=100   max=100
     ${Total2}=  Convert To Number  ${Total2}  1
-    ${resp}=   Set Price Variation Per Schedule    ${sch_id2}  ${s_id1}  -${Total2}
+    ${resp}=   Set Price Variation Per Schedule    ${sch_id2}  ${s_id1}   ${Total2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -4453,9 +4453,9 @@ JD-TC-GetSlots By Date and service -18
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${percentage}=  Evaluate  ${minpre} / ${Total} * 100
+    ${percentage}=  Evaluate  ${Total} * ${minpre} / 100
     ${totalamt}=  Evaluate   ${Total} - ${Total2}
-    ${amountRequiredNow}=  Evaluate  ${totalamt} * ${percentage} / 100
+    ${amountRequiredNow}=  Evaluate   ${totalamt} * ${minpre} / 100
     ${amt_float}=  twodigitfloat  ${amountRequiredNow} 
 
     ${cnote}=   FakerLibrary.name
@@ -4692,7 +4692,7 @@ JD-TC-GetSlots By Date and service -19
 
     ${percentage}=  Evaluate  ${minpre2} / ${Total2} * 100
     ${totalamt}=  Evaluate   ${Total2} + ${Total3}
-    ${amountRequiredNow}=  Evaluate  ${totalamt} * ${percentage} / 100
+    ${amountRequiredNow}=  Evaluate  Evaluate   ${totalamt} * ${minpre} / 100
     ${amt_float}=  twodigitfloat  ${amountRequiredNow} 
 
     ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
@@ -5149,7 +5149,7 @@ JD-TC-GetSlots By Date and service -21
 
     ${percentage}=  Evaluate  ${minpre} / ${Total} * 100
     ${totalamt}=  Evaluate   ${Total} + ${Total2}
-    ${amountRequiredNow}=  Evaluate  ${totalamt} * ${percentage} / 100
+    ${amountRequiredNow}=  Evaluate   ${totalamt} * ${minpre} / 100
 
     ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
     Log   ${resp.json()}
