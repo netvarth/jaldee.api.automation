@@ -10010,8 +10010,10 @@ Update IVR Call Status
 Get IVR Graph Details
 
     [Arguments]    ${category}    ${startDate}    ${endDate}
+    ${data}=    Create Dictionary    category=${category}    startDate=${startDate}   endDate=${endDate}    
+    ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
-    ${resp}=    PUT On Session  ynw  /provider/ivr/graph  expected_status=any
+    ${resp}=    PUT On Session  ynw  /provider/ivr/graph  data=${data}  expected_status=any
     [Return]  ${resp}
 
 Delete All IVR Records

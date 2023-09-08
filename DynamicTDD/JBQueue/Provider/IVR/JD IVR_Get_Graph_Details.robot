@@ -398,4 +398,8 @@ JD-TC-Get_IVR_Graph_Details-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     
