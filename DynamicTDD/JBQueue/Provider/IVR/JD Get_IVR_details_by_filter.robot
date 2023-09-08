@@ -1349,6 +1349,7 @@ JD-TC-Get_IVR_Details_By_Filter-UH1
     ${resp}=    Get Ivr Details By Filter  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  "${resp.json()}"    "[]"
 
 JD-TC-Get_IVR_Details_By_Filter-UH2
 

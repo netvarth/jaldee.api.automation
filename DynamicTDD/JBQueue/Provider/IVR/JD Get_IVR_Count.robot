@@ -1698,7 +1698,7 @@ JD-TC-Get_IVR_Count-UH1
     ${resp}=    Get IVR Count
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Should Be Equal As Strings  "${resp.json()}"    "0"
 JD-TC-Get_IVR_Count-UH2
 
     [Documentation]    Get IVR Count Without login

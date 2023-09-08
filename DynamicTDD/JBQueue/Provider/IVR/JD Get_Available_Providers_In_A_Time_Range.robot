@@ -55,7 +55,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
 
     ${sTime2}=  add_time  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime2}=  add_two   ${sTime2}  ${delta}
+    ${eTime2}=  add_time  15  20
     ${schedule_name2}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${JCstatus[0]}  ${user_id}
@@ -66,7 +66,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     ${DAY3}=  add_date  15 
     ${sTime3}=  add_time  16  20
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime3}=  add_two   ${sTime3}  ${delta}
+    ${eTime3}=  add_time  20  25
     ${schedule_name3}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name3}  ${recurringtype[1]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
@@ -75,9 +75,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     Set Suite Variable  ${sch_id2}  ${resp.json()}
     
     ${DAY4}=  add_date  20 
-    ${sTime4}=  add_time  21  23
+    ${sTime4}=  add_time  26  30
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime4}=  add_two   ${sTime4}  ${delta}
+    ${eTime4}=  add_time  30  35
     ${schedule_name4}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name4}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}

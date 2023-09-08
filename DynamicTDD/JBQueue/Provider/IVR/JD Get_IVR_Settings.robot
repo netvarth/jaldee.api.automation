@@ -211,6 +211,8 @@ JD-TC-Get_IVR_Settings-UH1
     ${resp}=    Get IVR Setting
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  "${resp.json()}"    "[]"
+
 
 JD-TC-Get_IVR_Settings-UH2
 

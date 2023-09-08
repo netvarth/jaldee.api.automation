@@ -784,4 +784,45 @@ JD-TC-Outbound_IVR-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+JD-TC-Outbound_IVR-UH2
+
+    [Documentation]   Try to delete ivr record using another login
+    clear_queue      ${PUSERNAME14}
+    clear_location   ${PUSERNAME14}
+    clear_service    ${PUSERNAME14}
+    clear_customer   ${PUSERNAME14}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME14}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=   Get IVR Users
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  "${resp.json()}"    "[]"
+
+    ${resp}=    Delete All IVR Records
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+D-TC-Outbound_IVR-UH3
+
+    [Documentation]   Try to delete ivr record without login
+
+    ${resp}=    Delete All IVR Records
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"    "${SESSION_EXPIRED}"
+
+
 

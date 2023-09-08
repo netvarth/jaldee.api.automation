@@ -625,26 +625,26 @@ JD-TC-Create_Provider_Schedule-UH12
 
     [Documentation]  date format is incorrect
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_id1}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${date}=    Convert Date   ${DAY1}    result_format=%d %b %Y 
-    ${sTime1}=  add_time  0  15
+    ${DAY7}=  add_date  20
+    ${DAY8}=  add_date  30      
+    ${list}=  Create List  1  2  3  4  5  6  7 
+    ${date}=    Convert Date   ${DAY7}    result_format=%d %b %Y 
+    ${sTime1}=  add_time  0  5
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${date}  ${DAY2}  ${EMPTY}  ${sTime1}  ${empty}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${date}  ${DAY8}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVAID_DATE_FORMAT}"
