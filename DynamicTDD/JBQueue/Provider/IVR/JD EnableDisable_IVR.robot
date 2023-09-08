@@ -196,6 +196,7 @@ JD-TC-Enable_Disable_IVR-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
+<<<<<<< HEAD
 JD-TC-Enable_Disable_IVR-UH1
 
     [Documentation]   Enable IVR which is already enabled
@@ -210,6 +211,8 @@ JD-TC-Enable_Disable_IVR-UH1
     Should Be Equal As Strings  ${resp.json()}    ${IVR_Already_Disabled}
 
 
+=======
+>>>>>>> refs/remotes/origin/master
 JD-TC-Enable_Disable_IVR-2
 
     [Documentation]   Disabling IVR which is Enabled
@@ -222,8 +225,7 @@ JD-TC-Enable_Disable_IVR-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-JD-TC-Enable_Disable_IVR-UH2
+JD-TC-Enable_Disable_IVR-UH1
 
     [Documentation]   Disabling IVR which is Disabled
 
@@ -233,7 +235,26 @@ JD-TC-Enable_Disable_IVR-UH2
 
     ${resp}=    enable and disable IVR    ${toggle[1]}
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${CUSTOM_EMAIL_ALREADY_DISABLED}
+    
+
+JD-TC-Enable_Disable_IVR-UH2
+
+    [Documentation]   Enable IVR which is already enabled
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    enable and disable IVR    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    enable and disable IVR    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${IVR_Already_Enabled}
 
 
 JD-TC-Enable_Disable_IVR-UH3

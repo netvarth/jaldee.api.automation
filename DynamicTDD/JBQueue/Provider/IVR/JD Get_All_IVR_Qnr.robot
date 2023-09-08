@@ -440,3 +440,11 @@ JD-TC-GetAllIVRQnr-1
     ${resp}=    Get All IVR Qnr    ${ivruid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-GetAllIVRQnr-UH1
+    [Documentation]  Get ivr qnr without login
+
+    ${resp}=    Get All IVR Qnr    ${ivruid}
+    Log  ${resp.content} 
+    Should Be Equal As Strings   ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"   "${SESSION_EXPIRED}"

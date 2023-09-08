@@ -208,7 +208,7 @@ JD-TC-Create_IVR_Settings-UH1
 
     ${resp}=    Create_IVR_Settings    ${fake_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH2
 
@@ -220,7 +220,7 @@ JD-TC-Create_IVR_Settings-UH2
 
     ${resp}=    Create_IVR_Settings    ${empty}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH3
 
@@ -244,7 +244,7 @@ JD-TC-Create_IVR_Settings-UH4
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${empty}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH5
 
@@ -256,7 +256,7 @@ JD-TC-Create_IVR_Settings-UH5
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${empty}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH6
 
@@ -268,7 +268,7 @@ JD-TC-Create_IVR_Settings-UH6
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${empty}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH7
 
@@ -280,7 +280,7 @@ JD-TC-Create_IVR_Settings-UH7
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${empty}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH8
 
@@ -292,7 +292,7 @@ JD-TC-Create_IVR_Settings-UH8
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${empty}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH9
 
@@ -304,7 +304,7 @@ JD-TC-Create_IVR_Settings-UH9
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${empty}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH9
 
@@ -316,9 +316,14 @@ JD-TC-Create_IVR_Settings-UH9
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${empty}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
+<<<<<<< HEAD
     Should Be Equal As Strings  ${resp.status_code}  500
 
 JD-TC-Create_IVR_Settings-UH10
+=======
+    Should Be Equal As Strings  ${resp.status_code}  422
+JD-TC-Create_IVR_Settings-UH11
+>>>>>>> refs/remotes/origin/master
 
     [Documentation]   Create IVR Settings where public id is empty
     
@@ -328,7 +333,7 @@ JD-TC-Create_IVR_Settings-UH10
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${empty}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH11
 
@@ -340,7 +345,7 @@ JD-TC-Create_IVR_Settings-UH11
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${empty}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_IVR_Settings-UH12
 
@@ -352,4 +357,4 @@ JD-TC-Create_IVR_Settings-UH12
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422

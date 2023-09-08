@@ -1603,14 +1603,14 @@ JD-TC-Take Appointment in Different Timezone-3
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
     ${postcode}=  FakerLibrary.postcode
-    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
-    ${DAY}=  db.get_date_by_timezone  ${US_tz}
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  db.get_time_by_timezone  ${US_tz}  
-    ${eTime}=  db.add_timezone_time  ${US_tz}  0  30  
+    ${sTime}=  db.get_time_by_timezone  ${tz}  
+    ${eTime}=  db.add_timezone_time  ${tz}  0  30  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1643,5 +1643,168 @@ JD-TC-Take Appointment in Different Timezone-3
     ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${email_id}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Enable Appointment
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep   01s
+    
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
+
+    FOR   ${i}  IN RANGE   5
+        ${latti1}  ${longi1}  ${city1}  ${country_abbr1}  ${tz1}=  FakerLibrary.Local Latlng  
+        IF  '${tz}' == '${tz1}'
+            Continue For Loop
+        ELSE
+            Exit For Loop
+        END
+    END
+    ${address1} =  FakerLibrary.address
+    ${postcode1}=  FakerLibrary.postcode
+    ${DAY1}=  db.get_date_by_timezone  ${tz1}
+    ${DAY2}=  db.add_timezone_date  ${tz1}  10     
+    ${sTime1}=  add_timezone_time  ${tz1}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz1}  1  00  
+    ${parking}    Random Element     ${parkingType} 
+    ${24hours}    Random Element    ['True','False']
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  ${url}  ${postcode1}  ${address1}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_l2}  ${resp.json()}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=   FakerLibrary.job
+    ${p1_s1}=  Create Sample Service  ${SERVICE1}
+
+    ${SERVICE2}=   FakerLibrary.job
+    ${p1_s2}=  Create Sample Service  ${SERVICE2}
+
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
+    ${DAY4}=  db.add_timezone_date  ${tz}  10  
+    ${sTime2}=  add_timezone_time  ${tz}  1  00  
+    ${eTime2}=  add_timezone_time  ${tz}  1  30  
+    ${schedule_name}=  FakerLibrary.administrative unit
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${duration}=  FakerLibrary.Random Int  min=1  max=5
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l1}  ${duration}  ${bool1}  ${p1_s1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_sch1}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${p1_sch1}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${p1_sch1}   name=${schedule_name}  apptState=${Qstate[0]}
+    
+    ${sTime3}=  add_timezone_time  ${tz1}  0  30
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime3}  ${delta}
+    ${schedule_name}=  FakerLibrary.administrative unit
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY1}=  db.get_date_by_timezone  ${tz1}
+    ${DAY2}=  db.add_timezone_date  ${tz1}  10       
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l2}  ${duration}  ${bool1}  ${p1_s2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_sch2}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${p1_sch2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${p1_sch2}   name=${schedule_name}  apptState=${Qstate[0]}
+    
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${firstName}=  FakerLibrary.name
+    ${lastName}=  FakerLibrary.last_name
+    ${Number}=  random_phone_num_generator
+    Log  ${Number}
+    ${CountryCode}=  Set Variable  ${Number.country_code}
+    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
+    
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid2}    ${resp.json()['providerConsumer']}
+
+    ${resp}=  Get Appointment Schedules Consumer  ${acc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Appointment Schedule ById Consumer  ${p1_sch1}   ${acc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${p1_sch1}   ${acc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-1}
+    ${k}=  Random Int  max=${num_slots-1}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
+    Set Test Variable   ${slot2}   ${slots[${k}]}
+
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${US_tz}
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Take Appointment For Provider   ${acc_id1}  ${p1_s1}  ${p1_sch1}  ${DAY1}  ${cnote}  ${apptfor}  location=${{str('${p1_l1}')}}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${apptid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${c3_apptid1}  ${apptid[0]}
+
+    ${resp}=   Get consumer Appointment By Id   ${acc_id1}  ${c3_apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${c3_apptid1}
 
     

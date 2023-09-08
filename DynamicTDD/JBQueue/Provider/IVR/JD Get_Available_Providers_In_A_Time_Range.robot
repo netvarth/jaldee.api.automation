@@ -63,7 +63,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
 
     ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime2}=  add_two   ${sTime2}  ${delta}
+    ${eTime2}=  add_time  15  20
     ${schedule_name2}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${JCstatus[0]}  ${user_id}
@@ -74,7 +74,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     ${DAY3}=  db.add_timezone_date  ${tz}  15 
     ${sTime3}=  db.add_timezone_time  ${tz}  16  20
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime3}=  add_two   ${sTime3}  ${delta}
+    ${eTime3}=  add_time  20  25
     ${schedule_name3}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name3}  ${recurringtype[1]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
@@ -82,10 +82,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
     
+<<<<<<< HEAD
     ${DAY4}=  db.add_timezone_date  ${tz}  20 
     ${sTime4}=  db.add_timezone_time  ${tz}  21  23
+=======
+    ${DAY4}=  add_date  20 
+    ${sTime4}=  add_time  26  30
+>>>>>>> refs/remotes/origin/master
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime4}=  add_two   ${sTime4}  ${delta}
+    ${eTime4}=  add_time  30  35
     ${schedule_name4}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name4}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
@@ -103,3 +108,210 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     ${resp}=    Get Available Providers In A Time Range    ${datetime1}    ${datetime2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-Get_Avaliable_Providers_In_A_Time_Range-2
+
+    [Documentation]  Get Avaliable Providers In A Time Range without creating schedules
+
+    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DAY2}=  add_date  10
+    ${DAY3}=  add_date  15
+    ${sTime2}=  add_time  11  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime2}  ${delta}
+
+    ${datetime1}    Convert Date    ${DAY2}${sTime2}    result_format=%Y-%m-%dT%H:%M:%S
+    ${datetime2}    Convert Date    ${DAY3} ${eTime3}    result_format=%Y-%m-%dT%H:%M:%S
+
+    ${resp}=    Get Available Providers In A Time Range    ${datetime1}    ${datetime2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-Get_Avaliable_Providers_In_A_Time_Range-UH1
+
+    [Documentation]  Get Avaliable Providers In A Time Range with another provider details
+
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  "${resp.json()}"   "[]"
+
+    ${DAY2}=  add_date  10
+    ${DAY3}=  add_date  15
+    ${sTime2}=  add_time  11  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime2}  ${delta}
+
+    ${datetime1}    Convert Date    ${DAY2}${sTime2}    result_format=%Y-%m-%dT%H:%M:%S
+    ${datetime2}    Convert Date    ${DAY3} ${eTime3}    result_format=%Y-%m-%dT%H:%M:%S
+
+    ${resp}=    Get Available Providers In A Time Range    ${datetime1}    ${datetime2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  "${resp.json()}"   "[]"
+
+JD-Get_Avaliable_Providers_In_A_Time_Range-UH2
+
+    [Documentation]  Get Avaliable Providers In A Time Range without login
+
+
+    ${DAY2}=  add_date  10
+    ${DAY3}=  add_date  15
+    ${sTime2}=  add_time  11  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime2}  ${delta}
+
+    ${datetime1}    Convert Date    ${DAY2}${sTime2}    result_format=%Y-%m-%dT%H:%M:%S
+    ${datetime2}    Convert Date    ${DAY3} ${eTime3}    result_format=%Y-%m-%dT%H:%M:%S
+
+    ${resp}=    Get Available Providers In A Time Range    ${datetime1}    ${datetime2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED}
+
+JD-Get_Avaliable_Providers_In_A_Time_Range-UH3
+
+    [Documentation]  Get Avaliable Providers In A Time Range with last date is empty
+
+    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DAY2}=  add_date  10
+    ${DAY3}=  add_date  15
+    ${sTime2}=  add_time  11  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime2}  ${delta}
+
+    ${datetime1}    Convert Date    ${DAY2}${sTime2}    result_format=%Y-%m-%dT%H:%M:%S
+    ${datetime2}    Convert Date    ${DAY3} ${eTime3}    result_format=%Y-%m-%dT%H:%M:%S
+
+    ${resp}=    Get Available Providers In A Time Range    ${datetime1}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  500
+
+JD-Get_Avaliable_Providers_In_A_Time_Range-UH4
+
+    [Documentation]  Get Avaliable Providers In A Time Range with start date is empty
+
+    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DAY2}=  add_date  10
+    ${DAY3}=  add_date  15
+    ${sTime2}=  add_time  11  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime2}  ${delta}
+
+    ${datetime1}    Convert Date    ${DAY2}${sTime2}    result_format=%Y-%m-%dT%H:%M:%S
+    ${datetime2}    Convert Date    ${DAY3} ${eTime3}    result_format=%Y-%m-%dT%H:%M:%S
+
+    ${resp}=    Get Available Providers In A Time Range    ${empty}    ${datetime2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  500
+
+JD-Get_Avaliable_Providers_In_A_Time_Range-UH5
+
+    [Documentation]  Get Avaliable Providers In A Time Range with start date is different format
+
+    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DAY2}=  add_date  10
+    ${DAY3}=  add_date  15
+    ${sTime2}=  add_time  11  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime2}  ${delta}
+
+    ${datetime1}    Convert Date    ${DAY2}${sTime2}    result_format=%Y-%m-%dT
+    ${datetime2}    Convert Date    ${DAY3} ${eTime3}    result_format=%Y-%m-%dT%H:%M:%S
+
+    ${resp}=    Get Available Providers In A Time Range    ${datetime1}    ${datetime2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  500
+
+JD-Get_Avaliable_Providers_In_A_Time_Range-UH6
+
+    [Documentation]  Get Avaliable Providers In A Time Range with end date is different format
+
+    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=    Get all schedules of an account 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${DAY2}=  add_date  10
+    ${DAY3}=  add_date  15
+    ${sTime2}=  add_time  11  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime2}  ${delta}
+
+    ${datetime1}    Convert Date    ${DAY2}${sTime2}    result_format=%Y-%m-%dT%H:%M:%S
+    ${datetime2}    Convert Date    ${DAY3} ${eTime3}    result_format=%Y-%m-%dT
+
+    ${resp}=    Get Available Providers In A Time Range    ${datetime1}    ${datetime2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  500

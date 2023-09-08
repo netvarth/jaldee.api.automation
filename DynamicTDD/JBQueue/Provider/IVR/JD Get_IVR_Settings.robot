@@ -192,3 +192,42 @@ JD-TC-Get_IVR_Settings-1
     ${resp}=    Get IVR Setting
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_IVR_Settings-2
+
+    [Documentation]   Get IVR Settings without creating ivr settings
+
+    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=    Get IVR Setting
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Get_IVR_Settings-UH1
+
+    [Documentation]   Get IVR Settings with another provider login
+
+    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=    Get IVR Setting
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  "${resp.json()}"    "[]"
+
+
+JD-TC-Get_IVR_Settings-UH2
+
+    [Documentation]   Get IVR Settings Without login
+
+    ${resp}=    Get IVR Setting
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED} 

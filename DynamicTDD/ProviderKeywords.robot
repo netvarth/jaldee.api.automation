@@ -3512,7 +3512,7 @@ Change StatusBoard Status
     [Return]  ${resp}
 
 Create User
-    [Arguments]  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}  @{vargs} 
+    [Arguments]  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   @{vargs} 
     ${whatsAppNum}=  Create Dictionary  countryCode=${whatsApp_countrycode}  number=${WhatsApp_num}
     ${telegramNum}=  Create Dictionary  countryCode=${telegram_countrycode}  number=${telegram_num}
     ${data}=  Create Dictionary  firstName=${fname}  lastName=${lname}  dob=${dob}  gender=${gender}  email=${email}  userType=${user_type}  pincode=${pincode}  countryCode=${countryCode}  mobileNo=${mob_no}  deptId=${dept_id}  subdomain=${sub_domain}  admin=${admin}  whatsAppNum=${whatsAppNum}  telegramNum=${telegramNum}
@@ -6760,10 +6760,21 @@ Create Sample Donation For User
 
 Get Account Level Analytics
     [Arguments]   ${metricId}  ${dateFrom}  ${dateTo}  ${frequency}  &{kwargs}
+<<<<<<< HEAD
     ${pro_params}=  Create Dictionary  metricId=${metricId}  dateFrom=${dateFrom}  dateTo=${dateTo}  frequency=${frequency}
+=======
+    ${param}=  Create Dictionary  metricId=${metricId}  dateFrom=${dateFrom}  dateTo=${dateTo}  frequency=${frequency}
+>>>>>>> refs/remotes/origin/master
     Check And Create YNW Session
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${param} 	${key}=${value}
+    END
     # ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${kwargs}  expected_status=any
+<<<<<<< HEAD
     ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${pro_params}  expected_status=any
+=======
+    ${resp}=    GET On Session    ynw   /provider/analytics/account       params=${param}  expected_status=any
+>>>>>>> refs/remotes/origin/master
     [Return]  ${resp}
 
 Get Account Level Analytics Acc To config
@@ -10116,7 +10127,7 @@ Get Ivr By reference id
 
     [Arguments]    ${Refr_id}
     Check And Create YNW Session
-    ${resp}=    Get On Session    ynw   /provider/ivr/reference/${Refr_id}
+    ${resp}=    Get On Session    ynw   /provider/ivr/reference/${Refr_id}     expected_status=any
     [Return]    ${resp}
 
 Unassign IVR User
@@ -10234,6 +10245,14 @@ Get IVR User Details
     ${resp}=    GET On Session  ynw  /provider/ivr/user/settings/${userType}/${userId}   expected_status=any
     [Return]  ${resp}
 
+Delete User Details
+
+    [Arguments]     ${userId}
+
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session  ynw  /provider/ivr/users/${userId}   expected_status=any
+    [Return]  ${resp}
+
 Get All IVR User Details
 
     Check And Create YNW Session
@@ -10302,10 +10321,13 @@ Get all schedules of an account
 
 Update Provider Schedule
 
-    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}
+    [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}  &{kwargs}
 
-    ${data}=  Provider Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}
+    ${data}=  Provider Schedule  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}  
     Check And Create YNW Session
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END 
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/schedule  data=${data}  expected_status=any
     [Return]  ${resp}

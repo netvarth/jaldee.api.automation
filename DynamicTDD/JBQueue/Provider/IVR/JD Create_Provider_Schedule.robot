@@ -71,11 +71,10 @@ JD-TC-Create_Provider_Schedule-1
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['repeatIntervals']}           ${list}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['startDate']}                 ${DAY1}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['terminator']['endDate']}     ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['sTime']}     ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['eTime']}     ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['scheduleState']}             ${JCstatus[0]}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['providerId']}                ${user_id}
-    
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleState']}                             ${JCstatus[0]}
+    Should Be Equal As Strings  ${resp.json()['providerId']}                                ${user_id}
 
 
 JD-TC-Create_Provider_Schedule-2
@@ -122,10 +121,10 @@ JD-TC-Create_Provider_Schedule-2
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['repeatIntervals']}           ${list}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['startDate']}                 ${DAY2}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['terminator']['endDate']}     ${DAY3}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['sTime']}     ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['eTime']}     ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['scheduleState']}             ${JCstatus[0]}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['providerId']}                ${user_id}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleState']}                             ${JCstatus[0]}
+    Should Be Equal As Strings  ${resp.json()['providerId']}                                ${user_id}
     
     ${resp}=  Create Provider Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY4}  ${DAY5}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[1]}  ${user_id}
     Log  ${resp.json()}
@@ -134,15 +133,15 @@ JD-TC-Create_Provider_Schedule-2
     ${resp}=    Get Scheduled Using Id    ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}                                      ${schedule_name}
+    Should Be Equal As Strings  ${resp.json()['name']}                                      ${schedule_name1}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['recurringType']}             ${recurringtype[1]}  
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['repeatIntervals']}           ${list}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['startDate']}                 ${DAY4}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['terminator']['endDate']}     ${DAY5}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['sTime']}     ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['eTime']}     ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['scheduleState']}             ${JCstatus[1]}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['providerId']}                ${user_id}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleState']}                             ${JCstatus[0]}
+    Should Be Equal As Strings  ${resp.json()['providerId']}                                ${user_id}
     
 
 JD-TC-Create_Provider_Schedule-3
@@ -190,10 +189,10 @@ JD-TC-Create_Provider_Schedule-3
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['repeatIntervals']}           ${list}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['startDate']}                 ${DAY2}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['terminator']['endDate']}     ${DAY3}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['sTime']}     ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['eTime']}     ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['scheduleState']}             ${JCstatus[0]}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['providerId']}                ${user_id}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleState']}                             ${JCstatus[0]}
+    Should Be Equal As Strings  ${resp.json()['providerId']}                                ${user_id}
 
     ${resp}=  Create Provider Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list1}  ${DAY4}  ${DAY5}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[1]}  ${user_id}
     Log  ${resp.json()}
@@ -202,15 +201,15 @@ JD-TC-Create_Provider_Schedule-3
     ${resp}=    Get Scheduled Using Id    ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}                                      ${schedule_name}
+    Should Be Equal As Strings  ${resp.json()['name']}                                      ${schedule_name1}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['recurringType']}             ${recurringtype[1]}  
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['repeatIntervals']}           ${list}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['repeatIntervals']}           ${list1}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['startDate']}                 ${DAY4}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['terminator']['endDate']}     ${DAY5}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['sTime']}     ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['eTime']}     ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['scheduleState']}             ${JCstatus[1]}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['providerId']}                ${user_id}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+   Should Be Equal As Strings   ${resp.json()['scheduleState']}                              ${JCstatus[0]}
+    Should Be Equal As Strings  ${resp.json()['providerId']}                                ${user_id}
     
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
@@ -256,10 +255,10 @@ JD-TC-Create_Provider_Schedule-4
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['repeatIntervals']}           ${list}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['startDate']}                 ${DAY1}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['terminator']['endDate']}     ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['sTime']}     ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['eTime']}     ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['scheduleState']}             ${JCstatus[0]}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['providerId']}                ${user_id}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleState']}                             ${JCstatus[0]}
+    Should Be Equal As Strings  ${resp.json()['providerId']}                                ${user_id}
 
     ${resp}=    Enable And Disable A Schedule    ${JCstatus[1]}    ${sch_id}
     Log  ${resp.json()}
@@ -273,10 +272,10 @@ JD-TC-Create_Provider_Schedule-4
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['repeatIntervals']}           ${list}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['startDate']}                 ${DAY1}
     Should Be Equal As Strings  ${resp.json()['scheduleTime']['terminator']['endDate']}     ${DAY2}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['sTime']}     ${sTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots[0]']['eTime']}     ${eTime1}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['scheduleState']}             ${JCstatus[1]}
-    Should Be Equal As Strings  ${resp.json()['scheduleTime']['providerId']}                ${user_id}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+    Should Be Equal As Strings  ${resp.json()['scheduleState']}                             ${JCstatus[1]}
+    Should Be Equal As Strings  ${resp.json()['providerId']}                                ${user_id}
 
 
 JD-TC-Create_Provider_Schedule-UH1
@@ -329,11 +328,6 @@ JD-TC-Create_Provider_Schedule-UH2
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
     
-    ${ser_name}=   FakerLibrary.word
-    Set Suite Variable    ${ser_name}
-    ${resp}=   Create Sample Service  ${ser_name}
-    Set Suite Variable    ${s_id}    ${resp} 
-
     ${DAY1}=  get_date
     ${DAY2}=  add_date  17    
     ${DAY3}=  add_date  19
@@ -479,7 +473,7 @@ JD-TC-Create_Provider_Schedule-UH6
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${INVAID_DATE_FORMAT}"
+    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_PROVIDER_ID}"
     
 
 
@@ -505,9 +499,9 @@ JD-TC-Create_Provider_Schedule-UH7
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  add_date  33
-    ${DAY2}=  add_date  35    
-    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY1}=  add_date  40
+    ${DAY2}=  add_date  42    
+    ${list}=  Create List  1  
     ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -549,6 +543,7 @@ JD-TC-Create_Provider_Schedule-UH8
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${END_DATE_REQUIRED}"
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
 JD-TC-Create_Provider_Schedule-UH9
@@ -603,7 +598,7 @@ JD-TC-Create_Provider_Schedule-UH10
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${empty}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${INVAID_DATE_FORMAT}"
+    
    
 
 JD-TC-Create_Provider_Schedule-UH11
@@ -638,6 +633,34 @@ JD-TC-Create_Provider_Schedule-UH12
 
     [Documentation]  date format is incorrect
 
+    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id1}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id}  ${resp.json()['id']}
+
+ 
+    ${DAY7}=  add_date  20
+    ${DAY8}=  add_date  30      
+    ${list}=  Create List  1  2  3  4  5  6  7 
+    ${date}=    Convert Date   ${DAY7}    result_format=%d %b %Y 
+    ${sTime1}=  add_time  0  5
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${date}  ${DAY8}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${INVAID_DATE_FORMAT}"
+
+JD-TC-Create_Provider_Schedule-UH13
+
+    [Documentation]  Create Provider Schedule with empty start date and end date
+
     ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -648,19 +671,25 @@ JD-TC-Create_Provider_Schedule-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
- 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${date}=    Convert Date   ${DAY1}    result_format=%d %b %Y 
+    ${lid}=  Create Sample Location  
+    Set Suite Variable  ${lid}
+    
+    ${ser_name}=   FakerLibrary.word
+    Set Suite Variable    ${ser_name}
+    ${resp}=   Create Sample Service  ${ser_name}
+    Set Suite Variable    ${s_id}    ${resp} 
+
+    ${DAY1}=  add_date  45
+    ${DAY2}=  add_date  46    
+    ${list}=  Create List  1  
     ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${date}  ${DAY2}  ${EMPTY}  ${sTime1}  ${empty}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${empty}  ${empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${INVAID_DATE_FORMAT}"
+    Set Suite Variable  ${sch_id}  ${resp.json()}
 
 
 ***comment***
