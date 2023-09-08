@@ -196,23 +196,6 @@ JD-TC-Enable_Disable_IVR-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-<<<<<<< HEAD
-JD-TC-Enable_Disable_IVR-UH1
-
-    [Documentation]   Enable IVR which is already enabled
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}    ${IVR_Already_Disabled}
-
-
-=======
->>>>>>> refs/remotes/origin/master
 JD-TC-Enable_Disable_IVR-2
 
     [Documentation]   Disabling IVR which is Enabled

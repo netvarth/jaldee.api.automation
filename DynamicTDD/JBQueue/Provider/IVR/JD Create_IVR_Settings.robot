@@ -306,7 +306,7 @@ JD-TC-Create_IVR_Settings-UH9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-Create_IVR_Settings-UH9
+JD-TC-Create_IVR_Settings-UH10
 
     [Documentation]   Create IVR Settings where company id is empty
     
@@ -316,14 +316,10 @@ JD-TC-Create_IVR_Settings-UH9
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${empty}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-<<<<<<< HEAD
-    Should Be Equal As Strings  ${resp.status_code}  500
-
-JD-TC-Create_IVR_Settings-UH10
-=======
     Should Be Equal As Strings  ${resp.status_code}  422
+
+
 JD-TC-Create_IVR_Settings-UH11
->>>>>>> refs/remotes/origin/master
 
     [Documentation]   Create IVR Settings where public id is empty
     
@@ -335,7 +331,7 @@ JD-TC-Create_IVR_Settings-UH11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-Create_IVR_Settings-UH11
+JD-TC-Create_IVR_Settings-UH12
 
     [Documentation]   Create IVR Settings where language Reset Count is empty
     
@@ -347,7 +343,7 @@ JD-TC-Create_IVR_Settings-UH11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-Create_IVR_Settings-UH12
+JD-TC-Create_IVR_Settings-UH13
 
     [Documentation]   Create IVR Settings where ivr config data is empty
     

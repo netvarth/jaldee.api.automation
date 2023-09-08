@@ -50,12 +50,8 @@ JD-TC-Update_Provider_Schedule-1
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-<<<<<<< HEAD
     ${sTime1}=  db.add_timezone_time  ${tz}  0  15
-=======
-    ${sTime1}=  add_time  0  15
-    Set Suite Variable  ${sTime1}  
->>>>>>> refs/remotes/origin/master
+    Set Suite Variable  ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     Set Suite Variable  ${eTime1} 

@@ -102,11 +102,8 @@ JD-TC-GET_All_IVR_USer_Details-1
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
-<<<<<<< HEAD
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
-=======
         Set Suite Variable  ${pin}  ${resp.json()[0]['pinCode']}
->>>>>>> refs/remotes/origin/master
     END
 
     ${gender}=  Random Element    ${Genderlist}

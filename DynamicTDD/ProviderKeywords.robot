@@ -6760,21 +6760,13 @@ Create Sample Donation For User
 
 Get Account Level Analytics
     [Arguments]   ${metricId}  ${dateFrom}  ${dateTo}  ${frequency}  &{kwargs}
-<<<<<<< HEAD
     ${pro_params}=  Create Dictionary  metricId=${metricId}  dateFrom=${dateFrom}  dateTo=${dateTo}  frequency=${frequency}
-=======
-    ${param}=  Create Dictionary  metricId=${metricId}  dateFrom=${dateFrom}  dateTo=${dateTo}  frequency=${frequency}
->>>>>>> refs/remotes/origin/master
     Check And Create YNW Session
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${param} 	${key}=${value}
     END
     # ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${kwargs}  expected_status=any
-<<<<<<< HEAD
     ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${pro_params}  expected_status=any
-=======
-    ${resp}=    GET On Session    ynw   /provider/analytics/account       params=${param}  expected_status=any
->>>>>>> refs/remotes/origin/master
     [Return]  ${resp}
 
 Get Account Level Analytics Acc To config

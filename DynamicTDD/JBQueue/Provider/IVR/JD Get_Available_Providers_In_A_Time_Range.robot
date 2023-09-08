@@ -82,13 +82,8 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
     
-<<<<<<< HEAD
     ${DAY4}=  db.add_timezone_date  ${tz}  20 
-    ${sTime4}=  db.add_timezone_time  ${tz}  21  23
-=======
-    ${DAY4}=  add_date  20 
-    ${sTime4}=  add_time  26  30
->>>>>>> refs/remotes/origin/master
+    ${sTime4}=  db.add_timezone_time  ${tz}  26  30
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_time  30  35
     ${schedule_name4}=  FakerLibrary.bs

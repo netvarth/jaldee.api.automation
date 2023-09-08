@@ -160,11 +160,7 @@ JD-TC-Unassign_IVR_User-1
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${strt_time}=   db.get_time_by_timezone  ${tz}
     Set Suite Variable    ${strt_time}
-<<<<<<< HEAD
-    ${end_time}=    add_timezone_time  ${tz}  6  00   
-=======
-    ${end_time}=    add_time  1  00 
->>>>>>> refs/remotes/origin/master
+    ${end_time}=    add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
