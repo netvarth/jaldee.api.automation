@@ -5924,8 +5924,9 @@ def get_Timezone_by_lat_long(latitude, longitude):
 
 def get_time_by_timezone(tz):
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
-    zone, loc = tz.split('/')
-    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    # zone, loc = tz.split('/')
+    # URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    URL = BASE_URL + '/provider/location/date/'+ tz
     try:
         r = requests.get(url = URL)
         log_request(r)
@@ -5945,8 +5946,9 @@ def get_time_by_timezone(tz):
 
 def get_date_by_timezone(tz):
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
-    zone, loc = tz.split('/')
-    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    # zone, loc = tz.split('/')
+    # URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    URL = BASE_URL + '/provider/location/date/'+ tz
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
@@ -5963,8 +5965,9 @@ def get_date_by_timezone(tz):
 
 def get_date_time_by_timezone(tz):
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
-    zone, loc = tz.split('/')
-    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    # zone, loc = tz.split('/')
+    # URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    URL = BASE_URL + '/provider/location/date/'+ tz
     r = requests.get(url = URL)
     log_request(r)
     log_response(r)
