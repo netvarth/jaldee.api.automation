@@ -1743,6 +1743,7 @@ Disable Waitlist
 
 Add To Waitlist
     [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  @{fids}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
@@ -1759,7 +1760,7 @@ Add To Waitlist
 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
 
     FOR    ${key}    ${value}    IN    &{kwargs}
@@ -1772,6 +1773,7 @@ Add To Waitlist
 
 Add To Waitlist with mode
     [Arguments]   ${waitlistMode}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}   @{fids}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
@@ -1785,7 +1787,7 @@ Add To Waitlist with mode
     END
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
 
     ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  consumerNote=${consumerNote}  waitlistingFor=${fid}  ignorePrePayment=${ignorePrePayment}  waitlistMode=${waitlistMode}
@@ -1796,6 +1798,7 @@ Add To Waitlist with mode
 
 Add To Waitlist with PhoneNo
     [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${waitlistPhoneNumber}  ${country_code}  @{fids}   &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
@@ -1810,7 +1813,7 @@ Add To Waitlist with PhoneNo
 
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
 
     ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  waitlistPhoneNumber=${waitlistPhoneNumber}  countryCode=${country_code}  waitlistingFor=${fid}  
@@ -1821,6 +1824,7 @@ Add To Waitlist with PhoneNo
 
 Add To Waitlist By User
     [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${user_id}  @{fids}    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
@@ -1836,7 +1840,7 @@ Add To Waitlist By User
     ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  consumerNote=${consumerNote}  waitlistingFor=${fid}  ignorePrePayment=${ignorePrePayment}  provider=${uid}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
 
     FOR    ${key}    ${value}    IN    &{kwargs}
@@ -1849,6 +1853,7 @@ Add To Waitlist By User
 
 Add To Waitlist Block
     [Arguments]    ${qid}   ${service_id}  ${serviceType}   ${date}  ${consumerNote}   ${ignorePrePayment}  ${waitlistingFor}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${qid}=  Create Dictionary  id=${qid}
     ${sid}=  Create Dictionary  id=${service_id}  serviceType=${serviceType}
@@ -1856,7 +1861,7 @@ Add To Waitlist Block
     ${data}=  json.dumps  ${data}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist/block  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
@@ -1864,10 +1869,11 @@ Add To Waitlist Block
 
 Confirm Wailtlist Block
     [Arguments]   ${cons_id}  ${wid}   ${waitlistingFor}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
     ${consumer}=  Create Dictionary  id=${cons_id} 
     ${data}=    Create Dictionary   waitlistingFor=${waitlistingFor}  ynwUuid=${wid}  consumer=${consumer}
@@ -1878,10 +1884,11 @@ Confirm Wailtlist Block
 
 Waitlist Unblock
     [Arguments]    ${wid}  &{kwargs} 
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/waitlist/unblock/${wid}  params=${pro_params}  expected_status=any
@@ -1891,10 +1898,11 @@ Waitlist Unblock
 Provider Add To WL With Virtual Service
     [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${waitlistMode}   ${virtualService}  @{fids}
     
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
     
     ${cid}=  Create Dictionary  id=${consid}
@@ -1916,10 +1924,11 @@ Provider Add To WL With Virtual Service
 
 Get Waitlist By Id
     [Arguments]  ${wid}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/${wid}  params=${pro_params}  expected_status=any
@@ -1928,9 +1937,10 @@ Get Waitlist By Id
 	     
 Get Waitlist Today
     [Arguments]    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/today  params=${kwargs}  expected_status=any
@@ -1938,9 +1948,10 @@ Get Waitlist Today
 
 Get Waitlist Count Today
     [Arguments]    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/today/count  params=${kwargs}  expected_status=any
@@ -1948,9 +1959,10 @@ Get Waitlist Count Today
 
 Get Waitlist Future
     [Arguments]     &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/future/  params=${kwargs}  expected_status=any
@@ -1958,9 +1970,10 @@ Get Waitlist Future
 
 Get Waitlist Count Future
     [Arguments]     &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/future/count  params=${kwargs}  expected_status=any
@@ -1968,9 +1981,10 @@ Get Waitlist Count Future
     
 Get Waitlist History
     [Arguments]    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/history  params=${kwargs}  expected_status=any
@@ -1978,9 +1992,10 @@ Get Waitlist History
 
 Get Waitlist Count History
     [Arguments]    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/history/count  params=${kwargs}  expected_status=any
@@ -1992,7 +2007,7 @@ Get Waitlist Count History
 #     [Arguments]    &{kwargs}
 #     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
 #     Log  ${kwargs}
-#     Set To Dictionary  ${cons_headers}   &{tzheaders}
+#     Set To Dictionary  ${pro_headers}   &{tzheaders}
 #     Set To Dictionary  ${kwargs}   &{locparam}
 #     Check And Create YNW Session
 #     ${resp}=    GET On Session    ynw  /provider/waitlist/consumers  params=${kwargs}  expected_status=any
@@ -2002,7 +2017,7 @@ Get Waitlist Count History
 #     [Arguments]    &{kwargs}
 #     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
 #     Log  ${kwargs}
-#     Set To Dictionary  ${cons_headers}   &{tzheaders}
+#     Set To Dictionary  ${pro_headers}   &{tzheaders}
 #     Set To Dictionary  ${kwargs}   &{locparam}
 #     Check And Create YNW Session
 #     ${resp}=    GET On Session    ynw  /provider/waitlist/consumers/count  params=${kwargs}  expected_status=any
@@ -2859,10 +2874,11 @@ Create Fieldlist For QueueSet
 
 Create Appointment QueueSet for Branch
     [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${dept}   ${service}     ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
     ${len}=  Get Length  ${queueSetFor}
     ${len}=  Evaluate  ${len}-1
@@ -2886,10 +2902,11 @@ Create Appointment QueueSet for Branch
 Create Appointment QueueSet for Provider
     [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${service}   ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}  &{kwargs}
     
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
 
     ${len}=  Get Length  ${queueSetFor}
@@ -4257,10 +4274,11 @@ Get jaldeeIntegration Settings
 User Take Appointment For Consumer 
     [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
     
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
 
     ${user_id}=  Create Dictionary  id=${userid}
@@ -4278,10 +4296,11 @@ User Take Appointment For Consumer
 Take Appointment For Consumer 
     [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
     
+    ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
-    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
     Set To Dictionary  ${pro_params}   &{locparam}
     
     ${cid}=  Create Dictionary  id=${consid}
