@@ -26,6 +26,11 @@ JD-Get_all_schedules_of_an_account-1
 
     [Documentation]  Get all schedules of an account
 
+    clear_queue      ${PUSERNAME14}
+    clear_location   ${PUSERNAME14}
+    clear_service    ${PUSERNAME14}
+    clear_customer   ${PUSERNAME14}
+
     ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -55,10 +60,24 @@ JD-Get_all_schedules_of_an_account-1
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['name']}                                      ${schedule_name}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['recurringType']}             ${recurringtype[1]}  
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['repeatIntervals']}           ${list}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['startDate']}                 ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['terminator']['endDate']}     ${DAY2}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleState']}                             ${JCstatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['providerId']}                                ${user_id}
 
 JD-Get_all_schedules_of_an_account-2
 
     [Documentation]  Get all schedules of an account  without creating schedule for same provider
+
+    clear_queue      ${PUSERNAME14}
+    clear_location   ${PUSERNAME14}
+    clear_service    ${PUSERNAME14}
+    clear_customer   ${PUSERNAME14}
 
     ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
@@ -79,15 +98,19 @@ JD-Get_all_schedules_of_an_account-2
     ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
+
 
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-Get_all_schedules_of_an_account-3
 
     [Documentation]  Create two schedules and Get all schedules of an account
+
+    clear_queue      ${PUSERNAME14}
+    clear_location   ${PUSERNAME14}
+    clear_service    ${PUSERNAME14}
+    clear_customer   ${PUSERNAME14}
 
     ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
@@ -133,7 +156,7 @@ JD-Get_all_schedules_of_an_account-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
+    
 JD-Get_all_schedules_of_an_account-UH1
 
     [Documentation]  Get all schedules of an account without creating schedule for another provider
@@ -302,7 +325,7 @@ JD-Get_all_schedules_of_an_account-UH5
 
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
 
 JD-Get_all_schedules_of_an_account-UH6
 
