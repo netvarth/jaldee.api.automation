@@ -30,6 +30,7 @@ Consumer Login
 
 Consumer Logout
     [Arguments]    #${timeZone}=Asia/Kolkata
+    ${cons_headers}=  Create Dictionary  &{headers} 
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any   headers=${cons_headers}
     [Return]  ${resp}
