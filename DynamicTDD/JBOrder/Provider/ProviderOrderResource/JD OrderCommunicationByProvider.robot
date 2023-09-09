@@ -534,9 +534,9 @@ JD-TC-ProviderOrderCommunication-2
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['name']}   ${c15_UName}
     Should Contain 	${resp.json()[0]}   attachements
     Dictionary Should Contain Key  ${resp.json()[0]['attachements'][0]}   s3path
-    Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .jpg
+    Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .pdf
     Dictionary Should Contain Key  ${resp.json()[0]['attachements'][0]}   thumbPath
-    Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .jpg
+    Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .pdf
     # Should Be Equal As Strings  ${resp.json()[0]['attachements'][0]['caption']}     ${caption1}
 
     Should Be Equal As Strings  ${resp.json()[0]['service']}        Order '${order_no11}' on ${DATE1}
@@ -560,9 +560,9 @@ JD-TC-ProviderOrderCommunication-2
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['name']}   ${c15_UName}
     Should Contain 	${resp.json()[0]}   attachements
     Dictionary Should Contain Key  ${resp.json()[0]['attachements'][0]}   s3path
-    Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .jpg
+    Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .pdf
     Dictionary Should Contain Key  ${resp.json()[0]['attachements'][0]}   thumbPath
-    Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .jpg
+    Should Contain  ${resp.json()[0]['attachements'][0]['s3path']}   .pdf
     # Should Be Equal As Strings  ${resp.json()[0]['attachements'][0]['caption']}     ${caption1} 
 
     Should Be Equal As Strings  ${resp.json()[0]['service']}        Order '${order_no11}' on ${DATE1}
@@ -750,7 +750,11 @@ JD-TC-ProviderOrderCommunication-4
     # Log  ${resp}
     # Should Be Equal As Strings  ${resp[1]}  200
    
-    
+    ${resp}=   Get Order by uid    ${orderid11}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${ordernumber1}     ${resp.json()['orderNumber']}   
+
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -770,9 +774,9 @@ JD-TC-ProviderOrderCommunication-4
     ${Order_Message}=  Set Variable   ${resp.json()['orderMessages']['massCommunication']['Consumer_APP']} 
     Log  ${Order_Message}
 
-    ${Order_Msg}=  Replace String  ${Order_Message}  [type]   ${msg_type[0]}
+    ${Order_Msg}=  Replace String  ${Order_Message}  [action]   ${orderStatuses[12]}
     ${Order_Msg}=  Replace String  ${Order_Msg}  [consumer]   ${c15_UName}
-    ${Order_Msg}=  Replace String  ${Order_Msg}  [message]   ${msg}
+    ${Order_Msg}=  Replace String  ${Order_Msg}  [bookingId]   ${ordernumber1}
 
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -872,7 +876,7 @@ JD-TC-ProviderOrderCommunication-7
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${Order_Message}=  Set Variable   ${resp.json()['orderMessages']['massCommunication']['Consumer_APP']} 
+    ${Order_Message}=  Set Variable   ${resp.json()['orderMessages']['statusChangeMessages']['Consumer_APP']} 
     Log  ${Order_Message}
 
     ${Order_Msg}=  Replace String  ${Order_Message}  [type]   ${msg_type[0]}

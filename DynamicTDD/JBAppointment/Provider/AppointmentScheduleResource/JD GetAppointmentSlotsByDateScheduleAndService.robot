@@ -4077,7 +4077,7 @@ JD-TC-GetSlots By Date and service -17
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  SetMerchantId  ${pid}  ${merchantid}
 
-     ${resp}=   Get Account Payment Settings
+    ${resp}=   Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp1}=  Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment    ${toggle[0]}
@@ -4240,7 +4240,7 @@ JD-TC-GetSlots By Date and service -17
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${amt_float}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${minpre}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Make payment Consumer Mock  ${amt_float}  ${bool[1]}  ${apptid1}  ${pid}  ${purpose[0]}  ${cid1}
@@ -4250,7 +4250,7 @@ JD-TC-GetSlots By Date and service -17
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
    
     sleep   02s
-    ${amountDue}=   Evaluate  ${totalamt} - ${amt_float} 
+    ${amountDue}=   Evaluate  ${totalamt} - ${minpre} 
     ${amountDue}=  twodigitfloat  ${amountDue} 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
@@ -4264,7 +4264,7 @@ JD-TC-GetSlots By Date and service -17
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}  
     Should Be Equal As Numbers  ${resp.json()['netTotal']}    ${totalamt}
     Should Be Equal As Numbers  ${resp.json()['netRate']}    ${totalamt}
-    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}    ${amt_float}
+    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}    ${minpre}
     Should Be Equal As Numbers  ${resp.json()['amountDue']}    ${amountDue}
 
     ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
@@ -4454,7 +4454,7 @@ JD-TC-GetSlots By Date and service -18
     ${apptfor}=   Create List  ${apptfor1}
 
     ${percentage}=  Evaluate  ${Total} * ${minpre} / 100
-    ${totalamt}=  Evaluate   ${Total} - ${Total2}
+    ${totalamt}=  Evaluate   ${Total} + ${Total2}
     ${amountRequiredNow}=  Evaluate   ${totalamt} * ${minpre} / 100
     ${amt_float}=  twodigitfloat  ${amountRequiredNow} 
 
@@ -4692,7 +4692,7 @@ JD-TC-GetSlots By Date and service -19
 
     ${percentage}=  Evaluate  ${minpre2} / ${Total2} * 100
     ${totalamt}=  Evaluate   ${Total2} + ${Total3}
-    ${amountRequiredNow}=  Evaluate  Evaluate   ${totalamt} * ${minpre} / 100
+    ${amountRequiredNow}=  Evaluate   ${totalamt} * ${minpre} / 100
     ${amt_float}=  twodigitfloat  ${amountRequiredNow} 
 
     ${resp}=  Consumer Login  ${CUSERNAME23}  ${PASSWORD}
