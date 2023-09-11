@@ -209,9 +209,9 @@ JD-TC-Get_IVR_Settings-UH1
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=    Get IVR Setting
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  "${resp.json()}"    "[]"
+    Should Be Equal As Strings    ${resp.content}    ${empty}
 
 
 JD-TC-Get_IVR_Settings-UH2

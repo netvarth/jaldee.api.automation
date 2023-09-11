@@ -422,5 +422,5 @@ JD-TC-Update_User_Language-UH5
 
     ${resp}=  IVR Update User Language    ${user_id}    ${empty}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 

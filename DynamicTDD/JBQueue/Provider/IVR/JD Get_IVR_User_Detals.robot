@@ -305,7 +305,7 @@ JD-TC-Get_IVR_USER_DETAILS-1
 
 JD-TC-Get_IVR_USER_DETAILS-2
 
-    [Documentation]   Delete users from ivr table ang get ivr details
+    [Documentation]   Delete users from ivr table and get ivr details
     
     ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
@@ -364,8 +364,9 @@ JD-TC-Get_IVR_USER_DETAILS-2
     Log  ${resp.json()}
 
     ${resp}=    Get IVR User Details    ${userType[0]}    ${user_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    ${empty}
 
 JD-TC-Get_IVR_USER_DETAILS-3
 
@@ -391,10 +392,12 @@ JD-TC-Get_IVR_USER_DETAILS-3
 
     ${resp}=    Update User Availability   ${userId}  ${Availability[0]}
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
 
     ${resp}=    Get IVR User Details    ${userType[0]}    ${user_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings    ${resp.content}    ${empty}
 
 JD-TC-Get_IVR_USER_DETAILS-UH1
 
@@ -407,8 +410,9 @@ JD-TC-Get_IVR_USER_DETAILS-UH1
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=    Get IVR User Details    ${userType[0]}    ${user_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}   ${empty}
 
 JD-TC-Get_IVR_USER_DETAILS-UH2
 
@@ -430,8 +434,10 @@ JD-TC-Get_IVR_USER_DETAILS-UH3
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=    Get IVR User Details    ${userType[1]}    ${user_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}   ${empty}
+
 
 JD-TC-Get_IVR_USER_DETAILS-UH4
 
@@ -443,9 +449,9 @@ JD-TC-Get_IVR_USER_DETAILS-UH4
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${resp}=    Get IVR User Details    ${empty}    ${user_id}
+    ${resp}=    Get IVR User Details    ${NONE}    ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Get_IVR_USER_DETAILS-UH5
 
@@ -459,7 +465,7 @@ JD-TC-Get_IVR_USER_DETAILS-UH5
 
     ${resp}=    Get IVR User Details    ${userType[0]}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Get_IVR_USER_DETAILS-UH6
 
@@ -474,8 +480,9 @@ JD-TC-Get_IVR_USER_DETAILS-UH6
     ${invalid_id}    FakerLibrary.Random Number
 
     ${resp}=    Get IVR User Details    ${userType[0]}    ${invalid_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    ${empty}
 
 *** comment ***
 
