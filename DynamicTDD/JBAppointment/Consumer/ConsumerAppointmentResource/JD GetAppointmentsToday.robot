@@ -170,8 +170,8 @@ JD-TC-GetAppointmentToday-1
     # ${postcode}=  FakerLibrary.postcode
     # ${address}=  get_address
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    Set Suite Variable  ${tz}
+    ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -245,7 +245,7 @@ JD-TC-GetAppointmentToday-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
