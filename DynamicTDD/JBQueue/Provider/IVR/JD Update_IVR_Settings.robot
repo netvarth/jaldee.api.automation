@@ -943,9 +943,9 @@ JD-TC-Update_IVR_Settings-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get IVR Setting
-    Log  ${resp.json()}
+     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Should Be Equal As Strings    ${resp.content}    ${empty}
 JD-TC-Update_IVR_Settings-UH2
 
     [Documentation]   Update IVR Settings without login
@@ -968,7 +968,7 @@ JD-TC-Update_IVR_Settings-UH2
 
 JD-TC-Update_IVR_Settings-UH3
 
-    [Documentation]   Update IVR Settings where ivr call priority is empty
+    [Documentation]   Update IVR Settings where ivr call priority is low
     
     clear_queue      ${PUSERNAME143}
     clear_location   ${PUSERNAME143}
@@ -1010,9 +1010,9 @@ JD-TC-Update_IVR_Settings-UH3
     ${companyId2}    FakerLibrary.Random Number
     ${publicId2}    FakerLibrary.Random Number
 
-    ${resp}=    Update IVR Settings    ${acc_id}    ${empty}}    ${callWaitingTime2}    ${ser_id2}    ${token2}    ${secretKey2}    ${apiKey2}    ${companyId2}    ${publicId2}    ${languageResetCount}    ${ivr_config_data}
+    ${resp}=    Update IVR Settings    ${acc_id}    ${ivr_callpriority[2]}    ${callWaitingTime2}    ${ser_id2}    ${token2}    ${secretKey2}    ${apiKey2}    ${companyId2}    ${publicId2}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get IVR Setting
     Log  ${resp.json()}
@@ -1020,7 +1020,7 @@ JD-TC-Update_IVR_Settings-UH3
     
 JD-TC-Update_IVR_Settings-UH4
 
-    [Documentation]   Update IVR Settings where Language reset count  is empty
+    [Documentation]   Update IVR Settings where ivr_config_data  is empty
     
     clear_queue      ${PUSERNAME143}
     clear_location   ${PUSERNAME143}

@@ -143,6 +143,8 @@ JD-TC-Unassign_IVR_User-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
+    ${list2}=  Create List  
+    Set Suite Variable    ${list2}
     ${strt_time}=   add_time  0  00
     Set Suite Variable    ${strt_time}
     ${end_time}=    add_time  1  00 
@@ -1719,7 +1721,7 @@ JD-TC-Unassign_IVR_User-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=    Unassign IVR User    ${ivr_uid}    ${empty}    ${so_id1}
+    ${resp}=    Unassign IVR User    ${ivr_uid}    ${list2}    ${so_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
