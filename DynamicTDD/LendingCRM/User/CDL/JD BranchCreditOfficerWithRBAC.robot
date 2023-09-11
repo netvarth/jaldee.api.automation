@@ -2683,21 +2683,6 @@ JD-TC-BranchCreditOfficerWithRBAC-UH5
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[3]}
 
-    # ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings             ${resp.status_code}  200
-
-    # ${description}=                        FakerLibrary.sentence
-
-    # ${resp}=                               Retainrejected Loan Application        ${loanuid}    ${note}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings             ${resp.status_code}                   200
-
-    # ${resp}=                               Get Loan Application By uid           ${loanuid} 
-    # Log  ${resp.content}
-    # Should Be Equal As Strings             ${resp.status_code}                   200
-    # Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
-
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}    200
@@ -2813,3 +2798,15 @@ JD-TC-BranchCreditOfficerWithRBAC-UH5
     Should Be Equal As Strings             ${resp.status_code}  422
     Should Be Equal As Strings             ${resp.json()}   ${STATUS_IS_APPROVALREQUIRED}
 
+
+JD-TC-BranchCreditOfficerWithRBAC-UH6
+
+    [Documentation]     BranchCreditOfficer  - Operational Approval
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=  salesofficer Approval        ${loanuid}    ${sch1}     ${tenu1}    ${noOfAdvanceEmi}   ${dayofmonth}    partner=${partner}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
