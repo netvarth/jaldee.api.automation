@@ -290,7 +290,7 @@ JD-TC-Resubmit_Member_QNR-UH2
 
     ${resp}=    Resubmit Member Questionnaire    ${accountId}    ${empty}    ${data}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Resubmit_Member_QNR-UH3
 
@@ -302,7 +302,7 @@ JD-TC-Resubmit_Member_QNR-UH3
 
     ${resp}=    Resubmit Member Questionnaire    ${accountId}    ${memberid1}    ${empty}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Resubmit_Member_QNR-UH4
 

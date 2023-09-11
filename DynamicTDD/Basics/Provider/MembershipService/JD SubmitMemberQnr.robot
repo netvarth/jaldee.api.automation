@@ -289,7 +289,7 @@ JD-TC-Submit_Member_QNR-UH3
 
     ${resp}=    Submit Member Qnr    ${accountId}    ${empty}    ${data}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Submit_Member_QNR-UH4
 
@@ -301,7 +301,7 @@ JD-TC-Submit_Member_QNR-UH4
 
     ${resp}=    Submit Member Qnr    ${accountId}    ${memberid1}    ${empty}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Submit_Member_QNR-UH5
 

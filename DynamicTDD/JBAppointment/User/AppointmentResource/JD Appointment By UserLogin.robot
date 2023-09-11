@@ -8583,11 +8583,12 @@ JD-TC-AppointmentByUserLogin-UH21
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
+    ${list}=     Create List
+
     ${cnote}=   FakerLibrary.word
-    ${resp}=  User Take Appointment with Appointment Mode  ${u_id1}   ${EMPTY}   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  User Take Appointment with Appointment Mode  ${u_id1}   ${list}   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
-    Should Be Equal As Strings  "${resp.json()}"  "${JALDEE_OUT_OF_REACH_PROBLEM}"
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-AppointmentByUserLogin-UH22
     [Documentation]  Provider takes appointment for jaldee consumer when online presence is disabled and checks it in consumer side

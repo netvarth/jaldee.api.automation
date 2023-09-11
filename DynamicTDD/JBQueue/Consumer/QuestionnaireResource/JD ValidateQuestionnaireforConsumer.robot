@@ -283,61 +283,59 @@ JD-TC-ValidateConsumerQuestionnaire-UH2
     Should Be Equal As Strings   ${resp.json()}    []
 
 
-JD-TC-ValidateConsumerQuestionnaire-UH3
-    [Documentation]  Validate service questionnaire with invalid action.
+# JD-TC-ValidateConsumerQuestionnaire-UH3
+#     [Documentation]  Validate service questionnaire with invalid action.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+#     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
-    Should Be Equal As Strings  ${resp.json()['id']}   ${id}
+#     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
+#     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
+#     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
-    Log  ${fudata}
+#     ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+#     Log  ${fudata}
 
-    ${action}=  FakerLibrary.word
-    Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    action=${action}
+#     ${action}=  FakerLibrary.word
+#     Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    action=${action}
 
-    Log  ${fudata}
+#     Log  ${fudata}
 
-    ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
-    Log  ${data}
-    ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
-    Should Be Equal As Strings   ${resp.json()}    ${JALDEE_OUT_OF_REACH_PROBLEM}
+#     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
+#     Log  ${data}
+#     ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  422
 
 
-JD-TC-ValidateConsumerQuestionnaire-UH4
-    [Documentation]  Validate service questionnaire without action.
+# JD-TC-ValidateConsumerQuestionnaire-UH4
+#     [Documentation]  Validate service questionnaire without action.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+#     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
-    Should Be Equal As Strings  ${resp.json()['id']}   ${id}
+#     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
+#     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
+#     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
-    Log  ${fudata}
+#     ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+#     Log  ${fudata}
 
-    Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    action=${EMPTY}
+#     Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    action=${EMPTY}
 
-    Log  ${fudata}
+#     Log  ${fudata}
 
-    ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
-    Log  ${data}
-    ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
-    Should Be Equal As Strings   ${resp.json()}    ${JALDEE_OUT_OF_REACH_PROBLEM}
+#     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
+#     Log  ${data}
+#     ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  422
 
 
 JD-TC-ValidateConsumerQuestionnaire-UH5

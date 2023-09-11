@@ -309,8 +309,7 @@ JD-TC-Change_Release_Status_Member_QNR-UH1
 
     ${resp}=    Change Release Status Of Member Questionnaire    ${QnrReleaseStatus[2]}    ${fakemem}    ${Quid}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
-    Should Be Equal As Strings    ${resp.json()}    ${JALDEE_OUT_OF_REACH_PROBLEM}
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Change_Release_Status_Member_QNR-UH2
 
