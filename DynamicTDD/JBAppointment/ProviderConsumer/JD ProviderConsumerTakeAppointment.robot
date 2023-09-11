@@ -2755,12 +2755,27 @@ JD-TC-providerConsumerAppointment-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME76}
     clear_location  ${PUSERNAME76}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+   
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
-    ${resp}=   Change License Package  ${highest_package[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    # ${highest_package}=  get_highest_license_pkg
+    # Log  ${highest_package}
+    # Set Suite variable  ${lic2}  ${highest_package[0]}
+    # ${resp}=   Change License Package  ${highest_package[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Service
     Log  ${resp.content}

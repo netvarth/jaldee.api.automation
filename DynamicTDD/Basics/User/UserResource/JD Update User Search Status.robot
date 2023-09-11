@@ -44,10 +44,8 @@ JD-TC-UpadateUserSearchStatus-1
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
 
-     ${DAY1}=  db.get_date_by_timezone  ${tz}
-     Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
-     Set Suite Variable  ${list}  ${list}
+     Set Suite Variable  ${list}  
      ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
      ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
      ${views}=  Random Element    ${Views}
@@ -75,6 +73,9 @@ JD-TC-UpadateUserSearchStatus-1
      Set Suite Variable   ${sTime}
      ${eTime}=  add_timezone_time  ${tz}  0  45  
      Set Suite Variable   ${eTime}
+
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
+     Set Suite Variable  ${DAY1}  
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200

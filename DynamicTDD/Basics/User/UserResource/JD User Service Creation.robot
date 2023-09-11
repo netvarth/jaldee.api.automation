@@ -164,10 +164,18 @@ JD-TC-ServiceForUser-4
           ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
           Log  ${resp.json()}
           Should Be Equal As Strings    ${resp.status_code}    200
+
+          ${decrypted_data}=  db.decrypt_data  ${resp.content}
+          Log  ${decrypted_data}
+          # Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+          Set Test Variable   ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+          ${domain}=   Set Variable    ${decrypted_data['sector']}
+          ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
           clear_service   ${MUSERNAME${a}}
-          Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-          ${domain}=   Set Variable    ${resp.json()['sector']}
-          ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+          # Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+          # ${domain}=   Set Variable    ${resp.json()['sector']}
+          # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
           Run Keyword If  "${pkgId}"=="${licId}"  Exit For Loop
      END
 

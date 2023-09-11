@@ -95,7 +95,7 @@ JD-TC-UpdateServiceByUserLogin-1
      Set Suite Variable   ${p_id1}
      reset_user_metric  ${p_id1}
 
-${resp}=    Get Locations
+     ${resp}=    Get Locations
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      IF   '${resp.content}' == '${emptylist}'

@@ -131,9 +131,14 @@ JD-TC-UpdateDomainVirtualField-UH3
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
      Log  ${iscorp_subdomains}
      Set Test Variable  ${domains}  ${iscorp_subdomains[3]['domain']}
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${d}  ${resp.json()['sector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${d}  ${decrypted_data['sector']}
+    # Set Test Variable   ${d}  ${resp.json()['sector']}
     ${fields}=   Get Domain level Fields  ${d}
     Log  ${fields.json()}
     Should Be Equal As Strings    ${fields.status_code}   200
