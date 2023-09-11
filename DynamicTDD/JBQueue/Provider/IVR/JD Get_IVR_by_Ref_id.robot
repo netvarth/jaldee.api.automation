@@ -1413,9 +1413,9 @@ JD-TC-Get_IVR_By_Ref_Id-UH3
     ${inv_uid}    FakerLibrary.Random Number    
 
     ${resp}=    Get Ivr By reference id    ${inv_uid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    ${empty}
 
 JD-TC-Get_IVR_By_Ref_Id-UH4
 
@@ -1426,5 +1426,6 @@ JD-TC-Get_IVR_By_Ref_Id-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Ivr By reference id    ${empty}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    ${empty}

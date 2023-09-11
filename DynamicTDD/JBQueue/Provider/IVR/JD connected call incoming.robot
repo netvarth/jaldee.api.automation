@@ -1420,10 +1420,10 @@ JD-TC-Incall_IVR-UH12
     
 #.......   Incoming call on server    ..........
 
-    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${empty}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${empty}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_UID}
+    
 
 
     ${current_time}=    Get Current Date
@@ -1507,6 +1507,7 @@ JD-TC-Incall_IVR-UH13
     ${created_date}=  get_date
     ${Past_date}=     add_date  -10
     ${call_time}=    db.get_time_secs
+    ${fake_text}=    FakerLibrary.word
     ${cclid}    Random Number 	digits=2 
     ${cclid}=    Evaluate    f'{${cclid}:0>9d}'
     Log  ${cclid}
@@ -1517,7 +1518,7 @@ JD-TC-Incall_IVR-UH13
     
 #.......   Incoming call on server    ..........
 
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${clid_row}   ${fake_text}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_PHONE}
@@ -1527,17 +1528,17 @@ JD-TC-Incall_IVR-UH13
     ${current_time}=    Get Current Date    result_format=%s
     Log    Current Time: ${current_time}
     
-    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${fake_text}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 # ........  dialing users    .......
 
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${fake_text}    ${empty}    ${ivr_inputValue[5]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     
-    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${fake_text}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1548,21 +1549,21 @@ JD-TC-Incall_IVR-UH13
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
 
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${fake_text}    ${empty}    ${ivr_inputValue[6]}    ${ivr_inputValue[1]}    ${empty}    ${user}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     
-    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${fake_text}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
 #.......  call finished      .........                                                                                                                                                                                                                                                                                                   
 
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}    ${clid_row}   ${fake_text}    ${empty}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     
-    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${fake_text}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

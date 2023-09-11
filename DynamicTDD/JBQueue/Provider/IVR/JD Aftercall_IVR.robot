@@ -846,7 +846,7 @@ JD-TC-Aftercall_IVR-UH3
 
 JD-TC-Aftercall_IVR-UH4
 
-    [Documentation]   Aftercall IVR Country code is different
+    [Documentation]   Aftercall IVR Country code is invalid
     
     clear_queue      ${PUSERNAME112}
     clear_location   ${PUSERNAME112}
@@ -896,7 +896,7 @@ JD-TC-Aftercall_IVR-UH5
 
 JD-TC-Aftercall_IVR-UH6
 
-    [Documentation]   Aftercall IVR Call Log type is different
+    [Documentation]   Aftercall IVR Call Log type is empty
     
     clear_queue      ${PUSERNAME112}
     clear_location   ${PUSERNAME112}
@@ -915,7 +915,7 @@ JD-TC-Aftercall_IVR-UH6
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
     Set Suite Variable   ${acc_id1} 
 
-    ${resp}=    Aftercall IVR    ${acc_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${empty}    ${difference}    ${dur_min}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${file_name}    ${file_link}    ${ivr_inputValue[0]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${call_log}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
+    ${resp}=    Aftercall IVR    ${acc_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${empty}    ${difference}    ${dur_min}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${file_name}    ${file_link}    ${ivr_inputValue[0]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${empty}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

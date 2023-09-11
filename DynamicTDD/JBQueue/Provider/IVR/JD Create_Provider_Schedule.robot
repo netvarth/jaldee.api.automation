@@ -624,6 +624,7 @@ JD-TC-Create_Provider_Schedule-UH11
 JD-TC-Create_Provider_Schedule-UH12
 
     [Documentation]  date format is incorrect
+    #Date is picked from Dev side,Not checked our parameters
 
     ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}

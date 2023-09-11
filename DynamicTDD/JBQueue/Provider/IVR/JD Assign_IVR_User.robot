@@ -443,7 +443,7 @@ JD-TC-Assign_IVR_User-UH3
 
      ${resp}=    Get IVR User Details    ${userType[0]}    ${invuserid}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  4200
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.content}    ${empty}
 
 

@@ -99,7 +99,7 @@ JD-TC-Create_Instant_Schedule-UH2
     ${eTime3}=  add_two   ${sTime3}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${list2}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${NONE}}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   422
 

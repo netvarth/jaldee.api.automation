@@ -247,7 +247,7 @@ JD-TC-Create_IVR_Settings-UH5
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${empty}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  422      #not considering this from dev
 
 JD-TC-Create_IVR_Settings-UH6
 
@@ -330,7 +330,7 @@ JD-TC-Create_IVR_Settings-UH12
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${empty}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  422          #Language reset count is not check from dev side
 
 JD-TC-Create_IVR_Settings-UH13
 
