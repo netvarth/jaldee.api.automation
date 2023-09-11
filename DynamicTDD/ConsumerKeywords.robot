@@ -1469,7 +1469,7 @@ Get Payment Details
     [Arguments]   &{cons_params}
     ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}
     Log  ${cons_params}
-    Set To Dictionary  ${cons_headers}   &{headers}
+    ${cons_headers}=  Create Dictionary  &{headers} 
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /consumer/payment     params=${cons_params}   expected_status=any   headers=${cons_headers}
