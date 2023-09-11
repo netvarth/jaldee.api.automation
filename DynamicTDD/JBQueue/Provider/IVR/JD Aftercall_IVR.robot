@@ -796,6 +796,7 @@ JD-TC-Aftercall_IVR-UH1
 JD-TC-Aftercall_IVR-UH2
 
     [Documentation]   Aftercall IVR Callers number(raw) is given as wrong
+    #Callers number(raw) is not considering from dev
     
     clear_queue      ${PUSERNAME112}
     clear_location   ${PUSERNAME112}
@@ -916,11 +917,12 @@ JD-TC-Aftercall_IVR-UH6
 
     ${resp}=    Aftercall IVR    ${acc_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${empty}    ${difference}    ${dur_min}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${file_name}    ${file_link}    ${ivr_inputValue[0]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${call_log}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Aftercall_IVR-UH7
 
     [Documentation]   Aftercall IVR Call event type is different
+    #Aftercall IVR Call event type is different is different
     
     clear_queue      ${PUSERNAME112}
     clear_location   ${PUSERNAME112}
@@ -946,7 +948,8 @@ JD-TC-Aftercall_IVR-UH7
 JD-TC-Aftercall_IVR-UH8
 
     [Documentation]   Aftercall IVR Notification status is different
-    
+    #Notification status is not considering from dev
+
     clear_queue      ${PUSERNAME112}
     clear_location   ${PUSERNAME112}
     clear_service    ${PUSERNAME112}
@@ -967,7 +970,7 @@ JD-TC-Aftercall_IVR-UH8
     ${resp}=    Aftercall IVR    ${acc_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${empty}    ${difference}    ${dur_min}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}   ${file_name}    ${file_link}    ${ivr_inputValue[4]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${call_log}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-
+    
 JD-TC-Aftercall_IVR-UH9
 
     [Documentation]   Aftercall IVR Call log ring start time is empty

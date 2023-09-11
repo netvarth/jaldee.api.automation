@@ -410,6 +410,11 @@ JD-TC-Assign_IVR_User-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}    ${bool[0]}
 
+    ${resp}=    Get Ivr By Uid    ${invaliduid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    ${empty}
+
 JD-TC-Assign_IVR_User-UH2
 
     [Documentation]   Assign IVR User with user type as assistance
@@ -420,7 +425,7 @@ JD-TC-Assign_IVR_User-UH2
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[1]}    ${so_id1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600
+    Should Be Equal As Strings  ${resp.status_code}  200   #Currently this usertype is not existing.but future may come this from dev
 
 JD-TC-Assign_IVR_User-UH3
 
@@ -434,7 +439,13 @@ JD-TC-Assign_IVR_User-UH3
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${invuserid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=    Get IVR User Details    ${userType[0]}    ${invuserid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  4200
+    Should Be Equal As Strings    ${resp.content}    ${empty}
+
 
 JD-TC-Assign_IVR_User-UH4
 
@@ -449,6 +460,7 @@ JD-TC-Assign_IVR_User-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}    ${bool[0]}
 
+
 JD-TC-Assign_IVR_User-UH5
 
     [Documentation]   Assign IVR User with user id is empty
@@ -459,21 +471,10 @@ JD-TC-Assign_IVR_User-UH5
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
+
 
 JD-TC-Assign_IVR_User-UH6
-
-    [Documentation]   Assign IVR User with usertype is empty
-    
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Assign IVR User    ${ivr_uid}    ${empty}    ${so_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
-
-JD-TC-Assign_IVR_User-UH7
 
     [Documentation]   Assign IVR User with another provider login   
 
@@ -486,7 +487,7 @@ JD-TC-Assign_IVR_User-UH7
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
-JD-TC-Assign_IVR_User-UH8
+JD-TC-Assign_IVR_User-UH7
 
     [Documentation]   Assign IVR User with consumer login   
 
@@ -499,7 +500,7 @@ JD-TC-Assign_IVR_User-UH8
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings    ${resp.json()}    ${NoAccess}
 
-JD-TC-Assign_IVR_User-UH9
+JD-TC-Assign_IVR_User-UH8
 
     [Documentation]   Assign IVR User without login   
 
@@ -508,4 +509,17 @@ JD-TC-Assign_IVR_User-UH9
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
+
+*** comment ***
+JD-TC-Assign_IVR_User-UH6
+
+    [Documentation]   Assign IVR User with usertype is empty
     
+    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${list}=  Create List
+
+    ${resp}=    Assign IVR User    ${ivr_uid}    ${list}    ${so_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422

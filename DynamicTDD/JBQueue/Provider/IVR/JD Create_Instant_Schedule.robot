@@ -47,6 +47,8 @@ JD-TC-Create_Instant_Schedule-1
     ${DAY1}=  get_date
     ${DAY2}=  add_date  10      
     ${list}=  Create List  7
+    ${list2}=  Create List  
+    Set Suite Variable  ${list2}  
     ${sTime1}=  add_time  0  3
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -86,7 +88,7 @@ JD-TC-Create_Instant_Schedule-UH1
 
 JD-TC-Create_Instant_Schedule-UH2
 
-    [Documentation]  Create Instant Schedule where recurring typee is empty
+    [Documentation]  Create Instant Schedule where recurring type is empty
 
     ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
@@ -95,10 +97,11 @@ JD-TC-Create_Instant_Schedule-UH2
     ${sTime3}=  add_time  5  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime3}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${list2}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500 
+    Should Be Equal As Strings  ${resp.status_code}   422
 
 JD-TC-Create_Instant_Schedule-UH3
 
@@ -114,10 +117,13 @@ JD-TC-Create_Instant_Schedule-UH3
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     Set Suite Variable    ${eTime4}
     ${list2}=  Create List  
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${DAY_CANNOT_BE_EMPTY}
+    
 
 JD-TC-Create_Instant_Schedule-UH4
 
@@ -131,10 +137,12 @@ JD-TC-Create_Instant_Schedule-UH4
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${empty}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${empty}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${DAY_CANNOT_BE_EMPTY} 
 
 JD-TC-Create_Instant_Schedule-UH5
 
@@ -149,10 +157,13 @@ JD-TC-Create_Instant_Schedule-UH5
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
     ${DAY11}=  add_date  -10 
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY11}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY11}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${APPT_START_DATE_PAST} 
+    
 
 JD-TC-Create_Instant_Schedule-UH6
 
@@ -166,10 +177,12 @@ JD-TC-Create_Instant_Schedule-UH6
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${empty}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${empty}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${END_DATE_REQUIRED}
 
 JD-TC-Create_Instant_Schedule-UH7
 
@@ -184,10 +197,12 @@ JD-TC-Create_Instant_Schedule-UH7
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
     ${DAY22}=  add_date  -10 
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY22}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY22}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${APPT_START_END_DATE_MISMATCH}
 
 JD-TC-Create_Instant_Schedule-UH8
 
@@ -201,10 +216,12 @@ JD-TC-Create_Instant_Schedule-UH8
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${empty}  ${eTime4}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${empty}  ${eTime4}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${TIME_SLOT_NEEDED}
 
 JD-TC-Create_Instant_Schedule-UH9
 
@@ -219,10 +236,12 @@ JD-TC-Create_Instant_Schedule-UH9
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
     ${DAY22}=  add_date  -10 
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${empty}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${empty}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}    ${TIME_SLOT_NEEDED} 
 
 JD-TC-Create_Instant_Schedule-UH10
 
@@ -238,22 +257,11 @@ JD-TC-Create_Instant_Schedule-UH10
     ${list2}=  Create List  
     Set Suite Variable    ${list2}
     ${DAY22}=  add_date  -10 
+    ${schedule_name}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[1]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[1]}  ${user_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
-
-JD-TC-Create_Instant_Schedule-UH11
-
-    [Documentation]  Create Instant Schedule where Schedule state is empty
-
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${empty}  ${user_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500 
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Create_Instant_Schedule-UH12
 
@@ -263,7 +271,9 @@ JD-TC-Create_Instant_Schedule-UH12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${empty}
+    ${schedule_name}=  FakerLibrary.bs
+
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
@@ -275,7 +285,26 @@ JD-TC-Create_Instant_Schedule-UH13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${empty}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
+    ${schedule_name}=  FakerLibrary.bs
+
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings    ${resp.json()}    ${NoAccess}
+
+*** comment ***
+
+JD-TC-Create_Instant_Schedule-UH11
+
+    [Documentation]  Create Instant Schedule where Schedule state is empty
+
+    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${schedule_name}=  FakerLibrary.bs
+    
+
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${list2}  ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422 
