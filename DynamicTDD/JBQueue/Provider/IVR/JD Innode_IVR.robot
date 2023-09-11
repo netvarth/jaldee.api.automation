@@ -514,7 +514,7 @@ JD-TC-Innode_IVR-UH4
 
     ${resp}=    innode IVR    ${empty}     ${incall_id}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Innode_IVR-UH5
 
