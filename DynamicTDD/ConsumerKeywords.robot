@@ -125,6 +125,7 @@ Consumer Set Credential
 Send Verify Login Consumer
     [Arguments]  ${loginid}  ${countryCode}=+91  &{kwargs}  #${timeZone}=Asia/Kolkata
     Check And Create YNW Session
+    ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=     Create Dictionary   countryCode=${countryCode}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
@@ -888,13 +889,13 @@ Add To Waitlist Consumer For User
 # Delete Waitlist Consumer
 #     [Arguments]  ${uuid}  ${accId}  ${CancelReason}=${waitlist_cancl_reasn[4]}    ${CommunicationMessage}=other   &{kwargs}  #${timeZone}=Asia/Kolkata
 #     ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${accId}
+    # ${cons_params}=  Create Dictionary  account=${accId}
 #     ${auth}=  Create Dictionary   cancelReason=${CancelReason}    communicationMessage=${CommunicationMessage}
 #     ${auth}=    json.dumps    ${auth}
 #     Check And Create YNW Session
 
 #     ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
+    # ${cons_params}=  Create Dictionary
 #     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
 #     Log  ${kwargs}
 #     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1082,7 +1083,8 @@ Get Service By Location
     [Return]  ${resp} 
 
 Get history Waitlist 
-    [Arguments]  &{params} 
+    [Arguments]  &{cons_params} 
+    ${cons_headers}=  Create Dictionary  &{headers}
     ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
     Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
@@ -1109,6 +1111,7 @@ AddFamilyMemberWithPhNo
 
 Get history Waitlist Count
     [Arguments]   &{cons_params} 
+    ${cons_headers}=  Create Dictionary  &{headers}
     ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}
     Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
@@ -1170,8 +1173,6 @@ Add To Waitlist Consumers with JCoupon
     END 
     ${data}=  Create Dictionary  queue=${queueId}  date=${date}  service=${serviceId}  consumerNote=${consumerNote}  waitlistingFor=${consumerlist}  revealPhone=${revealPhone}  coupons=${coupons} 
     ${data}=  json.dumps  ${data}
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1184,8 +1185,6 @@ Get Services in Department By Consumer
     [Arguments]   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary  account=${accId}
-    ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
     Log  ${kwargs}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -1270,7 +1269,7 @@ update consumer travelmode
 check start status
     [Arguments]   ${pId}  ${waitlist_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
     # ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${pId}
+    # ${cons_params}=  Create Dictionary  account=${pId}
     # ${data}=   Create Dictionary   travelMode=${travelMode}
     # ${data}=   json.dumps   ${data}
     ${cons_headers}=  Create Dictionary  &{headers} 
@@ -1467,6 +1466,7 @@ Get Donation Service By Consumer
 
 Get Payment Details
     [Arguments]   &{cons_params}
+    ${cons_headers}=  Create Dictionary  &{headers}
     ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}
     Log  ${cons_params}
     ${cons_headers}=  Create Dictionary  &{headers} 
@@ -2257,7 +2257,7 @@ Get Consumer Order Count By Criteria
 Get Catalog By AccId
     [Arguments]    ${accId}   &{kwargs}  #${timeZone}=Asia/Kolkata
     # ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${accId}
+    # ${cons_params}=  Create Dictionary  account=${accId}
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
@@ -2402,7 +2402,8 @@ Get Order By EncodedId
 
  
 Get Consumer Order History 
-    [Arguments]   &{params}
+    [Arguments]   &{cons_params}
+    ${cons_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
     Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
@@ -2413,7 +2414,8 @@ Get Consumer Order History
 
 
 Get Consumer Order History Count
-    [Arguments]  &{params}
+    [Arguments]  &{cons_params}
+    ${cons_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
     Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{tzheaders}
