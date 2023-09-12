@@ -1896,7 +1896,7 @@ Waitlist Unblock
 
 
 Provider Add To WL With Virtual Service
-    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${waitlistMode}   ${virtualService}  @{fids}
+    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${waitlistMode}   ${virtualService}  @{fids}  &{kwargs}
     
     ${pro_headers}=  Create Dictionary  &{headers}
     ${pro_params}=   Create Dictionary
