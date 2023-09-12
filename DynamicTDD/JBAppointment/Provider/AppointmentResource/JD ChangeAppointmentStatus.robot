@@ -104,6 +104,8 @@ JD-TC-ChangeAppointmentStatus-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
@@ -156,7 +158,11 @@ JD-TC-ChangeAppointmentStatus-1
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
-  
+    
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
+    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    Set Suite Variable   ${apptTakenTime}
+
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -216,7 +222,9 @@ JD-TC-ChangeAppointmentStatus-2
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]} 
+    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
 
     ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid1}
     Log   ${resp.json()}
@@ -226,6 +234,8 @@ JD-TC-ChangeAppointmentStatus-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
 
 JD-TC-ChangeAppointmentStatus-3
     [Documentation]  change status to Started from Arrived
@@ -239,6 +249,8 @@ JD-TC-ChangeAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log   ${resp.json()}
@@ -248,6 +260,8 @@ JD-TC-ChangeAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[3]}
+    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
 
 JD-TC-ChangeAppointmentStatus-4
     [Documentation]  change status to Completed from Started
@@ -261,6 +275,8 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[3]} 
+    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
 
     ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
     Log   ${resp.json()}
@@ -270,6 +286,8 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[6]}
+    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
 
 JD-TC-ChangeAppointmentStatus-5
     [Documentation]  change status to Completed from Arrived
