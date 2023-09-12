@@ -111,7 +111,7 @@ JD-TC-UpdateUser-1
      Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
      Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
      Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
-     Variable Should Exist   ${resp.json()['city']}      ${city}    ignore_case=True
+     Variable Should Exist   ${resp.json()['city']}      ${city}    
 
      ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+336341
      clear_users  ${PUSERNAME_U3}

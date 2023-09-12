@@ -48,7 +48,12 @@ JD-TC-GetAppointmentHistory-1
 
     ${lid1}=  Create Sample Location  
     Set Suite Variable    ${lid1}
-    
+
+    ${resp}=   Get Location By Id   ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${today}=   db.get_date_by_timezone  ${tz}
     
     ${cur_date}=   change_system_date   -5

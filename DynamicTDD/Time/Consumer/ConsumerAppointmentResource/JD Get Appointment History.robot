@@ -38,23 +38,25 @@ JD-TC-Get Appointment history-1
 
     ${pid}=  get_acc_id  ${PUSERNAME1}
     Set Suite Variable  ${pid} 
-   
-    ${DAY}=  db.get_date_by_timezone  ${tz}  
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10   
-    Set Suite Variable  ${DAY2}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
     # ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
+    
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    ${DAY}=  db.get_date_by_timezone  ${tz}  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    Set Suite Variable  ${DAY2}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
