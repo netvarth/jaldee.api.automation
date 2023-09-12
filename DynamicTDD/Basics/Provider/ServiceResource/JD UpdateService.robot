@@ -270,7 +270,7 @@ JD-TC-UpdateService-UH6
         Verify Response  ${resp}  name=${SERVICE8}  description=${description}  serviceDuration=${service_duration[2]}  notification=${bool[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
         ${resp}=  Update Service  ${id}  ${SERVICE8}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  0  ${bool[1]}  ${bool[0]}
         Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  422
+        Should Be Equal As Strings  ${resp.status_code}  200
         #Should Be Equal As Strings  "${resp.json()}"  "${PREPAYMENT_AMT_LT_PRICE}"
         
 

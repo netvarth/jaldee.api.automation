@@ -918,7 +918,8 @@ Get consumer Waitlist By Id
     [Return]  ${resp}
 
 Get consumer Waitlist 
-    [Arguments]   &{params} 
+    [Arguments]   &{params}
+    ${cons_headers}=  Create Dictionary  &{headers} 
     # &{params}=  db.Set_TZ_Header  &{params}
     ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
     Log  ${cons_params}
@@ -930,6 +931,7 @@ Get consumer Waitlist
 
 Get Future Waitlist 
     [Arguments]  &{params} 
+    ${cons_headers}=  Create Dictionary  &{headers} 
     # &{params}=  db.Set_TZ_Header  &{params}
     ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
     Log  ${cons_params}
@@ -943,6 +945,7 @@ Get Future Waitlist
 Get Future Waitlist Count   
     [Arguments]   &{params} 
     # &{params}=  db.Set_TZ_Header  &{params}
+    ${cons_headers}=  Create Dictionary  &{headers} 
     ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
     Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}

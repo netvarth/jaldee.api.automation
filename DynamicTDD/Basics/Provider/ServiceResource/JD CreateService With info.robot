@@ -112,7 +112,7 @@ JD-TC-Create Service With info-1
         ${preInfoText}=  FakerLibrary.sentence  
         ${postInfoTitle}=  FakerLibrary.sentence  
         ${postInfoText}=  FakerLibrary.sentence
-        ${resp}=  Create Service with info  ${SERVICE1}   ${description}   ${service_duration[1]}   ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}   ${status[0]}   ${btype}  ${bool[1]}   ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes}   ${EMPTY}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
+        ${resp}=  Create Service with info  ${SERVICE1}   ${description}   ${service_duration[1]}   ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}   ${status[0]}   ${btype}  ${bool[1]}   ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes}   ${NULL}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200  
         ${resp}=   Get Service By Id  ${resp.json()}

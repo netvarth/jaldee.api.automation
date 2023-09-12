@@ -28,12 +28,27 @@ JD-TC-ProviderLogin-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${ACC_ID35}=  get_id    ${PUSERNAME35}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${firstname}     ${resp.json()['firstName']}  
-    Set Test Variable  ${lastname}      ${resp.json()['lastName']}  
-    Set Test Variable  ${username}      ${resp.json()['userName']}
-    Verify Response    ${resp}  id=${ACC_ID35}  userName=${username}  userType=1  accStatus=${status[0]}  firstName=${firstname}  lastName=${lastname}  primaryPhoneNumber=${PUSERNAME35}  isProvider=${bool[1]}
+    
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${firstname}  ${decrypted_data['firstName']}
+    Set Test Variable  ${lastname}  ${decrypted_data['firstName']}
+    Set Test Variable  ${username}  ${decrypted_data['firstName']}
+
+    # Set Test Variable  ${firstname}     ${resp.json()['firstName']}  
+    # Set Test Variable  ${lastname}      ${resp.json()['lastName']}  
+    # Set Test Variable  ${username}      ${resp.json()['userName']}
+
+    Should Be Equal As Strings    ${decrypted_data['id']}                   ${ACC_ID35}
+    Should Be Equal As Strings    ${decrypted_data['userName']}             ${username}
+    Should Be Equal As Strings    ${decrypted_data['userType']}             1
+    Should Be Equal As Strings    ${decrypted_data['accStatus']}            ${status[0]}
+    Should Be Equal As Strings    ${decrypted_data['firstName']}            ${firstname}
+    Should Be Equal As Strings    ${decrypted_data['lastName']}             ${lastname}
+    Should Be Equal As Strings    ${decrypted_data['primaryPhoneNumber']}   ${PUSERNAME35}
+    Should Be Equal As Strings    ${decrypted_data['isProvider']}           ${bool[1]}
+   
+    # Verify Response    ${decrypted_data}  id=${ACC_ID35}  userName=${username}  userType=1  accStatus=${status[0]}  firstName=${firstname}  lastName=${lastname}  primaryPhoneNumber=${PUSERNAME35}  isProvider=${bool[1]}
 
 JD-TC-ProviderLogin-2
     [Documentation]    Login valid provider and enable Multi Factor Authentication then again try to login.
@@ -127,80 +142,56 @@ JD-TC-ProviderLogin-UH2
 
     ${resp}=   Encrypted Provider Login  ${invalid_provider}  ${SPASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${NOT_REGISTERED_PROVIDER}
-    # Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
+    Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
     
 JD-TC-ProviderLogin-UH3
     [Documentation]    Login using empty userid and invalid password
 
     ${resp}=   Encrypted Provider Login  ${EMPTY}  ${SPASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   422
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${ENTER_PHONE_EMAIL}
-    # Should Be Equal As Strings    ${resp.json()}     ${ENTER_PHONE_EMAIL}
+    Should Be Equal As Strings    ${resp.json()}     ${ENTER_PHONE_EMAIL}
     
 JD-TC-ProviderLogin-UH4
     [Documentation]    Login using empty userid and empty password
 
     ${resp}=   Encrypted Provider Login  ${EMPTY}  ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}   422
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}    ${ENTER_PHONE_EMAIL}
-    # Should Be Equal As Strings    ${resp.json()}    ${ENTER_PHONE_EMAIL}
+    Should Be Equal As Strings    ${resp.json()}    ${ENTER_PHONE_EMAIL}
     
 JD-TC-ProviderLogin-UH5
     [Documentation]    Login using valid userid and empty password
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}    ${PASSWORD_EMPTY}
-    # Should Be Equal As Strings    ${resp.json()}    ${PASSWORD_EMPTY}
+    Should Be Equal As Strings    ${resp.json()}    ${PASSWORD_EMPTY}
 
 JD-TC-ProviderLogin-UH6
     [Documentation]    Login using valid consumer userid and  password
 
     ${resp}=   Encrypted Provider Login  ${CUSERNAME8}   ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}      ${NOT_REGISTERED_PROVIDER}
-    # Should Be Equal As Strings    ${resp.json()}      ${NOT_REGISTERED_PROVIDER}
+    Should Be Equal As Strings    ${resp.json()}      ${NOT_REGISTERED_PROVIDER}
     
 JD-TC-ProviderLogin-UH7
     [Documentation]    Login using valid consumer userid and  invalid password
 
     ${resp}=   Encrypted Provider Login  ${CUSERNAME8}   ${SPASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}      ${NOT_REGISTERED_PROVIDER}
-    # Should Be Equal As Strings    ${resp.json()}      ${NOT_REGISTERED_PROVIDER}
+    Should Be Equal As Strings    ${resp.json()}      ${NOT_REGISTERED_PROVIDER}
     
 JD-TC-ProviderLogin-UH8
     [Documentation]    Login using valid consumer userid and  empty password
 
     ${resp}=   Encrypted Provider Login  ${CUSERNAME8}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${PASSWORD_EMPTY}
-    # Should Be Equal As Strings    ${resp.json()}     ${PASSWORD_EMPTY}
+    Should Be Equal As Strings    ${resp.json()}     ${PASSWORD_EMPTY}
 
 JD-TC-ProviderLogin-UH9
     [Documentation]    Login using valid  userid and  sql injection in password
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}   '' or '1'='1'
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
 JD-TC-ProviderLogin-UH10
     [Documentation]    Login using valid userid and previous valid password
@@ -211,10 +202,7 @@ JD-TC-ProviderLogin-UH10
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Encrypted Provider Login   ${PUSERNAME35}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings  ${resp.json()}  ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings  ${resp.json()}  ${LOGIN_INVALID_USERID_PASSWORD}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD2}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Provider Change Password  ${PASSWORD2}  ${PASSWORD}
@@ -234,10 +222,7 @@ JD-TC-ProviderLogin-UH12
     Set Test Variable   ${PUSERPH0}
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}   ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${NOT_REGISTERED_PROVIDER}
-    # Should Be Equal As Strings    ${resp.json()}       ${NOT_REGISTERED_PROVIDER}
+    Should Be Equal As Strings    ${resp.json()}       ${NOT_REGISTERED_PROVIDER}
 
 JD-TC-ProviderLogin-UH13
     [Documentation]    Login provider with different country code
@@ -248,10 +233,7 @@ JD-TC-ProviderLogin-UH13
     END
     ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}  countryCode=${country_code}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${NOT_REGISTERED_PROVIDER}
-    # Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
+    Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
 
 JD-TC-ProviderLogin-UH14
     [Documentation]    Login using valid userid and invalid password 2 times
@@ -267,26 +249,23 @@ JD-TC-ProviderLogin-UH14
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  78945dfdg
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  1245asdf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     # ${resp}=  GetCustomer  
     # Log  ${resp.content}
@@ -295,34 +274,34 @@ JD-TC-ProviderLogin-UH14
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
 JD-TC-ProviderLogin-UH15
     [Documentation]    Login using valid userid and invalid password 2 times(multiFactorAuthenticationRequired is false)
@@ -350,34 +329,34 @@ JD-TC-ProviderLogin-UH15
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
 JD-TC-ProviderLogin-UH16
     [Documentation]    Login using valid userid and invalid password 2 times(without login)
@@ -385,34 +364,34 @@ JD-TC-ProviderLogin-UH16
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
-    # Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
+    # ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    # Log  ${decrypted_data}
+    # Should Be Equal As Strings    ${decrypted_data}     ${LOGIN_INVALID_USERID_PASSWORD}
+    Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
 
 JD-TC-ProviderLogin-UH17
