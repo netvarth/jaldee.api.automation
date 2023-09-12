@@ -207,6 +207,9 @@ JD-TC-Get Bill By UUId -1
         ${disc1}=  Bill Discount Input  ${discountId}  ${des}  ${desc}
         ${bdisc}=  Bill Discount  ${bid}  ${disc1}   
         
+        ${bill_time}=  db.get_date_time_by_timezone  ${tz}
+        ${bill_createdtime}=   db.remove_date_time_secs   ${bill_time}
+
         ${resp}=  Update Bill   ${wid}  addBillLevelDiscount  ${bdisc}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${netTotal}=  Evaluate  ${ser_amount}+${it_amount}
@@ -240,7 +243,7 @@ JD-TC-Get Bill By UUId -1
         Should Be Equal As Strings  ${resp.json()['discount'][0]['privateNote']}  ${des}  
         Should Be Equal As Strings  ${resp.json()['discount'][0]['calculationType']}  ${calctype[1]}
         Should Be Equal As Strings  ${resp.json()['providerCoupon']['${cupn_code}']['value']}  ${cou_amount}  
-
+        Should Be Equal As Strings  ${resp.json()['createdDate']}  ${bill_createdtime}
         # Should Be Equal As Strings  ${resp.json()['providerCoupon'][0]['id']}  ${couponId}  
         # Should Be Equal As Strings  ${resp.json()['providerCoupon'][0]['couponValue']}  ${cou_amount} 
         # Should Be Equal As Strings  ${resp.json()['providerCoupon'][0]['name']}  ${coupon1}
