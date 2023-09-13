@@ -26,12 +26,12 @@ JD-Get_all_schedules_of_an_account-1
 
     [Documentation]  Get all schedules of an account
 
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
-    clear_customer   ${PUSERNAME14}
+    clear_queue      ${PUSERNAME6}
+    clear_location   ${PUSERNAME6}
+    clear_service    ${PUSERNAME6}
+    clear_customer   ${PUSERNAME6}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -74,12 +74,12 @@ JD-Get_all_schedules_of_an_account-2
 
     [Documentation]  Get all schedules of an account  without creating schedule for same provider
 
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
-    clear_customer   ${PUSERNAME14}
+    clear_queue      ${PUSERNAME6}
+    clear_location   ${PUSERNAME6}
+    clear_service    ${PUSERNAME6}
+    clear_customer   ${PUSERNAME6}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -107,12 +107,12 @@ JD-Get_all_schedules_of_an_account-3
 
     [Documentation]  Create two schedules and Get all schedules of an account
 
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
-    clear_customer   ${PUSERNAME14}
+    clear_queue      ${PUSERNAME6}
+    clear_location   ${PUSERNAME6}
+    clear_service    ${PUSERNAME6}
+    clear_customer   ${PUSERNAME6}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -191,7 +191,7 @@ JD-Get_all_schedules_of_an_account-UH2
 
     [Documentation]  Provider schedule name is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -226,7 +226,7 @@ JD-Get_all_schedules_of_an_account-UH3
 
     [Documentation]  Provider schedule start date and end date is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -261,7 +261,7 @@ JD-Get_all_schedules_of_an_account-UH4
 
     [Documentation]  Provider schedule start time and end time is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -296,7 +296,7 @@ JD-Get_all_schedules_of_an_account-UH5
 
     [Documentation]  Provider schedule user id is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -331,7 +331,7 @@ JD-Get_all_schedules_of_an_account-UH6
 
     [Documentation]  Provider schedule user id is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

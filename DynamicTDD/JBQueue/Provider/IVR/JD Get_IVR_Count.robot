@@ -45,7 +45,6 @@ JD-TC-Get_IVR_Count-1
     [Documentation]   Get IVR Count
     
     clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
     clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
@@ -180,9 +179,15 @@ JD-TC-Get_IVR_Count-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${myoperator_id}    FakerLibrary.Random Number
     ${incall_id}    FakerLibrary.Random Number
@@ -302,7 +307,7 @@ JD-TC-Get_IVR_Count-2
     [Documentation]   Add two calls and Get IVR Count
     
     clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
+    #   clear_location   ${PUSERNAME143}
     clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
@@ -657,7 +662,7 @@ JD-TC-Get_IVR_Count-3
     [Documentation]   Get IVR Count before aftercall
     
     clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
+    #   clear_location   ${PUSERNAME143}
     clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
@@ -915,7 +920,7 @@ JD-TC-Get_IVR_Count-4
     [Documentation]   Get IVR Count after incoming call on server
     
     clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
+    #   clear_location   ${PUSERNAME143}
     clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
@@ -1173,7 +1178,7 @@ JD-TC-Get_IVR_Count-5
     [Documentation]   Get IVR Count after dialling call
     
     clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
+    #   clear_location   ${PUSERNAME143}
     clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
@@ -1431,7 +1436,7 @@ JD-TC-Get_IVR_Count-6
     [Documentation]   Get IVR Count after answeing call
     
     clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
+    #   clear_location   ${PUSERNAME143}
     clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 

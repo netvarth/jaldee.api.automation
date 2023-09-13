@@ -26,6 +26,11 @@ JD-TC-Update_Provider_Schedule-1
 
     [Documentation]  Update Provider Schedule
 
+    clear_queue      ${PUSERNAME14}
+    clear_location   ${PUSERNAME14}
+    clear_service    ${PUSERNAME14}
+    clear_customer   ${PUSERNAME14}
+
     ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

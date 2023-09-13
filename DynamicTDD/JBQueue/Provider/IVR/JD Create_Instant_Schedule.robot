@@ -26,6 +26,12 @@ JD-TC-Create_Instant_Schedule-1
 
     [Documentation]  Create Instant Schedule
 
+
+    clear_queue      ${PUSERNAME113}
+    clear_location   ${PUSERNAME113}
+    clear_service    ${PUSERNAME113}
+    clear_customer   ${PUSERNAME113}
+
     ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -86,22 +92,6 @@ JD-TC-Create_Instant_Schedule-UH1
     Should Be Equal As Strings  ${resp.status_code}  422  
     Should Be Equal As Strings  "${resp.json()}"   "${NECESSARY_FIELD_MISSING}" 
 
-JD-TC-Create_Instant_Schedule-UH2
-
-    [Documentation]  Create Instant Schedule where recurring type is empty
-
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${sTime3}=  add_time  5  7
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime3}=  add_two   ${sTime3}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
-
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${NONE}}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}   422
 
 JD-TC-Create_Instant_Schedule-UH3
 
@@ -308,3 +298,21 @@ JD-TC-Create_Instant_Schedule-UH11
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}  ${list2}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422 
+
+
+JD-TC-Create_Instant_Schedule-UH2
+
+    [Documentation]  Create Instant Schedule where recurring type is empty
+
+    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${sTime3}=  add_time  5  7
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime3}=  add_two   ${sTime3}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${list2}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   422

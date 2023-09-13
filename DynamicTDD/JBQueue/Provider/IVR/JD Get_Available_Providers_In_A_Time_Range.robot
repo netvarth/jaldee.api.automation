@@ -27,7 +27,12 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
 
     [Documentation]  Get Avaliable Providers In A Time Range
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    clear_queue      ${PUSERNAME7}
+    clear_location   ${PUSERNAME7}
+    clear_service    ${PUSERNAME7}
+    clear_customer   ${PUSERNAME7}
+
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -100,7 +105,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-2
 
     [Documentation]  Get Avaliable Providers In A Time Range without creating schedules
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -183,7 +188,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH3
 
     [Documentation]  Get Avaliable Providers In A Time Range with last date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -214,7 +219,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH4
 
     [Documentation]  Get Avaliable Providers In A Time Range with start date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -245,7 +250,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH5
 
     [Documentation]  Get Avaliable Providers In A Time Range with start date is different format
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -276,7 +281,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH6
 
     [Documentation]  Get Avaliable Providers In A Time Range with end date is different format
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

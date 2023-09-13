@@ -26,6 +26,11 @@ JD-TC-Create_Provider_Schedule-1
 
     [Documentation]  Create Provider Schedule
 
+    clear_queue      ${PUSERNAME14}
+    clear_location   ${PUSERNAME14}
+    clear_service    ${PUSERNAME14}
+    clear_customer   ${PUSERNAME14}
+
     ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -72,6 +77,12 @@ JD-TC-Create_Provider_Schedule-1
 JD-TC-Create_Provider_Schedule-2
 
     [Documentation]   Create a schedule with same details of another provider
+
+    clear_queue      ${PUSERNAME143}
+    clear_location   ${PUSERNAME143}
+    clear_service    ${PUSERNAME143}
+    clear_customer   ${PUSERNAME143}
+    
     ${resp}=  Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

@@ -46,6 +46,11 @@ ${loc}    AP, IN
 JD-TC-Get_User_Specified_Schedules-1
 
     [Documentation]   Get all IVR user details
+
+    clear_queue      ${HLMUSERNAME3}
+    clear_location   ${HLMUSERNAME3}
+    clear_service    ${HLMUSERNAME3}
+    clear_customer   ${HLMUSERNAME3}
     
     ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
