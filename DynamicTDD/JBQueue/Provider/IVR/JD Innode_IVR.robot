@@ -46,15 +46,17 @@ JD-TC-Innode_IVR-1
 
     [Documentation]   Innode IVR
     
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME142}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME142}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -103,6 +105,7 @@ JD-TC-Innode_IVR-1
 
     ${cons_verfy_id}    FakerLibrary.Random Number
     ${cons_verfy_node_value}    FakerLibrary.Random Number
+    Set Suite Variable   ${cons_verfy_node_value}
     ${call_back_id}    FakerLibrary.Random Number
     ${call_back_node_value}    FakerLibrary.Random Number
     ${token_Verfy_id}    FakerLibrary.Random Number
@@ -179,9 +182,15 @@ JD-TC-Innode_IVR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${incall_id}    FakerLibrary.Random Number
     ${incall_uid}    FakerLibrary.Random Number
@@ -191,12 +200,15 @@ JD-TC-Innode_IVR-1
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
 
+
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
     Set Suite Variable  ${clid}  9${clid}
+    ${myoperator_id}    FakerLibrary.Random Number
 
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
+
 
     ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
@@ -212,15 +224,15 @@ JD-TC-Innode_IVR-UH1
 
     [Documentation]   Innode IVR with another provider login
     
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
+    clear_queue      ${PUSERNAME15}
+    clear_location   ${PUSERNAME15}
+    clear_service    ${PUSERNAME15}
+    clear_customer   ${PUSERNAME15}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME14}
+    ${acc_id}=  get_acc_id  ${PUSERNAME15}
     Set Test Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -240,7 +252,7 @@ JD-TC-Innode_IVR-UH1
     ${company_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    # #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
@@ -259,7 +271,8 @@ JD-TC-Innode_IVR-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${IVR_SETTING_NOt_FOUND}
-    
+
+
 
 JD-TC-Innode_IVR-UH2
 
@@ -273,7 +286,7 @@ JD-TC-Innode_IVR-UH2
     ${company_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    # #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
@@ -297,15 +310,15 @@ JD-TC-Innode_IVR-UH3
 
     [Documentation]   Innode IVR -without ivr settings
     
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
+    clear_queue      ${PUSERNAME15}
+    clear_location   ${PUSERNAME15}
+    clear_service    ${PUSERNAME15}
+    clear_customer   ${PUSERNAME15}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME14}
+    ${acc_id}=  get_acc_id  ${PUSERNAME15}
     Set Test Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -325,7 +338,7 @@ JD-TC-Innode_IVR-UH3
     ${company_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    # #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
@@ -347,17 +360,14 @@ JD-TC-Innode_IVR-UH3
 
 JD-TC-Innode_IVR-UH4
 
-    [Documentation]   Innode IVR -passing empty account id
+    [Documentation]   Innode IVR -passing empty current time
     
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME14}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Test Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -368,126 +378,6 @@ JD-TC-Innode_IVR-UH4
     ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
-     ${CUR_DAY}=  get_date
-    ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
-
-    ${ser_name1}=   FakerLibrary.word
-    Set Suite Variable    ${ser_name1} 
-    ${resp}=   Create Sample Service  ${ser_name1}
-    Set Suite Variable    ${ser_id1}    ${resp}  
-    ${ser_name2}=   FakerLibrary.word
-    Set Suite Variable    ${ser_name2} 
-
-    ${resp}=   Create Sample Service  ${ser_name2}
-    Set Suite Variable    ${ser_id2}    ${resp}  
-
-    ${q_name}=    FakerLibrary.word
-    Set Suite Variable    ${q_name}
-    ${list}=  Create List   1  2  3  4  5  6  7
-    Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
-    Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
-    Set Suite Variable    ${end_time}   
-    ${parallel}=   Random Int  min=1   max=2
-    Set Suite Variable   ${parallel}
-    ${capacity}=  Random Int   min=10   max=20
-    Set Suite Variable   ${capacity}
-    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${que_id1}   ${resp.json()}
-
-    ${callWaitingTime}    Generate random string    1    123456789
-    ${token}    FakerLibrary.Random Number
-    ${secretKey}    FakerLibrary.Random Number
-    ${apiKey}    FakerLibrary.Random Number
-    ${companyId}    FakerLibrary.Random Number
-    ${publicId}    FakerLibrary.Random Number
-    ${languageResetCount}    Generate random string    1    123456789
-
-    ${cons_verfy_id}    FakerLibrary.Random Number
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
-    ${call_back_id}    FakerLibrary.Random Number
-    ${call_back_node_value}    FakerLibrary.Random Number
-    ${token_Verfy_id}    FakerLibrary.Random Number
-    ${token_Verfy_node_value}    FakerLibrary.Random Number
-    ${consumer_Settings_id}    FakerLibrary.Random Number
-    ${consumer_Settings_node_value}    FakerLibrary.Random Number
-    ${getlanguage_id}    FakerLibrary.Random Number
-    ${getlanguage_node_value}    FakerLibrary.Random Number
-    ${English_id}    FakerLibrary.Random Number
-    ${English_node_value}    FakerLibrary.Random Number
-    ${Hindi_id}    FakerLibrary.Random Number
-    ${Hindi_node_value}    FakerLibrary.Random Number
-    ${Telugu_id}    FakerLibrary.Random Number
-    ${Telugu_node_value}    FakerLibrary.Random Number
-    ${voice_Mail_id}    FakerLibrary.Random Number
-    ${voice_Mail_node_value}    FakerLibrary.Random Number
-    ${working_hours_id}    FakerLibrary.Random Number
-    ${working_hours_node_value}    FakerLibrary.Random Number
-    ${Emergency_id}    FakerLibrary.Random Number
-    ${Emergency_node_value}    FakerLibrary.Random Number
-    ${User_Available_id}    FakerLibrary.Random Number
-    ${User_Available_node_value}    FakerLibrary.Random Number
-    ${Error_message_id}    FakerLibrary.Random Number
-    ${Error_message_node_value}    FakerLibrary.Random Number
-    ${generate_token_id}    FakerLibrary.Random Number
-    ${generate_token_node_value}    FakerLibrary.Random Number
-    ${Call_users_id}    FakerLibrary.Random Number
-    ${Call_users_node_value}    FakerLibrary.Random Number
-    ${update_Waiting_Time_id}    FakerLibrary.Random Number
-    ${update_Waiting_Time_node_value}    FakerLibrary.Random Number
-    ${get_Waiting_Time_id}    FakerLibrary.Random Number
-    ${get_Waiting_Time_node_value}    FakerLibrary.Random Number
-    ${waiting_option_id}    FakerLibrary.Random Number
-    ${waiting_option_node_value}    FakerLibrary.Random Number
-
-
-    ${consumer_Verfy}    create_ivr_children   ${cons_verfy_id}  ${cons_verfy_name}  ${ivr_language[0]}  ${cons_verfy_node_value}  ${ivr_inputValue[0]}
-    ${call_back_message}    create_ivr_children   ${call_back_id}  ${call_back_name}  ${ivr_language[0]}  ${call_back_node_value}  ${ivr_inputValue[1]}
-    ${action_token_verify}    ivr_acion_dict    ${token_Verfy_id}  ${token_Verfy_name}  ${ivr_actions[1]}  ${ivr_language[0]}  ${token_Verfy_node_value}  ${consumer_Verfy}  ${call_back_message}
-
-    ${consumer_Settings_True}    create_ivr_children   ${consumer_Settings_id}  ${consumer_Settings_name}  ${ivr_language[0]}  ${consumer_Settings_node_value}  ${ivr_inputValue[0]}
-    ${consumer_Settings_False}    create_ivr_children   ${consumer_Settings_id}  ${consumer_Settings_name}  ${ivr_language[0]}  ${consumer_Settings_node_value}  ${ivr_inputValue[1]}
-    ${action_consumerVerfy}    ivr_acion_dict    ${cons_verfy_id}  ${cons_verfy_name}  ${ivr_actions[0]}  ${ivr_language[0]}  ${cons_verfy_node_value}  ${consumer_Settings_True}  ${consumer_Settings_False}
-
-    ${English}    create_ivr_children   ${English_id}  ${English_name}  ${ivr_language[0]}  ${English_node_value}  ${ivr_inputValue[0]}
-    ${Hindi}    create_ivr_children   ${Hindi_id}  ${Hindi_name}  ${ivr_language[1]}  ${Hindi_node_value}  ${ivr_inputValue[1]}
-    ${Telugu}    create_ivr_children   ${Telugu_id}  ${Telugu_name}  ${ivr_language[2]}  ${Telugu_node_value}  ${ivr_inputValue[2]}
-    ${action_getlanguage}    ivr_acion_dict    ${getlanguage_id}  ${getlanguage_name}  ${ivr_actions[13]}  ${ivr_language[0]}  ${getlanguage_node_value}  ${English}  ${Hindi}  ${Telugu}
-
-    ${voice_Mail}    create_ivr_children   ${voice_Mail_id}  ${voice_Mail_name}  ${ivr_language[0]}  ${voice_Mail_node_value}  ${ivr_inputValue[0]}
-    ${working_hours}    create_ivr_children   ${working_hours_id}  ${working_hours_name}  ${ivr_language[0]}  ${working_hours_node_value}  ${ivr_inputValue[1]}
-    ${action_language}    ivr_acion_dict    ${English_id}  ${English_name}  ${ivr_actions[5]}  ${ivr_language[0]}  ${English_node_value}  ${voice_Mail}  ${working_hours}
-
-    ${Emergency}    create_ivr_children   ${Emergency_id}  ${Emergency_name}  ${ivr_language[0]}  ${Emergency_node_value}  ${ivr_inputValue[0]}
-    ${User_Available}    create_ivr_children   ${User_Available_id}  ${User_Available_name}  ${ivr_language[0]}  ${User_Available_node_value}  ${ivr_inputValue[1]}
-    ${action_checkSchedule}    ivr_acion_dict    ${working_hours_id}  ${working_hours_name}  ${ivr_actions[2]}  ${ivr_language[0]}  ${working_hours_node_value}  ${Emergency}  ${User_Available}
-
-    ${Error_Mesage}    create_ivr_children   ${Error_message_id}  ${Error_message_name}  ${ivr_language[0]}  ${Error_message_node_value}  ${ivr_inputValue[0]}
-    ${action_generateToken_Callback}    ivr_acion_dict    ${generate_token_id}  ${Generate_token_name}  ${ivr_actions[2]}  ${ivr_language[0]}  ${generate_token_node_value}  ${Error_Mesage}  ${call_back_message}
-
-    ${action_callUsers}    ivr_acion_dict    ${Call_users_id}  ${Call_User_name}  ${ivr_actions[4]}  ${ivr_language[0]}  ${Call_users_node_value}  ${Error_Mesage}  ${call_back_message}
-
-    ${get_User_List}    create_ivr_children   ${Call_users_id}  ${Call_User_name}  ${ivr_language[0]}  ${Call_users_node_value}  ${ivr_inputValue[1]}
-    ${action_update_Waiting_Time}    ivr_acion_dict    ${update_Waiting_Time_id}  ${update_Waiting_Time_name}  ${ivr_actions[12]}  ${ivr_language[0]}  ${update_Waiting_Time_node_value}  ${Error_Mesage}  ${get_User_List}
-
-    ${waiting_option}    create_ivr_children   ${waiting_option_id}  ${waiting_option_name}  ${ivr_language[0]}  ${waiting_option_node_value}  ${ivr_inputValue[0]}
-    ${action_getWaitingTime}    ivr_acion_dict    ${get_Waiting_Time_id}  ${get_Waiting_Time_name}  ${ivr_actions[11]}  ${ivr_language[0]}  ${get_Waiting_Time_node_value}  ${waiting_option}  ${get_User_List}
-
-    ${resp}=    IVR_Config_Json    ${action_token_verify}    ${action_consumerVerfy}    ${action_getlanguage}    ${action_language}    ${action_checkSchedule}    ${action_generateToken_Callback}    ${action_callUsers}    ${action_update_Waiting_Time}    ${action_getWaitingTime} 
-    Log  ${resp}
-    Set Suite Variable  ${ivr_config_data}   ${resp}
-
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 
     ${incall_id}    FakerLibrary.Random Number
@@ -497,7 +387,7 @@ JD-TC-Innode_IVR-UH4
     ${company_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+   # ${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
@@ -512,23 +402,20 @@ JD-TC-Innode_IVR-UH4
 
     ${current_time}=    Get Current Date    result_format=%s
 
-    ${resp}=    innode IVR    ${empty}     ${incall_id}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${empty}    ${clid}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  422          #Not considering current time from our parameters.They are considering from myoperator(dev)
 
 JD-TC-Innode_IVR-UH5
 
-    [Documentation]   Innode IVR -passing empty current time
+    [Documentation]   Innode IVR -passing empty consumer number
     
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
+   
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME14}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Test Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -548,7 +435,7 @@ JD-TC-Innode_IVR-UH5
     ${company_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
@@ -557,77 +444,29 @@ JD-TC-Innode_IVR-UH5
 
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${empty}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_PHONE}
+    
 
     ${current_time}=    Get Current Date    result_format=%s
 
-    ${resp}=    innode IVR    ${acc_id}     ${incall_id}    ${cons_verfy_node_value}    ${empty}    ${clid}    ${empty}
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${empty}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422          #Not considering current time from our parameters(dev)
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_PHONE}
 
 JD-TC-Innode_IVR-UH6
 
-    [Documentation]   Innode IVR -passing empty consumer number
-    
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
-
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${acc_id}=  get_acc_id  ${PUSERNAME14}
-    Set Test Variable   ${acc_id} 
-
-    ${resp}=  Get Accountsettings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
-
-    ${CUR_DAY}=  get_date
-    ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
-
-
-    ${incall_id}    FakerLibrary.Random Number
-    ${incall_uid}    FakerLibrary.Random Number
-    ${incall_uid}=  Convert To String  ${incall_uid}
-    ${reference_id}    FakerLibrary.Random Number
-    ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
-
-    ${clid}    Random Number 	digits=5 
-    ${clid}=    Evaluate    f'{${clid}:0>9d}'
-    Log  ${clid}
-    Set Suite Variable  ${clid}  9${clid}
-
-    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
-
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${current_time}=    Get Current Date    result_format=%s
-
-    ${resp}=    innode IVR    ${acc_id}     ${incall_id}    ${cons_verfy_node_value}    ${current_time}    ${empty}    ${empty}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Innode_IVR-UH7
-
     [Documentation]   Innode IVR -where account id is invalid
     
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fake_id}=    FakerLibrary.Random Number
@@ -640,7 +479,7 @@ JD-TC-Innode_IVR-UH7
     ${company_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
@@ -662,16 +501,16 @@ JD-TC-Innode_IVR-UH7
     Should Be Equal As Strings  ${resp.status_code}  404
     Should Be Equal As Strings  "${resp.json()}"   "${ACCOUNT_NOT_EXIST}"
 
-JD-TC-Innode_IVR-UH8
+JD-TC-Innode_IVR-UH7
 
-    [Documentation]   Innode IVR -where client number is invalid
+    [Documentation]   Innode IVR -where client number is empty
     
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fake_id}=    FakerLibrary.Random Number
@@ -684,7 +523,7 @@ JD-TC-Innode_IVR-UH8
     ${company_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+   # ${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
@@ -693,35 +532,39 @@ JD-TC-Innode_IVR-UH8
 
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
+    ${cl_num_invalid}    FakerLibrary.word
+
     ${cclid}    Random Number 	digits=2 
     ${cclid}=    Evaluate    f'{${cclid}:0>9d}'
     Log  ${cclid}
     Set Suite Variable  ${cclid}  ${cclid}
     Set Test Variable     ${clid_row1}    ${countryCodes[0]}${cclid}
 
-    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
+    ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422      #Not considering these parameters now
+    Should Be Equal As Strings  ${resp.status_code}  422  
+    Should Be Equal As Strings  ${resp.json()}  ${Invalid_CC}
+    
 
     ${current_time}=    Get Current Date    result_format=%s
 
-    ${resp}=    innode IVR    ${acc_id}     ${incall_id}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
+    ${resp}=    innode IVR    ${acc_id}     ${incall_uid}    ${cons_verfy_node_value}    ${current_time}    ${cclid}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-Innode_IVR-UH9
+JD-TC-Innode_IVR-UH8
 
     [Documentation]   Innode IVR -passing empty innod id
     
-    clear_queue      ${PUSERNAME142}
-    clear_location   ${PUSERNAME142}
-    clear_service    ${PUSERNAME142}
-    clear_customer   ${PUSERNAME142}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME14}
+    ${acc_id}=  get_acc_id  ${PUSERNAME15}
     Set Test Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -741,7 +584,7 @@ JD-TC-Innode_IVR-UH9
     ${company_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    # ${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
@@ -758,16 +601,17 @@ JD-TC-Innode_IVR-UH9
 
     ${resp}=    innode IVR    ${acc_id}     ${empty}    ${cons_verfy_node_value}    ${current_time}    ${clid}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.content}  ${empty}   
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_UID}   
 
-JD-TC-Innode_IVR-UH10
+JD-TC-Innode_IVR-UH9
 
     [Documentation]   Innode IVR -Without incall
     
     ${incall_id}    FakerLibrary.Random Number
     ${created_date}=  get_date
     ${call_time}=    db.get_time_secs
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
+    # #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
