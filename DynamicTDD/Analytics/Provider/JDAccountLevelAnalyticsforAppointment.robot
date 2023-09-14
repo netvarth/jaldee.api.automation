@@ -5367,6 +5367,9 @@ JD-TC-AccountLevelAnalytics-28
 
     # ${confirmed_appt_len}=  Evaluate  len($online_appt_ids) + len($online_vs_appt_ids) + len($cons_phonein_appt_ids) + len($cons_phonein_vs_appt_ids) + len($pro_phonein_appt_ids) + len($pro_vs_phonein_appt_ids) - len($cancelled_online_appt_ids) - len($rejected_online_appt_ids) + len($confirmed_appt_ids)
     ${confirmed_appt_len}=  Evaluate  len($online_appt_ids) + len($online_vs_appt_ids) + len($cons_phonein_appt_ids) + len($cons_phonein_vs_appt_ids) + len($pro_phonein_appt_ids) + len($pro_vs_phonein_appt_ids) - len($cancelled_online_appt_ids) - len($rejected_online_appt_ids1) + len($confirmed_appt_ids)/2
+
+    ${confirmed_appt_len}=    Convert To Integer    ${confirmed_appt_len}
+
     ${resp}=  Get Account Level Analytics  ${appointmentAnalyticsMetrics['CONFIRMED_APPMT']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
