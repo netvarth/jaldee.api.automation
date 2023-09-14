@@ -42,18 +42,18 @@ JD-TC-Incall_IVR-1
 
     [Documentation]   Incall IVR
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
 
@@ -197,7 +197,7 @@ JD-TC-Incall_IVR-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME152}  ${countryCodes[1]}${PUSERNAME152}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -225,7 +225,7 @@ JD-TC-Incall_IVR-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -253,18 +253,18 @@ JD-TC-Incall_IVR-2
 
     [Documentation]   Incall IVR-Work Flow change
     #  Work flow change will works here-From dev
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -303,7 +303,7 @@ JD-TC-Incall_IVR-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 #........  user answerd    .......
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -319,7 +319,7 @@ JD-TC-Incall_IVR-2
     Should Be Equal As Strings  ${resp.status_code}  200
 #..........   Dialling users   ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -347,18 +347,18 @@ JD-TC-Incall_IVR-3
 
     [Documentation]   Given Past date on Incoming call on server
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -410,7 +410,7 @@ JD-TC-Incall_IVR-3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -438,18 +438,18 @@ JD-TC-Incall_IVR-UH1
 
     [Documentation]   Passing different account id
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${acc_ids}=  get_acc_id  ${PUSERNAME1}
@@ -504,7 +504,7 @@ JD-TC-Incall_IVR-UH1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -532,18 +532,18 @@ JD-TC-Incall_IVR-UH2
 
     [Documentation]   Passing empty incall uid on "Incoming call on server" 
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${acc_ids}=  get_acc_id  ${PUSERNAME1}
@@ -599,7 +599,7 @@ JD-TC-Incall_IVR-UH2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -627,18 +627,18 @@ JD-TC-Incall_IVR-UH3
 
     [Documentation]   Passing empty reference id on "Incoming call on server" 
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${acc_ids}=  get_acc_id  ${PUSERNAME1}
@@ -694,7 +694,7 @@ JD-TC-Incall_IVR-UH3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -784,7 +784,7 @@ JD-TC-Incall_IVR-UH4
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -880,7 +880,7 @@ JD-TC-Incall_IVR-UH6
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -908,18 +908,18 @@ JD-TC-Incall_IVR-UH7
 
     [Documentation]   Passing empty call state id on "Incoming call on server" 
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${acc_ids}=  get_acc_id  ${PUSERNAME1}
@@ -951,7 +951,9 @@ JD-TC-Incall_IVR-UH7
 
     ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${clid}    ${empty}    ${empty}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${Past_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${ INVALID_STATUS}
+   
    
 
 
@@ -975,7 +977,7 @@ JD-TC-Incall_IVR-UH7
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1005,18 +1007,18 @@ JD-TC-Incall_IVR-UH8
 
     [Documentation]   Passing empty call time on Incoming call on server
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -1068,7 +1070,7 @@ JD-TC-Incall_IVR-UH8
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1096,18 +1098,18 @@ JD-TC-Incall_IVR-UH9
 
     [Documentation]   Given Future date on Incoming call on server
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -1159,7 +1161,7 @@ JD-TC-Incall_IVR-UH9
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1187,18 +1189,18 @@ JD-TC-Incall_IVR-UH10
 
     [Documentation]   Passing empty reference id on "Incoming call on server" 
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${acc_ids}=  get_acc_id  ${PUSERNAME1}
@@ -1254,7 +1256,7 @@ JD-TC-Incall_IVR-UH10
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1284,18 +1286,18 @@ JD-TC-Incall_IVR-UH11
     
  
 
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${acc_ids}=  get_acc_id  ${PUSERNAME1}
@@ -1351,7 +1353,7 @@ JD-TC-Incall_IVR-UH11
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1381,18 +1383,18 @@ JD-TC-Incall_IVR-UH12
     
  
 
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${acc_ids}=  get_acc_id  ${PUSERNAME1}
@@ -1425,7 +1427,7 @@ JD-TC-Incall_IVR-UH12
     ${resp}=    Incall IVR    ${acc_ids}     ${incall_id}    ${incall_id}    ${reference_id}    ${company_id}  ${empty}   ${clid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}   ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_UID}
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_PHONE}
 
 
     ${current_time}=    Get Current Date
@@ -1448,7 +1450,7 @@ JD-TC-Incall_IVR-UH12
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1478,18 +1480,18 @@ JD-TC-Incall_IVR-UH13
     
  
 
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME152}
+    clear_location   ${PUSERNAME152}
+    clear_service    ${PUSERNAME152}
+    clear_customer   ${PUSERNAME152}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
     ${acc_ids}=  get_acc_id  ${PUSERNAME1}
@@ -1545,7 +1547,7 @@ JD-TC-Incall_IVR-UH13
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME152}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}

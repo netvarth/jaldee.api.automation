@@ -47,12 +47,12 @@ JD-TC-Get_User_Specified_Schedules-1
 
     [Documentation]   Get all IVR user details
 
-    clear_queue      ${HLMUSERNAME3}
-    clear_location   ${HLMUSERNAME3}
-    clear_service    ${HLMUSERNAME3}
-    clear_customer   ${HLMUSERNAME3}
+    clear_queue      ${HLMUSERNAME6}
+    clear_location   ${HLMUSERNAME6}
+    clear_service    ${HLMUSERNAME6}
+    clear_customer   ${HLMUSERNAME6}
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -155,7 +155,7 @@ JD-TC-Get_User_Specified_Schedules-2
 
     [Documentation]  Get schedules using id  ,without creating schedule for same provider
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -240,7 +240,7 @@ JD-TC-Get_User_Specified_Schedules-UH1
 
     [Documentation]   Get user specified schedules where user id is invalid
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}

@@ -26,12 +26,12 @@ JD-Get_schedules_Using_Id-1
 
     [Documentation]  Get schedules using id
 
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
-    clear_customer   ${PUSERNAME14}
+    clear_queue      ${PUSERNAME168}
+    clear_location   ${PUSERNAME168}
+    clear_service    ${PUSERNAME168}
+    clear_customer   ${PUSERNAME168}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -85,7 +85,7 @@ JD-Get_schedules_Using_Id-2
 
     [Documentation]  Get schedules using id  ,without creating schedule for same provider
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -119,7 +119,7 @@ JD-Get_schedules_Using_Id-3
 
     [Documentation]  Create two schedules and Get schedules of an account using id
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -207,7 +207,7 @@ JD-Get_schedules_Using_Id-UH2
 
     [Documentation]  Provider schedule name is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -246,7 +246,7 @@ JD-Get_schedules_Using_Id-UH3
 
     [Documentation]  Provider schedule start date and end date is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -285,7 +285,7 @@ JD-Get_schedules_Using_Id-UH4
 
     [Documentation]  Provider schedule start time and end time is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -324,7 +324,7 @@ JD-Get_schedules_Using_Id-UH5
 
     [Documentation]  Provider schedule user id is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -363,7 +363,7 @@ JD-Get_schedules_Using_Id-UH6
 
     [Documentation]  Provider schedule  start time is after end time  and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

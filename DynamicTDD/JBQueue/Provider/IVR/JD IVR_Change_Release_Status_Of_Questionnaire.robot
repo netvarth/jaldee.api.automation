@@ -67,7 +67,7 @@ JD-TC-IVRChangeReleaseStatusOfQuestionnaire-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -249,7 +249,7 @@ JD-TC-IVRChangeReleaseStatusOfQuestionnaire-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -292,7 +292,7 @@ JD-TC-IVRChangeReleaseStatusOfQuestionnaire-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${account_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME14}  ${countryCodes[1]}${PUSERNAME14}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${account_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME170}  ${countryCodes[1]}${PUSERNAME170}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -319,7 +319,7 @@ JD-TC-IVRChangeReleaseStatusOfQuestionnaire-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME14}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME170}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}

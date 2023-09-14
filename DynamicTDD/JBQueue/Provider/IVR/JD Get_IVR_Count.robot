@@ -44,17 +44,17 @@ JD-TC-Get_IVR_Count-1
 
     [Documentation]   Get IVR Count
     
-    clear_queue      ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME164}
+    clear_service    ${PUSERNAME164}
+    clear_customer   ${PUSERNAME164}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME164}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -203,7 +203,7 @@ JD-TC-Get_IVR_Count-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME164}  ${countryCodes[1]}${PUSERNAME164}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -230,7 +230,7 @@ JD-TC-Get_IVR_Count-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME164}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -306,18 +306,18 @@ JD-TC-Get_IVR_Count-2
 
     [Documentation]   Add two calls and Get IVR Count
     
-    clear_queue      ${PUSERNAME143}
-    #   clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME164}
+    #   clear_location   ${PUSERNAME164}
+    clear_service    ${PUSERNAME164}
+    clear_customer   ${PUSERNAME164}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME164}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -460,7 +460,7 @@ JD-TC-Get_IVR_Count-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME164}  ${countryCodes[1]}${PUSERNAME164}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -487,7 +487,7 @@ JD-TC-Get_IVR_Count-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME164}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -586,7 +586,7 @@ JD-TC-Get_IVR_Count-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME164}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -661,18 +661,18 @@ JD-TC-Get_IVR_Count-3
 
     [Documentation]   Get IVR Count before aftercall
     
-    clear_queue      ${PUSERNAME143}
-    #   clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME164}
+    #   clear_location   ${PUSERNAME164}
+    clear_service    ${PUSERNAME164}
+    clear_customer   ${PUSERNAME164}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME164}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -815,7 +815,7 @@ JD-TC-Get_IVR_Count-3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME164}  ${countryCodes[1]}${PUSERNAME164}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -842,7 +842,7 @@ JD-TC-Get_IVR_Count-3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME164}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -919,18 +919,18 @@ JD-TC-Get_IVR_Count-4
 
     [Documentation]   Get IVR Count after incoming call on server
     
-    clear_queue      ${PUSERNAME143}
-    #   clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME164}
+    #   clear_location   ${PUSERNAME164}
+    clear_service    ${PUSERNAME164}
+    clear_customer   ${PUSERNAME164}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME164}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -1073,7 +1073,7 @@ JD-TC-Get_IVR_Count-4
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME164}  ${countryCodes[1]}${PUSERNAME164}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1105,7 +1105,7 @@ JD-TC-Get_IVR_Count-4
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME164}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1177,18 +1177,18 @@ JD-TC-Get_IVR_Count-5
 
     [Documentation]   Get IVR Count after dialling call
     
-    clear_queue      ${PUSERNAME143}
-    #   clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME164}
+    #   clear_location   ${PUSERNAME164}
+    clear_service    ${PUSERNAME164}
+    clear_customer   ${PUSERNAME164}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME164}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -1331,7 +1331,7 @@ JD-TC-Get_IVR_Count-5
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME164}  ${countryCodes[1]}${PUSERNAME164}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1363,7 +1363,7 @@ JD-TC-Get_IVR_Count-5
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME164}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1435,18 +1435,18 @@ JD-TC-Get_IVR_Count-6
 
     [Documentation]   Get IVR Count after answeing call
     
-    clear_queue      ${PUSERNAME143}
-    #   clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME164}
+    #   clear_location   ${PUSERNAME164}
+    clear_service    ${PUSERNAME164}
+    clear_customer   ${PUSERNAME164}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME164}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -1589,7 +1589,7 @@ JD-TC-Get_IVR_Count-6
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+   # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME164}  ${countryCodes[1]}${PUSERNAME164}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1617,7 +1617,7 @@ JD-TC-Get_IVR_Count-6
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME164}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}

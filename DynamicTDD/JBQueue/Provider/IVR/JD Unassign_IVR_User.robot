@@ -49,7 +49,7 @@ JD-TC-Unassign_IVR_User-1
     [Documentation]   Unassign IVR User
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -267,7 +267,7 @@ JD-TC-Unassign_IVR_User-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -294,7 +294,7 @@ JD-TC-Unassign_IVR_User-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -387,7 +387,7 @@ JD-TC-Unassign_IVR_User-2
     [Documentation]  After Unassign IVR User assigned the same user again.
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -597,7 +597,7 @@ JD-TC-Unassign_IVR_User-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -624,7 +624,7 @@ JD-TC-Unassign_IVR_User-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -751,7 +751,7 @@ JD-TC-Unassign_IVR_User-UH3
     [Documentation]   Unassign IVR User without assigning user
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -961,7 +961,7 @@ JD-TC-Unassign_IVR_User-UH3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -988,7 +988,7 @@ JD-TC-Unassign_IVR_User-UH3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1077,7 +1077,7 @@ JD-TC-Unassign_IVR_User-UH4
     [Documentation]   Unassign IVR User where ivr uid is invalid
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -1287,7 +1287,7 @@ JD-TC-Unassign_IVR_User-UH4
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1314,7 +1314,7 @@ JD-TC-Unassign_IVR_User-UH4
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1409,7 +1409,7 @@ JD-TC-Unassign_IVR_User-UH5
     [Documentation]   Unassign IVR User where usertype is empty
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -1619,7 +1619,7 @@ JD-TC-Unassign_IVR_User-UH5
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1646,7 +1646,7 @@ JD-TC-Unassign_IVR_User-UH5
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1740,7 +1740,7 @@ JD-TC-Unassign_IVR_User-UH6
     [Documentation]   Unassign IVR User where user id is empty
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -1950,7 +1950,7 @@ JD-TC-Unassign_IVR_User-UH6
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -1977,7 +1977,7 @@ JD-TC-Unassign_IVR_User-UH6
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -2071,7 +2071,7 @@ JD-TC-Unassign_IVR_User-UH7
     [Documentation]   Unassign IVR User where assigned user and unassign user is different
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -2281,7 +2281,7 @@ JD-TC-Unassign_IVR_User-UH7
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+    #${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME7}  ${countryCodes[1]}${HLMUSERNAME7}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -2308,7 +2308,7 @@ JD-TC-Unassign_IVR_User-UH7
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME7}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}

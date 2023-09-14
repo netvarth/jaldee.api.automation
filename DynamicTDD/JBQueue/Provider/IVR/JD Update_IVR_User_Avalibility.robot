@@ -47,7 +47,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
 
     [Documentation]   Get all IVR user avaliability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -260,7 +260,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME3}  ${countryCodes[1]}${HLMUSERNAME3}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME8}  ${countryCodes[1]}${HLMUSERNAME8}  ${user_id}  ${user_name}
 
     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -290,7 +290,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME3}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME8}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -383,7 +383,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
 
     [Documentation]   Get all IVR user avaliability where user availabilty is updated two times
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -454,7 +454,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
 
     [Documentation]   Get all IVR user avaliability where user id  is invalid
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -481,7 +481,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH4
 
     [Documentation]   Get all IVR user avaliability where user availability is invalid
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -508,7 +508,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH5
 
     [Documentation]   Get all IVR user avaliability where user availability is empty
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}

@@ -26,12 +26,12 @@ JD-TC-Create_Provider_Schedule-1
 
     [Documentation]  Create Provider Schedule
 
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
-    clear_customer   ${PUSERNAME14}
+    clear_queue      ${PUSERNAME155}
+    clear_location   ${PUSERNAME155}
+    clear_service    ${PUSERNAME155}
+    clear_customer   ${PUSERNAME155}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -78,12 +78,12 @@ JD-TC-Create_Provider_Schedule-2
 
     [Documentation]   Create a schedule with same details of another provider
 
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME1553}
+    clear_location   ${PUSERNAME1553}
+    clear_service    ${PUSERNAME1553}
+    clear_customer   ${PUSERNAME1553}
     
-    ${resp}=  Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME1553}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${user_id}    ${resp.json()['id']}
@@ -150,7 +150,7 @@ JD-TC-Create_Provider_Schedule-2
 JD-TC-Create_Provider_Schedule-3
 
     [Documentation]   Create 2 schedules with same time on different days
-    ${resp}=  Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME1553}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${user_id}    ${resp.json()['id']}
@@ -220,7 +220,7 @@ JD-TC-Create_Provider_Schedule-4
 
     [Documentation]  Create one schedule and disabled that schedule.
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -285,7 +285,7 @@ JD-TC-Create_Provider_Schedule-UH1
 
     [Documentation]  Schedule Conflict
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -318,7 +318,7 @@ JD-TC-Create_Provider_Schedule-UH1
 JD-TC-Create_Provider_Schedule-UH2
 
     [Documentation]   Given same Schedule name
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -354,7 +354,7 @@ JD-TC-Create_Provider_Schedule-UH2
 JD-TC-Create_Provider_Schedule-UH3
 
     [Documentation]   Create a schedule with eTime is less than sTime
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -387,7 +387,7 @@ JD-TC-Create_Provider_Schedule-UH3
 JD-TC-Create_Provider_Schedule-UH4
 
     [Documentation]   create schedule with start date, a past date
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -417,7 +417,7 @@ JD-TC-Create_Provider_Schedule-UH4
 JD-TC-Create_Provider_Schedule-UH5
 
     [Documentation]   create schedule with start date and end date, as past dates
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -448,7 +448,7 @@ JD-TC-Create_Provider_Schedule-UH6
 
     [Documentation]  Create Provider Schedule with empty Provider id
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -484,7 +484,7 @@ JD-TC-Create_Provider_Schedule-UH7
 
     [Documentation]  Create Provider Schedule with empty start date
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -518,7 +518,7 @@ JD-TC-Create_Provider_Schedule-UH8
 
     [Documentation]  Create Provider Schedule with empty end date
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -553,7 +553,7 @@ JD-TC-Create_Provider_Schedule-UH9
 
     [Documentation]  Create Provider Schedule with empty start time
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -580,7 +580,7 @@ JD-TC-Create_Provider_Schedule-UH10
 
     [Documentation]  Create Provider Schedule with empty end time
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -608,7 +608,7 @@ JD-TC-Create_Provider_Schedule-UH11
 
     [Documentation]  Create Provider Schedule with empty schedule name
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -665,7 +665,7 @@ JD-TC-Create_Provider_Schedule-UH13
 
     [Documentation]  Create Provider Schedule with empty start date and end date
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -702,7 +702,7 @@ JD-TC-Create_Provider_Schedule-UH13
 
     [Documentation]  Create Provider Schedule with empty recurring type
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -729,7 +729,7 @@ JD-TC-Create_Provider_Schedule-UH14
 
     [Documentation]  Repeat intervals of schedule is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -757,7 +757,7 @@ JD-TC-Create_Provider_Schedule-UH15
 
     [Documentation]  Create Provider Schedule with empty schedule state
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

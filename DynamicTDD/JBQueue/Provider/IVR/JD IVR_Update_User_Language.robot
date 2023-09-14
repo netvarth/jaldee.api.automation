@@ -51,7 +51,7 @@ JD-TC-Update_User_Language-1
 
     [Documentation]  Update User Language
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -60,7 +60,7 @@ JD-TC-Update_User_Language-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    ${acc_id}=  get_acc_id  ${PUSERNAME14}
+    ${acc_id}=  get_acc_id  ${PUSERNAME174}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -208,7 +208,7 @@ JD-TC-Update_User_Language-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME14}  ${countryCodes[1]}${PUSERNAME14}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME174}  ${countryCodes[1]}${PUSERNAME174}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -235,7 +235,7 @@ JD-TC-Update_User_Language-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME14}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME174}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -320,7 +320,7 @@ JD-TC-Update_User_Language-2
 
     [Documentation]  Update User Language two times with different language
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${user_id}    ${resp.json()['id']}
@@ -374,7 +374,7 @@ JD-TC-Update_User_Language-UH3
 
     [Documentation]  Update User Language with invalid user id
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -394,7 +394,7 @@ JD-TC-Update_User_Language-UH4
 
     [Documentation]  Update User Language with empty user id
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -414,7 +414,7 @@ JD-TC-Update_User_Language-UH5
 
     [Documentation]  Update User Language with empty language
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

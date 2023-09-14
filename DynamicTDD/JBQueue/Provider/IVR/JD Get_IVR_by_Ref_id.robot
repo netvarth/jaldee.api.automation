@@ -44,7 +44,7 @@ JD-TC-Get_IVR_By_Ref_Id-1
 
     [Documentation]   Get IVR By Referance Id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
@@ -53,18 +53,18 @@ JD-TC-Get_IVR_By_Ref_Id-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME162}
+    clear_location   ${PUSERNAME162}
+    clear_service    ${PUSERNAME162}
+    clear_customer   ${PUSERNAME162}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME162}
     Set Suite Variable   ${acc_id} 
 
 
@@ -209,7 +209,7 @@ JD-TC-Get_IVR_By_Ref_Id-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME162}  ${countryCodes[1]}${PUSERNAME162}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -236,7 +236,7 @@ JD-TC-Get_IVR_By_Ref_Id-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME162}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -313,7 +313,7 @@ JD-TC-Get_IVR_By_Ref_Id-2
 
     [Documentation]   Get IVR By Referance Id Before After call
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
@@ -322,18 +322,18 @@ JD-TC-Get_IVR_By_Ref_Id-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME162}
+    clear_location   ${PUSERNAME162}
+    clear_service    ${PUSERNAME162}
+    clear_customer   ${PUSERNAME162}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME162}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -503,7 +503,7 @@ JD-TC-Get_IVR_By_Ref_Id-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME162}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -580,7 +580,7 @@ JD-TC-Get_IVR_By_Ref_Id-3
 
     [Documentation]   Get IVR By Referance Id after incoming call on server
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
@@ -589,18 +589,18 @@ JD-TC-Get_IVR_By_Ref_Id-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME162}
+    clear_location   ${PUSERNAME162}
+    clear_service    ${PUSERNAME162}
+    clear_customer   ${PUSERNAME162}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME162}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -775,7 +775,7 @@ JD-TC-Get_IVR_By_Ref_Id-3
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME162}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -847,7 +847,7 @@ JD-TC-Get_IVR_By_Ref_Id-4
 
     [Documentation]   Get IVR By Referance Id after dialling user
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
@@ -856,18 +856,18 @@ JD-TC-Get_IVR_By_Ref_Id-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME162}
+    clear_location   ${PUSERNAME162}
+    clear_service    ${PUSERNAME162}
+    clear_customer   ${PUSERNAME162}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME162}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -1043,7 +1043,7 @@ JD-TC-Get_IVR_By_Ref_Id-4
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME162}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1115,7 +1115,7 @@ JD-TC-Get_IVR_By_Ref_Id-5
 
     [Documentation]   Get IVR By Referance Id after user answered the call
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
@@ -1124,18 +1124,18 @@ JD-TC-Get_IVR_By_Ref_Id-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME162}
+    clear_location   ${PUSERNAME162}
+    clear_service    ${PUSERNAME162}
+    clear_customer   ${PUSERNAME162}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME162}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -1307,7 +1307,7 @@ JD-TC-Get_IVR_By_Ref_Id-5
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME162}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -1408,7 +1408,7 @@ JD-TC-Get_IVR_By_Ref_Id-UH3
 
     [Documentation]   Get IVR By Referance Id with invalid uid
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1423,7 +1423,7 @@ JD-TC-Get_IVR_By_Ref_Id-UH4
 
     [Documentation]   Get IVR By Referance Id where Ref id is empty
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

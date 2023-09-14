@@ -26,12 +26,12 @@ JD-TC-Update_Provider_Schedule-1
 
     [Documentation]  Update Provider Schedule
 
-    clear_queue      ${PUSERNAME14}
-    clear_location   ${PUSERNAME14}
-    clear_service    ${PUSERNAME14}
-    clear_customer   ${PUSERNAME14}
+    clear_queue      ${PUSERNAME180}
+    clear_location   ${PUSERNAME180}
+    clear_service    ${PUSERNAME180}
+    clear_customer   ${PUSERNAME180}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -74,7 +74,7 @@ JD-TC-Update_Provider_Schedule-2
 
     [Documentation]  Provider Schedule is disabled at first and then enabled
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -116,7 +116,7 @@ JD-TC-Update_Provider_Schedule-3
 
     [Documentation]  Update Provider Schedule where schedule name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -191,7 +191,7 @@ JD-TC-Update_Provider_Schedule-UH3
 
     [Documentation]  Update Provider Schedule where start date is null
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -225,7 +225,7 @@ JD-TC-Update_Provider_Schedule-UH4
 
     [Documentation]  Update Provider Schedule where end date is null
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -259,7 +259,7 @@ JD-TC-Update_Provider_Schedule-UH5
 
     [Documentation]  Update Provider Schedule where start time is null
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -292,7 +292,7 @@ JD-TC-Update_Provider_Schedule-UH6
 
     [Documentation]  Update Provider Schedule where end time is null
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -326,7 +326,7 @@ JD-TC-Update_Provider_Schedule-UH7
 
     [Documentation]  Update Provider Schedule where provider id is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

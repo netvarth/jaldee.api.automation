@@ -2021,6 +2021,8 @@ NO_ACTIVE_SCHEDULES_FOUND="No active schedules found"
 PLEASE_FILL_THE_FORM_TO_COMPLETE="Please fill the form to complete"
 CUSTOM_EMAIL_ALREADY_DISABLED="custom Email already disabled"	
 DAY_CANNOT_BE_EMPTY="Day cannot be empty"
+Invalid_CC="Invalid Country Code"
+INVALID_STATUS="Invalid Status"
 
 
 TOOTH_ID_CANNOT_BE_NULL= "Tooth Id cannot be null"

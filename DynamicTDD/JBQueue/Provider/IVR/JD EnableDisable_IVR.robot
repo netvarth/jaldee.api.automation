@@ -46,18 +46,18 @@ JD-TC-Enable_Disable_IVR-1
 
     [Documentation]   Enable Disable IVR
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME158}
+    clear_location   ${PUSERNAME158}
+    clear_service    ${PUSERNAME158}
+    clear_customer   ${PUSERNAME158}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME158}
     Set Suite Variable   ${acc_id} 
 
 
@@ -193,7 +193,7 @@ JD-TC-Enable_Disable_IVR-2
 
     [Documentation]   Disabling IVR which is Enabled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -205,7 +205,7 @@ JD-TC-Enable_Disable_IVR-UH1
 
     [Documentation]   Disabling IVR which is Disabled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -219,7 +219,7 @@ JD-TC-Enable_Disable_IVR-UH2
 
     [Documentation]   Enable IVR which is already enabled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

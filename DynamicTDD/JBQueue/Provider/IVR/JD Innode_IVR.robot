@@ -46,17 +46,17 @@ JD-TC-Innode_IVR-1
 
     [Documentation]   Innode IVR
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
-    clear_customer   ${PUSERNAME152}
+    clear_queue      ${PUSERNAME169}
+    clear_location   ${PUSERNAME169}
+    clear_service    ${PUSERNAME169}
+    clear_customer   ${PUSERNAME169}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME169}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME152}
+    ${acc_id}=  get_acc_id  ${PUSERNAME169}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -364,10 +364,10 @@ JD-TC-Innode_IVR-UH4
     
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME169}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME152}
+    ${acc_id}=  get_acc_id  ${PUSERNAME169}
     Set Test Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -412,10 +412,10 @@ JD-TC-Innode_IVR-UH5
     
    
 
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME169}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME152}
+    ${acc_id}=  get_acc_id  ${PUSERNAME169}
     Set Test Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -461,10 +461,10 @@ JD-TC-Innode_IVR-UH6
 
     [Documentation]   Innode IVR -where account id is invalid
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
-    clear_customer   ${PUSERNAME152}
+    clear_queue      ${PUSERNAME169}
+    clear_location   ${PUSERNAME169}
+    clear_service    ${PUSERNAME169}
+    clear_customer   ${PUSERNAME169}
 
     ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -505,10 +505,10 @@ JD-TC-Innode_IVR-UH7
 
     [Documentation]   Innode IVR -where client number is empty
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
-    clear_customer   ${PUSERNAME152}
+    clear_queue      ${PUSERNAME169}
+    clear_location   ${PUSERNAME169}
+    clear_service    ${PUSERNAME169}
+    clear_customer   ${PUSERNAME169}
 
     ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -556,10 +556,10 @@ JD-TC-Innode_IVR-UH8
 
     [Documentation]   Innode IVR -passing empty innod id
     
-    clear_queue      ${PUSERNAME152}
-    clear_location   ${PUSERNAME152}
-    clear_service    ${PUSERNAME152}
-    clear_customer   ${PUSERNAME152}
+    clear_queue      ${PUSERNAME169}
+    clear_location   ${PUSERNAME169}
+    clear_service    ${PUSERNAME169}
+    clear_customer   ${PUSERNAME169}
 
     ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
