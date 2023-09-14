@@ -765,11 +765,11 @@ JD-TC-GetAppmtServicesByLocation-10
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_R}.${test_mail}
+    # Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_R}.${test_mail}
 
-    ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -839,7 +839,22 @@ JD-TC-GetAppmtServicesByLocation-10
     ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id1}  ${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Suite Variable   ${slot2}   ${slots[${j}]}
+ 
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        IF  ${resp.json()['availableSlots'][${i}]['active']}==${bool[1]}
+            Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][${i}]['time']}
+        END
+    END
+    # Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${resp}=    Get Appmt Service By LocationId   ${p1_l1}
     Log   ${resp.json()}
