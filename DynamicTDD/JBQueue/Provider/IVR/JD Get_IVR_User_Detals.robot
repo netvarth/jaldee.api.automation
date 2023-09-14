@@ -447,33 +447,22 @@ JD-TC-Get_IVR_USER_DETAILS-UH3
 
 JD-TC-Get_IVR_USER_DETAILS-UH4
 
-    [Documentation]   Get IVR user details where user type is empty
+    [Documentation]   Get IVR user details where user type is invalid
 
     ${resp}=  ProviderLogin  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${invalid}    FakerLibrary.Random Number
 
-    ${resp}=    Get IVR User Details    ${NONE}    ${user_id}
+    ${resp}=    Get IVR User Details    ${invalid}    ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+
+
 
 JD-TC-Get_IVR_USER_DETAILS-UH5
-
-    [Documentation]   Get IVR user details where user id is empty
-
-    ${resp}=  ProviderLogin  ${PUSERNAME167}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-
-    ${resp}=    Get IVR User Details    ${userType[0]}    ${empty}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Get_IVR_USER_DETAILS-UH6
 
     [Documentation]   Get IVR user details where user id is invalid
 
@@ -491,6 +480,19 @@ JD-TC-Get_IVR_USER_DETAILS-UH6
     Should Be Equal As Strings    ${resp.content}    ${empty}
 
 *** comment ***
+JD-TC-Get_IVR_USER_DETAILS-UH6
+
+    [Documentation]   Get IVR user details where user id is empty
+
+    ${resp}=  ProviderLogin  ${PUSERNAME167}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-Get_IVR_USER_DETAILS-UH7
 

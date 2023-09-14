@@ -47,37 +47,45 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
 
     [Documentation]   Get all IVR user avaliability
 
-    clear_queue      ${HLMUSERNAME4}
-    clear_location   ${HLMUSERNAME4}
-    clear_service    ${HLMUSERNAME4}
-    clear_customer   ${HLMUSERNAME4}
+    clear_queue      ${HLMUSERNAME2}
+    clear_location   ${HLMUSERNAME2}
+    clear_service    ${HLMUSERNAME2}
+    clear_customer   ${HLMUSERNAME2}
     
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
-    # ${resp}=  Get Business Profile
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable  ${acc_id}   ${resp.json()['id']}
-    # Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
-    # ${resp}=  View Waitlist Settings
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # IF  ${resp.json()['filterByDept']}==${bool[0]}
-    #     ${resp}=  Toggle Department Enable
-    #     Log  ${resp.json()}
-    #     Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    # END
+    END
 
-    # ${resp}=  Get Departments
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${dep_name1}=  FakerLibrary.bs
+    ${dep_code1}=   Random Int  min=100   max=999
+    ${dep_desc1}=   FakerLibrary.word  
+    ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp1.json()}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     # IF   '${resp.content}' == '${emptylist}'
     #     ${dep_name1}=  FakerLibrary.bs
     #     ${dep_code1}=   Random Int  min=100   max=999
@@ -90,22 +98,22 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     # END
 
-    # ${resp}=    Get Locations
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # IF   '${resp.content}' == '${emptylist}'
-    #     ${locId}=  Create Sample Location
-    # ELSE
-    #     Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-    #     Set Suite Variable  ${place}  ${resp.json()[0]['place']}
-    # END
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+    ELSE
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+    END
 
-    # ${gender}=  Random Element    ${Genderlist}
-    # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    # ${dob}=  Convert To String  ${dob}
-    # ${firstName}=    FakerLibrary.firstName
-    # ${lastName}=    FakerLibrary.lastName
-    # Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
+    ${gender}=  Random Element    ${Genderlist}
+    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String  ${dob}
+    ${firstName}=    FakerLibrary.firstName
+    ${lastName}=    FakerLibrary.lastName
+    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
@@ -138,6 +146,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
 
     ${resp}=   Create Sample Service  ${ser_name2}    department=${dep_id}
     Set Suite Variable    ${ser_id2}    ${resp}  
+
 
     ${q_name}=    FakerLibrary.word
     Set Suite Variable    ${q_name}
@@ -265,7 +274,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME4}  ${countryCodes[1]}${HLMUSERNAME4}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME2}  ${countryCodes[1]}${HLMUSERNAME2}  ${user_id}  ${user_name}
 
     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -295,7 +304,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME4}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME2}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -380,7 +389,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
 
     [Documentation]   Create sample user -that not add to ivr table and get the user availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -481,7 +490,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME4}  ${countryCodes[1]}${HLMUSERNAME4}  ${user_id}  ${user_name}
+    # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME2}  ${countryCodes[1]}${HLMUSERNAME2}  ${user_id}  ${user_name}
 
     # ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -511,7 +520,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME4}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${HLMUSERNAME2}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -596,7 +605,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-3
 
     [Documentation]   Delete users from ivr table ang get ivr user availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -697,7 +706,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME4}  ${countryCodes[1]}${HLMUSERNAME4}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME2}  ${countryCodes[1]}${HLMUSERNAME2}  ${user_id}  ${user_name}
 
     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 
@@ -722,7 +731,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-4
 
     [Documentation]  already deleted user details update  and get ivr user availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -778,7 +787,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
 
     [Documentation]   Update user availability(without user schedule) from ivr table and get ivr user availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${user_id}   ${resp.json()['id']}
@@ -879,7 +888,7 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME4}  ${countryCodes[1]}${HLMUSERNAME4}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${HLMUSERNAME2}  ${countryCodes[1]}${HLMUSERNAME2}  ${user_id}  ${user_name}
 
     ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${SOUSERNAME1}  ${countryCodes[1]}${SOUSERNAME1}  ${so_id1}  ${name}
 

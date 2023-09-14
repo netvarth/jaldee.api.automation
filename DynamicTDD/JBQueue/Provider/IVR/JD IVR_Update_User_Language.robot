@@ -390,27 +390,8 @@ JD-TC-Update_User_Language-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
 
+
 JD-TC-Update_User_Language-UH4
-
-    [Documentation]  Update User Language with empty user id
-
-    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-
-    ${resp}=  Get Business Profile
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
-
-    ${so_id2}    FakerLibrary.Random Number
-
-    ${resp}=  IVR Update User Language    ${empty}    ${ivr_language[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-
-JD-TC-Update_User_Language-UH5
 
     [Documentation]  Update User Language with empty language
 
@@ -430,3 +411,24 @@ JD-TC-Update_User_Language-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
+*** comment ***
+JD-TC-Update_User_Language-UH4
+
+    [Documentation]  Update User Language with empty user id
+
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${so_id2}    FakerLibrary.Random Number
+
+    ${resp}=  IVR Update User Language    ${empty}    ${ivr_language[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
