@@ -270,6 +270,9 @@ JD-TC-Consumer-Payment-Transaction-1
 
     sleep   02s
 
+    ${payment_time}=  db.get_date_time_by_timezone  ${tz}
+    ${payment_time}=   db.remove_date_time_secs   ${payment_time}
+    
     ${resp}=  Get Payment Details  account-eq=${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -279,7 +282,8 @@ JD-TC-Consumer-Payment-Transaction-1
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${cwid}
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}   ${payment_time}
+    
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
