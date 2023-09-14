@@ -78,12 +78,12 @@ JD-TC-Create_Provider_Schedule-2
 
     [Documentation]   Create a schedule with same details of another provider
 
-    clear_queue      ${PUSERNAME1553}
-    clear_location   ${PUSERNAME1553}
-    clear_service    ${PUSERNAME1553}
-    clear_customer   ${PUSERNAME1553}
+    clear_queue      ${PUSERNAME155}
+    clear_location   ${PUSERNAME155}
+    clear_service    ${PUSERNAME155}
+    clear_customer   ${PUSERNAME155}
     
-    ${resp}=  Provider Login  ${PUSERNAME1553}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${user_id}    ${resp.json()['id']}
@@ -150,7 +150,7 @@ JD-TC-Create_Provider_Schedule-2
 JD-TC-Create_Provider_Schedule-3
 
     [Documentation]   Create 2 schedules with same time on different days
-    ${resp}=  Provider Login  ${PUSERNAME1553}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${user_id}    ${resp.json()['id']}

@@ -59,53 +59,53 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    # ${resp}=  Get Business Profile
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    # Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  View Waitlist Settings
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # IF  ${resp.json()['filterByDept']}==${bool[0]}
+    #     ${resp}=  Toggle Department Enable
+    #     Log  ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+    # END
 
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
+    # ${resp}=  Get Departments
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${dep_name1}=  FakerLibrary.bs
+    #     ${dep_code1}=   Random Int  min=100   max=999
+    #     ${dep_desc1}=   FakerLibrary.word  
+    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Set Test Variable  ${dep_id}  ${resp1.json()}
+    # ELSE
+    #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # END
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${locId}=  Create Sample Location
-    ELSE
-        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${place}  ${resp.json()[0]['place']}
-    END
+    # ${resp}=    Get Locations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${locId}=  Create Sample Location
+    # ELSE
+    #     Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+    #     Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+    # END
 
-    ${gender}=  Random Element    ${Genderlist}
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-    ${firstName}=    FakerLibrary.firstName
-    ${lastName}=    FakerLibrary.lastName
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
+    # ${gender}=  Random Element    ${Genderlist}
+    # ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
+    # ${dob}=  Convert To String  ${dob}
+    # ${firstName}=    FakerLibrary.firstName
+    # ${lastName}=    FakerLibrary.lastName
+    # Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}

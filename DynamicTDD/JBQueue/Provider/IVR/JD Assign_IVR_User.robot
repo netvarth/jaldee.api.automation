@@ -387,7 +387,7 @@ JD-TC-Assign_IVR_User-1
 
 JD-TC-Assign_IVR_User-2
 
-    [Documentation]   Assign IVR User is anvailable
+    [Documentation]   Assign IVR User is unvailable
     
     ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
@@ -400,6 +400,11 @@ JD-TC-Assign_IVR_User-2
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${vo_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${vo_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.json()['availability']}    ${Availability[1]}
 
 JD-TC-Assign_IVR_User-UH1
 
@@ -431,7 +436,12 @@ JD-TC-Assign_IVR_User-UH2
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[1]}    ${so_id1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   #Currently this usertype is not existing.but future may come this from dev
+    Should Be Equal As Strings  ${resp.status_code}  422   #Currently this usertype is not existing.but future may come 
+
+    # ${resp}=    Get IVR User Details    ${userType[1]}    ${so_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings    ${resp.json()['userType']}    ${userType[1]}
 
 JD-TC-Assign_IVR_User-UH3
 
@@ -447,7 +457,7 @@ JD-TC-Assign_IVR_User-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=    Get IVR User Details    ${userType[0]}    ${invuserid}
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${invuserid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.content}    ${empty}

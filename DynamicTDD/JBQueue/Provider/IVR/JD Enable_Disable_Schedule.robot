@@ -146,8 +146,8 @@ JD-Enable_Disable_Schedule-UH1
 
     ${DAY1}=  get_date
     ${DAY2}=  add_date  10  
-    ${DAY3}=  add_date  30 
-    ${DAY4}=  add_date  40     
+    ${DAY3}=  add_date  41
+    ${DAY4}=  add_date  51     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
