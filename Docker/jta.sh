@@ -176,7 +176,7 @@ createDir()
             mkdir -p $3
         elif [ "$reply" = "n" ] || [ "$reply" = "no" ] ;then
             echo "Directory does not exist. cannot continue."
-            exit 1
+            exit 3
         fi
     else
         return 0
@@ -205,13 +205,13 @@ setDefaults()
         *)
             echo "Invalid Option."
             echo "Please select between [dev | jenkins | scale]"
-            exit 1
+            exit 4
             ;;
     esac
     ifExists "$defaultInputPath"
     if [ "$?" -eq 1 ]; then
         echo "Default Input Location does not exist. Please run $0 -i for interactive session."
-        exit 1
+        exit 3
     fi
     ifExists "$defaultOutputPath"
     createDir $? 0 "$defaultOutputPath"
@@ -571,7 +571,7 @@ eof
         echo "Database backup completed successfully"
     else
         echo "Error found during backup"
-        exit 1
+        exit 5
     fi
 
     if [ ! -z "${DB_BACKUP_PATH}" ]; then
@@ -626,6 +626,12 @@ setUserAndIP()
 # Turn date and time sync with ntp server off, if parameter passed is 0 and on, if parameter passed is 1
 setDateTimeSync()
 {
+    is_installed="$(which sshd)"
+    if [ -z "$is_installed" ]; then
+        echo -e "openssh-server not installed. Please install it using the command: \n sudo apt install openssh-server"
+        exit 6
+    fi
+
     status="$(timedatectl status | grep systemd-timesyncd.service | cut -d" " -f3)"
     # echo "systemd-timesyncd.service status= $status"
     if [ -z "$status" ]; then
@@ -680,7 +686,7 @@ fi
 # If no parameters are passed with this script show usage.
 if [ "$*" = ""  ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 # check if --APre and --noAPre parameters are used together.
@@ -852,11 +858,11 @@ while [ "$1" != "" ]; do
             ;;
         "-h" | "--help" )           
                 usage
-                exit 
+                exit 2
             ;;
         * )                     
                 usage
-                exit 1
+                exit 2
             ;;
     esac
     shift

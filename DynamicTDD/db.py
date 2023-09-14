@@ -43,6 +43,7 @@ if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
     db_host = subprocess.getoutput("cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2 | tr -d '\n'")
 else:
     db_host = "127.0.0.1"
+    
 
 # db_host = "127.0.0.1"
 db_user = "root"
@@ -1299,7 +1300,7 @@ def subtract_date(days):
 #     userpass=os.environ['SSHPASS']
 #     try:
 #         command1= "date +%u"
-#         command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S "+command1
+#         command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S "+command1
 #         proc=subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
 #         out, err= proc.communicate()
 #         print out
@@ -1365,12 +1366,12 @@ def change_system_time(h,m):
     hostip=os.environ['IP_ADDRESS']
     userpass=os.environ['SSHPASS']
     try:
-        command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+        command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
         subprocess.call(command2, shell=True)
         t = datetime.datetime.now()
         t += datetime.timedelta(hours=int(h),minutes=int(m))
         str=t.strftime("%m%d%H%M%y.%S")
-        command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S date "+str
+        command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S date "+str
         # os.system(command)
         subprocess.call(command, shell=True)
     except Exception as e:
@@ -1383,10 +1384,10 @@ def resetsystem_time():
     hostip=os.environ['IP_ADDRESS']
     userpass=os.environ['SSHPASS']
     try:
-        command1="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S hwclock --hctosys"
+        command1="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S hwclock --hctosys"
         a=subprocess.call(command1,shell=True)
         if a==1:
-            command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 1"
+            command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 1"
             subprocess.call(command2, shell=True)    
     except Exception as e:
         print ("Exception:", e)
@@ -1395,15 +1396,18 @@ def resetsystem_time():
 
 def change_system_date(d):
     user=os.environ['USERNAME']
+    print ("USERNAME:", user)
     hostip=os.environ['IP_ADDRESS']
+    print ("hostip:", hostip)
     userpass=os.environ['SSHPASS']
+    print ("userpass:", userpass)
     try:
-        command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+        command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
         subprocess.call(command2, shell=True)
         t = datetime.datetime.now()
         t += datetime.timedelta(days=int(d))
         str=t.strftime("%m%d%H%M%y.%S")
-        command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S date "+str+" |sleep 2"
+        command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S date "+str+" |sleep 2"
         subprocess.call(command, shell=True)
     #   os.system(command)
     except Exception as e:
@@ -1443,9 +1447,9 @@ def change_date(date):
     hostip=os.environ['IP_ADDRESS']
     userpass=os.environ['SSHPASS']
     # os.system("sudo date '%s'" %str)
-    command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+    command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
     subprocess.call(command2, shell=True)
-    command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S date "+str
+    command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S date "+str
     subprocess.call(command, shell=True)
 
 def bill_cycle_annual():
@@ -6145,9 +6149,9 @@ def change_date_with_tz(tz,date):
     hostip=os.environ['IP_ADDRESS']
     userpass=os.environ['SSHPASS']
     # os.system("sudo date '%s'" %str)
-    command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+    command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
     subprocess.call(command2, shell=True)
-    command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S date "+str
+    command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S date "+str
     subprocess.call(command, shell=True)
 def getMimetype(*files):
     filetype={}
