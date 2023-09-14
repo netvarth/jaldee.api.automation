@@ -297,7 +297,8 @@ JD-TC-Get_User_Specified_Schedules-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}    []
 
-***  comment  ***
+*** comments ***
+
 JD-TC-Get_User_Specified_Schedules-UH3
 
     [Documentation]   Get user specified schedules where user id is empty
