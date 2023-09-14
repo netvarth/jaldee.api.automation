@@ -46,6 +46,66 @@ JD-TC-GetAppmtServicesByLocation-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_R}${\n}
     Set Suite Variable  ${PUSERNAME_R}
+    ${pid}=  get_acc_id  ${PUSERNAME_R}
+
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${ph1}=  Evaluate  ${PUSERNAME_R}+15566122
+    ${ph2}=  Evaluate  ${PUSERNAME_R}+25566122
+    ${views}=  Random Element    ${Views}
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ${bool}
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
+    Log  ${fields.json()}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_R}.${test_mail}
+
+    ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -54,8 +114,7 @@ JD-TC-GetAppmtServicesByLocation-1
 
     clear_service   ${PUSERNAME_R}
     clear_location  ${PUSERNAME_R}
-    ${pid}=  get_acc_id  ${PUSERNAME_R}
-
+    
     # ${sTime}=  db.get_time_by_timezone   ${tz}
     # ${city}=   FakerLibrary.state
     # ${latti}=  get_latitude
@@ -200,12 +259,22 @@ JD-TC-GetAppmtServicesByLocation-1
     ${resp}=  Consumer Login  ${CUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id1}  ${pid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
     ${resp}=    Get Appmt Service By LocationId   ${p1_l1}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   200
     Verify Response List  ${resp}   0    id=${p1_s1}   name=${P1SERVICE1}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
     Verify Response List  ${resp}   1    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
-    
+    Should Be Equal As Strings   ${resp.json()[0]['serviceAvailability']['nextAvailableDate']}  ${DAY1}
+    Should Be Equal As Strings   ${resp.json()[0]['serviceAvailability']['nextAvailable']}      ${slot1}
+
+    Should Be Equal As Strings   ${resp.json()[1]['serviceAvailability']['nextAvailableDate']}  ${DAY1}
+    Should Be Equal As Strings   ${resp.json()[1]['serviceAvailability']['nextAvailable']}      ${slot1}
+   
 JD-TC-GetAppmtServicesByLocation-2
 
     [Documentation]  Consumer get Service By another LocationId of the same provider.
@@ -618,6 +687,175 @@ JD-TC-GetAppmtServicesByLocation-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}        []
 
+JD-TC-GetAppmtServicesByLocation-10
+
+    [Documentation]  Consumer get Service By LocationId THEN VERIFY NEXT AVAILABLE SLOT AND DATE.  
+
+    ${multilocdoms}=  get_mutilocation_domains
+    Log  ${multilocdoms}
+    Set Test Variable  ${dom}  ${multilocdoms[0]['domain']}
+    Set Test Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
+
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${PUSERNAME_R}=  Evaluate  ${PUSERNAME}+556600198
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_R}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${PUSERNAME_R}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_R}${\n}
+    ${pid}=  get_acc_id  ${PUSERNAME_R}
+
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${ph1}=  Evaluate  ${PUSERNAME_R}+15566122
+    ${ph2}=  Evaluate  ${PUSERNAME_R}+25566122
+    ${views}=  Random Element    ${Views}
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ${bool}
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
+    Log  ${fields.json()}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_R}.${test_mail}
+
+    ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+
+    clear_service   ${PUSERNAME_R}
+    clear_location  ${PUSERNAME_R}
+   
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}   
+    ${list}=  Create List  1  2  3  4  5  6  7
+  
+    ${parking}    Random Element     ${parkingType} 
+    ${24hours}    Random Element    ['True','False']
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_l1}  ${resp.json()}
+   
+    clear_appt_schedule   ${PUSERNAME_R}
+        
+    ${service_duration}=   Random Int   min=5   max=10
+    ${P1SERVICE1}=    FakerLibrary.word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_s1}  ${resp.json()}    
+ 
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  15  
+    ${eTime1}=  add_timezone_time  ${tz}  2  15  
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${duration}=  FakerLibrary.Random Int  min=2  max=5
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}  ${p1_s1}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id1}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Consumer Login  ${CUSERNAME5}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+  
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id1}  ${pid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${resp}=    Get Appmt Service By LocationId   ${p1_l1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()[0]['serviceAvailability']['nextAvailableDate']}  ${DAY1}
+    Should Be Equal As Strings   ${resp.json()[0]['serviceAvailability']['nextAvailable']}      ${slot1}
+   
+    ${resp}=  ConsumerLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Appmt Service By LocationId   ${p1_l1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()[0]['serviceAvailability']['nextAvailableDate']}  ${DAY1}
+    Should Be Equal As Strings   ${resp.json()[0]['serviceAvailability']['nextAvailable']}      ${slot1}
+   
 # JD-TC-GetAppmtServicesByLocation-UH3
 
 #     [Documentation]  Consumer get Service By LocationId without login.

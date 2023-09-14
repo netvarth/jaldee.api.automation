@@ -205,7 +205,7 @@ JD-TC-GetAppmtServicesByLocation-1
     Should Be Equal As Strings   ${resp.status_code}   200
     Verify Response List  ${resp}   0    id=${p1_s1}   name=${P1SERVICE1}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
     Verify Response List  ${resp}   1    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
-    
+     
 JD-TC-GetAppmtServicesByLocation-2
 
     [Documentation]  Consumer get Service By another LocationId of the same provider.

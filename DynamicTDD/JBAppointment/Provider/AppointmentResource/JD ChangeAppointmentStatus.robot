@@ -209,7 +209,8 @@ JD-TC-ChangeAppointmentStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-
+    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
 
 JD-TC-ChangeAppointmentStatus-2
     [Documentation]  change status to Arrived from Confirmed
@@ -234,8 +235,8 @@ JD-TC-ChangeAppointmentStatus-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[2]}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
+    Should Be Equal As Strings  ${resp.json()[1]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[1]['date']}   ${DAY1}  
 
 JD-TC-ChangeAppointmentStatus-3
     [Documentation]  change status to Started from Arrived
@@ -249,8 +250,8 @@ JD-TC-ChangeAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[2]} 
-    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
+    Should Be Equal As Strings  ${resp.json()[1]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[1]['date']}   ${DAY1}  
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log   ${resp.json()}
@@ -260,8 +261,8 @@ JD-TC-ChangeAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[3]}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
+    Should Be Equal As Strings  ${resp.json()[2]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[2]['date']}   ${DAY1}  
 
 JD-TC-ChangeAppointmentStatus-4
     [Documentation]  change status to Completed from Started
@@ -275,8 +276,8 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[3]} 
-    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
+    Should Be Equal As Strings  ${resp.json()[2]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[2]['date']}   ${DAY1}  
 
     ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
     Log   ${resp.json()}
@@ -286,8 +287,8 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[6]}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
+    Should Be Equal As Strings  ${resp.json()[3]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[3]['date']}   ${DAY1}  
 
 JD-TC-ChangeAppointmentStatus-5
     [Documentation]  change status to Completed from Arrived
