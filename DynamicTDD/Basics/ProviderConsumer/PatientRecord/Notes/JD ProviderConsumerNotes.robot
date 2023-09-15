@@ -48,7 +48,8 @@ Get Provider Consumer Notes
 ${jpgfile}     /ebs/TDD/uploadimage.jpg
 ${order}    0
 ${fileSize}    0.00458
-
+${title1}    @sdf@123
+${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
@@ -86,7 +87,7 @@ JD-TC-Adding Provider Consumer Notes-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${token}  ${resp.json()['token']}
@@ -152,5 +153,231 @@ JD-TC-Adding Provider Consumer Notes-1
     ${resp}=    Get Provider Consumer Notes    ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-Adding Provider Consumer Notes-2
+
+    [Documentation]    Adding Provider consumer notes where description contain 250 words.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.name
+    ${description}=  FakerLibrary.Text     	max_nb_chars=255
+    ${users}=   Create List  
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Adding Provider Consumer Notes-3
+
+    [Documentation]    Adding Provider consumer notes where title contain more than 50 words.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List  
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Adding Provider Consumer Notes-4
+
+    [Documentation]    Adding provider consumer notes where the title is empty.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    # ${title}=  FakerLibrary.Text     	
+    ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List  
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${EMPTY}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Adding Provider Consumer Notes-5
+
+    [Documentation]   Adding Provider Consumer notes where description is empty.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.Text     	
+    # ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List  
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${EMPTY}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider Consumer notes where user id is empty.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.Text     	
+    ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List  
+
+    ${resp}=    Provider Consumer Add Notes    ${EMPTY}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes using another provider login.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.Text     	
+    ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List  
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes where description contains numbers.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.Text     	
+    ${description}=  FakerLibrary.Random Number     	
+    ${users}=   Create List  
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes where user id is invalid.
+
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.Text     	
+    ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List   ${title}
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes where consumer id is invalid.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.Text     	
+    ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List   
+
+    ${resp}=    Provider Consumer Add Notes    ${EMPTY}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes where the title contains numbers.
+
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title}=  FakerLibrary.Random Number     	
+    ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List   
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes where the title contains special characters.
+
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+     	
+    ${description}=  FakerLibrary.Text     	
+    ${users}=   Create List   
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title1}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes where the title contains special characters.
+
+
+    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+    
+    ${title}=  FakerLibrary.Text     	
+    ${users}=   Create List   
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description1}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes without login.
+
+    ${description}=  FakerLibrary.Text     	
+    ${title}=  FakerLibrary.Text     	
+    ${users}=   Create List   
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+
+JD-TC-Adding Provider Consumer Notes-UH
+
+    [Documentation]   Adding Provider consumer notes with Consumer login.
+
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.Text     	
+    ${title}=  FakerLibrary.Text     	
+    ${users}=   Create List   
+
+    ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   400
+    Should Be Equal As Strings    ${resp.json()}   ${LOGIN_INVALID_URL}
 
 
