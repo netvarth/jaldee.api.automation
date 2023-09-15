@@ -691,10 +691,12 @@ JD-TC-Payment By Consumer-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
 
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${totalamt}  ${min_pre}
+    
     ${resp}=  Make payment Consumer Mock  ${pid}  ${totalamt}  ${purpose[0]}  ${cwid}  ${p2_sid1}  ${bool[0]}   ${bool[1]}  ${cid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
     # Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     # Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
@@ -1543,6 +1545,8 @@ JD-TC-Payment By Consumer-UH3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
+    
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${amountpaid}  ${balamount}
     
     ${resp}=  Make payment Consumer Mock  ${pid11}  ${amountpaid}  ${purpose[1]}  ${widc}  ${p2_sid1}  ${bool[0]}   ${bool[1]}  ${cid7}
     Log   ${resp.content}
