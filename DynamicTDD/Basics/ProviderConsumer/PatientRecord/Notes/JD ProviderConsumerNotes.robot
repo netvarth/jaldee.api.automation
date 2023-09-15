@@ -25,8 +25,8 @@ Provider Consumer Add Notes
     [Return]  ${resp}
 
 Update Provider Consumer Notes
-    [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
+    [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}
+    ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
@@ -134,7 +134,7 @@ JD-TC-Adding Provider Consumer Notes-1
     ${description1}=  FakerLibrary.last_name
     ${users1}=   Create List  
 
-    ${resp}=    Update Provider Consumer Notes    ${cid}    ${title1}    ${description1}    ${users1}
+    ${resp}=    Update Provider Consumer Notes    ${note_id}    ${title1}    ${description1}    ${users1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
