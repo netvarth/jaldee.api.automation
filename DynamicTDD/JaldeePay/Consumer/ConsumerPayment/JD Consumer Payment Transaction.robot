@@ -200,6 +200,7 @@ JD-TC-Consumer-Payment-Transaction-1
     ${min_pre}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
+    Set Suite Variable   ${min_pre}
     ${pre_float}=  twodigitfloat  ${min_pre}
     ${Tot1}=  Convert To Number  ${Tot}  1 
     Set Suite Variable   ${Tot}   ${Tot1}
@@ -513,11 +514,13 @@ JD-TC-Consumer-Payment-Transaction-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   
+
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${amt_float}  ${min_pre}
     
     ${resp}=  Make payment Consumer Mock  ${pid}  ${amt_float}  ${purpose[0]}  ${wid1}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${Pcid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
     # Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     # Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
