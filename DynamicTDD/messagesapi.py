@@ -2071,3 +2071,8 @@ MEMBER_SERVICE_ALREADY_DISABLED = "Membership Settings already disabled"
 MEMBER_SERVICE_ALREADY_ENABLED = "Membership Settings already enabled"
 MEMBER_SERVICE_IS_DISABLED = "Service is disabled"
 MEMBER_SERVICE_REQUIRED = "Member Service ID required"
+
+
+# ..................Patient Record............
+
+PROVIDER_CONSUMER_NOTES_NOT_FOUND = "Provider consumer notes not found"
