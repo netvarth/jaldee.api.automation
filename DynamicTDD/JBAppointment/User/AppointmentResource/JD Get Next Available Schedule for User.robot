@@ -584,7 +584,7 @@ JD-TC-NextAvailableSchedule for User-4
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  db.add_timezone_date  ${tz}  1
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime}=  add_timezone_time  ${tz}  0  5  
@@ -737,7 +737,7 @@ JD-TC-NextAvailableSchedule for User-4
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service For User  ${SERVICE2}  ${dep_id1}  ${u_id1}
     
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY11}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  add_timezone_time  ${tz}  0  15  
@@ -750,7 +750,7 @@ JD-TC-NextAvailableSchedule for User-4
     ${maxval1}=  Convert To Integer   ${delta1/5}
         ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
     ${bool2}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id1}  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}  ${parallel1}  ${lid1}  ${duration1}  ${bool1}  ${s_id1}
+    ${resp}=  Create Appointment Schedule For User  ${u_id1}  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY11}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel1}  ${parallel1}  ${lid1}  ${duration1}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -762,11 +762,15 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid1}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
-    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY11}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+
+    ${resp}=  Provider Logout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${var1}=  Set Variable  ${pid1}-${lid}-${u_id}
     ${var2}=  Set Variable   ${pid}-${lid1}-${u_id1}
@@ -800,7 +804,7 @@ JD-TC-NextAvailableSchedule for User-4
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['id']}    ${sch_id1}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['name']}  ${schedule_name1}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['location']['id']}    ${lid1}
-    Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['apptSchedule']['startDate']}     ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['apptSchedule']['startDate']}     ${DAY11}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['apptSchedule']['terminator']['endDate']}     ${DAY2}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['apptSchedule']['timeSlots'][0]['sTime']}     ${sTime1}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['apptSchedule']['timeSlots'][0]['eTime']}     ${eTime1}
@@ -811,7 +815,7 @@ JD-TC-NextAvailableSchedule for User-4
     # Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['batchEnable']}   ${bool2}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['todayAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['futureAppt']}  ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['availableDate']}     ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[1]['availableSchedule']['availableDate']}     ${DAY11}
     Should Be Equal As Strings  ${resp.json()[1]['isCheckinAllowed']}   ${bool[1]}
     Should Contain  "${resp.json()[1]}"  availableSlots
     ${sch_length1}=  get_slot_length  ${delta1}  ${duration1}
