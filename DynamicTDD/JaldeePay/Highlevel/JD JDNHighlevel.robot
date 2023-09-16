@@ -191,7 +191,17 @@ JD-TC-JDN Highlevel-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-     
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    Set Suite Variable  ${DAY2} 
+
     ${desc}=  FakerLibrary.sentence
     Set Suite Variable   ${desc}
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -308,11 +318,7 @@ JD-TC-JDN Highlevel-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${sid3}  ${resp.json()}
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
-
+    
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
     ${sTime}=  add_timezone_time  ${tz}  0  30  
