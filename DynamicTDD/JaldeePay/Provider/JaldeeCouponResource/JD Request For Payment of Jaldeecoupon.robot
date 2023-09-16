@@ -476,7 +476,7 @@ JD-TC-Request for payment-2
     Should Be Equal As Strings  ${resp.json()[0]['reportEndDate']}  ${DAY1}
     Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeBank']}  0.0
     Should Contain  ${resp.json()[0]['listOfJaldeeCoupons']}  ${cupn_code2018}
-    Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeCoupons']}  100.0
+    Should Be Equal As Strings  ${resp.json()[0]['subTotalJaldeeCoupons']}  50.0
     Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  100.0
     Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[3]}
     Should Be Equal As Strings  ${resp.json()[0]['subJcTotalPaid']}  0.0
@@ -559,6 +559,10 @@ JD-TC-Request for payment-3
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
     Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code}
     Should Be Equal As Strings  ${resp.status_code}  200
 

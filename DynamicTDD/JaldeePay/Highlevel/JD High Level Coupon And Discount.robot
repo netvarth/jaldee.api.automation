@@ -52,6 +52,8 @@ JD-TC-High Level Test Case-1
     Set Test Variable   ${discountId}   ${resp.json()}
     clear_location   ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
+    clear_service   ${PUSERNAME${a}}
+
     ${resp} =  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
@@ -226,6 +228,8 @@ JD-TC-High Level Test Case-3
     
     clear_location   ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
+    clear_service   ${PUSERNAME${a}}
+
     ${resp} =  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
