@@ -103,7 +103,8 @@ JD-TC- Disable Discount-2
        Set Test Variable   ${discountId}   ${resp.json()}
        clear_location  ${PUSERNAME120}
        clear_customer   ${PUSERNAME120}
-       
+       clear_service   ${PUSERNAME120}
+
        ${resp} =  Create Sample Queue
        Set Suite Variable  ${s_id}  ${resp['service_id']}
        Set Suite Variable  ${qid}   ${resp['queue_id']}

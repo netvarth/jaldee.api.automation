@@ -130,6 +130,7 @@ JD-TC- Delete Discount-UH5
        # ${postcode}=  FakerLibrary.postcode
        # ${address}=  get_address
        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
        # ${sTime}=  db.get_time_by_timezone   ${tz}
        ${sTime}=  db.get_time_by_timezone  ${tz}
        ${eTime}=  add_timezone_time  ${tz}  0  15  
@@ -235,6 +236,11 @@ JD-TC- Delete Discount-UH6
               Set Test Variable  ${check}  ${resp2.json()['serviceBillable']}
               Exit For Loop IF     "${check}" == "True"
        END
+
+       ${resp}=  Get Business Profile
+       Should Be Equal As Strings  ${resp.status_code}  200
+       Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+     
        clear_Discount  ${PUSERNAME${a}}
        clear_customer   ${PUSERNAME${a}}
        ${desc}=  FakerLibrary.Sentence   nb_words=2

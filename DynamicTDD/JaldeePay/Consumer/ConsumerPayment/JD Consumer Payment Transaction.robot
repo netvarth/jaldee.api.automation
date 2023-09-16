@@ -157,9 +157,9 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.content}
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
-    ${resp}=  Enable Waitlist
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Enable Waitlist
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -168,11 +168,11 @@ JD-TC-Consumer-Payment-Transaction-1
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
     Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}

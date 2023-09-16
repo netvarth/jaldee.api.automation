@@ -96,7 +96,7 @@ JD-TC-Get Coupon By Id-1
     ${coupon2}=    FakerLibrary.word
     ${desc2}=  FakerLibrary.Sentence   nb_words=2
     ${amount2}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
-    ${cupn_code2}=   FakerLibrary.word
+    ${cupn_code2}=   FakerLibrary.firstname
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime}=  add_timezone_time  ${tz}  0  15  
     ${eTime}=  add_timezone_time  ${tz}  0  45  

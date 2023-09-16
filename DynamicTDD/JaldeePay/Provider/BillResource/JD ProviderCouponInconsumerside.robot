@@ -341,6 +341,7 @@ JD-TC-ProviderCouponBill-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep  2s
     # ${resp}=  ConsumerLogout
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -2659,7 +2660,7 @@ JD-TC-ProviderCouponBill-11
 
     sleep   2s
 
-    ${balamount}=  Evaluate  ${Tot1}-${min_pre1}
+    ${balamount}=  Evaluate  ${Tot1}-${min_pre1}-${pc_amount1}
     ${balamount1}=  Convert To Number  ${balamount}  1
 
     ${resp}=  Get Bill By consumer  ${cwid}  ${account_id1}

@@ -255,6 +255,7 @@ JD-TC-Delete Coupon-UH5
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${couponId}  ${resp.json()}
     clear_location  ${PUSERNAME${a}}
+    clear_service   ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
     Set Suite Variable    ${a}
     ${resp} =  Create Sample Queue
@@ -281,7 +282,7 @@ JD-TC-Delete Coupon-UH5
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
-    ${min_bill_amount}=   Random Int   min=50   max=100
+    ${min_bill_amount}=   Random Int   min=75   max=100
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
     ${book_channel}=   Create List   ${bookingChannel[0]}

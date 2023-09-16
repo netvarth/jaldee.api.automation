@@ -209,6 +209,8 @@ JD-TC-Disable coupon-2
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${couponId}  ${resp.json()}
     clear_location  ${PUSERNAME${a}}
+    clear_service   ${PUSERNAME${a}}
+    clear_customer   ${PUSERNAME${a}}
     ${resp} =  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
