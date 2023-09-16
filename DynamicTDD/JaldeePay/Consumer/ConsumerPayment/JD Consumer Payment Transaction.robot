@@ -74,10 +74,13 @@ JD-TC-Consumer-Payment-Transaction-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable   ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+
     # Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    # ${list}=  Create List  1  2  3  4  5  6  7
-    # Set Suite Variable  ${list}  
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  
     # @{Views}=  Create List  self  all  customersOnly
     # ${ph1}=  Evaluate  ${PUSERNAME210}+1000000000
     # ${ph2}=  Evaluate  ${PUSERNAME210}+2000000000
@@ -107,8 +110,7 @@ JD-TC-Consumer-Payment-Transaction-1
     # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # Set Suite Variable   ${eTime}
 
-    # ${DAY}=  db.get_date_by_timezone  ${tz}
-    # Set Suite Variable  ${DAY}  
+    
     
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     # Log  ${resp.content}
@@ -146,6 +148,16 @@ JD-TC-Consumer-Payment-Transaction-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${highest_package}=  get_highest_license_pkg
+    Log  ${highest_package}
+    Set Suite variable  ${lic2}  ${highest_package[0]}
+
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${accId}=  get_acc_id  ${PUSERNAME210}
 
@@ -196,7 +208,10 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()[0]['id']} 
-
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY}  
     ${min_pre}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
