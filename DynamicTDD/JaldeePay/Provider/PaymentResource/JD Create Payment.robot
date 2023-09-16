@@ -476,7 +476,7 @@ JD-TC-Create Payment-2
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cup_code}
     Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  06s
+    sleep  02s
     
     ${resp}=  AddCustomer  ${CUSERNAME18}
     Log   ${resp.json()}
@@ -513,36 +513,39 @@ JD-TC-Create Payment-2
     # Set Test Variable   ${min_pre2}   ${resp.json()['amountDue']} 
     Verify Response  ${resp}   waitlistStatus=${wl_status[3]}
     Verify Response  ${resp}   paymentStatus=${paymentStatus[0]}
-    
-    ${resp}=  Make payment Consumer Mock  ${pid0}  ${min_pre2}  ${purpose[0]}  ${wid18}  ${p1_s2}  ${bool[0]}   ${bool[1]}  ${consumer_id3}
+
+    ${totalpaid}=   Evaluate  ${min_pre2}-50
+    ${totalpaid}=  Convert To Number  ${totalpaid}  1
+
+    ${resp}=  Make payment Consumer Mock  ${pid0}  ${totalpaid}  ${purpose[0]}  ${wid18}  ${p1_s2}  ${bool[0]}   ${bool[1]}  ${consumer_id3}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()}  ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
     # ${resp}=  Make payment Consumer Mock  ${min_pre2}  ${bool[1]}  ${wid18}  ${pid0}  ${purpose[0]}   ${cid18}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    # sleep   02s
+    sleep   02s
 
-    # ${resp}=  Get consumer Waitlist By Id  ${wid18}  ${pid0}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  paymentStatus=${paymentStatus[2]}   waitlistStatus=${wl_status[0]}  
+    ${resp}=  Get consumer Waitlist By Id  ${wid18}  ${pid0}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  paymentStatus=${paymentStatus[2]}   waitlistStatus=${wl_status[0]}  
        
 
-    # ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Get Waitlist By Id  ${wid18} 
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response  ${resp}  paymentStatus=${paymentStatus[2]}   waitlistStatus=${wl_status[0]}
+    ${resp}=  Get Waitlist By Id  ${wid18} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  paymentStatus=${paymentStatus[2]}   waitlistStatus=${wl_status[0]}
        
 
-    # ${resp}=  Get Bill By UUId  ${wid18}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['uuid']}   ${wid18}
-    # Verify Response  ${resp}  billPaymentStatus=${paymentStatus[2]}   totalAmountPaid=${Total2}  amountDue=-50.0
+    ${resp}=  Get Bill By UUId  ${wid18}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}   ${wid18}
+    Verify Response  ${resp}  billPaymentStatus=${paymentStatus[2]}   totalAmountPaid=${Total2}  amountDue=-50.0
 
 
 JD-TC-Create Payment-3

@@ -40,7 +40,8 @@ JD-TC-Get Payment by UUId -1
     
     clear_location  ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
-     
+    clear_service    ${PUSERNAME${a}}
+
     ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     Set Suite Variable  ${s_id1}   ${resp['service_id']}
