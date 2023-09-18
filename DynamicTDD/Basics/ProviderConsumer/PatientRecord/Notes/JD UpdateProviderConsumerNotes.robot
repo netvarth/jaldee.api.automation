@@ -692,6 +692,26 @@ JD-TC-Update Provider Consumer Notes-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.content}   "${NO_PERMISSION}"
+
+JD-TC-Update Provider Consumer Notes-UH8
+
+    [Documentation]   Update Provider consumer notes u with Consumer login.
+
+
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${test}=   FakerLibrary.Text 
+    ${users1}=   Create List   ${test}
+    ${title2}=  FakerLibrary.Text    
+    ${des_num}=   FakerLibrary.Random Number
+
+    ${resp}=    Update Provider Consumer Notes    ${note_id}    ${title2}    ${description2}    ${users1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   400
+    Should Be Equal As Strings    ${resp.json()}   ${LOGIN_INVALID_URL}
+
     
 
      
