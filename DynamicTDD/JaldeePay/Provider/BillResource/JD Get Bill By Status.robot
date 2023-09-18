@@ -76,13 +76,19 @@ JD-TC-Get Bill By Status -1
     # Set Suite Variable  ${sid1}  ${resp.json()}
     Set Suite Variable  ${sid1}  ${resp.json()}
     ${lid}=  Create Sample Location 
+
+    ${resp}=  Get Location By Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${list}=  Create List   1  2  3  4  5  6  7
     ${sTime}=  add_timezone_time  ${tz}  0  30  
     ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  100  ${lid}  ${s_id1}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
-    ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY1}  hi  True  ${cid}
+    ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY1}  hi  True  ${cid}  location=${lid}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
