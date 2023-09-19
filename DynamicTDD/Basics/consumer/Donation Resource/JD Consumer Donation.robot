@@ -435,7 +435,7 @@ JD-TC-ConsumerDonation-6
         ${resp}=  Consumer Activation  ${CUSERPH0_EMAIL}  1
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Consumer Set Credential  ${CUSERPH0_EMAIL}  ${PASSWORD}  1  countryCode=+${countryCode}
+        ${resp}=  Consumer Set Credential  ${CUSERPH0_EMAIL}  ${PASSWORD}  1  
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  countryCode=+${countryCode}
@@ -444,10 +444,11 @@ JD-TC-ConsumerDonation-6
 
         Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
 
-        # ${resp}=   Consumer Login  ${CUSERNAME9}   ${PASSWORD}
-        # Should Be Equal As Strings    ${resp.status_code}   200
+        # # ${resp}=   Consumer Login  ${CUSERNAME9}   ${PASSWORD}
+        # # Should Be Equal As Strings    ${resp.status_code}   200
         Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
         Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+
 
         ${con_id}=  get_id  ${CUSERPH0}
         Set Suite Variable  ${con_id}

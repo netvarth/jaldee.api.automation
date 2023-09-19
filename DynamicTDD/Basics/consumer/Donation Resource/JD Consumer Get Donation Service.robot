@@ -124,8 +124,14 @@ Billable Domain Providers
             
         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         ${acc_id}=  get_acc_id  ${PUSERNAME${a}}
         Set Suite Variable   ${acc_id}
         ${resp}=   Get Active License
