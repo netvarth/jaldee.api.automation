@@ -299,3 +299,26 @@ JD-TC-Get Provider Consumer Notes-UH
     ${resp}=    Get Provider Consumer Notes    ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Get Provider Consumer Notes-UH
+
+    [Documentation]   Get Provider consumer notes without login.
+
+    Get Provider Consumer Notes    ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+
+JD-TC-Get Provider Consumer Notes-UH
+
+    [Documentation]   Get Provider consumer notes with Consumer login.
+
+    ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    Get Provider Consumer Notes    ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   400
+    Should Be Equal As Strings    ${resp.json()}   ${LOGIN_INVALID_URL}
