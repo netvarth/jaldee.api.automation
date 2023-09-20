@@ -76,8 +76,8 @@ ${mp4file}      /ebs/TDD/MP4file.mp4
 ${mp3file}      /ebs/TDD/MP3file.mp3
 ${order}    0
 ${fileSize}    0.00458
-${title1}    @sdf@123
-${description1}    &^7gsdkqwrrf
+${titles}    @sdf@123
+${descriptions}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
@@ -86,11 +86,23 @@ JD-TC-Update Patient Medical History-1
 
     [Documentation]    Update Patient Medical History
 
-    ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    # ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings          ${resp.status_code}   200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -230,7 +242,7 @@ JD-TC-Update Patient Medical History-2
     ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}
     
 
-    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${EMPTY}    ${users1}   ${attachements3}
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${SPACE}    ${users1}   ${attachements3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -239,7 +251,7 @@ JD-TC-Update Patient Medical History-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
-    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${EMPTY}
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${SPACE}
 
 JD-TC-Update Patient Medical History-3
 
@@ -380,5 +392,207 @@ JD-TC-Update Patient Medical History-6
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
+
+JD-TC-Update Patient Medical History-UH
+
+    [Documentation]    Update Provider Consumer Medical history where medicalHistory id is invalid.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title1}=  FakerLibrary.Text       
+    ${description1}=  FakerLibrary.name     	
+    ${users1}=   Create List  
+    
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Test Variable    ${driveId3}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}
+    
+    ${medicalHistory_id}=  FakerLibrary.name     	
+
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${description1}    ${users1}   ${attachements3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Patient Medical History    ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
+
+JD-TC-Update Patient Medical History-UH
+
+    [Documentation]    Update Provider Consumer Medical history where the title contains numbers.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title1}=  FakerLibrary.Random Number       
+    ${description1}=  FakerLibrary.name     	
+    ${users1}=   Create List  
+    
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Test Variable    ${driveId3}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}   	
+
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${description1}    ${users1}   ${attachements3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Patient Medical History    ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
+
+JD-TC-Update Patient Medical History-UH
+
+    [Documentation]    Update Provider Consumer Medical history where the title contains special characters.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    # ${title1}=  FakerLibrary.name      
+    ${description1}=  FakerLibrary.name     	
+    ${users1}=   Create List  
+    
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Test Variable    ${driveId3}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}   	
+
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${titles}    ${description1}    ${users1}   ${attachements3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Patient Medical History    ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${titles}
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
+
+JD-TC-Update Patient Medical History-UH
+
+    [Documentation]    Update Provider Consumer Medical history where the description contains special characters.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title1}=  FakerLibrary.name      
+    # ${description1}=  FakerLibrary.name     	
+    ${users1}=   Create List  
+    
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Test Variable    ${driveId3}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}   	
+
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${descriptions}    ${users1}   ${attachements3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Patient Medical History    ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${descriptions}
+
+JD-TC-Update Patient Medical History-UH
+
+    [Documentation]    Update Provider Consumer Medical history using another provider login.
+
+    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings          ${resp.status_code}   200
+
+    ${title1}=  FakerLibrary.name      
+    ${description1}=  FakerLibrary.name     	
+    ${users1}=   Create List  
+    
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Test Variable    ${driveId3}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId3}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}   	
+
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${description1}    ${users1}   ${attachements3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
+
+JD-TC-Update Patient Medical History-UH
+
+    [Documentation]    Update Provider Consumer Medical history using another consumer login.
+
+    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${title1}=  FakerLibrary.name      
+    ${description1}=  FakerLibrary.name     	
+    ${users1}=   Create List  
+    
+    ${attachements3}=  Create Dictionary   
+
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${description1}    ${users1}   ${attachements3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}   ${NoAccess}
+
+JD-TC-Update Patient Medical History-UH
+
+    [Documentation]    Update Provider Consumer Medical history without login.
+
+    ${title1}=  FakerLibrary.name      
+    ${description1}=  FakerLibrary.name     	
+    ${users1}=   Create List  
+    
+    ${attachements3}=  Create Dictionary   
+
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${description1}    ${users1}   ${attachements3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+
 
  
