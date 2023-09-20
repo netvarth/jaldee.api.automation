@@ -77,16 +77,22 @@ JD-TC-UpdateLocation-1
       Should Be Equal As Strings  ${resp.status_code}  200
       # ${city1}=   get_place
       # Set Suite Variable  ${city1}
-      # ${latti1}=  get_latitude
+      # # ${latti1}=  get_latitude
       # Set Suite Variable  ${latti1}
-      # ${longi1}=  get_longitude
+      # # ${longi1}=  get_longitude
       # Set Suite Variable  ${longi1}
-      # ${postcode1}=  FakerLibrary.postcode
+      # # ${postcode1}=  FakerLibrary.postcode
       # Set Suite Variable  ${postcode1}
       # ${address1}=  get_address
       
       ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
       ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
+
+      # Set Suite Variable  ${city1}
+      Set Suite Variable  ${latti1}
+      Set Suite Variable  ${longi1}
+      Set Suite Variable  ${postcode1}
+
       Set Suite Variable  ${tz}
       Set Suite Variable  ${address1}
       Set Suite Variable  ${city1}
@@ -161,17 +167,23 @@ JD-TC-UpdateLocation-2
       Should Be Equal As Strings  ${resp.status_code}  200
       # ${city2}=   get_place
       # Set Suite Variable  ${city2}
-      # ${latti2}=  get_latitude
+      # # ${latti2}=  get_latitude
       # Set Suite Variable  ${latti2}
-      # ${longi2}=  get_longitude
+      # # ${longi2}=  get_longitude
       # Set Suite Variable  ${longi2}
-      # ${postcode2}=  FakerLibrary.postcode
+      # # ${postcode2}=  FakerLibrary.postcode
       # Set Suite Variable  ${postcode2}
-      # ${address2}=  get_address
+      # # ${address2}=  get_address
       # Set Suite Variable  ${address2}
       ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
       ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
       Set Suite Variable  ${tz2}
+
+      Set Suite Variable  ${city2}
+      Set Suite Variable  ${latti2}
+      Set Suite Variable  ${longi2}
+      Set Suite Variable  ${postcode2}
+      Set Suite Variable  ${address2}
       ${parking_type2}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type2}
       ${24hours2}    Random Element    ['True','False']
@@ -417,6 +429,10 @@ JD-TC-UpdateLocation-UH1
       ${resp}=  Update Location  ${city}  ${longi6}  ${latti6}  www.${city6}.com  ${postcode6}  ${address6}  ${parking_type6}  ${24hours6}  ${lid4} 
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_EXISTS}"
+
+      ${resp}=  Get Location ById  ${lid4}
+      Should Be Equal As Strings  ${resp.status_code}  200
+     
       
 
 JD-TC-UpdateLocation-5

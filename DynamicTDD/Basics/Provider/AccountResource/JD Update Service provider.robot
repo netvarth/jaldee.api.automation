@@ -115,7 +115,12 @@ JD-TC-Update Service Provider-UH1
     [Documentation]   Update provider details with already used provider email id
     ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${id}  ${resp.json()['id']}
     ${resp}=  Update Service Provider With Emailid  ${id}  ${firstname}  ${lastname}  ${gender}  ${dob}  ${lastname}${P_Email}.${test_mail}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${EMAIL_EXISTS}"

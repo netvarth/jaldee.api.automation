@@ -332,11 +332,11 @@ JD-TC-UpdateBusinessProfile-6
     Set Suite Variable  ${sid}   ${resp['service_id']}
     Set Suite Variable   ${lid}   ${resp['location_id']}
 
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    Set Suite Variable   ${lid}   ${resp['location_id']}
+    # ${resp}=   Get Location ById  ${lid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # Set Suite Variable   ${lid}   ${resp['location_id']}
 
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
