@@ -29,7 +29,7 @@ Create DentalRecord
     ${data}=  json.dumps  ${data}
 
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  provider/dental  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/dental  data=${data}  expected_status=any
     [Return]  ${resp}
 
 
@@ -46,7 +46,7 @@ Update DentalRecord
     ${data}=  json.dumps  ${data}
 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  provider/dental  data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/dental  data=${data}  expected_status=any
     [Return]  ${resp}
 
 Update DentalRecord Status
