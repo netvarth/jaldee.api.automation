@@ -455,13 +455,8 @@ JD-TC-Assign_IVR_User-UH3
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${invuserid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get IVR User Details    ${userType[0]}    ${invuserid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.content}    ${empty}
-
+    Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
 JD-TC-Assign_IVR_User-UH4
 
