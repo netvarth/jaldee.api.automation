@@ -154,11 +154,11 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Create MR Case-1
+JD-TC-Get Case Filter-1
 
-    [Documentation]    Create Case Category
+    [Documentation]   Get Case Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -241,7 +241,7 @@ JD-TC-Create MR Case-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -253,20 +253,15 @@ JD-TC-Create MR Case-1
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
 
-    ${resp}=    Get MR Case By UID   ${caseUId}    
+    ${title1}=  FakerLibrary.name
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=   Get Case Filter   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['firstName']}     ${pdrfname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['lastName']}     ${pdrlname}
-    Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
-    Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
-   
-  
-
-
-
-
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description} 

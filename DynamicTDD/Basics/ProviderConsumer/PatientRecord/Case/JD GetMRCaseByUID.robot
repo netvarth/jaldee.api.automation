@@ -154,11 +154,11 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Create MR Case-1
+JD-TC-Get MR Case By UID-1
 
-    [Documentation]    Create Case Category
+    [Documentation]    Get MR Case By UID
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -241,7 +241,7 @@ JD-TC-Create MR Case-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -265,8 +265,3 @@ JD-TC-Create MR Case-1
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
    
-  
-
-
-
-

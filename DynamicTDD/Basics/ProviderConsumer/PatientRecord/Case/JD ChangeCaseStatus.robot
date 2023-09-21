@@ -154,11 +154,11 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Create MR Case-1
+JD-TC-Change Case Status-1
 
-    [Documentation]    Create Case Category
+    [Documentation]    Change Case Status
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -184,6 +184,7 @@ JD-TC-Create MR Case-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
+    ${DAY1}=  get_date
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}
     Log   ${resp.content}
@@ -241,7 +242,7 @@ JD-TC-Create MR Case-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -264,9 +265,20 @@ JD-TC-Create MR Case-1
     Should Be Equal As Strings    ${resp.json()['doctor']['lastName']}     ${pdrlname}
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
+    Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['spInternalStatus']}     ${PRStatus[0]}
+
+
+    ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=    Get MR Case By UID   ${caseUId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['spInternalStatus']}     ${PRStatus[1]}
+
    
-  
 
-
-
-
+    
+   
