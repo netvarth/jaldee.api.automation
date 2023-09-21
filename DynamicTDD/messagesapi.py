@@ -2076,3 +2076,5 @@ MEMBER_SERVICE_REQUIRED = "Member Service ID required"
 # ..................Patient Record............
 
 PROVIDER_CONSUMER_NOTES_NOT_FOUND = "Provider consumer notes not found"
+INVALID_CASE_TYPE_ID = "Invalid Case Type ID"
+INVALID_CASE_CATEGORY_ID = "Invalid Case Category ID"
