@@ -14,52 +14,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
-*** Keywords ***
-
-Add Patient Medical History
-
-    [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}   @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${AttachmentList}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${AttachmentList}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}  title=${title}  description=${description}    viewByUsers=${viewByUsers}  medicalHistoryAttachments=${AttachmentList}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    provider/medicalrecord/medicalHistory    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update Patient Medical History
-
-    [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}  @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${AttachmentList}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${AttachmentList}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}   medicalHistoryAttachments=${AttachmentList}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${medicalHistoryId}    data=${data}     expected_status=any
-    [Return]  ${resp}
-
-Delete Patient Medical History
-
-    [Arguments]    ${medicalHistoryId}  
-    ${resp}=    DELETE On Session    ynw   /provider/medicalrecord/medicalHistory/${medicalHistoryId}        expected_status=any
-    [Return]  ${resp}
-
-Get Patient Medical History
-
-    [Arguments]    ${providerConsumerId}  
-    ${resp}=    GET On Session    ynw    /provider/medicalrecord/medicalHistory/${providerConsumerId}        expected_status=any
-    [Return]  ${resp}
-
 
 *** Variables ***
 
@@ -86,11 +40,22 @@ JD-TC-Adding Patient Medical History-1
 
     [Documentation]    Adding Patient Medical History
 
-    ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    # ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings          ${resp.status_code}   200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -137,9 +102,9 @@ JD-TC-Adding Patient Medical History-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     Set Suite Variable    ${title}

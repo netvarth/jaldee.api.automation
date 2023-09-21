@@ -14,34 +14,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
-*** Keywords ***
-
-Provider Consumer Add Notes
-    [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update Provider Consumer Notes
-    [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}
-    ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Delete Provider Consumer Notes
-    [Arguments]    ${notesId}  
-    ${resp}=    DELETE On Session    ynw    /provider/customers/notes/${notesId}        expected_status=any
-    [Return]  ${resp}
-
-Get Provider Consumer Notes
-    [Arguments]    ${providerConsumerId}  
-    ${resp}=    GET On Session    ynw    /provider/customers/notes/${providerConsumerId}        expected_status=any
-    [Return]  ${resp}
-
 *** Variables ***
 
 @{emptylist}
@@ -58,11 +30,20 @@ JD-TC-Get Provider Consumer Notes-1
 
     [Documentation]    Get Provider Consumer Notes.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+
+    # ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings          ${resp.status_code}   200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -109,9 +90,9 @@ JD-TC-Get Provider Consumer Notes-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     ${description}=  FakerLibrary.last_name
@@ -132,9 +113,9 @@ JD-TC-Get Provider Consumer Notes-2
 
     [Documentation]    Adding Provider consumer notes where description contain 250 words and get that details using Providrer consumer id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     ${description1}=  FakerLibrary.Text     	max_nb_chars=255
@@ -155,9 +136,9 @@ JD-TC-Get Provider Consumer Notes-3
 
     [Documentation]    Adding 2 more provider consumer notes and get the notes details.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     ${description}=  FakerLibrary.last_name
@@ -190,9 +171,9 @@ JD-TC-Get Provider Consumer Notes-4
 
     [Documentation]    Adding provider consumer notes where the title is empty and get the notes details.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${description}=  FakerLibrary.last_name
     ${users}=   Create List  
@@ -212,9 +193,9 @@ JD-TC-Get Provider Consumer Notes-5
 
     [Documentation]    Adding Provider Consumer notes where description is empty and get the notes details.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.last_name
     ${users}=   Create List  
@@ -234,9 +215,9 @@ JD-TC-Get Provider Consumer Notes-6
 
     [Documentation]    Create and Update a note then verify it.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     ${description}=  FakerLibrary.last_name
@@ -275,9 +256,9 @@ JD-TC-Get Provider Consumer Notes-7
 
     [Documentation]    Delete a note then verify it.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Delete Provider Consumer Notes    ${note_id}    
     Log   ${resp.content}
@@ -292,7 +273,7 @@ JD-TC-Get Provider Consumer Notes-UH
 
     [Documentation]    Adding Provider consumer notes using another provider login and get the notes details.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 

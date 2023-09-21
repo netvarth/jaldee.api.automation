@@ -14,52 +14,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
-*** Keywords ***
-
-Add Patient Medical History
-
-    [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}   @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${AttachmentList}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${AttachmentList}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}  title=${title}  description=${description}    viewByUsers=${viewByUsers}  medicalHistoryAttachments=${AttachmentList}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    provider/medicalrecord/medicalHistory    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update Patient Medical History
-
-    [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}  @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${AttachmentList}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${AttachmentList}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}   medicalHistoryAttachments=${AttachmentList}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${medicalHistoryId}    data=${data}     expected_status=any
-    [Return]  ${resp}
-
-Delete Patient Medical History
-
-    [Arguments]    ${medicalHistoryId}  
-    ${resp}=    DELETE On Session    ynw   /provider/medicalrecord/medicalHistory/${medicalHistoryId}        expected_status=any
-    [Return]  ${resp}
-
-Get Patient Medical History
-
-    [Arguments]    ${providerConsumerId}  
-    ${resp}=    GET On Session    ynw    /provider/medicalrecord/medicalHistory/${providerConsumerId}        expected_status=any
-    [Return]  ${resp}
-
 
 *** Variables ***
 
@@ -85,11 +39,23 @@ JD-TC-Get Patient Medical History-1
 
     [Documentation]    Get Patient Medical History.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME13}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+
+    # ${resp}=   ProviderLogin  ${PUSERNAME13}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings          ${resp.status_code}   200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -136,9 +102,9 @@ JD-TC-Get Patient Medical History-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     Set Suite Variable    ${title}
@@ -194,9 +160,7 @@ JD-TC-Get Patient Medical History-2
 
     [Documentation]    Adding Provider consumer Medical history where title contain 255 words and get that details using Provider consumer id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME13}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
 
     ${title}=  FakerLibrary.Text     	max_nb_chars=255
     ${caption}=  FakerLibrary.name
@@ -237,7 +201,7 @@ JD-TC-Get Patient Medical History-3
 
     [Documentation]    Adding 2 more Provider Consumer Medical history and get that details using Provider consumer id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME14}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 
@@ -302,9 +266,11 @@ JD-TC-Get Patient Medical History-3
 JD-TC-Get Patient Medical History-4
 
     [Documentation]    Adding Provider Consumer Medical history  where the title is empty.
-    ${resp}=   ProviderLogin  ${PUSERNAME13}  ${PASSWORD} 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
+         
 
     # ${title}=  FakerLibrary.Text     	max_nb_chars=260
     ${caption}=  FakerLibrary.name
@@ -343,10 +309,11 @@ JD-TC-Get Patient Medical History-4
 JD-TC-Get Patient Medical History-5
 
     [Documentation]   Adding  Provider Consumer Medical history where description is empty.
-    ${resp}=   ProviderLogin  ${PUSERNAME13}  ${PASSWORD} 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
-
+        
     ${title}=  FakerLibrary.Text     	
     ${caption}=  FakerLibrary.name
     # ${description}=  FakerLibrary.last_name
@@ -385,11 +352,10 @@ JD-TC-Get Patient Medical History-6
 
     [Documentation]    Adding Patient Medical History
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -436,7 +402,7 @@ JD-TC-Get Patient Medical History-6
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 
@@ -518,7 +484,7 @@ JD-TC-Get Patient Medical History-UH
 
     [Documentation]    Get Patient medical record using another provider login.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 

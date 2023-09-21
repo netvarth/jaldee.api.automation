@@ -15,34 +15,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-*** Keywords ***
-
-Provider Consumer Add Notes
-    [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update Provider Consumer Notes
-    [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}
-    ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Delete Provider Consumer Notes
-    [Arguments]    ${notesId}  
-    ${resp}=    DELETE On Session    ynw    /provider/customers/notes/${notesId}        expected_status=any
-    [Return]  ${resp}
-
-Get Provider Consumer Notes
-    [Arguments]    ${providerConsumerId}  
-    ${resp}=    GET On Session    ynw    /provider/customers/notes/${providerConsumerId}        expected_status=any
-    [Return]  ${resp}
-
 *** Variables ***
 
 @{emptylist}
@@ -59,11 +31,20 @@ JD-TC-Update Provider Consumer Notes-1
 
     [Documentation]    Update Provider Consumer Notes
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+
+    # ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings          ${resp.status_code}   200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -110,9 +91,9 @@ JD-TC-Update Provider Consumer Notes-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     Set Suite Variable    ${title}
@@ -157,11 +138,11 @@ JD-TC-Update Provider Consumer Notes-2
     [Documentation]     Update Provider consumer notes where  description is empty.
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -198,11 +179,11 @@ JD-TC-Update Provider Consumer Notes-3
     [Documentation]     Update Provider consumer notes where  title is empty.
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -239,11 +220,11 @@ JD-TC-Update Provider Consumer Notes-4
     [Documentation]     Update Provider consumer notes where discription is different.
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -280,11 +261,11 @@ JD-TC-Update Provider Consumer Notes-5
     [Documentation]     Update Provider consumer notes where title is different.
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -321,11 +302,11 @@ JD-TC-Update Provider Consumer Notes-6
     [Documentation]     Update Provider consumer notes where description contain 255 words
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -364,11 +345,11 @@ JD-TC-Update Provider Consumer Notes-7
     [Documentation]     Update Provider consumer notes where title contain 255 words
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -403,13 +384,22 @@ JD-TC-Update Provider Consumer Notes-8
 
     [Documentation]  Update Provider consumer notes with valid user login
 
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME4}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME4}
-    Set Suite Variable   ${p_id1}
+
+    # ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${p_id1}=  get_acc_id  ${HLMUSERNAME4}
+    # Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -481,9 +471,9 @@ JD-TC-Update Provider Consumer Notes-8
     Set Suite Variable    ${jconid1}         ${resp.json()['id']}
    
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME4}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
 
 
@@ -522,7 +512,7 @@ JD-TC-Update Provider Consumer Notes-8
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${sam_email}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
@@ -547,11 +537,11 @@ JD-TC-Update Provider Consumer Notes-UH1
     [Documentation]     Update Provider consumer notes where user id is invalid.
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${test}=   FakerLibrary.Text 
     ${users1}=   Create List   ${test}
@@ -565,11 +555,11 @@ JD-TC-Update Provider Consumer Notes-UH2
 
     [Documentation]     Update Provider consumer notes where note id is invalid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${test}=   FakerLibrary.Text 
     ${users1}=   Create List   ${test}
@@ -585,11 +575,11 @@ JD-TC-Update Provider Consumer Notes-UH3
 
     [Documentation]     Update Provider consumer notes where the title contains numbers.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${test}=   FakerLibrary.Text 
     ${users1}=   Create List   ${test}
@@ -604,11 +594,11 @@ JD-TC-Update Provider Consumer Notes-UH4
 
     [Documentation]     Update Provider consumer notes where the title contains special characters.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${test}=   FakerLibrary.Text 
     ${users1}=   Create List   ${test}
@@ -623,11 +613,11 @@ JD-TC-Update Provider Consumer Notes-UH4
 
     [Documentation]    Update Provider consumer notes where the description contains special characters.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${test}=   FakerLibrary.Text 
     ${users1}=   Create List   ${test}
@@ -657,11 +647,11 @@ JD-TC-Update Provider Consumer Notes-UH6
     [Documentation]   Update Provider consumer notes where description contains numbers.
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${test}=   FakerLibrary.Text 
     ${users1}=   Create List   ${test}
@@ -677,11 +667,11 @@ JD-TC-Update Provider Consumer Notes-UH7
     [Documentation]   Update Provider consumer notes using another provider login.
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME100}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${test}=   FakerLibrary.Text 
     ${users1}=   Create List   ${test}

@@ -15,34 +15,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-*** Keywords ***
-
-Provider Consumer Add Notes
-    [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update Provider Consumer Notes
-    [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}
-    ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Delete Provider Consumer Notes
-    [Arguments]    ${notesId}  
-    ${resp}=    DELETE On Session    ynw    /provider/customers/notes/${notesId}        expected_status=any
-    [Return]  ${resp}
-
-Get Provider Consumer Notes
-    [Arguments]    ${providerConsumerId}  
-    ${resp}=    GET On Session    ynw    /provider/customers/notes/${providerConsumerId}        expected_status=any
-    [Return]  ${resp}
-
 *** Variables ***
 
 @{emptylist}
@@ -59,11 +31,20 @@ JD-TC-Delete Provider Consumer Notes-1
 
     [Documentation]    Delete Provider Consumer Notes
 
-    ${resp}=   ProviderLogin  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME9}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+
+    # ${resp}=   ProviderLogin  ${PUSERNAME9}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings          ${resp.status_code}   200
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -110,9 +91,9 @@ JD-TC-Delete Provider Consumer Notes-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME9}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     Set Suite Variable    ${title}
@@ -148,9 +129,9 @@ JD-TC-Delete Provider Consumer Notes-2
 
     [Documentation]    Adding Provider consumer notes where description contain 250 words and delete using note id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME9}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     ${description}=  FakerLibrary.Text     	max_nb_chars=255
@@ -182,9 +163,9 @@ JD-TC-Delete Provider Consumer Notes-3
     [Documentation]    Adding 2 more provider consumer notes and delete using note id.
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME9}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
     ${description}=  FakerLibrary.Text     	max_nb_chars=255
@@ -241,9 +222,9 @@ JD-TC-Delete Provider Consumer Notes-4
 
     [Documentation]    Adding provider consumer notes where the title is empty and delete using note id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME9}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     # ${title}=  FakerLibrary.Text     	
     ${description}=  FakerLibrary.Text     	
@@ -273,9 +254,9 @@ JD-TC-Delete Provider Consumer Notes-5
 
     [Documentation]   Adding Provider Consumer notes where description is empty  and delete using note id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME9}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.Text     	
     # ${description}=  FakerLibrary.Text     	
@@ -306,12 +287,21 @@ JD-TC-Delete Provider Consumer Notes-6
 
     [Documentation]   delete the provider consumer notes from valid user login
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
-    Set Suite Variable   ${p_id1}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+
+    # ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
+    # Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -383,9 +373,9 @@ JD-TC-Delete Provider Consumer Notes-6
     Set Suite Variable    ${jconid1}         ${resp.json()['id']}
    
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
 
 
@@ -424,7 +414,7 @@ JD-TC-Delete Provider Consumer Notes-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${sam_email}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
@@ -443,12 +433,12 @@ JD-TC-Update Provider Consumer Notes-7
     [Documentation]  Update provider consumer notes from user login and remove the notes details from main provider login.
 
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
-    Set Suite Variable   ${p_id1}
+    # ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
+    # Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -520,9 +510,9 @@ JD-TC-Update Provider Consumer Notes-7
     Set Suite Variable    ${jconid1}         ${resp.json()['id']}
    
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
 
 
@@ -561,7 +551,7 @@ JD-TC-Update Provider Consumer Notes-7
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${sam_email}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
@@ -578,9 +568,9 @@ JD-TC-Update Provider Consumer Notes-7
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title2}
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Delete Provider Consumer Notes    ${note_id1}    
     Log   ${resp.content}
@@ -596,12 +586,12 @@ JD-TC-Update Provider Consumer Notes-8
     [Documentation]  update provider consumer notes from user login and delete the notes from user login.
 
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
-    Set Suite Variable   ${p_id1}
+    # ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
+    # Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -673,9 +663,9 @@ JD-TC-Update Provider Consumer Notes-8
     Set Suite Variable    ${jconid1}         ${resp.json()['id']}
    
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
 
 
@@ -714,7 +704,7 @@ JD-TC-Update Provider Consumer Notes-8
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${sam_email}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
@@ -746,12 +736,12 @@ JD-TC-Update Provider Consumer Notes-9
     [Documentation]  Add 2 provider consumer notes from user login and remove one notes  from main provider login.
 
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
-    Set Suite Variable   ${p_id1}
+    # ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
+    # Set Suite Variable   ${p_id1}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -823,9 +813,9 @@ JD-TC-Update Provider Consumer Notes-9
     Set Suite Variable    ${jconid1}         ${resp.json()['id']}
    
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
 
 
@@ -851,7 +841,7 @@ JD-TC-Update Provider Consumer Notes-9
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${sam_email}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
@@ -882,9 +872,9 @@ JD-TC-Update Provider Consumer Notes-9
     Set Suite Variable    ${note_id3}    ${resp.json()[1]['id']}   
 
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=    Delete Provider Consumer Notes    ${note_id2}    
     Log   ${resp.content}
@@ -903,9 +893,9 @@ JD-TC-Delete Provider Consumer Notes-UH1
 
     [Documentation]   Delete Provider Consumer notes where note id is invalid.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings          ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME9}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.Text     	
     ${description}=  FakerLibrary.Text     	
@@ -925,7 +915,7 @@ JD-TC-Delete Provider Consumer Notes-UH2
 
     [Documentation]   Delete Provider Consumer notes using another provider login.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 
