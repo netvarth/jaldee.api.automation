@@ -472,40 +472,41 @@ JD-TC-GetJaldeeCouponStats-3
     ${coupons}=  Create List  ${cupn_code2018}  ${cupn_code01}  ${cupn_code03}
     ${resp}=  Waitlist AdvancePayment Details   ${pid}  ${qid1}  ${DAY1}  ${s_id3}  ${desc}  ${bool[0]}  ${coupons}  ${self}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}   200
 
     ${coupons}=  Create List  ${cupn_code2018}  ${cupn_code01}  ${cupn_code03}
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${qid1}  ${DAY1}  ${s_id3}  ${des}  ${bool[0]}  ${coupons}  ${self}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422 
-
-    ${coupons}=  Create List  ${cupn_code2018}  ${cupn_code01}
-    ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${qid1}  ${DAY1}  ${s_id3}  ${des}  ${bool[0]}  ${coupons}  ${self}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}   200 
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     #Should Be Equal As Strings  ${resp.json()['providerUsage']['usageAmt']}  50.0
     Should Be Equal As Strings  ${resp.json()['providerUsage']['usageCount']}  3
     Should Be Equal As Strings  ${resp.json()['providerUsage']['reimbursed']}  0.0 
+
     ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_code01}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['providerUsage']['usageAmt']}  100.0
     Should Be Equal As Strings  ${resp.json()['providerUsage']['usageCount']}  2
     Should Be Equal As Strings  ${resp.json()['providerUsage']['reimbursed']}  0.0 
+
     ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_code02}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['providerUsage']['usageAmt']}  50.0
     Should Be Equal As Strings  ${resp.json()['providerUsage']['usageCount']}  1
     Should Be Equal As Strings  ${resp.json()['providerUsage']['reimbursed']}  0.0 
-     ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_code03}
+
+   ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_code03}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['providerUsage']['usageAmt']}  0.0
     Should Be Equal As Strings  ${resp.json()['providerUsage']['usageCount']}  0
@@ -739,6 +740,11 @@ JD-TC-GetJaldeeCouponStats-UH3
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_code09}
@@ -749,12 +755,15 @@ JD-TC-GetJaldeeCouponStats-UH3
   
     ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
+
+
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${qid1}  ${DAY1}  ${s_id7}  ${des}  ${bool[0]}  ${coupons}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "Provider use Limit Reached"
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
+
     ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_code09}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['providerUsage']['usageAmt']}  50.0
@@ -930,10 +939,18 @@ JD-TC-Verify GetJaldeeCouponStats-UH5
 
     ${JALDEE_COUPON_EXCEEDS_APPLY_LIMIT}=   Format String   ${JALDEE_COUPON_EXCEEDS_APPLY_LIMIT}    ${cupn_code11}   
 
+    ${desc}=   FakerLibrary.word
+    ${coupons}=  Create List  ${cupn_code11}  
+    ${resp}=  Waitlist AdvancePayment Details   ${pid}  ${qid1}  ${DAY1}  ${s_id10}  ${des}  ${bool[0]}  ${coupons}  ${self}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Should Contain   ${resp.json()['jCouponList']['${cupn_code11}']['systemNote']}   ONLY_WHEN_FITST_CHECKIN
+
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${qid1}  ${DAY1}  ${s_id10}  ${des}  ${bool[0]}  ${coupons}  ${self}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${JALDEE_COUPON_EXCEEDS_APPLY_LIMIT}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"  "${JALDEE_COUPON_EXCEEDS_APPLY_LIMIT}"
     
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200

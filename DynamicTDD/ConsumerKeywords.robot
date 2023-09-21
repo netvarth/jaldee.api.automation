@@ -3004,9 +3004,9 @@ Get Donation Details
     [Return]  ${resp}
 
 Donation Payment Via Link
-    [Arguments]  ${acc_id}  ${custId}  ${amount}  ${isInternational}  ${paymentMode}  ${purpose}  ${serviceId}  ${source}  ${pay_link}  ${response}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    [Arguments]  ${acc_id}  ${custId}  ${amount}  ${isInternational}  ${paymentMode}  ${purpose}  ${serviceId}   ${source}   ${uuid}  ${pay_link}  ${response}  &{kwargs}  #${timeZone}=Asia/Kolkata
     ${data}=  Create Dictionary  accountId=${acc_id}  custId=${custId}  amount=${amount}  isInternational=${isInternational}  
-    ...   paymentMode=${paymentMode}  purpose=${purpose}  serviceId=${serviceId}  source=${source}  uuid=${pay_link}
+    ...   paymentMode=${paymentMode}  purpose=${purpose}  serviceId=${serviceId}  source=${source}  paylink=${pay_link}  uuid=${uuid}
     ...    mockResponse=${response}
     ${data}=   json.dumps   ${data}
     ${cons_headers}=  Create Dictionary  &{headers} 
