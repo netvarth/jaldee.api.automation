@@ -70,12 +70,12 @@ JD-TC-GetDonationsCount-1
         Should Be Equal As Strings  ${resp.status_code}  200  
         Set Suite Variable  ${sid2}  ${resp.json()}
 
-        ${resp}=   Consumer Login  ${CUSERNAME5}   ${PASSWORD}
+        ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
         Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
 
-        ${con_id}=  get_id  ${CUSERNAME5}
+        ${con_id}=  get_id  ${CUSERNAME11}
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME56}
         Set Suite Variable  ${acc_id}
@@ -111,12 +111,12 @@ JD-TC-GetDonationsCount-1
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}  
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}  
         Log  ${resp.content}
         Should Be Equal As Strings      ${resp.status_code}  200
         Set Suite Variable  ${prov_consid}  ${resp.json()[0]['id']}
 
-        ${resp}=   Consumer Login  ${CUSERNAME5}   ${PASSWORD}
+        ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         
         ${resp}=  Get Bill By consumer  ${don_id1}  ${acc_id}
@@ -172,7 +172,7 @@ JD-TC-GetDonationsCount-1
         ${donar_fname}=  FakerLibrary.first_name
         ${donar_lname}=  FakerLibrary.last_name
         ${address}=  get_address
-        ${ph1}=  Evaluate  ${CUSERNAME5}+58963
+        ${ph1}=  Evaluate  ${CUSERNAME11}+58963
         ${don_amt2}=   Random Int   min=1000   max=4000
         ${mod}=  Evaluate  ${don_amt2}%${multiples[0]}
         ${don_amt2}=  Evaluate  ${don_amt2}-${mod}
@@ -262,7 +262,7 @@ JD-TC-GetDonationsCount-1
 
 JD-TC-GetDonationsCount-2
         [Documentation]   Consumer Get Donations Count
-        ${resp}=   Consumer Login  ${CUSERNAME5}   ${PASSWORD}
+        ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=  Get Donation Count By Consumer  date-eq=${CUR_DAY}
         Log  ${resp.json()}
@@ -271,7 +271,7 @@ JD-TC-GetDonationsCount-2
 
 JD-TC-GetDonationsCount-3
         [Documentation]   Consumer Get Donations Count
-        ${resp}=   Consumer Login  ${CUSERNAME5}   ${PASSWORD}
+        ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=  Get Donation Count By Consumer  service-eq=${sid2}
         Log  ${resp.json()}
@@ -280,7 +280,7 @@ JD-TC-GetDonationsCount-3
 
 JD-TC-GetDonationsCount-4
         [Documentation]   Consumer Get Donations Count
-        ${resp}=   Consumer Login  ${CUSERNAME5}   ${PASSWORD}
+        ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=  Get Donation Count By Consumer  location-eq=${loc_id1}
         Log  ${resp.json()}
@@ -289,7 +289,7 @@ JD-TC-GetDonationsCount-4
 
 JD-TC-GetDonationsCount-5
         [Documentation]   Consumer Get Donations Count
-        ${resp}=   Consumer Login  ${CUSERNAME5}   ${PASSWORD}
+        ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=  Get Donation Count By Consumer  donationAmount-eq=${don_amt1}
         Log  ${resp.json()}
@@ -298,7 +298,7 @@ JD-TC-GetDonationsCount-5
 
 JD-TC-GetDonationsCount-6
         [Documentation]   Consumer Get Donations Count
-        ${resp}=   Consumer Login  ${CUSERNAME5}   ${PASSWORD}
+        ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=  Get Donation Count By Consumer  billPaymentStatus-eq=${paymentStatus[0]}
         Log  ${resp.json()}
@@ -307,7 +307,7 @@ JD-TC-GetDonationsCount-6
 
 JD-TC-GetDonationsCount-7
         [Documentation]   Consumer Get Donations Count
-        ${resp}=   Consumer Login  ${CUSERNAME5}   ${PASSWORD}
+        ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         ${resp}=  Get Donation Count By Consumer  billPaymentStatus-eq=${paymentStatus[2]}
         Log  ${resp.json()}

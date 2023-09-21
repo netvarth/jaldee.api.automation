@@ -280,8 +280,8 @@ JD-TC-DonationPayment-UH2
 
         Set Suite Variable  ${acc_id12}
         ${resp}=  Make payment Consumer Mock  ${acc_id12}  ${don_amt}  ${purpose[5]}  0000  ${sid2}  ${bool[0]}   ${bool[1]}  ${con_id10}
-        Should Be Equal As Strings  ${resp.status_code}  401
-        Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"   
+        Should Be Equal As Strings  ${resp.status_code}  422
+        Should Be Equal As Strings  "${resp.json()}"  "${INVALID_YNWUUID}"   
 
 JD-TC-DonationPayment-UH3  
         [Documentation]   get bill without login      

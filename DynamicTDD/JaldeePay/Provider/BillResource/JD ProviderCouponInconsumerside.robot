@@ -492,6 +492,76 @@ JD-TC-ProviderCouponBill-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain   ${resp.json()['proCouponList']['${cupn_code3}']['systemNote']}   EXCEEDS_PRO_COUP_APPLY_LIMIT
 
+
+
+JD-TC-ProviderCouponBill-UH11
+
+    [Documentation]  Consumer apply a coupon at Checkin time.but the coupon is for first checkin only
+
+    clear_Coupon     ${PUSERNAME185}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${coupon3}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${pc_amount}=   Random Int   min=10  max=50
+    ${pc_amount}=  Convert To Number  ${pc_amount}  1
+    Set Suite Variable  ${pc_amount} 
+    ${cupn_code3}=   FakerLibrary.word
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=90   max=100
+    ${max_disc_val}=   Random Int   min=90  max=100
+    ${max_prov_use}=   Random Int   min=1   max=1
+    ${book_channel}=   Create List   ${bookingChannel[1]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list   ${p1_sid1}   
+    ${resp}=  Create Provider Coupon   ${coupon3}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code3}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${couponId3}  ${resp.json()}
+
+    ${resp}=  Get Coupon By Id  ${couponId3} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cid}=  get_id  ${CUSERNAME19}
+
+    ${msg}=  FakerLibrary.word
+    ${coupons}=  Create List  ${cupn_code3}  
+    ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid2}  ${msg}  ${bool[0]}  ${coupons}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${cwid}  ${wid[0]} 
+
+    ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${DAY2}=  db.add_timezone_date  ${tz}  1
+
+    ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY2}  ${p1_sid2}  ${msg}  ${bool[0]}  ${coupons}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    # ${wid}=  Get Dictionary Values  ${resp.json()}
+    # Set Test Variable  ${cwid1}  ${wid[0]} 
+
+    # ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Contain   ${resp.json()['proCouponList']['${cupn_code3}']['systemNote']}   EXCEEDS_PRO_COUP_APPLY_LIMIT
+
+
 JD-TC-ProviderCouponBill-UH2
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon not in online
      

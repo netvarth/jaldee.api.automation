@@ -198,7 +198,7 @@ JD-TC-DonationPaymentViaLink-1
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   donation payment via link  ${pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   donation payment via link  ${pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}   ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200 
         Should Be Equal As Strings   ${resp.json()['amount']}  ${don_amt}
@@ -228,7 +228,7 @@ JD-TC-DonationPaymentViaLink-2
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${pid}  ${In_con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${pid}  ${In_con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}   ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200 
         Should Be Equal As Strings   ${resp.json()['amount']}  ${don_amt}
@@ -256,7 +256,7 @@ JD-TC-DonationPaymentViaLink-3
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${pid}  ${In_con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${pid}  ${In_con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  422
         # Should Be Equal As Strings   ${resp.json()['amount']}  ${don_amt}
@@ -284,7 +284,7 @@ JD-TC-DonationPaymentViaLink-UH1
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${pid}  ${con_id}  ${0_don_amt1}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${pid}  ${con_id}  ${0_don_amt1}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  $${uuid1}  {pay_link}  ${bool[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   422
         Should Be Equal As Strings    ${resp.json()}   ${CANNOT_ACCEPT_PAY_SINCE_AMOUNT_IS_ZERO}
@@ -312,7 +312,7 @@ JD-TC-DonationPaymentViaLink-UH2
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${pid}  ${con_id}  ${ng_don_amt1}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${pid}  ${con_id}  ${ng_don_amt1}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   422
         Should Be Equal As Strings    ${resp.json()}   ${INVALID_PAYMENT_AMOUNT}
@@ -340,7 +340,7 @@ JD-TC-DonationPaymentViaLink-UH3
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${pid}  ${con_id}  ${high_don_amt1}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${pid}  ${con_id}  ${high_don_amt1}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   422
         Should Be Equal As Strings    ${resp.json()}   ${HIGHER_PAYMENT_AMOUNT}
@@ -368,7 +368,7 @@ JD-TC-DonationPaymentViaLink-UH4
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${in_pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${in_pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
 
 
@@ -394,7 +394,7 @@ JD-TC-DonationPaymentViaLink-UH5
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${ng_pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${ng_pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
 
 
@@ -420,7 +420,7 @@ JD-TC-DonationPaymentViaLink-UH6
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${sp_char_pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${sp_char_pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
 
     
@@ -446,7 +446,7 @@ JD-TC-DonationPaymentViaLink-UH7
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${l_pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${l_pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
 
 
@@ -472,7 +472,7 @@ JD-TC-DonationPaymentViaLink-UH8
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${empty}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${empty}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
 
 
@@ -498,7 +498,7 @@ JD-TC-DonationPaymentViaLink-UH9
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${pid}  ${empty}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${pid}  ${empty}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
 
 
@@ -524,5 +524,5 @@ JD-TC-DonationPaymentViaLink-UH10
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=   Donation Payment Via Link  ${pid}  ${sp_char_con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=   Donation Payment Via Link  ${pid}  ${sp_char_con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}

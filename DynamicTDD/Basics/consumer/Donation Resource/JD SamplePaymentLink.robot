@@ -175,7 +175,7 @@ JD-TC-GetDonationPaymentViaLink-1
         Set Suite Variable  ${don_amt} 
         ${isInternational}=  Convert To Boolean  ${isInternational}
         ${serviceId}=  Convert To Integer  ${serviceId}
-        ${resp}=  donation payment via link  ${pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${pay_link}  ${bool[1]}
+        ${resp}=  donation payment via link  ${pid}  ${con_id}  ${don_amt}  ${isInternational}  ${paymentMode}  ${purpose}  ${sid1}  ${source}  ${uuid1}  ${pay_link}  ${bool[1]}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200 
 
