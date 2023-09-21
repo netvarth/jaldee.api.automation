@@ -157,7 +157,7 @@ JD-TC-Get Case Type-1
 
     [Documentation]    Get Case Type By id
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -195,11 +195,12 @@ JD-TC-Get Case Type-1
     Should Be Equal As Strings    ${resp.json()['name']}     ${name}
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${aliasName}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
+    
 JD-TC-Get Case Type-2
 
     [Documentation]    Create Case Category where name contain 255 words and get case category by id
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -223,7 +224,7 @@ JD-TC-Get Case Type-3
 
     [Documentation]    Create Case Category where name contain 255 words and get case category by id
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -270,7 +271,7 @@ JD-TC-Get Case Type-UH3
 
     [Documentation]    Get Case Category with invalid id
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
