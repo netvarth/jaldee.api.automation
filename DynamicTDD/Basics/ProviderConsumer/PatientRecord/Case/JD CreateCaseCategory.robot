@@ -61,6 +61,8 @@ JD-TC-Create Case Category-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
+    ${DAY1}=  get_date
+    Set Suite Variable    ${DAY1}
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}
     Log   ${resp.content}
@@ -75,6 +77,7 @@ JD-TC-Create Case Category-1
     Should Be Equal As Strings    ${resp.json()['name']}     ${name}
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${aliasName}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
+  
 
 JD-TC-Create Case Category-2
 
@@ -136,6 +139,7 @@ JD-TC-Create Case Category-UH1
     ${resp}=    Create Case Category    ${empty}  ${aliasName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+     Should Be Equal As Strings    ${resp.content}   "${NAME_REQUIRED}"
    
 JD-TC-Create Case Category-UH2
 

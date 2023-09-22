@@ -136,6 +136,7 @@ JD-TC-Create Case Type-UH1
     ${resp}=    Create Case Type    ${empty}  ${aliasName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.content}   "${NAME_REQUIRED}"
    
 JD-TC-Create Case Type-UH2
 

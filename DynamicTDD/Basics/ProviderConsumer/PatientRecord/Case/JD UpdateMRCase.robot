@@ -133,6 +133,7 @@ JD-TC-Update MR Case-1
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
 
+
     ${title1}=  FakerLibrary.name
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
@@ -146,5 +147,232 @@ JD-TC-Update MR Case-1
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description} 
 
+JD-TC-Update MR Case-2
 
+    [Documentation]    Update MR Case title contain 255 words
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+   ${title1}=  FakerLibrary.Text      max_nb_chars=255
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=   Get Case Filter   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description} 
+
+JD-TC-Update MR Case-3
+
+    [Documentation]    Update MR Case description contain 255 words
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${title1}=  FakerLibrary.name
+   ${description}=  FakerLibrary.Text      max_nb_chars=255
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=   Get Case Filter   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
+
+JD-TC-Update MR Case-4
+
+    [Documentation]    Update MR Case title contain numbers
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${title1}=  FakerLibrary.Random Number
+   ${description}=  FakerLibrary.Text      max_nb_chars=255
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=   Get Case Filter   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
+
+JD-TC-Update MR Case-5
+
+    [Documentation]    Update MR Case description contain numbers
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${title1}=  FakerLibrary.name
+   ${description}=  FakerLibrary.Random Number
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=   Get Case Filter   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
+
+JD-TC-Update MR Case-7
+
+    [Documentation]    Update MR Case title is empty
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+   ${description}=  FakerLibrary.Text      max_nb_chars=255
+
+    ${resp}=    Update MR Case    ${caseUId}  ${empty}  ${description}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=   Get Case Filter   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${empty} 
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
+
+JD-TC-Update MR Case-8
+
+    [Documentation]    Update MR Case from user login
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accoun_Id}        ${resp.json()['id']}  
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${dep_name1}=  FakerLibrary.bs
+    ${dep_code1}=   Random Int  min=100   max=999
+    ${dep_desc1}=   FakerLibrary.word  
+    ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp1.json()}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${u_id}=  Create Sample User
+    Set Suite Variable  ${u_id}
+
+    ${resp}=  Get User By Id      ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
+    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
+
+    ${resp}=  SendProviderResetMail   ${sam_email}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${sam_email}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${title1}=  FakerLibrary.name
+   ${description}=  FakerLibrary.Text      max_nb_chars=255
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${empty}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=   Get Case Filter   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${empty}
+
+JD-TC-Update MR Case-UH1
+
+    [Documentation]    Update MR Case description contain more than 255 words
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${title1}=  FakerLibrary.name
+   ${description}=  FakerLibrary.Text      max_nb_chars=400
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=   Get Case Filter   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
+    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
+
+JD-TC-Update MR Case-UH2
+
+    [Documentation]    Update MR Case using another provider login
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${title1}=  FakerLibrary.name
+   ${description}=  FakerLibrary.Text      max_nb_chars=400
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
+
+JD-TC-Update MR Case-UH3
+
+    [Documentation]    Update MR Case without login
+
+    ${resp}=    Update MR Case    ${caseUId}  ${title}  ${description}  
+    Log   ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+
+
+
+   
    
