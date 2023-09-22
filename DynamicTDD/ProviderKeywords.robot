@@ -10856,7 +10856,7 @@ Create DentalRecord
 
     [Arguments]      ${toothNo}  ${toothType}  ${orginUid}   &{kwargs}
 
-    ${data}=  Create Dictionary    toothNo=${toothNo}  toothType=${toothType}  investigation=${investigation}  orginUid=${orginUid}
+    ${data}=  Create Dictionary    toothNo=${toothNo}  toothType=${toothType}    orginUid=${orginUid}
 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
@@ -10871,9 +10871,9 @@ Create DentalRecord
 
 Update DentalRecord
 
-    [Arguments]      ${toothNo}  ${toothType}  ${orginUid}   &{kwargs}
+    [Arguments]    ${id}      ${toothNo}  ${toothType}  ${orginUid}   &{kwargs}
 
-    ${data}=  Create Dictionary    toothNo=${toothNo}  toothType=${toothType}  investigation=${investigation}  orginUid=${orginUid}
+    ${data}=  Create Dictionary    id=${id}    toothNo=${toothNo}  toothType=${toothType}    orginUid=${orginUid}
 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
