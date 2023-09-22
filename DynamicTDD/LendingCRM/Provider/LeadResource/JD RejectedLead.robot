@@ -22,7 +22,7 @@ Library           /ebs/TDD/excelfuncs.py
 
 
 Check Answers
-    [Arguments]  ${resp}  ${data}  
+    [Arguments]  ${resp}  ${data}   
     ${len}=  Get Length  ${resp.json()['questionnaire']['questionAnswers']}
     # ${answer}=  Set Variable  ${data}
     ${data}=  json.loads  ${data}
@@ -134,6 +134,15 @@ JD-TC-RejectLeadStatus-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${resp}=   Create Sample Location
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
  
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -373,7 +382,11 @@ JD-TC-RejectLeadStatus-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}

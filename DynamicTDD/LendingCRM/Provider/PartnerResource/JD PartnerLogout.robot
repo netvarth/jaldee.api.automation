@@ -424,6 +424,10 @@ JD-TC-Logout Partner-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
+    ${resp}=  Provider Logout
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=    Partner Reset Password    ${account_id}  ${P_phone}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    511 
@@ -451,10 +455,6 @@ JD-TC-Logout Partner-1
 JD-TC-Logout Partner-UH1
                                   
     [Documentation]              Logout Partner which is already logged out
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Login Partner with Password    ${account_id}  ${P_phone}  ${PASSWORD}
     Log  ${resp.content}

@@ -698,7 +698,8 @@ JD-TC-CdlWorkFlow-1
     ${dealerfname}=                        FakerLibrary.name
     ${dealername}=                         FakerLibrary.bs
     ${dealerlname}=                        FakerLibrary.last_name
-    ${dob}=                                FakerLibrary.Date
+    ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String             ${dob} 
     Set Test Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
    
     ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
@@ -983,9 +984,9 @@ JD-TC-CdlWorkFlow-1
         ${resp1}=  AddCustomer  ${cust}    firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings         ${resp1.status_code}    200
-        Set Test Variable  ${cust_id}      ${resp1.json()}
+        Set Suite Variable  ${cust_id}      ${resp1.json()}
     ELSE
-        Set Test Variable  ${cust_id}      ${resp.json()[0]['id']}
+        Set Suite Variable  ${cust_id}      ${resp.json()[0]['id']}
     END
 
     Set Suite Variable  ${cust_email}           ${fname}${C_Email}.ynwtest@jaldee.com
@@ -1122,7 +1123,7 @@ JD-TC-CdlWorkFlow-1
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
 
-    ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${custid}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
+    ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
 
     ${locations}=    Create Dictionary     id=${locId}
@@ -1156,10 +1157,10 @@ JD-TC-CdlWorkFlow-1
 
 # ....... Verify adhaar number .......
 
-    ${aadhaarAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${custid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}   driveId=${driveId2}   ownerType=${ownerType[0]}   type=photo
+    ${aadhaarAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}   driveId=${driveId2}   ownerType=${ownerType[0]}   type=photo
     Log  ${aadhaarAttachments}
 
-    ${resp}=                               Requst For Aadhar Validation    ${custid}    ${loanuid}    ${cust}    ${aadhaar}    ${aadhaarAttachments}
+    ${resp}=                               Requst For Aadhar Validation    ${cust_id}    ${loanuid}    ${cust}    ${aadhaar}    ${aadhaarAttachments}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
@@ -1193,10 +1194,10 @@ JD-TC-CdlWorkFlow-1
 
 # ....... Verify Pan Number .......
 
-    ${panAttachments}  Create Dictionary   action=${LoanAction[0]}  owner=${custid}  fileName=${jpgfile2}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
+    ${panAttachments}  Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${jpgfile2}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
     Log  ${panAttachments}
 
-    ${resp}=   Requst For Pan Validation   ${custid}    ${loanuid}    ${cust}    ${pan}    ${panAttachments}
+    ${resp}=   Requst For Pan Validation   ${cust_id}    ${loanuid}    ${cust}    ${pan}    ${panAttachments}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
@@ -1280,7 +1281,7 @@ JD-TC-CdlWorkFlow-1
 
 # ....... Update Bank Details to loan .......
 
-    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${custid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
     Log  ${bankStatementAttachments}
 
     ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}

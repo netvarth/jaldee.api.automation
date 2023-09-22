@@ -438,7 +438,8 @@ JD-TC-Partner Aadhar Verify-UH2
 
     ${resp}    Aadhaar Status    ${Puid1}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}   ${ENTER_VALID_AADHAR_NUMBER}
 
 JD-TC-Partner Aadhar Verify-UH3
     

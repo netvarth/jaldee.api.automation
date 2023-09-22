@@ -82,7 +82,15 @@ JD-TC-Change Branch Status-1
     ${resp}=    Create BranchMaster    ${branchCode}    ${branchName2}    ${locId}    ${status[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${branchid1}  ${resp.json()['id']}
+    Set Suite Variable  ${branchid2}  ${resp.json()['id']}
+
+    ${resp}=    Get Branch By Id    ${branchId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Branch By Id    ${branchId2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Change Branch Status    ${branchid1}    ${bool[1]}
     Log  ${resp.content}
@@ -108,7 +116,7 @@ JD-TC-Change Branch Status-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${branid}=    FakerLibrary.Random Number
+    ${branid}=    FakerLibrary.Random Number   digits=10  fix_len=True
 
     ${resp}=    Change Branch Status    ${branid}    ${bool[1]}
     Log  ${resp.content}

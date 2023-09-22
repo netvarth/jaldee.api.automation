@@ -1,89 +1,67 @@
 *** Settings ***
-Suite Teardown    Delete All Sessions
-Test Teardown     Delete All Sessions
-Force Tags        RBAC
-Library           Collections
-Library           String
-Library           json
-Library           DateTime
-Library           requests
-Library           FakerLibrary
-Library           /ebs/TDD/db.py
-Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/Keywords.robot
-Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/SuperAdminKeywords.robot
-Resource          /ebs/TDD/ApiKeywords.robot
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/consumermail.py
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Suite Teardown     Delete All Sessions
+Test Teardown      Delete All Sessions
+Force Tags         RBAC
+Library            Collections
+Library            String
+Library            json
+Library            FakerLibrary
+Library            /ebs/TDD/db.py
+Library            /ebs/TDD/excelfuncs.py
+Resource           /ebs/TDD/ProviderKeywords.robot
+Resource           /ebs/TDD/ConsumerKeywords.robot
+Resource           /ebs/TDD/ProviderPartnerKeywords.robot
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/consumerlist.py 
+Variables          /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_musers.py
 
 
 *** Variables ***
 
 @{emptylist}
+${invoiceAmount}                     80000
+${downpaymentAmount}                 20000
+${requestedAmount}                   60000
+${sanctionedAmount}                  60000
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
+${jpgfile}                           /ebs/TDD/uploadimage.jpg
+${pngfile}                           /ebs/TDD/upload.png
+${pdffile}                           /ebs/TDD/sample.pdf
+${jpgfile2}                          /ebs/TDD/small.jpg
+${gif}                               /ebs/TDD/sample.gif
+${xlsx}                              /ebs/TDD/qnr.xlsx
 
-${order}    0
-${fileSize}  0.00458
+${order}                             0
+${fileSize}                          0.00458
 
-${phonez}   7024567616
-${custphone}    5555512345
+${aadhaar}                           555555555555
 
-${phone}     5555512345
-${phone1}     5555512347
-${phone2}     5555512375
-${phone3}     5555512389
-${phone4}     5555512752
-${phonen}    5555548751
+${monthlyIncome}                     80000
+${emiPaidAmountMonthly}              2000
+${start}                             12
 
-${aadhaar}    555558555555
-${pan}     5555555555
+${customerEducation}                 1    
+${customerEmployement}               1   
+${salaryRouting}                     1
+${familyDependants}                  1
+${noOfYearsAtPresentAddress}         1  
+${currentResidenceOwnershipStatus}   1  
+${ownedMovableAssets}                1
+${goodsFinanced}                     1
+${earningMembers}                    1
+${existingCustomer}                  1
+${autoApprovalUptoAmount}            50000
+${autoApprovalUptoAmount2}           70000
+${cibilScore}                        850
 
-${bankAccountNo}    55555345478
-${bankIfsc}         55555687
-${bankPin}       5555585
-
-${bankAccountNo2}    5555534587
-${bankIfsc2}         55555688
-${bankPin2}       5555589
-
-${invoiceAmount}    80000
-${downpaymentAmount}    20000
-${requestedAmount}    60000
-${sanctionedAmount}   60000
-
-${invoiceAmount1}    22001
-${downpaymentAmount1}    2000
-${requestedAmount1}    20001
-
-${monthlyIncome}    80000
-${emiPaidAmountMonthly}    2000
-
-
-${customerEducation}  1    
-${customerEmployement}   1   
-${salaryRouting}    1
-${familyDependants}    1
-${noOfYearsAtPresentAddress}    1  
-${currentResidenceOwnershipStatus}    1 
-${ownedMovableAssets}    1
-${goodsFinanced}    1
-${earningMembers}    1
-${existingCustomer}    1
-${vehicleNo}    2456
-
-${autoApprovalUptoAmount}    50000
-${autoApprovalUptoAmount2}    70000
+${minCreditScoreRequired}            50
+${minEquifaxScoreRequired}           690
+${minCibilScoreRequired}             690
+${minAge}                            23
+${maxAge}                            60
+${minAmount}                         5000
+${maxAmount}                         300000
 
 *** Test Cases ***
 
@@ -91,11 +69,52 @@ JD-TC-BussinessHeadWithRBAC-1
                                   
     [Documentation]               createBranch Using Business Head Role with RBAC
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${resp}=  Get BusinessDomainsConf
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${length}=  Get Length  ${resp.json()}
+    FOR   ${domindex}  IN RANGE   ${length}
+        IF  "${resp.json()[${domindex}]['domain']}" == "finance"
+            ${sublen}=  Get Length  ${resp.json()[${domindex}]['subDomains']}
+            FOR   ${subdomindex}  IN RANGE   ${sublen}
+                IF  "${resp.json()[${domindex}]['subDomains'][${subdomindex}]['subDomain']}" == "nbfc"
+                    Set Test Variable  ${domains}  ${resp.json()[${domindex}]['domain']}
+                    Set Test Variable  ${sub_domains}  ${resp.json()[${domindex}]['subDomains'][${subdomindex}]['subDomain']}
+                    
+                    Exit For Loop
+                END
+            END
+        END
+    END
+    ${firstname_A}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname_A}
+    ${lastname_A}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_A}
+
+# ..... SignUp Business Head
+
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}    200
+    
+    ${resp}=  Account Activation          ${NBFCMUSERNAME1}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Account Set Credential      ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.content}

@@ -104,7 +104,7 @@ JD-TC-UpdateBranchMaster-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account}  ${resp.json()['id']}
 
-    ${invbrid}=    FakerLibrary.Random Number
+    ${invbrid}=    FakerLibrary.Random Number   digits=10  fix_len=True
 
     ${resp}=    Update BranchMaster    ${invbrid}    ${branchCode2}    ${branchName2}    ${locId}    ${status[0]}
     Log  ${resp.content}
