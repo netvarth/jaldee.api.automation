@@ -11026,6 +11026,52 @@ Change Case Status
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}/status/${statusName}   expected_status=any
     [Return]  ${resp}
 
+Get Case Count Filter
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case     expected_status=any
+    [Return]  ${resp}
+
+Create Treatment Plan
+
+    [Arguments]      ${caseDto}  ${treatment}  ${works}  &{kwargs}
+    ${data}=  Create Dictionary    caseDto=${caseDto}  treatment=${treatment}  works=${works} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Update Treatment Plan
+
+    [Arguments]     ${id}  ${caseDto}  ${treatment}  ${works}  &{kwargs}
+    ${data}=  Create Dictionary    id=${id}  caseDto=${caseDto}  treatment=${treatment}  works=${works} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Update Treatment Plan Work status
+    [Arguments]     ${treatmentId}  ${workId}  ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/${treatmentId}/${workId}/${status}   expected_status=any
+    [Return]  ${resp}
+
+Get Treatment Plan By Id
+    [Arguments]     ${id}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/${Id}  expected_status=any
+    [Return]  ${resp}
+
+Get Treatment Plan By case Id
+    [Arguments]     ${uid}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/case/${uid}  expected_status=any
+    [Return]  ${resp}
 
 Encrypted Provider Login
     [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91

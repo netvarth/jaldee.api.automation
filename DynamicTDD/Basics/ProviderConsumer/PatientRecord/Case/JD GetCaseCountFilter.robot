@@ -34,11 +34,11 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Get Case Filter-1
+JD-TC-Get Case Count Filter-1
 
-    [Documentation]   Get Case Filter
+    [Documentation]   Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -124,7 +124,7 @@ JD-TC-Get Case Filter-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -142,7 +142,7 @@ JD-TC-Get Case Filter-1
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
@@ -163,11 +163,11 @@ JD-TC-Get Case Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['type']['id']}     ${type_id}
 
 
-JD-TC-Get Case Filter-2
+JD-TC-Get Case Count Filter-2
 
-    [Documentation]    Update MR Case title contain 255 words and get case filter
+    [Documentation]    Update MR Case title contain 255 words and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -177,18 +177,18 @@ JD-TC-Get Case Filter-2
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description} 
 
-JD-TC-Get Case Filter-3
+JD-TC-Get Case Count Filter-3
 
-    [Documentation]    Update MR Case description contain 255 words  and get case filter
+    [Documentation]    Update MR Case description contain 255 words  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -199,18 +199,18 @@ JD-TC-Get Case Filter-3
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Get Case Filter-4
+JD-TC-Get Case Count Filter-4
 
-    [Documentation]    Update MR Case title contain numbers  and get case filter
+    [Documentation]    Update MR Case title contain numbers  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -221,18 +221,18 @@ JD-TC-Get Case Filter-4
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Get Case Filter-5
+JD-TC-Get Case Count Filter-5
 
-    [Documentation]    Update MR Case description contain numbers  and get case filter
+    [Documentation]    Update MR Case description contain numbers  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -243,18 +243,18 @@ JD-TC-Get Case Filter-5
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Get Case Filter-7
+JD-TC-Get Case Count Filter-7
 
-    [Documentation]    Update MR Case title is empty  and get case filter
+    [Documentation]    Update MR Case title is empty  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -264,18 +264,18 @@ JD-TC-Get Case Filter-7
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${empty} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Get Case Filter-8
+JD-TC-Get Case Count Filter-8
 
-    [Documentation]    Update MR Case from user login and get case filter
+    [Documentation]    Update MR Case from user login and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -333,30 +333,30 @@ JD-TC-Get Case Filter-8
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${empty}
 
-JD-TC-Get Case Filter-UH1
+JD-TC-Get Case Count Filter-UH1
 
-    [Documentation]    Get Case Filter- without login
+    [Documentation]    Get Case Count Filter- without login
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   
     Log   ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 D-TC-Get Case Filter-UH2
 
-    [Documentation]    Get Case Filter- with another provider login
+    [Documentation]    Get Case Count Filter- with another provider login
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter 
     Log   ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}    []
