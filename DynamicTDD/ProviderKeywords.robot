@@ -10887,8 +10887,8 @@ Update DentalRecord
 
 Update DentalRecord Status
 
-    [Arguments]    ${healthRecordSectionEnum}   ${medicalId}  
-    ${resp}=    PUT On Session    ynw   /provider/dental/${healthRecordSectionEnum}/${medicalId}        expected_status=any
+    [Arguments]      ${dentalid}   ${healthRecordSectionEnum} 
+    ${resp}=    PUT On Session    ynw   /provider/dental/${dentalid}/status/${healthRecordSectionEnum}       expected_status=any
     [Return]  ${resp}
 
 Delete DentalRecord

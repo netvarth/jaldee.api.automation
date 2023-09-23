@@ -34,9 +34,9 @@ ${titles}    @sdf@123
 ${descriptions}    &^7gsdkqwrrf
 
 *** Test Cases ***
-JD-TC-Get Dental Record-1
+JD-TC-Update Dental Record Status-1
 
-    [Documentation]    Create a Dental Record and verify .
+    [Documentation]    Create a Dental Record then verify it's status.
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -148,7 +148,7 @@ JD-TC-Get Dental Record-1
     ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Test Variable      ${id}           ${resp.json()}
+    Set Suite Variable      ${id}           ${resp.json()}
     # Set Test Variable      ${uid}           ${resp.json()["uid"]}
 
     ${resp}=    Get DentalRecord ById   ${id}    
@@ -156,192 +156,86 @@ JD-TC-Get Dental Record-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
     Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
-    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[0]} 
-    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
-    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
-    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
-    Should Be Equal As Strings    ${resp.json()['provider']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['provider']['firstName']}     ${pdrfname} 
-    Should Be Equal As Strings    ${resp.json()['provider']['lastName']}     ${pdrlname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
+    Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[0]} 
 
-JD-TC-Get Dental Record-2
 
-    [Documentation]    Create a Dental Record then update toothType and verify .
+JD-TC-Update Dental Record Status-2
+
+    [Documentation]    Create a Dental Record and Update it's status to COMPLETED, then verify it's status.
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-
-    ${consumer}=  Create Dictionary  id=${cid} 
-    ${category}=  Create Dictionary  id=${category_id}  
-    ${type}=  Create Dictionary  id=${type_id}  
-    ${doctor}=  Create Dictionary  id=${pid}
-
-    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${caseId1}        ${resp.json()['id']}
-    Set Suite Variable    ${caseUId1}    ${resp.json()['uid']}
-
-    ${resp}=    Get MR Case By UID   ${caseUId1}    
+    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['firstName']}     ${pdrfname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['lastName']}     ${pdrlname}
-    Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
-    Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
 
-    ${toothNo}=   Random Int  min=1   max=47
-    ${note1}=  FakerLibrary.word
-    ${investigation}=    Create List   ${note1}
-    ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
-
-    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId1}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable      ${id1}           ${resp.json()}
-    # Set Test Variable      ${uid}           ${resp.json()["uid"]}
-
-    ${resp}=    Get DentalRecord ById   ${id1}    
+    ${resp}=    Get DentalRecord ById   ${id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['id']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
-    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[0]} 
-    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId1} 
-    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
-    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
-    Should Be Equal As Strings    ${resp.json()['provider']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['provider']['firstName']}     ${pdrfname} 
-    Should Be Equal As Strings    ${resp.json()['provider']['lastName']}     ${pdrlname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
+    Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[1]} 
 
-    ${resp}=    Update DentalRecord    ${id1}    ${toothNo}  ${toothType[1]}  ${caseUId1}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
+JD-TC-Update Dental Record Status-UH1
 
-    ${resp}=    Get DentalRecord ById   ${id1}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['id']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
-    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[1]} 
-    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId1} 
-
-JD-TC-Get Dental Record-3
-
-    [Documentation]    Delete Dental Record and Get that record using id.
+    [Documentation]    Update Dental record status with invalid dental record status.
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Delete DentalRecord   ${id1}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    ${status}=  FakerLibrary.word
 
-    ${resp}=    Get DentalRecord ById   ${id1}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-
-JD-TC-Get Dental Record-4
-
-    [Documentation]    Creating a Dental record with multiple  tooth surfaces and Get that record using id.
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${toothNo}=   Random Int  min=1   max=47
-    ${note1}=  FakerLibrary.word
-    ${investigation}=    Create List   ${note1}
-    ${toothSurfaces}=    Create List   ${toothSurfaces[0]}    ${toothSurfaces[1]}
-
-    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId1}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable      ${id2}           ${resp.json()}
-    # Set Test Variable      ${uid}           ${resp.json()["uid"]}
-
-    ${resp}=    Get DentalRecord ById   ${id2}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['id']}     ${id2} 
-    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
-    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[0]} 
-    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId1} 
-    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
-    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
-    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]} 
-
-    Should Be Equal As Strings    ${resp.json()['provider']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['provider']['firstName']}     ${pdrfname} 
-    Should Be Equal As Strings    ${resp.json()['provider']['lastName']}     ${pdrlname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
-
-JD-TC-Get Dental Record-UH1
-
-    [Documentation]    Get Dental records using invalid id.
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${id3}=   Random Int  min=12   max=47
-
-    ${resp}=    Get DentalRecord ById   ${id3}    
+    ${resp}=    Update DentalRecord Status    ${id}       ${status}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Get Dental Record-UH2
+JD-TC-Update Dental Record Status-UH2
 
-    [Documentation]    Get Dental Record with another provider login.
+    [Documentation]    Update Dental record status with invalid dental id.
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${dentalid}=  FakerLibrary.word
+
+    ${resp}=    Update DentalRecord Status    ${dentalid}       ${PRStatus[1]}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+JD-TC-Update Dental Record Status-UH3
+
+    [Documentation]    Update Dental Record status with another provider login.
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get DentalRecord ById   ${id2}    
+    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
 
-JD-TC-Get Dental Record-UH3
+JD-TC-Update Dental Record Status-UH4
 
-    [Documentation]    Get Dental Record without login.
+    [Documentation]    Update Dental Record status without login.
 
-    ${resp}=    Get DentalRecord ById   ${id2}    
+    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Get Dental Record-UH3
+JD-TC-Update Dental Record Status-UH5
 
-    [Documentation]    Get Dental Record with consumer login.
+    [Documentation]    Update Dental Record status with consumer login.
 
     ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get DentalRecord ById   ${id2}    
+    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
-
-
-
-
