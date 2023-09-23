@@ -78,11 +78,11 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Create Treatment Plan-1
+JD-TC-Get Treatment Plan By Id-1
 
-    [Documentation]    Create Treatment Plan
+    [Documentation]    Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -170,7 +170,7 @@ JD-TC-Create Treatment Plan-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -213,11 +213,11 @@ JD-TC-Create Treatment Plan-1
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
 
 
-JD-TC-Create Treatment Plan-2
+JD-TC-Get Treatment Plan By Id-2
 
-    [Documentation]    Create 2 more Treatment Plan
+    [Documentation]    Create 2 more Treatment Plan and Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -255,11 +255,11 @@ JD-TC-Create Treatment Plan-2
     # Should Be Equal As Strings    ${resp.json()['works'][1]['createdDate']}     ${DAY1}
 
 
-JD-TC-Create Treatment Plan-3
+JD-TC-Get Treatment Plan By Id-3
 
-    [Documentation]    Create Treatment Plan where treatment field contain 255 words
+    [Documentation]    Create Treatment Plan where treatment field contain 255 words and Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -291,47 +291,12 @@ JD-TC-Create Treatment Plan-3
     Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
 
-JD-TC-Create Treatment Plan-4
 
-    [Documentation]    Create Treatment Plan where work field contain 255 words
+JD-TC-Get Treatment Plan By Id-4
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
+    [Documentation]    Create Treatment Plan where treatment is empty and Get Treatment Plan By Id
 
-    ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.Text      max_nb_chars=255
-    ${one}=  Create Dictionary  work=${work}   status=${QnrStatus[1]}
-    ${works}=  Create List  ${one}  
-
-    ${resp}=    Create Treatment Plan    ${caseDto}  ${treatment}  ${works}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${treatmentId4}        ${resp.json()}
-
-    ${resp}=    Get Treatment Plan By Id   ${treatmentId4}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
-    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['lastName']}     ${proconlname} 
-    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['firstName']}     ${pdrfname} 
-    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['lastName']}     ${pdrlname}
-    Should Be Equal As Strings    ${resp.json()['caseDto']['type']['id']}     ${type_id} 
-    Should Be Equal As Strings    ${resp.json()['caseDto']['category']['id']}     ${category_id} 
-    Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${QnrStatus[1]}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
-
-JD-TC-Create Treatment Plan-5
-
-    [Documentation]    Create Treatment Plan where treatment is empty
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -363,11 +328,11 @@ JD-TC-Create Treatment Plan-5
     Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
 
-JD-TC-Create Treatment Plan-6
+JD-TC-Get Treatment Plan By Id-5
 
-    [Documentation]    Create Treatment Plan where works list is empty
+    [Documentation]    Create Treatment Plan where works list is empty and Get Treatment Plan By Id
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -397,9 +362,9 @@ JD-TC-Create Treatment Plan-6
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
   
 
-JD-TC-Create Treatment Plan-UH1
+JD-TC-Get Treatment Plan By Id-UH1
 
-    [Documentation]    Create Treatment Plan using another provider login
+    [Documentation]    Get Treatment Plan By Id using another provider login
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -410,79 +375,47 @@ JD-TC-Create Treatment Plan-UH1
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}  
 
-    ${resp}=    Create Treatment Plan    ${caseDto}  ${treatment}  ${works}  
-    Log   ${resp.json()}
+     ${resp}=    Get Treatment Plan By Id   ${treatmentId6}    
+    Log   ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
 
-JD-TC-Create Treatment Plan-UH2
+JD-TC-Get Treatment Plan By Id-UH2
 
-    [Documentation]    Create Treatment Plan without login
+    [Documentation]    Get Treatment Plan By Id without login
 
-    ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.Text      max_nb_chars=255
-    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    ${works}=  Create List  ${one}  
-
-    ${resp}=    Create Treatment Plan    ${caseDto}  ${treatment}  ${works}  
-    Log   ${resp.json()}
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId6}    
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Treatment Plan-UH3
+JD-TC-Get Treatment Plan By Id-UH3
 
-    [Documentation]    Create Treatment Plan where casedto is empty
+    [Documentation]    Get Treatment Plan By Id  where id is invalid
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.name
-    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    ${works}=  Create List  ${one}  
-
-    ${resp}=    Create Treatment Plan    ${empty}  ${treatment}  ${works}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
-
-
-JD-TC-Create Treatment Plan-UH4
-
-    [Documentation]    Create Treatment Plan where case dto uid is invalid
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.name
-    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    ${works}=  Create List  ${one}  
     ${fake_id}=  Random Int  min=500   max=1000
-    ${caseDto1}=  Create Dictionary  uid=${fake_id} 
+     
 
-    ${resp}=    Create Treatment Plan    ${caseDto1}  ${treatment}  ${works}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_CASE_ID}"
+    ${resp}=    Get Treatment Plan By Id   ${fake_id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Should Be Equal As Strings  ${resp.content}    ${empty}
 
-JD-TC-Create Treatment Plan-UH5
 
-    [Documentation]    Create Treatment Plan using provider consumer login
+JD-TC-Get Treatment Plan By Id-UH4
+
+    [Documentation]     Get Treatment Plan By Id using provider consumer login
 
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.Text      max_nb_chars=255
-    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    ${works}=  Create List  ${one}  
-
-    ${resp}=    Create Treatment Plan    ${caseDto}  ${treatment}  ${works}  
-    Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}  400
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId6}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  400
     Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
     
   
