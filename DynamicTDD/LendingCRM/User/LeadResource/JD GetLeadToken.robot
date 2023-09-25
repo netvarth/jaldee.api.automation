@@ -41,7 +41,9 @@ JD-TC-GetLeadToken-1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${p_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${p_id}    ${decrypted_data['id']}
     # ${p_id}=  get_acc_id  ${MUSERNAME63}
 
     ${resp}=    Get Locations
@@ -147,7 +149,9 @@ JD-TC-GetLeadToken-2
     ${resp}=   Encrypted Provider Login  ${MUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${p_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${p_id}    ${decrypted_data['id']}
     ${resp}=  Create Sample Location
     Set Suite Variable    ${locid1}   ${resp}
 

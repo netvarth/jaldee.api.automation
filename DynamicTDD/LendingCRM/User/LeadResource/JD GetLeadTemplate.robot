@@ -27,7 +27,9 @@ JD-TC-GetLeadTemplates-1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 # *** comment ***
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -216,7 +218,9 @@ JD-TC-GetLeadTemplates-2
     ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
 
     ${resp}=    AddCustomer    ${CUSERNAME8}
     Log   ${resp.json()}
@@ -483,7 +487,9 @@ JD-TC-AddLeadToken-UH4
     ${resp}=   Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

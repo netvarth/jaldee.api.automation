@@ -88,8 +88,10 @@ JD-TC-AddLeadToken-1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${p_id}    ${resp.json()['id']}
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${p_id}    ${decrypted_data['id']}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
  
     # ${p_id}=  get_acc_id  ${MUSERNAME61}
 
@@ -1077,7 +1079,9 @@ JD-TC-AddLeadToken-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
     ${pid1}=  get_acc_id    ${MUSERNAME_E}
 
     ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
@@ -1250,7 +1254,9 @@ JD-TC-AddLeadToken-8
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
 
     # ${resp}=   Enable Waitlist
     # Log   ${resp.json()}

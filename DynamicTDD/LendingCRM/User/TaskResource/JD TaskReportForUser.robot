@@ -156,8 +156,8 @@ JD-TC-TaskReport-1
     ${resp}=  Get Report Status By Token Id  ${token_id}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${DAY}              ${resp.json()['reportContent']['data'][0]['1']}
-    Should Be Equal As Strings  ${place}            ${resp.json()['reportContent']['data'][0]['2']}
+    Should Be Equal As Strings  ${DAY}              ${resp.json()['reportContent']['date']}
+    Should Be Equal As Strings  ${place}            ${resp.json()['reportContent']['reportHeader']['Location']}
     Should Be Equal As Strings  ${fname}${SPACE}${lname}            ${resp.json()['reportContent']['data'][0]['3']}
     Should Be Equal As Strings  ${employeeId}           ${resp.json()['reportContent']['data'][0]['4']}
     Should Be Equal As Strings  ${title}           ${resp.json()['reportContent']['data'][0]['5']}
@@ -167,7 +167,7 @@ JD-TC-TaskReport-2
 
     [Documentation]  Generate Task Report For Title Filter
 
-    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provide=r Login        ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     

@@ -115,8 +115,10 @@ JD-TC-ChangeLeadStatusbyuser-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${prov_fname11}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${prov_fname11}  ${decrypted_data['firstName']}
 
     ${highest_package}=  get_highest_license_pkg
     ${resp}=   Change License Package  ${highest_package[0]}
@@ -479,8 +481,10 @@ JD-TC-ChangeLeadStatusbyuser-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${first_name1}  ${resp.json()['firstName']}
-    Set Suite Variable  ${user_name1}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${first_name1}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${user_name1}  ${decrypted_data['userName']}
 
 
 #    enquiry create
@@ -835,7 +839,9 @@ JD-TC-ChangeLeadStatusbyuser-2
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1099,7 +1105,9 @@ JD-TC-ChangeLeadStatusbyuser-3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
   
     ${resp}=  Get Lead By Id   ${leUid2}
     Log   ${resp.content}
@@ -1153,7 +1161,9 @@ JD-TC-ChangeLeadStatusbyuser-4
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
 
     ${resp}=    Change Status Lead    ${status_id10}    ${leUid2} 
     Log  ${resp.content}
@@ -1171,7 +1181,9 @@ JD-TC-ChangeLeadStatusbyuser-5
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
    
     ${resp}=   Get Qnr for login status   ${leUid2}
     Log   ${resp.content}
@@ -1218,7 +1230,9 @@ JD-TC-ChangeLeadStatusbyuser-6
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
   
     ${resp}=   Get Qnr for login status   ${leUid2}
     Log   ${resp.content}
@@ -1262,7 +1276,9 @@ JD-TC-ChangeLeadStatusbyuser-7
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
    
     ${resp}=    Change Status Lead    ${status_id13}    ${leUid2} 
     Log  ${resp.content}
@@ -1280,7 +1296,9 @@ JD-TC-ChangeLeadStatusbyuser-8
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
     
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1652,7 +1670,9 @@ JD-TC-ChangeLeadStatusbyuser-9
     ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
   
    
     ${resp}=  Get Questionnaire By uuid For Lead    ${leUid4}
@@ -1788,7 +1808,9 @@ JD-TC-ChangeLeadStatusbyuser-10
     ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypt_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1832,7 +1854,9 @@ JD-TC-ChangeLeadStatusbyuser-UH1
     ${resp}=   Encrypted Provider Login  ${MUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
   
     ${resp}=    Change Status Lead   ${status_id10}    ${leUid3} 
     Log  ${resp.content}
