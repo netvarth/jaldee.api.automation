@@ -347,7 +347,9 @@ JD-TC-Payment_Report-1
     Should Be Equal As Strings  ${payment_modes[5]}        ${resp.json()['reportContent']['data'][1]['11']}  # Mode_of_tansaction
     Set Suite Variable  ${BillRef_id101}     ${resp.json()['reportContent']['data'][1]['7']}  # ConfirmationId
     Should Be Equal As Strings  ${BillRef_id101}   ${BillRef_id100}
-
+    Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['23']}   ${DAY}        
+    Should Be Equal As Strings   ${resp.json()['reportContent']['reportGeneratedOn']}   ${Date}      
+    Should Be Equal As Strings   ${resp.json()['reportContent']['date']}   ${DAY}     
 
 JD-TC-Payment_Report-UH1
     [Documentation]  Generate Payment_Report without login

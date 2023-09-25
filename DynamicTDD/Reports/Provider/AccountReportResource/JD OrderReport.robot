@@ -281,11 +281,15 @@ JD-TC-orderreport-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Server Time
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${Date}    ${resp.json()}   
-    ${Date} =	Convert Date	${Date}	 result_format=%d/%m/%Y %I:%M %p
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
+    ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
+    Set Test Variable  ${Date}   ${TODAY_dd_mm_yyyy} ${ReportTime}
+
+    # ${resp}=  Get Server Time
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${Date}    ${resp.json()}   
+    # ${Date} =	Convert Date	${Date}	 result_format=%d/%m/%Y %I:%M %p
 
     ${filter}=  Create Dictionary 
     ${resp}=  Generate Report REST details  ${reportType[4]}  ${dateCategory[0]}  ${filter}
@@ -300,7 +304,10 @@ JD-TC-orderreport-1
     Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['2']}   ${cons_name1}              
     Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['3']}   ${countryCodes[0]}${CUSERNAME12}              
     Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['5']}   ${bookingType[3]}    ignore_case=True         
-    Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['7']}   ${ordernumber}              
+    Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['7']}   ${ordernumber}       
+    Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['23']}   ${DAY1}        
+    Should Be Equal As Strings   ${resp.json()['reportContent']['reportGeneratedOn']}   ${Date}      
+    Should Be Equal As Strings   ${resp.json()['reportContent']['date']}   ${DAY1}     
     Variable Should Exist   ${resp.json()['reportContent']['data'][0]['10']}  ${total}
     Variable Should Exist   ${resp.json()['reportContent']['data'][0]['15']}  ${total}
 
@@ -1051,23 +1058,6 @@ JD-TC-orderreport-4
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cons_id1}  ${resp.json()[0]['id']}
-    
-    ${resp}=   Get Order by uid     ${orderid1} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${ordernumber}     ${resp.json()['orderNumber']}   
-    Should Be Equal As Strings  ${resp.json()['uid']}                     ${orderid1}
-    Should Be Equal As Strings  ${resp.json()['homeDelivery']}            ${bool[1]} 
-    Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]} 
-  
     ${totalPrice1}=  Evaluate  ${item_quantity1} * ${promoPrice1}
     ${totalPrice1}=  Convert To Number  ${totalPrice1}  1
     Set Suite Variable   ${totalPrice1}
@@ -1118,6 +1108,11 @@ JD-TC-orderreport-4
     ${resp}=   Get Order by uid     ${orderid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${ordernumber}     ${resp.json()['orderNumber']}   
+    Should Be Equal As Strings  ${resp.json()['uid']}                     ${orderid1}
+    Should Be Equal As Strings  ${resp.json()['homeDelivery']}            ${bool[1]} 
+    Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]} 
+  
 
     ${resp}=  Consumer Login  ${CUSERNAME15}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1189,6 +1184,19 @@ JD-TC-orderreport-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp1}=   Run Keyword If  ${resp.json()['onlinePresence']}==${bool[0]}   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${EMPTY}
+    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
+    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
@@ -1418,7 +1426,7 @@ JD-TC-orderreport-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${total} 
     
-    ${resp}=  Make payment Consumer Mock  ${account_id1}  ${advanceAmount}  ${purpose[0]}  ${orderid1}  ${EMPTY}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${account_id1}  ${total}  ${purpose[1]}  ${orderid1}  ${EMPTY}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1456,8 +1464,8 @@ JD-TC-orderreport-5
     Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['3']}   ${countryCodes[0]}${CUSERNAME12}              
     Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['5']}   ${bookingType[3]}    ignore_case=True         
     Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['7']}   ${ordernumber}              
-    Variable Should Exist   ${resp.json()['reportContent']['data'][0]['10']}  ${advanceAmount}
-    Variable Should Exist   ${resp.json()['reportContent']['data'][0]['15']}  ${advanceAmount}
+    Variable Should Exist   ${resp.json()['reportContent']['data'][0]['10']}  ${total}
+    Variable Should Exist   ${resp.json()['reportContent']['data'][0]['15']}  ${total}
 
 
 JD-TC-orderreport-6
