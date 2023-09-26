@@ -163,7 +163,7 @@ JD-TC-ConsumerCreateApptRequest-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.json()[0]['apptTakenTime']}     ${statusUpdatedTime}
-   
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}               ${appt_reqid1}
 
 JD-TC-ConsumerCreateApptRequest-2
 
