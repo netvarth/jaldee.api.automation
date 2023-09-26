@@ -154,10 +154,16 @@ JD-TC-ConsumerCreateApptRequest-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${appt_reqid1}  ${apptid[0]}
 
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
+    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
+    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
+
     ${resp}=  Consumer Get Appt Service Request
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Should Be Equal As Strings    ${resp.json()[0]['apptTakenTime']}     ${statusUpdatedTime}
+   
 
 JD-TC-ConsumerCreateApptRequest-2
 
