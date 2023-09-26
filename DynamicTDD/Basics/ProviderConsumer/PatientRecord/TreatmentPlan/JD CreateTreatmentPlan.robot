@@ -386,22 +386,6 @@ JD-TC-Create Treatment Plan-UH2
     Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Treatment Plan-UH3
-
-    [Documentation]    Create Treatment Plan where casedto is empty
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.name
-    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    ${works}=  Create List  ${one}  
-
-    ${resp}=    Create Treatment Plan    ${empty}  ${treatment}  ${works}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
 
 
 JD-TC-Create Treatment Plan-UH4
@@ -441,6 +425,45 @@ JD-TC-Create Treatment Plan-UH5
     Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  400
     Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
+
+
+JD-TC-Create Treatment Plan-UH6
+
+    [Documentation]      Create Treatment Plan where case dto uid is invalid  
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${treatment}=  FakerLibrary.name
+    ${work}=  FakerLibrary.name
+    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
+    ${works}=  Create List  ${one}  
+    ${fake_id}=  Random Int  min=500   max=1000
+    ${caseDto1}=  Create Dictionary  uid=${fake_id} 
+
+    ${resp}=   Create Treatment Plan   ${caseDto1}  ${treatment}  ${works}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_CASE_ID}"
+
+*** comment ***
+JD-TC-Create Treatment Plan-UH3
+
+    [Documentation]    Create Treatment Plan where casedto is empty            #cant able to pass empty dto.need a an empty dictionary insteadvb
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${treatment}=  FakerLibrary.name
+    ${work}=  FakerLibrary.name
+    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
+    ${works}=  Create List  ${one}  
+
+    ${resp}=    Create Treatment Plan    ${empty}  ${treatment}  ${works}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   422
     
   
 

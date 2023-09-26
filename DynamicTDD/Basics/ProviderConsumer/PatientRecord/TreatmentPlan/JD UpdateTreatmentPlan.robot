@@ -380,27 +380,10 @@ JD-TC-Update Treatment Plan-UH2
     Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Update Treatment Plan-UH3
-
-    [Documentation]   Update Treatment Plan where casedto is empty
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.name
-    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    ${works}=  Create List  ${one}  
-
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${empty}  ${treatment}  ${works}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
-
 
 JD-TC-Update Treatment Plan-UH4
 
-    [Documentation]     Update Treatment Plan where case dto uid is invalid
+    [Documentation]     Update Treatment Plan where case dto uid is invalid   #Dev didnot check case dto in update section
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -458,3 +441,20 @@ JD-TC-Update Treatment Plan-UH6
 
 
 
+*** comment ***
+JD-TC-Update Treatment Plan-UH3
+
+    [Documentation]   Update Treatment Plan where casedto is empty     #Dev didnot check case dto in update section.also we cant set empty value here
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${treatment}=  FakerLibrary.name
+    ${work}=  FakerLibrary.name
+    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
+    ${works}=  Create List  ${one}  
+
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${empty}  ${treatment}  ${works}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   422

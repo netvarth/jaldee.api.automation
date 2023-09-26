@@ -170,7 +170,7 @@ JD-TC-Update Treatment Plan Work status-1
     Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
 
-    ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${PRStatus[0]}  
+    ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${QnrStatus[1]}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
@@ -187,9 +187,14 @@ JD-TC-Update Treatment Plan Work status-2
     Should Be Equal As Strings            ${resp.status_code}    200
 
 
+    ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${PRStatus[0]}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
     ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${QnrStatus[1]}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
+
 
     ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
     Log   ${resp.content}
@@ -197,7 +202,7 @@ JD-TC-Update Treatment Plan Work status-2
 
 JD-TC-Update Treatment Plan Work status-UH1
 
-    [Documentation]    Update Treatment Plan Work status that already updated
+    [Documentation]    Update Treatment Plan Work status that already complete status
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -207,7 +212,7 @@ JD-TC-Update Treatment Plan Work status-UH1
     ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${QnrStatus[1]}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${ALREADY_UPDATED}
+    Should Be Equal As Strings    ${resp.json()}   ${STATUS_COMPLETE}
 
 JD-TC-Update Treatment Plan Work status-UH2
 
@@ -259,7 +264,7 @@ JD-TC-Update Treatment Plan Work status-UH5
    ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${fake_id}  ${PRStatus[0]}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"
+    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_WORK_ID}"
 
 JD-TC-Update Treatment Plan Work status-UH6
 
@@ -273,8 +278,25 @@ JD-TC-Update Treatment Plan Work status-UH6
    ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${fake_id}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"
+    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"                 # They cant fix this,because of enum value
 
+JD-TC-Update Treatment Plan Work status-UH7
+
+    [Documentation]    Update Treatment Plan Work status that already open status
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${PRStatus[0]}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}  200
+
+    ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${PRStatus[0]}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}   ${STATUS_OPEN}
 
     
 

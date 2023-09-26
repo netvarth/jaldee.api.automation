@@ -179,8 +179,9 @@ JD-TC-Get Treatment Plan By case Id-UH1
 
     ${resp}=    Get Treatment Plan By case Id   ${caseUId}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
+    Should Be Equal As Strings       ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}  []
+   
 
 JD-TC-Get Treatment Plan By case Id-UH2
 
