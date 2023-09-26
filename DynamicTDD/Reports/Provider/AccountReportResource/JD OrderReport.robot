@@ -578,11 +578,15 @@ JD-TC-orderreport-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Server Time
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${Date}    ${resp.json()}   
-    ${Date} =	Convert Date	${Date}	 result_format=%d/%m/%Y %I:%M %p
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
+    ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
+    Set Test Variable  ${Date}   ${TODAY_dd_mm_yyyy} ${ReportTime}
+
+    # ${resp}=  Get Server Time
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${Date}    ${resp.json()}   
+    # ${Date} =	Convert Date	${Date}	 result_format=%d/%m/%Y %I:%M %p
 
     ${filter}=  Create Dictionary 
     ${resp}=  Generate Report REST details  ${reportType[4]}  ${dateCategory[0]}  ${filter}
