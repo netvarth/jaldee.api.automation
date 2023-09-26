@@ -11080,3 +11080,52 @@ Encrypted Provider Login
     ${data}=    json.dumps    ${encrypted_data}
     ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
     [Return]  ${resp}
+
+Create MedicalRecordPrescription Template
+    [Arguments]    ${templateName}    @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${prescriptionDto}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${prescriptionDto}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    templateName=${templateName}  prescriptionDto=${prescriptionDto} 
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Update MedicalRecordPrescription Template
+    [Arguments]    ${id}  ${templateName}    @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${prescriptionDto}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${prescriptionDto}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary   id=${id}  templateName=${templateName}  prescriptionDto=${prescriptionDto} 
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Remove Prescription Template
+    Check And Create YNW Session
+    [Arguments]    ${temId} 
+    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/template/${temId}       expected_status=any
+    [Return]  ${resp}
+
+Get Prescription Template By Account Id
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template      expected_status=any
+    [Return]  ${resp}
+
+Get MedicalPrescription Template By Id
+    [Arguments]    ${temId} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
+    [Return]  ${resp}
+

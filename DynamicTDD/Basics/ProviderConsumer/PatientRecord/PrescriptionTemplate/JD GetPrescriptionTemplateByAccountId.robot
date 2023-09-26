@@ -15,55 +15,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-*** Keywords  ***
-
-Create Prescription Template
-    [Arguments]    ${templateName}    @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${prescriptionDto}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${prescriptionDto}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    templateName=${templateName}  prescriptionDto=${prescriptionDto} 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update Prescription Template
-    [Arguments]    ${id}  ${templateName}    @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${prescriptionDto}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${prescriptionDto}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary   id=${id}  templateName=${templateName}  prescriptionDto=${prescriptionDto} 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Remove Prescription Template
-
-    [Arguments]    ${temId} 
-    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/template/${temId}       expected_status=any
-    [Return]  ${resp}
-
-Get Prescription Template By Account Id
-
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template      expected_status=any
-    [Return]  ${resp}
-
-Get Prescription Template By Id
-    [Arguments]    ${temId} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
-    [Return]  ${resp}
 
 
 
@@ -127,7 +78,7 @@ JD-TC-Get Prescription Template By Account Id-1
 
     ${prescription}=    Create Dictionary    frequency=${frequency}  duration=${duration}  instructions=${instructions}  dosage=${dosage}   medicineName=${medicineName} 
 
-    ${resp}=    Create Prescription Template    ${templateName}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${temId}    ${resp.json()}
@@ -168,7 +119,7 @@ JD-TC-Get Prescription Template By Account Id-UH2
     Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-***  comments ***
+*** comment ***
 
 JD-TC-Get Prescription Template By Account Id-2
 
@@ -195,7 +146,7 @@ JD-TC-Get Prescription Template By Account Id-2
 
     ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1} 
 
-    ${resp}=    Create Prescription Template    ${templateName1}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}
@@ -216,7 +167,7 @@ JD-TC-Get Prescription Template By Account Id-2
 
 JD-TC-Get Prescription Template By Account Id-3
 
-    [Documentation]   Create Prescription Template where template name contain  255 words and Get Prescription Template By Account Id
+    [Documentation]   Create MedicalRecordPrescription Template where template name contain  255 words and Get Prescription Template By Account Id
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -239,7 +190,7 @@ JD-TC-Get Prescription Template By Account Id-3
 
     ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1} 
 
-    ${resp}=    Create Prescription Template    ${templateName1}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}
@@ -257,7 +208,7 @@ JD-TC-Get Prescription Template By Account Id-3
 
 JD-TC-Get Prescription Template By Account Id-4
 
-    [Documentation]   Create Prescription Template where instructions contain 255 words and Get Prescription Template By Account Id
+    [Documentation]   Create MedicalRecordPrescription Template where instructions contain 255 words and Get Prescription Template By Account Id
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -280,7 +231,7 @@ JD-TC-Get Prescription Template By Account Id-4
 
     ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1} 
 
-    ${resp}=    Create Prescription Template    ${templateName1}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}
@@ -298,7 +249,7 @@ JD-TC-Get Prescription Template By Account Id-4
 
 JD-TC-Get Prescription Template By Account Id-5
 
-    [Documentation]   Create Prescription Template where medicine name contain  255 words and Get Prescription Template By Account Id
+    [Documentation]   Create MedicalRecordPrescription Template where medicine name contain  255 words and Get Prescription Template By Account Id
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -321,7 +272,7 @@ JD-TC-Get Prescription Template By Account Id-5
 
     ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1} 
 
-    ${resp}=    Create Prescription Template    ${templateName1}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}
@@ -339,7 +290,7 @@ JD-TC-Get Prescription Template By Account Id-5
 
 JD-TC-Get Prescription Template By Account Id-6
 
-    [Documentation]   Create Prescription Template where template name contain  numbers and Get Prescription Template By Account Id
+    [Documentation]   Create MedicalRecordPrescription Template where template name contain  numbers and Get Prescription Template By Account Id
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -362,7 +313,7 @@ JD-TC-Get Prescription Template By Account Id-6
 
     ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1} 
 
-    ${resp}=    Create Prescription Template    ${templateName1}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}
@@ -380,7 +331,7 @@ JD-TC-Get Prescription Template By Account Id-6
 
 JD-TC-Get Prescription Template By Account Id-7
 
-    [Documentation]   Create Prescription Template contain empty prescription list and Get Prescription Template By Account Id
+    [Documentation]   Create MedicalRecordPrescription Template contain empty prescription list and Get Prescription Template By Account Id
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -392,7 +343,7 @@ JD-TC-Get Prescription Template By Account Id-7
 
     ${prescription}=    Create Dictionary     
 
-    ${resp}=    Create Prescription Template    ${templateName1}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}
@@ -407,7 +358,7 @@ JD-TC-Get Prescription Template By Account Id-7
 
 JD-TC-Get Prescription Template By Account Id-8
 
-    [Documentation]   Get Prescription Template By Account Id-Create Prescription Template where template name contain title contain numbers 
+    [Documentation]   Get Prescription Template By Account Id-Create MedicalRecordPrescription Template where template name contain title contain numbers 
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -441,7 +392,7 @@ JD-TC-Get Prescription Template By Account Id-8
     ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1}
      ${prescription1}=    Create Dictionary    frequency=${frequency2}  duration=${duration2}  instructions=${instructions2}  dosage=${dosage2}   medicineName=${medicineName2}  
 
-    ${resp}=    Create Prescription Template    ${templateName1}  ${prescription}   ${prescription1}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}   ${prescription1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}
@@ -464,7 +415,7 @@ JD-TC-Get Prescription Template By Account Id-8
 
 JD-TC-Get Prescription Template By Account Id-9
 
-    [Documentation]    Update Prescription Template and Get Prescription Template By Account Id
+    [Documentation]    Update MedicalRecordPrescription Template and Get Prescription Template By Account Id
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -503,19 +454,19 @@ JD-TC-Get Prescription Template By Account Id-9
 
     ${prescription}=    Create Dictionary    frequency=${frequency}  duration=${duration}  instructions=${instructions}  dosage=${dosage}   medicineName=${medicineName} 
 
-    ${resp}=    Create Prescription Template    ${templateName}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${temId}    ${resp.json()}
 
-    ${resp}=    Get Prescription Template By Id   ${temId}    
+    ${resp}=    Get MedicalPrescription Template By Id   ${temId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${templateName0}=  FakerLibrary.name
     Set Suite Variable    ${templateName0}
 
-    ${resp}=    Update Prescription Template   ${temId}  ${templateName0}  ${prescription}
+    ${resp}=    Update MedicalRecordPrescription Template   ${temId}  ${templateName0}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     

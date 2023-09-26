@@ -245,7 +245,7 @@ JD-TC-Update Treatment Plan Work status-UH4
    ${resp}=    Update Treatment Plan Work status    ${fake_id}  ${workId}  ${PRStatus[0]}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"
+    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_TREATMENT_REQUEST}"
 
 JD-TC-Update Treatment Plan Work status-UH5
 
@@ -270,7 +270,7 @@ JD-TC-Update Treatment Plan Work status-UH6
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${fake_id}=  Random Int  min=500   max=1000
-   ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${fake_id}  ${fake_id}  
+   ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${fake_id}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"

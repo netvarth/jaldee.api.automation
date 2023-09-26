@@ -170,18 +170,18 @@ JD-TC-Update Treatment Plan-1
     Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
 
-    ${work}=  FakerLibrary.name
     ${work1}=  FakerLibrary.name
-    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    # ${two}=  Create Dictionary  work=${work1}   status=${PRStatus[0]}
-    ${works}=  Create List  ${one}  
+    ${work2}=  FakerLibrary.name
+    ${one}=  Create Dictionary  work=${work1}   status=${PRStatus[0]}
+    ${two}=  Create Dictionary  work=${work2}   status=${QnrStatus[1]}
+    ${works}=  Create List  ${one}  ${two}
 
     ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${updatetreatmentId}        ${resp.json()}
 
-    ${resp}=    Get Treatment Plan By Id   ${updatetreatmentId}    
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
@@ -194,12 +194,12 @@ JD-TC-Update Treatment Plan-1
     Should Be Equal As Strings    ${resp.json()['caseDto']['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
-    #  Should Be Equal As Strings    ${resp.json()['works'][1]['status']}     ${PRStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()['works'][1]['work']}     ${work1}
-    # Should Be Equal As Strings    ${resp.json()['works'][1]['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['works'][1]['status']}     ${PRStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['works'][1]['work']}     ${work1}
+    Should Be Equal As Strings    ${resp.json()['works'][1]['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['works'][2]['status']}     ${QnrStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['works'][2]['work']}     ${work2}
+    Should Be Equal As Strings    ${resp.json()['works'][2]['createdDate']}     ${DAY1}
 
 JD-TC-Update Treatment Plan-2
 
@@ -219,9 +219,9 @@ JD-TC-Update Treatment Plan-2
     ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment1}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${updatetreatmentId1}        ${resp.json()}
+   
 
-    ${resp}=    Get Treatment Plan By Id   ${updatetreatmentId1}    
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
@@ -235,7 +235,7 @@ JD-TC-Update Treatment Plan-2
     Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment1}
     Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
+    Should Be Equal As Strings    ${resp.json()['works'][3]['work']}     ${work}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
     #  Should Be Equal As Strings    ${resp.json()['works'][1]['status']}     ${PRStatus[0]}
     # Should Be Equal As Strings    ${resp.json()['works'][1]['work']}     ${work1}
@@ -259,9 +259,9 @@ JD-TC-Update Treatment Plan-3
     ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment2}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${updatetreatmentId2}        ${resp.json()}
 
-    ${resp}=    Get Treatment Plan By Id   ${updatetreatmentId2}    
+
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
@@ -275,7 +275,7 @@ JD-TC-Update Treatment Plan-3
     Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment2}
     Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
+    Should Be Equal As Strings    ${resp.json()['works'][4]['work']}     ${work}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
 
 JD-TC-Update Treatment Plan-4
@@ -296,9 +296,9 @@ JD-TC-Update Treatment Plan-4
     ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${empty}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${updatetreatmentId3}        ${resp.json()}
+  
 
-    ${resp}=    Get Treatment Plan By Id   ${updatetreatmentId3}    
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
@@ -312,7 +312,7 @@ JD-TC-Update Treatment Plan-4
     Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${empty}
     Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
-    Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
+    Should Be Equal As Strings    ${resp.json()['works'][5]['work']}     ${work}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
 
 JD-TC-Update Treatment Plan-5
@@ -329,9 +329,9 @@ JD-TC-Update Treatment Plan-5
     ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment2}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${updatetreatmentId3}        ${resp.json()}
 
-    ${resp}=    Get Treatment Plan By Id   ${updatetreatmentId3}    
+
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
@@ -343,7 +343,7 @@ JD-TC-Update Treatment Plan-5
     Should Be Equal As Strings    ${resp.json()['caseDto']['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['caseDto']['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['treatment']}     ${empty}
+    Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment2}
     # Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
     # Should Be Equal As Strings    ${resp.json()['works'][0]['work']}     ${work}
     # Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}

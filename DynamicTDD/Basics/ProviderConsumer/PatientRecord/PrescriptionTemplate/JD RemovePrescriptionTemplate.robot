@@ -15,55 +15,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-*** Keywords  ***
-
-Create Prescription Template
-    [Arguments]    ${templateName}    @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${prescriptionDto}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${prescriptionDto}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    templateName=${templateName}  prescriptionDto=${prescriptionDto} 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update Prescription Template
-    [Arguments]    ${id}  ${templateName}    @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${prescriptionDto}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${prescriptionDto}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary   id=${id}  templateName=${templateName}  prescriptionDto=${prescriptionDto} 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Remove Prescription Template
-
-    [Arguments]    ${temId} 
-    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/template/${temId}       expected_status=any
-    [Return]  ${resp}
-
-Get Prescription Template By Account Id
-
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template      expected_status=any
-    [Return]  ${resp}
-
-Get Prescription Template By Id
-    [Arguments]    ${temId} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
-    [Return]  ${resp}
 
 
 
@@ -127,12 +78,12 @@ JD-TC-Remove Prescription Template-1
 
     ${prescription}=    Create Dictionary    frequency=${frequency}  duration=${duration}  instructions=${instructions}  dosage=${dosage}   medicineName=${medicineName} 
 
-    ${resp}=    Create Prescription Template    ${templateName}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${temId}    ${resp.json()}
 
-    ${resp}=    Get Prescription Template By Id   ${temId}    
+    ${resp}=    Get MedicalPrescription Template By Id   ${temId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['id']}     ${temId} 
@@ -178,12 +129,12 @@ JD-TC-Remove Prescription Template-UH1
 
     ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1} 
 
-    ${resp}=    Create Prescription Template    ${templateName1}  ${prescription}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}
 
-    ${resp}=    Get Prescription Template By Id   ${temId1}    
+    ${resp}=    Get MedicalPrescription Template By Id   ${temId1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['id']}     ${temId1} 
