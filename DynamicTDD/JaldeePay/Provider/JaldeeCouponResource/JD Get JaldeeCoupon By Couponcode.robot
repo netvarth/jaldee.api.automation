@@ -417,7 +417,7 @@ JD-TC-GetJaldeecouponsBycode -UH4
 
 JD-TC-GetJaldeecouponsBycode -UH5
     [Documentation]  provider get  a invlid jaldee coupon by code
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cupn_code044}=   FakerLibrary.word
     Set Suite Variable   ${cupn_code044}
