@@ -374,6 +374,26 @@ JD-TC-Remove Prescription-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+JD-TC-Remove Prescription-4
+
+    [Documentation]    Create Prescription with Empty html  and Remove that Prescription.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    ${prescriptionAttachments}   ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${resp}=    Remove Prescription   ${prescription_id1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 JD-TC-Remove Prescription-UH1
 
     [Documentation]    Remove that Prescription that already removed
@@ -391,212 +411,43 @@ JD-TC-Remove Prescription-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-*** comment ***
-JD-TC-Update Prescription-2
+JD-TC-Remove Prescription-UH2
 
-    [Documentation]   update Prescription with Empty caseId.
-
+    [Documentation]     Remove Prescription with invalid id.
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+     ${invalid}=   Random Int  min=123   max=400
+
+     ${resp}=    Remove Prescription   ${invalid}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
 
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage1} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
+  
+JD-TC-Remove Prescription-UH3
 
+    [Documentation]    Remove Prescription with another provider login.
 
-JD-TC-Update Prescription-3
-
-
-    [Documentation]    update Prescription with Empty dentalRecordId.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    ${resp}=    Remove Prescription   ${prescription_id}   
     Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
+
+JD-TC-Remove Prescription-UH4
+
+    [Documentation]    Remove Prescription with consumer login.
+
+    ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
+    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
+     ${resp}=    Remove Prescription   ${prescription_id}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage1} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-
-
-
-
-JD-TC-Update Prescription-4
-
-    [Documentation]    update Prescription with Empty mrPrescriptions.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${SPACE}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-Update Prescription-5
-
-    [Documentation]    update Prescription with Empty prescription attachments.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${prescriptionAttachments}=  Create List   
-
-    ${resp}=   Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage1} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-
-
-
-JD-TC-Update Prescription-6
-
-    [Documentation]    update Two Prescription with same details.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Update Prescription-7
-
-    [Documentation]   update Prescription with caseId is zero.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=   Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${order}      ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${order} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage1} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-JD-TC-Update Prescription-UH1
-
-    [Documentation]    update Prescription with another provider login
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME4}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-   
-
-    ${resp}=   Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
-
-JD-TC-Update Prescription-UH2
-
-    [Documentation]    update Prescription with Empty ProviderConsumer id.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update Prescription   ${prescription_id}   ${EMPTY}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.content}   "${INVALID_PROVIDERCONSUMER_ID}"
-
-
-JD-TC-Update Prescription-UH3
-
-    [Documentation]    update Prescription with Empty userId.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=  Update Prescription   ${prescription_id}  ${cid}    ${EMPTY}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.content}   "${INVALID_USER_ID}"
-
-
-JD-TC-Update Prescription-UH4
-
-    [Documentation]    update Prescription with Empty html.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.content}   "${HTML_REQUIRED}"
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
 
