@@ -1,50 +1,67 @@
 *** Settings ***
-Suite Teardown    Delete All Sessions 
-Test Teardown     Delete All Sessions
-Force Tags        LOAN
-Library           Collections
-Library           String
-Library           json
-Library           FakerLibrary
-Library           /ebs/TDD/db.py
-Resource          /ebs/TDD/Keywords.robot
-Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ConsumerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py
-Variables         /ebs/TDD/varfiles/consumermail.py
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
+Suite Teardown     Delete All Sessions
+Test Teardown      Delete All Sessions
+Force Tags         RBAC
+Library            Collections
+Library            String
+Library            json
+Library            FakerLibrary
+Library            /ebs/TDD/db.py
+Library            /ebs/TDD/excelfuncs.py
+Resource           /ebs/TDD/ProviderKeywords.robot
+Resource           /ebs/TDD/ConsumerKeywords.robot
+Resource           /ebs/TDD/ProviderPartnerKeywords.robot
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/consumerlist.py 
+Variables          /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_musers.py
 
 
 *** Variables ***
 
 @{emptylist}
+${invoiceAmount}                     80000
+${downpaymentAmount}                 20000
+${requestedAmount}                   60000
+${sanctionedAmount}                  60000
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
+${jpgfile}                           /ebs/TDD/uploadimage.jpg
+${pngfile}                           /ebs/TDD/upload.png
+${pdffile}                           /ebs/TDD/sample.pdf
+${jpgfile2}                          /ebs/TDD/small.jpg
+${gif}                               /ebs/TDD/sample.gif
+${xlsx}                              /ebs/TDD/qnr.xlsx
 
-${order}    0
-${fileSize}  0.00458
+${order}                             0
+${fileSize}                          0.00458
 
-${cc}   +91
-${phone}     555512345
-${aadhaar}   555555555555
-${pan}       5555523145
-${bankAccountNo}    5555534564
-${bankIfsc}         5555566
-${bankPin}       5555533
+${aadhaar}                           555555555555
 
-${bankAccountNo2}    5555534587
-${bankIfsc2}         55555688
-${bankPin2}       5555589
+${monthlyIncome}                     80000
+${emiPaidAmountMonthly}              2000
+${start}                             12
 
-${invoiceAmount}    100000
-${downpaymentAmount}    20000
-${requestedAmount}    80000
+${customerEducation}                 1    
+${customerEmployement}               1   
+${salaryRouting}                     1
+${familyDependants}                  1
+${noOfYearsAtPresentAddress}         1  
+${currentResidenceOwnershipStatus}   1  
+${ownedMovableAssets}                1
+${goodsFinanced}                     1
+${earningMembers}                    1
+${existingCustomer}                  1
+${autoApprovalUptoAmount}            50000
+${autoApprovalUptoAmount2}           70000
+${cibilScore}                        850
+
+${minCreditScoreRequired}            50
+${minEquifaxScoreRequired}           690
+${minCibilScoreRequired}             690
+${minAge}                            23
+${maxAge}                            60
+${minAmount}                         5000
+${maxAmount}                         300000
 
 *** Test Cases ***
 
@@ -65,7 +82,12 @@ JD-TC-LoanApplication-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+
+*** comment ***
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -463,7 +485,9 @@ JD-TC-GetPartnerCategory-UH3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
 
     ${resp}=    Get Partner Loan Application Category

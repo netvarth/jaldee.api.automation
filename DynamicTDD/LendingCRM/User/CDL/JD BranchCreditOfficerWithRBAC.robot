@@ -122,7 +122,7 @@ JD-TC-BranchCreditOfficerWithRBAC-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+1895566
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
