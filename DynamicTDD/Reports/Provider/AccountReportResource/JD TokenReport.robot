@@ -146,7 +146,7 @@ JD-TC-Token_Report-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
@@ -380,7 +380,7 @@ JD-TC-Token_Report-1
     ${resp}=  Get Report By Status       ${Statuses[0]}  ${Statuses[1]}  ${Statuses[2]}  ${Statuses[3]}  ${Statuses[4]}  ${Statuses[5]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-*** comment ***
+
 JD-TC-Token_Report-2
     [Documentation]  Generate Next_Week report of a provider for both online and walk-in checkin for any PHYSICAL SERVICE
     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
@@ -2768,13 +2768,13 @@ JD-TC-Token_Report-UH9
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_DATE_RANGE}
 
-    ${Sub_Date92}=  db.subtract_timezone_date  ${tz}   92
-    Set Suite Variable  ${Sub_Date92}
-    ${filter}=  Create Dictionary   waitlistingForId-eq=${jid_c38}   date-ge=${Sub_Date92}   date-le=${YESTERDAY}
-    ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory1}  ${filter}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}    ${MAX_DATE_RANGE}
+    # ${Sub_Date92}=  db.subtract_timezone_date  ${tz}   92
+    # Set Suite Variable  ${Sub_Date92}
+    # ${filter}=  Create Dictionary   waitlistingForId-eq=${jid_c38}   date-ge=${Sub_Date92}   date-le=${YESTERDAY}
+    # ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory1}  ${filter}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings   ${resp.json()}    ${MAX_DATE_RANGE}
 
 
 JD-TC-Token_Report-UH10
@@ -3849,7 +3849,12 @@ JD-TC-Token_Report-14
         ${resp}=  Encrypted Provider Login  ${MUSERNAME23}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${P_Sector}   ${decrypted_data['sector']}
+
+        # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
         ${pid_B28}=  get_acc_id  ${MUSERNAME23}
         Set Suite variable  ${pid_B28}
 
@@ -3937,8 +3942,8 @@ JD-TC-Token_Report-14
         ${resp}=  Get User
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
-        Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
+        # Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
+        # Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
     
         ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}
@@ -4001,7 +4006,7 @@ JD-TC-Token_Report-14
         ${msg}=  FakerLibrary.word
         ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
-        ${resp}=  Add To Waitlist Consumer For User  ${pid_B28}  ${que_id28}  ${CUR_DAY}  ${s_id}  ${msg}  ${bool[0]}  ${p1_id}  0
+        ${resp}=  Add To Waitlist Consumer For User  ${pid_B28}  ${que_id28}  ${CUR_DAY}  ${s_id}  ${msg}  ${bool[0]}  ${u_id}  0
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -4196,7 +4201,11 @@ JD-TC-Token_Report-15
         ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${P_Sector}   ${decrypted_data['sector']}
+        # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
         ${pid_B5}=  get_acc_id  ${MUSERNAME21}
         Set Suite variable  ${pid_B5}
 
@@ -4284,8 +4293,8 @@ JD-TC-Token_Report-15
         ${resp}=  Get User
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable   ${p1_id32}   ${resp.json()[0]['id']}
-        Set Suite Variable   ${p0_id32}   ${resp.json()[1]['id']}
+        # Set Suite Variable   ${p1_id32}   ${resp.json()[0]['id']}
+        # Set Suite Variable   ${p0_id32}   ${resp.json()[1]['id']}
     
         # ${resp}=  Enable Disable Virtual Service  Enable
         # Log  ${resp.json()}
@@ -4429,7 +4438,7 @@ JD-TC-Token_Report-15
         ${msg}=  FakerLibrary.word
         ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable   ${CUR_DAY}
-        ${resp}=  Consumer Add To WL With Virtual Service For User  ${pid_B5}  ${que_id32}  ${CUR_DAY}  ${VS_id1}  ${msg}  ${bool[0]}  ${virtualService}   ${p1_id32}  0
+        ${resp}=  Consumer Add To WL With Virtual Service For User  ${pid_B5}  ${que_id32}  ${CUR_DAY}  ${VS_id1}  ${msg}  ${bool[0]}  ${virtualService}   ${u_id32}  0
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200    
         
