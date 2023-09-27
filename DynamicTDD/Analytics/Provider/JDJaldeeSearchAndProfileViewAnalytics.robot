@@ -41,7 +41,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-1
     Set Suite Variable  ${pid}
     
     ${DAY1}=  get_date
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -87,7 +87,7 @@ JD-TC-JaldeeSearchandProfileViewAnalytics-2
     Set Test Variable  ${pid}
     
     ${DAY1}=  get_date
-    ${resp}=  Provider Login  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

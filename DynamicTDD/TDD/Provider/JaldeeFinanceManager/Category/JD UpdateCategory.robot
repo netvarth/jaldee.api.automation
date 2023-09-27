@@ -22,7 +22,7 @@ JD-TC-UpdateCategory-1
 
     [Documentation]  Create Category as Vendor and update it as Expense.
 
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -78,7 +78,7 @@ JD-TC-UpdateCategory-2
 
     [Documentation]  Create Category as payable.
 
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -99,7 +99,7 @@ JD-TC-UpdateCategory-3
 
     [Documentation]  Create Category as Income.
 
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -120,7 +120,7 @@ JD-TC-UpdateCategory-4
 
     [Documentation]  Create Category as Receivable.
 
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -142,7 +142,7 @@ JD-TC-UpdateCategory-5
 
     [Documentation]  Create Category as Invoice.
 
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -189,7 +189,7 @@ JD-TC-UpdateCategory-UH3
 
     [Documentation]  update Category with another providers category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

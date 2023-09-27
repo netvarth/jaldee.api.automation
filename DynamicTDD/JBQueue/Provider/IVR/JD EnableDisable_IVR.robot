@@ -46,12 +46,12 @@ JD-TC-Enable_Disable_IVR-1
 
     [Documentation]   Enable Disable IVR
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME158}
+    clear_location   ${PUSERNAME158}
+    clear_service    ${PUSERNAME158}
+    clear_customer   ${PUSERNAME158}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -61,13 +61,9 @@ JD-TC-Enable_Disable_IVR-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME158}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}
@@ -191,16 +187,22 @@ JD-TC-Enable_Disable_IVR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
 
 JD-TC-Enable_Disable_IVR-2
 
     [Documentation]   Disabling IVR which is Enabled
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -212,7 +214,7 @@ JD-TC-Enable_Disable_IVR-UH1
 
     [Documentation]   Disabling IVR which is Disabled
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -226,13 +228,19 @@ JD-TC-Enable_Disable_IVR-UH2
 
     [Documentation]   Enable IVR which is already enabled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=    enable and disable IVR    ${toggle[0]}
     Log  ${resp.json()}

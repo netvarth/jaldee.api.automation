@@ -240,6 +240,9 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{finance_payment_modes}            Cash   CC    EMI    Offline    PAYLATER    Mock    UPI    Other    NB    STORE_CREDIT    WALLET    JCASH    DC    PayLater    PAYTM_PostPaid    BANK_TRANSFER
 @{CDLRelationType}                  CareOf  DaughterOf  SonOf  HusbandOf  WifeOf
 @{CDLTypeCibil}                     cibil
+@{toothType}                        ADULT  CHILD
+@{toothSurfaces}                    BUCCAL   LINGUAL  PALATAL
+@{PRStatus}                         OPEN  COMPLETED 
 
 *** Keywords ***
 Login

@@ -10197,8 +10197,10 @@ Update IVR Call Status
 Get IVR Graph Details
 
     [Arguments]    ${category}    ${startDate}    ${endDate}
+    ${data}=    Create Dictionary    category=${category}    startDate=${startDate}   endDate=${endDate}    
+    ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
-    ${resp}=    PUT On Session  ynw  /provider/ivr/graph  expected_status=any
+    ${resp}=    PUT On Session  ynw  /provider/ivr/graph  data=${data}  expected_status=any
     [Return]  ${resp}
 
 Delete All IVR Records
@@ -10857,6 +10859,8 @@ Encrypted Provider Login
     ${data}=    json.dumps    ${encrypted_data}
     ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
     [Return]  ${resp}
+
+
 Get Invoice With Filter
 
     [Arguments]   &{param}  
@@ -11109,3 +11113,347 @@ Account with Multiple Users in NBFC
     END
    
     [Return]  ${MUSERNAME${a}}
+
+# -------------- Patient Records-----------
+
+Add Patient Medical History
+
+    [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}   @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${AttachmentList}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${AttachmentList}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}  title=${title}  description=${description}    viewByUsers=${viewByUsers}  medicalHistoryAttachments=${AttachmentList}
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    provider/medicalrecord/medicalHistory    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Update Patient Medical History
+
+    [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}  @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${AttachmentList}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${AttachmentList}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}   medicalHistoryAttachments=${AttachmentList}
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${medicalHistoryId}    data=${data}     expected_status=any
+    [Return]  ${resp}
+
+Delete Patient Medical History
+
+    [Arguments]    ${medicalHistoryId}  
+    ${resp}=    DELETE On Session    ynw   /provider/medicalrecord/medicalHistory/${medicalHistoryId}        expected_status=any
+    [Return]  ${resp}
+
+Get Patient Medical History
+
+    [Arguments]    ${providerConsumerId}  
+    ${resp}=    GET On Session    ynw    /provider/medicalrecord/medicalHistory/${providerConsumerId}        expected_status=any
+    [Return]  ${resp}
+
+Provider Consumer Add Notes
+    [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Update Provider Consumer Notes
+    [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}
+    ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    PUT On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Delete Provider Consumer Notes
+    [Arguments]    ${notesId}  
+    ${resp}=    DELETE On Session    ynw    /provider/customers/notes/${notesId}        expected_status=any
+    [Return]  ${resp}
+
+Get Provider Consumer Notes
+    [Arguments]    ${providerConsumerId}  
+    ${resp}=    GET On Session    ynw    /provider/customers/notes/${providerConsumerId}        expected_status=any
+    [Return]  ${resp}  
+
+
+
+Create DentalRecord
+
+    [Arguments]      ${toothNo}  ${toothType}  ${orginUid}   &{kwargs}
+
+    ${data}=  Create Dictionary    toothNo=${toothNo}  toothType=${toothType}    orginUid=${orginUid}
+
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+
+    ${data}=  json.dumps  ${data}
+
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/dental  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Update DentalRecord
+
+    [Arguments]    ${id}      ${toothNo}  ${toothType}  ${orginUid}   &{kwargs}
+
+    ${data}=  Create Dictionary    id=${id}    toothNo=${toothNo}  toothType=${toothType}    orginUid=${orginUid}
+
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+
+    ${data}=  json.dumps  ${data}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/dental  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Update DentalRecord Status
+
+    [Arguments]      ${dentalid}   ${healthRecordSectionEnum} 
+    ${resp}=    PUT On Session    ynw   /provider/dental/${dentalid}/status/${healthRecordSectionEnum}       expected_status=any
+    [Return]  ${resp}
+
+Delete DentalRecord
+
+    [Arguments]    ${Id}  
+    ${resp}=    DELETE On Session    ynw    /provider/dental/${Id}       expected_status=any
+    [Return]  ${resp}
+
+Get DentalRecord ById
+
+    [Arguments]     ${Id}  
+    ${resp}=    GET On Session    ynw    /provider/dental/${Id}        expected_status=any
+    [Return]  ${resp}
+
+Get DentalRecord ByProviderConsumerId
+
+    [Arguments]     ${Id}  
+    ${resp}=    GET On Session    ynw    /provider/dental/providerconsumer/${Id}        expected_status=any
+    [Return]  ${resp}
+
+Get DentalRecord ByCaseId
+
+    [Arguments]     ${Id}  
+    ${resp}=    GET On Session    ynw   /provider/dental/mr/${Id}    expected_status=any
+    [Return]  ${resp}
+
+
+Create Case Category
+
+    [Arguments]      ${name}  ${aliasName}  &{kwargs}
+    ${data}=  Create Dictionary    name=${name}  aliasName=${aliasName} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/case/category  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Case Category
+
+    [Arguments]     ${Id}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/medicalrecord/case/category/${id}        expected_status=any
+    [Return]  ${resp}
+
+Update Case Category
+
+    [Arguments]     ${id}  ${name}  ${aliasName}  ${status}  &{kwargs}
+    ${data}=  Create Dictionary  name=${name}  aliasName=${aliasName}   status=${status}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/category/${id}  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Case Category Filter
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case/category      expected_status=any
+    [Return]  ${resp}
+
+Create Case Type
+
+    [Arguments]      ${name}  ${aliasName}  &{kwargs}
+    ${data}=  Create Dictionary    name=${name}  aliasName=${aliasName} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/case/type  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Case Type
+
+    [Arguments]     ${Id}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/medicalrecord/case/type/${id}  expected_status=any
+    [Return]  ${resp}
+
+Update Case Type
+    [Arguments]     ${id}  ${name}  ${aliasName}  ${status}  &{kwargs}
+    ${data}=  Create Dictionary  name=${name}  aliasName=${aliasName}   status=${status}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/type/${id}  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Case Type Filter
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case/type      expected_status=any
+    [Return]  ${resp}
+
+Create MR Case
+    [Arguments]      ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  &{kwargs}
+    ${data}=  Create Dictionary    category=${category}  type=${type}  doctor=${doctor}  consumer=${consumer}   title=${title}  description=${description}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/case  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get MR Case By UID
+     [Arguments]     ${uid}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/medicalrecord/case/${uid}  expected_status=any
+    [Return]  ${resp}
+
+Update MR Case
+    [Arguments]      ${uid}  ${title}  ${description}   &{kwargs}
+    ${data}=  Create Dictionary  title=${title}  description=${description}   status=${status}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Case Filter
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case     expected_status=any
+    [Return]  ${resp}
+
+Change Case Status
+    [Arguments]      ${uid}  ${statusName} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}/status/${statusName}   expected_status=any
+    [Return]  ${resp}
+
+Get Case Count Filter
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case     expected_status=any
+    [Return]  ${resp}
+
+Create Treatment Plan
+
+    [Arguments]      ${caseDto}  ${treatment}  ${works}  &{kwargs}
+    ${data}=  Create Dictionary    caseDto=${caseDto}  treatment=${treatment}  works=${works} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Update Treatment Plan
+
+    [Arguments]     ${id}  ${caseDto}  ${treatment}  ${works}  &{kwargs}
+    ${data}=  Create Dictionary    id=${id}  caseDto=${caseDto}  treatment=${treatment}  works=${works} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Update Treatment Plan Work status
+    [Arguments]     ${treatmentId}  ${workId}  ${status}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/${treatmentId}/${workId}/${status}   expected_status=any
+    [Return]  ${resp}
+
+Get Treatment Plan By Id
+    [Arguments]     ${id}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/${Id}  expected_status=any
+    [Return]  ${resp}
+
+Get Treatment Plan By case Id
+    [Arguments]     ${uid}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/case/${uid}  expected_status=any
+    [Return]  ${resp}
+
+Create MedicalRecordPrescription Template
+    [Arguments]    ${templateName}    @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${prescriptionDto}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${prescriptionDto}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    templateName=${templateName}  prescriptionDto=${prescriptionDto} 
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Update MedicalRecordPrescription Template
+    [Arguments]    ${id}  ${templateName}    @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${prescriptionDto}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${prescriptionDto}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary   id=${id}  templateName=${templateName}  prescriptionDto=${prescriptionDto} 
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Remove Prescription Template
+    Check And Create YNW Session
+    [Arguments]    ${temId} 
+    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/template/${temId}       expected_status=any
+    [Return]  ${resp}
+
+Get Prescription Template By Account Id
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template      expected_status=any
+    [Return]  ${resp}
+
+Get MedicalPrescription Template By Id
+    [Arguments]    ${temId} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
+    [Return]  ${resp}
+

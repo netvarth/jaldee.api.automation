@@ -22,7 +22,7 @@ JD-TC-GetCategoryByCategoryType-1
 
     [Documentation]  Create Category as Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -67,7 +67,7 @@ JD-TC-GetCategoryByCategoryType-2
 
     [Documentation]  Create Category as Expense and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -91,7 +91,7 @@ JD-TC-GetCategoryByCategoryType-3
 
     [Documentation]  Create Category as Payable and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -115,7 +115,7 @@ JD-TC-GetCategoryByCategoryType-4
 
     [Documentation]  Create Category as Income and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -139,7 +139,7 @@ JD-TC-GetCategoryByCategoryType-5
 
     [Documentation]  Create Category as Receivable and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -163,7 +163,7 @@ JD-TC-GetCategoryByCategoryType-6
 
     [Documentation]  Create Category as Invoice and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -186,7 +186,7 @@ JD-TC-GetCategoryByCategoryType-7
 
     [Documentation]  Create multiple Category as Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +266,7 @@ JD-TC-GetCategoryByCategoryType-UH3
 
     [Documentation]  Get category by category type , without create category.
 
-    ${resp}=  Provider Login  ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -301,7 +301,7 @@ JD-TC-GetCategoryByCategoryType-UH4
 
     [Documentation]  Create Category as Vendor then update it as Expense then try to get category type as vendor.
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

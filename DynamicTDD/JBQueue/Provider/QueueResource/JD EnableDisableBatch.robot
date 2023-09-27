@@ -185,7 +185,7 @@ JD-TC-EnableDisableBatch-1
 JD-TC-EnableDisableBatch-2
     [Documentation]  Enable batch, add to waitlist, disable batch
     clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=    Get Locations
@@ -261,7 +261,7 @@ JD-TC-EnableDisableBatch-2
 JD-TC-EnableDisableBatch-5
     [Documentation]  Give batch name without suffix
     clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=    Get Locations
@@ -327,7 +327,7 @@ JD-TC-EnableDisableBatch-5
 JD-TC-EnableDisableBatch-6
     [Documentation]  Give batch name without prefix
     clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=    Get Locations
@@ -393,7 +393,7 @@ JD-TC-EnableDisableBatch-6
 JD-TC-EnableDisableBatch-7
     [Documentation]  Enable batch without batch name
     clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=    Get Locations
@@ -460,7 +460,7 @@ JD-TC-EnableDisableBatch-8
     [Documentation]  Enable batch for service in department
     # clear_queue  ${PUSERPH0}
     # clear_Department   ${PUSERPH0}
-    # ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
     
     # ${resp}=    Get Locations
@@ -488,7 +488,7 @@ JD-TC-EnableDisableBatch-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_K}${\n}
@@ -658,7 +658,7 @@ JD-TC-EnableDisableBatch-8
 
 JD-TC-EnableDisableBatch-UH1
     [Documentation]  Enable batch with invalid queue id
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Enable Waitlist Batch   0
@@ -677,7 +677,7 @@ JD-TC-EnableDisableBatch-UH2
 JD-TC-EnableDisableBatch-UH3
     [Documentation]  Enable batch with another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Enable Waitlist Batch   ${p1_q1}
@@ -688,7 +688,7 @@ JD-TC-EnableDisableBatch-UH3
 JD-TC-EnableDisableBatch-UH4
     [Documentation]  Disable batch when it is not enabled
 
-    ${resp}=  Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Disable Waitlist Batch   ${p1_q1}
@@ -699,7 +699,7 @@ JD-TC-EnableDisableBatch-UH4
 JD-TC-EnableDisableBatch-UH5
     [Documentation]  Enable already enabled batch
 
-    ${resp}=  Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Enable Waitlist Batch   ${p1_q1}
@@ -718,7 +718,7 @@ JD-TC-EnableDisableBatch-UH5
 JD-TC-EnableDisableBatch-3
     [Documentation]  Add to waitlist, Enable batch
     clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=    Get Locations
@@ -851,7 +851,7 @@ JD-TC-EnableDisableBatch-3
 JD-TC-EnableDisableBatch-4
     [Documentation]  Add to waitlist, Enable batch for future waitlist
     clear_queue  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=    Get Locations

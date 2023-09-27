@@ -2021,6 +2021,9 @@ IVR_SETTING_NOt_FOUND= "Ivr setting not found"
 NO_ACTIVE_SCHEDULES_FOUND="No active schedules found"
 PLEASE_FILL_THE_FORM_TO_COMPLETE="Please fill the form to complete"
 CUSTOM_EMAIL_ALREADY_DISABLED="custom Email already disabled"	
+DAY_CANNOT_BE_EMPTY="Day cannot be empty"
+Invalid_CC="Invalid Country Code"
+INVALID_STATUS="Invalid Status"
 
 
 TOOTH_ID_CANNOT_BE_NULL= "Tooth Id cannot be null"
@@ -2069,3 +2072,21 @@ MEMBER_SERVICE_ALREADY_DISABLED = "Membership Settings already disabled"
 MEMBER_SERVICE_ALREADY_ENABLED = "Membership Settings already enabled"
 MEMBER_SERVICE_IS_DISABLED = "Service is disabled"
 MEMBER_SERVICE_REQUIRED = "Member Service ID required"
+
+
+# ..................Patient Record............
+
+PROVIDER_CONSUMER_NOTES_NOT_FOUND = "Provider consumer notes not found"
+INVALID_CASE_TYPE_ID = "Invalid Case Type ID"
+INVALID_CASE_CATEGORY_ID = "Invalid Case Category ID"
+NAME_REQUIRED = "Name required."
+DOCTOR_REQUIRED = "Doctor required."
+CONSUMER_REQUIRED = "Consumer required."
+INVALID_CASE_ID = "Invalid Case ID"
+INVALID_ID= "Invalid ID"
+INVALID_TREATMENT_REQUEST= "Invalid Treatment Request"
+STATUS_OPEN= "Record status is already OPEN"
+STATUS_COMPLETE= "Record status is already COMPLETE"
+INVALID_WORK_ID= "Invalid work ID"
+INVALID_PROVIDERCONSUMER_ID= "Invalid ProviderConsumer ID"
+HTML_REQUIRED= "Prescription html required for updation "

@@ -46,8 +46,10 @@ JD-TC-Get Lucene Search Documentation-1
     clear_customer    ${PUSERNAME21}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME21}
     Set Test Variable   ${acc_id}

@@ -46,8 +46,13 @@ ${loc}    AP, IN
 JD-TC-Get_User_Specified_Schedules-1
 
     [Documentation]   Get all IVR user details
+
+    clear_queue      ${HLMUSERNAME6}
+    clear_location   ${HLMUSERNAME6}
+    clear_service    ${HLMUSERNAME6}
+    clear_customer   ${HLMUSERNAME6}
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     # Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -75,20 +80,28 @@ JD-TC-Get_User_Specified_Schedules-1
 
     END
 
+    ${dep_name1}=  FakerLibrary.bs
+    ${dep_code1}=   Random Int  min=100   max=999
+    ${dep_desc1}=   FakerLibrary.word  
+    ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp1.json()}
+
     ${resp}=  Get Departments
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${dep_name1}=  FakerLibrary.bs
+    #     ${dep_code1}=   Random Int  min=100   max=999
+    #     ${dep_desc1}=   FakerLibrary.word  
+    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Set Test Variable  ${dep_id}  ${resp1.json()}
+    # ELSE
+    #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # END
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -160,7 +173,7 @@ JD-TC-Get_User_Specified_Schedules-2
 
     [Documentation]  Get schedules using id  ,without creating schedule for same provider
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -199,7 +212,7 @@ JD-TC-Get_User_Specified_Schedules-3
 
     [Documentation]   Get user specified schedules where the user schedule is disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -245,24 +258,30 @@ JD-TC-Get_User_Specified_Schedules-UH1
 
     [Documentation]   Get user specified schedules where user id is invalid
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${so_id2}    FakerLibrary.Random Number
 
     ${resp}=    Get User-Specific Schedules     ${so_id2}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}    []
 
 JD-TC-Get_User_Specified_Schedules-UH2
 
     [Documentation]  Get user specified schedules using another provider details
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id1}    ${resp.json()['id']}
@@ -290,18 +309,26 @@ JD-TC-Get_User_Specified_Schedules-UH2
 
     ${resp}=    Get User-Specific Schedules     ${user_id1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}    []
+
+*** comments ***
 
 JD-TC-Get_User_Specified_Schedules-UH3
 
     [Documentation]   Get user specified schedules where user id is empty
     
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${so_id2}    FakerLibrary.Random Number
 

@@ -43,12 +43,12 @@ JD-TC-Create_IVR_Settings-1
 
     [Documentation]   Create IVR Settings
     
-    clear_queue      ${PUSERNAME114}
-    clear_location   ${PUSERNAME114}
-    clear_service    ${PUSERNAME114}
-    clear_customer   ${PUSERNAME114}
+    clear_queue      ${PUSERNAME154}
+    clear_location   ${PUSERNAME154}
+    clear_service    ${PUSERNAME154}
+    clear_customer   ${PUSERNAME154}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -58,7 +58,7 @@ JD-TC-Create_IVR_Settings-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME114}
+    ${acc_id}=  get_acc_id  ${PUSERNAME154}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -200,7 +200,7 @@ JD-TC-Create_IVR_Settings-UH1
 
     [Documentation]   Create IVR Settings where account is is invalid
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -214,7 +214,7 @@ JD-TC-Create_IVR_Settings-UH2
 
     [Documentation]   Create IVR Settings where account is is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -226,7 +226,7 @@ JD-TC-Create_IVR_Settings-UH3
 
     [Documentation]   Create IVR Settings where call priority is low
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -238,7 +238,7 @@ JD-TC-Create_IVR_Settings-UH4
 
     [Documentation]   Create IVR Settings where call priority is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -250,19 +250,19 @@ JD-TC-Create_IVR_Settings-UH5
 
     [Documentation]   Create IVR Settings where call waiting time is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${empty}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  422      #not considering this from dev
 
 JD-TC-Create_IVR_Settings-UH6
 
     [Documentation]   Create IVR Settings where service id is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -274,7 +274,7 @@ JD-TC-Create_IVR_Settings-UH7
 
     [Documentation]   Create IVR Settings where token is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -286,7 +286,7 @@ JD-TC-Create_IVR_Settings-UH8
 
     [Documentation]   Create IVR Settings where secret key is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -298,7 +298,7 @@ JD-TC-Create_IVR_Settings-UH9
 
     [Documentation]   Create IVR Settings where apiKey is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -310,7 +310,7 @@ JD-TC-Create_IVR_Settings-UH10
 
     [Documentation]   Create IVR Settings where company id is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -323,7 +323,7 @@ JD-TC-Create_IVR_Settings-UH11
 
     [Documentation]   Create IVR Settings where public id is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -335,19 +335,19 @@ JD-TC-Create_IVR_Settings-UH12
 
     [Documentation]   Create IVR Settings where language Reset Count is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${empty}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  422          #Language reset count is not check from dev side
 
 JD-TC-Create_IVR_Settings-UH13
 
     [Documentation]   Create IVR Settings where ivr config data is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

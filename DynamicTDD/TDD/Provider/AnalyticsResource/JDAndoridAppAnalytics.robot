@@ -488,7 +488,10 @@ JD-TC-AndroidLevelAnalytics-3
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
     
     ${resp}=  Get Order Settings by account id
     Log  ${resp.json()}

@@ -44,12 +44,12 @@ JD-TC-Update_IVR_Settings-1
 
     [Documentation]   Update IVR Settings
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -59,7 +59,7 @@ JD-TC-Update_IVR_Settings-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -213,18 +213,22 @@ JD-TC-Update_IVR_Settings-2
 
     [Documentation]   Update IVR Settingswithout creating ivr settings
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -364,18 +368,22 @@ JD-TC-Update_IVR_Settings-3
 
     [Documentation]   Update IVR Settings where call waiting time is empty
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -417,18 +425,22 @@ JD-TC-Update_IVR_Settings-4
 
     [Documentation]   Update IVR Settings where sample service is empty
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -488,18 +500,22 @@ JD-TC-Update_IVR_Settings-5
 
     [Documentation]   Update IVR Settings where token is empty
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -541,18 +557,22 @@ JD-TC-Update_IVR_Settings-6
 
     [Documentation]   Update IVR Settings where secret key is empty 
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -594,18 +614,22 @@ JD-TC-Update_IVR_Settings-7
 
     [Documentation]   Update IVR Settings where api key is empty
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -647,18 +671,22 @@ JD-TC-Update_IVR_Settings-8
 
     [Documentation]   Update IVR Settings where token is empty
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -700,18 +728,22 @@ JD-TC-Update_IVR_Settings-9
 
     [Documentation]   Update IVR Settings where public id  is empty
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -753,18 +785,22 @@ JD-TC-Update_IVR_Settings-10
 
     [Documentation]   Update IVR Settings where Language reset count  is empty
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -952,9 +988,9 @@ JD-TC-Update_IVR_Settings-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get IVR Setting
-    Log  ${resp.json()}
+     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Should Be Equal As Strings    ${resp.content}    ${empty}
 JD-TC-Update_IVR_Settings-UH2
 
     [Documentation]   Update IVR Settings without login
@@ -977,20 +1013,24 @@ JD-TC-Update_IVR_Settings-UH2
 
 JD-TC-Update_IVR_Settings-UH3
 
-    [Documentation]   Update IVR Settings where ivr call priority is empty
+    [Documentation]   Update IVR Settings where ivr call priority is low
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -1019,9 +1059,9 @@ JD-TC-Update_IVR_Settings-UH3
     ${companyId2}    FakerLibrary.Random Number
     ${publicId2}    FakerLibrary.Random Number
 
-    ${resp}=    Update IVR Settings    ${acc_id}    ${empty}}    ${callWaitingTime2}    ${ser_id2}    ${token2}    ${secretKey2}    ${apiKey2}    ${companyId2}    ${publicId2}    ${languageResetCount}    ${ivr_config_data}
+    ${resp}=    Update IVR Settings    ${acc_id}    ${ivr_callpriority[2]}    ${callWaitingTime2}    ${ser_id2}    ${token2}    ${secretKey2}    ${apiKey2}    ${companyId2}    ${publicId2}    ${languageResetCount}    ${ivr_config_data}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get IVR Setting
     Log  ${resp.json()}
@@ -1029,20 +1069,24 @@ JD-TC-Update_IVR_Settings-UH3
     
 JD-TC-Update_IVR_Settings-UH4
 
-    [Documentation]   Update IVR Settings where Language reset count  is empty
+    [Documentation]   Update IVR Settings where ivr_config_data  is empty
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME179}
+    clear_location   ${PUSERNAME179}
+    clear_service    ${PUSERNAME179}
+    clear_customer   ${PUSERNAME179}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME179}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME179}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  

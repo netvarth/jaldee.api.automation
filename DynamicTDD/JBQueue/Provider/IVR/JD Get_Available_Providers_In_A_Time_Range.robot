@@ -27,7 +27,12 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
 
     [Documentation]  Get Avaliable Providers In A Time Range
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    clear_queue      ${PUSERNAME161}
+    clear_location   ${PUSERNAME161}
+    clear_service    ${PUSERNAME161}
+    clear_customer   ${PUSERNAME161}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -55,8 +60,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
+    ${list2}=  Create List  1  
 
-    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -65,8 +71,10 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_time  15  20
     ${schedule_name2}=  FakerLibrary.bs
+    ${list2}=  Create List  1  
+    ${DAY3}=  add_date  15 
 
-    ${resp}=  Create Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime2}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
@@ -77,21 +85,11 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     ${eTime3}=  add_time  20  25
     ${schedule_name3}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name3}  ${recurringtype[1]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
+    ${resp}=  Create Provider Schedule  ${schedule_name3}  ${recurringtype[2]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
-    
-    ${DAY4}=  db.add_timezone_date  ${tz}  20 
-    ${sTime4}=  db.add_timezone_time  ${tz}  26  30
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime4}=  add_time  30  35
-    ${schedule_name4}=  FakerLibrary.bs
 
-    ${resp}=  Create Provider Schedule  ${schedule_name4}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime4}  ${eTime4}  ${JCstatus[0]}  ${user_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sch_id2}  ${resp.json()}
 
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}
@@ -108,7 +106,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-2
 
     [Documentation]  Get Avaliable Providers In A Time Range without creating schedules
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -139,7 +137,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH1
 
     [Documentation]  Get Avaliable Providers In A Time Range with another provider details
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -191,7 +189,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH3
 
     [Documentation]  Get Avaliable Providers In A Time Range with last date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -222,7 +220,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH4
 
     [Documentation]  Get Avaliable Providers In A Time Range with start date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -253,7 +251,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH5
 
     [Documentation]  Get Avaliable Providers In A Time Range with start date is different format
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -284,7 +282,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH6
 
     [Documentation]  Get Avaliable Providers In A Time Range with end date is different format
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

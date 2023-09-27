@@ -26,8 +26,10 @@ JD-TC-Create Lucene Search Documentation-1
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

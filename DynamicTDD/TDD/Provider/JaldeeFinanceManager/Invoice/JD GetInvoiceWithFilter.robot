@@ -21,10 +21,12 @@ JD-TC-CreateInvoice-1
 
     [Documentation]  Create a invoice with valid details then call filter without param.
 
-    ${resp}=  Provider Login  ${PUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
 
     ${resp}=  Get Business Profile

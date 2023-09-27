@@ -23,7 +23,7 @@ JD-TC-UnAssign User-1
 
     [Documentation]  Create a invoice and assign the invoice to a user then unassign that user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

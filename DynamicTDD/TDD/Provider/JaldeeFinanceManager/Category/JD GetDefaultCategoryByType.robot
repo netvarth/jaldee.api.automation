@@ -50,10 +50,13 @@ JD-TC-JD GetDefaultCategoryByType-1
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Vendor)
 
-    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+    # Set Test Variable  ${userName}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${userName}  ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

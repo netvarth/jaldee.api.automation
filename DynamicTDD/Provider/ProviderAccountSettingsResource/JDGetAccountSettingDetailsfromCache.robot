@@ -68,7 +68,10 @@ JD-TC-GetAccountSettingsfromCache-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${uid}=  get_uid     ${PUSERNAME_A}
     Set Suite Variable   ${uid} 

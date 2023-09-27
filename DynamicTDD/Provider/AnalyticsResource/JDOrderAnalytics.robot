@@ -63,7 +63,10 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -394,7 +397,10 @@ JD-TC-BRAND_NEW_ORDERS-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -716,7 +722,10 @@ JD-TC-PHONE_IN_ORDER-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -1052,7 +1061,10 @@ JD-TC-WALK_IN_ORDER-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -1387,7 +1399,10 @@ JD-TC-ACKNOWLEDGED_ORDER-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -1746,7 +1761,10 @@ JD-TC-CONFIRMED_ORDER-6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -2104,7 +2122,10 @@ JD-TC-PREPARING_ORDER-7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -2461,7 +2482,10 @@ JD-TC-PACKING_ORDER-8
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -2818,7 +2842,10 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -3165,7 +3192,10 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -3524,7 +3554,10 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -3881,7 +3914,10 @@ JD-TC-COMPLETED_ORDER-12
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -4238,7 +4274,10 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -4595,7 +4634,10 @@ JD-TC-IN_TRANSIT_ORDER-14
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -4953,7 +4995,10 @@ JD-TC-SHIPPED_ORDER-15
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -5311,7 +5356,10 @@ JD-TC-ORDERS_FOR_BILLING-17
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     
@@ -5669,7 +5717,10 @@ JD-TC-CANCEL_ORDER-16
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
     

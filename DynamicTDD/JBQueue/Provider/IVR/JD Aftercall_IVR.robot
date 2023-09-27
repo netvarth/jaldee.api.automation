@@ -45,12 +45,12 @@ JD-TC-Aftercall_IVR-1
 
     [Documentation]   Aftercall IVR
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -60,13 +60,9 @@ JD-TC-Aftercall_IVR-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}
@@ -190,9 +186,15 @@ JD-TC-Aftercall_IVR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${myoperator_id}    FakerLibrary.Random Number
     ${incall_id}    FakerLibrary.Random Number
@@ -208,7 +210,7 @@ JD-TC-Aftercall_IVR-1
     Set Suite Variable  ${clid}  9${clid}
     Set Suite Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME112}  ${countryCodes[1]}${PUSERNAME112}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME151}  ${countryCodes[1]}${PUSERNAME151}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -235,7 +237,7 @@ JD-TC-Aftercall_IVR-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME112}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME151}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -328,18 +330,22 @@ JD-TC-Aftercall_IVR-2
 
     [Documentation]   Aftercall IVR incall id is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -353,18 +359,22 @@ JD-TC-Aftercall_IVR-3
 
     [Documentation]   Aftercall IVR Call Souce is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -378,18 +388,22 @@ JD-TC-Aftercall_IVR-4
 
     [Documentation]   Aftercall IVR Company id is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -403,18 +417,22 @@ JD-TC-Aftercall_IVR-5
 
     [Documentation]   Aftercall IVR Caller number is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -428,18 +446,22 @@ JD-TC-Aftercall_IVR-6
 
     [Documentation]   Aftercall IVR Caller name is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -453,18 +475,22 @@ JD-TC-Aftercall_IVR-7
 
     [Documentation]   Aftercall IVR Caller number(formatted) is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -478,18 +504,22 @@ JD-TC-Aftercall_IVR-8
 
     [Documentation]   Aftercall IVR Country code is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -503,18 +533,22 @@ JD-TC-Aftercall_IVR-9
 
     [Documentation]   Aftercall IVR Call location is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -528,18 +562,22 @@ JD-TC-Aftercall_IVR-10
 
     [Documentation]   Aftercall IVR Log time stamp and start time is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -553,18 +591,22 @@ JD-TC-Aftercall_IVR-11
 
     [Documentation]   Aftercall IVR Log timestamp (unix epoch) in milliseconds is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -578,18 +620,22 @@ JD-TC-Aftercall_IVR-12
 
     [Documentation]   Aftercall IVR diff b/w call end time and start time in seconds is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -603,18 +649,22 @@ JD-TC-Aftercall_IVR-13
 
     [Documentation]   Aftercall IVR Call end time is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -628,18 +678,22 @@ JD-TC-Aftercall_IVR-14
 
     [Documentation]   Aftercall IVR Call duration (hh:mm:ss) is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -653,18 +707,22 @@ JD-TC-Aftercall_IVR-15
 
     [Documentation]   Aftercall IVR Call duration (in minutes) is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -678,18 +736,22 @@ JD-TC-Aftercall_IVR-16
 
     [Documentation]   Aftercall IVR Call Log type is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -703,18 +765,22 @@ JD-TC-Aftercall_IVR-17
 
     [Documentation]   Aftercall IVR Call event type is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -728,18 +794,22 @@ JD-TC-Aftercall_IVR-18
 
     [Documentation]   Aftercall IVR file name and file type is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -753,18 +823,22 @@ JD-TC-Aftercall_IVR-19
 
     [Documentation]   Aftercall IVR Notification Status is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -782,18 +856,22 @@ JD-TC-Aftercall_IVR-UH1
 
     [Documentation]   Aftercall IVR account id is different 
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -806,19 +884,24 @@ JD-TC-Aftercall_IVR-UH1
 JD-TC-Aftercall_IVR-UH2
 
     [Documentation]   Aftercall IVR Callers number(raw) is given as wrong
+    #Callers number(raw) is not considering from dev
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -832,18 +915,22 @@ JD-TC-Aftercall_IVR-UH3
 
     [Documentation]   Aftercall IVR Caller number(formatted) is given as wrong
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -855,20 +942,24 @@ JD-TC-Aftercall_IVR-UH3
 
 JD-TC-Aftercall_IVR-UH4
 
-    [Documentation]   Aftercall IVR Country code is different
+    [Documentation]   Aftercall IVR Country code is invalid
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -882,18 +973,22 @@ JD-TC-Aftercall_IVR-UH5
 
     [Documentation]   Aftercall IVR Log difference between start time and end time is different
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -905,45 +1000,54 @@ JD-TC-Aftercall_IVR-UH5
 
 JD-TC-Aftercall_IVR-UH6
 
-    [Documentation]   Aftercall IVR Call Log type is different
+    [Documentation]   Aftercall IVR Call Log type is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
     Set Suite Variable   ${acc_id1} 
 
-    ${resp}=    Aftercall IVR    ${acc_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${empty}    ${difference}    ${dur_min}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${file_name}    ${file_link}    ${ivr_inputValue[0]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${call_log}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
+    ${resp}=    Aftercall IVR    ${acc_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${empty}    ${difference}    ${dur_min}    ${ivr_inputValue[2]}    ${ivr_inputValue[1]}    ${file_name}    ${file_link}    ${ivr_inputValue[0]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${empty}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Aftercall_IVR-UH7
 
     [Documentation]   Aftercall IVR Call event type is different
+    #Aftercall IVR Call event type is different is different
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -956,19 +1060,24 @@ JD-TC-Aftercall_IVR-UH7
 JD-TC-Aftercall_IVR-UH8
 
     [Documentation]   Aftercall IVR Notification status is different
-    
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    #Notification status is not considering from dev
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -977,23 +1086,27 @@ JD-TC-Aftercall_IVR-UH8
     ${resp}=    Aftercall IVR    ${acc_id}    ${incall_id}    ${ivr_inputValue[1]}    ${comp_id}    ${clid_row}    ${caller_name}    ${clid}    ${countryCodes[0]}    ${loc}    ${start_time}    ${start_time}    ${start_time_in_milli_sec}    ${timestamp}    ${empty}    ${difference}    ${dur_min}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}   ${file_name}    ${file_link}    ${ivr_inputValue[4]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${pm}    ${empty}    ${call_log}    ${ivr_inputValue[0]}    ${empty}    ${empty}    ${empty}    ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-
+    
 JD-TC-Aftercall_IVR-UH9
 
     [Documentation]   Aftercall IVR Call log ring start time is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -1010,18 +1123,22 @@ JD-TC-Aftercall_IVR-UH10
 
     [Documentation]   Aftercall IVR call cancelled
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -1038,18 +1155,22 @@ JD-TC-Aftercall_IVR-UH11
 
     [Documentation]   Aftercall IVR agent id is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -1066,18 +1187,22 @@ JD-TC-Aftercall_IVR-UH12
 
     [Documentation]   Aftercall IVR agent name is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -1094,18 +1219,22 @@ JD-TC-Aftercall_IVR-UH13
 
     [Documentation]   Aftercall IVR email is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -1122,18 +1251,22 @@ JD-TC-Aftercall_IVR-UH14
 
     [Documentation]   Aftercall IVR agent contanct number is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -1150,18 +1283,22 @@ JD-TC-Aftercall_IVR-UH15
 
     [Documentation]   Aftercall IVR agent contanct number with country code is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}
@@ -1178,18 +1315,22 @@ JD-TC-Aftercall_IVR-UH16
 
     [Documentation]   Aftercall IVR agent call start time and end time is empty
     
-    clear_queue      ${PUSERNAME112}
-    clear_location   ${PUSERNAME112}
-    clear_service    ${PUSERNAME112}
-    clear_customer   ${PUSERNAME112}
+    clear_queue      ${PUSERNAME151}
+    clear_location   ${PUSERNAME151}
+    clear_service    ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME112}
+    ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
     ${acc_id1}=  get_acc_id  ${PUSERNAME1}

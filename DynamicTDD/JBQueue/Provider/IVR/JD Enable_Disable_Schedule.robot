@@ -26,7 +26,12 @@ JD-Enable_Disable_Schedule-1
 
     [Documentation]  Enable Provider schedule
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    clear_queue      ${PUSERNAME157}
+    clear_location   ${PUSERNAME157}
+    clear_service    ${PUSERNAME157}
+    clear_customer   ${PUSERNAME157}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -92,7 +97,7 @@ JD-Enable_Disable_Schedule-2
 
     [Documentation]  Disable Provider schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -134,7 +139,7 @@ JD-Enable_Disable_Schedule-UH1
 
     [Documentation]  Tried to enable already enabled schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -149,8 +154,8 @@ JD-Enable_Disable_Schedule-UH1
 
     ${DAY1}=  get_date
     ${DAY2}=  add_date  10  
-    ${DAY3}=  add_date  30 
-    ${DAY4}=  add_date  40     
+    ${DAY3}=  add_date  41
+    ${DAY4}=  add_date  51     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -178,7 +183,7 @@ JD-Enable_Disable_Schedule-UH2
 
     [Documentation]  Disable already disabled Provider schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

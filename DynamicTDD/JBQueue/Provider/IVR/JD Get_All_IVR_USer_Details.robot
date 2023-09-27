@@ -133,10 +133,6 @@ JD-TC-GET_All_IVR_USer_Details-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Accountsettings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
@@ -259,9 +255,15 @@ JD-TC-GET_All_IVR_USer_Details-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${myoperator_id}    FakerLibrary.Random Number
     ${incall_id}    FakerLibrary.Random Number
@@ -387,12 +389,17 @@ JD-TC-GET_All_IVR_USer_Details-2
 
     [Documentation]   Create sample user -that not add to ivr table and get the user details
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -599,12 +606,17 @@ JD-TC-GET_All_IVR_USer_Details-3
 
     [Documentation]   Delete users from ivr table ang get ivr details
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -724,12 +736,17 @@ JD-TC-GET_All_IVR_USer_Details-4
 
     [Documentation]  already deleted user details update  and get ivr details
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
 
 
@@ -763,93 +780,17 @@ JD-TC-GET_All_IVR_USer_Details-UH2
 
     [Documentation]   Get all IVR user details with another provider login
     
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
-     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
-
-    ${gender}=  Random Element    ${Genderlist}
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-    ${firstName}=    FakerLibrary.firstName
-    ${lastName}=    FakerLibrary.lastName
-    Set Suite Variable  ${email}  ${firstName}${C_Email}.${test_mail}
-    ${numbers}=     Random Int   min=100   max=5000
-    ${PUSERNAME_U1}=  Evaluate  ${MUSERNAME}+${numbers}
-    clear_users  ${PUSERNAME_U1}
-    ${random_ph}=   Random Int   min=20000   max=30000
-    ${whpnum}=  Evaluate  ${MUSERNAME}+${random_ph}
-    ${tlgnum}=  Evaluate  ${MUSERNAME}+${random_ph}
-
-    ${so_id1}=  Create Sample User   
-    Set Suite Variable  ${so_id1}
-
-   
-     ${resp}=  Get User By Id  ${so_id1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${SOUSERNAME1}  ${resp.json()['mobileNo']}
-    Set Suite Variable  ${name}  ${resp.json()['firstName']}
-    
-
-    ${resp}=  Get Accountsettings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
-
-    ${CUR_DAY}=  get_date
-    ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
-
-    
-    
-    ${myoperator_id}    FakerLibrary.Random Number
-    ${incall_id}    FakerLibrary.Random Number
-    ${incall_uid}    FakerLibrary.Random Number
-    ${reference_id}    FakerLibrary.Random Number
-    ${company_id}    FakerLibrary.Random Number
-    ${cons_verfy_node_value}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
-    ${clid}    Random Number 	digits=5 
-    ${clid}=    Evaluate    f'{${clid}:0>9d}'
-    Log  ${clid}
-    Set Suite Variable  ${clid}  9${clid}
-    Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
-
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
 
     ${resp}=    Get All IVR User Details
@@ -861,12 +802,17 @@ JD-TC-GET_All_IVR_USer_Details-UH3
 
     [Documentation]   Update user availability(without user schedule) from ivr table and get ivr details
     
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}

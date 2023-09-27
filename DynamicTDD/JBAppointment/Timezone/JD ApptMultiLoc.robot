@@ -1901,4 +1901,210 @@ JD-TC-Take Appointment in Different Timezone-3
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}   ${c1_apptid1}
 
+
+
+JD-TC-Take Appointment in Different Timezone-4
+    [Documentation]  4 multiuser acccounts- 2 in US- different time zones, 1 in ME, 1 in India, each mu has 2 users each in different locations
+                ...    same for consumers, and the consumer tries to take appointment for these users
+
+    
+    ############################## US ##############################
+    Comment  Multi User Account in US
+    ${PO_Number}=  FakerLibrary.Numerify  %#####
+    ${US_MultiUser}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    # ${licresp}=   Get Licensable Packages
+    # Should Be Equal As Strings  ${licresp.status_code}  200
+    # ${liclen}=  Get Length  ${licresp.json()}
+    # Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
+    # Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
+
+    ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
+
+    ${resp}=  Get BusinessDomainsConf
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${dom_len}=  Get Length  ${resp.json()}
+    ${dom}=  random.randint  ${0}  ${dom_len-1}
+    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+    Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+    Log   ${domain}
+    
+    FOR  ${subindex}  IN RANGE  ${sdom_len}
+        ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+        Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+        ${is_corp}=  check_is_corp  ${subdomain}
+        Exit For Loop If  '${is_corp}' == 'True'
+    END
+    Log   ${subdomain}
+
+    ${fname}=  FakerLibrary.name
+    ${lname}=  FakerLibrary.lastname
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${USProvider}  ${licpkgid}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Account Activation  ${USProvider}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${USProvider}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    sleep  01s
+    ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${ph1}=  Evaluate  ${USProvider}+15566122
+    ${ph2}=  Evaluate  ${USProvider}+25566122
+    ${views}=  Random Element    ${Views}
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${USProvider}.${test_mail}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    ${address} =  FakerLibrary.address
+    ${postcode}=  FakerLibrary.postcode
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${DAY}=  db.get_date_by_timezone  ${US_tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ${bool}
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  db.get_time_by_timezone  ${US_tz}  
+    ${eTime}=  db.add_timezone_time  ${US_tz}  0  30  
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+
+    ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    Set Test Variable  ${email_id}  ${P_Email}${USProvider}.${test_mail}
+
+    ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${email_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Enable Appointment
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep   01s
+    
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${UO_Number}=  FakerLibrary.Numerify  %#####
+    ${US_User_U1}=  Evaluate  ${PUSERNAME}+${UO_Number}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${pin}=  FakerLibrary.postcode
+    ${user_dis_name}=  FakerLibrary.last_name
+    ${employee_id}=  FakerLibrary.last_name
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${US_User_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${US_User_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[0]}  ${US_User_U1}  ${countryCodes[0]}  ${US_User_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${us_uid1}  ${resp.json()}
+
+    ${resp}=  Get User By Id  ${us_uid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
+
+    ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${spec}=  get_specs  ${resp.json()}
+    Log  ${spec}
+
+    ${resp}=  Get Spoke Languages
+    Should Be Equal As Strings    ${resp.status_code}   200 
+    ${Languages}=  get_Languagespoken  ${resp.json()}
+    Log  ${Languages}
+
+    ${bs}=  FakerLibrary.bs
+    ${bs_des}=  FakerLibrary.word
+
+    ${resp}=  User Profile Updation  ${bs}  ${bs_des}  ${spec}  ${Languages}  ${sub_domain_id}  ${us_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${us_upid1}  ${resp.json()['profileId']}
+
+    ${resp}=  Get User Profile  ${us_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs_des}  languagesSpoken=${Languages}  userSubdomain=${sub_domain_id}   profileId=${us_upid1}  specialization=${spec}
+
     

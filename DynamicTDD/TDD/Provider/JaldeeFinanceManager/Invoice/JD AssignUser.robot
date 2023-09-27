@@ -22,7 +22,7 @@ JD-TC-Assign User-1
 
     [Documentation]  Create a invoice then assign the invoice to a user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

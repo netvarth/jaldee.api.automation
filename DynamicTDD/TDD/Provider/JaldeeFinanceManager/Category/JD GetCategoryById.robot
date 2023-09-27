@@ -22,7 +22,7 @@ JD-TC-GetCategoryById-1
 
     [Documentation]  Create Category as Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -66,7 +66,7 @@ JD-TC-GetCategoryById-2
 
     [Documentation]  Create Category as Expense and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,7 +89,7 @@ JD-TC-GetCategoryById-3
 
     [Documentation]  Create Category as Payable and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -112,7 +112,7 @@ JD-TC-GetCategoryById-4
 
     [Documentation]  Create Category as Income and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +135,7 @@ JD-TC-GetCategoryById-5
 
     [Documentation]  Create Category as Receivable and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -158,7 +158,7 @@ JD-TC-GetCategoryById-6
 
     [Documentation]  Create Category as Invoice and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -204,7 +204,7 @@ JD-TC-GetCategoryById-UH3
 
     [Documentation]   Get Category by Id Using another provisders category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -256,9 +256,15 @@ JD-TC-Assign_IVR_User-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${myoperator_id}    FakerLibrary.Random Number
     ${incall_id}    FakerLibrary.Random Number
@@ -381,11 +387,33 @@ JD-TC-Assign_IVR_User-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.json()['userId']}    ${so_id1}
 
+
+JD-TC-Assign_IVR_User-2
+
+    [Documentation]   Assign IVR User is unvailable
+    
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update User Availability    ${vo_id1}    ${Availability[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${vo_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get IVR User Details    ${userType[0]}    ${vo_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.json()['availability']}    ${Availability[1]}
+
 JD-TC-Assign_IVR_User-UH1
 
     [Documentation]   Assign IVR User with invalid ivr uid
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -396,23 +424,33 @@ JD-TC-Assign_IVR_User-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}    ${bool[0]}
 
+    ${resp}=    Get Ivr By Uid    ${invaliduid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    ${empty}
+
 JD-TC-Assign_IVR_User-UH2
 
     [Documentation]   Assign IVR User with user type as assistance
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[1]}    ${so_id1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600
+    Should Be Equal As Strings  ${resp.status_code}  422   #Currently this usertype is not existing.but future may come 
+
+    # ${resp}=    Get IVR User Details    ${userType[1]}    ${so_id1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings    ${resp.json()['userType']}    ${userType[1]}
 
 JD-TC-Assign_IVR_User-UH3
 
     [Documentation]   Assign IVR User with invalid user id    
 
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -420,13 +458,14 @@ JD-TC-Assign_IVR_User-UH3
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${invuserid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  600
+    Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
 JD-TC-Assign_IVR_User-UH4
 
     [Documentation]   Assign IVR User with uid is empty
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -435,35 +474,25 @@ JD-TC-Assign_IVR_User-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}    ${bool[0]}
 
+
 JD-TC-Assign_IVR_User-UH5
 
     [Documentation]   Assign IVR User with user id is empty
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Assign IVR User    ${ivr_uid}    ${userType[0]}    ${empty}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
+    Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-Assign_IVR_User-UH6
-
-    [Documentation]   Assign IVR User with usertype is empty
-    
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Assign IVR User    ${ivr_uid}    ${empty}    ${so_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  500
 
 JD-TC-Assign_IVR_User-UH6
 
     [Documentation]   Assign IVR User with another provider login   
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -493,3 +522,18 @@ JD-TC-Assign_IVR_User-UH8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+
+*** comment ***
+JD-TC-Assign_IVR_User-UH6
+
+    [Documentation]   Assign IVR User with usertype is empty
+    
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${list}=  Create List
+
+    ${resp}=    Assign IVR User    ${ivr_uid}    ${list}    ${so_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422

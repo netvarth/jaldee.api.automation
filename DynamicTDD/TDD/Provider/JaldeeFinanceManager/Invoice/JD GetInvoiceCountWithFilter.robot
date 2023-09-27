@@ -20,10 +20,12 @@ JD-TC-GetInvoiceCountWithFilter-1
 
     [Documentation]  Create a invoice with valid details then try to get count filter without param.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
 
     ${resp}=  Get Business Profile

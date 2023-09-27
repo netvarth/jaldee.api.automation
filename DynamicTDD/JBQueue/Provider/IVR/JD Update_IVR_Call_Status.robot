@@ -44,12 +44,12 @@ JD-TC-Update_IVR_Call_Status-1
 
     [Documentation]   Update IVR Call Status
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME178}
+    clear_location   ${PUSERNAME178}
+    clear_service    ${PUSERNAME178}
+    clear_customer   ${PUSERNAME178}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -59,7 +59,7 @@ JD-TC-Update_IVR_Call_Status-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME178}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -189,9 +189,15 @@ JD-TC-Update_IVR_Call_Status-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${myoperator_id}    FakerLibrary.Random Number
     ${incall_id}    FakerLibrary.Random Number
@@ -206,7 +212,7 @@ JD-TC-Update_IVR_Call_Status-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME178}  ${countryCodes[1]}${PUSERNAME178}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -233,7 +239,7 @@ JD-TC-Update_IVR_Call_Status-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME178}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -317,7 +323,7 @@ JD-TC-Update_IVR_Call_Status-2
 
     [Documentation]   Update IVR Call Status to transferred
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -339,7 +345,7 @@ JD-TC-Update_IVR_Call_Status-3
 
     [Documentation]   Update IVR Call Status to Incall
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -361,7 +367,7 @@ JD-TC-Update_IVR_Call_Status-4
 
     [Documentation]   Update IVR Call Status to Connected
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -383,7 +389,7 @@ JD-TC-Update_IVR_Call_Status-5
 
     [Documentation]   Update IVR Call Status to Missed
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -405,7 +411,7 @@ JD-TC-Update_IVR_Call_Status-6
 
     [Documentation]   Update IVR Call Status to Voicemail
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -427,7 +433,7 @@ JD-TC-Update_IVR_Call_Status-7
 
     [Documentation]   Update IVR Call Status to Call completed
 
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -451,7 +457,7 @@ JD-TC-Update_IVR_Call_Status-UH1
 
     [Documentation]   Update IVR Call Status where uid is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -466,7 +472,7 @@ JD-TC-Update_IVR_Call_Status-UH2
 
     [Documentation]   Update IVR Call Status where status is invalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

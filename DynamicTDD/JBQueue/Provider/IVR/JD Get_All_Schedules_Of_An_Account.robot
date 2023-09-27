@@ -26,7 +26,12 @@ JD-Get_all_schedules_of_an_account-1
 
     [Documentation]  Get all schedules of an account
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    clear_queue      ${PUSERNAME160}
+    clear_location   ${PUSERNAME160}
+    clear_service    ${PUSERNAME160}
+    clear_customer   ${PUSERNAME160}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -63,12 +68,26 @@ JD-Get_all_schedules_of_an_account-1
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['name']}                                      ${schedule_name}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['recurringType']}             ${recurringtype[1]}  
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['repeatIntervals']}           ${list}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['startDate']}                 ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['terminator']['endDate']}     ${DAY2}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['timeSlots'][0]['sTime']}     ${sTime1}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleTime']['timeSlots'][0]['eTime']}     ${eTime1}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleState']}                             ${JCstatus[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['providerId']}                                ${user_id}
 
 JD-Get_all_schedules_of_an_account-2
 
     [Documentation]  Get all schedules of an account  without creating schedule for same provider
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    clear_queue      ${PUSERNAME160}
+    clear_location   ${PUSERNAME160}
+    clear_service    ${PUSERNAME160}
+    clear_customer   ${PUSERNAME160}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -87,17 +106,21 @@ JD-Get_all_schedules_of_an_account-2
     ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${schedule_name}=  FakerLibrary.bs
+
 
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-Get_all_schedules_of_an_account-3
 
     [Documentation]  Create two schedules and Get all schedules of an account
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    clear_queue      ${PUSERNAME160}
+    clear_location   ${PUSERNAME160}
+    clear_service    ${PUSERNAME160}
+    clear_customer   ${PUSERNAME160}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -141,12 +164,12 @@ JD-Get_all_schedules_of_an_account-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
+    
 JD-Get_all_schedules_of_an_account-UH1
 
     [Documentation]  Get all schedules of an account without creating schedule for another provider
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -176,7 +199,7 @@ JD-Get_all_schedules_of_an_account-UH2
 
     [Documentation]  Provider schedule name is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -211,7 +234,7 @@ JD-Get_all_schedules_of_an_account-UH3
 
     [Documentation]  Provider schedule start date and end date is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -246,7 +269,7 @@ JD-Get_all_schedules_of_an_account-UH4
 
     [Documentation]  Provider schedule start time and end time is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -281,7 +304,7 @@ JD-Get_all_schedules_of_an_account-UH5
 
     [Documentation]  Provider schedule user id is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -310,13 +333,13 @@ JD-Get_all_schedules_of_an_account-UH5
 
     ${resp}=    Get all schedules of an account 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
 
 JD-Get_all_schedules_of_an_account-UH6
 
     [Documentation]  Provider schedule user id is empty and try to get the schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

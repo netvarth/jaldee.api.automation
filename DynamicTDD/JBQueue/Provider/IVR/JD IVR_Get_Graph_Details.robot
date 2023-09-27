@@ -44,12 +44,12 @@ JD-TC-Get_IVR_Graph_Details-1
 
     [Documentation]   Get IVR Graph Details
     
-    clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
-    clear_service    ${PUSERNAME143}
-    clear_customer   ${PUSERNAME143}
+    clear_queue      ${PUSERNAME171}
+    clear_location   ${PUSERNAME171}
+    clear_service    ${PUSERNAME171}
+    clear_customer   ${PUSERNAME171}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -59,7 +59,7 @@ JD-TC-Get_IVR_Graph_Details-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME143}
+    ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
 
     ${resp}=  Get Accountsettings  
@@ -189,9 +189,15 @@ JD-TC-Get_IVR_Graph_Details-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${myoperator_id}    FakerLibrary.Random Number
     ${incall_id}    FakerLibrary.Random Number
@@ -206,7 +212,7 @@ JD-TC-Get_IVR_Graph_Details-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME143}  ${countryCodes[1]}${PUSERNAME143}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME171}  ${countryCodes[1]}${PUSERNAME171}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -233,7 +239,7 @@ JD-TC-Get_IVR_Graph_Details-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME171}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -338,7 +344,7 @@ JD-TC-Get_IVR_Graph_Details-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME143}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME171}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -406,5 +412,367 @@ JD-TC-Get_IVR_Graph_Details-1
     ${resp}=    Get Ivr Details By Filter
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${created_date2}    ${created_date}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['labels'][0]}                                 ${created_date2}
+    Should Be Equal As Strings  ${resp.json()['labels'][7]}                                 ${created_date} 
+    Should Be Equal As Strings  ${resp.json()['datasets'][0]['data'][0]}                    0
+    Should Be Equal As Strings  ${resp.json()['datasets'][1]['data'][0]}                    0
+
+
+JD-TC-Get_IVR_Graph_Details-2 
+
+    [Documentation]   Get IVR Graph Details with a particular date range
+    
+    clear_queue      ${PUSERNAME171}
+    clear_location   ${PUSERNAME171}
+    clear_service    ${PUSERNAME171}
+    clear_customer   ${PUSERNAME171}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME171}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+    ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
+    ${CUR_DAY}=  get_date
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['labels'][0]}                                 ${start_date}
+    Should Be Equal As Strings  ${resp.json()['labels'][7]}                                 ${CUR_DAY}  
+    Should Be Equal As Strings  ${resp.json()['datasets'][0]['data'][0]}                    0
+    Should Be Equal As Strings  ${resp.json()['datasets'][1]['data'][0]}                     0
+
+JD-TC-Get_IVR_Graph_Details-UH1
+
+    [Documentation]   Get IVR Graph Details without login
+     
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+    ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
+    ${CUR_DAY}=  get_date
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+JD-TC-Get_IVR_Graph_Details-UH2 
+
+    [Documentation]   Get IVR Graph Details with another provider login
+    
+    clear_queue      ${PUSERNAME14}
+    clear_location   ${PUSERNAME14}
+    clear_service    ${PUSERNAME14}
+    clear_customer   ${PUSERNAME14}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME14}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+    ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
+    ${CUR_DAY}=  get_date
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['labels'][0]}                                 ${start_date}
+    Should Be Equal As Strings  ${resp.json()['labels'][7]}                                 ${CUR_DAY}  
+    Should Be Equal As Strings  ${resp.json()['datasets'][0]['data'][0]}                    0
+    Should Be Equal As Strings  ${resp.json()['datasets'][1]['data'][0]}                     0
+
+JD-TC-Get_IVR_Graph_Details-UH3
+
+    [Documentation]   Get IVR Graph Details where Report date category is different
+    
+    clear_queue      ${PUSERNAME171}
+    clear_location   ${PUSERNAME171}
+    clear_service    ${PUSERNAME171}
+    clear_customer   ${PUSERNAME171}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME171}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+    ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
+    ${CUR_DAY}=  get_date
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[4]}   ${start_date}    ${CUR_DAY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['labels'][0]}                                 ${start_date}
+    Should Be Equal As Strings  ${resp.json()['labels'][7]}                                 ${CUR_DAY}  
+    Should Be Equal As Strings  ${resp.json()['datasets'][0]['data'][0]}                    0
+    Should Be Equal As Strings  ${resp.json()['datasets'][1]['data'][0]}                     0
+
+JD-TC-Get_IVR_Graph_Details-UH4
+
+    [Documentation]   Get IVR Graph Details where start date given null
+    
+    clear_queue      ${PUSERNAME171}
+    clear_location   ${PUSERNAME171}
+    clear_service    ${PUSERNAME171}
+    clear_customer   ${PUSERNAME171}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME171}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+    ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
+    ${CUR_DAY}=  get_date
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${SPACE}    ${CUR_DAY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-Get_IVR_Graph_Details-UH5
+
+    [Documentation]   Get IVR Graph Details where start date is empty
+    
+    clear_queue      ${PUSERNAME171}
+    clear_location   ${PUSERNAME171}
+    clear_service    ${PUSERNAME171}
+    clear_customer   ${PUSERNAME171}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME171}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+    ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
+    ${CUR_DAY}=  get_date
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${empty}    ${CUR_DAY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-Get_IVR_Graph_Details-UH6
+
+    [Documentation]   Get IVR Graph Details where end date is null
+    
+    clear_queue      ${PUSERNAME171}
+    clear_location   ${PUSERNAME171}
+    clear_service    ${PUSERNAME171}
+    clear_customer   ${PUSERNAME171}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME171}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+    ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
+    ${CUR_DAY}=  get_date
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${SPACE}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-Get_IVR_Graph_Details-UH7
+
+    [Documentation]   Get IVR Graph Details where end date is empty
+    
+    clear_queue      ${PUSERNAME171}
+    clear_location   ${PUSERNAME171}
+    clear_service    ${PUSERNAME171}
+    clear_customer   ${PUSERNAME171}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME171}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+    ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
+    ${CUR_DAY}=  get_date
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-Get_IVR_Graph_Details-UH8
+
+    [Documentation]   Get IVR Graph Details where date format is different
+    
+    clear_queue      ${PUSERNAME171}
+    clear_location   ${PUSERNAME171}
+    clear_service    ${PUSERNAME171}
+    clear_customer   ${PUSERNAME171}
+
+    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+
+    ${acc_id}=  get_acc_id  ${PUSERNAME171}
+    Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Server Time
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${start1}    ${resp.json()}
+    ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
+  
+
+    ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start2}    ${start1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+   
+   
+    
+
+
 
     

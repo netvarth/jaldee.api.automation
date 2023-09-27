@@ -53,10 +53,13 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
@@ -393,7 +396,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     
     FOR   ${a}  IN RANGE   ${count}
         
-        # ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -464,7 +467,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${pre_payment_total}=  Evaluate  ${pickup_pre_total} + ${home_pre_total}
     Set Suite Variable   ${pre_payment_total}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -596,7 +599,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-2
     
     FOR   ${a}  IN RANGE   ${count}
         
-        # ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -707,7 +710,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-2
     Set Suite Variable   ${bill_payment_total}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -746,7 +749,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-3
     [Documentation]   take online order(home delivery and pickup) for a provider by 10 consumers and do the prepayment and then bill payment with tax
     ...  and check account level analytics for ORDER_BILL_PAYMENT_COUNT matrix.
     
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -842,7 +845,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-3
     
     FOR   ${a}  IN RANGE   ${count}
         
-        # ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -954,7 +957,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-3
     ${bill_payment_total}=  Evaluate  ${home_bill_total} + ${pickup_bill_total}
     Set Test Variable   ${bill_payment_total}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1002,7 +1005,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${item_quantity2}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -1089,7 +1092,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
     
     FOR   ${a}  IN RANGE   ${count}
         
-        # ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -1157,7 +1160,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
     Set Suite Variable   ${pre_payment_total}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1263,7 +1266,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-6
     
     FOR   ${a}  IN RANGE   ${count}
         
-        # ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -1336,7 +1339,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-6
     ${billpayment_count}=   Evaluate  len($order_ids)
     Set Suite Variable   ${billpayment_count}
 
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     

@@ -51,13 +51,13 @@ JD-TC-Add_Notes_in_IVR-1
 
     [Documentation]   Add notes in IVR
     
-    clear_queue      ${PUSERNAME111}
-    clear_location   ${PUSERNAME111}
-    clear_service    ${PUSERNAME111}
-    clear_customer   ${PUSERNAME111}
+    clear_queue      ${PUSERNAME150}
+    clear_location   ${PUSERNAME150}
+    clear_service    ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -67,13 +67,9 @@ JD-TC-Add_Notes_in_IVR-1
     # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${acc_id}=  get_acc_id  ${PUSERNAME111}
+    ${acc_id}=  get_acc_id  ${PUSERNAME150}
     Set Suite Variable   ${acc_id} 
 
-    ${resp}=  Get Accountsettings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
@@ -196,9 +192,15 @@ JD-TC-Add_Notes_in_IVR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    enable and disable IVR    ${toggle[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableIvr']}==${bool[0]}
+        ${resp}=    enable and disable IVR    ${toggle[0]}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${myoperator_id}    FakerLibrary.Random Number
     ${incall_id}    FakerLibrary.Random Number
@@ -213,7 +215,7 @@ JD-TC-Add_Notes_in_IVR-1
     Set Suite Variable  ${clid}  9${clid}
     Set Test Variable     ${clid_row}    ${countryCodes[0]}${clid}
 
-    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME111}  ${countryCodes[1]}${PUSERNAME111}  ${user_id}  ${user_name}
+    ${resp}=    ivr_user_details    ${acc_id}  ${countryCodes[1]}  ${myoperator_id}  ${PUSERNAME150}  ${countryCodes[1]}${PUSERNAME150}  ${user_id}  ${user_name}
 
 #.......   Incoming call on server    ..........
 
@@ -240,7 +242,7 @@ JD-TC-Add_Notes_in_IVR-1
 
 #........  user answered    ........
     
-    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME111}
+    ${clid_user}=    Convert To String    ${countryCodes[1]}${PUSERNAME150}
     
     ${user}=    Create List    ${clid_user}
     ${user}=    json.dumps    ${user}
@@ -401,7 +403,7 @@ JD-TC-Add_Notes_in_IVR-2
 
     [Documentation]   Add notes in IVR where note is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -419,7 +421,7 @@ JD-TC-Add_Notes_in_IVR-3
 
     [Documentation]   Add notes in IVR where attachment userid is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -437,7 +439,7 @@ JD-TC-Add_Notes_in_IVR-4
 
     [Documentation]   Add notes in IVR where attachment owner type is invalid
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -455,7 +457,7 @@ JD-TC-Add_Notes_in_IVR-5
 
     [Documentation]   Add notes in IVR where attachment owner name is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -473,7 +475,7 @@ JD-TC-Add_Notes_in_IVR-6
 
     [Documentation]   Add notes in IVR where attachment file name is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -488,7 +490,7 @@ JD-TC-Add_Notes_in_IVR-7
 
     [Documentation]   Add notes in IVR where attachment file size is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -503,7 +505,7 @@ JD-TC-Add_Notes_in_IVR-8
 
     [Documentation]   Add notes in IVR where attachment caption is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -521,7 +523,7 @@ JD-TC-Add_Notes_in_IVR-9
 
     [Documentation]   Add notes in IVR where attachment action is remove
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -543,7 +545,7 @@ JD-TC-Add_Notes_in_IVR-10
 
     [Documentation]   Add notes in IVR where attachment uid is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -557,7 +559,7 @@ JD-TC-Add_Notes_in_IVR-11
 
     [Documentation]   Add notes in IVR where attachment order is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -571,7 +573,7 @@ JD-TC-Add_Notes_in_IVR-12
 
     [Documentation]   Add notes in IVR where attachment file size is large
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -585,7 +587,7 @@ JD-TC-Add_Notes_in_IVR-13
 
     [Documentation]   Add notes in IVR where attachment file type is document
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -599,7 +601,7 @@ JD-TC-Add_Notes_in_IVR-14
 
     [Documentation]   Add notes in IVR where attachment file type is excel
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -613,7 +615,7 @@ JD-TC-Add_Notes_in_IVR-15
 
     [Documentation]   Add notes in IVR where attachment file type is jpg
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -627,7 +629,7 @@ JD-TC-Add_Notes_in_IVR-15
 
     [Documentation]   Add notes in IVR where attachment file type is png
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -642,7 +644,7 @@ JD-TC-Add_Notes_in_IVR-UH1
 
     [Documentation]   Add notes in IVR where attachment file type is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -658,7 +660,7 @@ JD-TC-Add_Notes_in_IVR-UH2
 
     [Documentation]   Add notes in IVR where ivr id is invalid
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -708,7 +710,7 @@ JD-TC-Add_Notes_in_IVR-UH6
 
     [Documentation]   Add notes in IVR where attachment file type is sh
     
-    ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

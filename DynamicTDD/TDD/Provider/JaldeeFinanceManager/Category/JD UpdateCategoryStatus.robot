@@ -22,7 +22,7 @@ JD-TC-UpdateCategoryStatus-1
 
     [Documentation]  Create Category as Vendor update this category status as disable.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -78,7 +78,7 @@ JD-TC-UpdateCategoryStatus-2
 
     [Documentation]  Create Category as Expense then update this category status as disable..
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -112,7 +112,7 @@ JD-TC-UpdateCategoryStatus-3
 
     [Documentation]  Create Category as payable then update this category status as disable..
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,7 +147,7 @@ JD-TC-UpdateCategoryStatus-4
 
     [Documentation]  Create Category as Income then update this category status as disable..
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -181,7 +181,7 @@ JD-TC-UpdateCategoryStatus-5
 
     [Documentation]  Create Category as Receivable then update this category status as disable.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -216,7 +216,7 @@ JD-TC-UpdateCategoryStatus-6
 
     [Documentation]  Create Category as Invoice then update this category status as disable.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -250,7 +250,7 @@ JD-TC-UpdateCategoryStatus-7
 
     [Documentation]  update category status without name.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -284,7 +284,7 @@ JD-TC-UpdateCategoryStatus-8
 
     [Documentation]  update category status as category type as empty.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -342,7 +342,7 @@ JD-TC-UpdateCategoryStatus-UH3
 
     [Documentation]  Update category status with the same status again(Enable).
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -392,7 +392,7 @@ JD-TC-UpdateCategoryStatus-UH4
 
     [Documentation]  Update category status with the same status again(Disable).
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

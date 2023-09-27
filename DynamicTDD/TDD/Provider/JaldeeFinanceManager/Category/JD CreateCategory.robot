@@ -22,7 +22,7 @@ JD-TC-CreateCategory-1
 
     [Documentation]  Create Category as Vendor.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -52,7 +52,7 @@ JD-TC-CreateCategory-2
 
     [Documentation]  Create Category as Expense.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -66,7 +66,7 @@ JD-TC-CreateCategory-3
 
     [Documentation]  Create Category as Payable.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -80,7 +80,7 @@ JD-TC-CreateCategory-4
 
     [Documentation]  Create Category as Income.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -94,7 +94,7 @@ JD-TC-CreateCategory-5
 
     [Documentation]  Create Category as Receivable.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -108,7 +108,7 @@ JD-TC-CreateCategory-6
 
     [Documentation]  Create Category as Invoice.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,7 +147,7 @@ JD-TC-CreateCategory-UH3
 
     [Documentation]  Create Category with name as empty.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -163,7 +163,7 @@ JD-TC-CreateCategory-UH4
 
     [Documentation]  Create Category without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -195,7 +195,7 @@ JD-TC-CreateCategory-UH5
 
     [Documentation]  Create same Category multiple times.
 
-    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

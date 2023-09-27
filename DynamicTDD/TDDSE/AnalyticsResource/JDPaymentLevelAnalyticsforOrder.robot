@@ -56,7 +56,10 @@ JD-TC-PaymentLevelAnalyticsforOrder-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
