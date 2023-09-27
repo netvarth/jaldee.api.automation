@@ -2740,7 +2740,7 @@ JD-TC-Reschedule Waitlist-UH4
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
-    ${DAY3}=  subtract_date  2
+    ${DAY3}=  db.subtract_timezone_date  ${tz}  2
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60

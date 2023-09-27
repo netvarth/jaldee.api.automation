@@ -90,7 +90,7 @@ JD-TC-DepartmentWiseAnalytics-1
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
 
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
@@ -114,9 +114,9 @@ JD-TC-DepartmentWiseAnalytics-1
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
+     ${sTime}=  db.add_timezone_time  ${tz}  0  15
      Set Suite Variable   ${sTime}
-     ${eTime}=  add_time   0  45
+     ${eTime}=  db.add_timezone_time  ${tz}   0  45
      Set Suite Variable   ${eTime}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
@@ -425,15 +425,15 @@ JD-TC-DepartmentWiseAnalytics-1
     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
     Set Suite Variable   ${eTime1}
 
     ${resp}=  Get Locations
@@ -876,11 +876,11 @@ JD-TC-DepartmentWiseAnalytics-3
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  25  ${lid}  ${u_id1}  ${v_s1} 
     Log  ${resp.json()}
@@ -1009,7 +1009,7 @@ JD-TC-DepartmentWiseAnalytics-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id3}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1033,7 +1033,7 @@ JD-TC-DepartmentWiseAnalytics-4
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id4}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -1110,7 +1110,7 @@ JD-TC-DepartmentWiseAnalytics-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Update Queue  ${q_id2}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
     ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
     ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}   ${s_id5}
@@ -1134,7 +1134,7 @@ JD-TC-DepartmentWiseAnalytics-5
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id2}  ${DAY}  ${s_id5}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}

@@ -110,10 +110,10 @@ JD-Enable_Disable_Schedule-2
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  add_date  20      
-    ${DAY2}=  add_date  30
+    ${DAY1}=  db.add_timezone_date  ${tz}  20      
+    ${DAY2}=  db.add_timezone_date  ${tz}  30
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -152,12 +152,12 @@ JD-Enable_Disable_Schedule-UH1
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10  
-    ${DAY3}=  add_date  41
-    ${DAY4}=  add_date  51     
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    ${DAY3}=  db.add_timezone_date  ${tz}  41
+    ${DAY4}=  db.add_timezone_date  ${tz}  51     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -196,12 +196,12 @@ JD-Enable_Disable_Schedule-UH2
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10  
-    ${DAY4}=  add_date  40  
-    ${DAY5}=  add_date  50   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    ${DAY4}=  db.add_timezone_date  ${tz}  40  
+    ${DAY5}=  db.add_timezone_date  ${tz}  50   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs

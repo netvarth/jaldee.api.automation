@@ -30,7 +30,7 @@ JD-TC-CloudSearch-1
     clear_location   ${PUSERNAME5}
     clear_queue   ${PUSERNAME5}
     Set Suite Variable    ${pname}    ${resp.json()['userName']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3 
     Set Suite Variable  ${list}
@@ -68,9 +68,9 @@ JD-TC-CloudSearch-1
     Set Suite Variable   ${postcode}
     ${address}=  get_address
     Set Suite Variable   ${address}
-    ${sTime}=  add_time  0   5
+    ${sTime}=  db.add_timezone_time  ${tz}  0   5
     Set Suite Variable   ${sTime}   
-    ${eTime}=  add_time  5  5
+    ${eTime}=  db.add_timezone_time  ${tz}  5  5
     Set Suite Variable   ${eTime}
     ${description}=     FakerLibrary.sentence
     Set Suite Variable   ${description}
@@ -172,8 +172,8 @@ JD-TC-CloudSearch-4
     ${companySuffix}=  FakerLibrary.companySuffix
     ${postcode}=  FakerLibrary.postcode
     ${address}=  get_address
-    ${sTime1}=  add_time  0  5
-    ${eTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  5
+    ${eTime1}=  db.add_timezone_time  ${tz}  0  15
     ${latti1}=  get_latitude
     ${longi1}=  get_longitude
     ${resp}=  Create Location  ${city}  ${longi1}  ${latti1}  www.${companySuffix}.com  ${postcode}  ${address}  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
@@ -298,8 +298,8 @@ JD-TC-CloudSearch-8
     ${resp}=  Create Service  ${SERVICE2}  ${description}   30  ACTIVE  Waitlist  ${notify}   ${notifytype}  45  500  ${isPrePayment}  ${taxable}
     Should Be Equal As Strings  ${resp.status_code}  200     
     Set Suite Variable  ${s_id1}  ${resp.json()} 
-    ${sTime2}=  add_time
-    ${eTime2}=  add_time
+    ${sTime2}=  db.add_timezone_time  ${tz}
+    ${eTime2}=  db.add_timezone_time  ${tz}
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid2}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid}  ${resp.json()}

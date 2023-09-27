@@ -29,9 +29,9 @@ JD-TC-Get Waitlist Consumer count-1
     ${pid}=  get_acc_id  ${PUSERNAME5}
     Set Suite Variable  ${pid}  ${pid}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${DAY}=  add_date  0  
-    ${DAY1}=  add_date  1 
-    ${DAY2}=  add_date  2
+    ${DAY}=  db.add_timezone_date  ${tz}  0  
+    ${DAY1}=  db.add_timezone_date  ${tz}  1 
+    ${DAY2}=  db.add_timezone_date  ${tz}  2
     Set Suite Variable  ${DAY}
     Set Suite Variable  ${DAY1}
     Set Suite Variable  ${DAY2}

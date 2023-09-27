@@ -76,7 +76,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     Set Suite Variable  ${MUSERNAME_E}
     ${accid}=   get_acc_id   ${MUSERNAME_E}
     Set Suite Variable  ${accid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -100,9 +100,9 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -214,15 +214,15 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
     Set Suite Variable   ${eTime1}
 
     ${resp}=  Get Locations
@@ -445,11 +445,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-2
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  25  ${lid}  ${u_id}  ${v_s1} 
     Log  ${resp.json()}
@@ -607,11 +607,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
     Set Test Variable  ${s_id6}
 
     comment  queue 1 for checkins
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  15  ${lid}  ${u_id}  ${s_id6} 
     Log  ${resp.json()}
@@ -627,7 +627,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${accid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${u_id}  ${self}
         Log  ${resp.json()}
@@ -658,7 +658,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${consumerNote1}=   FakerLibrary.word
         ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id0}
         ${resp}=  Consumer Add To WL With Virtual Service For User  ${accid}  ${q_id1}  ${DAY}  ${v_s1}  ${consumerNote1}  ${bool[0]}  ${virtualService}   ${u_id}  0
@@ -825,11 +825,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
     Set Test Variable  ${s_id7}  ${resp.json()}
 
     comment  queue 1 for checkins
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  20  ${lid}  ${u_id}  ${s_id6}  ${s_id7} 
     Log  ${resp.json()}
@@ -846,7 +846,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${accid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${u_id}  ${self} 
         Log  ${resp.json()}
@@ -1017,11 +1017,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
     Set Test Variable  ${s_id7}  ${resp.json()}
 
     comment  queue 1 for checkins
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  15  ${lid}  ${u_id}  ${s_id6}  ${s_id7} 
     Log  ${resp.json()}
@@ -1036,7 +1036,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${accid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${u_id}  ${self} 
         Log  ${resp.json()}
@@ -1162,11 +1162,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
     Set Test Variable  ${s_id7}  ${resp.json()}
 
     comment  queue 1 for checkins
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  15  ${lid}  ${u_id}  ${s_id6}  ${s_id7} 
     Log  ${resp.json()}
@@ -1181,7 +1181,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${accid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${u_id}  ${self} 
         Log  ${resp.json()}
@@ -1202,7 +1202,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
     END
 
     Log List   ${waitlist_id}
-    ${DAY3}=  add_date  4
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
 
     Log   ${waitlist_id[0]}
     ${len}=  Get Length  ${waitlist_id}
@@ -1280,7 +1280,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
      Set Suite Variable  ${MUSERNAME_E}
      ${accid}=   get_acc_id   ${MUSERNAME_E}
      Set Suite Variable  ${accid}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
@@ -1304,9 +1304,9 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
+     ${sTime}=  db.add_timezone_time  ${tz}  0  15
      Set Suite Variable   ${sTime}
-     ${eTime}=  add_time   0  45
+     ${eTime}=  db.add_timezone_time  ${tz}   0  45
      Set Suite Variable   ${eTime}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
@@ -1418,15 +1418,15 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
     Set Suite Variable   ${eTime1}
 
     ${resp}=  Get Locations
@@ -1610,7 +1610,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
         Should Be Equal As Strings  ${resp.status_code}  200
 
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id7}  ${q_id3}  ${DAY}  ${cnote}  ${bool[0]}  ${u_id}  ${cid${a}} 
 
@@ -1776,11 +1776,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  15  ${lid}  ${u_id}  ${s_id7} 
     Log  ${resp.json()}

@@ -456,7 +456,7 @@ JD-TC-Get_IVR_Graph_Details-2
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -477,7 +477,7 @@ JD-TC-Get_IVR_Graph_Details-UH1
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -518,7 +518,7 @@ JD-TC-Get_IVR_Graph_Details-UH2
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -562,7 +562,7 @@ JD-TC-Get_IVR_Graph_Details-UH3
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[4]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -606,7 +606,7 @@ JD-TC-Get_IVR_Graph_Details-UH4
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${SPACE}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -646,7 +646,7 @@ JD-TC-Get_IVR_Graph_Details-UH5
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${empty}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -686,7 +686,7 @@ JD-TC-Get_IVR_Graph_Details-UH6
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${SPACE}
     Log  ${resp.json()}
@@ -726,7 +726,7 @@ JD-TC-Get_IVR_Graph_Details-UH7
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${empty}
     Log  ${resp.json()}

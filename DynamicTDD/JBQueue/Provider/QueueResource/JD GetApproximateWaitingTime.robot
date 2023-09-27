@@ -50,7 +50,7 @@ JD-TC-Approximate Waiting Time-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
-    # ${DAY1}=  get_date
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${DAY1}  ${DAY1}
     # ${DAY2}=  add_date  70      
     # Set Suite Variable  ${DAY2}  ${DAY2}

@@ -93,7 +93,7 @@ JD-TC-Create_Instant_Schedule-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${sTime2}=  add_time  3  5
+    # ${sTime2}=  db.add_timezone_time  ${tz}  3  5
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime2}=  add_two   ${sTime2}  ${delta}
 
@@ -111,7 +111,7 @@ JD-TC-Create_Instant_Schedule-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     Set Suite Variable    ${sTime4}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
@@ -133,7 +133,7 @@ JD-TC-Create_Instant_Schedule-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
@@ -152,11 +152,11 @@ JD-TC-Create_Instant_Schedule-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
-    ${DAY11}=  add_date  -10 
+    ${DAY11}=  db.add_timezone_date  ${tz}  -10 
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY11}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
@@ -173,7 +173,7 @@ JD-TC-Create_Instant_Schedule-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
@@ -192,11 +192,11 @@ JD-TC-Create_Instant_Schedule-UH7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
-    ${DAY22}=  add_date  -10 
+    ${DAY22}=  db.add_timezone_date  ${tz}  -10 
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY22}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
@@ -212,7 +212,7 @@ JD-TC-Create_Instant_Schedule-UH8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
@@ -231,11 +231,11 @@ JD-TC-Create_Instant_Schedule-UH9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
-    ${DAY22}=  add_date  -10 
+    ${DAY22}=  db.add_timezone_date  ${tz}  -10 
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${empty}  ${JCstatus[0]}  ${user_id}
@@ -251,12 +251,12 @@ JD-TC-Create_Instant_Schedule-UH10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
     Set Suite Variable    ${list2}
-    ${DAY22}=  add_date  -10 
+    ${DAY22}=  db.add_timezone_date  ${tz}  -10 
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[1]}  ${user_id}
@@ -318,7 +318,7 @@ JD-TC-Create_Instant_Schedule-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime3}=  add_time  5  7
+    ${sTime3}=  db.add_timezone_time  ${tz}  5  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime3}  ${delta}
     ${schedule_name}=  FakerLibrary.bs

@@ -95,14 +95,14 @@ JD-TC-Update_Provider_Schedule-2
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
 
      ${schedule_name2}=  FakerLibrary.bs
-    ${DAY3}=  add_date  15
-    ${DAY4}=  add_date  20 
+    ${DAY3}=  db.add_timezone_date  ${tz}  15
+    ${DAY4}=  db.add_timezone_date  ${tz}  20 
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY3}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[1]}  ${user_id}  id=${sch_id}
     Log  ${resp.json()}
@@ -137,15 +137,15 @@ JD-TC-Update_Provider_Schedule-3
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
 
 
     ${schedule_name2}=  FakerLibrary.bs
-    ${DAY5}=  add_date  25 
-    ${DAY4}=  add_date  20 
+    ${DAY5}=  db.add_timezone_date  ${tz}  25 
+    ${DAY4}=  db.add_timezone_date  ${tz}  20 
 
     ${resp}=  Update Provider Schedule  ${empty}  ${recurringtype[1]}  ${list}  ${DAY4}  ${DAY5}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}  id=${sch_id}
     Log  ${resp.json()}
@@ -159,12 +159,12 @@ JD-TC-Update_Provider_Schedule-UH1
 
     [Documentation]  Update Provider Schedule without login
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
     ${schedule_name2}=  FakerLibrary.bs
-    ${DAY3}=  add_date  15 
+    ${DAY3}=  db.add_timezone_date  ${tz}  15 
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY3}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}  id=${sch_id}
     Log  ${resp.json()}
@@ -181,12 +181,12 @@ JD-TC-Update_Provider_Schedule-UH2
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
     ${schedule_name2}=  FakerLibrary.bs
-    ${DAY3}=  add_date  15 
+    ${DAY3}=  db.add_timezone_date  ${tz}  15 
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY3}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}  id=${sch_id}
     Log  ${resp.json()}
@@ -212,14 +212,14 @@ JD-TC-Update_Provider_Schedule-UH3
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
 
      ${schedule_name2}=  FakerLibrary.bs
-    ${DAY5}=  add_date  25 
-    ${DAY6}=  add_date  30
+    ${DAY5}=  db.add_timezone_date  ${tz}  25 
+    ${DAY6}=  db.add_timezone_date  ${tz}  30
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${SPACE}  ${DAY6}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}   id=${sch_id}
     Log  ${resp.json()}
@@ -246,14 +246,14 @@ JD-TC-Update_Provider_Schedule-UH4
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
 
      ${schedule_name2}=  FakerLibrary.bs
-    ${DAY5}=  add_date  25 
-    ${DAY6}=  add_date  30 
+    ${DAY5}=  db.add_timezone_date  ${tz}  25 
+    ${DAY6}=  db.add_timezone_date  ${tz}  30 
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY6}  ${SPACE}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}  id=${sch_id}
     Log  ${resp.json()}
@@ -280,13 +280,13 @@ JD-TC-Update_Provider_Schedule-UH5
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
 
      ${schedule_name2}=  FakerLibrary.bs
-    ${DAY3}=  add_date  15 
+    ${DAY3}=  db.add_timezone_date  ${tz}  15 
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY3}  ${EMPTY}  ${SPACE}  ${eTime1}  ${JCstatus[0]}  ${user_id}  id=${sch_id}
     Log  ${resp.json()}
@@ -313,13 +313,13 @@ JD-TC-Update_Provider_Schedule-UH6
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
 
      ${schedule_name2}=  FakerLibrary.bs
-    ${DAY3}=  add_date  15 
+    ${DAY3}=  db.add_timezone_date  ${tz}  15 
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY3}  ${EMPTY}  ${sTime1}  ${SPACE}  ${JCstatus[0]}  ${user_id}  id=${sch_id}
     Log  ${resp.json()}
@@ -347,13 +347,13 @@ JD-TC-Update_Provider_Schedule-UH7
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
 
      ${schedule_name2}=  FakerLibrary.bs
-    ${DAY3}=  add_date  15 
+    ${DAY3}=  db.add_timezone_date  ${tz}  15 
 
     ${resp}=  Update Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY3}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${empty}  id=${sch_id}
     Log  ${resp.json()}

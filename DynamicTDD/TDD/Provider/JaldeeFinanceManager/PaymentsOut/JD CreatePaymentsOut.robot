@@ -155,7 +155,7 @@ JD-TC-Create PaymentsOut-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=  db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word

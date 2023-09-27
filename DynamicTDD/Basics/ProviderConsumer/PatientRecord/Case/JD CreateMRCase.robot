@@ -65,7 +65,7 @@ JD-TC-Create MR Case-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}
@@ -678,7 +678,7 @@ JD-TC-Create MR Case-UH1
 
     ${name}=  FakerLibrary.name
     ${aliasName}=  FakerLibrary.name
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
 
     ${fake_id}=  Random Int  min=500   max=1000
@@ -770,7 +770,7 @@ JD-TC-Create MR Case-UH3
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}
@@ -931,7 +931,7 @@ JD-TC-Create MR Case-UH1
 
     ${name}=  FakerLibrary.name
     ${aliasName}=  FakerLibrary.name
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
 
     ${fake_id1}=  FakerLibrary.name
@@ -1023,7 +1023,7 @@ JD-TC-Create MR Case-UH3
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}

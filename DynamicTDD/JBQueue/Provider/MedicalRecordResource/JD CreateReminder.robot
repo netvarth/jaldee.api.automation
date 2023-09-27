@@ -566,7 +566,7 @@ JD-TC-CreateReminder-UH13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  subtract_date  1
+    ${DAY1}=  db.subtract_timezone_date  ${tz}  1
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}  
@@ -587,7 +587,7 @@ JD-TC-CreateReminder-UH14
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  subtract_date  1    
+    ${DAY2}=  db.subtract_timezone_date  ${tz}  1    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}  
     ${eTime1}=  db.add_timezone_time  ${tz}  3  15

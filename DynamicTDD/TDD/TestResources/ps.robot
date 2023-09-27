@@ -348,7 +348,7 @@ JD-TC-TakeAppointment-1
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Suite Variable  ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  10  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
     ${sTime1}=  get_time_by_timezone  ${tz}
     # ${eTime1}=  add_timezone_time  ${tz}  0  45      
     ${delta}=  FakerLibrary.Random Int  min=10  max=60

@@ -64,7 +64,7 @@ JD-TC-Change Case Status-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}
     Log   ${resp.content}

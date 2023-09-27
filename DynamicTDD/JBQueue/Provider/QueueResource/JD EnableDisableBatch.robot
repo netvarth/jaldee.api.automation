@@ -68,7 +68,7 @@ JD-TC-EnableDisableBatch-1
     
 
 ***comment***
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -93,9 +93,9 @@ JD-TC-EnableDisableBatch-1
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
@@ -131,12 +131,12 @@ JD-TC-EnableDisableBatch-1
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  db.add_timezone_time  ${tz}  0  45
+    ${etime1}=  db.add_timezone_time  ${tz}  1  0
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -201,12 +201,12 @@ JD-TC-EnableDisableBatch-2
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  db.add_timezone_time  ${tz}  0  45
+    ${etime1}=  db.add_timezone_time  ${tz}  1  0
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -277,12 +277,12 @@ JD-TC-EnableDisableBatch-5
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  db.add_timezone_time  ${tz}  0  45
+    ${etime1}=  db.add_timezone_time  ${tz}  1  0
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -343,12 +343,12 @@ JD-TC-EnableDisableBatch-6
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  db.add_timezone_time  ${tz}  0  45
+    ${etime1}=  db.add_timezone_time  ${tz}  1  0
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -409,12 +409,12 @@ JD-TC-EnableDisableBatch-7
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  db.add_timezone_time  ${tz}  0  45
+    ${etime1}=  db.add_timezone_time  ${tz}  1  0
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -500,7 +500,7 @@ JD-TC-EnableDisableBatch-8
     # ${resp}=   Create Sample Location
     # Set Suite Variable    ${lid}    ${resp}  
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -524,9 +524,9 @@ JD-TC-EnableDisableBatch-8
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  subtract_time  3  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_time   2  30
+    ${eTime}=  db.add_timezone_time  ${tz}   2  30
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Create Business Profile  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}
     Log  ${resp.json()}
@@ -601,12 +601,12 @@ JD-TC-EnableDisableBatch-8
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  db.add_timezone_time  ${tz}  0  45
+    ${etime1}=  db.add_timezone_time  ${tz}  1  0
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -734,12 +734,12 @@ JD-TC-EnableDisableBatch-3
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  db.add_timezone_time  ${tz}  0  45
+    ${etime1}=  db.add_timezone_time  ${tz}  1  0
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=2
@@ -867,13 +867,13 @@ JD-TC-EnableDisableBatch-4
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${tomorrow}=  add_date  1
-    ${today}=  get_date
+    ${tomorrow}=  db.add_timezone_date  ${tz}  1
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  db.add_timezone_time  ${tz}  0  45
+    ${etime1}=  db.add_timezone_time  ${tz}  1  0
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=2

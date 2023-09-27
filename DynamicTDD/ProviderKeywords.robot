@@ -537,7 +537,7 @@ Sample Queue
     # ${DAY2}=  db.add_timezone_date  ${tz}  10 
     # ${Time}=  db.get_time_by_timezone   ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  10  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
     ${delta}=  FakerLibrary.Random Int  min=20  max=60
     ${Time}=  db.get_time_by_timezone  ${tz}
     ${sTime}=  add_two   ${Time}  ${delta}

@@ -1377,7 +1377,7 @@ JD-TC-GetVideoCallMinutes-12
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  get_time  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%

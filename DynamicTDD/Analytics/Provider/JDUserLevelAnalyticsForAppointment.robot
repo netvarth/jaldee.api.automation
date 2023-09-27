@@ -61,7 +61,7 @@ JD-TC-UserLevelAnalyticsForAppointment-1
     Set Suite Variable  ${MUSERNAME_E}
     ${accid}=   get_acc_id   ${MUSERNAME_E}
     Set Suite Variable  ${accid} 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000
     ${ph2}=  Evaluate  ${MUSERNAME_E}+2000000000
@@ -83,9 +83,9 @@ JD-TC-UserLevelAnalyticsForAppointment-1
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -188,14 +188,14 @@ JD-TC-UserLevelAnalyticsForAppointment-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   2  30
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
 
     ${resp}=  Get Locations
     Log  ${resp.json()}
@@ -219,7 +219,7 @@ JD-TC-UserLevelAnalyticsForAppointment-1
     Set Test Variable  ${s_id}  ${resp.json()}
 
     comment  schedule for appointment
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  db.add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -414,7 +414,7 @@ JD-TC-UserLevelAnalyticsForAppointment-2
 
     comment  queue 1 for checkins
 
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  db.add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -603,7 +603,7 @@ JD-TC-UserLevelAnalyticsForAppointment-3
 
     comment  schedule for appointment
 
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  db.add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -699,7 +699,7 @@ JD-TC-UserLevelAnalyticsForAppointment-3
         ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${s7_slots[${a}]}
         ${apptfor}=   Create List  ${apptfor1}
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.name
         ${resp}=   Take Virtual Service Appointment For User   ${accid}  ${v_s2}  ${sch_id1}  ${DAY1}  ${cnote}  ${CallingModes[0]}  ${ZOOM_id0}  ${u_id}  ${apptfor}
         Log  ${resp.json()}

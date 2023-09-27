@@ -175,7 +175,7 @@ JD-TC-Enable_Disable_Service-UH4
     ${description2}=    FakerLibrary.bs
     ${name2}=           FakerLibrary.firstName
     ${displayname2}=    FakerLibrary.firstName
-    ${effectiveFrom2}=  get_date
+    ${effectiveFrom2}=  db.get_date_by_timezone  ${tz}
     ${effectiveTo2}=      add_date  10 
 
     ${resp}=    Create Membership Service     ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo2}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}

@@ -61,7 +61,7 @@ JD-TC-Incall_IVR-1
     Set Suite Variable   ${acc_id} 
 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -193,8 +193,8 @@ JD-TC-Incall_IVR-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -286,8 +286,8 @@ JD-TC-Incall_IVR-2
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -384,9 +384,9 @@ JD-TC-Incall_IVR-3
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -482,9 +482,9 @@ JD-TC-Incall_IVR-4
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -580,9 +580,9 @@ JD-TC-Incall_IVR-5
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -680,9 +680,9 @@ JD-TC-Incall_IVR-UH3
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -768,9 +768,9 @@ JD-TC-Incall_IVR-UH4
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -866,9 +866,9 @@ JD-TC-Incall_IVR-UH6
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -965,9 +965,9 @@ JD-TC-Incall_IVR-UH7
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1065,9 +1065,9 @@ JD-TC-Incall_IVR-UH8
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${future_date}=     add_date  +10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1160,9 +1160,9 @@ JD-TC-Incall_IVR-UH9
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${future_date}=     add_date  +10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1258,9 +1258,9 @@ JD-TC-Incall_IVR-UH10
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1359,9 +1359,9 @@ JD-TC-Incall_IVR-UH11
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1460,9 +1460,9 @@ JD-TC-Incall_IVR-UH12
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1561,9 +1561,9 @@ JD-TC-Incall_IVR-UH13
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
+    ${created_date}=  db.get_date_by_timezone  ${tz}
     ${Past_date}=     add_date  -10
-    ${call_time}=    db.get_time_secs
+    ${call_time}=  db.get_tz_time_secs  ${tz}
     ${cclid}    Random Number 	digits=2 
     ${cclid}=    Evaluate    f'{${cclid}:0>9d}'
     Log  ${cclid}
