@@ -333,19 +333,63 @@ JD-TC-Remove Prescription-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
-    # Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    # Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
-    # Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    # Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration1} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn1} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage1} 
-    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
+   
+JD-TC-Remove Prescription-2
 
+    [Documentation]    CCreate Prescription with Empty caseId and Remove that Prescription
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+   ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+     ${resp}=    Remove Prescription   ${prescription_id1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Remove Prescription-3
+
+    [Documentation]    Create Prescription with Empty dentalRecordId and Remove that Prescription
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+     ${resp}=    Remove Prescription   ${prescription_id1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Remove Prescription-UH1
+
+    [Documentation]    Remove that Prescription that already removed
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+     ${resp}=    Remove Prescription   ${prescription_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+
+    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 *** comment ***
 JD-TC-Update Prescription-2

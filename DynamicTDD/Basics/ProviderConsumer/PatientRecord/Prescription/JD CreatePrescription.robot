@@ -222,7 +222,7 @@ JD-TC-Create Prescription-1
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=99
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -280,30 +280,6 @@ JD-TC-Create Prescription-1
 
 JD-TC-Create Prescription-2
 
-    [Documentation]    Create Prescription with Empty ProviderConsumer id.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Prescription    ${EMPTY}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Create Prescription-3
-
-    [Documentation]    Create Prescription with Empty userId.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Prescription    ${cid}    ${EMPTY}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Create Prescription-4
-
     [Documentation]    Create Prescription with Empty caseId.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
@@ -314,7 +290,7 @@ JD-TC-Create Prescription-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Prescription-5
+JD-TC-Create Prescription-3
 
     [Documentation]    Create Prescription with Empty dentalRecordId.
 
@@ -326,7 +302,7 @@ JD-TC-Create Prescription-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Prescription-6
+JD-TC-Create Prescription-4
 
     [Documentation]    Create Prescription with Empty html.
 
@@ -338,7 +314,7 @@ JD-TC-Create Prescription-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Prescription-7
+JD-TC-Create Prescription-5
 
     [Documentation]    Create Prescription with Empty mrPrescriptions.
 
@@ -350,7 +326,7 @@ JD-TC-Create Prescription-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Prescription-8
+JD-TC-Create Prescription-6
 
     [Documentation]    Create Prescription with Empty mrPrescriptions.
 
@@ -364,7 +340,7 @@ JD-TC-Create Prescription-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Prescription-9
+JD-TC-Create Prescription-7
 
     [Documentation]    Create Two Prescription with same details.
 
@@ -379,3 +355,43 @@ JD-TC-Create Prescription-9
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Prescription-UH1
+
+    [Documentation]    Create Prescription with Empty ProviderConsumer id.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Prescription    ${EMPTY}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.content}     "${INVALID_PROVIDERCONSUMER_ID}"
+
+JD-TC-Create Prescription-UH2
+
+    [Documentation]    Create Prescription with Empty userId.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Prescription    ${cid}    ${EMPTY}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.content}     "${INVALID_USER_ID}"
+
+JD-TC-Update Prescription-UH3
+
+    [Documentation]    Create Prescription with another provider login
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME4}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+   
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
