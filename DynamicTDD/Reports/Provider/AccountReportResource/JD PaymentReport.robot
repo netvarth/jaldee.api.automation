@@ -304,6 +304,11 @@ JD-TC-Payment_Report-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${token_id}   ${resp.json()}
     sleep  02s
+
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
+    ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
+    Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
+    
     ${resp}=  Get Report Status By Token Id  ${token_id}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -348,7 +353,7 @@ JD-TC-Payment_Report-1
     Set Suite Variable  ${BillRef_id101}     ${resp.json()['reportContent']['data'][1]['7']}  # ConfirmationId
     Should Be Equal As Strings  ${BillRef_id101}   ${BillRef_id100}
     Should Be Equal As Strings   ${resp.json()['reportContent']['data'][0]['23']}   ${DAY}        
-    Should Be Equal As Strings   ${resp.json()['reportContent']['reportGeneratedOn']}   ${Date}      
+    Should Be Equal As Strings   ${resp.json()['reportContent']['reportGeneratedOn']}   ${Date_Time}      
     Should Be Equal As Strings   ${resp.json()['reportContent']['date']}   ${DAY}     
 
 JD-TC-Payment_Report-UH1
