@@ -1358,6 +1358,7 @@ JD-TC-Payment By Consumer-UH1
     ${tax}=   Evaluate  ${tax1}/100
     ${totalamt}=  Evaluate  ${Tot1}+${tax}
     ${balamount}=  Evaluate  ${totalamt}-${min_pre1}
+    Set Suite Variable    ${balamount}
     
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
     Log   ${resp.content}
@@ -1551,7 +1552,7 @@ JD-TC-Payment By Consumer-UH3
     ${resp}=  Make payment Consumer Mock  ${pid11}  ${amountpaid}  ${purpose[1]}  ${widc}  ${p2_sid1}  ${bool[0]}   ${bool[1]}  ${cid7}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
     # Should Be Equal As Strings  "${resp.json()}"  "${AMOUNT_IS_LESS}"
     
 JD-TC-Payment By Consumer-UH4
@@ -1633,10 +1634,12 @@ JD-TC-Payment By Consumer-UH5
     ${HighTotal1}=  Convert To Number  ${HighTotal}  1 
     Set Test Variable   ${HighTotal}   ${HighTotal1}
 
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${HighTotal}  ${Total1}
+    
     ${resp}=  Make payment Consumer Mock  ${pid11}  ${HighTotal}  ${purpose[1]}  ${wid}  ${p2_sid3}  ${bool[0]}   ${bool[1]}  ${Pcid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
     # Should Be Equal As Strings  "${resp.json()}"  "${AMOUNT_IS_HIGH}"  
 
 JD-TC-Payment By Consumer-UH6
@@ -1670,10 +1673,12 @@ JD-TC-Payment By Consumer-UH6
     ${LowTotal1}=  Convert To Number  ${LowTotal}  1 
     Set Test Variable   ${LowTotal}   ${LowTotal1}
 
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${LowTotal}  ${Total1}
+    
     ${resp}=  Make payment Consumer Mock  ${pid11}  ${LowTotal}  ${purpose[1]}  ${wid}  ${p2_sid3}  ${bool[0]}   ${bool[1]}  ${Pcid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
     # Should Be Equal As Strings  "${resp.json()}"    "${AMOUNT_IS_LESS}" 
 
 JD-TC-Payment By Consumer-UH7
@@ -1695,7 +1700,7 @@ JD-TC-Payment By Consumer-UH8
    ${resp}=   Encrypted Provider Login   ${PUSERNAME210}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${amount}=   Random Int   min=100   max=700
-    ${resp}=  Make payment Consumer Mock  ${pid11}  ${amount}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid11}  ${balamount}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"  "${PAYMENT_AMOUNT_IS_NOT_MATCHED}"   	
@@ -1727,11 +1732,14 @@ JD-TC-Payment By Consumer-UH9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid}  ${wid[0]} 
     Set Test Variable  ${cwidfam}  ${wid[1]} 
+    ${amount}=   Evaluate  ${prepay}*2
+
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${prepay}  ${amount}
     
     ${resp}=  Make payment Consumer Mock  ${pid1}  ${prepay}  ${purpose[0]}  ${cwid}  ${p4_sid1}  ${bool[0]}   ${bool[1]}  ${cid3}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
     # Should Be Equal As Strings  "${resp.json()}"     "${MINIMUM_PREPAYMENT_AMOUNT_SHOULD_BE_PROVIDED}"
     
     # ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
