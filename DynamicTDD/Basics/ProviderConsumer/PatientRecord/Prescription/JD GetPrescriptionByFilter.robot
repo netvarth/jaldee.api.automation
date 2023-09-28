@@ -86,9 +86,9 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Create Prescription-1
+JD-TC-Get Prescription By Filter-1
 
-    [Documentation]    Create Prescription with valid details.
+    [Documentation]   Get Prescription By Filter
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
      Log  ${iscorp_subdomains}
@@ -100,7 +100,7 @@ JD-TC-Create Prescription-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9778812
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9778817
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -345,7 +345,7 @@ JD-TC-Create Prescription-1
     
  
 
-JD-TC-Create Prescription-2
+JD-TC-Get Prescription By Filter-2
 
     [Documentation]    Create Prescription with Empty caseId.
 
@@ -353,29 +353,42 @@ JD-TC-Create Prescription-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+     ${med_name1}=      FakerLibrary.name
+    Set Suite Variable    ${med_name1}
+    ${frequency1}=     FakerLibrary.word
+     Set Suite Variable     ${frequency1}
+    ${duration1}=      FakerLibrary.sentence
+     Set Suite Variable     ${duration1}
+    ${instrn1}=        FakerLibrary.sentence
+     Set Suite Variable    ${instrn1}
+    ${dosage1}=        FakerLibrary.sentence
+      Set Suite Variable     ${dosage1}
+
+     ${mrPrescriptions1}=  Create Dictionary  medicineName=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
+    Set Suite Variable    ${mrPrescriptions1}
+
+    ${resp}=   Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-     Set Test Variable    ${prescription_id1}   ${resp.content}
 
     ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   dentalRecordId-eq=${id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id1} 
+    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${empty} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage} 
+    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
+    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 
+    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration1} 
+    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn1} 
+    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage1} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
-JD-TC-Create Prescription-3
+JD-TC-Get Prescription By Filter-3
 
     [Documentation]    Create Prescription with Empty dentalRecordId.
 
@@ -405,7 +418,7 @@ JD-TC-Create Prescription-3
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
-JD-TC-Create Prescription-4
+JD-TC-Get Prescription By Filter-4
 
     [Documentation]    Create Prescription with Empty html.
 
@@ -436,7 +449,7 @@ JD-TC-Create Prescription-4
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
 
-JD-TC-Create Prescription-5
+JD-TC-Get Prescription By Filter-5
 
     [Documentation]    Create Prescription with Empty mrPrescriptions.
 
@@ -466,7 +479,7 @@ JD-TC-Create Prescription-5
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
-JD-TC-Create Prescription-6
+JD-TC-Get Prescription By Filter-6
 
     [Documentation]    Create Prescription with Empty prescriptionAttachments.
 
@@ -486,7 +499,7 @@ JD-TC-Create Prescription-6
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
-JD-TC-Create Prescription-7
+JD-TC-Get Prescription By Filter-7
 
     [Documentation]    Create Two Prescription with same details.
 
@@ -502,7 +515,7 @@ JD-TC-Create Prescription-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Prescription-UH1
+JD-TC-Get Prescription By Filter-UH1
 
     [Documentation]    Create Prescription with Empty ProviderConsumer id.
 
@@ -515,7 +528,7 @@ JD-TC-Create Prescription-UH1
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.content}     "${INVALID_PROVIDERCONSUMER_ID}"
 
-JD-TC-Create Prescription-UH2
+JD-TC-Get Prescription By Filter-UH2
 
     [Documentation]    Create Prescription with Empty userId.
 
