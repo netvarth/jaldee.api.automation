@@ -180,6 +180,7 @@ JD-TC-ConsumerGetApptRequestCount-3
     ${apptfor1}=  Create Dictionary  id=${cidfor2} 
     ${apptfor}=   Create List  ${apptfor1}
 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cons_note2}=    FakerLibrary.word
     Set Suite Variable   ${cons_note2}
     ${coupons}=  Create List

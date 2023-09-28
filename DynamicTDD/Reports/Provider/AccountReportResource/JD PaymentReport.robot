@@ -20,6 +20,7 @@ ${parallel}           1
 ${self}               0
 @{provider_list}
 ${start}              140
+@{multiples}  10  20  30   40   50
 
 ***Keywords***
 
@@ -408,8 +409,123 @@ JD-TC-Payment_Report-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
+JD-TC-Payment_Report-2
 
+    [Documentation]   Generate payment report for donation,
 
+    ${billable_providers}=    Billable Domain Providers   min=240   max=250
+    Log   ${billable_providers}
+    ${pro_len}=  Get Length   ${billable_providers}
+    Log  ${pro_len}
+    clear_location  ${billable_providers[3]}
+    clear_service    ${billable_providers[3]}
+    clear_queue     ${billable_providers[3]}
+    clear_customer   ${billable_providers[3]}
+
+    ${acc_id}=  get_acc_id  ${billable_providers[3]}
+    Set Test Variable  ${acc_id}
+
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Create Sample Location
+    Set Test Variable    ${loc_id1}    ${resp} 
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${SERVICE1}=    FakerLibrary.word
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${min_don_amt}=   Random Int   min=10   max=50
+    ${min_don_amt}=   Evaluate  ${min_don_amt}*${multiples[0]}
+    ${max_don_amt}=   Random Int   min=1000   max=5000
+    ${max_don_amt}=   Evaluate  ${max_don_amt}*${multiples[0]}
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${min_don_amt}=  Convert To Number  ${min_don_amt}  1
+    ${max_don_amt}=  Convert To Number  ${max_don_amt}  1
+    ${service_duration}=   Random Int   min=10   max=50
+    ${total_amnt}=   Random Int   min=500   max=1000
+    ${total_amnt1}=  Convert To Number  ${total_amnt}  1
+    ${resp}=  Create Donation Service  ${SERVICE1}   ${description}   ${service_duration}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${total_amnt1}  ${bool[0]}   ${bool[0]}  ${service_type[0]}  ${min_don_amt}  ${max_don_amt}  ${multiples[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Test Variable  ${sid1}  ${resp.json()}
+
+    ${resp}=   Consumer Login  ${CUSERNAME22}   ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${d_fname}=    FakerLibrary.word
+    ${d_lname}=    FakerLibrary.word
+    Set Test Variable   ${Donor_name}    ${d_fname} ${d_lname}
+    ${con_id}=  get_id  ${CUSERNAME22}
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${don_amt}=  Evaluate  ${min_don_amt}*${multiples[0]}
+    ${don_amt_float}=  twodigitfloat  ${don_amt}
+    ${Donation_amt}=  commaformatNumber  ${don_amt}
+
+    ${resp}=  Donation By Consumer  ${con_id}  ${sid1}  ${loc_id1}  ${don_amt}  ${d_fname}  ${d_lname}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${acc_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+    ${don_id}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${don_id}  ${don_id[0]}
+
+    ${resp}=  Get Consumer Donation By Id  ${don_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response  ${resp}    uid=${don_id}   date=${CUR_DAY}  billPaymentStatus=${paymentStatus[0]}  donationAmount=${don_amt}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}  ${con_id}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${sid1}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${loc_id1}
+
+    ${resp}=  Get Bill By consumer  ${don_id}  ${acc_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Make payment Consumer Mock  ${acc_id}  ${don_amt}  ${purpose[5]}  ${don_id}  ${sid1}  ${bool[0]}   ${bool[0]}  ${con_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Bill By UUId  ${don_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${Current_Date} =	Convert Date	${CUR_DAY}	result_format=%d/%m/%Y
+    Set Suite Variable  ${Current_Date}
+
+    Set Test Variable  ${paymentPurpose-eq2}      donation
+    Set Test Variable  ${reportType}              DONATION
+    Set Test Variable  ${reportDateCategory}      TODAY
+    ${don_amt11}=  Convert To String  ${don_amt} 
+    ${filter2}=  Create Dictionary   
+    ${resp}=  Generate Report REST details  ${reportType[3]}  ${reportDateCategory}  ${filter2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${token_id}   ${resp.json()}
+    # sleep  04s
+    ${resp}=  Get Report Status By Token Id  ${token_id}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  reportType=${Report_Types[2]}   reportResponseType=${ReportResponseType[0]}   status=${Report_Status[0]}
+    Set Suite Variable  ${ReportId1_c8}      ${resp.json()['reportRequestId']}
+    Should Be Equal As Strings  Today       ${resp.json()['reportContent']['reportHeader']['Time Period']}
+    Should Be Equal As Strings  Donation Report         ${resp.json()['reportContent']['reportName']}
+    Should Be Equal As Strings  ${token_id}                    ${resp.json()['reportContent']['count']}
+    Should Be Equal As Strings  ${CUR_DAY}               ${resp.json()['reportContent']['date']}
+    Should Be Equal As Strings  ${Current_Date}               ${resp.json()['reportContent']['data'][0]['1']}  # Date
+    Should Be Equal As Strings  ${d_fname}               ${resp.json()['reportContent']['data'][0]['2']}  # Customer Name (Donor)
+    Should Be Equal As Strings  ${SERVICE1}        ${resp.json()['reportContent']['data'][0]['4']}  # Service
+    Should Be Equal As Strings  ${Donation_amt}      ${resp.json()['reportContent']['data'][0]['6']}  # Donation_Amount 
+    Set Suite Variable  ${DonationRef_id101}     ${resp.json()['reportContent']['data'][0]['5']}  # ConfirmationId
+    
 
 *** comment ***
 

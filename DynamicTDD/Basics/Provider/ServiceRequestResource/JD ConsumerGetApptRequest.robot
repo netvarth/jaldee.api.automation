@@ -133,15 +133,10 @@ JD-TC-ConsumerGetApptRequest-1
     ${resp}=  Consumer Get Appt Service Request
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()[0]['apptTakenTime']}     ${statusUpdatedTime}
-    Should Be Equal As Strings    ${resp.json()[0]['uid']}               ${appt_reqid1}
- 
-    ${resp}=  Consumer Get Appt Service Request
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     Should Be Equal As Strings  ${resp.json()[0]['uid']}                     ${appt_reqid1}
     Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}               ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['apptTakenTime']}         ${statusUpdatedTime}
     Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}              ${apptStatus[11]}
     Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}         ${appointmentMode[2]}
     Should Be Equal As Strings  ${resp.json()[0]['consumerNote']}            ${cons_note}
