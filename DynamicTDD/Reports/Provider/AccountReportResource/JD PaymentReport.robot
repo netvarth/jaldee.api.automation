@@ -502,11 +502,11 @@ JD-TC-Payment_Report-2
     Set Suite Variable  ${Current_Date}
 
     Set Test Variable  ${paymentPurpose-eq2}      donation
-    Set Test Variable  ${reportType}              DONATION
+    # Set Test Variable  ${reportType}              DONATION
     Set Test Variable  ${reportDateCategory}      TODAY
-    ${don_amt11}=  Convert To String  ${don_amt} 
+    # ${don_amt11}=  Convert To String  ${don_amt} 
     ${filter2}=  Create Dictionary   
-    ${resp}=  Generate Report REST details  ${reportType[3]}  ${reportDateCategory}  ${filter2}
+    ${resp}=  Generate Report REST details  ${reportType[4]}  ${reportDateCategory}  ${filter2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${token_id}   ${resp.json()}
