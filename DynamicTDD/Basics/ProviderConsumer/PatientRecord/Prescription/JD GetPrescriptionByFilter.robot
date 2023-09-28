@@ -347,7 +347,7 @@ JD-TC-Get Prescription By Filter-1
 
 JD-TC-Get Prescription By Filter-2
 
-    [Documentation]    Create Prescription with Empty caseId.
+    [Documentation]    Create Prescription with Empty caseId Get Prescription By Filter.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -390,13 +390,13 @@ JD-TC-Get Prescription By Filter-2
 
 JD-TC-Get Prescription By Filter-3
 
-    [Documentation]    Create Prescription with Empty dentalRecordId.
+    [Documentation]    Create Prescription with Empty dentalRecordId and Get Prescription By Filter .
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${prescription_id1}   ${resp.content}
@@ -420,7 +420,7 @@ JD-TC-Get Prescription By Filter-3
 
 JD-TC-Get Prescription By Filter-4
 
-    [Documentation]    Create Prescription with Empty html.
+    [Documentation]    Create Prescription with Empty html Get Prescription By Filter.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -449,97 +449,57 @@ JD-TC-Get Prescription By Filter-4
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
 
-JD-TC-Get Prescription By Filter-5
+JD-TC-Get Prescription By Filter-UH1
 
-    [Documentation]    Create Prescription with Empty mrPrescriptions.
+    [Documentation]     Get Prescription By Filter  using user login.(user is not added in mr case)
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${SPACE}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
+    ${u_id}=  Create Sample User
+    Set Suite Variable  ${u_id}
 
-    ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   referenceId-eq=${referenceId}  mrPrescriptionStatus-eq=${prescriptionStatus}   dentalRecordId-eq=${id1}   uid-eq=${uid}
-    Log  ${resp.content}
+    ${resp}=  Get User By Id      ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
+    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
+
+    ${resp}=  SendProviderResetMail   ${sam_email}
     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${empty} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
-JD-TC-Get Prescription By Filter-6
+    @{resp}=  ResetProviderPassword  ${sam_email}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    [Documentation]    Create Prescription with Empty prescriptionAttachments.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${prescriptionAttachments}=  Create List   
-
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   referenceId-eq=${referenceId}  mrPrescriptionStatus-eq=${prescriptionStatus}   dentalRecordId-eq=${id1}   uid-eq=${uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    []
+   
 
-JD-TC-Get Prescription By Filter-7
-
-    [Documentation]    Create Two Prescription with same details.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Get Prescription By Filter-UH1
-
-    [Documentation]    Create Prescription with Empty ProviderConsumer id.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Prescription    ${EMPTY}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.content}     "${INVALID_PROVIDERCONSUMER_ID}"
 
 JD-TC-Get Prescription By Filter-UH2
 
-    [Documentation]    Create Prescription with Empty userId.
+    [Documentation]    Get Prescription By Filter with Empty ProviderConsumer id.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${EMPTY}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
+    ${resp}=  Get Prescription By Filter      referenceId-eq=${referenceId}  mrPrescriptionStatus-eq=${prescriptionStatus}   dentalRecordId-eq=${id1}   uid-eq=${uid}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.content}     "${INVALID_USER_ID}"
+    Should Be Equal As Strings    ${resp.content}     "${PROVIDER_CONSUMER_ID_NEEDED_IN_FILTER}"
+
 
 JD-TC-Update Prescription-UH3
 
@@ -550,7 +510,23 @@ JD-TC-Update Prescription-UH3
     Should Be Equal As Strings            ${resp.status_code}    200
    
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}    ${MR_NOT_ALLOWED}
+    ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   referenceId-eq=${referenceId}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    []
+
+JD-TC-Get Prescription By Filter-UH4
+
+    [Documentation]    Get Prescription By Filter with invalid ProviderConsumer id.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${fake_id}=  Random Int  min=500   max=1000
+
+    ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${fake_id}   referenceId-eq=${referenceId}  mrPrescriptionStatus-eq=${prescriptionStatus}   dentalRecordId-eq=${id1}   uid-eq=${uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.content}     "${INVALID_PROVIDERCONSUMER_ID}"
+   
