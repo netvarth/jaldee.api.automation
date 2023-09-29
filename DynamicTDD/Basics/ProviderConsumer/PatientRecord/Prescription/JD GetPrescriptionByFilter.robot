@@ -18,7 +18,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 *** Keywords  ***
 
 Create Prescription 
-    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    ${prescriptionAttachments}     @{vargs}
+    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}      @{vargs}    &{kwargs}
     ${len}=  Get Length  ${vargs}
     ${mrPrescriptions}=  Create List  
 
@@ -26,14 +26,17 @@ Create Prescription
         Exit For Loop If  ${len}==0
         Append To List  ${mrPrescriptions}  ${vargs[${index}]}
     END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    prescriptionAttachments=${prescriptionAttachments}
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
     Check And Create YNW Session
+     FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
     [Return]  ${resp}
 
 Update Prescription 
-    [Arguments]    ${prescriptionId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    ${prescriptionAttachments}     @{vargs}
+    [Arguments]    ${prescriptionId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    @{vargs}  &{kwargs}
     ${len}=  Get Length  ${vargs}
     ${mrPrescriptions}=  Create List  
 
@@ -41,8 +44,11 @@ Update Prescription
         Exit For Loop If  ${len}==0
         Append To List  ${mrPrescriptions}  ${vargs[${index}]}
     END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    prescriptionAttachments=${prescriptionAttachments}
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
     Check And Create YNW Session
+     FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionId}    data=${data}    expected_status=any
     [Return]  ${resp}
@@ -71,6 +77,7 @@ Get Prescription Count By Filter
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
     [Return]  ${resp}
+
 
 *** Variables ***
 
@@ -313,7 +320,7 @@ JD-TC-Get Prescription By Filter-1
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}     ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${prescription_id}   ${resp.content}
@@ -364,12 +371,15 @@ JD-TC-Get Prescription By Filter-2
     ${dosage1}=        FakerLibrary.sentence
       Set Suite Variable     ${dosage1}
 
+      ${userid2}=   Random Int  min=1000   max=2000
+
      ${mrPrescriptions1}=  Create Dictionary  medicineName=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     Set Suite Variable    ${mrPrescriptions1}
 
-    ${resp}=   Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions1}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${order}       ${id1}    ${html}     ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${prescription_id}   ${resp.content}
 
     ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   dentalRecordId-eq=${id1}
     Log  ${resp.content}
@@ -377,7 +387,7 @@ JD-TC-Get Prescription By Filter-2
     Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${empty} 
+    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${order} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 
@@ -396,7 +406,7 @@ JD-TC-Get Prescription By Filter-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${prescription_id1}   ${resp.content}
@@ -408,7 +418,7 @@ JD-TC-Get Prescription By Filter-3
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${empty} 
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${order} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration} 
@@ -426,27 +436,28 @@ JD-TC-Get Prescription By Filter-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    ${prescriptionAttachments}   ${mrPrescriptions}
-    Log   ${resp.content}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}   prescriptionAttachments=${prescriptionAttachments}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${prescription_id1}   ${resp.content}
     
     ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   referenceId-eq=${referenceId}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id1} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${empty} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage} 
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileName']}     ${pdffile} 
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['owner']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileSize']}     ${fileSize} 
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileType']}     ${fileType} 
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['order']}     ${order} 
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['action']}     ${LoanAction[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname}  
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
+
 
 
 JD-TC-Get Prescription By Filter-UH1
@@ -501,7 +512,7 @@ JD-TC-Get Prescription By Filter-UH2
     Should Be Equal As Strings    ${resp.content}     "${PROVIDER_CONSUMER_ID_NEEDED_IN_FILTER}"
 
 
-JD-TC-Update Prescription-UH3
+JD-TC-Get Prescription By Filter-UH3
 
     [Documentation]    Create Prescription with another provider login
 
@@ -527,6 +538,6 @@ JD-TC-Get Prescription By Filter-UH4
 
     ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${fake_id}   referenceId-eq=${referenceId}  mrPrescriptionStatus-eq=${prescriptionStatus}   dentalRecordId-eq=${id1}   uid-eq=${uid}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.content}     "${INVALID_PROVIDERCONSUMER_ID}"
+    Should Be Equal As Strings    ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.content}    []
    

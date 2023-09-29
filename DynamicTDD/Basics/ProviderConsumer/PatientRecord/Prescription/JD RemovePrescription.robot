@@ -18,7 +18,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 *** Keywords  ***
 
 Create Prescription 
-    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    ${prescriptionAttachments}     @{vargs}
+    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}      @{vargs}    &{kwargs}
     ${len}=  Get Length  ${vargs}
     ${mrPrescriptions}=  Create List  
 
@@ -26,14 +26,17 @@ Create Prescription
         Exit For Loop If  ${len}==0
         Append To List  ${mrPrescriptions}  ${vargs[${index}]}
     END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    prescriptionAttachments=${prescriptionAttachments}
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
     Check And Create YNW Session
+     FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
     [Return]  ${resp}
 
 Update Prescription 
-    [Arguments]    ${prescriptionId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    ${prescriptionAttachments}     @{vargs}
+    [Arguments]    ${prescriptionId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    @{vargs}  &{kwargs}
     ${len}=  Get Length  ${vargs}
     ${mrPrescriptions}=  Create List  
 
@@ -41,8 +44,11 @@ Update Prescription
         Exit For Loop If  ${len}==0
         Append To List  ${mrPrescriptions}  ${vargs[${index}]}
     END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    prescriptionAttachments=${prescriptionAttachments}
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
     Check And Create YNW Session
+     FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionId}    data=${data}    expected_status=any
     [Return]  ${resp}
@@ -59,6 +65,18 @@ Remove Prescription
     ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/${prescriptionId}       expected_status=any
     [Return]  ${resp}
 
+
+Get Prescription By Filter
+    [Arguments]    &{kwargs} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription   params=${kwargs}   expected_status=any
+    [Return]  ${resp}
+
+Get Prescription Count By Filter
+    [Arguments]    &{param} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
+    [Return]  ${resp}
 
 *** Variables ***
 
@@ -301,7 +319,7 @@ JD-TC-Remove Prescription-1
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${prescription_id}   ${resp.content}
@@ -342,7 +360,7 @@ JD-TC-Remove Prescription-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${prescription_id1}   ${resp.content}
@@ -363,7 +381,7 @@ JD-TC-Remove Prescription-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}    ${prescriptionAttachments}   ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${prescription_id1}   ${resp.content}
@@ -384,7 +402,7 @@ JD-TC-Remove Prescription-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    ${prescriptionAttachments}   ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${prescription_id1}   ${resp.content}
