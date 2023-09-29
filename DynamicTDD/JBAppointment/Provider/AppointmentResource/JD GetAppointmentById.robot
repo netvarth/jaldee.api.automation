@@ -167,11 +167,11 @@ JD-TC-Get AppointmentById-1
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
-    Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
+    # ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
+    Should Be Equal As Strings    ${appttime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
-    ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
+    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
+    Should Be Equal As Strings    ${updatedtime1}    ${statusUpdatedTime}
 
 JD-TC-Get AppointmentById-2
 
@@ -304,11 +304,11 @@ JD-TC-Get AppointmentById-2
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
-    Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
+    # ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
+    Should Be Equal As Strings    ${appttime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
-    ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
+    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
+    Should Be Equal As Strings    ${updatedtime1}    ${statusUpdatedTime}
 
 JD-TC-Get AppointmentById-3
 
@@ -447,11 +447,11 @@ JD-TC-Get AppointmentById-3
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
-    Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
+    # ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
+    Should Be Equal As Strings    ${appttime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
-    ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
+    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
+    Should Be Equal As Strings    ${updatedtime1}    ${statusUpdatedTime}
 
 JD-TC-Get AppointmentById-4
 
@@ -618,11 +618,11 @@ JD-TC-Get AppointmentById-4
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     Set Test Variable  ${appttime1}   ${resp.json()['apptTakenTime']}
-    ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
-    Should Be Equal As Strings    ${apptTakenTime1}    ${apptTakenTime}
+    # ${apptTakenTime1}=  db.remove_date_time_secs   ${appttime1}
+    Should Be Equal As Strings    ${appttime1}    ${apptTakenTime}
     Set Test Variable  ${updatedtime1}   ${resp.json()['statusUpdatedTime']}
-    ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
-    Should Be Equal As Strings    ${statusUpdatedTime1}    ${statusUpdatedTime}
+    # ${statusUpdatedTime1}=  db.remove_date_time_secs   ${updatedtime1}
+    Should Be Equal As Strings    ${updatedtime1}    ${statusUpdatedTime}
 
 
 JD-TC-Get AppointmentById-UH1
