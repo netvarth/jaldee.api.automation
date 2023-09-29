@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 
 Create Sections 
     [Arguments]    ${uid}    ${id}    ${templateDetailId}       ${sectionType}    ${sectionValue}    @{vargs}  &{kwargs}
-    Check And Create YNW Session
+     Check And Create YNW Session
     ${mrCase}=    Create Dictionary  uid=${uid}
     ${doctor}=      Create Dictionary    id=${id}
      ${len}=  Get Length  ${vargs}
@@ -37,18 +37,6 @@ Create Sections
     END
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/medicalrecord/section    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Create Section Template
-
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw   /provider/medicalrecord/section/createdefaulttemplates    expected_status=any
-    [Return]  ${resp}
-
-Get Section Template
-    [Arguments]    ${caseUid} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/template/case/${caseUid}    expected_status=any
     [Return]  ${resp}
 
 Update MR Sections
@@ -69,6 +57,17 @@ Update MR Sections
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/section/${uid}   data=${data}    expected_status=any
     [Return]  ${resp}
 
+Create Section Template
+
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw   /provider/medicalrecord/section/createdefaulttemplates    expected_status=any
+    [Return]  ${resp}
+
+Get Section Template
+    [Arguments]    ${caseUid} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/template/case/${caseUid}    expected_status=any
+    [Return]  ${resp}
 
 Get Sections By UID
     [Arguments]    ${uid}
@@ -77,8 +76,9 @@ Get Sections By UID
     [Return]  ${resp}
 
 Get Sections Filter
+    [Arguments]    &{kwargs}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section    expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section    params=${kwargs}    expected_status=any
     [Return]  ${resp}
 
 Get MR Sections By Case
@@ -122,7 +122,7 @@ JD-TC-Create Sections-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9766802
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9778802
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -283,7 +283,78 @@ JD-TC-Create Sections-1
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
 
-    Create Section Template
+
+    ${templateName}=  FakerLibrary.name
+    Set Suite Variable    ${templateName}
+    ${frequency}=  Random Int  min=500   max=1000
+    Set Suite Variable    ${frequency}
+    ${duration}=  Random Int  min=1   max=100
+    Set Suite Variable    ${duration}
+    ${instructions}=  FakerLibrary.name
+    Set Suite Variable    ${instructions}
+    ${dosage}=  Random Int  min=500   max=1000
+    Set Suite Variable    ${dosage}
+     ${medicineName}=  FakerLibrary.name
+    Set Suite Variable    ${medicineName}
+
+    ${prescription}=    Create Dictionary    frequency=${frequency}  duration=${duration}  instructions=${instructions}  dosage=${dosage}   medicineName=${medicineName} 
+
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName}  ${prescription}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${temId}    ${resp.json()}
+
+    ${med_name}=      FakerLibrary.name
+    Set Suite Variable    ${med_name}
+    ${frequency}=     FakerLibrary.word
+    Set Suite Variable    ${frequency}
+    ${duration}=      FakerLibrary.sentence
+    Set Suite Variable    ${duration}
+    ${instrn}=        FakerLibrary.sentence
+    Set Suite Variable    ${instrn}
+    ${dosage}=        FakerLibrary.sentence
+    Set Suite Variable    ${dosage}
+    ${type}=     FakerLibrary.word
+    Set Suite Variable    ${type}
+    ${clinicalNote}=     FakerLibrary.word
+    Set Suite Variable    ${clinicalNote}
+    ${clinicalNote1}=        FakerLibrary.sentence
+    Set Suite Variable    ${clinicalNote1}
+    ${type1}=        FakerLibrary.sentence
+    Set Suite Variable    ${type1}
+
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachments}=    Create Dictionary   action=${file_action[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}    driveId=${driveId}
+    Log  ${attachments}
+    Set Suite Variable    ${attachments}
+
+    ${voiceAttachments}=    Create Dictionary   action=${file_action[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}    driveId=${driveId}
+    Log  ${voiceAttachments}
+    ${voiceAttachments}=  Create List   ${voiceAttachments}
+    Set Suite Variable    ${voiceAttachments}
 
     ${resp}=    Create Section Template    
     Log   ${resp.content}
@@ -293,17 +364,26 @@ JD-TC-Create Sections-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()[0]['enumName']}   ${}
-    Set Test Variable    ${enumName}    ${resp.json()[0]['enumName']}
-    Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
-    Set Test Variable    ${sortOrder}    ${resp.json()[0]['sortOrder']}
+    Set Test Variable    ${temp_id}    ${resp.json()[0]['id']}
+    Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
+    # Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
 
-    Set Test Variable    ${enumName1}    ${resp.json()[1]['enumName']}
-    Set Test Variable    ${displayName1}    ${resp.json()[1]['displayName']}
-    Set Test Variable    ${sortOrder1}    ${resp.json()[1]['sortOrder']}   
-    Set Test Variable    ${schema1}    ${resp.json()[1]['schema']['properties']['chiefComplaint']['description']}
+    ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}
+    Set Suite Variable    ${CHIEFCOMPLAINT}
 
-    Set Test Variable    ${enumName4}    ${resp.json()[4]['enumName']}
-    Set Test Variable    ${displayName4}    ${resp.json()[4]['displayName']}
-    Set Test Variable    ${sortOrder4}    ${resp.json()[4]['sortOrder']}   
-    Set Test Variable    ${schema4}    ${resp.json()[4]['schema']['properties']['medication']['items']}
-          
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${sec_id}    ${resp.json()['uid']}
+
+    ${resp}=    Get Sections Filter   caseUid-eq=${caseUId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Delete MR Sections    ${sec_id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sections Filter   caseUid-eq=${caseUId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
