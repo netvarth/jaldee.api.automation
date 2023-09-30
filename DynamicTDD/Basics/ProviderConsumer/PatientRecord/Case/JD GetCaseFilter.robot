@@ -142,7 +142,14 @@ JD-TC-Get Case Filter-1
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=    Get MR Case By UID   ${caseUId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  200
+    Set Suite Variable    ${referenceNo}            ${resp.json()['referenceNo']}
+    Set Suite Variable    ${spInternalStatus}            ${resp.json()['spInternalStatus']}
+
+
+    ${resp}=   Get Case Filter   uid-eq=${caseUId}   referenceNo-eq=${referenceNo}   title-eq=${title1}   consumerId-eq=${cid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
@@ -177,7 +184,7 @@ JD-TC-Get Case Filter-2
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Filter   uid-eq=${caseUId}   consumerFirstName-eq=${proconfname}   consumerLastName-eq=${proconlname}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
@@ -199,7 +206,7 @@ JD-TC-Get Case Filter-3
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Filter   doctorId-eq=${pid}   doctorFirstName-eq=${pdrfname}   doctorLastName-eq=${pdrlname}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
@@ -221,7 +228,7 @@ JD-TC-Get Case Filter-4
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Filter   category-eq=${category_id}   categoryName-eq=${name}   type-eq=${type_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
@@ -243,14 +250,14 @@ JD-TC-Get Case Filter-5
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Filter  uid-eq=${caseUId}  typeName-eq=${name}   spInternalStatus-eq=${spInternalStatus}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Get Case Filter-7
+JD-TC-Get Case Filter-6
 
     [Documentation]    Update MR Case title is empty  and get case filter
 
@@ -264,14 +271,14 @@ JD-TC-Get Case Filter-7
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Filter   createdDate-eq=${DAY1}  updatedDate-eq=${DAY1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${empty} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Get Case Filter-8
+JD-TC-Get Case Filter-7
 
     [Documentation]    Update MR Case from user login and get case filter
 
@@ -333,7 +340,7 @@ JD-TC-Get Case Filter-8
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Filter    uid-eq=${caseUId}   title-eq=${title1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 

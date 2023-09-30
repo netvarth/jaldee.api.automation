@@ -11016,8 +11016,9 @@ Update MR Case
     [Return]  ${resp}
 
 Get Case Filter
+    [Arguments]    &{kwargs} 
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case     expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case   params=${kwargs}   expected_status=any
     [Return]  ${resp}
 
 Change Case Status
@@ -11027,8 +11028,9 @@ Change Case Status
     [Return]  ${resp}
 
 Get Case Count Filter
+    [Arguments]    &{kwargs} 
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case     expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/case     params=${kwargs}   expected_status=any
     [Return]  ${resp}
 
 Create Treatment Plan
