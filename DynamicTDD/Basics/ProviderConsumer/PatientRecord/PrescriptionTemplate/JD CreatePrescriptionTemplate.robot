@@ -385,6 +385,210 @@ JD-TC-Create Treatment Plan-8
     Should Be Equal As Strings    ${resp.json()['prescriptionDto'][1]['instructions']}     ${instructions2}
     Should Be Equal As Strings    ${resp.json()['prescriptionDto'][1]['dosage']}     ${dosage2}
 
+JD-TC-Create Treatment Plan-9
+
+    [Documentation]     Create prescription Template Where medicine name as empty
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${templateName1}=  FakerLibrary.name
+    Set Test Variable    ${templateName1}
+    ${frequency1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${frequency1}
+    ${duration1}=  Random Int  min=1   max=100
+    Set Test Variable    ${duration1}
+    ${instructions1}=  FakerLibrary.name
+    Set Test Variable    ${instructions1}
+    ${dosage1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${dosage1}
+    ${medicineName1}=  FakerLibrary.name
+    Set Test Variable    ${medicineName1}
+    
+
+    ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${empty} 
+
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${temId1}    ${resp.json()}
+
+    ${resp}=    Get MedicalPrescription Template By Id   ${temId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${temId1} 
+    Should Be Equal As Strings    ${resp.json()['templateName']}     ${templateName1} 
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['medicineName']}     ${empty}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['frequency']}     ${frequency1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['duration']}     ${duration1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['instructions']}     ${instructions1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['dosage']}     ${dosage1}
+
+JD-TC-Create Treatment Plan-10
+
+    [Documentation]     Create prescription Template Where dosage as empty
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${templateName1}=  FakerLibrary.name
+    Set Test Variable    ${templateName1}
+    ${frequency1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${frequency1}
+    ${duration1}=  Random Int  min=1   max=100
+    Set Test Variable    ${duration1}
+    ${instructions1}=  FakerLibrary.name
+    Set Test Variable    ${instructions1}
+    ${dosage1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${dosage1}
+    ${medicineName1}=  FakerLibrary.name
+    Set Test Variable    ${medicineName1}
+    
+
+    ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${instructions1}  dosage=${empty}   medicineName=${medicineName1} 
+
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${temId1}    ${resp.json()}
+
+    ${resp}=    Get MedicalPrescription Template By Id   ${temId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${temId1} 
+    Should Be Equal As Strings    ${resp.json()['templateName']}     ${templateName1} 
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['medicineName']}     ${medicineName1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['frequency']}     ${frequency1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['duration']}     ${duration1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['instructions']}     ${instructions1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['dosage']}     ${empty}
+   
+JD-TC-Create Treatment Plan-11
+
+    [Documentation]     Create prescription Template Where instructions empty
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${templateName1}=  FakerLibrary.name
+    Set Test Variable    ${templateName1}
+    ${frequency1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${frequency1}
+    ${duration1}=  Random Int  min=1   max=100
+    Set Test Variable    ${duration1}
+    ${instructions1}=  FakerLibrary.name
+    Set Test Variable    ${instructions1}
+    ${dosage1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${dosage1}
+    ${medicineName1}=  FakerLibrary.name
+    Set Test Variable    ${medicineName1}
+    
+
+    ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${duration1}  instructions=${empty}  dosage=${dosage1}   medicineName=${medicineName1} 
+
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${temId1}    ${resp.json()}
+
+    ${resp}=    Get MedicalPrescription Template By Id   ${temId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${temId1} 
+    Should Be Equal As Strings    ${resp.json()['templateName']}     ${templateName1} 
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['medicineName']}     ${medicineName1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['frequency']}     ${frequency1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['duration']}     ${duration1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['instructions']}     ${empty}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['dosage']}     ${dosage1}
+
+JD-TC-Create Treatment Plan-12
+
+    [Documentation]     Create prescription Template Where duration is empty
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${templateName1}=  FakerLibrary.name
+    Set Test Variable    ${templateName1}
+    ${frequency1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${frequency1}
+    ${duration1}=  Random Int  min=1   max=100
+    Set Test Variable    ${duration1}
+    ${instructions1}=  FakerLibrary.name
+    Set Test Variable    ${instructions1}
+    ${dosage1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${dosage1}
+    ${medicineName1}=  FakerLibrary.name
+    Set Test Variable    ${medicineName1}
+    
+
+    ${prescription}=    Create Dictionary    frequency=${frequency1}  duration=${empty}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1} 
+
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${temId1}    ${resp.json()}
+
+    ${resp}=    Get MedicalPrescription Template By Id   ${temId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${temId1} 
+    Should Be Equal As Strings    ${resp.json()['templateName']}     ${templateName1} 
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['medicineName']}     ${medicineName1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['frequency']}     ${frequency1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['duration']}     ${empty}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['instructions']}     ${instructions1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['dosage']}     ${dosage1}
+
+JD-TC-Create Treatment Plan-13
+
+    [Documentation]     Create prescription Template Where frequency is empty
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${templateName1}=  FakerLibrary.name
+    Set Test Variable    ${templateName1}
+    ${frequency1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${frequency1}
+    ${duration1}=  Random Int  min=1   max=100
+    Set Test Variable    ${duration1}
+    ${instructions1}=  FakerLibrary.name
+    Set Test Variable    ${instructions1}
+    ${dosage1}=  Random Int  min=500   max=1000
+    Set Test Variable    ${dosage1}
+    ${medicineName1}=  FakerLibrary.name
+    Set Test Variable    ${medicineName1}
+    
+
+    ${prescription}=    Create Dictionary    frequency=${empty}  duration=${duration1}  instructions=${instructions1}  dosage=${dosage1}   medicineName=${medicineName1} 
+
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${prescription}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${temId1}    ${resp.json()}
+
+    ${resp}=    Get MedicalPrescription Template By Id   ${temId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${temId1} 
+    Should Be Equal As Strings    ${resp.json()['templateName']}     ${templateName1} 
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['medicineName']}     ${medicineName1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['frequency']}     ${empty}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['duration']}     ${duration1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['instructions']}     ${instructions1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['dosage']}     ${dosage1}
 JD-TC-Create Treatment Plan-UH1
 
     [Documentation]   Create MedicalRecordPrescription Template with another provider login
