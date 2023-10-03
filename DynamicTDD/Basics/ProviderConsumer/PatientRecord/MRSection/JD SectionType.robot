@@ -283,7 +283,6 @@ JD-TC-Create Sections-1
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
 
-    Create Section Template
 
     ${resp}=    Create Section Template    
     Log   ${resp.content}
@@ -293,11 +292,12 @@ JD-TC-Create Sections-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()[0]['enumName']}   ${}
-    Set Test Variable    ${enumName}    ${resp.json()[0]['enumName']}
+    Set Test Variable    ${temp_id}    ${resp.json()[0]['id']}
+    Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
     Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
     Set Test Variable    ${sortOrder}    ${resp.json()[0]['sortOrder']}
 
-    Set Test Variable    ${enumName1}    ${resp.json()[1]['enumName']}
+    Set Test Variable    ${enumName1}    ${resp.json()[1]['sectionType']}
     Set Test Variable    ${displayName1}    ${resp.json()[1]['displayName']}
     Set Test Variable    ${sortOrder1}    ${resp.json()[1]['sortOrder']}   
     Set Test Variable    ${schema1}    ${resp.json()[1]['schema']['properties']['chiefComplaint']['description']}

@@ -549,7 +549,7 @@ JD-TC-CreateService-7
      
         ${appt_sh}=   Create Dictionary  id=${sch_id}
         ${appt_shd}=    Create List   ${appt_sh}
-        ${app_status}=    Create List   ${apptStatus[2]}
+        ${app_status}=    Create List   ${apptStatus[1]}
         ${resp}=   Create Appointment QueueSet for Provider    ${s_name[0]}   ${s_name[1]}   ${s_desc}   ${fieldList}       ${ser}     ${EMPTY}   ${EMPTY}    ${appt_shd}    ${app_status}         ${statusboard_type[0]}   ${service_list}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
