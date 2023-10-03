@@ -10547,6 +10547,25 @@ Get MemberService by Consumer
     ${resp}=    GET On Session  ynw  url=/consumer/membership/services?account=${accountId}       expected_status=any
     [Return]  ${resp}
 
+Member Creation From Provider Dashboard
+
+    [Arguments]     ${memberServiceId}    ${firstName}    ${lastName}   ${phoneNo}   ${countryCode}
+
+    ${data}=  Create Dictionary    memberServiceId=${memberServiceId}    firstName=${firstName}    lastName=${lastName}    phoneNo=${phoneNo}    countryCode=${countryCode}
+    ${data}=    json.dumps    ${data} 
+
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /provider/membership/member   data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Submit Provider Member Qnr
+
+    [Arguments]    ${memberId}  ${data}
+
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /provider/membership/member/questionnaire/submit/${memberId}    data=${data}       expected_status=any
+    [Return]  ${resp}
+
 # ........Finance Manager.............
 
 

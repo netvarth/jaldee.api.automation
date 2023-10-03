@@ -2072,7 +2072,7 @@ MEMBER_SERVICE_ALREADY_DISABLED = "Membership Settings already disabled"
 MEMBER_SERVICE_ALREADY_ENABLED = "Membership Settings already enabled"
 MEMBER_SERVICE_IS_DISABLED = "Service is disabled"
 MEMBER_SERVICE_REQUIRED = "Member Service ID required"
-
+MEMBER_SERVICE_DOES_NOT_EXIST = "Member Service does not exist"
 
 # ..................Patient Record............
 
