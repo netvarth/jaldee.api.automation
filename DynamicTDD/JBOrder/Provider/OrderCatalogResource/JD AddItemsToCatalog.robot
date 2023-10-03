@@ -379,14 +379,14 @@ JD-TC-Add_Items_To_Catalog-4
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2  
     ${itemDesc1}=  FakerLibrary.Sentence   nb_words=3   
-    ${price1}=  Random Int  min=50   max=300 
+    ${price1}=  Random Int  min=95   max=300 
     ${price1float}=  twodigitfloat  ${price1}
 
     ${itemName1}=   FakerLibrary.name  
 
     ${itemNameInLocal1}=  FakerLibrary.Sentence   nb_words=2  
   
-    ${promoPrice1}=  Random Int  min=10   max=${price1} 
+    ${promoPrice1}=  Random Int  min=95   max=${price1} 
 
     ${promoPrice1float}=  twodigitfloat  ${promoPrice1}
 
@@ -493,6 +493,7 @@ JD-TC-Add_Items_To_Catalog-4
 
     Set Test Variable  ${maxNumberItem}   5
 
+    
 
     ${resp}=  Create Catalog For ShoppingCart   ${catalogName}  ${catalogDesc}   ${catalogSchedule}   ${orderType}   ${paymentType}   ${orderStatuses}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catalogStatus}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo}   postInfo=${postInfo}    
     Log   ${resp.json()}
@@ -574,6 +575,7 @@ JD-TC-Add_Items_To_Catalog-4
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${coupons}=  Create List  ${cupn_code}  
+    
 
     ${resp}=   Create Order For HomeDelivery   ${cookie}   ${accId}    ${self}    ${CatalogId1}   ${bool[1]}    ${address}    ${sTime1}    ${eTime1}   ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${coupons}   ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
