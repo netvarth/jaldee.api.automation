@@ -192,7 +192,8 @@ JD-TC-AppointmentCommunication-1
     ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [consumer]   ${uname}
     ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [bookingId]   ${encId}
 
-    # ${date}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
+    ${datetime} =	Convert Date  ${DAY1}  datetime
+    ${date}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
     # ${converted_slot}=  convert_slot_12hr  ${slot1} 
     # log    ${converted_slot}
     # ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [username]   ${uname} 
@@ -200,21 +201,39 @@ JD-TC-AppointmentCommunication-1
     # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [date]   ${date}
     # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [time]   ${converted_slot}
     # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [providerName]   ${bsname}
-
-    
+    ${apptTime}=  db.get_date_time_by_timezone  ${tz} 
     
     ${resp}=  Get provider communications
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
+    Set Test Variable  ${timestamp}   ${resp.json()[0]['timeStamp']}
+    Set Test Variable  ${timestamp1}   ${resp.json()[1]['timeStamp']}
+
+    ${ts} =  Evaluate  ${timestamp}/1000
+    ${start_time}=    DateTime.Convert Date    ${ts}   result_format="%Y-%m-%d %H:%M"
+
+    ${ts1} =  Evaluate  ${timestamp1}/1000
+    ${start_time1}=    DateTime.Convert Date    ${ts1}   result_format="%Y-%m-%d %H:%M"
+
+    ${datetime} =	timestamp_conversion   ${timestamp}  
+    ${apptTakenTime}=  db.remove_date_time_secs   ${datetime}
+    Should Be Equal As Strings  ${appttime1}   ${start_time}
+
+    ${datetime1} =	timestamp_conversion   ${timestamp1}  
+    ${apptTakenTime}=  db.remove_date_time_secs   ${datetime1}
+    Should Be Equal As Strings  ${appttime1}   ${start_time1}
+
     Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        0
     Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid1}
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${defconfirm_msg}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${jdconID}
+    Should Be Equal As Strings  ${resp.json()[0]['service']}            ${SERVICE1} on ${date}
 
     Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}        0
     Should Be Equal As Strings  ${resp.json()[1]['waitlistId']}         ${apptid1}
     Should Be Equal As Strings  ${resp.json()[1]['msg']}                ${msg}
+    Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${jdconID}
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${jdconID}
     Should Not Contain   ${resp.json()[1]}   attachements
 
@@ -240,7 +259,7 @@ JD-TC-AppointmentCommunication-1
     Should Be Equal As Strings    ${resp.status_code}    200 
 
 # *** Test Cases ***
-# ***Comment***
+***Comment***
 
 JD-TC-AppointmentCommunication-2
     [Documentation]  Send appointment comunication message to consumer with attachment

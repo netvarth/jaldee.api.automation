@@ -276,227 +276,114 @@ JD-TC-ProviderCouponBill-1
     Should Be Equal As Strings  ${resp.json()['amountDue']}                             ${balamount2}
   
 
-# JD-TC-ProviderCouponBill-2
+JD-TC-ProviderCouponBill-2
 
-#     [Documentation]  Taking waitlist from consumer side with provider coupon
+    [Documentation]  Taking waitlist from consumer side with provider coupon
               
-#     ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${SysNote}=  Create List  ${SystemNote[2]}  
-#     Set Suite Variable  ${SysNote} 
+    ${SysNote}=  Create List  ${SystemNote[2]}  
+    Set Suite Variable  ${SysNote} 
 
-#     ${coupon1}=    FakerLibrary.word
-#     ${desc}=  FakerLibrary.Sentence   nb_words=2
-#     ${pc_amount}=   Random Int   min=10  max=50
-#     ${pc_amount}=  Convert To Number  ${pc_amount}  1
-#     ${cupn_code}=   FakerLibrary.word
-#     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${sTime}=  subtract_timezone_time  ${tz}  0  15
-#     ${eTime}=  add_timezone_time  ${tz}  0  45  
-#     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
-#     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
-#     ${min_bill_amount}=   Random Int   min=90   max=100
-#     ${max_disc_val}=   Random Int   min=90  max=100
-#     ${max_prov_use}=   Random Int   min=10   max=20
-#     ${book_channel}=   Create List   ${bookingChannel[1]}
-#     ${coupn_based}=  Create List   ${couponBasedOn[0]}
-#     ${tc}=  FakerLibrary.sentence
-#     ${services}=   Create list   ${p1_sid1}   
-#     ${resp}=  Create Provider Coupon   ${coupon1}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Set Suite Variable  ${couponId2}  ${resp.json()}
+    ${coupon1}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${pc_amount}=   Random Int   min=10  max=50
+    ${pc_amount}=  Convert To Number  ${pc_amount}  1
+    ${cupn_code}=   FakerLibrary.word
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=90   max=100
+    ${max_disc_val}=   Random Int   min=90  max=100
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[1]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list   ${p1_sid1}   
+    ${resp}=  Create Provider Coupon   ${coupon1}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${couponId2}  ${resp.json()}
 
-#     ${resp}=  Get Coupon By Id  ${couponId2} 
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=  Get Coupon By Id  ${couponId2} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
 
-#     ${resp}=  Consumer Login  ${CUSERNAME16}  ${PASSWORD}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Consumer Login  ${CUSERNAME16}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${cid2}=  get_id  ${CUSERNAME16}
-#     Set Suite Variable   ${cid2}
+    ${cid2}=  get_id  ${CUSERNAME16}
+    Set Suite Variable   ${cid2}
 
-#     ${msg}=  FakerLibrary.word
-#     ${coupons}=  Create List  ${cupn_code}  
-#     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
-#     Log  ${resp.json()}
-#     ${wid}=  Get Dictionary Values  ${resp.json()}
-#     Set Test Variable  ${cwid}  ${wid[0]} 
+    ${msg}=  FakerLibrary.word
+    ${coupons}=  Create List  ${cupn_code}  
+    ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
+    Log  ${resp.json()}
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${cwid}  ${wid[0]} 
 
-#     ${balamount}=  Evaluate  ${Tot1}-${pc_amount}
-#     ${balamount1}=  Evaluate  ${balamount}-${min_pre1}
-#     ${balamount1}=  Convert To Number  ${balamount1}  2
+    ${balamount}=  Evaluate  ${Tot1}-${pc_amount}
+    ${balamount1}=  Evaluate  ${balamount}-${min_pre1}
+    ${balamount1}=  Convert To Number  ${balamount1}  2
 
    
-#     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
+    ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
     
-#     ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid2}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-#     sleep  2s
-#     # ${resp}=  ConsumerLogout
-#     # Log  ${resp.json()}
-#     # Should Be Equal As Strings  ${resp.status_code}  200
+    sleep  2s
+    # ${resp}=  ConsumerLogout
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-#     # ${resp}=   Encrypted Provider Login   ${PUSERNAME185}  ${PASSWORD} 
-#     # Log  ${resp.json()}
-#     # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Encrypted Provider Login   ${PUSERNAME185}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-#     # ${resp}=  Get Bill By UUId  ${cwid}
-#     # Log  ${resp.json()}
-#     # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Bill By UUId  ${cwid}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-#     # ${resp}=  ProviderLogout
-#     # Log  ${resp.json()}
-#     # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ProviderLogout
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-#     # ${resp}=  Consumer Login  ${CUSERNAME16}  ${PASSWORD}
-#     # Log  ${resp.json()}
-#     # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Consumer Login  ${CUSERNAME16}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-#     ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     # Should Be Equal As Strings  ${resp.json()['jCoupon']['${cupn_code2018}']['value']}  50.0
-#     # Should Contain  ${resp.json()['jCoupon']['${cupn_code2018}']['systemNote']}         ${SystemNote[2]}
-#     Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['couponCode']}        ${cupn_code}
-#     Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['value']}             ${pc_amount}
-#     Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['systemNote']}        ${SysNote}
-#     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${cwid}
-#     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
-#     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}               ${p1_sid1}  
-#     Should Be Equal As Strings  ${resp.json()['service'][0]['price']}                   ${Tot1}
-#     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}             ${P1SERVICE1}  
-#     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}                1.0
-#     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${Tot1}
-#     Should Be Equal As Strings  ${resp.json()['netRate']}                               ${balamount}
-#     Should Be Equal As Strings  ${resp.json()['amountDue']}                             ${balamount1}
-
-
-# JD-TC-ProviderCouponBill-UH1
-
-#     [Documentation]  Consumer apply a coupon at Checkin time.but maxProviderUseLimit is over
-
-#     clear_Coupon     ${PUSERNAME185}
-#     ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${coupon3}=    FakerLibrary.word
-#     ${desc}=  FakerLibrary.Sentence   nb_words=2
-#     ${pc_amount}=   Random Int   min=10  max=50
-#     ${pc_amount}=  Convert To Number  ${pc_amount}  1
-#     Set Suite Variable  ${pc_amount} 
-#     ${cupn_code3}=   FakerLibrary.word
-#     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${sTime}=  subtract_timezone_time  ${tz}  0  15
-#     ${eTime}=  add_timezone_time  ${tz}  0  45  
-#     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
-#     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
-#     ${min_bill_amount}=   Random Int   min=90   max=100
-#     ${max_disc_val}=   Random Int   min=90  max=100
-#     ${max_prov_use}=   Random Int   min=1   max=1
-#     ${book_channel}=   Create List   ${bookingChannel[1]}
-#     ${coupn_based}=  Create List   ${couponBasedOn[0]}
-#     ${tc}=  FakerLibrary.sentence
-#     ${services}=   Create list   ${p1_sid1}   
-#     ${resp}=  Create Provider Coupon   ${coupon3}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code3}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Set Suite Variable  ${couponId3}  ${resp.json()}
-
-#     ${resp}=  Get Coupon By Id  ${couponId3} 
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200 
-
-#     ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-
-#     ${cid}=  get_id  ${CUSERNAME18}
-
-#     ${msg}=  FakerLibrary.word
-#     ${coupons}=  Create List  ${cupn_code3}  
-#     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
-#     Log  ${resp.json()}
-#     ${wid}=  Get Dictionary Values  ${resp.json()}
-#     Set Test Variable  ${cwid}  ${wid[0]} 
-
-#     ${balamount}=  Evaluate  ${Tot1}-${pc_amount}
-#     ${balamount1}=  Evaluate  ${balamount}-${min_pre1}
-#     ${balamount1}=  Convert To Number  ${balamount1}  1
-    
-#     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
-    
-#     ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-
-#     ${resp}=  ConsumerLogout
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-
-#     # ${resp}=   Encrypted Provider Login   ${PUSERNAME185}  ${PASSWORD} 
-#     # Log  ${resp.json()}
-#     # Should Be Equal As Strings  ${resp.status_code}  200
-
-#     # ${resp}=  Get Bill By UUId  ${cwid}
-#     # Log  ${resp.json()}
-#     # Should Be Equal As Strings  ${resp.status_code}  200
-
-#     # ${resp}=  ProviderLogout
-#     # Log  ${resp.json()}
-#     # Should Be Equal As Strings  ${resp.status_code}  200
-
-#     ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-    
-#     ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200   
-#     Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['couponCode']}        ${cupn_code3}
-#     Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['value']}             ${pc_amount}
-#     Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['systemNote']}        ${SysNote}
-#     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${cwid}
-#     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
-#     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}               ${p1_sid1}  
-#     Should Be Equal As Strings  ${resp.json()['service'][0]['price']}                   ${Tot1}
-#     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}             ${P1SERVICE1}  
-#     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}                1.0
-#     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${Tot1}
-#     Should Be Equal As Strings  ${resp.json()['netRate']}                               ${balamount}
-#     Should Be Equal As Strings  ${resp.json()['amountDue']}                             ${balamount1}
-
-#     ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-
-#     ${msg}=  FakerLibrary.word
-#     ${coupons}=  Create List  ${cupn_code3}  
-#     # ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
-#     # Log  ${resp.json()}
-#     ${resp}=  Waitlist AdvancePayment Details   ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
-#     Log   ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
-#     Should Contain   ${resp.json()['proCouponList']['${cupn_code3}']['systemNote']}   EXCEEDS_PRO_COUP_APPLY_LIMIT
+    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['jCoupon']['${cupn_code2018}']['value']}  50.0
+    # Should Contain  ${resp.json()['jCoupon']['${cupn_code2018}']['systemNote']}         ${SystemNote[2]}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['couponCode']}        ${cupn_code}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['value']}             ${pc_amount}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['systemNote']}        ${SysNote}
+    Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${cwid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}               ${p1_sid1}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}                   ${Tot1}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}             ${P1SERVICE1}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}                1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${Tot1}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${balamount}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}                             ${balamount1}
 
 
+JD-TC-ProviderCouponBill-UH1
 
-JD-TC-ProviderCouponBill-UH11
-
-    [Documentation]  Consumer apply a coupon at Checkin time.but the coupon is for first checkin only
+    [Documentation]  Consumer apply a coupon at Checkin time.but maxProviderUseLimit is over
 
     clear_Coupon     ${PUSERNAME185}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
@@ -520,35 +407,30 @@ JD-TC-ProviderCouponBill-UH11
     ${book_channel}=   Create List   ${bookingChannel[1]}
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
-    ${services}=   Create list   ${p1_sid1}   ${p1_sid2} 
-    ${resp}=  Create Provider Coupon   ${coupon3}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code3}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    ${services}=   Create list   ${p1_sid1}   
+    ${resp}=  Create Provider Coupon   ${coupon3}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code3}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${couponId3}  ${resp.json()}
+    Set Suite Variable  ${couponId3}  ${resp.json()}
 
     ${resp}=  Get Coupon By Id  ${couponId3} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cid}=  get_id  ${CUSERNAME19}
+    ${cid}=  get_id  ${CUSERNAME18}
 
     ${msg}=  FakerLibrary.word
     ${coupons}=  Create List  ${cupn_code3}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid}  ${wid[0]} 
 
-    ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-     ${balamount}=  Evaluate  ${Tot1}-${pc_amount}
+    ${balamount}=  Evaluate  ${Tot1}-${pc_amount}
     ${balamount1}=  Evaluate  ${balamount}-${min_pre1}
     ${balamount1}=  Convert To Number  ${balamount1}  1
     
@@ -565,41 +447,52 @@ JD-TC-ProviderCouponBill-UH11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${PUSERNAME185}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Encrypted Provider Login   ${PUSERNAME185}  ${PASSWORD} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By UUId  ${cwid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Bill By UUId  ${cwid}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  ProviderLogout
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200   
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['couponCode']}        ${cupn_code3}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['value']}             ${pc_amount}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['systemNote']}        ${SysNote}
+    Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${cwid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}               ${p1_sid1}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['price']}                   ${Tot1}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}             ${P1SERVICE1}  
+    Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}                1.0
+    Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${Tot1}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${balamount}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}                             ${balamount1}
 
-    ${DAY2}=  db.add_timezone_date  ${tz}  1
-
-    ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY2}  ${p1_sid2}  ${msg}  ${bool[0]}  ${coupons}  ${self}
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    # ${wid}=  Get Dictionary Values  ${resp.json()}
-    # Set Test Variable  ${cwid1}  ${wid[0]} 
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
+    ${msg}=  FakerLibrary.word
+    ${coupons}=  Create List  ${cupn_code3}  
+    # ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Contain   ${resp.json()['proCouponList']['${cupn_code3}']['systemNote']}   EXCEEDS_PRO_COUP_APPLY_LIMIT
+    ${resp}=  Waitlist AdvancePayment Details   ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Contain   ${resp.json()['proCouponList']['${cupn_code3}']['systemNote']}   EXCEEDS_PRO_COUP_APPLY_LIMIT
 
-*** comment ***
+
 JD-TC-ProviderCouponBill-UH2
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon not in online
      
@@ -1418,12 +1311,12 @@ JD-TC-ProviderCouponBill-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.status_code}  200   
-    Should Be Equal As Strings  ${resp.json()['proCouponList'][1]['couponCode']}        ${cupn_code6}
-    Should Be Equal As Strings  ${resp.json()['proCouponList'][1]['value']}             ${pc_amount4}
-    Should Be Equal As Strings  ${resp.json()['proCouponList'][1]['systemNote']}        ${SysNote}
-    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['couponCode']}        ${cupn_code5}
-    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['value']}             ${pc_amount1}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['couponCode']}        ${cupn_code6}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['value']}             ${pc_amount4}
     Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['systemNote']}        ${SysNote}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][1]['couponCode']}        ${cupn_code5}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][1]['value']}             ${pc_amount1}
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][1]['systemNote']}        ${SysNote}
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${cwid}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
     Should Be Eq ual As Strings  ${resp.json()['service'][0]['serviceId']}              ${s_id3}  
@@ -1619,6 +1512,134 @@ JD-TC-ProviderCouponBill-UH5
     Should Be Equal As Strings  ${resp.status_code}  422 
     Should Be Equal As Strings  "${resp.json()}"  "${COUPON_ALREADY_USED}"
 
+JD-TC-ProviderCouponBill-UH6
+
+    [Documentation]  Consumer apply a coupon at Checkin time.but the coupon is for first checkin only
+
+    clear_Coupon     ${PUSERNAME185}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${coupon3}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${pc_amount}=   Random Int   min=10  max=50
+    ${pc_amount}=  Convert To Number  ${pc_amount}  1
+    Set Suite Variable  ${pc_amount} 
+    ${cupn_code3}=   FakerLibrary.word
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=90   max=100
+    ${max_disc_val}=   Random Int   min=90  max=100
+    ${max_prov_use}=   Random Int   min=1   max=1
+    ${book_channel}=   Create List   ${bookingChannel[1]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list   ${p1_sid1}   ${p1_sid2} 
+    ${resp}=  Create Provider Coupon   ${coupon3}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code3}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${couponId3}  ${resp.json()}
+
+    ${resp}=  Get Coupon By Id  ${couponId3} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cid}=  get_id  ${CUSERNAME19}
+
+    ${desc}=   FakerLibrary.word
+    ${coupons}=  Create List  ${cupn_code3}  
+    ${resp}=  Waitlist AdvancePayment Details   ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${desc}  ${bool[0]}  ${coupons}  ${self}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${msg}=  FakerLibrary.word
+    # ${coupons}=  Create List  ${cupn_code3}  
+    ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${cwid}  ${wid[0]} 
+
+    ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${balamount}=  Evaluate  ${Tot1}-${pc_amount}
+    ${balamount1}=  Evaluate  ${balamount}-${min_pre1}
+    ${balamount1}=  Convert To Number  ${balamount1}  1
+    
+    ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
+    
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  ConsumerLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME185}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Bill By UUId  ${cwid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['proCouponList'][0]['systemNote'][0]}    COUPON_APPLIED
+
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+
+    ${DAY2}=  db.add_timezone_date  ${tz}  1
+
+    ${desc}=   FakerLibrary.word
+    ${resp}=  Waitlist AdvancePayment Details   ${pid}  ${p1_qid1}  ${DAY2}  ${p1_sid2}  ${desc}  ${bool[0]}  ${coupons}  ${self}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Should Contain   ${resp.json()['proCouponList']['${cupn_code3}']['systemNote']}   ONLY_WHEN_FITST_CHECKIN
+
+    ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY2}  ${p1_sid2}  ${msg}  ${bool[0]}  ${coupons}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${cwid1}  ${wid[0]} 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Bill By UUId  ${cwid1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Contain  ${resp.json()['providerCoupon']['${cupn_code3}']['systemNote']}    ONLY_WHEN_FITST_CHECKIN
+
+
+JD-TC-ProviderCouponBill-UH7
+
+    [Documentation]   Provider Consumer apply a coupon at Checkin time.but the coupon is for first checkin only
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 # .....cases for provider coupon based on consumer group........
 

@@ -6337,3 +6337,12 @@ def CDLEnqStatus(account):
         if dbconn is not None:
             dbconn.close()
 
+
+def timestamp_conversion(timestamp):
+    try:
+        date_time1= datetime.datetime.fromtimestamp(int(timestamp)/1000)
+        return date_time1
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0

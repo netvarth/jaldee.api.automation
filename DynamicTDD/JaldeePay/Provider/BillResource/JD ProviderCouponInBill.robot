@@ -3253,9 +3253,21 @@ JD-TC-ProviderCouponBill-UH9
     Should Be Equal As Strings  "${resp.json()}"       "Provider coupon not applicable for this booking mode Phone in"
 
 
+JD-TC-ProviderCouponBill-UH10
 
+    [Documentation]  Consumer apply a coupon at Checkin time. the coupon is for first checkin only, then apply the same coupon again in bill.
+   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-ProviderCouponBill-UH11
 
+    [Documentation]  Consumer apply a coupon at Checkin time. the coupon is for first checkin only, then apply the same coupon in
+    ...   another checkin bill.
+   
 
-
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 

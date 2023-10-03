@@ -1174,7 +1174,7 @@ JD-TC-Appointment_Report-1
     ${resp}=  Get Report By Status       ${Statuses[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-***COMMENT***
+
 JD-TC-Appointment_Report-2
     [Documentation]  Generate Next_Week Appointment_report of a provider
     ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
