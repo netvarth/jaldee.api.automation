@@ -15,6 +15,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/musers.py
 
 *** Variables ***
 ${SERVICE1}   CONSULTATION1
@@ -1453,6 +1454,389 @@ JD-TC- Create Bill -24
         Should Be Equal As Strings  ${resp.json()['discount'][0]['id']}  ${addiscount}
         Should Be Equal As Strings  ${resp.json()['discount'][0]['discValue']}  ${ad_amount}
 
+JD-TC- Create Bill -25
+
+        [Documentation]   Bill generated in family member's name if booking is for family member
+        ...    Get Bill
+      
+
+        ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get Consumer By Id  ${CUSERNAME8}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${jdconID}   ${resp.json()['id']}
+        Set Test Variable  ${Con_firstName}   ${resp.json()['userProfile']['firstName']}
+        Set Test Variable  ${Con_lastName}   ${resp.json()['userProfile']['lastName']}
+        Set Test Variable  ${cid}  ${resp.json()['userProfile']['id']}
+        # clear_service   ${PUSERNAME_Z}
+        # clear_location  ${PUSERNAME_Z}
+        # clear_queue      ${PUSERNAME_Z}
+        # clear_appt_schedule   ${PUSERNAME_Z}
+        # clear_customer   ${PUSERNAME_Z}
+
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    
+        ${resp}=  Get jaldeeIntegration Settings
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+        ${resp}=   Get Appointment Settings
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+
+        ${lid}=  Create Sample Location
+        ${DAY1}=  get_date
+        ${DAY2}=  add_date  10      
+        ${list}=  Create List  1  2  3  4  5  6  7
+        ${sTime1}=  add_time  0  15
+        ${delta}=  FakerLibrary.Random Int  min=10  max=60
+        ${eTime1}=  add_two   ${sTime1}  ${delta}
+        ${s_name}=  FakerLibrary.name
+        ${s_id}=  Create Sample Service  ${s_name}
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+        ${maxval}=  Convert To Integer   ${delta/4}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+
+        # ${resp}=  Create Sample Schedule
+        # Set Test Variable  ${sch_id}   ${resp['schedule_id']}
+        # Set Test Variable  ${s_id}   ${resp['service_id']}
+        # Set Test Variable  ${lid}   ${resp['location_id']}
+        # Set Test Variable  ${s_name}   ${resp['service_name']}
+
+        ${resp}=  Get Appointment Schedule ById  ${sch_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  id=${sch_id}  apptState=${Qstate[0]}
+
+        ${resp}=  AddCustomer  ${CUSERNAME8}   firstName=${Con_firstName}   lastName=${Con_lastName}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${cid}  ${resp.json()}   
+        FOR  ${i}  IN RANGE  1   4
+        
+                ${firstname}=  FakerLibrary.first_name
+                Set Test Variable  ${firstname${i}}  ${firstname}
+                ${lastname}=  FakerLibrary.last_name
+                Set Test Variable  ${lastname${i}}  ${lastname}
+                ${dob}=  FakerLibrary.Date
+                Set Test Variable  ${dob${i}}  ${dob}
+                ${gender}=   Random Element    ${Genderlist}
+                Set Test Variable  ${gender${i}}  ${gender}
+                ${resp}=  AddFamilyMemberByProvider   ${cid}  ${firstname${i}}  ${lastname${i}}  ${dob${i}}  ${gender${i}}
+                Log  ${resp.json()}
+                Should Be Equal As Strings  ${resp.status_code}  200
+                Set Test Variable  ${mem_id${i}}  ${resp.json()}
+        
+        END
+
+        ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  scheduleId=${sch_id}
+        Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+        Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][1]['time']}
+        Set Test Variable   ${slot3}   ${resp.json()['availableSlots'][2]['time']}
+        Set Test Variable   ${slot4}   ${resp.json()['availableSlots'][3]['time']}
+
+        ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+        ${apptfor2}=  Create Dictionary  id=${mem_id1}   apptTime=${slot2}
+        ${apptfor3}=  Create Dictionary  id=${mem_id2}   apptTime=${slot3}
+        ${apptfor4}=  Create Dictionary  id=${mem_id3}   apptTime=${slot4}
+        ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}  ${apptfor3}  ${apptfor4}
+
+        ${cnote}=   FakerLibrary.word
+        ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${Keys}=  Get Dictionary Keys  ${resp.json()}   sort_keys=False 
+        ${apptid1}=  Get From Dictionary  ${resp.json()}  ${Con_firstName}
+        ${apptid2}=  Get From Dictionary  ${resp.json()}  ${firstName1}
+        ${apptid3}=  Get From Dictionary  ${resp.json()}  ${firstName2}
+        ${apptid4}=  Get From Dictionary  ${resp.json()}  ${firstName3}
+
+        FOR  ${i}  IN RANGE  1   5
+
+                ${resp}=  Get Appointment EncodedID   ${apptid${i}}
+                Log   ${resp.json()}
+                Should Be Equal As Strings  ${resp.status_code}  200
+                ${encId}=   Set Variable   ${resp.json()}
+                Set Test Variable  ${encId${i}}  ${encId}
+
+        END
+
+        ${resp}=  Get Appointment By Id   ${apptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+
+        ${resp}=  Get Appointment By Id   ${apptid2}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+
+        ${resp}=  Get Appointment By Id   ${apptid3}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  uid=${apptid3}  appointmentEncId=${encId3}  appmtDate=${DAY1}  appmtTime=${slot3}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+
+        ${resp}=  Get Appointment By Id   ${apptid4}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  uid=${apptid4}  appointmentEncId=${encId4}  appmtDate=${DAY1}  appmtTime=${slot4}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+
+        ${resp}=   Get Service
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()[0]['id']}   ${s_id}
+        Set Test Variable   ${service_charge}   ${resp.json()[0]['totalAmount']}
+
+        ${netRate}=   Evaluate   ${service_charge}*4
+
+        
+        ${resp}=  Get Bill By UUId  ${apptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['uuid']}         ${apptid1}
+        Should Be Equal As Strings  ${resp.json()['service'][0]['netRate']}         ${netRate}
+        Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}         4.0
+
+        ${resp}=  Get Bill By UUId  ${apptid2}
+        Log   ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  422
+        # Should Be Equal As Strings  "${resp.json()}"   "${CANNOT_CREATE_BILL}"
+
+        ${resp}=  Get Bill By UUId  ${apptid3}
+        Log   ${resp.json()}
+
+        ${resp}=  Get Bill By UUId  ${apptid4}
+        Log   ${resp.json()}
+
+        ${resp}=  Accept Payment  ${apptid1}  ${acceptPaymentBy[0]}  ${netRate}  
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get Bill By UUId  ${apptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Settl Bill  ${apptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get Bill By UUId  ${apptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['uuid']}  ${apptid1}    
+        Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
+
+        ${resp}=  Get Bill By UUId  ${apptid2}
+        Log   ${resp.json()}
+
+        ${resp}=  Get Bill By UUId  ${apptid3}
+        Log   ${resp.json()}
+
+        # # ${resp}=  Get Bill By UUId  ${apptid4}
+        # # Log   ${resp.json()}
+
+        # # ${reason}=  Random Element  ${cancelReason}
+        # # ${cancel_msg}=   FakerLibrary.word
+        # # ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${cancel_msg}  ${DAY1}
+        # # Log   ${resp.json()}
+        # # Should Be Equal As Strings  ${resp.status_code}  200
+
+        # # sleep  02s
+
+        # ${resp}=  Get Appointment By Id   ${apptid1}
+        # Log   ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Verify Response  ${resp}  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[2]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[4]}
+
+        # ${resp}=  Get Appointment By Id   ${apptid2}
+        # Log   ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Verify Response  ${resp}  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[2]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+
+        # ${resp}=  Get Appointment By Id   ${apptid3}
+        # Log   ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Verify Response  ${resp}  uid=${apptid3}  appointmentEncId=${encId3}  appmtDate=${DAY1}  appmtTime=${slot3}  apptBy=PROVIDER   paymentStatus=${paymentStatus[2]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+
+        # ${resp}=  Get Appointment By Id   ${apptid4}
+        # Log   ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Verify Response  ${resp}  uid=${apptid4}  appointmentEncId=${encId4}  appmtDate=${DAY1}  appmtTime=${slot4}  apptBy=PROVIDER   paymentStatus=${paymentStatus[2]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+
+        ${resp}=  Get Bill By UUId  ${apptid1}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+       
+
+        ${netRate}=   Evaluate   ${service_charge}*3
+        ${netrate}=  Convert To Number  ${netrate}  2
+
+        ${resp}=  Get Bill By UUId  ${apptid2}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['uuid']}         ${apptid2}
+        Should Be Equal As Strings  ${resp.json()['service'][0]['netRate']}         ${netRate}
+        Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}         3.0
+
+
+JD-TC- Create Bill -26
+
+        [Documentation]   consumer takes checkin for self and family members
+        ...    Get Bill
+
+        ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
+        Log   ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        Set Test Variable  ${jdconID}   ${resp.json()['id']}
+        Set Test Variable  ${firstName}   ${resp.json()['firstName']}
+        Set Test Variable  ${lastName}   ${resp.json()['lastName']}
+        Set Test Variable  ${cid}  ${resp.json()}  
+         ${DAY}=  get_date
+        Set Suite Variable  ${DAY}
+
+        ${resp}=  Consumer Logout
+        Log   ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+        ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+        ${len}=   Split to lines  ${resp}
+        ${length}=  Get Length   ${len}
+        ${max_party}=  get_maxpartysize_subdomain
+        Log    ${max_party}
+        Set Test Variable  ${d1}  ${max_party['domain']}
+        Set Test Variable  ${sd1}  ${max_party['subdomain']}
+        
+        FOR   ${a}  IN RANGE    ${length}    
+                ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+                Should Be Equal As Strings    ${resp.status_code}    200
+                ${domain}=   Set Variable    ${resp.json()['sector']}
+                ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+                ${resp}=  View Waitlist Settings
+                Log   ${resp.json()}
+                Should Be Equal As Strings    ${resp.status_code}    200
+                Continue For Loop If  '${resp.json()['maxPartySize']}' == '1'
+                Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
+                Exit For Loop If     '${resp.json()['maxPartySize']}' > '1'  
+                # Exit For Loop If  '${domain}' == '${d1}' and '${subdomain}' == '${sd1}'
+        END
+        Set Suite Variable  ${a}
+        Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+        # ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings    ${resp.status_code}    200 
+
+
+        # ${pkg_id}=   get_highest_license_pkg
+        # ${resp}=  Change License Package  ${pkgid[0]}
+        # Should Be Equal As Strings    ${resp.status_code}   200
+
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    
+        ${resp}=  Get jaldeeIntegration Settings
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+       ${resp}=  AddCustomer  ${CUSERNAME12}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${cid}  ${resp.json()}   
+
+        ${resp}=  Create Sample Queue  
+        Set Test Variable  ${qid1}   ${resp['queue_id']}
+        Set Test Variable  ${sid1}   ${resp['service_id']}
+        Set Test Variable  ${lid}   ${resp['location_id']}
+        Set Test Variable  ${s_name}   ${resp['service_name']}
+
+        ${resp}=   Get Service
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()[0]['id']}   ${sid1}
+        Set Test Variable   ${service_charge}   ${resp.json()[0]['totalAmount']}
+
+        # ${resp}=    Get Locations
+        # Log   ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Should Be Equal As Strings  ${resp.json()[0]['id']}   ${lid}
+        # # Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+
+        FOR  ${i}  IN RANGE  1   4
+        
+                ${firstname}=  FakerLibrary.first_name
+                Set Test Variable  ${firstname${i}}  ${firstname}
+                ${lastname}=  FakerLibrary.last_name
+                Set Test Variable  ${lastname${i}}  ${lastname}
+                ${dob}=  FakerLibrary.Date
+                Set Test Variable  ${dob${i}}  ${dob}
+                ${gender}=   Random Element    ${Genderlist}
+                Set Test Variable  ${gender${i}}  ${gender}
+                ${resp}=  AddFamilyMemberByProvider   ${cid}  ${firstname${i}}  ${lastname${i}}  ${dob${i}}  ${gender${i}}
+                Log  ${resp.json()}
+                Should Be Equal As Strings  ${resp.status_code}  200
+                Set Test Variable  ${mem_id${i}}  ${resp.json()}
+        
+        END
+
+        ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY}  ${cnote}  ${bool[1]}  ${cid}
+        Log  ${resp.json()} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+         Set Test Variable  ${wait_id1}  ${resp.json()['parent_uuid']}
+
+        ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY}  ${cnote}  ${bool[1]}  ${mem_id1}
+        Log  ${resp.json()} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+         Set Test Variable  ${wait_id2}  ${resp.json()['parent_uuid']}
+        
+      
+        ${resp}=  Get Waitlist By Id  ${wait_id1}
+        Log  ${resp.json()} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  ynwUuid=${wait_id1}    date=${DAY}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby[1]}  personsAhead=0
+        Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id1}
+        Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+        Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
+
+        ${resp}=  Get Waitlist By Id  ${wait_id2}
+        Log  ${resp.json()} 
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  ynwUuid=${wait_id2}    date=${DAY}  waitlistStatus=${wl_status[1]}  partySize=1   waitlistedBy=${waitlistedby[1]}  personsAhead=1
+        Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id1}
+        Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+        # Should Be Equal As Strings  ${resp.json()['parentUuid']}                      ${wait_id1}
+        Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${mem_id1}
+
+
+        ${netRate}=   Evaluate   ${service_charge}*4
+
+        ${resp}=  Get Bill By UUId  ${wait_id1}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['uuid']}         ${wait_id1}
+        # Should Be Equal As Strings  ${resp.json()['service'][0]['netRate']}         ${netRate}
+        # Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}         4.0
+        
+        ${resp}=  Get Bill By UUId  ${wait_id2}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['uuid']}         ${wait_id2}
+        Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}         ${firstname1}
+        should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}         ${lastName1}
+
+        
 JD-TC- Create Bill -UH5
 
         [Documentation]  Create Bill for canceld waitlist
