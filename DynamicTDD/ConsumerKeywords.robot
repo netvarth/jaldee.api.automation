@@ -1958,3 +1958,9 @@ Get Service By Location Appoinment
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}  expected_status=any     
     [Return]  ${resp} 
+
+Get locations by service
+    [Arguments]      ${serviceId}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /consumer/service/${serviceId}/location    expected_status=any
+    [Return]  ${resp}
