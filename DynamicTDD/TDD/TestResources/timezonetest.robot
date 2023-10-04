@@ -17,15 +17,35 @@ Variables   /ebs/TDD/varfiles/hl_musers.py
 Variables   /ebs/TDD/varfiles/consumerlist.py
 Variables   /ebs/TDD/varfiles/consumermail.py
 
+*** Keywords ***
 
+Get Date Time via Timezone
+    [Arguments]    ${timezone}
+    ${zone}  @{loc}=  Split String    ${timezone}  /
+    ${type}=    Evaluate     type($loc).__name__
+    ${loc}=  Random Element    ${loc}
+    # IF  type($loc).__name__ == 'list'
+    #     ${loc}=  Random Element    ${loc}
+    # END
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  provider/location/date/${zone}/${loc}  expected_status=any
+    [Return]  ${resp}
 
 
 *** Test Cases ***  
 Testing timezones
 
+    ${resp}=  Get Date Time via Timezone   America/Indiana/Indianapolis
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Date Time via Timezone   Asia/Kolkata
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     # ${str} = 	Replace String Using Regexp 	America/Indiana/Indianapolis 	\\/\(\.+\){2} 	${EMPTY} 	count=1
-    ${str} = 	Replace String Using Regexp 	America/Indiana/Indianapolis  \(\\/.*\)\{2\}  ${EMPTY}
-    ${matches} = 	Get Regexp Matches 	America/Indiana/Indianapolis 	^.*/
+    # ${str} = 	Replace String Using Regexp 	America/Indiana/Indianapolis  \(\\/.*\)\{2\}  ${EMPTY}
+    # ${matches} = 	Get Regexp Matches 	America/Indiana/Indianapolis 	^.*/
     # ${ts} =  Evaluate  1523126888080/1000
     # ${start_time}=    DateTime.Convert Date    ${ts}   result_format="%a, %d %b %Y"
     

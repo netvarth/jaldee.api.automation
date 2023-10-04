@@ -10862,12 +10862,14 @@ Get Invoice By Id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${uid}    expected_status=any
     [Return]  ${resp}
+    
 
-Get Date Time via Timezone
-    [Arguments]    ${timezone}
-    ${zone}  ${loc}=  Split String    ${timezone}  /
+Get Date Time by Timezone
+    [Arguments]  ${timezone}
+    ${zone}  @{loc}=  Split String    ${timezone}  /
+    ${loc}=  Random Element    ${loc}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  provider/location/date/${zone}/${loc}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/location/date/${zone}/${loc}  expected_status=any
     [Return]  ${resp}
 
 
@@ -11025,11 +11027,6 @@ Draft Loan Application
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanuid}   data=${data}  expected_status=any
     [Return]  ${resp}
 
-Get Date Time by Timezone
-    [Arguments]  ${timezone}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/location/date/${timezone}  expected_status=any
-    [Return]  ${resp}
     
 Save Customer Details 
 
