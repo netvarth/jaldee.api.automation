@@ -11,7 +11,7 @@ import logging
 from RequestsLibrary.utils import is_file_descriptor
 from robot.api import logger
 from faker import Faker
-from Keywordspy import *
+from Keywordspy import second_password
 from db import ecrypt_data, decrypt_data, Set_TZ_Header
 BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP

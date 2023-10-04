@@ -36,6 +36,7 @@ from base64 import b64encode, b64decode
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 import socket
+from Keywordspy import create_tz
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
@@ -5924,6 +5925,7 @@ def get_Timezone_by_lat_long(latitude, longitude):
     log_response(r)
     data = r.json()
     print (data)
+    data =  create_tz(data)
     return  data
 
 def get_time_by_timezone(tz):

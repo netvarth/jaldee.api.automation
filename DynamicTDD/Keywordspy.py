@@ -1,4 +1,5 @@
 import pycurl
+import random
 try:
     from io import StringIO  ## for Python 3
 except ImportError:
@@ -85,3 +86,14 @@ def support_secondpassword():
                 return 'dinner'
     except:
         return 0
+
+def create_tz(tz):
+    try:
+        zone, *loc = tz.split('/')
+        loc = random.choice(loc)
+        return (zone+'/'+loc)
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+

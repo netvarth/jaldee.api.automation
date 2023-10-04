@@ -8,7 +8,9 @@ Library     json
 Library     requests
 # Library     FakerLibrary
 Library    FakerLibrary    locale=en_IN
-Library     /ebs/TDD/db.py
+# Library     /ebs/TDD/db.py
+Library     /ebs/TDD/Keywordspy.py
+# Library      /ebs/TDD/test.py
 Resource    /ebs/TDD/ProviderKeywords.robot
 Resource    /ebs/TDD/ConsumerKeywords.robot
 Resource    /ebs/TDD/SuperAdminKeywords.robot
@@ -35,6 +37,18 @@ Get Date Time via Timezone
 *** Test Cases ***  
 Testing timezones
 
+    
+    Log  ${CURDIR}
+    Log  ${EXECDIR} 
+    ${envs}=   Get Environment Variables
+    Log  ${envs} 
+    
+    ${tz}=  create_tz  America/Indiana/Indianapolis
+    ${tz}=  test.create_tz  America/Indiana/Indianapolis
+    ${tz}=  test.create_tz  America/Indiana/Indianapolis
+    ${tz}=  test.create_tz  America/Indiana/Indianapolis
+    # ${tz}=  Keywordspy.create_tz  Asia/Kolkata
+    
     ${time}=   db.get_time_by_timezone   America/Indiana/Indianapolis
 
     ${time}=   db.get_time_by_timezone   Asia/Kolkata
@@ -47,6 +61,8 @@ Testing timezones
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    # ${path1} 	${dir} = 	Split Path   America/Indiana/Indianapolis
+    # ${path1} 	${dir} = 	Split Path   Asia/Kolkata
     # ${str} = 	Replace String Using Regexp 	America/Indiana/Indianapolis 	\\/\(\.+\){2} 	${EMPTY} 	count=1
     # ${str} = 	Replace String Using Regexp 	America/Indiana/Indianapolis  \(\\/.*\)\{2\}  ${EMPTY}
     # ${matches} = 	Get Regexp Matches 	America/Indiana/Indianapolis 	^.*/
