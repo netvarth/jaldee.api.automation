@@ -959,6 +959,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
     Log   ${resp.content}
@@ -1068,6 +1071,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${acc_id2}  ${token} 
     Log   ${resp.content}
@@ -1125,6 +1131,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id3}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${acc_id3}  ${token} 
     Log   ${resp.content}
@@ -1192,6 +1201,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
     Log   ${resp.content}
@@ -1301,6 +1313,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id2}  ${token} 
     Log   ${resp.content}
@@ -1358,6 +1373,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id3}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id3}  ${token} 
     Log   ${resp.content}
@@ -1425,6 +1443,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
     Log   ${resp.content}
@@ -1537,6 +1558,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id2}  ${token} 
     Log   ${resp.content}
@@ -1594,6 +1618,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id3}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${acc_id3}  ${token} 
     Log   ${resp.content}
@@ -1859,6 +1886,9 @@ JD-TC-Take Appointment in Different Timezone-3
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${acc_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${acc_id1}  ${token} 
     Log   ${resp.content}
@@ -1925,30 +1955,32 @@ JD-TC-Take Appointment in Different Timezone-4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dom_len}=  Get Length  ${resp.json()}
-    ${dom}=  random.randint  ${0}  ${dom_len-1}
-    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
-    Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
-    Log   ${domain}
-    
-    FOR  ${subindex}  IN RANGE  ${sdom_len}
-        ${sdom}=  random.randint  ${0}  ${sdom_len-1}
-        Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
-        ${is_corp}=  check_is_corp  ${subdomain}
+    FOR  ${domindex}  IN RANGE  ${dom_len}
+        ${dom}=  random.randint  ${0}  ${dom_len-1}
+        ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+        Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+        Log   ${domain}
+        FOR  ${subindex}  IN RANGE  ${sdom_len}
+            ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+            Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+            ${is_corp}=  check_is_corp  ${subdomain}
+            Exit For Loop If  '${is_corp}' == 'True'
+        END
+        Log   ${subdomain}
         Exit For Loop If  '${is_corp}' == 'True'
     END
-    Log   ${subdomain}
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${USProvider}  ${licpkgid}
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${US_MultiUser}  ${licpkgid}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${USProvider}  0
+    ${resp}=  Account Activation  ${US_MultiUser}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${USProvider}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${US_MultiUser}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
-    ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${US_MultiUser}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
@@ -1959,15 +1991,15 @@ JD-TC-Take Appointment in Different Timezone-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${ph1}=  Evaluate  ${USProvider}+15566122
-    ${ph2}=  Evaluate  ${USProvider}+25566122
+    ${ph1}=  Evaluate  ${US_MultiUser}+15566122
+    ${ph2}=  Evaluate  ${US_MultiUser}+25566122
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${USProvider}.${test_mail}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${US_MultiUser}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
@@ -1988,6 +2020,7 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${acc_id1}  ${resp.json()['id']}
+    Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
     Log  ${fields.content}
@@ -2007,7 +2040,7 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${USProvider}.${test_mail}
+    Set Test Variable  ${email_id}  ${P_Email}${US_MultiUser}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${email_id}
     Log  ${resp.content}
@@ -2071,9 +2104,10 @@ JD-TC-Take Appointment in Different Timezone-4
     ${dob}=  FakerLibrary.Date
     ${pin}=  FakerLibrary.postcode
     ${user_dis_name}=  FakerLibrary.last_name
-    ${employee_id}=  FakerLibrary.last_name
+    ${employee_id}=  FakerLibrary.Random Number
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${US_User_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${US_User_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${countryCodes[0]}  ${US_User_U1}  ${countryCodes[0]}  ${US_User_U1}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${user_dis_name}  employeeId  ${employee_id}
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${US_User_U1}.${test_mail}   ${userType[0]}  ${EMPTY}  ${countryCodes[0]}  ${US_User_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}  bProfilePermitted  ${boolean[1]}  displayOrder  1  userDisplayName  ${firstname}  employeeId  ${employee_id}
+    # ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${us_uid1}  ${resp.json()}
@@ -2083,7 +2117,7 @@ JD-TC-Take Appointment in Different Timezone-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
 
-    ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${spec}=  get_specs  ${resp.json()}

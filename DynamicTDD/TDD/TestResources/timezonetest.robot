@@ -23,6 +23,13 @@ Variables   /ebs/TDD/varfiles/consumermail.py
 *** Test Cases ***  
 Testing timezones
 
+    # ${str} = 	Replace String Using Regexp 	America/Indiana/Indianapolis 	\\/\(\.+\){2} 	${EMPTY} 	count=1
+    ${str} = 	Replace String Using Regexp 	America/Indiana/Indianapolis  \(\\/.*\)\{2\}  ${EMPTY}
+    ${matches} = 	Get Regexp Matches 	America/Indiana/Indianapolis 	^.*/
+    # ${ts} =  Evaluate  1523126888080/1000
+    # ${start_time}=    DateTime.Convert Date    ${ts}   result_format="%a, %d %b %Y"
+    
+*** comment ***
     ${rand_loc}=  FakerLibrary.Local Latlng
     ${rand_loc}=  FakerLibrary.Local Latlng  country_code=US  coords_only=True
     ${rand_loc}=  FakerLibrary.Local Latlng  country_code=IN  
