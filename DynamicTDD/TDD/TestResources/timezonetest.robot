@@ -35,6 +35,10 @@ Get Date Time via Timezone
 *** Test Cases ***  
 Testing timezones
 
+    ${time}=   db.get_time_by_timezone   America/Indiana/Indianapolis
+
+    ${time}=   db.get_time_by_timezone   Asia/Kolkata
+    
     ${resp}=  Get Date Time via Timezone   America/Indiana/Indianapolis
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
