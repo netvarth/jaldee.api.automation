@@ -29,9 +29,9 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Remove Prescription-1
+JD-TC-Create Sections-1
 
-    [Documentation]    Remove Prescription with valid details.
+    [Documentation]    Create Sections with valid details.
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
      Log  ${iscorp_subdomains}
@@ -43,7 +43,7 @@ JD-TC-Remove Prescription-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9778810
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9778802
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -204,15 +204,26 @@ JD-TC-Remove Prescription-1
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
 
-    ${toothNo}=   Random Int  min=10   max=99
-    ${note1}=  FakerLibrary.word
-    ${investigation}=    Create List   ${note1}
-    ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
 
-    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable      ${id1}           ${resp.json()}
+    ${templateName}=  FakerLibrary.name
+    Set Suite Variable    ${templateName}
+    ${frequency}=  Random Int  min=500   max=1000
+    Set Suite Variable    ${frequency}
+    ${duration}=  Random Int  min=1   max=100
+    Set Suite Variable    ${duration}
+    ${instructions}=  FakerLibrary.name
+    Set Suite Variable    ${instructions}
+    ${dosage}=  Random Int  min=500   max=1000
+    Set Suite Variable    ${dosage}
+     ${medicineName}=  FakerLibrary.name
+    Set Suite Variable    ${medicineName}
+
+    ${prescription}=    Create Dictionary    frequency=${frequency}  duration=${duration}  instructions=${instructions}  dosage=${dosage}   medicineName=${medicineName} 
+
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName}  ${prescription}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${temId}    ${resp.json()}
 
     ${med_name}=      FakerLibrary.name
     Set Suite Variable    ${med_name}
@@ -248,164 +259,57 @@ JD-TC-Remove Prescription-1
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption1}
 
-    ${prescriptionAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${prescriptionAttachments}
-    ${prescriptionAttachments}=  Create List   ${prescriptionAttachments}
-    Set Suite Variable    ${prescriptionAttachments}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
 
-    ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
-    Set Suite Variable    ${mrPrescriptions}
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id}   ${resp.content}
+    ${attachments}=    Create Dictionary   action=${file_action[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}    driveId=${driveId}
+    Log  ${attachments}
+    Set Suite Variable    ${attachments}
 
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn} 
-    Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
+    ${voiceAttachments}=    Create Dictionary   action=${file_action[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}    driveId=${driveId}
+    Log  ${voiceAttachments}
+    ${voiceAttachments}=  Create List   ${voiceAttachments}
+    Set Suite Variable    ${voiceAttachments}
 
-    
-
-    ${resp}=    Remove Prescription   ${prescription_id}   
+    ${resp}=    Create Section Template    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
+    ${resp}=    Get Section Template   ${caseUId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
-   
-JD-TC-Remove Prescription-2
+    Set Test Variable    ${temp_id}    ${resp.json()[0]['id']}
+    Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
 
-    [Documentation]    CCreate Prescription with Empty caseId and Remove that Prescription
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
+    ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}
+    Set Suite Variable    ${CHIEFCOMPLAINT}
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}  
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
+    Set Suite Variable    ${Sec_Id}    ${resp.json()['id']}
+    Set Suite Variable    ${Sec_UId}    ${resp.json()['uid']}
 
-     ${resp}=    Remove Prescription   ${prescription_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Remove Prescription-3
-
-    [Documentation]    Create Prescription with Empty dentalRecordId and Remove that Prescription
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
-
-     ${resp}=    Remove Prescription   ${prescription_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Remove Prescription-4
-
-    [Documentation]    Create Prescription with Empty html  and Remove that Prescription.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
-
-      ${resp}=    Remove Prescription   ${prescription_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Remove Prescription-UH1
-
-    [Documentation]    Remove that Prescription that already removed
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
+    ${resp}    Get Sections By UID     ${Sec_UId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()['account']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()['status']}    ${bool[1]}
 
 
-     ${resp}=    Remove Prescription   ${prescription_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-    ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Remove Prescription-UH2
-
-    [Documentation]     Remove Prescription with invalid id.
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-     ${invalid}=   Random Int  min=123   max=400
-
-     ${resp}=    Remove Prescription   ${invalid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-  
-JD-TC-Remove Prescription-UH3
-
-    [Documentation]    Remove Prescription with another provider login.
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Remove Prescription   ${prescription_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
-
-JD-TC-Remove Prescription-UH4
-
-    [Documentation]    Remove Prescription with consumer login.
-
-    ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-     ${resp}=    Remove Prescription   ${prescription_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
 
