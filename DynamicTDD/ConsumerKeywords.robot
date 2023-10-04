@@ -3228,7 +3228,6 @@ Get convenienceFee Details
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
-<<<<<<< HEAD
     ${resp}=   PUT On Session  ynw  /consumer/payment/modes/MockConvenienceFee/${accountId}   params=${cons_params}  data=${data}   expected_status=any  headers=${cons_headers}
     [Return]  ${resp}
 
@@ -3246,7 +3245,6 @@ Get Service By Location Appoinment
     [Return]  ${resp} 
 
 
-=======
     ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}  expected_status=any     
     [Return]  ${resp} 
 
@@ -3255,4 +3253,3 @@ Get locations by service
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/service/${serviceId}/location    expected_status=any
     [Return]  ${resp}
->>>>>>> refs/remotes/origin/master

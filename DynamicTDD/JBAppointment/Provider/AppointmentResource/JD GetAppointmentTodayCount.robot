@@ -4977,17 +4977,10 @@ JD-TC-GetAppointmentTodayCount-23
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-<<<<<<< HEAD
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[2]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}   ${lname1}
-=======
     ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
->>>>>>> refs/remotes/origin/master
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
@@ -5015,17 +5008,10 @@ JD-TC-GetAppointmentTodayCount-23
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  
-<<<<<<< HEAD
-    ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[2]}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}   ${lname2}
-=======
     ...   appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
->>>>>>> refs/remotes/origin/master
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id2}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
