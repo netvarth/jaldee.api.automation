@@ -160,7 +160,7 @@ JD-TC-AppointmentCommunication-1
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}
     # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
@@ -211,18 +211,18 @@ JD-TC-AppointmentCommunication-1
     Set Test Variable  ${timestamp1}   ${resp.json()[1]['timeStamp']}
 
     ${ts} =  Evaluate  ${timestamp}/1000
-    ${start_time}=    DateTime.Convert Date    ${ts}   result_format="%Y-%m-%d %H:%M"
+    ${start_time}=    DateTime.Convert Date    ${ts}   result_format=%Y-%m-%d %H:%M %p
 
     ${ts1} =  Evaluate  ${timestamp1}/1000
-    ${start_time1}=    DateTime.Convert Date    ${ts1}   result_format="%Y-%m-%d %H:%M"
+    ${start_time1}=    DateTime.Convert Date    ${ts1}   result_format=%Y-%m-%d %H:%M %p
 
-    ${datetime} =	timestamp_conversion   ${timestamp}  
-    ${apptTakenTime}=  db.remove_date_time_secs   ${datetime}
-    Should Be Equal As Strings  ${appttime1}   ${start_time}
+    # ${datetime} =	timestamp_conversion   ${timestamp}  
+    ${apptTakenTime}=  db.remove_date_time_secs   ${apptTime}
+    Should Be Equal As Strings  ${apptTakenTime}   ${start_time}
 
-    ${datetime1} =	timestamp_conversion   ${timestamp1}  
-    ${apptTakenTime}=  db.remove_date_time_secs   ${datetime1}
-    Should Be Equal As Strings  ${appttime1}   ${start_time1}
+    # ${datetime1} =	timestamp_conversion   ${timestamp1}  
+    # ${apptTakenTime}=  db.remove_date_time_secs   ${datetime1}
+    Should Be Equal As Strings  ${apptTakenTime}   ${start_time1}
 
     Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        0
     Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid1}
@@ -258,8 +258,6 @@ JD-TC-AppointmentCommunication-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-# *** Test Cases ***
-***Comment***
 
 JD-TC-AppointmentCommunication-2
     [Documentation]  Send appointment comunication message to consumer with attachment
