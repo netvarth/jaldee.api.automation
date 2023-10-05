@@ -53,7 +53,9 @@ JD-TC-ChangeReadStatus-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME90}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -97,7 +99,9 @@ JD-TC-ChangeReadStatus-2
     ${resp}=  Encrypted Provider Login  ${MUSERNAME91}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
     
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -148,7 +152,9 @@ JD-TC-ChangeReadStatus-3
     ${resp}=  Encrypted Provider Login  ${MUSERNAME92}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     clear_Providermsg  ${MUSERNAME92}
     
@@ -201,7 +207,9 @@ JD-TC-ChangeReadStatus-4
     ${resp}=  Encrypted Provider Login  ${MUSERNAME94}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -245,7 +253,9 @@ JD-TC-ChangeReadStatus-5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME95}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -288,7 +298,9 @@ JD-TC-ChangeReadStatus-6
     ${resp}=  Encrypted Provider Login  ${MUSERNAME96}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -331,7 +343,9 @@ JD-TC-ChangeReadStatus-7
     ${resp}=  Encrypted Provider Login  ${MUSERNAME97}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -378,7 +392,9 @@ JD-TC-ChangeReadStatus-8
     ${resp}=  Encrypted Provider Login  ${MUSERNAME98}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -425,7 +441,9 @@ JD-TC-ChangeReadStatus-9
     ${resp}=  Encrypted Provider Login  ${MUSERNAME99}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -472,7 +490,9 @@ JD-TC-ChangeReadStatus-10
     ${resp}=  Encrypted Provider Login  ${MUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -510,7 +530,9 @@ JD-TC-ChangeReadStatus-11
     ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${fname}=  Fakerlibrary.firstname
     ${lname}=  Fakerlibrary.lastname
@@ -564,7 +586,9 @@ JD-TC-ChangeReadStatus-12
     ${resp}=  Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${fname}=  Fakerlibrary.firstname
     ${lname}=  Fakerlibrary.lastname
@@ -618,7 +642,9 @@ JD-TC-ChangeReadStatus-13
     ${resp}=  Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${fname}=  Fakerlibrary.firstname
     ${lname}=  Fakerlibrary.lastname
@@ -672,7 +698,9 @@ JD-TC-ChangeReadStatus-14
     ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${fname}=  Fakerlibrary.firstname
     ${lname}=  Fakerlibrary.lastname
@@ -724,7 +752,9 @@ JD-TC-ChangeReadStatus-15
     ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -825,7 +855,9 @@ JD-TC-ChangeReadStatus-16
     ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -921,7 +953,9 @@ JD-TC-ChangeReadStatus-17
     ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -1017,7 +1051,9 @@ JD-TC-ChangeReadStatus-18
     ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -1125,7 +1161,9 @@ JD-TC-ChangeReadStatus-19
     ${resp}=  Encrypted Provider Login  ${MUSERNAME90}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence

@@ -81,10 +81,12 @@ Account with Multiple Users in NBFC
     FOR   ${a}  IN RANGE   ${length}   
         ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        Set Test Variable  ${Dom}   ${resp.json()['sector']}
-        Set Test Variable  ${SubDom}   ${resp.json()['subSector']}
-        ${name}=  Set Variable  ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
+        ${decrypted_data}=  db.decrypt_data   ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        Set Test Variable  ${Dom}   ${decrypted_data['sector']}
+        Set Test Variable  ${SubDom}   ${decrypted_data['subSector']}
+        ${name}=  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
         Continue For Loop If  '${Dom}' != "finance"
         Continue For Loop If  '${SubDom}' != "nbfc"
@@ -114,8 +116,10 @@ JD-TC-Change Status Of Uploaded File-1
     ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
