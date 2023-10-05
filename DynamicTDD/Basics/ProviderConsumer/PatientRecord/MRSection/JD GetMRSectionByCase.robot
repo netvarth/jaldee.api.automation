@@ -41,7 +41,7 @@ JD-TC-Create Sections-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9658802
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+8658802
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -290,20 +290,22 @@ JD-TC-Create Sections-1
     Should Be Equal As Strings     ${resp.json()['account']}    ${accountId}
     Should Be Equal As Strings     ${resp.json()['mrCase']['id']}    ${caseId}
     Should Be Equal As Strings     ${resp.json()['mrCase']['uid']}    ${caseUId}
-    Should Be Equal As Strings     ${resp.json()['mrCase']['title']}    ${title}
-    Should Be Equal As Strings     ${resp.json()['doctor']['id']}    ${pid}
-    Should Be Equal As Strings     ${resp.json()['templateDetailId']}    ${temp_id}
-    Should Be Equal As Strings     ${resp.json()['sectionType']}    ${enumName}
-    Should Be Equal As Strings     ${resp.json()['sectionValue']['chiefComplaint']}    ${caption}
-    Should Be Equal As Strings     ${resp.json()['status']}    ${toggle[0]}
 
-    ${caption11}=  Fakerlibrary.Sentence
-    ${CHIEFCOMPLAINT1}=  create Dictionary  chiefComplaint=${caption11}
-    Set Suite Variable    ${CHIEFCOMPLAINT1}
+    ${DAY}=    get_date   
+    ${start}=    Get Current Date    result_format=%H:%M:%S
 
-    ${resp}=    Update MR Sections    ${Sec_UId}     ${CHIEFCOMPLAINT1}    ${attachments}   voiceAttachments=${voiceAttachments}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-
+    ${resp}    Get MR Sections By Case     ${caseUId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY} ${start}

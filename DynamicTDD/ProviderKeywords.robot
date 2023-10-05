@@ -11215,7 +11215,7 @@ Create Sections
     [Return]  ${resp}
 
 Update MR Sections
-    [Arguments]    ${uid}   ${sectionValue}   ${attachments}   @{vargs}   &{kwargs}
+    [Arguments]    ${uid}    ${sectionType}   ${sectionValue}   ${attachments}   @{vargs}   &{kwargs}
     Check And Create YNW Session
     ${len}=  Get Length  ${vargs}
     ${attachments}=  Create List  
@@ -11224,8 +11224,8 @@ Update MR Sections
         Exit For Loop If  ${len}==0
         Append To List  ${attachments}  ${vargs[${index}]}
     END
-    ${data}=    Create Dictionary    sectionValue=${sectionValue}    attachments=${attachments}        
-    $FOR    ${key}    ${value}    IN    &{kwargs}
+    ${data}=    Create Dictionary    sectionType=${sectionType}     sectionValue=${sectionValue}    attachments=${attachments}        
+    FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}

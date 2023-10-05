@@ -31,7 +31,7 @@ ${description1}    &^7gsdkqwrrf
 
 JD-TC-Create Sections-1
 
-    [Documentation]    Create Sections with valid details.
+    [Documentation]    Create Sections with valid details then filter by caseUid.
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
      Log  ${iscorp_subdomains}
@@ -43,7 +43,7 @@ JD-TC-Create Sections-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9778802
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+97777802
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -89,18 +89,6 @@ JD-TC-Create Sections-1
      ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    # Log  ${resp.json()}         
-    # Should Be Equal As Strings            ${resp.status_code}    200
-
-    # ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    # Log  ${decrypted_data}
-
-    # Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    # Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
-    # Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -285,8 +273,8 @@ JD-TC-Create Sections-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()[0]['enumName']}   ${}
-    Set Test Variable    ${temp_id}    ${resp.json()[0]['id']}
-    Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
+    Set Suite Variable    ${temp_id}    ${resp.json()[0]['id']}
+    Set Suite Variable    ${enumName}    ${resp.json()[0]['sectionType']}
     # Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
 
     ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}
@@ -295,7 +283,232 @@ JD-TC-Create Sections-1
     ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${Sec_Id}    ${resp.json()['id']}
+    Set Suite Variable    ${Sec_UId}    ${resp.json()['uid']}
+
+    ${start}=    Get Current Date    result_format=%H:%M:%S
+    Set Suite Variable    ${start} 
 
     ${resp}=    Get Sections Filter   caseUid-eq=${caseUId}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+
+JD-TC-Create Sections-2
+
+    [Documentation]    Create Sections with valid details then filter by uid.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   uid-eq=${Sec_UId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+
+JD-TC-Create Sections-3
+
+    [Documentation]    Create Sections with valid details then filter by doctorId.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   doctorId-eq=${pid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+
+JD-TC-Create Sections-4
+
+    [Documentation]    Create Sections with valid details then filter by doctorFirstName.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   doctorFirstName-eq=${pdrfname}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['firstName']}    ${pdrfname}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+
+JD-TC-Create Sections-5
+
+    [Documentation]    Create Sections with valid details then filter by doctorLastName.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   doctorLastName-eq=${pdrlname}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['lastName']}    ${pdrlname}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+
+JD-TC-Create Sections-6
+
+    [Documentation]    Create Sections with valid details then filter by sectionType.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   sectionType-eq=${enumName}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['lastName']}    ${pdrlname}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+
+JD-TC-Create Sections-7
+
+    [Documentation]    Create Sections with valid details then filter by spInternalStatus.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   spInternalStatus-eq=${enumName}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['lastName']}    ${pdrlname}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+
+JD-TC-Create Sections-8
+
+    [Documentation]    Create Sections with valid details then filter by createdDate.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   createdDate-eq=${DAY1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['lastName']}    ${pdrlname}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+
+JD-TC-Create Sections-9
+
+    [Documentation]    Create Sections with valid details then filter by updatedDate.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${DAY2}=  add_date  10 
+
+    ${caption11}=  Fakerlibrary.Sentence
+    ${CHIEFCOMPLAINT1}=  create Dictionary  chiefComplaint=${caption11}    
+    Set Suite Variable    ${CHIEFCOMPLAINT1}
+
+    ${resp}=    Update MR Sections    ${Sec_UId}    ${enumName}     ${CHIEFCOMPLAINT1}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sections Filter   updatedDate-eq=${DAY2}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['lastName']}    ${pdrlname}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
