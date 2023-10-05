@@ -420,3 +420,39 @@ JD-TC-Remove Prescription-UH4
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
 
+JD-TC-Remove Prescription-UH5
+
+    [Documentation]     Remove Prescription with userid.
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${prescription_uid1}   ${resp.json()}
+
+     ${u_id}=  Create Sample User
+    Set Suite Variable  ${u_id}
+
+    ${resp}=  Get User By Id      ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
+    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
+
+    ${resp}=  SendProviderResetMail   ${sam_email}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${sam_email}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+     ${resp}=    Remove Prescription   ${prescription_uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+

@@ -518,7 +518,7 @@ JD-TC-Update Prescription-UH4
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}   "${HTML_REQUIRED}"
 
-JD-TC-Update Prescription-UH4
+JD-TC-Update Prescription-UH5
 
     [Documentation]    update Prescription with invalid case id.
 
@@ -547,6 +547,57 @@ JD-TC-Update Prescription-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.content}   "${INVALID_MR_CASE_ID}"
+
+JD-TC-Update Prescription-UH6
+
+    [Documentation]   update Prescription where user type as assistant.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    4    0123456789
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    clear_users  ${PUSERPH0}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${email}=   FakerLibrary.email
+    ${gender}=  Random Element    ${Genderlist}
+    # ${pin}=  get_pincode
+
+    # ${resp}=  Get LocationsByPincode     ${pin}
+    FOR    ${i}    IN RANGE    3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+
+    ${whpnum}=  Evaluate  ${PUSERPH0}+336245
+    ${tlgnum}=  Evaluate  ${PUSERPH0}+336345
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id}  ${resp.json()}
+
+
+    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${u_id}    ${order}      ${id1}    ${html}     ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${PRESCRIPTION_CANNOT_UPDATE_BY_CHANGEDOCTOR}
+
     
     
 

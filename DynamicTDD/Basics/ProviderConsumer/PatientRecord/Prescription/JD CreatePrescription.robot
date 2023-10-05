@@ -454,7 +454,7 @@ JD-TC-Create Prescription-UH5
     # Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     # Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
-D-TC-Create Prescription-UH6
+JD-TC-Create Prescription-UH6
 
     [Documentation]    Manual Prescription with Empty html.
 
@@ -465,3 +465,54 @@ D-TC-Create Prescription-UH6
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}     ${mrPrescriptions}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+
+
+JD-TC-Create Prescription-UH7
+
+    [Documentation]    create prescription using usertype as assistant
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${PO_Number}    Generate random string    4    0123456789
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    clear_users  ${PUSERPH0}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${email}=   FakerLibrary.email
+    ${gender}=  Random Element    ${Genderlist}
+    # ${pin}=  get_pincode
+
+    # ${resp}=  Get LocationsByPincode     ${pin}
+    FOR    ${i}    IN RANGE    3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
+    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+
+    ${whpnum}=  Evaluate  ${PUSERPH0}+336245
+    ${tlgnum}=  Evaluate  ${PUSERPH0}+336345
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id}  ${resp.json()}
+
+    ${resp}=    Create Prescription    ${cid}    ${u_id}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+     Should Be Equal As Strings   ${resp.json()}   ${ONLY_USER_TYPE_DOCTOR_CAN_ADD_PRESCRIPTION}
