@@ -259,12 +259,12 @@ JD-TC-Remove Prescription-1
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id}   ${resp.content}
+    Set Suite Variable    ${prescription_uid}   ${resp.json()}
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
-    Log   ${resp.content}
+    Log   ${resp.content} 
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
@@ -280,18 +280,20 @@ JD-TC-Remove Prescription-1
 
     
 
-    ${resp}=    Remove Prescription   ${prescription_id}   
+    ${resp}=    Remove Prescription   ${prescription_uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionStatus']}     ${wl_status[4]}
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledDate']}     ${DAY1}  
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledBy']}     ${pid}
    
 JD-TC-Remove Prescription-2
 
-    [Documentation]    CCreate Prescription with Empty caseId and Remove that Prescription
+    [Documentation]    Create Prescription with Empty caseId and Remove that Prescription
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -300,15 +302,18 @@ JD-TC-Remove Prescription-2
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
+    Set Test Variable    ${prescriptions_uid1}   ${resp.json()}
 
-     ${resp}=    Remove Prescription   ${prescription_id1}   
+     ${resp}=    Remove Prescription   ${prescriptions_uid1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionStatus']}     ${wl_status[4]}
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledDate']}     ${DAY1}  
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledBy']}     ${pid}
 
 JD-TC-Remove Prescription-3
 
@@ -321,15 +326,18 @@ JD-TC-Remove Prescription-3
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
+    Set Test Variable    ${prescription_uid1}   ${resp.json()}
 
-     ${resp}=    Remove Prescription   ${prescription_id1}   
+     ${resp}=    Remove Prescription   ${prescription_uid1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionStatus']}     ${wl_status[4]}
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledDate']}     ${DAY1}  
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledBy']}     ${pid}
 
 JD-TC-Remove Prescription-4
 
@@ -342,15 +350,18 @@ JD-TC-Remove Prescription-4
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
+    Set Test Variable    ${prescription_uid1}   ${resp.json()}
 
-      ${resp}=    Remove Prescription   ${prescription_id1}   
+      ${resp}=    Remove Prescription   ${prescription_uid1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionStatus']}     ${wl_status[4]}
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledDate']}     ${DAY1}  
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledBy']}     ${pid}
 
 JD-TC-Remove Prescription-UH1
 
@@ -361,7 +372,7 @@ JD-TC-Remove Prescription-UH1
     Should Be Equal As Strings            ${resp.status_code}    200
 
 
-     ${resp}=    Remove Prescription   ${prescription_id}   
+     ${resp}=    Remove Prescription   ${prescription_uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
@@ -391,7 +402,7 @@ JD-TC-Remove Prescription-UH3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Remove Prescription   ${prescription_id}   
+    ${resp}=    Remove Prescription   ${prescription_uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
@@ -404,7 +415,7 @@ JD-TC-Remove Prescription-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-     ${resp}=    Remove Prescription   ${prescription_id}   
+     ${resp}=    Remove Prescription   ${prescription_uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NoAccess}

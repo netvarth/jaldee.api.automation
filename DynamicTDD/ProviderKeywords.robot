@@ -11150,7 +11150,7 @@ Create Prescription
     [Return]  ${resp}
 
 Update Prescription 
-    [Arguments]    ${prescriptionId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    @{vargs}  &{kwargs}
+    [Arguments]    ${prescriptionUId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    @{vargs}  &{kwargs}
     ${len}=  Get Length  ${vargs}
     ${mrPrescriptions}=  Create List  
 
@@ -11164,7 +11164,7 @@ Update Prescription
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionId}    data=${data}    expected_status=any
+    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}    data=${data}    expected_status=any
     [Return]  ${resp}
 
 Get Prescription By Provider consumer Id
@@ -11175,8 +11175,8 @@ Get Prescription By Provider consumer Id
 
 Remove Prescription 
     Check And Create YNW Session
-    [Arguments]    ${providerConsumerId}
-    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/${prescriptionId}       expected_status=any
+    [Arguments]    ${prescriptionUId}
+    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}       expected_status=any
     [Return]  ${resp}
 
 

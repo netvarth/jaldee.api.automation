@@ -259,7 +259,7 @@ JD-TC-Update Prescription-1
      ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id}   ${resp.content}
+    Set Suite Variable    ${prescription_uid}   ${resp.json()}
 
      ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
@@ -285,14 +285,14 @@ JD-TC-Update Prescription-1
 
     
 
-    ${resp}=    Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions1}
+    ${resp}=    Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
@@ -316,14 +316,14 @@ JD-TC-Update Prescription-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}    ${mrPrescriptions}
+    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}    ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
@@ -347,14 +347,14 @@ JD-TC-Update Prescription-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions1}
+    ${resp}=    Update Prescription   ${prescription_uid}    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
@@ -379,7 +379,7 @@ JD-TC-Update Prescription-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
+    ${resp}=    Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -394,14 +394,14 @@ JD-TC-Update Prescription-5
 
     ${prescriptionAttachments1}=  Create List   
 
-    ${resp}=   Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments1}   
+    ${resp}=   Update Prescription   ${prescription_uid}    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
@@ -426,11 +426,11 @@ JD-TC-Update Prescription-6
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
+    ${resp}=    Update Prescription   ${prescription_uid}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions}
+    ${resp}=    Update Prescription   ${prescription_uid}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -442,14 +442,14 @@ JD-TC-Update Prescription-7
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${order}      ${id1}    ${html}     ${mrPrescriptions}
+    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${order}      ${id1}    ${html}     ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${order} 
@@ -472,7 +472,7 @@ JD-TC-Update Prescription-UH1
     Should Be Equal As Strings            ${resp.status_code}    200
    
 
-    ${resp}=   Update Prescription   ${prescription_id}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
+    ${resp}=   Update Prescription   ${prescription_uid}    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
@@ -485,7 +485,7 @@ JD-TC-Update Prescription-UH2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Update Prescription   ${prescription_id}   ${EMPTY}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions}
+    ${resp}=    Update Prescription   ${prescription_uid}   ${EMPTY}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}   "${INVALID_PROVIDERCONSUMER_ID}"
@@ -499,7 +499,7 @@ JD-TC-Update Prescription-UH3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Update Prescription   ${prescription_id}  ${cid}    ${EMPTY}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
+    ${resp}=  Update Prescription   ${prescription_uid}  ${cid}    ${EMPTY}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}   "${INVALID_Doctor_ID}"
@@ -513,7 +513,7 @@ JD-TC-Update Prescription-UH4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}       ${mrPrescriptions}
+    ${resp}=    Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}   "${HTML_REQUIRED}"
@@ -543,7 +543,7 @@ JD-TC-Update Prescription-UH4
      ${mrPrescriptions1}=  Create Dictionary  medicineName=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     Set Suite Variable    ${mrPrescriptions1}
 
-    ${resp}=   Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${userid2}       ${id1}    ${html}      ${mrPrescriptions1}
+    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${userid2}       ${id1}    ${html}      ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.content}   "${INVALID_MR_CASE_ID}"

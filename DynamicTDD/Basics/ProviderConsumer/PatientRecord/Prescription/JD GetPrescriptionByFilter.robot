@@ -259,7 +259,7 @@ JD-TC-Get Prescription By Filter-1
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}     ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id}   ${resp.content}
+    Set Suite Variable    ${prescription_uid}   ${resp.json()}
 
      ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
@@ -272,7 +272,7 @@ JD-TC-Get Prescription By Filter-1
     ${resp1}=  Get Prescription By Filter   providerConsumerId-eq=${cid}  uid-eq=${uid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}    ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
@@ -315,12 +315,12 @@ JD-TC-Get Prescription By Filter-2
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${order}       ${id1}    ${html}     ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id}   ${resp.content}
+    Set Suite Variable    ${prescription_uid}   ${resp.json()}
 
     ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   dentalRecordId-eq=${id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}    ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${order} 
@@ -345,12 +345,12 @@ JD-TC-Get Prescription By Filter-3
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
+    Set Test Variable    ${prescription_uid1}   ${resp.json()}
 
     ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   mrPrescriptionStatus-eq=${prescriptionStatus}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id1} 
+     Should Be Equal As Strings    ${resp.json()[0]['uid']}    ${prescription_uid1} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
@@ -374,7 +374,7 @@ JD-TC-Get Prescription By Filter-4
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}   prescriptionAttachments=${prescriptionAttachments}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${prescription_id1}   ${resp.content}
+    Set Test Variable    ${prescription_uid1}   ${resp.json()}
     
     ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   referenceId-eq=${referenceId}
     Log  ${resp.content}
