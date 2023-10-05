@@ -199,10 +199,10 @@ fullRun()
 {
     echo "Running all JTA Resources"
     if [ "${SIGN_UP}" == "yes" ]; then
-        runAPre $1 TDD/APre
-        execQueries
         populatePostalCodeTable
         populateBankMasterTable
+        runAPre $1 TDD/APre
+        execQueries
         backupDB
     fi
     runAPI $1 TDD/JCloudAPI
