@@ -248,7 +248,12 @@ JD-TC-Remove Prescription-1
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption1}
 
-    ${prescriptionAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+     ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${prescriptionAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}  driveId=${driveId}
     Log  ${prescriptionAttachments}
     ${prescriptionAttachments}=  Create List   ${prescriptionAttachments}
     Set Suite Variable    ${prescriptionAttachments}
@@ -290,6 +295,11 @@ JD-TC-Remove Prescription-1
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionStatus']}     ${wl_status[4]}
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledDate']}     ${DAY1}  
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCancelledBy']}     ${pid}
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${prescription_uid2}   ${resp.json()}
    
 JD-TC-Remove Prescription-2
 
@@ -402,9 +412,9 @@ JD-TC-Remove Prescription-UH3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Remove Prescription   ${prescription_uid}   
+    ${resp}=    Remove Prescription   ${prescription_uid2}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
 
 JD-TC-Remove Prescription-UH4

@@ -11267,3 +11267,21 @@ Delete MR Sections
     [Arguments]    ${uid} 
     ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/section/${uid}       expected_status=any
     [Return]  ${resp}
+
+Share Prescription To Patient
+    [Arguments]   ${prescriptionUid}   ${msg}   ${email}   ${telegram}  ${sms}    ${whatsapp}  
+    Check And Create YNW Session
+    ${medium}=  Create Dictionary  email=${email}  telegram=${telegram}   sms=${sms}   whatsapp=${whatsapp}
+    ${data}=  Create Dictionary  message=${msg}   medium=${medium}  
+    ${data}=    json.dumps    ${data}
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/${prescriptionUid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Share Prescription To ThirdParty
+    [Arguments]   ${prescriptionUid}   ${msg}   ${email}     ${sms}    ${whatsapp}  ${telegram}
+    Check And Create YNW Session 
+    ${data}=  Create Dictionary  message=${msg}   email=${email}    sms=${sms}   whatsapp=${whatsapp}   telegram=${telegram} 
+    ${data}=    json.dumps    ${data}
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/thirdParty/${prescriptionUid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+    

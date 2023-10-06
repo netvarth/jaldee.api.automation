@@ -250,7 +250,13 @@ JD-TC-Create Prescription-1
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption1}
 
-    ${prescriptionAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+
+     ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${prescriptionAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}  driveId=${driveId}
     Log  ${prescriptionAttachments}
     ${prescriptionAttachments}=  Create List   ${prescriptionAttachments}
     Set Suite Variable    ${prescriptionAttachments}
@@ -515,4 +521,25 @@ JD-TC-Create Prescription-UH7
     ${resp}=    Create Prescription    ${cid}    ${u_id}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-     Should Be Equal As Strings   ${resp.json()}   ${ONLY_USER_TYPE_DOCTOR_CAN_ADD_PRESCRIPTION}
+    Should Be Equal As Strings   ${resp.json()}   ${ONLY_USER_TYPE_DOCTOR_CAN_ADD_PRESCRIPTION}
+
+JD-TC-Create Prescription-UH8
+
+    [Documentation]    create precription with empty drive id.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${prescriptionAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}  
+    Log  ${prescriptionAttachments1}
+    ${prescriptionAttachments1}=  Create List   ${prescriptionAttachments1}
+    Set Suite Variable    ${prescriptionAttachments1}
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_DRIVE_ID}
+
+    
+   

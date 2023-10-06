@@ -33,9 +33,9 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Share Prescription To Patient-1
+JD-TC-Share Prescription To ThirdParty-1
 
-    [Documentation]    Share Prescription To Patient.
+    [Documentation]    Share Prescription To ThirdParty.
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
      Log  ${iscorp_subdomains}
@@ -47,7 +47,7 @@ JD-TC-Share Prescription To Patient-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+97788120
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+97788121
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -311,14 +311,29 @@ JD-TC-Share Prescription To Patient-1
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${primaryMobileNo1}    Generate random string    10    9874563211
+    ${primaryMobileNo1}    Convert To Integer  ${primaryMobileNo1}
+    Set Suite Variable    ${primaryMobileNo1}
+    Set Suite Variable  ${email1}  ${lastName}${primaryMobileNo1}.${test_mail}
+
+    ${sms}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Suite Variable    ${sms}
+
+    ${whatsAppNumber}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Suite Variable    ${whatsAppNumber}
+
+    ${telegramNumber}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Suite Variable    ${telegramNumber}
+
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email1}       ${sms}    ${whatsAppNumber}    ${telegramNumber}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Share Prescription To Patient-2
 
-    [Documentation]    Create Prescription with Empty dentalRecordId and Share Prescription To Patient.
+JD-TC-Share Prescription To ThirdParty-2
+
+    [Documentation]    Create Prescription with Empty dentalRecordId and Share Prescription To third party.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -348,14 +363,28 @@ JD-TC-Share Prescription To Patient-2
      ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid1}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${primaryMobileNo2}    Generate random string    10    9874563211
+    ${primaryMobileNo2}    Convert To Integer  ${primaryMobileNo2}
+    Set Test Variable    ${primaryMobileNo2}
+    Set Test Variable  ${email2}  ${lastName}${primaryMobileNo2}.${test_mail}
+
+    ${sms1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${sms1}
+
+    ${whatsAppNumber1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${whatsAppNumber1}
+
+    ${telegramNumber1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${telegramNumber1}
+
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid1}    ${message}    ${email2}       ${sms1}    ${whatsAppNumber1}    ${telegramNumber1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Share Prescription To Patient-3
+JD-TC-Share Prescription To ThirdParty-3
 
-    [Documentation]    upload paper Prescription with Empty html and Share Prescription To Patient.
+    [Documentation]    upload paper Prescription with Empty html and Share Prescription To third party.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -370,14 +399,28 @@ JD-TC-Share Prescription To Patient-3
      ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid1}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${primaryMobileNo2}    Generate random string    10    9874563211
+    ${primaryMobileNo2}    Convert To Integer  ${primaryMobileNo2}
+    Set Test Variable    ${primaryMobileNo2}
+    Set Test Variable  ${email2}  ${lastName}${primaryMobileNo2}.${test_mail}
+
+    ${sms1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${sms1}
+
+    ${whatsAppNumber1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${whatsAppNumber1}
+
+    ${telegramNumber1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${telegramNumber1}
+
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid1}    ${message}    ${email2}       ${sms1}    ${whatsAppNumber1}    ${telegramNumber1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Share Prescription To Patient-4
+JD-TC-Share Prescription To ThirdParty -4
 
-    [Documentation]    Share multiple  Prescription To Patients.
+    [Documentation]    Share multiple  Prescription To third party.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -395,23 +438,35 @@ JD-TC-Share Prescription To Patient-4
 
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
+    
+    ${primaryMobileNo2}    Generate random string    10    9874563211
+    ${primaryMobileNo2}    Convert To Integer  ${primaryMobileNo2}
+    Set Test Variable    ${primaryMobileNo2}
+    Set Test Variable  ${email2}  ${lastName}${primaryMobileNo2}.${test_mail}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid1}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${sms1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${sms1}
+
+    ${whatsAppNumber1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${whatsAppNumber1}
+
+    ${telegramNumber1}=  Create Dictionary  countryCode=${${countryCodes[0]}}  number=${primaryMobileNo1}  
+    Set Test Variable    ${telegramNumber1}
+
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid1}    ${message}    ${email2}       ${sms1}    ${whatsAppNumber1}    ${telegramNumber1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-    ${message1}=  Fakerlibrary.Sentence
-    Set Test Variable    ${message1}
-
-    ${resp}=    Share Prescription To Patient   ${prescription_uid1}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid2}    ${message}    ${email2}       ${sms1}    ${whatsAppNumber1}    ${telegramNumber1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Share Prescription To Patient-5
 
-    [Documentation]    Share Prescription To Patient with empty email.
+JD-TC-Share Prescription To ThirdParty-5
+
+    [Documentation]    Share Prescription To third party with empty whatsapp number.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -420,14 +475,14 @@ JD-TC-Share Prescription To Patient-5
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${empty}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email}       ${sms}    ${whatsAppNumber}    ${empty}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Share Prescription To Patient-6
+JD-TC-Share Prescription To ThirdParty-6
 
-    [Documentation]    Share Prescription To Patient with empty telegram number.
+    [Documentation]    Share Prescription To third party with empty phone number.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -436,14 +491,14 @@ JD-TC-Share Prescription To Patient-6
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${empty}    ${bool[1]}    ${bool[1]}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email}     ${empty}    ${whatsAppNumber}    ${telegramNumber}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Share Prescription To Patient-7
+JD-TC-Share Prescription To ThirdParty-7
 
-    [Documentation]    Share Prescription To Patient with empty phone number.
+    [Documentation]    Share Prescription To ThirdParty with empty whatsapp number.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -452,14 +507,14 @@ JD-TC-Share Prescription To Patient-7
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${empty}    ${bool[1]}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email}     ${sms}    ${empty}    ${telegramNumber}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Share Prescription To Patient-8
+JD-TC-Share Prescription To ThirdParty-8
 
-    [Documentation]    Share Prescription To Patient with empty whatsapp number.
+    [Documentation]    Share Prescription To third party with empty email ,whatsapp and sms.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -468,31 +523,15 @@ JD-TC-Share Prescription To Patient-8
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${empty}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
-
-JD-TC-Share Prescription To Patient-9
-
-    [Documentation]    Share Prescription To Patient with empty email ,whatsapp and sms.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${message}=  Fakerlibrary.Sentence
-    Set Test Variable    ${message}
-
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${empty}       ${bool[1]}    ${empty}    ${empty}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${empty}       ${empty}    ${empty}    ${telegramNumber}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
 
-JD-TC-Share Prescription To Patient-UH1
+JD-TC-Share Prescription To ThirdParty-UH1
 
-    [Documentation]    Share Prescription To Patient with invalid uid.
+    [Documentation]    Share Prescription To ThirdParty with invalid uid.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -507,26 +546,26 @@ JD-TC-Share Prescription To Patient-UH1
     ${PRESCRIPTION_NOT_FOUND}=  Format String    ${PRESCRIPTION_NOT_FOUND}    ${invalid}
 
 
-    ${resp}=    Share Prescription To Patient   ${invalid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${resp}=    Share Prescription To ThirdParty   ${invalid}   ${message}    ${email}       ${sms}    ${whatsAppNumber}    ${telegramNumber}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}     ${PRESCRIPTION_NOT_FOUND}
 
-JD-TC-Share Prescription To Patient-UH2
+JD-TC-Share Prescription To ThirdParty-UH2
 
-    [Documentation]    Share Prescription To Patient with empty message.
+    [Documentation]    Share Prescription To ThirdParty with empty message.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${empty}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${empty}     ${email}       ${sms}    ${whatsAppNumber}    ${telegramNumber} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${MESSAGE_REQUIRED_TO_SHARE_PRESCRIPTION}
 
 
-JD-TC-Share Prescription To Patient-UH3
+JD-TC-Share Prescription To ThirdParty-UH3
 
     [Documentation]    Try to remove shared prescription.
 
@@ -537,7 +576,7 @@ JD-TC-Share Prescription To Patient-UH3
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email}       ${sms}    ${whatsAppNumber}    ${telegramNumber} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
@@ -547,25 +586,9 @@ JD-TC-Share Prescription To Patient-UH3
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${NOT_ALLOWED_TO_SHAREPRESCRIPTION}
 
-JD-TC-Share Prescription To Patient-UH4
+JD-TC-Share Prescription To ThirdParty-UH4
 
-    [Documentation]     shared prescription To Patient where all medium is empty.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${message}=  Fakerlibrary.Sentence
-    Set Test Variable    ${message}
-
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${empty}        ${empty}     ${empty}     ${empty}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}     ${INVALID_MEDIUM}
-
-JD-TC-Share Prescription To Patient-UH5
-
-    [Documentation]    shared prescription To Patient where all medium is given as false.
+    [Documentation]     Share Prescription To ThirdParty where all medium is empty.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -574,14 +597,56 @@ JD-TC-Share Prescription To Patient-UH5
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[0]}       ${bool[0]}    ${bool[0]}    ${bool[0]}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${empty}        ${empty}     ${empty}     ${empty}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}     ${INVALID_MEDIUM}
- 
-JD-TC-Share Prescription To Patient-UH6
 
-    [Documentation]   shared prescription To Patient  with another provider login
+JD-TC-Share Prescription To ThirdParty-UH5
+
+    [Documentation]   Share Prescription To ThirdParty where all medium is given as false.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+
+    ${sms1}=  Create Dictionary  countryCode=${empty}  number=${empty}  
+    Set Test Variable    ${sms1}
+
+    ${whatsAppNumber1}=  Create Dictionary  countryCode=${empty}  number=${empty}   
+    Set Test Variable    ${whatsAppNumber1}
+
+    ${telegramNumber1}=  Create Dictionary  countryCode=${empty}  number=${empty}  
+    Set Test Variable    ${telegramNumber1}
+
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${empty}       ${sms1}    ${whatsAppNumber1}    ${telegramNumber1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}     ${INVALID_EMAIL_FORMAT}
+
+JD-TC-Share Prescription To ThirdParty-UH6
+
+    [Documentation]    Share Prescription To third party with empty email.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=     Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${empty}       ${sms}    ${whatsAppNumber}    ${telegramNumber}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}     ${INVALID_EMAIL_FORMAT}
+
+JD-TC-Share Prescription To ThirdParty-UH7
+
+    [Documentation]   Share Prescription To ThirdParty  with another provider login
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -591,25 +656,21 @@ JD-TC-Share Prescription To Patient-UH6
      ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[0]}       ${bool[0]}    ${bool[0]}    ${bool[0]}  
+     ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email1}       ${sms}    ${whatsAppNumber}    ${telegramNumber}  
     Log   ${resp.content}
-     Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings    ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
 
-JD-TC-Share Prescription To Patient-UH7
+JD-TC-Share Prescription To ThirdParty-UH8
 
-    [Documentation]   shared prescription To Patient  without login
+    [Documentation]   Share Prescription To ThirdParty  without login
 
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[0]}       ${bool[0]}    ${bool[0]}    ${bool[0]}  
+   ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email1}       ${sms}    ${whatsAppNumber}    ${telegramNumber}  
     Log   ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-
-
-
-    
  

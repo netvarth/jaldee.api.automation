@@ -11,6 +11,7 @@ import logging
 from RequestsLibrary.utils import is_file_descriptor
 from robot.api import logger
 from faker import Faker
+from db import ecrypt_data, decrypt_data
 from Keywordspy import *
 BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP
@@ -87,13 +88,15 @@ def log_request(response):
 # Service Provider Login
 def spLogin(phno,pswd,countrycode=91):
     s = requests.Session()
-    url = BASE_URL+'/provider/login'
+    url = BASE_URL+'/provider/login/encrypt'
     try:
         headers = {
                 'Content-type': "application/json",
                 'Accept': "application/json",
             }
-        data = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
+        jsondata = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
+        encrypted_data=  ecrypt_data(jsondata)
+        data =  json.dumps(encrypted_data)
         r = s.post(url, data=data, headers=headers)
         # print s.cookies
         # print "--------------"
@@ -3263,3 +3266,4 @@ def UploadQNRfiletoTempLocation(cookie_dict, proid, qnrid, caption, mimeType, ke
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
+
