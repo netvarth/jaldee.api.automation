@@ -12,6 +12,7 @@ import csv
 import random
 import json
 import string
+import inspect
 import collections as col
 from collections import defaultdict
 from faker import Faker
@@ -156,6 +157,7 @@ def verify_accnt(email,purpose):
 
 
 def get_id(email):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -178,6 +180,7 @@ def get_id(email):
 
 
 def get_aid(number):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -196,6 +199,7 @@ def get_aid(number):
 
 
 def get_acc_id(email):
+    print("In function: ", inspect.stack()[0].function)
     uid= get_id(email)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -214,6 +218,7 @@ def get_acc_id(email):
             dbconn.close()
 
 def get_uid(ph):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(ph) 
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -233,6 +238,7 @@ def get_uid(ph):
             dbconn.close()
 
 def get_debit(ph):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(ph) 
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -253,7 +259,7 @@ def get_debit(ph):
 
 
 def get_ser_id(email):
-    
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -389,13 +395,14 @@ def update_entry(table,field,value,wfield,wid,cur):
 def update_entry_2Fields(table,wfield,wid,field1,value1,field2,value2,cur):
     try:
         cur.execute("UPDATE %s SET %s=%s WHERE %s='%s' and %s ='%s';" % (table,wfield,wid,field1,value1,field2,value2))
-        print(field, 'updated with ', value, ' in', table)
+        print(wfield, 'updated with ', wid, ' in', table)
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 
 def delete_queue_service(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -416,6 +423,7 @@ def delete_queue_service(aid):
 
 
 def delete_sequence_generator(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -436,6 +444,7 @@ def delete_sequence_generator(aid):
 
 
 def delete_ML_table(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -456,6 +465,7 @@ def delete_ML_table(aid):
 
 
 def delete_queue_stats_table(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -476,6 +486,7 @@ def delete_queue_stats_table(aid):
 
 
 def clear_queue (usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)    
     uid = get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -508,6 +519,7 @@ def clear_queue (usrid):
     
     
 def clear_waitlist(email):
+    print("In function: ", inspect.stack()[0].function)
     uid = get_id(email)
     aid = get_acc_id(email)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -536,6 +548,7 @@ def clear_waitlist(email):
 
 
 def delete_schedule_service(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -556,6 +569,7 @@ def delete_schedule_service(aid):
 
 
 def delete_donation_service(usrid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     aid=get_acc_id(usrid)
     try:
@@ -578,6 +592,7 @@ def delete_donation_service(usrid):
 
 
 def delete_virtual_service(usrid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     aid=get_acc_id(usrid)
     try:
@@ -599,6 +614,7 @@ def delete_virtual_service(usrid):
 
 
 def clear_service (usrid):
+    print("In function: ", inspect.stack()[0].function)
     # clear_appt_service(usrid)
     # print  ("In clear_service")
     clear_waitlist(usrid)
@@ -656,6 +672,7 @@ def clear_service (usrid):
 
 
 def reset_metric_usage(aid) :
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     # cur = dbconn.cursor()
     try :
@@ -682,6 +699,7 @@ def reset_metric_usage(aid) :
 
 
 def clear_provider_msgs (usrid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     aid=get_acc_id(usrid)
     try:
@@ -701,6 +719,7 @@ def clear_provider_msgs (usrid):
 
 
 def clear_consumer_msgs (usrid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     aid=get_id(usrid)
     try:
@@ -719,33 +738,21 @@ def clear_consumer_msgs (usrid):
             dbconn.close()       
      
 def clear_location (usrid):
-    
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     clear_queue(usrid)
     clear_Rating(usrid)
+    clear_appt_schedule(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try :
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
-            # print('account_info_tbl')
             update_entry('account_info_tbl','base_location','NULL','id',aid,cur)
-            # print('search_data_tbl')
             delete_search(aid)
-            # print('schedule_service_tbl')
             delete_schedule_service(aid)
-            # print('transaction_payment_tbl')
             delete_entry('transaction_payment_tbl','account',aid,cur)
-            # print('donation_tbl')
             delete_entry('donation_tbl','account',aid,cur)
-            # print('wl_cache_tbl')
-            delete_entry('wl_cache_tbl','account',aid,cur)
-            # print('appmnt_archive_tbl')
-            delete_entry('appmnt_archive_tbl','account',aid,cur)
-            # print('appt_schedule_tbl')
-            delete_entry('appt_schedule_tbl','account',aid,cur)
-            # print('appt_tbl')
-            delete_entry('appt_tbl','account',aid,cur)
-            # print('location_tbl')
+            
             # cur.execute("SELECT id FROM location_tbl WHERE account='%s'" % aid)
             # row = cur.fetchall()
             # print (row) 
@@ -765,6 +772,7 @@ def clear_location (usrid):
     
     
 def clear_Consumermsg(usrid):
+    print("In function: ", inspect.stack()[0].function)
     cid=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -780,6 +788,7 @@ def clear_Consumermsg(usrid):
             dbconn.close()
 
 def clear_Providermsg(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -795,6 +804,7 @@ def clear_Providermsg(usrid):
             dbconn.close()
 
 def clear_Item(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     id=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -813,6 +823,7 @@ def clear_Item(usrid):
    
 
 def clear_Catalog(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     id=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -834,6 +845,7 @@ def clear_Catalog(usrid):
     
     
 def clear_Coupon(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     id=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -850,6 +862,7 @@ def clear_Coupon(usrid):
             dbconn.close()  
 
 def clear_Discount(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     id=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -866,6 +879,7 @@ def clear_Discount(usrid):
             dbconn.close()   
       
 def clear_Bill(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=  get_acc_id(usrid)
     uid=  get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -882,6 +896,7 @@ def clear_Bill(usrid):
             dbconn.close()
 
 def clear_invoice(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     uid=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -901,6 +916,7 @@ def clear_invoice(usrid):
 
 
 def clear_Rating(usrid):
+    print("In function: ", inspect.stack()[0].function)
     uid=get_id(usrid)
     aid=get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -921,6 +937,7 @@ def clear_Rating(usrid):
             dbconn.close()  
 
 def clear_Family(uid): 
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -937,6 +954,7 @@ def clear_Family(uid):
             dbconn.close() 
 
 def clear_FamilyMember(consumer_id):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -952,6 +970,7 @@ def clear_FamilyMember(consumer_id):
             dbconn.close() 
 
 def clear_Alert (aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -967,6 +986,7 @@ def clear_Alert (aid):
             dbconn.close() 
 
 def clear_favorite_provider (usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -987,6 +1007,7 @@ def clear_favorite_provider (usrid):
             dbconn.close()
 
 def clear_Auditlog (usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1002,6 +1023,7 @@ def clear_Auditlog (usrid):
             dbconn.close()
     
 def clear_licence (aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1016,6 +1038,7 @@ def clear_licence (aid):
             dbconn.close()
    
 def clear_Addon (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid) 
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1034,6 +1057,7 @@ def clear_Addon (usrid):
 
 
 def clear_Adword (acid):
+    print("In function: ", inspect.stack()[0].function)
     # delete_entry('adword_tbl','account',acid,cur)
     # delete_entry('account_matrix_usage_tbl','id',acid,cur)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -1056,6 +1080,7 @@ def clear_Adword (acid):
 
 
 def get_claim_id(name):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1077,6 +1102,7 @@ def get_claim_id(name):
 
 
 def clear_claims(name):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1107,6 +1133,7 @@ def clear_claim():
 
 
 def clear_jaldeecoupon (code):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1126,6 +1153,7 @@ def clear_jaldeecoupon (code):
 
 
 def clear_tax_gstNum (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1143,6 +1171,7 @@ def clear_tax_gstNum (usrid):
 
 
 def clear_corporate (uid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1157,6 +1186,7 @@ def clear_corporate (uid):
             dbconn.close()
 
 def clear_branch (code):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1171,6 +1201,7 @@ def clear_branch (code):
             dbconn.close()
 
 def clear_JaldeeAlerts (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1187,6 +1218,7 @@ def clear_JaldeeAlerts (usrid):
             dbconn.close()
 
 def clear_Department (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1345,11 +1377,12 @@ def get_weekday_by_date(date):
 
 
 def SetMerchantId(accNo,mid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
-            uu=cur.execute("update account_payment_settings_tbl set payu_merchant_id='%s'  where id ='%s'  "% (mid,accNo))
+            uu=cur.execute("update account_payment_settings_tbl set payu_merchant_id='%s' where id ='%s'  "% (mid,accNo))
             dbconn.commit()
             # dbconn.close()
             return uu
@@ -1470,11 +1503,12 @@ def bill_cycle_annual():
 
     
 def payuVerify(accNo):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
-            cur.execute("update account_payment_settings_tbl set payu_verified=true  where account ='%s'" % accNo)
+            cur.execute("update account_payment_settings_tbl set payu_verified=true where account ='%s'" % accNo)
             # cur.execute("update account_payment_settings_tbl set is_default_account=false  where id ='%s'" % accNo)
             dbconn.commit()
             # dbconn.close()
@@ -1493,6 +1527,7 @@ def get_days(sdate,edate):
     return  (edate-sdate).days
 
 def pay_invoice(uid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1510,6 +1545,7 @@ def pay_invoice(uid):
 
 
 def delete_search(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         with dbconn.cursor() as cur:
@@ -1543,6 +1579,7 @@ def delete_search(aid):
         #return 0  
 
 def clear_payment_invoice (usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=  get_acc_id(usrid)
     uid=  get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -1895,6 +1932,7 @@ def Parking_Types(datas):
 
 
 def clear_Provider_Notification_Settings (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2022,6 +2060,7 @@ def Generate_ifsc_code() :
 
 
 def get_metric_license(metric):
+    print("In function: ", inspect.stack()[0].function)
     #find the license package id where the the given metric has the given value
     metric_id=0
     with open(licjson, 'r', encoding="utf-8") as f:
@@ -2146,6 +2185,7 @@ def sub_two(h,m):
         return 0
 
 def clear_Label (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2161,6 +2201,7 @@ def clear_Label (usrid):
             dbconn.close()
 
 def clear_Statusboard (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2179,6 +2220,7 @@ def clear_Statusboard (usrid):
     
 
 def get_jaldeekeyword_pkg():
+    print("In function: ", inspect.stack()[0].function)
     #get Jaldee-Keyword addon Id from licconfig gile
     try:
         with open(licjson,'r', encoding="utf-8") as datas:
@@ -2200,6 +2242,7 @@ def get_jaldeekeyword_pkg():
         return 0
 
 def get_statusboard_addonId():
+    print("In function: ", inspect.stack()[0].function)
     #get Jaldee-Keyword addon Id from licconfig gile
     try:
         with open(licjson,'r', encoding="utf-8") as datas:
@@ -2222,6 +2265,7 @@ def get_statusboard_addonId():
             
 
 def clear_jdn (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2238,6 +2282,7 @@ def clear_jdn (usrid):
 
 
 def clear_corporate (cname):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2265,6 +2310,7 @@ def clear_corporate (cname):
             dbconn.close()
 
 def clear_consumer_notification_settings (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2328,6 +2374,7 @@ def add_time_sec(h,m,s):
 
 
 def clear_ScTable(phno):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2343,6 +2390,7 @@ def clear_ScTable(phno):
 
 
 def clear_ScRepTable(sc_id):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2363,6 +2411,7 @@ def clear_ScRepTable(sc_id):
 
 
 def clear_ssc_code(phone):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     id =  get_acc_id(phone)
     try:
@@ -2402,6 +2451,7 @@ def check_is_corp(subdomain):
 
 
 def get_iscorp_subdomains(flag):
+    print("In function: ", inspect.stack()[0].function)
     # print (flag)
     try:
         with open(bizjson,'r', encoding="utf-8") as f:
@@ -2425,6 +2475,7 @@ def get_iscorp_subdomains(flag):
 
 
 def get_iscorp_subdomains_with_maxpartysize(flag):
+    print("In function: ", inspect.stack()[0].function)
     try:
         with open(bizjson,'r',encoding="utf-8") as f:
             data=json.load(f)
@@ -2445,6 +2496,7 @@ def get_iscorp_subdomains_with_maxpartysize(flag):
     return domlist
 
 def get_notiscorp_subdomains_with_no_multilocation(flag):
+    print("In function: ", inspect.stack()[0].function)
     try:
         with open(bizjson,'r',encoding="utf-8") as f:
             data=json.load(f)
@@ -2483,6 +2535,7 @@ def get_notiscorp_subdomains_with_no_multilocation(flag):
 #             dbconn.close()
 
 def clear_users(ph_no):
+    print("In function: ", inspect.stack()[0].function)
     uid=  get_id(ph_no)
     print ("1:", uid, "ph no:", ph_no)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -2490,27 +2543,16 @@ def clear_users(ph_no):
     try:
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
-            print ("3:", cur)
             delete_entry('login_tbl','id',uid,cur) 
-            print ("4: login_tbl")
             delete_entry('wl_history_tbl','provider',uid,cur)  
-            print ("5: wl_history_tbl")
             delete_entry('service_tbl','provider',uid,cur)  
-            print ("6: service_tbl")   
             delete_entry('user_team_tbl','local_user_id',uid,cur)  
-            print ("7: user_team_tbl") 
             delete_entry('schedule_service_tbl','service_id',uid,cur)  
-            print ("8: schedule_service_tbl")  
             delete_entry('service_tbl','provider',uid,cur)  
-            print ("9: service_tbl")           
             delete_entry('local_user_tbl','id',uid,cur)  
-            print ("10: local_user_tbl")
             delete_entry('login_history_tbl','user_id',uid,cur)
-            print ("11: login_history_tbl")
             delete_entry('crm_lead_tbl','generated_by_id',uid,cur)
-            print ("12: crm_lead_tbl")
             delete_entry('user_tbl','id',uid,cur)
-            print ("13: user_tbl")  
             dbconn.commit()
     except Exception as e:
         print ("Exception:", e)
@@ -2545,6 +2587,7 @@ def get_slot_length(timedur, apptdur) :
         return  int(timedur/apptdur)
 
 def get_item_metrics_value(metric,pkgId):
+    print("In function: ", inspect.stack()[0].function)
     #get license packag id from licconfig file
     metric_id=0
     with open(licjson, 'r', encoding="utf-8") as f:
@@ -2630,7 +2673,7 @@ def twodigitfloat(x):
 
 
 def clear_appt_schedule(usrid):
-    
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try :
         # cur = dbconn.cursor()
@@ -2649,28 +2692,17 @@ def clear_appt_schedule(usrid):
             
             for index in range(len(apptid)):
                 delete_entry('appt_livetrack_tbl','uuid',apptid[index][0],cur) 
-                # print('appt_livetrack_tbl cleared')
                 delete_entry('appt_tbl','uid',apptid[index][0],cur)
-                # print('appt_tbl cleared')
             for index in range(len(apptschid)):
                 delete_entry('schedule_service_tbl','schedule_id',int(apptschid[index][0]),cur)
-                # print('schedule_service_tbl cleared')
                 delete_entry('transaction_payment_tbl','schedule_id',int(apptschid[index][0]),cur)
-                # print('transaction_payment_tbl cleared')
             delete_entry('appmnt_archive_tbl','account',aid,cur)
-            # print('appmnt_archive_tbl cleared')
             delete_entry('appt_daily_schedule_tbl','account',aid,cur)
-            # print('appt_daily_schedule_tbl cleared')
             delete_entry('appt_queueset_tbl','account_id',aid,cur)
-            # print('appt_queueset_tbl cleared')
             delete_entry('appt_tbl','account',aid,cur)
-            # print('appt_tbl cleared')
             delete_entry('appt_schedule_tbl','account',aid,cur)
-            # print('appt_schedule_tbl cleared')
             delete_entry('appt_state_tbl','account',aid,cur)
-            # print('appt_state_tbl cleared')
             delete_entry('holidays_tbl','account',aid,cur)
-            # print('holidays_tbl cleared')
             reset_metric_usage(aid)
             dbconn.commit()
                     # dbconn.close()
@@ -2683,7 +2715,7 @@ def clear_appt_schedule(usrid):
             dbconn.close()
 
 def clear_appt_schedule_user(user_num, branch_num):
-    
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try :
         # cur = dbconn.cursor()
@@ -2704,28 +2736,17 @@ def clear_appt_schedule_user(user_num, branch_num):
             
             for index in range(len(apptid)):
                 delete_entry('appt_livetrack_tbl','uuid',apptid[index][0],cur) 
-                # print('appt_livetrack_tbl cleared')
                 delete_entry('appt_tbl','uid',apptid[index][0],cur)
-                # print('appt_tbl cleared')
             for index in range(len(apptschid)):
                 delete_entry('schedule_service_tbl','schedule_id',int(apptschid[index][0]),cur)
-                # print('schedule_service_tbl cleared')
                 delete_entry('transaction_payment_tbl','schedule_id',int(apptschid[index][0]),cur)
-                # print('transaction_payment_tbl cleared')
             delete_entry_2Fields('appmnt_archive_tbl','account',aid,'provider',uid,cur)
-            # print('appmnt_archive_tbl cleared')
             delete_entry('appt_daily_schedule_tbl','account',aid,cur)
-            # print('appt_daily_schedule_tbl cleared')
             delete_entry('appt_queueset_tbl','account_id',aid,cur)
-            # print('appt_queueset_tbl cleared')
             delete_entry_2Fields('appt_tbl','account',aid,'provider',uid,cur)
-            # print('appt_tbl cleared')
             delete_entry_2Fields('appt_schedule_tbl','account',aid,'provider',uid,cur)
-            # print('appt_schedule_tbl cleared')
             delete_entry('appt_state_tbl','account',aid,cur)
-            # print('appt_state_tbl cleared')
             delete_entry_2Fields('holidays_tbl','account',aid,'provider',uid,cur)
-            # print('holidays_tbl cleared')
             reset_metric_usage(aid)
             dbconn.commit()
                     # dbconn.close()
@@ -2738,6 +2759,7 @@ def clear_appt_schedule_user(user_num, branch_num):
             dbconn.close()
 
 def addons_all_license_applicable(addonlist):
+    print("In function: ", inspect.stack()[0].function)
     # data= json.loads(addonlist)
     data= addonlist
     alist=[]
@@ -2753,6 +2775,7 @@ def addons_all_license_applicable(addonlist):
     return alist
     
 def all_license_applicable_addonids(addonlist):
+    print("In function: ", inspect.stack()[0].function)
     # data= json.loads(addonlist)
     data= addonlist
     alist=[]
@@ -2765,6 +2788,7 @@ def all_license_applicable_addonids(addonlist):
     return alist
 
 def apptfor(*argv):
+    print("In function: ", inspect.stack()[0].function)
     apptfor_dict = {}
     apptfor_list = []
     for arg in argv:
@@ -2818,13 +2842,7 @@ def mins_diff(stime,etime):
     try:
         
         time1= datetime.datetime.strptime(stime, '%I:%M %p')
-        # print (time1)
-        # time1_delta = datetime.timedelta(hours=time1.hour, minutes=time1.minute, seconds=time1.second)
-        # print time1_delta
         time2= datetime.datetime.strptime(etime, '%I:%M %p')
-        # print (time2)
-        # time2_delta = datetime.timedelta(hours=time2.hour, minutes=time2.minute, seconds=time2.second)
-        # print time2_delta
         time_delta = (time2 - time1)
         # print (time_delta)
         total_seconds = time_delta.total_seconds()
@@ -2884,6 +2902,7 @@ def rounded(val):
     return value
 
 def get_subdomains(domain):
+    print("In function: ", inspect.stack()[0].function)
     try:
         with open(bizjson,'r', encoding="utf-8") as f:
             data=json.load(f)
@@ -2902,6 +2921,7 @@ def get_subdomains(domain):
 
 
 def clear_customer(phno):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2993,6 +3013,7 @@ def clear_customer(phno):
             
 
 def clear_customer_fam(phno):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -3110,6 +3131,7 @@ def convert_hour_minutes(time):
 
     
 def clear_customer_groups(phno):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -3134,6 +3156,7 @@ def clear_customer_groups(phno):
 
 
 def get_customers_from_group(grpid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -3158,6 +3181,7 @@ def get_customers_from_group(grpid):
 
 
 def get_procon_id(pronum,custnum):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -3185,6 +3209,7 @@ def get_procon_id(pronum,custnum):
             dbconn.close()
 
 def getType(*files):
+    print("In function: ", inspect.stack()[0].function)
     filetype={}
     for file in files:
         mimetype, encoding = mimetypes.guess_type(file)
@@ -3197,6 +3222,7 @@ def getType(*files):
 
 
 def addons_high_license_applicable(addonlist):
+    print("In function: ", inspect.stack()[0].function)
     # data= json.loads(addonlist)
     data= addonlist
     alist=[]
@@ -3213,6 +3239,7 @@ def addons_high_license_applicable(addonlist):
 
 
 def QuestionnaireAnswers(qnrdata, proConId, **kwargs):
+    print("In function: ", inspect.stack()[0].function)
     faker = Faker()      
     try:
         id = qnrdata['id']
@@ -3847,6 +3874,7 @@ def QuestionnaireAnswers(qnrdata, proConId, **kwargs):
 
 
 def setPrice(questions, answers):
+    print("In function: ", inspect.stack()[0].function)
     try:
         # print(answers)
         answers = json.loads(answers)
@@ -3929,6 +3957,7 @@ def setPrice(questions, answers):
 
 
 def createFUDict(data, actionval, uid):
+    print("In function: ", inspect.stack()[0].function)
     supported_filetypes= ['png', 'jpg', 'pdf', 'jpeg', 'bmp', 'flw', 'docx', 'txt']
     supported_videotypes= ['mp4', 'mov', 'flv', 'mkv', 'avi', 'webm'] 
     supported_audiotypes= ['mp3', 'wav', 'pcm']
@@ -4112,7 +4141,7 @@ def createFUDict(data, actionval, uid):
 
 
 def fileUploadDT(qnrdata, actionval, uid, *files):     
-    
+    print("In function: ", inspect.stack()[0].function)
     fileUploadDT.fileslist= list(files)
     supported_filetypes= ['png', 'jpg', 'pdf', 'jpeg', 'bmp', 'flw', 'docx', 'txt']
     supported_videotypes= ['mp4', 'mov', 'flv', 'mkv', 'avi', 'webm']
@@ -4165,6 +4194,7 @@ def fileUploadDT(qnrdata, actionval, uid, *files):
 
                       
 def clear_jcashoffer (name):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         with dbconn.cursor() as cur:
@@ -4505,6 +4535,7 @@ def tasktype(account):
             dbconn.close()
 
 def clear_category(account):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -4521,6 +4552,7 @@ def clear_category(account):
 
 
 def clear_drive(account):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(account)    
    # uid = get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -4621,23 +4653,6 @@ def taskTemplate(account_id, task_temp_name,status_id,origin_from=3,origin_id=0,
 #         if dbconn is not None:
 #             dbconn.close()
 
-def selectQuery(table,field,value):
-    dbconn = connect_db(db_host, db_user, db_passwd, db)
-    try:
-        with dbconn.cursor() as cur:
-            cur.execute("SELECT * from %s where %s ='%s';" % (table,field,value))
-            # print('Everything selected from ', field, 'for value', value,' in', table)
-            row = cur.fetchall()
-            print(row)          
-            dbconn.commit()
-         
-    except Exception as e:
-        print ("Exception:", e)
-        print ("Exception at line no:", e.__traceback__.tb_lineno)
-        pass
-    finally:
-        if dbconn is not None:
-            dbconn.close()
 
 def leadQnr(account):
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -4669,6 +4684,7 @@ def leadQnr(account):
 
 
 def reset_user_metric(aid) :
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     # cur = dbconn.cursor()
     try :
@@ -4722,7 +4738,7 @@ def CrifScore(account):
             dbconn.close()
 
 def fileUploadDTlead(qnrdata, actionval, *files):     
-    
+    print("In function: ", inspect.stack()[0].function)
     fileUploadDT.fileslist= list(files)
     supported_filetypes= ['png', 'jpg', 'pdf', 'jpeg', 'bmp', 'flw', 'docx', 'txt']
     supported_videotypes= ['mp4', 'mov', 'flv', 'mkv', 'avi', 'webm']
@@ -4775,6 +4791,7 @@ def fileUploadDTlead(qnrdata, actionval, *files):
 
 
 def QuestionnaireAnswerslead(qnrdata, proConId, **kwargs):
+    print("In function: ", inspect.stack()[0].function)
     faker = Faker()      
     try:
         id = qnrdata['questionnaireId']
@@ -5437,6 +5454,7 @@ def enquiryStatus(account):
             dbconn.close()
 
 def updateEnquiryStatus(account):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         with dbconn.cursor() as cur:
@@ -5457,7 +5475,7 @@ def updateEnquiryStatus(account):
 
 
 def fileUploadDTProcon(qnrdata, actionval, *files):     
-    
+    print("In function: ", inspect.stack()[0].function)
     fileUploadDT.fileslist= list(files)
     supported_filetypes= ['png', 'jpg', 'pdf', 'jpeg', 'bmp', 'flw', 'docx', 'txt']
     supported_videotypes= ['mp4', 'mov', 'flv', 'mkv', 'avi', 'webm']
@@ -5743,6 +5761,7 @@ def loanProducts(account):
             dbconn.close()
 
 def clear_enquiry(number):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(number)    
    # uid = get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -6354,3 +6373,35 @@ def timestamp_conversion(timestamp):
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
         return 0
+
+def clear_multilocation (usrid):
+    print("In function: ", inspect.stack()[0].function)
+    aid=get_acc_id(usrid)
+    clear_queue(usrid)
+    clear_Rating(usrid)
+    clear_appt_schedule(usrid)
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try :
+        with dbconn.cursor() as cursor:
+            print('fetching base location id')
+            cursor.execute("SELECT base_location FROM account_info_tbl WHERE id='%s'" % aid)
+            row = cursor.fetchone()
+            baseloc_id = row[0]
+            delete_search(aid)
+            delete_schedule_service(aid)
+            delete_entry('transaction_payment_tbl','account',aid,cursor)
+            delete_entry('donation_tbl','account',aid,cursor)
+            cursor.execute("SELECT id FROM location_tbl WHERE account='%s'" % aid)
+            row = cursor.fetchall()
+            print (row) 
+            for index in range(len(row)):
+                if row[index][0]!= baseloc_id:
+                    delete_entry_2Fields('location_tbl','id',int(row[index][0]),'account',aid,cursor)
+            dbconn.commit()
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+    finally:
+        if dbconn is not None:
+            dbconn.close()
