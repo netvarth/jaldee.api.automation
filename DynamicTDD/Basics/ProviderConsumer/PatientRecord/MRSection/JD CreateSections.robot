@@ -362,10 +362,11 @@ JD-TC-Create Sections-UH5
 
     ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}    note=${caption}
 
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+
 
 JD-TC-Create Sections-UH6
 
@@ -394,19 +395,19 @@ JD-TC-Create Sections-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Should Be Equal As Strings    ${resp.json()[0]['enumName']}   ${}
-    Set Test Variable    ${enumName}    ${resp.json()[0]['enumName']}
-    Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
-    Set Test Variable    ${sortOrder}    ${resp.json()[0]['sortOrder']}
+    Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
+    # Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
+    # Set Test Variable    ${sortOrder}    ${resp.json()[0]['sortOrder']}
 
-    Set Test Variable    ${enumName1}    ${resp.json()[1]['enumName']}
-    Set Test Variable    ${displayName1}    ${resp.json()[1]['displayName']}
-    Set Test Variable    ${sortOrder1}    ${resp.json()[1]['sortOrder']}   
-    Set Test Variable    ${schema1}    ${resp.json()[1]['schema']['properties']['chiefComplaint']['description']}
-
-    Set Test Variable    ${enumName4}    ${resp.json()[4]['enumName']}
-    Set Test Variable    ${displayName4}    ${resp.json()[4]['displayName']}
-    Set Test Variable    ${sortOrder4}    ${resp.json()[4]['sortOrder']}   
-    Set Test Variable    ${schema4}    ${resp.json()[4]['schema']['properties']['medication']['items']}
+    # Set Test Variable    ${enumName1}    ${resp.json()[1]['enumName']}
+    # Set Test Variable    ${displayName1}    ${resp.json()[1]['displayName']}
+    # Set Test Variable    ${sortOrder1}    ${resp.json()[1]['sortOrder']}   
+    # Set Test Variable    ${schema1}    ${resp.json()[1]['schema']['properties']['chiefComplaint']['description']}
+    Set Suite Variable    ${temp_id4}    ${resp.json()[3]['id']}
+    Set Test Variable    ${enumName4}    ${resp.json()[3]['sectionType']}
+    # Set Test Variable    ${displayName4}    ${resp.json()[4]['displayName']}
+    # Set Test Variable    ${sortOrder4}    ${resp.json()[4]['sortOrder']}   
+    # Set Test Variable    ${schema4}    ${resp.json()[4]['schema']['properties']['medication']['items']}
 
     ${items}=    Create List
 
@@ -414,7 +415,35 @@ JD-TC-Create Sections-UH7
     Set Suite Variable    ${MEDICATION}
   
 
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       MEDICATION    ${MEDICATION}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id4}       MEDICATION    ${MEDICATION}    ${attachments}   voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+
+JD-TC-Create Sections-U
+
+    [Documentation]    Create multiple Sections with differnt values .
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${complaint}=  FakerLibrary.name
+
+    ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${complaint}    
+    # note=${caption}
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+
+    ${complaint1}=  FakerLibrary.last_name
+
+    ${CHIEFCOMPLAINT1}=  create Dictionary  chiefComplaint=${complaint1}    
+    # note=${caption}
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}

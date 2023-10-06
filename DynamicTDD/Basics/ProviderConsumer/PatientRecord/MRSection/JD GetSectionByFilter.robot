@@ -280,14 +280,14 @@ JD-TC-Create Sections-1
     ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}
     Set Suite Variable    ${CHIEFCOMPLAINT}
 
+    ${start}=    Get Current Date    result_format=%H:%M:%S
+    Set Suite Variable    ${start} 
+
     ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${Sec_Id}    ${resp.json()['id']}
     Set Suite Variable    ${Sec_UId}    ${resp.json()['uid']}
-
-    ${start}=    Get Current Date    result_format=%H:%M:%S
-    Set Suite Variable    ${start} 
 
     ${resp}=    Get Sections Filter   caseUid-eq=${caseUId}    
     Log   ${resp.content}
@@ -486,17 +486,24 @@ JD-TC-Create Sections-9
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${DAY2}=  add_date  10 
-
+    # ${DAY2}=  add_date  10 
+    sleep  02s
     ${caption11}=  Fakerlibrary.Sentence
     ${CHIEFCOMPLAINT1}=  create Dictionary  chiefComplaint=${caption11}    
     Set Suite Variable    ${CHIEFCOMPLAINT1}
+
+    ${UpdatedTime}=    Get Current Date    result_format=%H:%M:%S
+    Set Suite Variable    ${UpdatedTime} 
 
     ${resp}=    Update MR Sections    ${Sec_UId}    ${enumName}     ${CHIEFCOMPLAINT1}    ${attachments}   voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Sections Filter   updatedDate-eq=${DAY2}    
+    ${resp}    Get Sections By UID     ${Sec_UId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   updatedDate-eq=${DAY1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
@@ -508,7 +515,9 @@ JD-TC-Create Sections-9
     Should Be Equal As Strings     ${resp.json()[0]['doctor']['lastName']}    ${pdrlname}
     Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
     Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
-    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption11}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
     Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
+    Should Be Equal As Strings     ${resp.json()[0]['updatedDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['updatedDateString']}    ${DAY1} ${UpdatedTime}
