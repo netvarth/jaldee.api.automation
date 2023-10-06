@@ -21,50 +21,48 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 *** Variables ***
 
 @{emptylist}
+${invoiceAmount}                     80000
+${downpaymentAmount}                 20000
+${requestedAmount}                   60000
+${sanctionedAmount}                  60000
 
-${invoiceAmount}    60000
-${downpaymentAmount}    2000
-${requestedAmount}    58000
-${sanctionedAmount}   58000
+${jpgfile}                           /ebs/TDD/uploadimage.jpg
+${pngfile}                           /ebs/TDD/upload.png
+${pdffile}                           /ebs/TDD/sample.pdf
+${jpgfile2}                          /ebs/TDD/small.jpg
+${gif}                               /ebs/TDD/sample.gif
+${xlsx}                              /ebs/TDD/qnr.xlsx
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
+${order}                             0
+${fileSize}                          0.00458
 
-${order}    0
-${fileSize1}  0.00458
+${aadhaar}                           555555555555
 
-${aadhaar}   555555555555
-${pan}       5555523145
-${bankAccountNo}    5555534564
-${bankIfsc}         5555566
-${bankPin}       5555533
+${monthlyIncome}                     80000
+${emiPaidAmountMonthly}              2000
+${start}                             12
 
-${bankAccountNo2}    5555534587
-${bankIfsc2}         55555688
-${bankPin2}       5555589
+${customerEducation}                 1    
+${customerEmployement}               1   
+${salaryRouting}                     1
+${familyDependants}                  1
+${noOfYearsAtPresentAddress}         1  
+${currentResidenceOwnershipStatus}   1  
+${ownedMovableAssets}                1
+${goodsFinanced}                     1
+${earningMembers}                    1
+${existingCustomer}                  1
+${autoApprovalUptoAmount}            50000
+${autoApprovalUptoAmount2}           70000
+${cibilScore}                        850
 
-${monthlyIncome}    80000
-${emiPaidAmountMonthly}    2000
-${start}   12
-
-${customerEducation}    1
-${customerEmployement}   1   
-${salaryRouting}    1
-${familyDependants}    1
-${noOfYearsAtPresentAddress}    1  
-${currentResidenceOwnershipStatus}    1 
-${ownedMovableAssets}    1
-${goodsFinanced}    1
-${earningMembers}    1
-${existingCustomer}    1
-${vehicleNo}    2456
-
-${autoApprovalUptoAmount}    50000
-${autoApprovalUptoAmount2}    70000
+${minCreditScoreRequired}            50
+${minEquifaxScoreRequired}           690
+${minCibilScoreRequired}             690
+${minAge}                            23
+${maxAge}                            60
+${minAmount}                         5000
+${maxAmount}                         300000
 
 *** Keywords ***
 
@@ -137,9 +135,9 @@ JD-TC-Change Status Of Uploaded File-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[0]}    ${bool[1]}    ${empty}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan
+    ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[0]}    ${bool[1]}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan    autoEmiDeductionRequire=${bool[1]}   partnerRequired=${bool[0]}  documentSignatureRequired=${bool[0]}   digitalSignatureRequired=${bool[1]}   emandateRequired=${bool[1]}   creditScoreRequired=${bool[1]}   equifaxScoreRequired=${bool[1]}   cibilScoreRequired=${bool[1]}   minCreditScoreRequired=${minCreditScoreRequired}   minEquifaxScoreRequired=${minEquifaxScoreRequired}   minCibilScoreRequired=${minCibilScoreRequired}   minAge=${minAge}   maxAge=${maxAge}   minAmount=${minAmount}   maxAmount=${maxAmount}   bankStatementVerificationRequired=${bool[1]}   eStamp=DIGIO 
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings            ${resp.status_code}   200
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -877,7 +875,7 @@ JD-TC-Change Status Of Uploaded File-1
     ${caption3}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption3}
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Test Variable    ${driveId}    ${resp.json()[0]['driveId']}

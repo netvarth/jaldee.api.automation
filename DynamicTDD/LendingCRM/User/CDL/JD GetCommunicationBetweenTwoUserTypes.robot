@@ -51,7 +51,9 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -98,7 +100,9 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-2
     ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -144,7 +148,9 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-3
     ${resp}=  Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id3}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id3}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -189,7 +195,9 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-4
     ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -244,7 +252,9 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}

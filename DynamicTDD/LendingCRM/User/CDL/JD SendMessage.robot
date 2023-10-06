@@ -50,7 +50,9 @@ JD-TC-SendMessage-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
@@ -76,7 +78,9 @@ JD-TC-SendMessage-2
     ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id2}  ${decrypted_data['id']}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -107,7 +111,9 @@ JD-TC-SendMessage-3
     ${resp}=  Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id3}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id3}  ${decrypted_data['id']}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -135,7 +141,9 @@ JD-TC-SendMessage-4
     ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${fname}=  Fakerlibrary.firstname
     ${lname}=  Fakerlibrary.lastname
@@ -172,7 +180,9 @@ JD-TC-SendMessage-5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -267,7 +277,9 @@ JD-TC-SendMessage-6
     ${resp}=  Encrypted Provider Login  ${MUSERNAME95}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -364,7 +376,9 @@ JD-TC-SendMessage-7
     ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
 
     clear_customer   ${MUSERNAME20}
 
@@ -390,7 +404,9 @@ JD-TC-SendMessage-UH1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME26}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -422,7 +438,9 @@ JD-TC-SendMessage-UH2
     ${resp}=  Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${caption}=  Fakerlibrary.Sentence
     ${resp}=  db.getType   ${jpgfile}
@@ -469,7 +487,9 @@ JD-TC-SendMessage-UH3
     ${resp}=  Encrypted Provider Login  ${MUSERNAME68}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     clear_customer   ${MUSERNAME68}
 
@@ -494,7 +514,9 @@ JD-TC-SendMessage-UH4
     ${resp}=  Encrypted Provider Login  ${MUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -660,7 +682,9 @@ JD-TC-SendMessage-UH5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
 
     clear_customer   ${MUSERNAME20}
 
@@ -689,7 +713,9 @@ JD-TC-SendMessage-UH6
     ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
 
     clear_customer   ${MUSERNAME20}
 

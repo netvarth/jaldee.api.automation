@@ -9648,6 +9648,14 @@ Account Aggregation
     ${resp}=  POST On Session  ynw   /provider/loanapplication/accountaggregate/${loanApplicationUid}/${kycId}  expected_status=any
     [Return]  ${resp}
 
+Get Account Aggregation
+    
+    [Arguments]    ${loanApplicationUid}    ${kycId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/loanapplication/accountaggregatestatus/${loanApplicationUid}/${kycId}  expected_status=any
+    [Return]  ${resp}
+
 Generate CDL Dropdowns
     
     Check And Create YNW Session
