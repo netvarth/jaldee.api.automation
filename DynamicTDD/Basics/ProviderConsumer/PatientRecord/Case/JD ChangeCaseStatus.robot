@@ -300,12 +300,12 @@ JD-TC-Change Case Status-UH2
 
      ${resp}=    Change Case Status    ${caseUId}   ${PRStatus[1]}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
 
 JD-TC-Change Case Status-UH3
 
-    [Documentation]    change Case Status with another login
+    [Documentation]    change Case Status with    INVALID_CASE_ID
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -316,6 +316,8 @@ JD-TC-Change Case Status-UH3
      ${resp}=    Change Case Status    ${caseUId1}   ${PRStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  422
+     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+ 
 
 JD-TC-Change Case Status-UH4
 

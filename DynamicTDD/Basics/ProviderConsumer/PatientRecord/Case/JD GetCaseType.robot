@@ -78,7 +78,7 @@ JD-TC-Get Case Type-1
     
 JD-TC-Get Case Type-2
 
-    [Documentation]    Create Case Category where name contain 255 words and get case category by id
+    [Documentation]    Create Case Category where name contain 255 words and Get Case Type By id 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -102,7 +102,7 @@ JD-TC-Get Case Type-2
 
 JD-TC-Get Case Type-3
 
-    [Documentation]    Create Case Category where name contain 255 words and get case category by id
+    [Documentation]    Create Case Category where name contain 255 words and  Get Case Type By id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -127,7 +127,7 @@ JD-TC-Get Case Type-3
 
 JD-TC-Get Case Type-UH1
 
-    [Documentation]    Get Case Category with another provider login
+    [Documentation]     Get Case Type By id with another provider login
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -140,7 +140,7 @@ JD-TC-Get Case Type-UH1
 
 JD-TC-Get Case Type-UH2
 
-    [Documentation]    Get Case Category without login
+    [Documentation]    Get Case Type By id without login
 
     ${resp}=     Get Case Type     ${id} 
     Log   ${resp.content}
@@ -149,7 +149,7 @@ JD-TC-Get Case Type-UH2
 
 JD-TC-Get Case Type-UH3
 
-    [Documentation]    Get Case Category with invalid id
+    [Documentation]    Get Case Type By id with invalid id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         

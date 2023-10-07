@@ -35,7 +35,7 @@ ${description1}    &^7gsdkqwrrf
 
 JD-TC-Get Case Type Filter-1
 
-    [Documentation]    Update Case Type
+    [Documentation]    Get Case Type Filter
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -96,7 +96,7 @@ JD-TC-Get Case Type Filter-1
 
 JD-TC-Get Case Type Filter-2
 
-    [Documentation]    Update Case type where name contain 255 words
+    [Documentation]    Update Case type where name contain 255 words  and  Get Case Type Filter
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -122,7 +122,7 @@ JD-TC-Get Case Type Filter-2
 
 JD-TC-Get Case Type Filter-3
 
-    [Documentation]    Update Case type where alias name contain 255 words
+    [Documentation]    Update Case type where alias name contain 255 words  and Get Case Type Filter
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -149,7 +149,7 @@ JD-TC-Get Case Type Filter-3
 
 JD-TC-Get Case Category Filter-UH1
 
-    [Documentation]    Get Case Category with another provider login
+    [Documentation]    Get Case Type Filter with another provider login
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -163,7 +163,7 @@ JD-TC-Get Case Category Filter-UH1
 
 JD-TC-Get Case Category Filter-UH2
 
-    [Documentation]    Get Case Category without login
+    [Documentation]  Get Case Type Filter without login
 
     ${resp}=   Get Case Type Filter    
     Log   ${resp.content}

@@ -170,28 +170,8 @@ JD-TC-Update Case Type-4
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${description1}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[1]}
 
+
 JD-TC-Update Case Type-5
-
-    [Documentation]    Update Case type where name is empty
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update Case Type   ${id}  ${empty}  ${description1}   ${toggle[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Case Type    ${id}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()['account']}     ${accountId} 
-    Should Be Equal As Strings    ${resp.json()['name']}     ${empty}
-    Should Be Equal As Strings    ${resp.json()['aliasName']}     ${description1}
-    Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
-   
-JD-TC-Update Case Type-6
 
     [Documentation]    Update Case type where aliasname is empty
 
@@ -318,6 +298,20 @@ JD-TC-Update Case Type-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}    "${INVALID_CASE_TYPE_ID}"
+
+JD-TC-Update Case Type-UH9
+
+    [Documentation]    Update Case type where name is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME20}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Update Case Type   ${id}  ${empty}  ${description1}   ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.content}    "${NAME_REQUIRED}"
+   
 
 
 

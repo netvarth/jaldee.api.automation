@@ -359,7 +359,7 @@ JD-TC-Update MR Case-UH2
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
 
 JD-TC-Update MR Case-UH3

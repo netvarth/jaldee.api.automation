@@ -266,19 +266,6 @@ JD-TC-Update Treatment Plan Work status-UH5
     Should Be Equal As Strings              ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"    "${INVALID_WORK_ID}"
 
-JD-TC-Update Treatment Plan Work status-UH6
-
-    [Documentation]    Update Treatment Plan Work status where status invalid
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${fake_id}=  Random Int  min=500   max=1000
-   ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${fake_id}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"                 # They cant fix this,because of enum value
 
 JD-TC-Update Treatment Plan Work status-UH7
 
@@ -297,6 +284,23 @@ JD-TC-Update Treatment Plan Work status-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}   ${STATUS_OPEN}
+
+
+*** comment ***
+
+JD-TC-Update Treatment Plan Work status-UH6
+
+    [Documentation]    Update Treatment Plan Work status where status invalid
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${fake_id}=  Random Int  min=500   max=1000
+   ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${fake_id}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"                 # They cant fix this,because of enum value
 
     
 

@@ -149,7 +149,7 @@ JD-TC-Get Case Category Filter-3
 
 JD-TC-Get Case Category Filter-UH1
 
-    [Documentation]    Get Case Category with another provider login
+    [Documentation]    Get Case Category Filter with another provider login
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -163,7 +163,7 @@ JD-TC-Get Case Category Filter-UH1
 
 JD-TC-Get Case Category Filter-UH2
 
-    [Documentation]    Get Case Category without login
+    [Documentation]    Get Case Category Filter without login
 
     ${resp}=    Get Case Category Filter     
     Log   ${resp.content}

@@ -170,28 +170,8 @@ JD-TC-Update Case Category-4
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${description1}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[1]}
 
-JD-TC-Update Case Category-5
-
-    [Documentation]    Update Case Category where name is empty
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME15}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update Case Category    ${id}  ${empty}  ${description1}   ${toggle[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Case Category    ${id}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()['account']}     ${accountId} 
-    Should Be Equal As Strings    ${resp.json()['name']}     ${empty}
-    Should Be Equal As Strings    ${resp.json()['aliasName']}     ${description1}
-    Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
    
-JD-TC-Update Case Category-6
+JD-TC-Update Case Category-5
 
     [Documentation]    Update Case Category where aliasname is empty
 
@@ -318,6 +298,20 @@ JD-TC-Update Case Category-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}    "${INVALID_CASE_CATEGORY_ID}"
+
+
+JD-TC-Update Case Category-UH9
+
+    [Documentation]    Update Case Category where name is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Update Case Category    ${id}  ${empty}  ${description1}   ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.content}    "${NAME_REQUIRED}"
 
 
 

@@ -403,7 +403,7 @@ JD-TC-Create Prescription-UH2
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.content}     "${INVALID_Doctor_ID}"
 
-JD-TC-Update Prescription-UH3
+JD-TC-Create Prescription-UH3
 
     [Documentation]    Create Prescription with another provider login
 
