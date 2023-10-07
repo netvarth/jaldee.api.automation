@@ -11047,8 +11047,8 @@ Create Treatment Plan
 
 Update Treatment Plan
 
-    [Arguments]     ${id}  ${caseDto}  ${treatment}  ${works}  &{kwargs}
-    ${data}=  Create Dictionary    id=${id}  caseDto=${caseDto}  treatment=${treatment}  works=${works} 
+    [Arguments]     ${id}  ${caseDto}  ${treatment}   &{kwargs}
+    ${data}=  Create Dictionary    id=${id}  caseDto=${caseDto}  treatment=${treatment}  
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -11061,6 +11061,13 @@ Update Treatment Plan Work status
     [Arguments]     ${treatmentId}  ${workId}  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/${treatmentId}/${workId}/${status}   expected_status=any
+    [Return]  ${resp}
+
+Update Work list in Treatment Plan
+    [Arguments]     ${treatmentId}    ${works}
+    ${data}=  json.dumps  ${works}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/work/${treatmentId}    data=${data}  expected_status=any
     [Return]  ${resp}
 
 Get Treatment Plan By Id
