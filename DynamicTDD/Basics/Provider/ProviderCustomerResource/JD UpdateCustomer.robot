@@ -1486,4 +1486,56 @@ JD-TC-Update CustomerDetails-UH8
     ${resp}=   UpdateCustomer with email  ${cid2}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email3}  ${gender}  ${dob1}  ${ph2}  ${EMPTY}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph3}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_SPHONE}
+
+
+
+JD-TC-Update CustomerDetails-13
+    [Documentation]  update manual id of customer
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # IF  ${resp.json()['enableIvr']}==${bool[0]}
+    #      ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
+    #      Log  ${resp.json()}
+    #      Should Be Equal As Strings  ${resp.status_code}  200
+    # END
+
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${cust_no}    FakerLibrary.Numerify   text=%######
+    Set Test Variable  ${cust_no}  555${cust_no}
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+    ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
+    ${resp}=  AddCustomer  ${cust_no}   countryCode=+${country_code}  firstName=${firstname}   lastName=${lastname}  jaldeeId=${jaldeeid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
+
+    ${resp}=  GetCustomer ById  ${cid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jaldeeId']}  ${jaldeeid}
+
+    ${jaldeeid2}=  Generate Random String  6  [LETTERS][NUMBERS]
+    ${resp}=  Update Customer Details  ${cid}  jaldeeId=${jaldeeid2}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${cust_no}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer ById  ${cid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jaldeeId']}  ${jaldeeid2}
      
