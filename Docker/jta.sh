@@ -169,11 +169,13 @@ setPathVariables()
 createDir()
 {
     if [ "$1" -eq 1 ] && [ "$2" = "0" ]; then
-        mkdir -p $3
+        mkdir -p "$3"
+        echo " Created Directory $3 "
     elif [ "$1" -eq 1 ] && [ "$2" = "1" ]; then
         read -p "The given path does not exist. would you like to create it? (y/n): " reply
         if [ "$reply" = "y" ] || [ "$reply" = "yes" ] ;then
-            mkdir -p $3
+            mkdir -p "$3"
+            echo " Created Directory $3 "
         elif [ "$reply" = "n" ] || [ "$reply" = "no" ] ;then
             echo "Directory does not exist. cannot continue."
             exit 3
@@ -521,7 +523,7 @@ populateBankMasterTable()
 # Take backup of database if provider/consumer/Branch signup is required. delete database backup older than 15 days.
 dbBackup ()
 {
-    mkdir -p ${DB_BACKUP_PATH}/Log/
+    mkdir -p "$DB_BACKUP_PATH/Log/"
     local -r MYSQL_USER='root'
     local -r DATABASE_NAME='ynw'
     local -r MYSQL_PORT='3306'
@@ -560,13 +562,13 @@ eof
     # mysql -fv -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} < ${inputPath}/$SQLFileName
     # mysql -f -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} < ${inputPath}/$SQLFileName
 
-    echo -e "\nLogging Database Data before backup in - ${DB_BACKUP_PATH}/Log/$logFileName"
-    echo -e "\n------------------------------------------------------------------------------$logdate------------------------------------------------------------------------------------\n" >> "${DB_BACKUP_PATH}/Log/$logFileName"
-    for i in $(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DATABASE_NAME} -e 'SHOW TABLES' | grep -v "Tables_in" | awk '{print $1}'); do echo "TABLE: $i"; mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DATABASE_NAME} -e "show create table $i"; echo -e "\n"; done >> "${DB_BACKUP_PATH}/Log/$logFileName"
-    echo -e "\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" >> "${DB_BACKUP_PATH}/Log/$logFileName"
+    echo -e "\nLogging Database Data before backup in - $DB_BACKUP_PATH/Log/$logFileName"
+    echo -e "\n------------------------------------------------------------------------------$logdate------------------------------------------------------------------------------------\n" >> "$DB_BACKUP_PATH/Log/$logFileName"
+    for i in $(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DATABASE_NAME} -e 'SHOW TABLES' | grep -v "Tables_in" | awk '{print $1}'); do echo "TABLE: $i"; mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} ${DATABASE_NAME} -e "show create table $i"; echo -e "\n"; done >> "$DB_BACKUP_PATH/Log/$logFileName"
+    echo -e "\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" >> "$DB_BACKUP_PATH/Log/$logFileName"
 
-    echo -e "\nBacking up Database to - ${DB_BACKUP_PATH}/${DATABASE_NAME}-${TODAY}.sql"
-    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}" 
+    echo -e "\nBacking up Database to - $DB_BACKUP_PATH/${DATABASE_NAME}-${TODAY}.sql"
+    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --add-drop-database --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}" 
     if [ $? -eq 0 ]; then
         echo "Database backup completed successfully"
     else
@@ -574,17 +576,17 @@ eof
         exit 5
     fi
 
-    if [ ! -z "${DB_BACKUP_PATH}" ]; then
-        backup_file_count=$(find "${DB_BACKUP_PATH}" -mindepth 1 -type f -mtime +${BACKUP_RETAIN_DAYS} -print | wc -l)
+    if [ ! -z "$DB_BACKUP_PATH" ]; then
+        backup_file_count=$(find "$DB_BACKUP_PATH" -mindepth 1 -type f -mtime +${BACKUP_RETAIN_DAYS} -print | wc -l)
         if [[ $backup_file_count -gt 0 ]]; then
             echo -e "\n $backup_file_count Backup files older than ${BACKUP_RETAIN_DAYS} days found. Deleting them.\n"
-            find "${DB_BACKUP_PATH}" -mindepth 1 -type f -mtime +${BACKUP_RETAIN_DAYS} -print -delete
+            find "$DB_BACKUP_PATH" -mindepth 1 -type f -mtime +${BACKUP_RETAIN_DAYS} -print -delete
         else
             echo -e "\nNo backup files older than ${BACKUP_RETAIN_DAYS} days found.\n"
         fi
     fi
     
-    for file in "${DB_BACKUP_PATH}/Log"/*; do
+    for file in "$DB_BACKUP_PATH/Log"/*; do
     if [ -f "$file" ]; then
         filename=$(echo ${file#$DB_BACKUP_PATH/Log/})
         if [ "$filename" = "$logFileName" ]; then
@@ -597,12 +599,12 @@ eof
     fi
     done
 
-    numfiles=$(ls -l "${DB_BACKUP_PATH}/Log/${logFileName}"* | wc -l)
+    numfiles=$(ls -l "$DB_BACKUP_PATH/Log/${logFileName}"* | wc -l)
     if [ $numfiles -ge 2 ]; then
-        log_file_count=$(find "${DB_BACKUP_PATH}/Log" -name "${logFileName}"* -mindepth 1 -type f -mtime +${log_retain_days} -print | wc -l)
+        log_file_count=$(find "$DB_BACKUP_PATH/Log" -name "${logFileName}"* -mindepth 1 -type f -mtime +${log_retain_days} -print | wc -l)
         if [[ $log_file_count -gt 0 ]]; then
             echo -e "\n $log_file_count Backup Log files older than ${log_retain_days} days found. Deleting them.\n"
-            find "${DB_BACKUP_PATH}/Log" -name "${logFileName}"* -mindepth 1 -type f -mtime +${log_retain_days} -print -delete
+            find "$DB_BACKUP_PATH/Log" -name "${logFileName}"* -mindepth 1 -type f -mtime +${log_retain_days} -print -delete
         else
             echo -e "\nNo backup log files older than ${log_retain_days} days found.\n"
         fi

@@ -37,29 +37,29 @@ Get Date Time via Timezone
 *** Test Cases ***  
 Testing timezones
 
-    
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=AE  coords_only=False    #UAE
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=ARE  coords_only=False   #UAE
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=OM  coords_only=False      #OMAN
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=QA  coords_only=False      #Qatar
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=BH  coords_only=False      #Bahrain
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=SA  coords_only=False      #saudi arabia
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=KW  coords_only=False      #Kuwait
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=YE  coords_only=False      #Yemen
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=IR  coords_only=False      #Iran
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=IQ  coords_only=False      #Iraq
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=ER  coords_only=False     #Eritrea
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=PK  coords_only=False      #Pakistan
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=DJ  coords_only=False     #Djibouti
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=AF  coords_only=False     #Afghanistan
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=JO  coords_only=False     #Jordan
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=SY  coords_only=False     #Syria
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=IL  coords_only=False     #Israel
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=PS  coords_only=False     #Palestinian Territory
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=TM  coords_only=False     #Turkmenistan
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=LB  coords_only=False     #Lebanon
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=EG  coords_only=False     #Egypt
-    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=ET  coords_only=False     #Ethiopia
+    # Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    # Ref: https://www.nationsonline.org/oneworld/country_code_list.htm
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=AE  coords_only=False    #UAE -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=OM  coords_only=False      #OMAN -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=QA  coords_only=False      #Qatar -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=BH  coords_only=False      #Bahrain -  	Asia/Qatar
+    ${value}  FakerLibrary.Local Latlng  country_code=SA  coords_only=False      #saudi arabia-                         Asia/Riyadh
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KW  coords_only=False      #Kuwait -  	Asia/Riyadh, Asia/Kuwait
+    ${value}  FakerLibrary.Local Latlng  country_code=YE  coords_only=False      #Yemen-             	Asia/Riyadh, Asia/Aden
+    ${value}  FakerLibrary.Local Latlng  country_code=IR  coords_only=False      #Iran -   Asia/Tehran
+    ${value}  FakerLibrary.Local Latlng  country_code=IQ  coords_only=False      #Iraq -     	Asia/Baghdad
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=ER  coords_only=False     #Eritrea-      Africa/Asmara
+    ${value}  FakerLibrary.Local Latlng  country_code=PK  coords_only=False      #Pakistan -        Asia/Karachi
+    ${value}  FakerLibrary.Local Latlng  country_code=DJ  coords_only=False     #Djibouti-  Africa/Djibouti, Africa/Nairobi
+    ${value}  FakerLibrary.Local Latlng  country_code=AF  coords_only=False     #Afghanistan- Asia/Kabul
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=JO  coords_only=False     #Jordan-  Asia/Amman
+    ${value}  FakerLibrary.Local Latlng  country_code=SY  coords_only=False     #Syria-   	Asia/Damascus
+    ${value}  FakerLibrary.Local Latlng  country_code=IL  coords_only=False     #Israel -   Asia/Jerusalem, Asia/Tel_Aviv
+    ${value}  FakerLibrary.Local Latlng  country_code=PS  coords_only=False     #Palestinian Territory-     Asia/Gaza
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=TM  coords_only=False     #Turkmenistan-  Asia/Ashgabat, Asia/Ashkhabad
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=LB  coords_only=False     #Lebanon-   	Asia/Beirut
+    ${value}  FakerLibrary.Local Latlng  country_code=EG  coords_only=False     #Egypt-     Africa/Cairo
+    ${value}  FakerLibrary.Local Latlng  country_code=ET  coords_only=False     #Ethiopia-       	Africa/Addis_Ababa, Africa/Nairobi
     
     # ${latti}  ${longi}  ${city}  ${country_abbr}  ${AE_tz}=  FakerLibrary.Local Latlng  country_code=AE  coords_only=False
     # ${latti}  ${longi}  ${city}  ${country_abbr}  ${AE_tz}=  FakerLibrary.Local Latlng  country_code=ARE  coords_only=False

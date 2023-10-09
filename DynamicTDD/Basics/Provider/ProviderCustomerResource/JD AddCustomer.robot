@@ -29,11 +29,9 @@ JD-TC-AddCustomer-1
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -41,13 +39,14 @@ JD-TC-AddCustomer-1
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${ph2}  ${EMPTY}
-     Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid}  ${resp.json()}
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
      ${resp}=  GetCustomer ById  ${cid}
-     Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     
      ${resp}=  GetCustomer    phoneNo-eq=${ph2}   status-eq=ACTIVE   
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -70,8 +69,9 @@ JD-TC-AddCustomer-2
      Set Suite Variable  ${ph2}
      Set Suite Variable  ${email2}  ${firstname1}${ph2}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname1}  ${lastname1}  ${EMPTY}  ${email2}  ${gender1}  ${dob1}  ${ph2}  ${EMPTY}
-     Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     
      Set Test Variable  ${cid1}  ${resp.json()}
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
      ${resp}=  GetCustomer    phoneNo-eq=${ph2}    status-eq=ACTIVE  
@@ -111,8 +111,9 @@ JD-TC-AddCustomer-4
      ${ph5}=  Evaluate  ${PUSERNAME233}+72004
      Set Test Variable  ${email}  ${firstname}${ph5}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${ph5}  ${EMPTY}
-     Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph5}${\n}
      ${resp}=  ProviderLogout
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -160,8 +161,9 @@ JD-TC-AddCustomer-5
      ${dob2}=  FakerLibrary.Date
      ${gender2}=  Random Element    ${Genderlist}
      ${resp}=  AddCustomer with email   ${firstname2}  ${lastname2}  ${EMPTY}  ${email5}  ${gender2}  ${dob2}  ${ph6}  ${EMPTY}
-     Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     
      Set Test Variable  ${cid1}  ${resp.json()}
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}
      ${resp}=  GetCustomer    phoneNo-eq=${ph6}   status-eq=ACTIVE   
@@ -211,8 +213,8 @@ JD-TC-AddCustomer-7
      ${gender}=  Random Element    ${Genderlist}
      Set Test Variable  ${email}  ${firstname1}${ph3}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname1}  ${lastname1}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
-     Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid2}  ${resp.json()}
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph3}${\n}
      ${resp}=  GetCustomer    phoneNo-eq=${ph3}    status-eq=ACTIVE  
@@ -230,8 +232,8 @@ JD-TC-AddCustomer-8
      ${gender}=  Random Element    ${Genderlist}
      Set Test Variable  ${email}  ${firstname}${PUSERNAME231}${C_Email}.${test_mail}
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${PUSERNAME231}  ${EMPTY}
-     Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid2}  ${resp.json()}
      ${resp}=  GetCustomer    phoneNo-eq=${PUSERNAME231}    status-eq=ACTIVE
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -247,11 +249,9 @@ JD-TC-AddCustomer-9
      clear waitlist   ${PUSERNAME231}
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
-
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
@@ -409,9 +409,9 @@ JD-TC-AddCustomer-10
      ${gender}=  Random Element    ${Genderlist}
      ${dob}=  FakerLibrary.Date
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph6}  ${ph3}
-     Set Test Variable  ${cid9}  ${resp.json()}
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${cid9}  ${resp.json()}
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}
 
      ${resp}=  ProviderLogout
@@ -641,16 +641,15 @@ JD-TC-AddCustomer-12
      ${dob}=  FakerLibrary.Date
      ${m_jid}=  Random Int  min=51  max=60
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph6}  ${m_jid}
-     Set Test Variable  ${cid}  ${resp.json()}
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${cid}  ${resp.json()}
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}                      
 
      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${desc}=   FakerLibrary.word
      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
      Should Be Equal As Strings  ${resp.status_code}  200
-     
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid4}  ${wid[0]}
      ${resp}=  Get Waitlist By Id  ${wid4} 
@@ -746,7 +745,6 @@ JD-TC-AddCustomer-13
      ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200 
-     
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -816,8 +814,8 @@ JD-TC-AddCustomer-15
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${resp}=  AddCustomer without email   ${EMPTY}  ${EMPTY}  ${EMPTY}   ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
      Log  ${resp.json()}
-     Set Test Variable  ${cidE}  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${cidE}  ${resp.json()}
      clear_queue      ${PUSERNAME231}
      clear_location   ${PUSERNAME231}
      clear_service    ${PUSERNAME231}
@@ -853,7 +851,6 @@ JD-TC-AddCustomer-15
      ${resp}=  Add To Waitlist  ${cidE}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cidE} 
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid5}  ${wid[0]}
      ${resp}=  Get Waitlist By Id  ${wid5} 
@@ -923,8 +920,8 @@ JD-TC-AddCustomer-UH4
      Should Be Equal As Strings    ${resp.status_code}    401
      Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
      ${resp}=  Consumer Login  ${ph7}  ${PASSWORD}
-     Should Be Equal As Strings    ${resp.status_code}    401
      Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    401
      Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_CUSTOMER}"
 
 
@@ -2610,8 +2607,6 @@ JD-TC-AddCustomer-23
      ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id4}  ${cnote}  ${bool[0]}  ${self}
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200 
-         
-    
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid4}  ${wid[0]}
 
@@ -2873,9 +2868,7 @@ D-TC-AddCustomer-UH8
      Should Be Equal As Strings  ${resp.status_code}  422
    
     
-
-
-JD-TC-AddCustomer-18
+JD-TC-AddCustomer-24
      [Documentation]  Add a new valid customer without Secondary phone number
      ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -2886,8 +2879,8 @@ JD-TC-AddCustomer-18
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
      ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
-     Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid}  ${resp.json()}
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
      ${resp}=  GetCustomer ById  ${cid}
@@ -2900,6 +2893,42 @@ JD-TC-AddCustomer-18
      ${resp}=  GetCustomer    secondaryPhoneNo-eq=${ph2}    status-eq=ACTIVE
      Should Be Equal As Strings  ${resp.status_code}  200
      Verify Response List  ${resp}  0  firstName=${firstname}  lastName=${lastname}  phoneNo=${phone1}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
+
+
+JD-TC-AddCustomer-25
+     [Documentation]  Add a customer with manual id.
+
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Test Variable  ${p_id}  ${decrypted_data['id']}
+     
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     # IF  ${resp.json()['enableIvr']}==${bool[0]}
+     #      ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
+     #      Log  ${resp.json()}
+     #      Should Be Equal As Strings  ${resp.status_code}  200
+     # END
+
+     ${firstname}=  FakerLibrary.first_name
+     ${lastname}=  FakerLibrary.last_name
+     ${cust_no}    FakerLibrary.Numerify   text=%######
+     Set Test Variable  ${cust_no}  555${cust_no}
+     ${dob}=  FakerLibrary.Date
+     ${gender}=  Random Element    ${Genderlist}
+     ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
+     ${resp}=  AddCustomer  ${cust_no}   countryCode=+${country_code}  firstName=${firstname}   lastName=${lastname}  jaldeeId=${jaldeeid}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${cid}  ${resp.json()}
+     ${resp}=  GetCustomer ById  ${cid}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['jaldeeId']}  ${jaldeeid}
 
 
 

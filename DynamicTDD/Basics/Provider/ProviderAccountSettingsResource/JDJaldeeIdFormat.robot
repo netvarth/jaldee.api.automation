@@ -35,13 +35,13 @@ JD-TC-JaldeeIDformat-1
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph2}  ${EMPTY}
-    Set Test Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${j_id}  ${resp.json()['jaldeeId']}
     Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
     Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
@@ -81,8 +81,8 @@ JD-TC-JaldeeIDformat-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${j_id}  ${resp.json()['jaldeeId']}
     Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
     Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
