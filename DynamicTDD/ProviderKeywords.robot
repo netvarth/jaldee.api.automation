@@ -9650,11 +9650,28 @@ Account Aggregation
     ${resp}=  POST On Session  ynw   /provider/loanapplication/accountaggregate/${loanApplicationUid}/${kycId}  expected_status=any
     [Return]  ${resp}
 
+Get Account Aggregation
+    
+    [Arguments]    ${loanApplicationUid}    ${kycId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/loanapplication/accountaggregatestatus/${loanApplicationUid}/${kycId}  expected_status=any
+    [Return]  ${resp}
+
 Generate CDL Dropdowns
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/csms/settings  expected_status=any
     [Return]  ${resp}
+
+Cancel Loan Application
+
+    [Arguments]    ${loanApplicationUid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/cancel    expected_status=any
+    [Return]  ${resp}
+
 
 Generate Credit Score-MAFIL Score
 
@@ -10565,7 +10582,7 @@ Submit Provider Member Qnr
     [Arguments]    ${memberId}  ${data}
 
     Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /provider/membership/member/questionnaire/submit/${memberId}    data=${data}       expected_status=any
+    ${resp}=    POST On Session  ynw  /provider/membership/questionnaire/submit/${memberId}    data=${data}       expected_status=any
     [Return]  ${resp}
 
 # ........Finance Manager.............

@@ -21,50 +21,48 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 *** Variables ***
 
 @{emptylist}
+${invoiceAmount}                     80000
+${downpaymentAmount}                 20000
+${requestedAmount}                   60000
+${sanctionedAmount}                  60000
 
-${invoiceAmount}    60000
-${downpaymentAmount}    2000
-${requestedAmount}    58000
-${sanctionedAmount}   58000
+${jpgfile}                           /ebs/TDD/uploadimage.jpg
+${pngfile}                           /ebs/TDD/upload.png
+${pdffile}                           /ebs/TDD/sample.pdf
+${jpgfile2}                          /ebs/TDD/small.jpg
+${gif}                               /ebs/TDD/sample.gif
+${xlsx}                              /ebs/TDD/qnr.xlsx
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
+${order}                             0
+${fileSize}                          0.00458
 
-${order}    0
-${fileSize1}  0.00458
+${aadhaar}                           555555555555
 
-${aadhaar}   555555555555
-${pan}       5555523145
-${bankAccountNo}    5555534564
-${bankIfsc}         5555566
-${bankPin}       5555533
+${monthlyIncome}                     80000
+${emiPaidAmountMonthly}              2000
+${start}                             12
 
-${bankAccountNo2}    5555534587
-${bankIfsc2}         55555688
-${bankPin2}       5555589
+${customerEducation}                 1    
+${customerEmployement}               1   
+${salaryRouting}                     1
+${familyDependants}                  1
+${noOfYearsAtPresentAddress}         1  
+${currentResidenceOwnershipStatus}   1  
+${ownedMovableAssets}                1
+${goodsFinanced}                     1
+${earningMembers}                    1
+${existingCustomer}                  1
+${autoApprovalUptoAmount}            50000
+${autoApprovalUptoAmount2}           70000
+${cibilScore}                        850
 
-${monthlyIncome}    80000
-${emiPaidAmountMonthly}    2000
-${start}   12
-
-${customerEducation}    1
-${customerEmployement}   1   
-${salaryRouting}    1
-${familyDependants}    1
-${noOfYearsAtPresentAddress}    1  
-${currentResidenceOwnershipStatus}    1 
-${ownedMovableAssets}    1
-${goodsFinanced}    1
-${earningMembers}    1
-${existingCustomer}    1
-${vehicleNo}    2456
-
-${autoApprovalUptoAmount}    50000
-${autoApprovalUptoAmount2}    70000
+${minCreditScoreRequired}            50
+${minEquifaxScoreRequired}           690
+${minCibilScoreRequired}             690
+${minAge}                            23
+${maxAge}                            60
+${minAmount}                         5000
+${maxAmount}                         300000
 
 *** Keywords ***
 
@@ -81,10 +79,12 @@ Account with Multiple Users in NBFC
     FOR   ${a}  IN RANGE   ${length}   
         ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        Set Test Variable  ${Dom}   ${resp.json()['sector']}
-        Set Test Variable  ${SubDom}   ${resp.json()['subSector']}
-        ${name}=  Set Variable  ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
+        ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+        Set Test Variable  ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        Set Test Variable  ${Dom}   ${decrypted_data['sector']}
+        Set Test Variable  ${SubDom}   ${decrypted_data['subSector']}
+        ${name}=  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
         Continue For Loop If  '${Dom}' != "finance"
         Continue For Loop If  '${SubDom}' != "nbfc"
@@ -114,8 +114,10 @@ JD-TC-UpdateFileToTemparyLocation-1
     ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -133,9 +135,9 @@ JD-TC-UpdateFileToTemparyLocation-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[0]}    ${bool[1]}    ${empty}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan
+    ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[0]}    ${bool[1]}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan    autoEmiDeductionRequire=${bool[1]}   partnerRequired=${bool[0]}  documentSignatureRequired=${bool[0]}   digitalSignatureRequired=${bool[1]}   emandateRequired=${bool[1]}   creditScoreRequired=${bool[1]}   equifaxScoreRequired=${bool[1]}   cibilScoreRequired=${bool[1]}   minCreditScoreRequired=${minCreditScoreRequired}   minEquifaxScoreRequired=${minEquifaxScoreRequired}   minCibilScoreRequired=${minCibilScoreRequired}   minAge=${minAge}   maxAge=${maxAge}   minAmount=${minAmount}   maxAmount=${maxAmount}   bankStatementVerificationRequired=${bool[1]}   eStamp=DIGIO 
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings            ${resp.status_code}   200
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -873,7 +875,7 @@ JD-TC-UpdateFileToTemparyLocation-1
     ${caption3}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption3}
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Test Variable    ${driveId}    ${resp.json()[0]['driveId']}
@@ -887,7 +889,7 @@ JD-TC-UpdateFileToTemparyLocation-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${empty}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${empty}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    500 
 
@@ -902,7 +904,7 @@ JD-TC-UpdateFileToTemparyLocation-UH2
 
     ${inv_ptnrid}    FakerLibrary.Random Number
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${inv_ptnrid}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${inv_ptnrid}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -915,7 +917,7 @@ JD-TC-UpdateFileToTemparyLocation-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${empty}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${empty}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    422
 
@@ -928,7 +930,7 @@ JD-TC-UpdateFileToTemparyLocation-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[1]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[1]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -940,7 +942,7 @@ JD-TC-UpdateFileToTemparyLocation-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[1]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[1]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -953,7 +955,7 @@ JD-TC-UpdateFileToTemparyLocation-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${empty}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${empty}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    500
 
@@ -966,7 +968,7 @@ JD-TC-UpdateFileToTemparyLocation-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${empty}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${empty}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -979,7 +981,7 @@ JD-TC-UpdateFileToTemparyLocation-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${empty}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${empty}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    422 
     Should Be Equal As Strings     ${resp.json()}    ${FILE_NAME_NOT_FOUND}
@@ -1007,7 +1009,7 @@ JD-TC-UpdateFileToTemparyLocation-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${empty}    ${fileType3}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${empty}    ${fileType3}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -1020,7 +1022,7 @@ JD-TC-UpdateFileToTemparyLocation-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${empty}    ${partuid1}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${empty}    ${partuid1}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    422
     Should Be Equal As Strings     ${resp.json()}    ${FILE_TYPE_NOT_FOUND}
@@ -1034,7 +1036,7 @@ JD-TC-UpdateFileToTemparyLocation-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${empty}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${empty}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -1049,7 +1051,7 @@ JD-TC-UpdateFileToTemparyLocation-UH13
 
     ${inv_uid}    FakerLibrary.Random Number
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[1]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${inv_uid}    ${order}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[1]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${inv_uid}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
@@ -1062,7 +1064,7 @@ JD-TC-UpdateFileToTemparyLocation-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize1}    ${caption3}    ${fileType3}    ${partuid1}    ${empty}
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${partuid1}    ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 

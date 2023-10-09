@@ -1,20 +1,20 @@
 *** Settings ***
-Suite Teardown    Delete All Sessions
-Test Teardown     Delete All Sessions
-Force Tags        LOAN
-Library           Collections
-Library           String
-Library           json
-Library           FakerLibrary
-Library           /ebs/TDD/db.py
-Library           /ebs/TDD/excelfuncs.py
-Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Suite Teardown     Delete All Sessions
+Test Teardown      Delete All Sessions
+Force Tags         RBAC
+Library            Collections
+Library            String
+Library            json
+Library            FakerLibrary
+Library            /ebs/TDD/db.py
+Library            /ebs/TDD/excelfuncs.py
+Resource           /ebs/TDD/ProviderKeywords.robot
+Resource           /ebs/TDD/ConsumerKeywords.robot
+Resource           /ebs/TDD/ProviderPartnerKeywords.robot
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/consumerlist.py 
+Variables          /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_musers.py
 
 *** Variables ***
 
@@ -62,22 +62,13 @@ ${maxAge}                            60
 ${minAmount}                         5000
 ${maxAmount}                         300000
 
-*** Keywords ***
-
-Get Account Aggregation
-    
-    [Arguments]    ${loanApplicationUid}    ${kycId}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/loanapplication/accountaggregatestatus/${loanApplicationUid}/${kycId}  expected_status=any
-    [Return]  ${resp}
 
 *** Test Cases ***
 
 JD-TC-Account Aggregation-1
-                                  
-    [Documentation]               Create a loan And try to call Account Aggregation.
-    
+
+    [Documentation]  Get Account Aggregation
+
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
     ${length}=  Get Length  ${resp.json()}
@@ -101,7 +92,7 @@ JD-TC-Account Aggregation-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8174581
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -439,19 +430,10 @@ JD-TC-Account Aggregation-1
         Set Suite Variable                 ${address2}
     END                         
 
-    clear Customer  ${PUSERNAME87}
-
-    ${fname}=  FakerLibrary.name
-    ${lname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
-    ${gender}=  Random Element    ${Genderlist}
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
+    ${resp}=   Get Location ById           ${locid}  
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
-    
+    Set Suite Variable                     ${locname1}              ${resp.json()['place']}
     
 # .... Create Branch1....
 
@@ -715,7 +697,8 @@ JD-TC-Account Aggregation-1
     ${dealerfname}=                        FakerLibrary.name
     ${dealername}=                         FakerLibrary.bs
     ${dealerlname}=                        FakerLibrary.last_name
-    ${dob}=                                FakerLibrary.Date
+    ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String             ${dob} 
     Set Test Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
    
     ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
@@ -1000,9 +983,9 @@ JD-TC-Account Aggregation-1
         ${resp1}=  AddCustomer  ${cust}    firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings         ${resp1.status_code}    200
-        Set Test Variable  ${cust_id}      ${resp1.json()}
+        Set Suite Variable  ${cust_id}      ${resp1.json()}
     ELSE
-        Set Test Variable  ${cust_id}      ${resp.json()[0]['id']}
+        Set Suite Variable  ${cust_id}      ${resp.json()[0]['id']}
     END
 
     Set Suite Variable  ${cust_email}           ${fname}${C_Email}.ynwtest@jaldee.com
@@ -1112,11 +1095,12 @@ JD-TC-Account Aggregation-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}  200
 
+
 JD-TC-Account Aggregation-UH1
                                   
     [Documentation]               Account Aggregation with invalid loanuid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

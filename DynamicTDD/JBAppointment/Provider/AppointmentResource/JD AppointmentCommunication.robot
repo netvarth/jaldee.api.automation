@@ -194,13 +194,7 @@ JD-TC-AppointmentCommunication-1
 
     ${datetime} =	Convert Date  ${DAY1}  datetime
     ${date}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
-    # ${converted_slot}=  convert_slot_12hr  ${slot1} 
-    # log    ${converted_slot}
-    # ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [username]   ${uname} 
-    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [service]   ${SERVICE1}
-    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [date]   ${date}
-    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [time]   ${converted_slot}
-    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [providerName]   ${bsname}
+    
     ${apptTime}=  db.get_date_time_by_timezone  ${tz} 
     
     ${resp}=  Get provider communications
@@ -211,17 +205,13 @@ JD-TC-AppointmentCommunication-1
     Set Test Variable  ${timestamp1}   ${resp.json()[1]['timeStamp']}
 
     ${ts} =  Evaluate  ${timestamp}/1000
-    ${start_time}=    DateTime.Convert Date    ${ts}   result_format=%Y-%m-%d %H:%M %p
+    ${start_time}=    DateTime.Convert Date    ${ts}   result_format=%Y-%m-%d %I:%M %p
 
     ${ts1} =  Evaluate  ${timestamp1}/1000
-    ${start_time1}=    DateTime.Convert Date    ${ts1}   result_format=%Y-%m-%d %H:%M %p
-
-    # ${datetime} =	timestamp_conversion   ${timestamp}  
+    ${start_time1}=    DateTime.Convert Date    ${ts1}   result_format=%Y-%m-%d %I:%M %p
+ 
     ${apptTakenTime}=  db.remove_date_time_secs   ${apptTime}
     Should Be Equal As Strings  ${apptTakenTime}   ${start_time}
-
-    # ${datetime1} =	timestamp_conversion   ${timestamp1}  
-    # ${apptTakenTime}=  db.remove_date_time_secs   ${datetime1}
     Should Be Equal As Strings  ${apptTakenTime}   ${start_time1}
 
     Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        0
@@ -229,13 +219,17 @@ JD-TC-AppointmentCommunication-1
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${defconfirm_msg}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${jdconID}
     Should Be Equal As Strings  ${resp.json()[0]['service']}            ${SERVICE1} on ${date}
+    Should Be Equal As Strings  ${resp.json()[0]['timeZone']}           ${tz}
 
     Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}        0
     Should Be Equal As Strings  ${resp.json()[1]['waitlistId']}         ${apptid1}
     Should Be Equal As Strings  ${resp.json()[1]['msg']}                ${msg}
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${jdconID}
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${jdconID}
+    Should Be Equal As Strings  ${resp.json()[0]['service']}            ${SERVICE1} on ${date}
+    Should Be Equal As Strings  ${resp.json()[0]['timeZone']}           ${tz}
     Should Not Contain   ${resp.json()[1]}   attachements
+    
 
     ${resp}=  Consumer Login  ${CUSERNAME26}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -244,15 +238,31 @@ JD-TC-AppointmentCommunication-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    Set Test Variable  ${timestamp2}   ${resp.json()[0]['timeStamp']}
+    Set Test Variable  ${timestamp3}   ${resp.json()[1]['timeStamp']}
+
+    ${ts2} =  Evaluate  ${timestamp2}/1000
+    ${start_time2}=    DateTime.Convert Date    ${ts2}   result_format=%Y-%m-%d %I:%M %p
+
+    ${ts3} =  Evaluate  ${timestamp3}/1000
+    ${start_time3}=    DateTime.Convert Date    ${ts3}   result_format=%Y-%m-%d %I:%M %p
+ 
+    Should Be Equal As Strings  ${apptTakenTime}   ${start_time2}
+    Should Be Equal As Strings  ${apptTakenTime}   ${start_time3}
+
     Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        0
     Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${apptid1}
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${defconfirm_msg}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${jdconID} 
+    Should Be Equal As Strings  ${resp.json()[0]['service']}            ${SERVICE1} on ${date}
+    Should Be Equal As Strings  ${resp.json()[0]['timeZone']}           ${tz}
 
     Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}        0
     Should Be Equal As Strings  ${resp.json()[1]['waitlistId']}         ${apptid1}
     Should Be Equal As Strings  ${resp.json()[1]['msg']}                ${msg}
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${jdconID} 
+    Should Be Equal As Strings  ${resp.json()[0]['service']}            ${SERVICE1} on ${date}
+    Should Be Equal As Strings  ${resp.json()[0]['timeZone']}           ${tz}
     Should Not Contain   ${resp.json()[0]}   attachements
 
     ${resp}=  Consumer Logout
@@ -260,7 +270,9 @@ JD-TC-AppointmentCommunication-1
 
 
 JD-TC-AppointmentCommunication-2
+
     [Documentation]  Send appointment comunication message to consumer with attachment
+    
     ${resp}=  Consumer Login  ${CUSERNAME26}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -486,7 +498,6 @@ JD-TC-AppointmentCommunication-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-# ***Comment***
 
 JD-TC-AppointmentCommunication-3
     [Documentation]  Send appointment comunication message to consumer with multiple files using file types jpeg, png and pdf

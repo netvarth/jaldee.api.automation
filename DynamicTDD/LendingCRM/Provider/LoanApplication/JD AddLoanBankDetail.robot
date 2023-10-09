@@ -91,7 +91,7 @@ JD-TC-AddLoanBankDetails-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745254
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -429,17 +429,10 @@ JD-TC-AddLoanBankDetails-1
         Set Suite Variable                 ${address2}
     END                         
 
-    ${gender}=  Random Element    ${Genderlist}
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-    ${fname}=    FakerLibrary.firstName
-    ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
+    ${resp}=   Get Location ById           ${locid}  
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
-
+    Set Suite Variable                     ${locname1}              ${resp.json()['place']}
     
 # .... Create Branch1....
 
@@ -703,7 +696,8 @@ JD-TC-AddLoanBankDetails-1
     ${dealerfname}=                        FakerLibrary.name
     ${dealername}=                         FakerLibrary.bs
     ${dealerlname}=                        FakerLibrary.last_name
-    ${dob}=                                FakerLibrary.Date
+    ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String             ${dob} 
     Set Test Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
    
     ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
@@ -1096,11 +1090,19 @@ JD-TC-AddLoanBankDetails-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
+    ${resp}=  Get Date Time by Timezone  ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${datetime1}    ${resp.json()}   
+    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
+
     ${resp}=                               Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
+    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
+
 
 # ....... Customer Photo .......
 
@@ -1122,12 +1124,19 @@ JD-TC-AddLoanBankDetails-1
 
 # ....... Save Customer Details .......
 
+    ${resp}=  Get Date Time by Timezone  ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${datetime2}    ${resp.json()} 
+    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d %H:%M
+
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
+    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
-    ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${ cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
+    ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
 
     ${locations}=    Create Dictionary     id=${locId}
@@ -1155,16 +1164,24 @@ JD-TC-AddLoanBankDetails-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
+    ${resp}=  Get Date Time by Timezone  ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${datetime3}    ${resp.json()} 
+    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d %H:%M
+
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
+    
 
 # ....... Verify adhaar number .......
 
-    ${aadhaarAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${ cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}   driveId=${driveId2}   ownerType=${ownerType[0]}   type=photo
+    ${aadhaarAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}   driveId=${driveId2}   ownerType=${ownerType[0]}   type=photo
     Log  ${aadhaarAttachments}
 
-    ${resp}=                               Requst For Aadhar Validation    ${ cust_id}    ${loanuid}    ${cust}    ${aadhaar}    ${aadhaarAttachments}
+    ${resp}=                               Requst For Aadhar Validation    ${cust_id}    ${loanuid}    ${cust}    ${aadhaar}    ${aadhaarAttachments}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
@@ -1174,9 +1191,16 @@ JD-TC-AddLoanBankDetails-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
+    ${resp}=  Get Date Time by Timezone  ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${datetime4}    ${resp.json()} 
+    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d %H:%M
+
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
 
@@ -1198,10 +1222,10 @@ JD-TC-AddLoanBankDetails-1
 
 # ....... Verify Pan Number .......
 
-    ${panAttachments}  Create Dictionary   action=${LoanAction[0]}  owner=${ cust_id}  fileName=${jpgfile2}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
+    ${panAttachments}  Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${jpgfile2}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
     Log  ${panAttachments}
 
-    ${resp}=   Requst For Pan Validation   ${ cust_id}    ${loanuid}    ${cust}    ${pan}    ${panAttachments}
+    ${resp}=   Requst For Pan Validation   ${cust_id}    ${loanuid}    ${cust}    ${pan}    ${panAttachments}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
@@ -1271,27 +1295,34 @@ JD-TC-AddLoanBankDetails-1
 # .......Verify Bank Details .......
 
     ${bankName}                            FakerLibrary.name
+    Set Suite Variable      ${bankName}
     ${bankBranchName}                      FakerLibrary.Street name
+    Set Suite Variable      ${bankBranchName}
     ${bankCity}                            FakerLibrary.word
+    Set Suite Variable      ${bankCity}
     ${bankState}                           FakerLibrary.state
-    Set Suite Variable  ${bankName}
-    Set Suite Variable  ${bankBranchName}
-    Set Suite Variable  ${bankCity}
-    Set Suite Variable  ${bankState}
+    Set Suite Variable      ${bankState}
 
     ${resp}=    Verify loan Bank           ${loanuid}    ${bankAccountNo}    ${bankIfsc}    bankName=${bankName}    bankBranchName=${bankBranchName}    loanApplicationUid=${loanuid}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
+    ${resp}=  Get Date Time by Timezone  ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${datetime5}    ${resp.json()} 
+    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d %H:%M
+
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
 
-    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${ cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
     Log  ${bankStatementAttachments}
-    Set Suite Variable  ${bankStatementAttachments}
+    Set Suite Variable    ${bankStatementAttachments}
 
     ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
     Log  ${resp.content}
@@ -1307,204 +1338,19 @@ JD-TC-AddLoanBankDetails-1
 
 JD-TC-AddLoanBankDetails-2
                                   
-    [Documentation]               Create Loan Application and add loan bank Details without Requst For Aadhar Validation and pan.
+    [Documentation]                add loan bank details where orgin uid is empty
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${PH_Number}    Random Number 	digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable  ${consumernumber}  555${PH_Number}
-    ${gender}    Random Element    ${Genderlist}
-    ${firstName}=  FakerLibrary.name
-    ${lastName}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-    ${resp}=  GetCustomer  phoneNo-eq=${consumernumber}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        Set Test Variable  ${custid}   0
-    ELSE
-        Set Suite Variable  ${custid}      ${resp.json()[0]['id']}
-        Set Suite Variable  ${Custfname}  ${resp.json()[0]['firstname']}
-        Set Suite Variable  ${Custlname}  ${resp.json()[0]['lastname']}
-    END
-
-
-    ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-    ${kyc_list1}=           Create Dictionary  isCoApplicant=${bool[0]}
-    
-    # ${resp}=    Verify Phone Otp and Create Loan Application   ${consumernumber}   ${OtpPurpose['ConsumerVerifyPhone']}   ${custid}    ${firstName}    ${lastName}    ${consumernumber}    ${countryCodes[0]}    ${locId}    ${kyc_list1}
-    ${resp}=    Verify Phone and Create Loan Application with customer details  ${consumernumber}  ${OtpPurpose['ConsumerVerifyPhone']}  ${custid}  ${locId}    ${CustomerPhoto}  ${kyc_list1}  firstName=${firstName}  lastName=${lastName}  phoneNo=${consumernumber}  countryCode=${countryCodes[0]}  gender=${gender}  dob=${dob}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-    Set Suite Variable  ${loanid1}    ${resp.json()['id']}
-    Set Suite Variable  ${loanuid1}    ${resp.json()['uid']}
-
-    ${resp}=    Get Loan Application By uid  ${loanuid1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-    Set Suite Variable  ${kycid}     ${resp.json()["loanApplicationKycList"][0]["id"]}
-
-    ${bankName}       FakerLibrary.name
-    ${bankAddress1}   FakerLibrary.Street name
-    ${bankAddress2}   FakerLibrary.Street name
-    ${bankCity}       FakerLibrary.word
-    ${bankState}      FakerLibrary.state
-
-    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${custid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${bankStatementAttachments}
-
-    ${resp}=    Add loan Bank Details    4    ${loanuid1}    ${loanuid1}    ${bankName}    ${bankAccountNo}    ${bankIfsc}    ${bankAddress1}    ${bankAddress2}    ${bankCity}    ${bankState}   ${bankPin}    ${bankStatementAttachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-    ${resp}=    Get Loan Application By uid  ${loanuid1} 
+    ${resp}=    Add loan Bank Details    ${empty}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
 JD-TC-AddLoanBankDetails-3
                                   
-    [Documentation]               Create Loan Application and add loan bank Details invalid orginfrom.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${PH_Number}    Random Number 	digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Suite Variable  ${consumernumber}  555${PH_Number}
-    ${gender}    Random Element    ${Genderlist}
-    ${firstName}=  FakerLibrary.name
-    ${lastName}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumernumber}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        Set Test Variable  ${custid}   0
-    ELSE
-        Set Suite Variable  ${custid}      ${resp.json()[0]['id']}
-        Set Suite Variable  ${Custfname}  ${resp.json()[0]['firstname']}
-        Set Suite Variable  ${Custlname}  ${resp.json()[0]['lastname']}
-    END
-
-    ${resp}=    Generate Loan Application Otp for Phone Number    ${consumernumber}  ${countryCodes[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-    ${kyc_list1}=           Create Dictionary  isCoApplicant=${bool[0]}
-    
-    # ${resp}=    Verify Phone Otp and Create Loan Application   ${consumernumber}   ${OtpPurpose['ConsumerVerifyPhone']}   ${custid}    ${firstName}    ${lastName}    ${consumernumber}    ${countryCodes[0]}    ${locId}    ${kyc_list1}
-    ${resp}=    Verify Phone and Create Loan Application with customer details  ${consumernumber}  ${OtpPurpose['ConsumerVerifyPhone']}  ${custid}  ${locId}    ${CustomerPhoto}  ${kyc_list1}  firstName=${firstName}  lastName=${lastName}  phoneNo=${consumernumber}  countryCode=${countryCodes[0]}  gender=${gender}  dob=${dob}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-    Set Suite Variable  ${loanid2}    ${resp.json()['id']}
-    Set Suite Variable  ${loanuid2}    ${resp.json()['uid']}
-
-    ${resp}=    Get Loan Application By uid  ${loanuid2} 
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-    Set Suite Variable  ${kycid}     ${resp.json()["loanApplicationKycList"][0]["id"]}
-
-    ${bankName}       FakerLibrary.name
-    ${bankAddress1}   FakerLibrary.Street name
-    ${bankAddress2}   FakerLibrary.Street name
-    ${bankCity}       FakerLibrary.word
-    ${bankState}      FakerLibrary.state
-
-    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${custid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${bankStatementAttachments}
-
-    ${resp}=    Add loan Bank Details    ${bankCity}    ${loanuid2}    ${loanuid2}    ${bankName}    ${bankAccountNo}    ${bankIfsc}    ${bankAddress1}    ${bankAddress2}    ${bankCity}    ${bankState}   ${bankPin}    ${bankStatementAttachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    500
-    Should Be Equal As Strings    ${resp.json()}   ${JALDEE_OUT_OF_REACH_PROBLEM}
-
-    ${resp}=    Get Loan Application By uid  ${loanuid2} 
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-JD-TC-AddLoanBankDetails-4
-                                  
-    [Documentation]               Create Loan Application and add loan bank Details with another provider loan id.
-
-    ${resp}=  Consumer Login  ${CUSERNAME35}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
-
-    ${resp}=  Consumer Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=   ProviderLogin  ${PUSERNAME84}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
-
-    ${fname}=  FakerLibrary.name
-    ${lname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
-    ${gender}=  Random Element    ${Genderlist}
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer with email   ${fname}  ${lname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${phone}  ${EMPTY}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${pcid14}   ${resp1.json()}
-    ELSE
-        Set Suite Variable  ${pcid14}  ${resp.json()[0]['id']}
-    END
-    ${resp}=  GetCustomer  phoneNo-eq=${phone}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-    ${resp}=  db.getType   ${pdffile} 
-    Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
-    Set Suite Variable    ${fileType}
-    ${caption}=  Fakerlibrary.Sentence
-
-    ${resp}=  db.getType   ${jpgfile}
-    Log  ${resp}
-    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
-    Set Suite Variable    ${fileType1}
-    ${caption1}=  Fakerlibrary.Sentence
-
-    ${bankName}    FakerLibrary.name
-    ${bankAddress1}   FakerLibrary.Street name
-    ${bankAddress2}   FakerLibrary.Street name
-    ${bankCity}       FakerLibrary.word
-    ${bankState}      FakerLibrary.state
-
-    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pcid14}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${bankStatementAttachments}
-
-    ${resp}=    Add loan Bank Details   4    ${loanuid1}    ${loanuid1}    ${bankName}    ${bankAccountNo}    ${bankIfsc}    ${bankAddress1}    ${bankAddress2}    ${bankCity}    ${bankState}   ${bankPin}    ${bankStatementAttachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    422
-    Should Be Equal As Strings     ${resp.json()}    ${NO_PERMISSION}
-
-
-JD-TC-AddLoanBankDetails-UH1
-                                  
-    [Documentation]                add loan bank Details invalid orginuid.
+    [Documentation]                add loan bank details where orgin uid is invalid
 
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1516,16 +1362,23 @@ JD-TC-AddLoanBankDetails-UH1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=    Get Loan Application By uid  ${loanuid} 
+JD-TC-AddLoanBankDetails-4
+                                  
+    [Documentation]                add loan bank details where uid is empty
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${empty}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()}   []
 
-
-JD-TC-AddLoanBankDetails-UH2
+JD-TC-AddLoanBankDetails-5
                                   
-    [Documentation]   add loan bank Details invalid originUid.
+    [Documentation]                add loan bank details where uid is invalid
 
-    
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}    200
@@ -1534,186 +1387,201 @@ JD-TC-AddLoanBankDetails-UH2
 
     ${resp}=    Add loan Bank Details    ${loanuid}    ${fake}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
-    Should Be Equal As Strings  ${resp.json()}   []
+    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()}   []
 
-
-JD-TC-AddLoanBankDetails-UH3
+JD-TC-AddLoanBankDetails-6
                                   
-    [Documentation]   add loan bank Details empty bank name
+    [Documentation]                add loan bank details where bank name is empty
 
-    
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}    200
 
     ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${empty}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
+    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-AddLoanBankDetails-UH4
+JD-TC-AddLoanBankDetails-7
                                   
-    [Documentation]   add loan bank Details empty bank AccountNo
+    [Documentation]                add loan bank details where bank account number is empty
 
-    
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}    200
 
     ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${empty}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
+    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-AddLoanBankDetails-UH5
+JD-TC-AddLoanBankDetails-8
                                   
-    [Documentation]   add loan bank Details empty ifsc
+    [Documentation]                add loan bank details where ifsc is empty
 
-    
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}    200
 
     ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${empty}   ${bankBranchName}    ${bankStatementAttachments}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
+    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-AddLoanBankDetails-UH6
+JD-TC-AddLoanBankDetails-9
                                   
-    [Documentation]   add loan bank Details empty branch name
+    [Documentation]                add loan bank details where branch name is empty
 
-    
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}    200
 
     ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${empty}    ${bankStatementAttachments}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
+    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-AddLoanBankDetails-UH7
+JD-TC-AddLoanBankDetails-10
                                   
-    [Documentation]   add loan bank Details where loan action is remove
+    [Documentation]                add loan bank details where loan action is remove
 
-    
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${bankStatementAttachments1}=    Create Dictionary   action=${LoanAction[1]}  owner=${ cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
-    Log  ${bankStatementAttachments1}
-
-    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments1}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
-    Should Be Equal As Strings  ${resp.json()}   []
-
-JD-TC-AddLoanBankDetails-UH8
-                                  
-    [Documentation]   add loan bank Details where owner is empty
-
-    
-    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-    ${bankStatementAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${empty}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
-    Log  ${bankStatementAttachments1}
-
-    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments1}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
-
-JD-TC-AddLoanBankDetails-UH9
-                                  
-    [Documentation]   add loan bank Details where owner is invalid
-
-    
-    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-    ${fake}=        FakerLibrary.Random Number
-
-    ${bankStatementAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${fake}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
-    Log  ${bankStatementAttachments1}
-
-    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments1}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
- 
- 
-JD-TC-AddLoanBankDetails-UH10
-                                  
-    [Documentation]   add loan bank Details where file name is empty
-
-    
-    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-    ${bankStatementAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${ cust_id}  fileName=${empty}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
-    Log  ${bankStatementAttachments1}
-
-    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments1}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   422 
-    Should Be Equal As Strings  ${resp.json()}   ${FILE_NAME_NOT_FOUND}
-
-JD-TC-AddLoanBankDetails-UH11
-                                  
-    [Documentation]   add loan bank Details where file size is empty
-
-    
-    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-    ${bankStatementAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${ cust_id}  fileName=${pdffile}  fileSize=${empty}  caption=${caption3}  fileType=${fileType3}  order=${order}
-    Log  ${bankStatementAttachments1}
-
-    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments1}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   422
-    Should Be Equal As Strings  ${resp.json()}   ${FILE_SIZE_ERROR}
-
-JD-TC-AddLoanBankDetails-UH12
-                                  
-    [Documentation]   add loan bank Details where caption is empty
-
-    
-    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-    ${bankStatementAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${ cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${empty}  fileType=${fileType3}  order=${order}
-    Log  ${bankStatementAttachments1}
-
-    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments1}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   200 
-
-JD-TC-AddLoanBankDetails-UH13
-                                  
-    [Documentation]   add loan bank Details where file type is empty
-
-    
-    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-    ${bankStatementAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${ cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${empty}  order=${order}
-    Log  ${bankStatementAttachments1}
-
-    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments1}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   422
-    Should Be Equal As Strings  ${resp.json()}   ${PLEASE_UPLOAD_PDF_FILE}
-
-JD-TC-AddLoanBankDetails-UH14
-                                  
-    [Documentation]   add loan bank Details without login
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[1]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
+    Log  ${bankStatementAttachments}
 
     ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}   419
-    Should Be Equal As Strings  ${resp.json()}   ${SESSION_EXPIRED}
+    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.json()}   []
+
+JD-TC-AddLoanBankDetails-11
+                                  
+    [Documentation]                add loan bank details where owner is empty
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${empty}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-AddLoanBankDetails-12
+                                  
+    [Documentation]                add loan bank details where owner is invalid
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${fake}=   FakerLibrary.Random Number
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${fake}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-AddLoanBankDetails-UH1
+                                  
+    [Documentation]                add loan bank details where file name is empty
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${empty}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}   ${FILE_NAME_NOT_FOUND}
+
+JD-TC-AddLoanBankDetails-UH2
+                                  
+    [Documentation]                add loan bank details where file size is empty
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${empty}  caption=${caption3}  fileType=${fileType3}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}   ${FILE_SIZE_ERROR}
+
+JD-TC-AddLoanBankDetails-13
+                                  
+    [Documentation]                add loan bank details where caption is empty
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${empty}  fileType=${fileType3}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-AddLoanBankDetails-UH3
+                                  
+    [Documentation]                add loan bank details where file type is empty
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${empty}  order=${order}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}   ${PLEASE_UPLOAD_PDF_FILE}
+
+JD-TC-AddLoanBankDetails-14
+                                  
+    [Documentation]                add loan bank details where order is empty
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${bankStatementAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${cust_id}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${empty}
+    Log  ${bankStatementAttachments}
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-AddLoanBankDetails-UH4
+                                  
+    [Documentation]                add loan bank details without login
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    419
+    Should Be Equal As Strings     ${resp.json()}    ${SESSION_EXPIRED}
+
+JD-TC-AddLoanBankDetails-UH5
+                                  
+    [Documentation]                add loan bank details with another provider login 
+
+    ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=    Add loan Bank Details    ${loanuid}    ${loanuid}    ${bankName}    ${bankAccountNo}    ${bankIfsc}   ${bankBranchName}    ${bankStatementAttachments}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    401
+    Should Be Equal As Strings     ${resp.json()}    ${NoAccess}
