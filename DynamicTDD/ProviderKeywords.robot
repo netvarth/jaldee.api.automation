@@ -9662,6 +9662,15 @@ Generate CDL Dropdowns
     ${resp}=  GET On Session  ynw   /provider/loanapplication/csms/settings  expected_status=any
     [Return]  ${resp}
 
+Cancel Loan Application
+
+    [Arguments]    ${loanApplicationUid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/cancel    expected_status=any
+    [Return]  ${resp}
+
+
 Generate Credit Score-MAFIL Score
 
     [Arguments]    ${loanApplicationUid}    ${kycId}

@@ -1,29 +1,20 @@
 *** Settings ***
-Suite Teardown    Delete All Sessions
-Test Teardown     Delete All Sessions
-Force Tags        LOAN
-Library           Collections
-Library           String
-Library           json
-Library           FakerLibrary
-Library           /ebs/TDD/db.py
-Library           /ebs/TDD/excelfuncs.py
-Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-*** Keywords ***
-
-Cancel Loan Application
-
-    [Arguments]    ${loanApplicationUid}
-
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/cancel    expected_status=any
-    [Return]  ${resp}
+Suite Teardown     Delete All Sessions
+Test Teardown      Delete All Sessions
+Force Tags         RBAC
+Library            Collections
+Library            String
+Library            json
+Library            FakerLibrary
+Library            /ebs/TDD/db.py
+Library            /ebs/TDD/excelfuncs.py
+Resource           /ebs/TDD/ProviderKeywords.robot
+Resource           /ebs/TDD/ConsumerKeywords.robot
+Resource           /ebs/TDD/ProviderPartnerKeywords.robot
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/consumerlist.py 
+Variables          /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_musers.py
 
 *** Variables ***
 
@@ -100,7 +91,7 @@ JD-TC-AddGeneralNotes-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+9748922
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -438,22 +429,10 @@ JD-TC-AddGeneralNotes-1
         Set Suite Variable                 ${address2}
     END                         
 
-    clear Customer  ${PUSERNAME87}
-
-    ${gender}=  Random Element    ${Genderlist}
-    Set Suite Variable  ${gender}
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-    Set Suite Variable  ${dob}
-
-    ${fname}=    FakerLibrary.firstName
-    ${lname}=    FakerLibrary.lastName
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
+    ${resp}=   Get Location ById           ${locid}  
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
-    
+    Set Suite Variable                     ${locname1}              ${resp.json()['place']}
     
 # .... Create Branch1....
 
@@ -717,7 +696,8 @@ JD-TC-AddGeneralNotes-1
     ${dealerfname}=                        FakerLibrary.name
     ${dealername}=                         FakerLibrary.bs
     ${dealerlname}=                        FakerLibrary.last_name
-    ${dob}=                                FakerLibrary.Date
+    ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String             ${dob} 
     Set Test Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
    
     ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
@@ -1002,9 +982,9 @@ JD-TC-AddGeneralNotes-1
         ${resp1}=  AddCustomer  ${cust}    firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings         ${resp1.status_code}    200
-        Set Test Variable  ${cust_id}      ${resp1.json()}
+        Set Suite Variable  ${cust_id}      ${resp1.json()}
     ELSE
-        Set Test Variable  ${cust_id}      ${resp.json()[0]['id']}
+        Set Suite Variable  ${cust_id}      ${resp.json()[0]['id']}
     END
 
     Set Suite Variable  ${cust_email}           ${fname}${C_Email}.ynwtest@jaldee.com
@@ -1100,13 +1080,15 @@ JD-TC-AddGeneralNotes-1
     Set Suite VAriable                     ${loanid}              ${resp.json()['id']}
     Set Suite VAriable                     ${loanuid}             ${resp.json()['uid']}
 
-    ${resp}=    Generate Loan Application Otp for Email    ${cust_email}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+# ....... Generate and verify email for loan .......
 
-    ${resp}=   Verify Email Otp and Create Loan Application    ${cust_email}    ${OtpPurpose['ConsumerVerifyEmail']}    ${loanuid}
+    ${resp}=                               Generate Loan Application Otp for Email  ${cust_email}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=    Verify Email Otp and Create Loan Application  ${cust_email}  ${OtpPurpose['ConsumerVerifyEmail']}  ${loanuid} 
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    200
 
     ${note}=      FakerLibrary.sentence
     Set Suite Variable    ${note}

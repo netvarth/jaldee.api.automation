@@ -92,7 +92,7 @@ JD-TC-Account Aggregation-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8174581
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -1095,13 +1095,12 @@ JD-TC-Account Aggregation-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}  200
 
-*** comment ***
 
 JD-TC-Account Aggregation-UH1
                                   
     [Documentation]               Account Aggregation with invalid loanuid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -1,20 +1,21 @@
 *** Settings ***
-Suite Teardown    Delete All Sessions
-Test Teardown     Delete All Sessions
-Force Tags        LOAN
-Library           Collections
-Library           String
-Library           json
-Library           FakerLibrary
-Library           /ebs/TDD/db.py
-Library           /ebs/TDD/excelfuncs.py
-Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
+Suite Teardown     Delete All Sessions
+Test Teardown      Delete All Sessions
+Force Tags         RBAC
+Library            Collections
+Library            String
+Library            json
+Library            FakerLibrary
+Library            /ebs/TDD/db.py
+Library            /ebs/TDD/excelfuncs.py
+Resource           /ebs/TDD/ProviderKeywords.robot
+Resource           /ebs/TDD/ConsumerKeywords.robot
+Resource           /ebs/TDD/ProviderPartnerKeywords.robot
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/consumerlist.py 
+Variables          /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_musers.py
+
 
 *** Variables ***
 
@@ -92,7 +93,7 @@ JD-TC-Add General Notes/Remarks-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745923
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -430,17 +431,10 @@ JD-TC-Add General Notes/Remarks-1
         Set Suite Variable                 ${address2}
     END                         
 
-    ${fname}=  FakerLibrary.name
-    ${lname}=  FakerLibrary.last_name
-    Set Suite Variable  ${email2}  ${lname}${C_Email}.${test_mail}
-    ${gender}=  Random Element    ${Genderlist}
-    ${dob}=  FakerLibrary.Date Of Birth   minimum_age=23   maximum_age=55
-    ${dob}=  Convert To String  ${dob}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${phone} 
+    ${resp}=   Get Location ById           ${locid}  
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
-    
+    Set Suite Variable                     ${locname1}              ${resp.json()['place']}
     
 # .... Create Branch1....
 
@@ -704,7 +698,8 @@ JD-TC-Add General Notes/Remarks-1
     ${dealerfname}=                        FakerLibrary.name
     ${dealername}=                         FakerLibrary.bs
     ${dealerlname}=                        FakerLibrary.last_name
-    ${dob}=                                FakerLibrary.Date
+    ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String             ${dob} 
     Set Test Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
    
     ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
@@ -989,9 +984,9 @@ JD-TC-Add General Notes/Remarks-1
         ${resp1}=  AddCustomer  ${cust}    firstName=${fname}   lastName=${lname}
         Log  ${resp1.content}
         Should Be Equal As Strings         ${resp1.status_code}    200
-        Set Test Variable  ${cust_id}      ${resp1.json()}
+        Set Suite Variable  ${cust_id}      ${resp1.json()}
     ELSE
-        Set Test Variable  ${cust_id}      ${resp.json()[0]['id']}
+        Set Suite Variable  ${cust_id}      ${resp.json()[0]['id']}
     END
 
     Set Suite Variable  ${cust_email}           ${fname}${C_Email}.ynwtest@jaldee.com
@@ -1102,3 +1097,66 @@ JD-TC-Add General Notes/Remarks-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
+JD-TC-Add General Notes/Remarks-UH1
+                                  
+    [Documentation]              Add General Notes/Remarks where uid is empty 
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=    Add General Notes/Remarks  ${empty}   ${note}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}    ${INVALID_LOAN_APPLICATION_ID}
+
+JD-TC-Add General Notes/Remarks-UH2
+                                  
+    [Documentation]              Add General Notes/Remarks where uid is invalid 
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${fake}=    FakerLibrary.Random Number
+
+    ${resp}=    Add General Notes/Remarks  ${fake}   ${note}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}    ${INVALID_LOAN_APPLICATION_ID}
+
+JD-TC-Add General Notes/Remarks-UH3
+                                  
+    [Documentation]              Add General Notes/Remarks where note is empty 
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=    Add General Notes/Remarks  ${loanuid}   ${empty}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}    ${INVALID_NOTE}
+
+JD-TC-Add General Notes/Remarks-UH4
+                                  
+    [Documentation]              Add General Notes/Remarks with consumer login
+
+    ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=    Add General Notes/Remarks  ${loanuid}   ${note}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    401
+    Should Be Equal As Strings     ${resp.json()}    ${NoAccess}
+    
+JD-TC-Add General Notes/Remarks-UH5
+                                  
+    [Documentation]              Add General Notes/Remarks without login
+
+    ${resp}=    Add General Notes/Remarks  ${loanuid}   ${note}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    419
+    Should Be Equal As Strings     ${resp.json()}    ${SESSION_EXPIRED}
+    
