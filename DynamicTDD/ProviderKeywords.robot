@@ -2262,6 +2262,14 @@ Get Bill By UUId
    ${resp}=    GET On Session    ynw  /provider/bill/${uuid}   expected_status=any
    [Return]  ${resp} 
 
+
+Get Bill Count
+
+    [Arguments]      &{param}
+    Check And Create YNW Session
+    ${resp}=    Get On Session    ynw    /provider/bill/count      params=${param}   expected_status=any  
+    [Return]  ${resp}
+
 Update Bill  
    [Arguments]  ${uuid}  ${action}  ${data}
     ${data}=  json.dumps  ${data}
@@ -3653,7 +3661,19 @@ Create educational qualification
     ${resp}=    PUT On Session     ynw    /provider/user/providerBprofile/${sts}/${u_id}     data=${data}   expected_status=any
     [Return]  ${resp}
     
-   
+
+Get Locations By UserId
+
+    [Arguments]    ${userid}   &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=    Get On Session    ynw    provider/user/${userid}/location       params=${pro_params}   expected_status=any  
+    [Return]  ${resp}   
 
 
 Update User Search Status
@@ -11493,4 +11513,3 @@ Get MedicalPrescription Template By Id
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
     [Return]  ${resp}
-
