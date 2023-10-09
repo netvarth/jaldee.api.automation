@@ -61,10 +61,12 @@ JD-TC-GetBillCount-1
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
+    ${pre_amount}=   Random Int   min=50   max=100
+    ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${ser_amount}=   Random Int   min=150   max=1000
     ${ser_amount1}=   Convert To Number   ${ser_amount}
     ${SERVICE1}=    FakerLibrary.name
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
+    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[1]}   ${bool[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
