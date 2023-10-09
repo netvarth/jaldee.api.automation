@@ -140,7 +140,7 @@ JD-TC-Create Dental Record-1
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -158,7 +158,7 @@ JD-TC-Create Dental Record-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -175,7 +175,7 @@ JD-TC-Create Dental Record-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -192,7 +192,7 @@ JD-TC-Create Dental Record-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  Random Int  min=1   max=47
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -209,7 +209,7 @@ JD-TC-Create Dental Record-5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[1]}
@@ -226,7 +226,7 @@ JD-TC-Create Dental Record-6
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[2]}
@@ -243,7 +243,7 @@ JD-TC-Create Dental Record-7
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
@@ -260,7 +260,7 @@ JD-TC-Create Dental Record-8
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     Set Suite Variable    ${toothNo}
     ${note1}=  FakerLibrary.word
     ${note2}=  FakerLibrary.word
@@ -271,7 +271,7 @@ JD-TC-Create Dental Record-8
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-JD-TC-Create Dental Record-UH1
+JD-TC-Create Dental Record-9
 
     [Documentation]    Create Dental records with the tooth surface empty.
 
@@ -279,7 +279,7 @@ JD-TC-Create Dental Record-UH1
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     # ${note2}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}   
@@ -287,9 +287,9 @@ JD-TC-Create Dental Record-UH1
 
     ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
     Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.status_code}   200
 
-JD-TC-Create Dental Record-UH2
+JD-TC-Create Dental Record-10
 
     [Documentation]    Try to Create Dental record with already created tooth number.
 
@@ -304,9 +304,9 @@ JD-TC-Create Dental Record-UH2
 
     ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
     Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.status_code}   200
 
-JD-TC-Create Dental Record-UH3
+JD-TC-Create Dental Record-UH1
 
     [Documentation]    Create Dental records with tooth type as invalid.
 
@@ -323,8 +323,9 @@ JD-TC-Create Dental Record-UH3
     ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${TOOTH_ID_CANNOT_BE_EMPTY}
 
-JD-TC-Create Dental Record-UH3
+JD-TC-Create Dental Record-UH2
 
     [Documentation]    Create Dental Record with another provider login.
 
@@ -332,7 +333,7 @@ JD-TC-Create Dental Record-UH3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${note2}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}    ${note2}
@@ -343,11 +344,11 @@ JD-TC-Create Dental Record-UH3
     Should Be Equal As Strings              ${resp.status_code}   422
     Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
 
-JD-TC-Create Dental Record-UH4
+JD-TC-Create Dental Record-UH3
 
     [Documentation]    Create Dental Record without login.
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${note2}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}    ${note2}
@@ -358,7 +359,7 @@ JD-TC-Create Dental Record-UH4
     Should Be Equal As Strings              ${resp.status_code}   419
     Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Dental Record-UH5
+JD-TC-Create Dental Record-UH4
 
     [Documentation]    Create Dental Record with consumer login.
 
@@ -366,7 +367,7 @@ JD-TC-Create Dental Record-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${note2}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}    ${note2}

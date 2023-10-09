@@ -215,16 +215,16 @@ JD-TC-Create Sections-1
     # Should Be Equal As Strings    ${resp.json()[0]['enumName']}   ${}
     Set Test Variable    ${temp_id}    ${resp.json()[0]['id']}
     Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
-    Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
+    # Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
     Set Test Variable    ${sortOrder}    ${resp.json()[0]['sortOrder']}
 
     Set Test Variable    ${enumName1}    ${resp.json()[1]['sectionType']}
-    Set Test Variable    ${displayName1}    ${resp.json()[1]['displayName']}
+    # Set Test Variable    ${displayName1}    ${resp.json()[1]['displayName']}
     Set Test Variable    ${sortOrder1}    ${resp.json()[1]['sortOrder']}   
-    Set Test Variable    ${schema1}    ${resp.json()[1]['schema']['properties']['chiefComplaint']['description']}
+    # Set Test Variable    ${schema1}    ${resp.json()[1]['schema']['properties']['chiefComplaint']['description']}
 
-    Set Test Variable    ${enumName4}    ${resp.json()[4]['enumName']}
-    Set Test Variable    ${displayName4}    ${resp.json()[4]['displayName']}
+    Set Test Variable    ${enumName4}    ${resp.json()[4]['sectionType']}
+    # Set Test Variable    ${displayName4}    ${resp.json()[4]['displayName']}
     Set Test Variable    ${sortOrder4}    ${resp.json()[4]['sortOrder']}   
-    Set Test Variable    ${schema4}    ${resp.json()[4]['schema']['properties']['medication']['items']}
+    # Set Test Variable    ${schema4}    ${resp.json()[4]['schema']['properties']['medication']['items']}
           

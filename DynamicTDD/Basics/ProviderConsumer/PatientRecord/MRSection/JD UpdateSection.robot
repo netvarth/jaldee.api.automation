@@ -301,7 +301,7 @@ JD-TC-Create Sections-1
     ${CHIEFCOMPLAINT1}=  create Dictionary  chiefComplaint=${caption11}
     Set Suite Variable    ${CHIEFCOMPLAINT1}
 
-    ${resp}=    Update MR Sections    ${Sec_UId}     ${CHIEFCOMPLAINT1}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    ${resp}=    Update MR Sections    ${Sec_UId}    ${enumName}     ${CHIEFCOMPLAINT1}    ${attachments}   voiceAttachments=${voiceAttachments}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
