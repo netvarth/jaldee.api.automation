@@ -38,6 +38,35 @@ Get Date Time via Timezone
 Testing timezones
 
     
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=AE  coords_only=False    #UAE
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=ARE  coords_only=False   #UAE
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=OM  coords_only=False      #OMAN
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=QA  coords_only=False      #Qatar
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=BH  coords_only=False      #Bahrain
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=SA  coords_only=False      #saudi arabia
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=KW  coords_only=False      #Kuwait
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=YE  coords_only=False      #Yemen
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=IR  coords_only=False      #Iran
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=IQ  coords_only=False      #Iraq
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=ER  coords_only=False     #Eritrea
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=PK  coords_only=False      #Pakistan
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=DJ  coords_only=False     #Djibouti
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=AF  coords_only=False     #Afghanistan
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=JO  coords_only=False     #Jordan
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=SY  coords_only=False     #Syria
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=IL  coords_only=False     #Israel
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=PS  coords_only=False     #Palestinian Territory
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=TM  coords_only=False     #Turkmenistan
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=LB  coords_only=False     #Lebanon
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=EG  coords_only=False     #Egypt
+    Run Keyword And Continue On Failure  FakerLibrary.Local Latlng  country_code=ET  coords_only=False     #Ethiopia
+    
+    # ${latti}  ${longi}  ${city}  ${country_abbr}  ${AE_tz}=  FakerLibrary.Local Latlng  country_code=AE  coords_only=False
+    # ${latti}  ${longi}  ${city}  ${country_abbr}  ${AE_tz}=  FakerLibrary.Local Latlng  country_code=ARE  coords_only=False
+    
+    
+*** comment ***
+
     Log  ${CURDIR}
     Log  ${EXECDIR} 
     ${envs}=   Get Environment Variables
@@ -68,8 +97,8 @@ Testing timezones
     # ${matches} = 	Get Regexp Matches 	America/Indiana/Indianapolis 	^.*/
     # ${ts} =  Evaluate  1523126888080/1000
     # ${start_time}=    DateTime.Convert Date    ${ts}   result_format="%a, %d %b %Y"
-    
-*** comment ***
+
+
     ${rand_loc}=  FakerLibrary.Local Latlng
     ${rand_loc}=  FakerLibrary.Local Latlng  country_code=US  coords_only=True
     ${rand_loc}=  FakerLibrary.Local Latlng  country_code=IN  

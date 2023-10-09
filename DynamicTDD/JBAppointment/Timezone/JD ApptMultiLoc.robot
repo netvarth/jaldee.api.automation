@@ -455,7 +455,8 @@ JD-TC-Take Appointment in Different Timezone-2
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
     ${postcode}=  FakerLibrary.postcode
-    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz_orig}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${US_tz}=  create_tz  ${US_tz_orig}
     ${DAY}=  db.get_date_by_timezone  ${US_tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
@@ -522,13 +523,14 @@ JD-TC-Take Appointment in Different Timezone-2
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
 
     FOR   ${i}  IN RANGE   5
-        ${latti1}  ${longi1}  ${city1}  ${country_abbr1}  ${US_tz1}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
-        IF  '${US_tz}' == '${US_tz1}'
+        ${latti1}  ${longi1}  ${city1}  ${country_abbr1}  ${US_tz1_orig}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+        IF  '${US_tz_orig}' == '${US_tz1_orig}'
             Continue For Loop
         ELSE
             Exit For Loop
         END
     END
+    ${US_tz1}=  create_tz  ${US_tz1_orig}
     ${address1} =  FakerLibrary.address
     ${postcode1}=  FakerLibrary.postcode
     ${DAY1}=  db.get_date_by_timezone  ${US_tz1}

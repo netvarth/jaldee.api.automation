@@ -5240,6 +5240,7 @@ uploadClinicalnotesImage
 #    ${resp}=  POST On Session  ynw  /provider/mr/patient/${patientId}  data=${data}  expected_status=any
 #    [Return]  ${resp}
 
+
 Create MR with patientId
     [Arguments]  ${patientId}  ${bookingType}  ${consultationMode}  ${complaints}  ${symptoms}  ${allergies}  ${vaccinationHistory}  ${observations}  ${diagnosis}  ${misc_notes}   ${notes}  ${mrConsultationDate}  ${state}   @{vargs}
     ${clinicalNotes}=  Create Dictionary  complaints=${complaints}  symptoms=${symptoms}  allergies=${allergies}  vaccinationHistory=${vaccinationHistory}  observations=${observations}  diagnosis=${diagnosis}  misc_notes=${misc_notes} 
@@ -5260,6 +5261,7 @@ Create MR with patientId
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/mr/patient/${patientId}  data=${data}  expected_status=any
    [Return]  ${resp}
+
 
 Billable Domain Providers
     [Arguments]  ${min}=0   ${max}=260

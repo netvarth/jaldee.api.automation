@@ -1,5 +1,5 @@
-# import MySQLdb
-import pymysql
+import MySQLdb
+# import pymysql
 # import mysql.connector
 import time
 import subprocess
@@ -62,15 +62,15 @@ def_profile='/ebs/TDD/defaultpaymentprofile.txt'
 queue_service_metric_id=20
 multiuser_metric_id=21
 
-# def connect_db(host, user, passwd, db):
-#     try:
-#         return MySQLdb.connect(host=host,
-#                                user=user,
-#                                passwd=passwd,
-#                                db=db)
-#     except MySQLdb.Error as e:
-#         print ("Exception:", e)
-        # print ("Exception at line no:", e.__traceback__.tb_lineno)
+def connect_db(host, user, passwd, db):
+    try:
+        return MySQLdb.connect(host=host,
+                               user=user,
+                               passwd=passwd,
+                               db=db)
+    except MySQLdb.Error as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 
 def get_Host_name_IP():
@@ -107,15 +107,15 @@ def log_request(response):
                 "headers=%s \n " % original_request.headers +
                 "body=%s \n " % (original_request.body))
 
-def connect_db(host, user, passwd, db):
-    try:
-        return pymysql.connect(host=host,
-                               user=user,
-                               passwd=passwd,
-                               db=db)
-    except Exception as e:
-        print ("Exception:", e)
-        print ("Exception at line no:", e.__traceback__.tb_lineno)
+# def connect_db(host, user, passwd, db):
+#     try:
+#         return pymysql.connect(host=host,
+#                                user=user,
+#                                passwd=passwd,
+#                                db=db)
+#     except Exception as e:
+#         print ("Exception:", e)
+#         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 # def connect_db(host, user, passwd, db):
 #     try:
@@ -1969,7 +1969,7 @@ def Generate_random_value(size=1, chars=string.ascii_uppercase + string.digits) 
 def Compare_data_from_file(val,fname) :
     # Compare passed data with contents of file.
     try:
-        f=open(fname,'r')
+        f=open(fname,"a+")
         contents=f.readline()
     except Exception as e:
         print ("Exception:", e)
@@ -1999,7 +1999,7 @@ def Generate_pan_number() :
         else:
             val_exists= True
         if val_exists:
-                f=open(fname,'a')
+                f=open(fname,'a+')
                 f.write(pan+"\n")
                 f.close
                 return (pan)
