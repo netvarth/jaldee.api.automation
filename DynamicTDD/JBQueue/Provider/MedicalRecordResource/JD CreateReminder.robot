@@ -69,7 +69,9 @@ JD-TC-CreateReminder-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}             ${rem_id}
-    
+
+*** comment ***
+ 
 JD-TC-CreateReminder-2
 
     [Documentation]    Provider create a reminder for his provider consumer but not a jaldee consumer.
