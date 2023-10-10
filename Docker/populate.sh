@@ -88,10 +88,10 @@ findsqlfile()
 
 populate()
 {
-    if [ -d $DB_BACKUP_PATH ]; then
+    if [ -d "$DB_BACKUP_PATH" ]; then
         if [ "$(ls -A $DB_BACKUP_PATH)" ]; then
             for file in "$DB_BACKUP_PATH"/*; do
-                [[ $file -nt $latest && $file != $DB_BACKUP_PATH/pre.sql && $file != $DB_BACKUP_PATH/post.sql && $file == *.sql ]] && latest=$file
+                [[ $file -nt $latest && $file != "$DB_BACKUP_PATH"/pre.sql && $file != "$DB_BACKUP_PATH"/post.sql && $file == *.sql ]] && latest=$file
             done
             # latest_file=$(echo ${latest#$DB_BACKUP_PATH/})
             if [ -a "${latest}" ]; then
@@ -138,12 +138,12 @@ backup()
     
     createconf
     # createPrePostSqlFiles
-    echo -e "\nBacking up Database to - ${DB_BACKUP_PATH}/${BACKUP_NAME}-${TODAY}.sql"
+    echo -e "\nBacking up Database to - $DB_BACKUP_PATH/${BACKUP_NAME}-${TODAY}.sql"
     # mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --disable-keys  --quick --databases ${DATABASE_NAME} > "${DB_BACKUP_PATH}/${BACKUP_FILE}"
     # mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --no-autocommit --skip-add-locks --disable-keys --add-drop-database --skip-add-drop-table --quick --dump-date --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}"
     # mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --no-autocommit --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}"
     # mysqlpump --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}"
-    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}"
+    mysqldump -h ${MYSQL_HOST} -P ${MYSQL_PORT} --opt --databases ${DATABASE_NAME} --result-file="$DB_BACKUP_PATH/${BACKUP_FILE}"
     # cat $DB_BACKUP_PATH/pre.sql $DB_BACKUP_PATH/$BACKUP_FILE $DB_BACKUP_PATH/post.sql > "${DB_BACKUP_PATH}/prepost-${BACKUP_FILE}"
     
     ##### Remove backups older than {BACKUP_RETAIN_DAYS} days  #####

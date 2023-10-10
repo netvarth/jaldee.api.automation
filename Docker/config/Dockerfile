@@ -12,9 +12,9 @@ ARG DEBCONF_NONINTERACTIVE_SEEN=true
 ENV TZ "Asia/Kolkata"
 
 RUN set -ex; \ 
-apt update && apt upgrade -y; \
+apt-get update && apt-get upgrade -y; \
 # apt install -y --no-install-recommends ;\
-apt install -y \
+apt-get install -y \
 apt-utils \
 # python3 \
 python3-pip \
@@ -22,30 +22,33 @@ build-essential \
 libssl-dev \
 libcurl4-openssl-dev \
 python3-dev \
+default-libmysqlclient-dev \
 # python-requests \
 openssh-client \
 sshpass \
 python3-setuptools \
 mysql-client \
 redis-tools \
-build-essential \
-curl
-RUN echo "tzdata tzdata/Areas select Asia" > /tmp/preseed.txt; \
+curl \
+pkg-config \
+&& echo "tzdata tzdata/Areas select Asia" > /tmp/preseed.txt; \
 echo "tzdata tzdata/Zones/Asia select Kolkata" >> /tmp/preseed.txt; \
 debconf-set-selections /tmp/preseed.txt \
 && apt install -y tzdata \
 && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 && apt autoremove \
 && apt clean \
-&& rm -r /var/lib/apt/lists/* 
-RUN python3 -m pip install robotframework \
+&& rm -r /var/lib/apt/lists/* \
+&& python3 -m pip install pip setuptools \
+setuptools-rust \
+robotframework \
 requests \
 robotframework-requests \
-pymysql \
+# pymysql \
+mysqlclient \
 robotframework-faker \
 robotframework-pabot \
-setuptools-rust \
-pycurl \
+# pycurl \
 openpyxl \
 phonenumbers \
 robotframework-jsonlibrary \ 

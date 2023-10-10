@@ -325,7 +325,7 @@ JD-TC-GetLocationsByUserId-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Locations By UserId  ${u_id}
+    ${resp}=  Get Locations By UserId  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}             ${lid}
@@ -352,9 +352,78 @@ JD-TC-GetLocationsByUserId-4
 
 JD-TC-GetLocationsByUserId-5
 
-    [Documentation]  User create a appt schedule with base location and another schedule with another location and verify get locations by user id.
+    [Documentation]  User create an appt schedule with base location and another schedule with another location 
+    ...  then disable that location and verify get locations by user id.
 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Disable Location  ${lid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Locations By UserId  ${u_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}             ${lid}
+    Should Be Equal As Strings  ${resp.json()[0]['place']}          ${place}
+    Should Be Equal As Strings  ${resp.json()[0]['address']}        ${address}
+    Should Be Equal As Strings  ${resp.json()[0]['pinCode']}        ${pinCode}
+    Should Be Equal As Strings  ${resp.json()[0]['longitude']}      ${longitude}
+    Should Be Equal As Strings  ${resp.json()[0]['lattitude']}      ${lattitude}
+    Should Be Equal As Strings  ${resp.json()[0]['googleMapUrl']}   ${googleMapUrl}
+    Should Be Equal As Strings  ${resp.json()[0]['timezone']}       ${tz}
+    Should Be Equal As Strings  ${resp.json()[0]['baseLocation']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}         ${status[0]}
+
+    Should not contain   ${resp.json()}             ${lid1}
+
+JD-TC-GetLocationsByUserId-6
+
+    [Documentation]  User create a queue with base location and another schedule with another location 
+    ...  then disable that location and verify get locations by user id.
+
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Locations By UserId  ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}             ${lid}
+    Should Be Equal As Strings  ${resp.json()[0]['place']}          ${place}
+    Should Be Equal As Strings  ${resp.json()[0]['address']}        ${address}
+    Should Be Equal As Strings  ${resp.json()[0]['pinCode']}        ${pinCode}
+    Should Be Equal As Strings  ${resp.json()[0]['longitude']}      ${longitude}
+    Should Be Equal As Strings  ${resp.json()[0]['lattitude']}      ${lattitude}
+    Should Be Equal As Strings  ${resp.json()[0]['googleMapUrl']}   ${googleMapUrl}
+    Should Be Equal As Strings  ${resp.json()[0]['timezone']}       ${tz}
+    Should Be Equal As Strings  ${resp.json()[0]['baseLocation']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}         ${status[0]}
+
+    Should not contain   ${resp.json()}             ${lid1}
+   
+JD-TC-GetLocationsByUserId -UH1
+
+    [Documentation]   Get locations by user id without login.  
+
+    ${resp}=  Get Locations By UserId  ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+ 
+JD-TC-GetLocationsByUserId -UH2
+
+    [Documentation]   Consumer calls get locations by user id.
+
+    ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Locations By UserId  ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}

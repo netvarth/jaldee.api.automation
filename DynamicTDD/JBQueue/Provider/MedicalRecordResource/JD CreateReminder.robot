@@ -67,8 +67,9 @@ JD-TC-CreateReminder-1
 
     ${resp}=  Get Consumer Communications
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}             ${rem_id}
+    
 JD-TC-CreateReminder-2
 
     [Documentation]    Provider create a reminder for his provider consumer but not a jaldee consumer.
@@ -95,6 +96,31 @@ JD-TC-CreateReminder-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
+
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+  
+    ${resp}=    Send Otp For Login    ${prov_cons_no}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${prov_cons_no}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${prov_cons_no}    ${account_id1}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+   
+    ${resp}=  Get Consumer Communications
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}             ${rem_id}
 
 JD-TC-CreateReminder-3
 
@@ -128,6 +154,15 @@ JD-TC-CreateReminder-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
+
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Consumer Communications
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}             ${rem_id}
 
 JD-TC-CreateReminder-4
 
@@ -178,6 +213,14 @@ JD-TC-CreateReminder-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
 
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Consumer Communications
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}             ${rem_id}
 
 JD-TC-CreateReminder-6
 
@@ -199,6 +242,15 @@ JD-TC-CreateReminder-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
+
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Consumer Communications
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}             ${rem_id}
 
 JD-TC-CreateReminder-7
 
