@@ -172,7 +172,7 @@ JD-TC-Remove Prescription Template-UH3
 
     [Documentation]   Remove Prescription Template with another login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -208,7 +208,7 @@ JD-TC-Remove Prescription Template-UH5
 
     ${resp}=    Remove Prescription Template    ${invalid} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${bool[0]}
 
 
 

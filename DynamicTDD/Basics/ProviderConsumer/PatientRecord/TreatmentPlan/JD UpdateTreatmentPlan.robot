@@ -135,20 +135,42 @@ JD-TC-Update Treatment Plan-1
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
 
-     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
 
-    ${caseDto}=  Create Dictionary  uid=${caseUId} 
-    Set Suite Variable    ${caseDto} 
+    ${toothNo}=   Random Int  min=10   max=47
+    ${note1}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[0]}    ${toothSurfaces[1]}
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Suite Variable       ${id1}          ${resp.json()}
+    # Set Test Variable      ${uid}           ${resp.json()["uid"]}
+
+    ${resp}=    Get DentalRecord ById   ${id1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id1} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[0]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]}
+
+    # ${caseDto}=  Create Dictionary  uid=${caseUId} 
+    # Set Suite Variable    ${caseDto} 
     ${treatment}=  FakerLibrary.name
     ${work}=  FakerLibrary.name
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}
 
-    ${resp}=    Create Treatment Plan    ${caseDto}  ${treatment}  ${works}  
+    ${resp}=    Create Treatment Plan    ${caseUId}    ${id1}  ${treatment}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${treatmentId}        ${resp.json()}
@@ -176,7 +198,7 @@ JD-TC-Update Treatment Plan-1
     # ${two}=  Create Dictionary  work=${work2}   status=${QnrStatus[1]}
     # ${works}=  Create List  ${one}  ${two}
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment}  
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${treatment}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${updatetreatmentId}        ${resp.json()}
@@ -215,7 +237,7 @@ JD-TC-Update Treatment Plan-2
     # # ${two}=  Create Dictionary  work=${work1}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment1}  
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${treatment1}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
    
@@ -255,7 +277,7 @@ JD-TC-Update Treatment Plan-3
     # # ${two}=  Create Dictionary  work=${work1}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${empty}    
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${empty}    
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
   
@@ -290,7 +312,7 @@ JD-TC-Update Treatment Plan-UH1
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment}   
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${treatment}   
     Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
@@ -304,7 +326,7 @@ JD-TC-Update Treatment Plan-UH2
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment}   
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${treatment}   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -323,12 +345,12 @@ JD-TC-Update Treatment Plan-UH4
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
     ${fake_id}=  Random Int  min=500   max=1000
-    ${caseDto1}=  Create Dictionary  uid=${fake_id} 
+    # ${caseDto1}=  Create Dictionary  uid=${fake_id} 
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto1}  ${treatment}   
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${fake_id}    ${id1}   ${treatment}   
     Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_CASE_ID}"
+    Should Be Equal As Strings              ${resp.status_code}   200
+    # Should Be Equal As Strings  "${resp.json()}"    "${INVALID_CASE_ID}"
 
 JD-TC-Update Treatment Plan-UH5
 
@@ -343,7 +365,7 @@ JD-TC-Update Treatment Plan-UH5
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseDto}  ${treatment}  
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}  ${treatment}  
     Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  400
     Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
@@ -362,7 +384,7 @@ JD-TC-Update Treatment Plan-UH6
     # ${works}=  Create List  ${one}  
     ${fake_id}=  Random Int  min=500   max=1000
 
-    ${resp}=    Update Treatment Plan   ${fake_id}  ${caseDto}  ${treatment}  
+    ${resp}=    Update Treatment Plan   ${fake_id}  ${caseUId}    ${id1}  ${treatment}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"

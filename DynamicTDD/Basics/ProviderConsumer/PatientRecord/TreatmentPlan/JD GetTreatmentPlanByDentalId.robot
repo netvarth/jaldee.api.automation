@@ -15,7 +15,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-
 *** Variables ***
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
@@ -35,9 +34,9 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Get Treatment Plan By case Id-1
+JD-TC-Get Treatment Plan By Dental Id-1
 
-    [Documentation]    Get Treatment Plan By case Id
+    [Documentation]    Get Treatment Plan By Dental Id
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -134,7 +133,7 @@ JD-TC-Get Treatment Plan By case Id-1
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
 
-    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
@@ -163,18 +162,20 @@ JD-TC-Get Treatment Plan By case Id-1
     Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]} 
 
     # ${caseDto}=  Create Dictionary  uid=${caseUId} 
+    # ${dentalRecord}=  Create Dictionary  id=${id1}
+
     # Set Suite Variable    ${caseDto} 
     ${treatment}=  FakerLibrary.name
     ${work}=  FakerLibrary.name
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}
 
-    ${resp}=    Create Treatment Plan    ${caseUId}   ${id1}   ${treatment}  ${works}  
+    ${resp}=    Create Treatment Plan    ${caseUId}    ${id1}  ${treatment}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${treatmentId}        ${resp.json()}
 
-    ${resp}=    Get Treatment Plan By case Id   ${caseUId}    
+    ${resp}=    Get Treatment Plan By Dental Id   ${id1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['caseDto']['uid']}     ${caseUId} 
@@ -191,53 +192,10 @@ JD-TC-Get Treatment Plan By case Id-1
     Should Be Equal As Strings    ${resp.json()[0]['works'][0]['work']}     ${work}
     Should Be Equal As Strings    ${resp.json()[0]['works'][0]['createdDate']}     ${DAY1}
 
-JD-TC-Get Treatment Plan By case Id-UH1
-
-    [Documentation]    Get Treatment Plan By case Id using another provider login
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Get Treatment Plan By case Id   ${caseUId}    
-    Log   ${resp.content}
-    Should Be Equal As Strings       ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}  []
-   
-
-JD-TC-Get Treatment Plan By case Id-UH2
-
-    [Documentation]    Get Treatment Plan By case Id without login
-
-    ${resp}=    Get Treatment Plan By case Id   ${caseUId}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Get Treatment Plan By case Id-UH3
-
-    [Documentation]    Get Treatment Plan By case Id where id is invalid
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME18}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-    ${fake_id}=  Random Int  min=500   max=1000
-     
-
-     ${resp}=    Get Treatment Plan By case Id   ${fake_id}    
-    Log   ${resp.content}
-    Should Be Equal As Strings              ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.content}    "${INVALID_CASE_ID}"
-
-JD-TC-Get Treatment Plan By case Id-UH4
-
-    [Documentation]     Get Treatment Plan By case Id using provider consumer login
-
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings              ${resp.status_code}   200
-
-   ${resp}=    Get Treatment Plan By case Id   ${caseUId}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  400
-    Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecord']['id']}     ${id1} 
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecord']['account']}     ${accountId} 
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecord']['toothNo']}     ${toothNo} 
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecord']['toothType']}     ${toothType[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecord']['investigation'][0]}     ${note1}
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecord']['toothSurfaces'][0]}     ${toothSurfaces[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecord']['toothSurfaces'][1]}     ${toothSurfaces[1]} 

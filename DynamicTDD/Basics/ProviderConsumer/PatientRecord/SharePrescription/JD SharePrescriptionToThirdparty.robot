@@ -482,7 +482,7 @@ JD-TC-Share Prescription To ThirdParty-5
 
 JD-TC-Share Prescription To ThirdParty-6
 
-    [Documentation]    Share Prescription To third party with empty phone number.
+    [Documentation]    Share Prescription To third party with empty sms.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -491,7 +491,7 @@ JD-TC-Share Prescription To ThirdParty-6
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email}     ${empty}    ${whatsAppNumber}    ${telegramNumber}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${email}     ${SPACE}    ${whatsAppNumber}    ${telegramNumber}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
@@ -523,7 +523,7 @@ JD-TC-Share Prescription To ThirdParty-8
     ${message}=  Fakerlibrary.Sentence
     Set Test Variable    ${message}
 
-    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${empty}       ${empty}    ${empty}    ${telegramNumber}  
+    ${resp}=    Share Prescription To ThirdParty   ${prescription_uid}    ${message}    ${SPACE}       ${SPACE}    ${SPACE}    ${telegramNumber}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     ${bool[1]}

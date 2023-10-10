@@ -10813,13 +10813,13 @@ Update Patient Medical History
     [Return]  ${resp}
 
 Delete Patient Medical History
-
+    Check And Create YNW Session
     [Arguments]    ${medicalHistoryId}  
     ${resp}=    DELETE On Session    ynw   /provider/medicalrecord/medicalHistory/${medicalHistoryId}        expected_status=any
     [Return]  ${resp}
 
 Get Patient Medical History
-
+    Check And Create YNW Session
     [Arguments]    ${providerConsumerId}  
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/medicalHistory/${providerConsumerId}        expected_status=any
     [Return]  ${resp}
@@ -10842,11 +10842,13 @@ Update Provider Consumer Notes
 
 Delete Provider Consumer Notes
     [Arguments]    ${notesId}  
+    Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /provider/customers/notes/${notesId}        expected_status=any
     [Return]  ${resp}
 
 Get Provider Consumer Notes
     [Arguments]    ${providerConsumerId}  
+    Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/customers/notes/${providerConsumerId}        expected_status=any
     [Return]  ${resp}  
 
@@ -10886,31 +10888,31 @@ Update DentalRecord
     [Return]  ${resp}
 
 Update DentalRecord Status
-
+    Check And Create YNW Session
     [Arguments]      ${dentalid}   ${healthRecordSectionEnum} 
     ${resp}=    PUT On Session    ynw   /provider/dental/${dentalid}/status/${healthRecordSectionEnum}       expected_status=any
     [Return]  ${resp}
 
 Delete DentalRecord
-
+    Check And Create YNW Session
     [Arguments]    ${Id}  
     ${resp}=    DELETE On Session    ynw    /provider/dental/${Id}       expected_status=any
     [Return]  ${resp}
 
 Get DentalRecord ById
-
+    Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw    /provider/dental/${Id}        expected_status=any
     [Return]  ${resp}
 
 Get DentalRecord ByProviderConsumerId
-
+    Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw    /provider/dental/providerconsumer/${Id}        expected_status=any
     [Return]  ${resp}
 
 Get DentalRecord ByCaseId
-
+    Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw   /provider/dental/mr/${Id}    expected_status=any
     [Return]  ${resp}
@@ -11035,8 +11037,11 @@ Get Case Count Filter
 
 Create Treatment Plan
 
-    [Arguments]      ${caseDto}  ${treatment}  ${works}  &{kwargs}
-    ${data}=  Create Dictionary    caseDto=${caseDto}  treatment=${treatment}  works=${works} 
+    [Arguments]      ${caseDto}   ${dental_id}   ${treatment}  ${works}  &{kwargs}
+    ${caseDto}=  Create Dictionary  uid=${caseDto} 
+    ${dentalRecord}=  Create Dictionary  id=${dental_id}
+
+    ${data}=  Create Dictionary    caseDto=${caseDto}    dentalRecord=${dentalRecord}  treatment=${treatment}  works=${works} 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -11047,8 +11052,11 @@ Create Treatment Plan
 
 Update Treatment Plan
 
-    [Arguments]     ${id}  ${caseDto}  ${treatment}   &{kwargs}
-    ${data}=  Create Dictionary    id=${id}  caseDto=${caseDto}  treatment=${treatment}  
+    [Arguments]     ${id}  ${caseDto}    ${dental_id}  ${treatment}   &{kwargs}
+    ${caseDto}=  Create Dictionary  uid=${caseDto} 
+    ${dentalRecord}=  Create Dictionary  id=${dental_id}
+
+    ${data}=  Create Dictionary    id=${id}  caseDto=${caseDto}    dentalRecord=${dentalRecord}  treatment=${treatment}  
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -11292,3 +11300,14 @@ Share Prescription To ThirdParty
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/thirdParty/${prescriptionUid}   data=${data}  expected_status=any
     [Return]  ${resp}
     
+Get Treatment Plan By ProviderConsumer Id
+    [Arguments]     ${id}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/consumer/${id}  expected_status=any
+    [Return]  ${resp}
+
+Get Treatment Plan By Dental Id
+    [Arguments]     ${id}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/dental/${id}  expected_status=any
+    [Return]  ${resp}

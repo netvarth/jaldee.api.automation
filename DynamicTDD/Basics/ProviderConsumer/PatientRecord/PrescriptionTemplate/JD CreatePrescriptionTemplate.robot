@@ -670,7 +670,7 @@ JD-TC-Create Treatment Plan-UH4
     ${templateName1}=  Random Int  min=500   max=1000
     Set Test Variable    ${templateName1}
 
-    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  ${empty}
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}

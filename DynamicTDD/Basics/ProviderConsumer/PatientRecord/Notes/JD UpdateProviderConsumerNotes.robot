@@ -581,8 +581,8 @@ JD-TC-Update Provider Consumer Notes-UH3
     # Set Suite Variable    ${pid}        ${resp.json()['id']}
     # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
-    ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    # ${test}=   FakerLibrary.Text 
+    ${users1}=   Create List   
     ${title2}=  FakerLibrary.Text    
     ${fakeid}=   FakerLibrary.Random Number
 
@@ -600,8 +600,8 @@ JD-TC-Update Provider Consumer Notes-UH4
     # Set Suite Variable    ${pid}        ${resp.json()['id']}
     # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
-    ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    # ${test}=   FakerLibrary.Text 
+    ${users1}=   Create List   
     ${title2}=  FakerLibrary.Text    
     ${fakeid}=   FakerLibrary.Random Number
 
@@ -609,7 +609,7 @@ JD-TC-Update Provider Consumer Notes-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Update Provider Consumer Notes-UH4
+JD-TC-Update Provider Consumer Notes-UH5
 
     [Documentation]    Update Provider consumer notes where the description contains special characters.
 
@@ -619,8 +619,8 @@ JD-TC-Update Provider Consumer Notes-UH4
     # Set Suite Variable    ${pid}        ${resp.json()['id']}
     # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
-    ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    # ${test}=   FakerLibrary.Text 
+    ${users1}=   Create List  
     ${title2}=  FakerLibrary.Text    
     ${fakeid}=   FakerLibrary.Random Number
 
@@ -628,21 +628,22 @@ JD-TC-Update Provider Consumer Notes-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Update Provider Consumer Notes-UH5
+JD-TC-Update Provider Consumer Notes-UH6
 
     [Documentation]   Update Provider consumer notes without login.
 
 
-    ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    # ${test}=   FakerLibrary.Text 
+    ${users1}=   Create List   
     ${title2}=  FakerLibrary.Text    
     ${fakeid}=   FakerLibrary.Random Number
 
     ${resp}=    Update Provider Consumer Notes    ${note_id}    ${title2}    ${description2}    ${users1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Update Provider Consumer Notes-UH6
+JD-TC-Update Provider Consumer Notes-UH7
 
     [Documentation]   Update Provider consumer notes where description contains numbers.
 
@@ -653,8 +654,8 @@ JD-TC-Update Provider Consumer Notes-UH6
     # Set Suite Variable    ${pid}        ${resp.json()['id']}
     # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
-    ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    # ${test}=   FakerLibrary.Text 
+    ${users1}=   Create List   
     ${title2}=  FakerLibrary.Text    
     ${des_num}=   FakerLibrary.Random Number
 
@@ -662,7 +663,7 @@ JD-TC-Update Provider Consumer Notes-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Update Provider Consumer Notes-UH7
+JD-TC-Update Provider Consumer Notes-UH8
 
     [Documentation]   Update Provider consumer notes using another provider login.
 
@@ -673,8 +674,8 @@ JD-TC-Update Provider Consumer Notes-UH7
     # Set Suite Variable    ${pid}        ${resp.json()['id']}
     # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
-    ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    # ${test}=   FakerLibrary.Text 
+    ${users1}=   Create List  
     ${title2}=  FakerLibrary.Text    
     ${des_num}=   FakerLibrary.Random Number
 
@@ -683,7 +684,7 @@ JD-TC-Update Provider Consumer Notes-UH7
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.content}   "${NO_PERMISSION}"
 
-JD-TC-Update Provider Consumer Notes-UH8
+JD-TC-Update Provider Consumer Notes-UH9
 
     [Documentation]   Update Provider consumer notes u with Consumer login.
 
@@ -692,8 +693,8 @@ JD-TC-Update Provider Consumer Notes-UH8
     Log   ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    # ${test}=   FakerLibrary.Text 
+    ${users1}=   Create List   
     ${title2}=  FakerLibrary.Text    
     ${des_num}=   FakerLibrary.Random Number
 

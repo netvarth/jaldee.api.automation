@@ -10,6 +10,7 @@ import requests
 import traceback
 import logging
 import mimetypes
+from robot.api import logger
 
 HOST='54.215.5.201:8181'
 BASE_URL='http://'+HOST+'/superadmin/rest/mgmt'
