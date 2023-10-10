@@ -27,7 +27,7 @@ JD-TC-get Default status-1
 
     [Documentation]  Create statuses,get all status and verify default one .
 
-    ${resp}=  Provider Login  ${PUSERNAME105}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -67,6 +67,10 @@ JD-TC-get Default status-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
+
+    ${resp}=  Set default status    ${status_id0}    ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get default status    ${categoryType[0]} 
     Log  ${resp.json()}

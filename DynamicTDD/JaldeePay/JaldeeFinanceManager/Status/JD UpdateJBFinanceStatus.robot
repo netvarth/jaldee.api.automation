@@ -37,7 +37,7 @@ JD-TC-UpdateStatus-1
 
     [Documentation]  Update Status as New and update it as Proceed.
 
-    ${resp}=  Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -75,7 +75,7 @@ JD-TC-UpdateStatus-2
 
     [Documentation]  Update Status as Unassign.
 
-    ${resp}=  Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -87,7 +87,7 @@ JD-TC-UpdateStatus-3
 
     [Documentation]  Update Status as Block.
 
-    ${resp}=  Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -99,7 +99,7 @@ JD-TC-UpdateStatus-4
 
     [Documentation]  Update Status as Delete.
 
-    ${resp}=  Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -112,7 +112,7 @@ JD-TC-UpdateStatus-5
 
     [Documentation]  Update Status as Remove.
 
-    ${resp}=  Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -180,7 +180,7 @@ JD-TC-UpdateStatus-UH4
 
     [Documentation]  Update Status With EMPTY Status .
 
-    ${resp}=  Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -193,7 +193,7 @@ JD-TC-UpdateStatus-6
 
     [Documentation]  Update Status With not created categoryType.
 
-    ${resp}=  Provider Login  ${PUSERNAME72}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

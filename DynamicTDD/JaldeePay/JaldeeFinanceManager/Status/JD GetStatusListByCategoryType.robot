@@ -46,7 +46,7 @@ JD-TC-GetstatusListByCategoryId-1
 
     [Documentation]  Create Status as New for Vendor then get with catagory Id.
 
-    ${resp}=  Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -80,17 +80,17 @@ JD-TC-GetstatusListByCategoryId-1
     ${resp}=  Get Finance Status By categorytype    ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id1} 
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['name']}  ${status[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1} 
-    Should Be Equal As Strings  ${resp.json()[0]['isEnabled']}  ${toggle[0]} 
+    Should Be Equal As Strings  ${resp.json()[5]['id']}  ${status_id1} 
+    Should Be Equal As Strings  ${resp.json()[5]['categoryType']}  ${categoryType[0]} 
+    Should Be Equal As Strings  ${resp.json()[5]['name']}  ${status[0]} 
+    Should Be Equal As Strings  ${resp.json()[5]['accountId']}  ${account_id1} 
+    Should Be Equal As Strings  ${resp.json()[5]['isEnabled']}  ${toggle[0]} 
 
 JD-TC-GetstatusListByCategoryId-2
 
     [Documentation]  Create Two Status for Vendor then get with catagory Id.
 
-    ${resp}=  Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -102,19 +102,19 @@ JD-TC-GetstatusListByCategoryId-2
     ${resp}=  Get Finance Status By categorytype    ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id1} 
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['name']}  ${status[0]} 
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1} 
-    Should Be Equal As Strings  ${resp.json()[0]['isEnabled']}  ${toggle[0]} 
+    Should Be Equal As Strings  ${resp.json()[5]['id']}  ${status_id1} 
+    Should Be Equal As Strings  ${resp.json()[5]['categoryType']}  ${categoryType[0]} 
+    Should Be Equal As Strings  ${resp.json()[5]['name']}  ${status[0]} 
+    Should Be Equal As Strings  ${resp.json()[5]['accountId']}  ${account_id1} 
+    Should Be Equal As Strings  ${resp.json()[5]['isEnabled']}  ${toggle[0]} 
     Should Be Equal As Strings  ${resp.json()[0]['isDefault']}  ${bool[1]} 
 
-    Should Be Equal As Strings  ${resp.json()[1]['id']}  ${status_id2} 
-    Should Be Equal As Strings  ${resp.json()[1]['categoryType']}  ${categoryType[0]} 
-    Should Be Equal As Strings  ${resp.json()[1]['name']}  ${status[1]} 
-    Should Be Equal As Strings  ${resp.json()[1]['accountId']}  ${account_id1} 
-    Should Be Equal As Strings  ${resp.json()[1]['isEnabled']}  ${toggle[0]} 
-    Should Be Equal As Strings  ${resp.json()[1]['isDefault']}  ${bool[0]} 
+    Should Be Equal As Strings  ${resp.json()[6]['id']}  ${status_id2} 
+    Should Be Equal As Strings  ${resp.json()[6]['categoryType']}  ${categoryType[0]} 
+    Should Be Equal As Strings  ${resp.json()[6]['name']}  ${status[1]} 
+    Should Be Equal As Strings  ${resp.json()[6]['accountId']}  ${account_id1} 
+    Should Be Equal As Strings  ${resp.json()[6]['isEnabled']}  ${toggle[0]} 
+    Should Be Equal As Strings  ${resp.json()[0]['isDefault']}  ${bool[1]} 
 
     ${resp}=  Get Finance Status By categorytype    ${categoryType[1]} 
     Log  ${resp.json()}

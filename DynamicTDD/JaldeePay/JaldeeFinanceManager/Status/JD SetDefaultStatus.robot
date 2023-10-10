@@ -37,7 +37,7 @@ JD-TC-Set Default status-1
 
     [Documentation]  Create statuses,get all status and verify default one .then change default status and Verified.
 
-    ${resp}=  Provider Login  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -102,7 +102,7 @@ JD-TC-Set Default status-2
 
     [Documentation]  try to set same status for default again.
 
-    ${resp}=  Provider Login  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

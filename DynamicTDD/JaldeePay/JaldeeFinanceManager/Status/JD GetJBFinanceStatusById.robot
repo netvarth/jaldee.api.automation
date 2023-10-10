@@ -46,7 +46,7 @@ JD-TC-Get status-1
 
     [Documentation]  Create Status as New and get status byid.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -85,13 +85,13 @@ JD-TC-Get status-1
     Should Be Equal As Strings  ${resp.json()['name']}  ${status[0]} 
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1} 
     Should Be Equal As Strings  ${resp.json()['isEnabled']}  ${toggle[0]} 
-    Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]} 
+    Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[0]} 
 
 JD-TC-Get status-2
 
     [Documentation]  Add new status for Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-Get status-3
 
     [Documentation]  Update Vendor status and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -136,7 +136,7 @@ JD-TC-Get status-4
 
     [Documentation]  Update Status With not created categoryType and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

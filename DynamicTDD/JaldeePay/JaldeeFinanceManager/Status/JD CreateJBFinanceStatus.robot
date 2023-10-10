@@ -37,7 +37,7 @@ JD-TC-Create status-1
 
     [Documentation]  Create Status as New.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -80,7 +80,7 @@ JD-TC-Create status-2
 
     [Documentation]  Create Status as Pending.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +93,7 @@ JD-TC-Create status-3
 
     [Documentation]  Create Status as Assigned.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -105,7 +105,7 @@ JD-TC-Create status-4
 
     [Documentation]  Create Status as Approved.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -117,7 +117,7 @@ JD-TC-Create status-5
 
     [Documentation]  Create Status as Rejected.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -152,7 +152,7 @@ JD-TC-Create status-UH3
 
     [Documentation]  Create Status with name as empty.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -168,7 +168,7 @@ JD-TC-Create status-UH4
 
     [Documentation]  Create Status without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -198,7 +198,7 @@ JD-TC-Create status-6
 
     [Documentation]  Create same status multiple times.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
