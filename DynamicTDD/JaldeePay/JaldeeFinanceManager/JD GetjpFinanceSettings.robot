@@ -17,23 +17,11 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Test Cases ***
 
-
-# JD-TC-EnableDisableFinanceManager-1
-
-#     [Documentation]  Get default jaldee finance status of an existing provider.
-
-#     ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=  Get Account Settings
-#     Log  ${resp.json()}
-#     Should Be Equal As Strings  ${resp.status_code}  200
     
 
-JD-TC-EnableDisableFinanceManager-1
+JD-TC-GetJPFinanceSettings-1
 
-    [Documentation]  enable jaldee finance.
+    [Documentation]  GetJPFinanceSettings.
 
     ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
@@ -56,9 +44,9 @@ JD-TC-EnableDisableFinanceManager-1
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
 
-JD-TC-EnableDisableFinanceManager-2
+JD-TC-GetJPFinanceSettings-2
 
-    [Documentation]  disable jaldee finance.
+    [Documentation]  disable jaldee finance and GetJPFinanceSettings.
 
     ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
@@ -89,9 +77,9 @@ JD-TC-EnableDisableFinanceManager-2
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[0]}
 
 
-JD-TC-EnableDisableFinanceManager-3
+JD-TC-GetJPFinanceSettings-3
 
-    [Documentation]  enable jaldee finance  which is disabled.
+    [Documentation]  enable jaldee finance  which is disabled and GetJPFinanceSettings.
 
     ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
@@ -131,9 +119,9 @@ JD-TC-EnableDisableFinanceManager-3
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
 
-JD-TC-EnableDisableFinanceManager-UH1
+JD-TC-GetJPFinanceSettings-UH1
 
-    [Documentation]  enable already enabled jaldee finance.
+    [Documentation]  enable already enabled jaldee finance and GetJPFinanceSettings.
 
     ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
@@ -161,32 +149,37 @@ JD-TC-EnableDisableFinanceManager-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}    ${ALREDY_ENABLED}
 
-JD-TC-EnableDisableFinanceManager-UH2
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    [Documentation]   Enable jaldee finance without login
+JD-TC-GetJPFinanceSettings-UH2
 
-    ${resp}=  Enable Disable Jaldee Finance   ${toggle[0]}
-    Log  ${resp.content}
+    [Documentation]   GetJPFinanceSettings without login
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-EnableDisableFinanceManager-UH3
+JD-TC-GetJPFinanceSettings-UH3
 
-    [Documentation]   Enable jaldee finance Using Consumer Login
+    [Documentation]   GetJPFinanceSettings Using Consumer Login
 
     ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Disable Jaldee Finance   ${toggle[0]}
-    Log  ${resp.content}
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 
-JD-TC-EnableDisableFinanceManager-UH4
+JD-TC-GetJPFinanceSettings-UH4
 
-    [Documentation]  disable jaldee finance which is already disabled.
+    [Documentation]  disable jaldee finance which is already disabled and GetJPFinanceSettings.
 
     ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
@@ -222,3 +215,8 @@ JD-TC-EnableDisableFinanceManager-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${ALREDY_DISABLED}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[0]}

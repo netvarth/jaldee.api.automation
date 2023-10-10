@@ -133,29 +133,6 @@ JD-TC-GetCategoryById-4
 
 JD-TC-GetCategoryById-5
 
-    [Documentation]  Create Category as Receivable and verify.
-
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[4]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id1}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-
-
-JD-TC-GetCategoryById-6
-
     [Documentation]  Create Category as Invoice and verify.
 
     ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
@@ -163,7 +140,7 @@ JD-TC-GetCategoryById-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[4]} 
+    ${resp}=  Create Category   ${name}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
@@ -172,7 +149,7 @@ JD-TC-GetCategoryById-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[3]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 

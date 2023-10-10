@@ -34,7 +34,7 @@ JD-TC-UploadAttachment-1
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Vendor)
 
-    ${resp}=  Provider Login  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -99,7 +99,7 @@ JD-TC-UploadAttachment-2
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Expense)
 
-    ${resp}=  Provider Login  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -127,9 +127,9 @@ JD-TC-UploadAttachment-2
 
 JD-TC-UploadAttachment-3
 
-    [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Payable)
+    [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is PaymentInOut)
 
-    ${resp}=  Provider Login  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -157,9 +157,9 @@ JD-TC-UploadAttachment-3
 
 JD-TC-UploadAttachment-3
 
-    [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Income)
+    [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Invoice)
 
-    ${resp}=  Provider Login  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -185,71 +185,14 @@ JD-TC-UploadAttachment-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-UploadAttachment-4
 
-    [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Receivable)
 
-    ${resp}=  Provider Login  ${PUSERNAME73}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[4]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id5}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id5}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance Attachment   ${category_id5}    ${categoryType[4]}    ${Attachments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-UploadAttachment-5
-
-    [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Invoice)
-
-    ${resp}=  Provider Login  ${PUSERNAME73}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[4]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id6}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id6}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance Attachment   ${category_id6}    ${categoryType[4]}    ${Attachments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-UploadAttachment-UH1
 
     [Documentation]  Create Category and upload a attachment with invalid category id.(categoryType is Vendor)
 
-    ${resp}=  Provider Login  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -280,7 +223,7 @@ JD-TC-UploadAttachment-UH2
 
     [Documentation]  Create Category and upload a attachment with category id -Vendor id.(categoryType is Expense)
 
-    ${resp}=  Provider Login  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}

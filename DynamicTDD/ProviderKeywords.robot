@@ -10407,7 +10407,27 @@ Get Category By Id
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/${category_id}     expected_status=any
     [Return]  ${resp}
 
+Get Category With Filter
 
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/list    params=${param}     expected_status=any
+    [Return]  ${resp}
+
+Get Default Category By Type
+
+    [Arguments]   ${typeEnum}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/${typeEnum}     expected_status=any
+    [Return]  ${resp}
+
+Update default category by type
+
+    [Arguments]   ${categoryid}   ${categoryTypeEnum}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/category/${categoryid}/${categoryTypeEnum}/default    expected_status=any
+    [Return]  ${resp}
+    
 Get Category By CategoryType
 
     [Arguments]   ${categoryType}  

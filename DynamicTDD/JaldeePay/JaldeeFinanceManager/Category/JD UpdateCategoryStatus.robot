@@ -22,7 +22,7 @@ JD-TC-UpdateCategoryStatus-1
 
     [Documentation]  Create Category as Vendor update this category status as disable.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -78,7 +78,7 @@ JD-TC-UpdateCategoryStatus-2
 
     [Documentation]  Create Category as Expense then update this category status as disable..
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -110,9 +110,9 @@ JD-TC-UpdateCategoryStatus-2
 
 JD-TC-UpdateCategoryStatus-3
 
-    [Documentation]  Create Category as payable then update this category status as disable..
+    [Documentation]  Create Category as paymentInOut then update this category status as disable..
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -145,9 +145,9 @@ JD-TC-UpdateCategoryStatus-3
 
 JD-TC-UpdateCategoryStatus-4
 
-    [Documentation]  Create Category as Income then update this category status as disable..
+    [Documentation]  Create Category as Invoice then update this category status as disable..
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -177,80 +177,12 @@ JD-TC-UpdateCategoryStatus-4
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 
+
 JD-TC-UpdateCategoryStatus-5
-
-    [Documentation]  Create Category as Receivable then update this category status as disable.
-
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[4]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id1}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-
-    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[4]}   ${toggle[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
-
-
-JD-TC-UpdateCategoryStatus-6
-
-    [Documentation]  Create Category as Invoice then update this category status as disable.
-
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[4]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id1}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-
-    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[4]}   ${toggle[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
-
-JD-TC-UpdateCategoryStatus-7
 
     [Documentation]  update category status without name.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -280,11 +212,11 @@ JD-TC-UpdateCategoryStatus-7
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 
-JD-TC-UpdateCategoryStatus-8
+JD-TC-UpdateCategoryStatus-6
 
     [Documentation]  update category status as category type as empty.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -319,7 +251,7 @@ JD-TC-UpdateCategoryStatus-UH1
     [Documentation]   Update Category status without login
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[4]}   ${toggle[1]}
+    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[3]}   ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -333,7 +265,7 @@ JD-TC-UpdateCategoryStatus-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[4]}   ${toggle[1]}
+    ${resp}=  Update Category Status   ${category_id1}  ${name}  ${categoryType[3]}   ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}

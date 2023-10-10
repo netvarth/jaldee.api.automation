@@ -15,24 +15,16 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 
-*** Keywords ***
-
-Get Category With Filter
-
-    [Arguments]   &{param}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/list    params=${param}     expected_status=any
-    [Return]  ${resp}
 
 
 *** Test Cases ***
 
 
-JD-TC-GetCategoryByCategoryType-1
+JD-TC-GetCategorywithfilter-1
 
     [Documentation]  Create Category as Vendor and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -73,11 +65,11 @@ JD-TC-GetCategoryByCategoryType-1
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-2
+JD-TC-GetCategorywithfilter-2
 
     [Documentation]  Create Category as Vendor and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -90,11 +82,11 @@ JD-TC-GetCategoryByCategoryType-2
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-3
+JD-TC-GetCategorywithfilter-3
 
     [Documentation]  Create Category as Vendor and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -108,11 +100,11 @@ JD-TC-GetCategoryByCategoryType-3
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
 
-JD-TC-GetCategoryByCategoryType-4
+JD-TC-GetCategorywithfilter-4
 
     [Documentation]  Create Category as Expense and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -132,11 +124,11 @@ JD-TC-GetCategoryByCategoryType-4
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-5
+JD-TC-GetCategorywithfilter-5
 
     [Documentation]  Create Category as Expense and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -149,11 +141,11 @@ JD-TC-GetCategoryByCategoryType-5
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-6
+JD-TC-GetCategorywithfilter-6
 
     [Documentation]  Create Category as Expense and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -167,11 +159,11 @@ JD-TC-GetCategoryByCategoryType-6
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
 
-JD-TC-GetCategoryByCategoryType-7
+JD-TC-GetCategorywithfilter-7
 
     [Documentation]  Create Category as PaymentsOut and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -192,11 +184,11 @@ JD-TC-GetCategoryByCategoryType-7
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-8
+JD-TC-GetCategorywithfilter-8
 
     [Documentation]  Create Category as PaymentsOut and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -209,11 +201,11 @@ JD-TC-GetCategoryByCategoryType-8
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-9
+JD-TC-GetCategorywithfilter-9
 
     [Documentation]  Create Category as PaymentsOut and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -226,11 +218,11 @@ JD-TC-GetCategoryByCategoryType-9
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-10
+JD-TC-GetCategorywithfilter-10
 
     [Documentation]  Create Category as PaymentsIn and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -250,11 +242,11 @@ JD-TC-GetCategoryByCategoryType-10
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-11
+JD-TC-GetCategorywithfilter-11
 
     [Documentation]  Create Category as PaymentsIn and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -267,11 +259,11 @@ JD-TC-GetCategoryByCategoryType-11
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-12
+JD-TC-GetCategorywithfilter-12
 
     [Documentation]  Create Category as PaymentsIn and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -284,11 +276,11 @@ JD-TC-GetCategoryByCategoryType-12
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-# JD-TC-GetCategoryByCategoryType-5
+# JD-TC-GetCategorywithfilter-5
 
 #     [Documentation]  Create Category as Receivable and verify.
 
-#     ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+#     ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -308,70 +300,70 @@ JD-TC-GetCategoryByCategoryType-12
 #     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
 
-JD-TC-GetCategoryByCategoryType-13
+JD-TC-GetCategorywithfilter-13
 
     [Documentation]  Create Category as Invoice and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${name4}=   FakerLibrary.word
     Set Suite Variable   ${name4}
-    ${resp}=  Create Category   ${name4}  ${categoryType[4]} 
+    ${resp}=  Create Category   ${name4}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[4]}    id-eq=${category_id1}
+    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    id-eq=${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}            ${category_id1}
     Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name4}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[4]}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[3]}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-14
+JD-TC-GetCategorywithfilter-14
 
     [Documentation]  Create Category as Invoice and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[4]}    name-eq=${name4}
+    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    name-eq=${name4}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['id']}            ${category_id1}
     Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name4}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[4]}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[3]}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-GetCategoryByCategoryType-15
+JD-TC-GetCategorywithfilter-15
 
     [Documentation]  Create Category as Invoice and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME97}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[4]}    account-eq=${account_id1}
+    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['id']}            ${category_id1}
     Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name4}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[4]}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[3]}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 # *** comment ***
 
-JD-TC-GetCategoryByCategoryType-7
+JD-TC-GetCategorywithfilter-7
 
     [Documentation]  Create multiple Category as Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -411,29 +403,29 @@ JD-TC-GetCategoryByCategoryType-7
     ${resp}=  Get Category By CategoryType   ${categoryType[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['id']}            ${category_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name1}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['id']}            ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[3]['name']}          ${name1}
+    Should Be Equal As Strings  ${resp.json()[3]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[3]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[3]['status']}        ${toggle[0]}
 
-    Should Be Equal As Strings  ${resp.json()[1]['id']}            ${category_id2}
-    Should Be Equal As Strings  ${resp.json()[1]['name']}          ${name2}
-    Should Be Equal As Strings  ${resp.json()[1]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[1]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[1]['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[4]['id']}            ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[4]['name']}          ${name2}
+    Should Be Equal As Strings  ${resp.json()[4]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[4]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[4]['status']}        ${toggle[0]}
 
 
-JD-TC-GetCategoryByCategoryType-UH1
+JD-TC-GetCategorywithfilter-UH1
 
     [Documentation]   Get Category By Id without login
 
-    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[4]}    account-eq=${account_id1}
+    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-GetCategoryByCategoryType-UH2
+JD-TC-GetCategorywithfilter-UH2
 
     [Documentation]   Get Category by Id Using Consumer Login
 
@@ -441,13 +433,13 @@ JD-TC-GetCategoryByCategoryType-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[4]}    account-eq=${account_id1}
+    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 
-JD-TC-GetCategoryByCategoryType-UH3
+JD-TC-GetCategorywithfilter-UH3
 
     [Documentation]  Get category by category type , without create category.
 
@@ -479,14 +471,15 @@ JD-TC-GetCategoryByCategoryType-UH3
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}     []       
+    ${len}=  Get Length  ${resp.json()}    
+    Should Be Equal As Strings  ${len}  3        
 
 
-JD-TC-GetCategoryByCategoryType-UH4
+JD-TC-GetCategorywithfilter-UH4
 
     [Documentation]  Create Category as Vendor then update it as Expense then try to get category type as vendor.
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -535,4 +528,5 @@ JD-TC-GetCategoryByCategoryType-UH4
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}     []       
+    ${len}=  Get Length  ${resp.json()}    
+    Should Be Equal As Strings  ${len}  3       

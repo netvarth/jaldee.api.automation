@@ -22,7 +22,7 @@ JD-TC-UpdateCategory-1
 
     [Documentation]  Create Category as Vendor and update it as Expense.
 
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -76,9 +76,9 @@ JD-TC-UpdateCategory-1
 
 JD-TC-UpdateCategory-2
 
-    [Documentation]  Create Category as payable.
+    [Documentation]  Update Category as paymentinOut.
 
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -97,9 +97,9 @@ JD-TC-UpdateCategory-2
 
 JD-TC-UpdateCategory-3
 
-    [Documentation]  Create Category as Income.
+    [Documentation]  Update Category as Invoice.
 
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -116,48 +116,8 @@ JD-TC-UpdateCategory-3
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-JD-TC-UpdateCategory-4
-
-    [Documentation]  Create Category as Receivable.
-
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${name1}=   FakerLibrary.word
-    ${resp}=  Update Category   ${category_id1}  ${name1}  ${categoryType[4]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name1}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
 
-JD-TC-UpdateCategory-5
-
-    [Documentation]  Create Category as Invoice.
-
-    ${resp}=  Provider Login  ${PUSERNAME70}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${name1}=   FakerLibrary.word
-    ${resp}=  Update Category   ${category_id1}  ${name1}  ${categoryType[4]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name1}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[4]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
 
 JD-TC-UpdateCategory-UH1
