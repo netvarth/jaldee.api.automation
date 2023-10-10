@@ -10,6 +10,7 @@ Resource          Keywords.robot
 
 Send Otp For Login
     [Arguments]    ${loginid}  ${accountId}  ${countryCode}=+91
+    Check And Create YNW Session
     ${otp}=    Create Dictionary    loginId=${loginid}  accountId=${accountId}  countryCode=${countryCode}
     ${log}=    json.dumps    ${otp}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser

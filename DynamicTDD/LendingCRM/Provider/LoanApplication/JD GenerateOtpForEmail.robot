@@ -988,8 +988,9 @@ JD-TC-GenerateotpForEmail-1
         Set Suite Variable  ${cust_id}      ${resp.json()[0]['id']}
     END
 
-    Set Suite Variable  ${cust_email}           ${fname}${C_Email}.ynwtest@jaldee.com
-    ${cust_email}=    String.RemoveString       ${cust_email}    ${SPACE}
+    Set test Variable  ${cust_email1}           ${fname}${C_Email}.ynwtest@jaldee.com
+    ${cust_email}=    String.RemoveString       ${cust_email1}    ${SPACE}
+    Set Suite Variable      ${cust_email}
 
     updateEnquiryStatus                    ${account_id1}
     sleep  01s
@@ -1090,3 +1091,40 @@ JD-TC-GenerateotpForEmail-1
     ${resp}=    Verify Email Otp and Create Loan Application  ${cust_email}  ${OtpPurpose['ConsumerVerifyEmail']}  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+
+JD-TC-GenerateotpForEmail-UH1
+                                  
+    [Documentation]               varify otp for mail - email is empty
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=                               Generate Loan Application Otp for Email  ${empty}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}         ${EMAIL_ID_REQUIRED}
+
+JD-TC-GenerateotpForEmail-UH2
+                                  
+    [Documentation]               varify otp for mail - without login
+
+    ${resp}=                               Generate Loan Application Otp for Email  ${cust_email}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    419
+    Should Be Equal As Strings             ${resp.json()}         ${SESSION_EXPIRED}
+
+JD-TC-GenerateotpForEmail-UH3
+                                  
+    [Documentation]               varify otp for mail - email is invalid
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${fakemail}=    FakerLibrary.name
+
+    ${resp}=                               Generate Loan Application Otp for Email  ${fakemail}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}         ${INVALID_EMAIL}
