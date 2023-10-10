@@ -2025,7 +2025,7 @@ NO_ACTIVE_SCHEDULES_FOUND="No active schedules found"
 PLEASE_FILL_THE_FORM_TO_COMPLETE="Please fill the form to complete"
 CUSTOM_EMAIL_ALREADY_DISABLED="custom Email already disabled"	
 DAY_CANNOT_BE_EMPTY="Day cannot be empty"
-Invalid_CC="Invalid Country Code"
+INVALID_COUNTRYCODE = "Invalid Country Code"
 INVALID_STATUS="Invalid Status"
 
 
@@ -2096,3 +2096,15 @@ HTML_REQUIRED= "Prescription html required for updation "
 PROVIDER_CONSUMER_ID_NEEDED_IN_FILTER= "Provider consumer Id needed in Filter"
 EITHER_ONE= "Either manual prescription or upload prescription is allowed"
 INVALID_MR_CASE_ID= "Invalid MR Case ID"
+
+# Provider Consumer
+
+INVALID_FOR_PHONE_NO = "Invalid phone No."
+INVALID_FOR_SECONDARY_NO = "Invalid secondary phone No."
+INVALID_FOR_TERTIARY_NO = "Invalid tertiary phone No."
+
+COUNTRY_CODE_REQUIRED_FOR_SECONDARY_NO = "Country code required for Secondary Phone No."
+COUNTRY_CODE_REQUIRED_FOR_TERTIARY_NO = "Country code required for Tertiary Phone No."
+		
+COUNTRY_CODE_INVALID_FOR_SECONDARY_NO = "Invalid secondary phone No country code."
+COUNTRY_CODE_INVALID_FOR_TERTIARY_NO = "Invalid tertiary phone No country code."

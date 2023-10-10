@@ -52,6 +52,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-1
       Set Suite Variable  ${mem_id}  ${resp.json()}
       ${resp}=  ListFamilyMemberByProvider  ${pcid}
       Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response List  ${resp}  0  id=${mem_id}  
       Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname1}
       Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname1}
@@ -125,6 +126,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-3
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${fid}  ${resp.json()}
       ${resp}=  ListFamilyMemberByProvider  ${pcid2}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response List  ${resp}  0  id=${fid} 
       Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
       Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}

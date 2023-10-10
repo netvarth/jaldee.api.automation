@@ -1492,21 +1492,25 @@ JD-TC-Update CustomerDetails-UH8
 JD-TC-Update CustomerDetails-13
     [Documentation]  update manual id of customer
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${p_id}  ${decrypted_data['id']}
     
     ${resp}=  Get Accountsettings  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}==${customerseries[0]}
+          ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
+          Log  ${resp.json()}
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
 
-    # IF  ${resp.json()['enableIvr']}==${bool[0]}
-    #      ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
-    #      Log  ${resp.json()}
-    #      Should Be Equal As Strings  ${resp.status_code}  200
-    # END
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -1515,7 +1519,7 @@ JD-TC-Update CustomerDetails-13
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
-    ${resp}=  AddCustomer  ${cust_no}   countryCode=+${country_code}  firstName=${firstname}   lastName=${lastname}  jaldeeId=${jaldeeid}
+    ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  jaldeeId=${jaldeeid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}

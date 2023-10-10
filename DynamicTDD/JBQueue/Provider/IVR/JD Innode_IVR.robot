@@ -552,7 +552,7 @@ JD-TC-Innode_IVR-UH7
     ${resp}=    Incall IVR    ${acc_id}     ${incall_id}    ${incall_uid}    ${reference_id}    ${company_id}  ${clid_row}   ${cclid}    ${empty}    ${ivr_inputValue[1]}    ${ivr_inputValue[1]}    ${empty}    ${empty}    ${created_date}    ${call_time}    ${empty}    ${NONE}    ${empty}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422  
-    Should Be Equal As Strings  ${resp.json()}  ${Invalid_CC}
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_COUNTRYCODE}
     
 
     ${current_time}=    Get Current Date    result_format=%s
