@@ -9005,6 +9005,33 @@ Loan Approval
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationUid}/approval  data=${data}  expected_status=any
     [Return]  ${resp}
 
+Delete Loan Attachment
+    [Arguments]    ${Uid}   ${customerPhone}    ${ownerid}        ${fileName}      ${fileSize}        ${caption}    ${fileType}    ${action}       ${type}   ${order}  &{kwargs}
+    
+
+    ${aadhaarAttachments}=  Create Dictionary   owner=${ownerid}   fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    action=${action}    type=${type}    order=${order}   
+    ${aadhaarAttachments}=    Create List   ${aadhaarAttachments}
+
+    ${panAttachments}=  Create Dictionary   owner=${ownerid}   fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    action=${action}    type=${type}    order=${order}   
+    ${panAttachments}=    Create List   ${panAttachments}
+
+    ${loanApplicationKycList}=    Create Dictionary    uid=${Uid}    customerPhone=${customerPhone}    aadhaarAttachments=${aadhaarAttachments}    panAttachments=${panAttachments}
+
+    # ${pan}=  Create Dictionary     owner=${owner}        fileName=${fileName}        fileSize=${fileSize}        caption=${caption}        fileType=${fileType}        order=${order}
+    # ${panAttachments}=    Create List    ${pan}
+
+    ${data}=  Create List    ${loanApplicationKycList}    
+    ${data}=  Create Dictionary    loanApplicationKycList=${data}      
+    Log  ${data}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/attachments  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
 Get User Available
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/available   expected_status=any
@@ -9167,13 +9194,6 @@ Update Scheme
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/loan/scheme/${id}   data=${data}   expected_status=any 
-    [Return]  ${resp}
-
-Change Sp Internal Status
-
-    [Arguments]    ${loanApplicationUid}   ${internalStatus}  
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationUid}/spinternalstatus/${internalStatus}    expected_status=any
     [Return]  ${resp}
 
 Get Loan Application By uid
@@ -9690,14 +9710,6 @@ Add General Notes/Remarks
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/note    data=${data}  expected_status=any
-    [Return]  ${resp}
-
-Change Loan Application Scheme
-
-    [Arguments]    ${loanApplicationUid}   ${schemeId}
-
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/scheme/${schemeId}    expected_status=any
     [Return]  ${resp}
 
 

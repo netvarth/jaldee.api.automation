@@ -1822,6 +1822,7 @@ INVALID_LOAN_APPLICATION_ID=  "Invalid Loan Application ID"
 CATEGORY_REQUIRES = " Sourcing Channel is Required"
 UNABLE_TO_CHANGE_INTERNAL_STATUS= "Unable to change internal status. Current Loan Application internal status is {}"
 NOMINEE_NAME_REQUIRED= "Nominee Name required"
+LOAN_APPLICATION_REF_REQ= "Loan Application Reference Required"
 #jaldee drive
 
 UPLOAD_ATLEAST_ONEFILE= "Need to upload atleast one file"
@@ -1965,6 +1966,8 @@ UNABLE_TO_SUSPEND = "Unable to suspend. Current Partner internal status is Suspe
 INVALID_PARTNER_UID = "Invalid Dealer"
 DOB_REQUIRED = "DoB required"
 STATUS_IS_APPROVALREQUIRED = "Unable to change internal status. Current Loan Application internal status is ApprovalRequired"
+STATUS_IS_ALREADY_CONSUMERACCEPTED= "Unable to change internal status. Current Loan Application internal status is ConsumerAccepted"
+
 
 # Branch Master
 
