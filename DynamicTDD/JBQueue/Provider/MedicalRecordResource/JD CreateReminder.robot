@@ -61,6 +61,13 @@ JD-TC-CreateReminder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
 
+    ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  SuperAdmin Logout 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
