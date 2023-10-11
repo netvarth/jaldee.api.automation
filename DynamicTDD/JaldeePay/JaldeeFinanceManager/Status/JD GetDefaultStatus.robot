@@ -53,17 +53,17 @@ JD-TC-get Default status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
-    ${resp}=  Create Finance Status   ${status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id0}   ${resp.json()}
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Create Finance Status   ${status[2]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
@@ -77,5 +77,5 @@ JD-TC-get Default status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${status[0]}
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[0]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}

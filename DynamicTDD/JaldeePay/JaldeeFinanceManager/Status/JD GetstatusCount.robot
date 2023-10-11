@@ -83,7 +83,7 @@ JD-TC-Getstatuscount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
 
-    ${resp}=  Get status count   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   name-eq=${status[0]}
+    ${resp}=  Get status count   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   name-eq=${New_status[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}   ${len}
@@ -99,7 +99,7 @@ JD-TC-Getstatuscount-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -125,7 +125,7 @@ JD-TC-Getstatuscount-3
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
 
-    ${resp}=  Create Finance Status   ${status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id1}   ${resp.json()}
@@ -148,7 +148,7 @@ JD-TC-Getstatuscount-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -172,7 +172,7 @@ JD-TC-Getstatuscount-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -201,7 +201,7 @@ JD-TC-Getstatuscount-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[2]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}

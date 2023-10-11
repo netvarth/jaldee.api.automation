@@ -72,7 +72,7 @@ JD-TC-Get status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
-    ${resp}=  Create Finance Status   ${status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
@@ -82,7 +82,7 @@ JD-TC-Get status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id1} 
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]} 
-    Should Be Equal As Strings  ${resp.json()['name']}  ${status[0]} 
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[0]} 
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1} 
     Should Be Equal As Strings  ${resp.json()['isEnabled']}  ${toggle[0]} 
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[0]} 
@@ -95,7 +95,7 @@ JD-TC-Get status-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
@@ -105,7 +105,7 @@ JD-TC-Get status-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2} 
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]} 
-    Should Be Equal As Strings  ${resp.json()['name']}  ${status[1]} 
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[1]} 
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1} 
     Should Be Equal As Strings  ${resp.json()['isEnabled']}  ${toggle[0]} 
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[0]} 

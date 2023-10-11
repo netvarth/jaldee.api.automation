@@ -72,17 +72,17 @@ JD-TC-GetstatusListfilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
-    ${resp}=  Create Finance Status   ${status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   name-eq=${status[0]}
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   name-eq=${New_status[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id1}
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${status[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[0]}
 
 # *** comment ***
 
@@ -94,7 +94,7 @@ JD-TC-GetstatusListfilter-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -104,7 +104,7 @@ JD-TC-GetstatusListfilter-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id2}
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${status[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[1]}
 
 JD-TC-GetstatusListfilter-3
 
@@ -116,7 +116,7 @@ JD-TC-GetstatusListfilter-3
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
 
-    ${resp}=  Create Finance Status   ${status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id1}   ${resp.json()}
@@ -126,7 +126,7 @@ JD-TC-GetstatusListfilter-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id1}
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${status[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[0]}
 
 JD-TC-GetstatusListfilter-4
 
@@ -136,7 +136,7 @@ JD-TC-GetstatusListfilter-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -146,7 +146,7 @@ JD-TC-GetstatusListfilter-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id2}
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${status[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[1]}
 
 JD-TC-GetstatusListfilter-5
 
@@ -156,7 +156,7 @@ JD-TC-GetstatusListfilter-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -181,7 +181,7 @@ JD-TC-GetstatusListfilter-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[2]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}

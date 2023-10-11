@@ -64,7 +64,7 @@ JD-TC-EnableDisableFinanceManagerStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${resp}=  Create Finance Status   ${status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
@@ -74,7 +74,7 @@ JD-TC-EnableDisableFinanceManagerStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id1} 
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]} 
-    Should Be Equal As Strings  ${resp.json()['name']}  ${status[0]} 
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[0]} 
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1} 
     Should Be Equal As Strings  ${resp.json()['isEnabled']}  ${toggle[0]} 
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[0]}
@@ -88,7 +88,7 @@ JD-TC-EnableDisableFinanceManagerStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id1} 
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]} 
-    Should Be Equal As Strings  ${resp.json()['name']}  ${status[0]} 
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[0]} 
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1} 
     Should Be Equal As Strings  ${resp.json()['isEnabled']}  ${toggle[1]} 
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[0]}
@@ -101,7 +101,7 @@ JD-TC-EnableDisableFinanceManagerStatus-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${STATUS_ALREADY_DISABLED}=  format String   ${STATUS_ALREADY_DISABLED}   ${status[0]}
+    ${STATUS_ALREADY_DISABLED}=  format String   ${STATUS_ALREADY_DISABLED}   ${New_status[0]}
 
     ${resp}=  Enable Disable Jaldee Finance Status   ${status_id1}      ${toggle[1]}  
     Log  ${resp.json()}
@@ -146,12 +146,12 @@ JD-TC-EnableDisableFinanceManagerStatus-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[2]}  ${categoryType[2]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Create Finance Status   ${status[3]}  ${categoryType[3]} 
+    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id3}   ${resp.json()}
@@ -165,7 +165,7 @@ JD-TC-EnableDisableFinanceManagerStatus-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2} 
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[2]} 
-    Should Be Equal As Strings  ${resp.json()['name']}  ${status[2]} 
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[2]} 
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1} 
     Should Be Equal As Strings  ${resp.json()['isEnabled']}  ${toggle[1]} 
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[0]}
@@ -179,7 +179,7 @@ JD-TC-EnableDisableFinanceManagerStatus-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id3} 
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[3]} 
-    Should Be Equal As Strings  ${resp.json()['name']}  ${status[3]} 
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[3]} 
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1} 
     Should Be Equal As Strings  ${resp.json()['isEnabled']}  ${toggle[1]} 
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[0]}
