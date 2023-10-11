@@ -247,7 +247,7 @@ CANNOT_LOGIN_SUPPORT_USER= "Sorry, you are not allowed to login as a support use
 LOGIN_FAILED= "Login attempt failed. It looks like there have been multiple login sessions for the same customer. "
 EMAIL_NOT_VERIFIED= "Email not verified."
 EMAIL_VERIFIED= "Email already verified."
-
+NO_PERMISSION_TO_UNASSIGN_USERSERVICE= "You cannot unassign from a user-specific service."
 
 PHONE_NOT_VERIFIED= "Phone number not verified."
 PHONE_VERIFIED= "Phone number already verified."

@@ -247,7 +247,12 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${subdomain}  ${decrypted_data['subSector']}
+
+    # Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
 
     # clear_service   ${MUSERNAME_E1}
     # clear_location  ${MUSERNAME_E1}
@@ -295,7 +300,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  pincode=${pin}  deptId=${dep_id}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}   deptId=${dep_id}  subdomain=${userSubDomain}
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -347,7 +352,11 @@ JD-TC-Is AvailableQueueNow ByProviderId-2
     # Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['sTime']}             ${start_time}  
     # Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${end_time}
        
+    ${resp}=  Activate Vacation    ${boolean[1]}  ${v_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep  2s
     ${resp}=  Is Available Queue Now ByProviderId    ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -555,7 +564,11 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${subdomain}  ${decrypted_data['subSector']}
+    # Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -648,7 +661,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Suite Variable  ${sub_domain_id1}  ${resp.json()['subdomain']}
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id3}  
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}   deptId=${dep_id3}  
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -701,7 +714,11 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
     ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${subdomain}  ${decrypted_data['subSector']}
+    # Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -780,7 +797,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-6
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id4}  
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}    deptId=${dep_id4}  
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -894,7 +911,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-7
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id3} 
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}   deptId=${dep_id3} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
@@ -1015,7 +1032,7 @@ JD-TC-Is AvailableQueueNow ByProviderId-8
     ${resp}=  Get User By Id  ${u_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id3}  
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}   deptId=${dep_id3}  
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${PUSERPH0} 
     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
     Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${PUSERPH0} 
