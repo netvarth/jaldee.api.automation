@@ -24,7 +24,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 Get Reminder Notification
 
     Check And Create YNW SuperAdmin Session
-    ${resp}=    Get On Session    synw    /userAgent/reminderNotificationTask    expected_status=any  
+    ${resp}=    POST On Session    synw    /userAgent/reminderNotificationTask    expected_status=any  
     [Return]  ${resp}
 
 
@@ -37,7 +37,7 @@ JD-TC-CreateReminder-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
+
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
@@ -83,6 +83,7 @@ JD-TC-CreateReminder-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep  2s
     ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
