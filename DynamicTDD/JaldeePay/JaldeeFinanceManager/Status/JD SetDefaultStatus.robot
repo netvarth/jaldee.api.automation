@@ -99,21 +99,21 @@ JD-TC-Set Default status-2
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}}
     
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id1}   ${resp.json()}
 
 
-    ${resp}=  Set default status    ${status_id1}    ${categoryType[0]} 
+    ${resp}=  Set default status    ${status_id1}    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[0]} 
+    ${resp}=  Get default status    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id1}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[0]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
@@ -126,20 +126,20 @@ JD-TC-Set Default status-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Set default status    ${status_id2}    ${categoryType[0]} 
+    ${resp}=  Set default status    ${status_id2}    ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[0]} 
+    ${resp}=  Get default status    ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[2]}
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[1]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
@@ -152,20 +152,20 @@ JD-TC-Set Default status-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Set default status    ${status_id2}    ${categoryType[0]} 
+    ${resp}=  Set default status    ${status_id2}    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[0]} 
+    ${resp}=  Get default status    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[3]}
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[2]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
@@ -177,21 +177,21 @@ JD-TC-Set Default status-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Set default status    ${status_id2}    ${categoryType[0]} 
+    ${resp}=  Set default status    ${status_id2}    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[0]} 
+    ${resp}=  Get default status    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[3]}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[3]}
+    Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[4]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 JD-TC-Set Default status-6

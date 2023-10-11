@@ -36,7 +36,7 @@ ${order}    0
 ${fileSize}  0.00458
 
 @{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
+@{New_status}    Proceed     Unassign    Block     Delete    Remove    Assign
 
 
 *** Test Cases ***
@@ -116,7 +116,7 @@ JD-TC-GetstatusListfilter-3
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
 
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id1}   ${resp.json()}
@@ -126,7 +126,7 @@ JD-TC-GetstatusListfilter-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id1}
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[2]}
 
 JD-TC-GetstatusListfilter-4
 
@@ -136,7 +136,7 @@ JD-TC-GetstatusListfilter-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -146,7 +146,7 @@ JD-TC-GetstatusListfilter-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id2}
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[3]}
 
 JD-TC-GetstatusListfilter-5
 
@@ -156,13 +156,13 @@ JD-TC-GetstatusListfilter-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
 
-    ${resp}=  Update Finance Status   ${New_status[3]}  ${categoryType[0]}   ${status_id2}
+    ${resp}=  Update Finance Status   ${New_status[5]}  ${categoryType[0]}   ${status_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -171,7 +171,7 @@ JD-TC-GetstatusListfilter-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${status_id2}
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[3]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[5]}
 
 JD-TC-GetstatusListfilter-6
 
