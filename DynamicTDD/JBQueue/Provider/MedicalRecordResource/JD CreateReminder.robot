@@ -6,6 +6,7 @@ Force Tags        Reminder
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/musers.py
@@ -17,6 +18,16 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 @{emptylist}
 
 
+*** Keywords ***
+
+    
+Get Reminder Notification
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    Get On Session    synw    /userAgent/reminderNotificationTask    expected_status=any  
+    [Return]  ${resp}
+
+
 *** Test Cases ***
 
 JD-TC-CreateReminder-1
@@ -26,6 +37,7 @@ JD-TC-CreateReminder-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
@@ -64,6 +76,9 @@ JD-TC-CreateReminder-1
     ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Reminder Notification
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200

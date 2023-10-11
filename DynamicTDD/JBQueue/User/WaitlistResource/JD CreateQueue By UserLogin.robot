@@ -373,8 +373,8 @@ JD-TC-CreateQueueByUserLogin-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${EMPTY}  ${u_id}  ${s_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_LOCATION_REQUIRED}"
+    Should Be Equal As Strings  ${resp.status_code}  404
+    Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_NOT_FOUND}"
 
 JD-TC-CreateQueueByUserLogin-UH7
 

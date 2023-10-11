@@ -1175,6 +1175,7 @@ NO_PERMISSION_TO_ADD_LOCATION= "You have no permission to assign to location"
 USER_NOT_FOUND_WITH_ID= "User not found with id {}"
 
 #consumer
+INVALID_CONS_ID= "Invalid Consumer Id"
 INVALID_ID= "Invalid Consumer Id"
 PRO_CON_ALREADY_EXIST= "[customer] already exists"
 ENTER_CON_PHONE_NO= "Enter Consumer phone number"
