@@ -63,7 +63,7 @@ JD-TC-Create status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
-    ${resp}=  Create Finance Status   ${status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
@@ -84,7 +84,7 @@ JD-TC-Create status-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable   ${status_id2}   ${resp.json()}
@@ -97,7 +97,7 @@ JD-TC-Create status-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[2]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -109,7 +109,7 @@ JD-TC-Create status-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[3]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -121,7 +121,7 @@ JD-TC-Create status-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${status[4]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -194,7 +194,7 @@ JD-TC-Create status-UH4
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${FIELD_DISABLED}
 
-JD-TC-Create status-6
+JD-TC-Create status-UH5
 
     [Documentation]  Create same status multiple times.
 
@@ -219,12 +219,8 @@ JD-TC-Create status-6
 
     ${resp}=  Create Finance Status   ${status[4]}  ${categoryType[0]} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${STATUS_EXISTS_WITH_GIVEN_NAME}
 
-    ${resp}=  Create Finance Status   ${status[4]}  ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Finance Status   ${status[4]}  ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+ 
