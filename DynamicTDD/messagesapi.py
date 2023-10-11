@@ -1967,7 +1967,7 @@ INVALID_PARTNER_UID = "Invalid Dealer"
 DOB_REQUIRED = "DoB required"
 STATUS_IS_APPROVALREQUIRED = "Unable to change internal status. Current Loan Application internal status is ApprovalRequired"
 STATUS_IS_ALREADY_CONSUMERACCEPTED= "Unable to change internal status. Current Loan Application internal status is ConsumerAccepted"
-
+STATUS_IS_ALREADY_CREDITAPPROVED= "Unable to change internal status. Current Loan Application internal status is CreditApproved"
 
 # Branch Master
 
