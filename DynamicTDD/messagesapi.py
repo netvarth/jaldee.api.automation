@@ -1823,6 +1823,7 @@ CATEGORY_REQUIRES = " Sourcing Channel is Required"
 UNABLE_TO_CHANGE_INTERNAL_STATUS= "Unable to change internal status. Current Loan Application internal status is {}"
 NOMINEE_NAME_REQUIRED= "Nominee Name required"
 LOAN_APPLICATION_REF_REQ= "Loan Application Reference Required"
+ALREADY_APPROVAL_REQUESTED= "Loan Application already rejected."
 #jaldee drive
 
 UPLOAD_ATLEAST_ONEFILE= "Need to upload atleast one file"
@@ -1968,6 +1969,8 @@ DOB_REQUIRED = "DoB required"
 STATUS_IS_APPROVALREQUIRED = "Unable to change internal status. Current Loan Application internal status is ApprovalRequired"
 STATUS_IS_ALREADY_CONSUMERACCEPTED= "Unable to change internal status. Current Loan Application internal status is ConsumerAccepted"
 STATUS_IS_ALREADY_CREDITAPPROVED= "Unable to change internal status. Current Loan Application internal status is CreditApproved"
+INVALID_APPLICATION_ID = "Invalid Loan Application ID"
+INVALID_LOAN_REQUESTED_AMOUNT = "Invalid Loan Requested Amount"
 
 # Branch Master
 
