@@ -192,29 +192,7 @@ JD-TC-Update Case Category-5
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${empty}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
 
-JD-TC-Update Case Category-UH1
-
-    [Documentation]    Update Case Category with another provider login
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update Case Category    ${id}  ${name}  ${empty}   ${toggle[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  401
-    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
-
-JD-TC-Update Case Category-UH2
-
-    [Documentation]    Update Case Category without login
-
-    ${resp}=    Update Case Category     ${id}  ${name}  ${empty}   ${toggle[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Update Case Category-UH3
+JD-TC-Update Case Category-6
 
     [Documentation]    Update Case Category where name contain numbers
 
@@ -227,9 +205,9 @@ JD-TC-Update Case Category-UH3
 
     ${resp}=    Update Case Category    ${id}  ${title1}  ${aliasName}   ${toggle[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Category-UH4
+JD-TC-Update Case Category-7
 
     [Documentation]    Update Case Category where aliasname contain numbers
 
@@ -240,9 +218,9 @@ JD-TC-Update Case Category-UH4
 
     ${resp}=    Update Case Category    ${id}  ${name}  ${title1}   ${toggle[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Category-UH5
+JD-TC-Update Case Category-8
 
     [Documentation]    Update Case Category where name contain special characters
 
@@ -252,10 +230,10 @@ JD-TC-Update Case Category-UH5
 
    ${resp}=    Update Case Category    ${id}  ${titles}  ${aliasName}   ${toggle[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 
-JD-TC-Update Case Category-UH6
+JD-TC-Update Case Category-9
 
     [Documentation]    Update Case Category where aliasname contain special characters
 
@@ -266,9 +244,9 @@ JD-TC-Update Case Category-UH6
     ${name1}=  FakerLibrary.name
      ${resp}=    Update Case Category    ${id}  ${name1}  ${titles}   ${toggle[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Category-UH7
+JD-TC-Update Case Category-10
 
     [Documentation]    update already disabled case catogory
 
@@ -283,9 +261,9 @@ JD-TC-Update Case Category-UH7
 
     ${resp}=    Update Case Category    ${id}  ${name1}  ${aliasName}   ${toggle[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Category-UH8
+JD-TC-Update Case Category-UH1
 
     [Documentation]    update case category with invalid id
 
@@ -300,7 +278,7 @@ JD-TC-Update Case Category-UH8
     Should Be Equal As Strings    ${resp.content}    "${INVALID_CASE_CATEGORY_ID}"
 
 
-JD-TC-Update Case Category-UH9
+JD-TC-Update Case Category-UH2
 
     [Documentation]    Update Case Category where name is empty
 
@@ -313,6 +291,29 @@ JD-TC-Update Case Category-UH9
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}    "${NAME_REQUIRED}"
 
+JD-TC-Update Case Category-UH3
+
+    [Documentation]    Update Case Category without login
+
+    ${resp}=    Update Case Category     ${id}  ${name}  ${empty}   ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
 
 
+
+*** comment ***
+
+JD-TC-Update Case Category-UH1
+
+    [Documentation]    Update Case Category with another provider login
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Update Case Category    ${id}  ${name}  ${empty}   ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}

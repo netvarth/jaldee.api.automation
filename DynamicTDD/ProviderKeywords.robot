@@ -11052,11 +11052,9 @@ Create Treatment Plan
 
 Update Treatment Plan
 
-    [Arguments]     ${id}  ${caseDto}    ${dental_id}  ${treatment}   &{kwargs}
-    ${caseDto}=  Create Dictionary  uid=${caseDto} 
-    ${dentalRecord}=  Create Dictionary  id=${dental_id}
+    [Arguments]     ${id}    ${treatment}    ${status}    &{kwargs}
 
-    ${data}=  Create Dictionary    id=${id}  caseDto=${caseDto}    dentalRecord=${dentalRecord}  treatment=${treatment}  
+    ${data}=  Create Dictionary    id=${id}      treatment=${treatment}    status=${status}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END

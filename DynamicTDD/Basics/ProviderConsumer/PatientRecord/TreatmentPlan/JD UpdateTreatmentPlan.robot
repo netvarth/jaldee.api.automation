@@ -198,7 +198,7 @@ JD-TC-Update Treatment Plan-1
     # ${two}=  Create Dictionary  work=${work2}   status=${QnrStatus[1]}
     # ${works}=  Create List  ${one}  ${two}
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${treatment}  
+    ${resp}=    Update Treatment Plan   ${treatmentId}    ${treatment}  ${PRStatus[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${updatetreatmentId}        ${resp.json()}
