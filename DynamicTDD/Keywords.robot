@@ -272,7 +272,7 @@ Verify Response
     [Arguments]  ${resp}  &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{items}
-        Should Be Equal As Strings  ${resp.json()['${key}']}  ${value}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['${key}']}  ${value}
     END
 
 Get Slot
@@ -285,14 +285,14 @@ Verify Response List
     [Arguments]  ${resp}  ${no}   &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{items}
-        Should Be Equal As Strings  ${resp.json()[${no}]['${key}']}  ${value}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[${no}]['${key}']}  ${value}
     END
 
 Verify Response CloudSearch
     [Arguments]  ${resp}   &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{items}
-        Should Be Equal As Strings  ${resp.json()['hits']['hit'][0]['fields']['${key}']}  ${value}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['hits']['hit'][0]['fields']['${key}']}  ${value}
     END
 
 Cloud Search

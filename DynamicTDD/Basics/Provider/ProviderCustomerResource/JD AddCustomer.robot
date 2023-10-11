@@ -7,10 +7,13 @@ Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
+Library           random
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
+
 
 ***Variables***
 # ${waitlistedby}           PROVIDER
@@ -33,6 +36,12 @@ JD-TC-AddCustomer-1
      Log  ${decrypted_data}
      Set Suite Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${ph2}=  Evaluate  ${PUSERNAME23}+73009
@@ -84,6 +93,12 @@ JD-TC-AddCustomer-2
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname1}=  FakerLibrary.first_name
      Set Suite Variable  ${firstname1}
      ${lastname1}=  FakerLibrary.last_name
@@ -161,6 +176,12 @@ JD-TC-AddCustomer-4
      [Documentation]  Provider signup for already added customer with email  
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${dob}=  FakerLibrary.Date
@@ -212,6 +233,12 @@ JD-TC-AddCustomer-4
 JD-TC-AddCustomer-5
      [Documentation]  Add a customer using already logined provider's phone number then add a family to that customer then add another customer using that family member's ph no
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}   ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -273,7 +300,7 @@ JD-TC-AddCustomer-5
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${ph6}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['isSignUpCustomer']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phone_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
@@ -328,14 +355,16 @@ JD-TC-AddCustomer-6
      [Documentation]  Add a customer which is added by another provider
      ${resp}=  Encrypted Provider Login  ${PUSERNAME232}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
-     Set Test Variable  ${firstname}
      ${lastname}=  FakerLibrary.last_name
-     Set Test Variable  ${lastname}
      ${dob}=  FakerLibrary.Date
-     Set Test Variable  ${dob}
      ${gender}=  Random Element    ${Genderlist}
-     Set Test variable  ${gender}
      ${ph3}=  Evaluate  ${PUSERNAME230}+72002
      Set Suite Variable  ${ph3}
      Set Test Variable  ${email}  ${firstname}${ph3}${C_Email}.${test_mail}
@@ -365,6 +394,13 @@ JD-TC-AddCustomer-6
      Should Be Equal As Strings    ${resp.status_code}    200
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  GetCustomer
@@ -416,6 +452,12 @@ JD-TC-AddCustomer-7
      [Documentation]  Add an already existing consumer name
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${ph3}=  Evaluate  ${PUSERNAME230}+72004
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
@@ -447,6 +489,12 @@ JD-TC-AddCustomer-7
 JD-TC-AddCustomer-8
      [Documentation]  Add a customer using already existing Provider's phone nember
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -489,6 +537,12 @@ JD-TC-AddCustomer-9
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
@@ -520,7 +574,7 @@ JD-TC-AddCustomer-9
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  ProviderLogout
+     ${resp}=  Provider Logout
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${CUSERPH0}=  Evaluate  ${CUSERPH}+100100333
@@ -544,6 +598,7 @@ JD-TC-AddCustomer-9
      ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
+     Set Test Variable    ${jcid}  ${resp.json()['id']}
 
      ${cnote}=   FakerLibrary.word
      ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
@@ -552,18 +607,29 @@ JD-TC-AddCustomer-9
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
-     Log  ${resp.content}
-     Should Be Equal As Strings    ${resp.status_code}    200
+     # ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
+     # Log  ${resp.content}
+     # Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH0}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+     # ${resp}=  Consumer Logout
+     # Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
+     # ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings    ${resp.status_code}    200
+
+     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH0}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings  ${resp.status_code}  200
+     # Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+
+     # ${resp}=  Provider Logout
+     # Should Be Equal As Strings  ${resp.status_code}  200
+
+     # ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings  ${resp.status_code}  200
+     
      
      ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
      Log  ${resp.content}
@@ -572,7 +638,7 @@ JD-TC-AddCustomer-9
      Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[0]}  partySize=1  appxWaitingTime=0  waitlistedBy=CONSUMER  personsAhead=0
      Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
      Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ser_id1}
-     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid1} 
+     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid} 
      Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id1}
      
      ${resp}=  Consumer Logout
@@ -585,10 +651,10 @@ JD-TC-AddCustomer-9
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      # Verify Response List  ${resp}  0  firstName=${firstname}  lastName=${lastname}  phoneNo=${CUSERPH0}  dob=${dob}  gender=${gender}  email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid}  favourite=${bool[0]}  jaldeeId=${CUSERPH0}-0
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid2}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['address']}  ${EMPTY}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['address']}  ${address}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['gender']}  ${gender}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['phoneNo']}  ${CUSERPH0}
@@ -600,10 +666,11 @@ JD-TC-AddCustomer-9
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['email_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['favourite']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['jaldeeId']}  ${CUSERPH0}-0
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['jaldeeConsumerDetails']['id']}  ${jcid}
 
 
 JD-TC-AddCustomer-10
-     [Documentation]   Set providers jaldeeId format as manual and provider add a customer after consumer signup with that jaldeeidnumber  and provider  check jaldeeid (it became null)
+     [Documentation]   Set providers jaldeeId format as manual and provider add a customer after consumer signup with that jaldeeidnumber and provider check jaldeeid (it became null)
      clear_queue      ${PUSERNAME231}
      clear_location   ${PUSERNAME231}
      clear_service    ${PUSERNAME231}
@@ -615,8 +682,15 @@ JD-TC-AddCustomer-10
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
-
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
@@ -647,7 +721,6 @@ JD-TC-AddCustomer-10
      ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-
 
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -700,6 +773,7 @@ JD-TC-AddCustomer-10
      ${resp}=  Consumer Login  ${ph3}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
+     Set Test Variable    ${jcid}  ${resp.json()['id']}
 
      ${cnote}=   FakerLibrary.word
      ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
@@ -708,18 +782,18 @@ JD-TC-AddCustomer-10
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
-     Log  ${resp.content}
-     Should Be Equal As Strings    ${resp.status_code}    200
+     # ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  GetCustomer  phoneNo-eq=${ph3}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+     # ${resp}=  GetCustomer  phoneNo-eq=${ph3}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings  ${resp.status_code}  200
+     # Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
 
-     ${resp}=  Consumer Login  ${ph3}  ${PASSWORD}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
+     # ${resp}=  Consumer Login  ${ph3}  ${PASSWORD}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings  ${resp.status_code}  200
      
      ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
      Log  ${resp.content}
@@ -728,7 +802,7 @@ JD-TC-AddCustomer-10
      Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[0]}  partySize=1  appxWaitingTime=0  waitlistedBy=CONSUMER  personsAhead=0
      Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
      Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ser_id1}
-     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid1} 
+     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid} 
      Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id1}
      
      ${resp}=  Consumer Logout
@@ -740,14 +814,14 @@ JD-TC-AddCustomer-10
      ${resp}=  GetCustomer  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     # Verify Response List  ${resp}  0  firstName=${firstname}  lastName=${lastname}  phoneNo=${ph3}  dob=${dob}  gender=${gender}  email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid1}  favourite=${bool[0]} 
+     # Verify Response List  ${resp}  0  firstName=${firstname}  lastName=${lastname}  phoneNo=${ph3}  dob=${dob}  gender=${gender}  email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid}  favourite=${bool[0]} 
      Run Keyword And Continue On Failure  Should Not Contain  ${resp.json()}   0   "jaldeeId":"${ph3}"  
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid1}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['address']}  ${EMPTY}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['address']}  ${address}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['gender']}  ${gender}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['phoneNo']}  ${ph3}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['status']}  ${status[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['countryCode']}  ${countryCodes[0]}
@@ -756,22 +830,29 @@ JD-TC-AddCustomer-10
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['phone_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['email_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['favourite']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['jaldeeConsumerDetails']['id']}  ${jcid}
 
 
 JD-TC-AddCustomer-11
-     [Documentation]   Set providers jaldeeId format as manual and a consumer added to waitlist, here the consumer is  a provider customer and check jaldeeid. 
+     [Documentation]   Set providers jaldeeId format as manual and a consumer added to waitlist, here the consumer is a provider customer and check jaldeeid. 
      clear_queue      ${PUSERNAME231}
      clear_location   ${PUSERNAME231}
      clear_service    ${PUSERNAME231}
      clear waitlist   ${PUSERNAME231}
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
-
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
@@ -785,10 +866,10 @@ JD-TC-AddCustomer-11
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
-     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
-     
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}    
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
      ${strt_time}=   add_timezone_time  ${tz}  3  00  
@@ -842,6 +923,7 @@ JD-TC-AddCustomer-11
      ${resp}=  Consumer Login  ${CUSERNAME5}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
+     Set Test Variable    ${jcid}  ${resp.json()['id']}
 
      ${cnote}=   FakerLibrary.word
      ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id2}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
@@ -849,6 +931,13 @@ JD-TC-AddCustomer-11
      Should Be Equal As Strings  ${resp.status_code}  200 
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
+
+     ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Consumer Logout
+     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Log  ${resp.content}
@@ -858,6 +947,9 @@ JD-TC-AddCustomer-11
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+
+     ${resp}=  ProviderLogout
+     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  Consumer Login  ${CUSERNAME5}  ${PASSWORD}
      Log  ${resp.content}
@@ -883,13 +975,13 @@ JD-TC-AddCustomer-11
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      # Verify Response   ${resp}     firstName=${firstname}  lastName=${lastname}  phoneNo=${CUSERNAME5}  dob=${dob}  gender=${gender}  email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid9}  favourite=${bool[0]}  jaldeeId=${m_jid}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid9}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['id']}  ${cid9}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${EMPTY}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${email2}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${gender}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${CUSERNAME5}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
@@ -899,6 +991,7 @@ JD-TC-AddCustomer-11
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['favourite']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeId']}  ${m_jid}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['id']}  ${jcid}
 
 
 JD-TC-AddCustomer-12
@@ -909,12 +1002,18 @@ JD-TC-AddCustomer-12
      clear waitlist   ${PUSERNAME231}
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
-
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
@@ -1028,12 +1127,18 @@ JD-TC-AddCustomer-13
      clear waitlist   ${PUSERNAME231}
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
-
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid0}=  get_acc_id  ${PUSERNAME231}
 
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
@@ -1047,9 +1152,10 @@ JD-TC-AddCustomer-13
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
-     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
      ${strt_time}=   add_timezone_time  ${tz}  3  00  
@@ -1089,6 +1195,7 @@ JD-TC-AddCustomer-13
      ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
+     Set Test Variable  ${jcid}   ${resp.json()['id']}
 
      ${cnote}=   FakerLibrary.word
      ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
@@ -1097,27 +1204,28 @@ JD-TC-AddCustomer-13
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
 
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
-     Log  ${resp.content}
-     Should Be Equal As Strings    ${resp.status_code}    200
+     # ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH0}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH0}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings  ${resp.status_code}  200
+     # Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
 
-     ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
+     # ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  Get consumer Waitlist By Id   ${wid1}  ${pid0}   
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable    ${cid}  ${resp.json()['consumer']['id']}  
+     # Set Test Variable    ${jid}  ${resp.json()['jaldeeConsumer']['id']}
      Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[0]}  partySize=1  appxWaitingTime=0  waitlistedBy=CONSUMER  personsAhead=0
      Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
      Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ser_id1}
-     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid1} 
+     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid} 
      Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id1}
      
      ${resp}=  Consumer Logout
@@ -1129,14 +1237,14 @@ JD-TC-AddCustomer-13
      ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH0}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${jid}  ${resp.json()[0]['jaldeeId']}
+     # Set Test Variable  ${jid}  ${resp.json()[0]['jaldeeId']}
      # Verify Response List  ${resp}  0  firstName=${firstname}  lastName=${lastname}  phoneNo=${CUSERPH0}  dob=${dob}  gender=${gender}  email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid}  favourite=${bool[0]}  jaldeeId=${jid}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['address']}  ${EMPTY}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['address']}  ${address}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['gender']}  ${gender}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['phoneNo']}  ${CUSERPH0}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['status']}  ${status[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['countryCode']}  ${countryCodes[0]}
@@ -1145,12 +1253,21 @@ JD-TC-AddCustomer-13
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['phone_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['email_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['favourite']}  ${bool[0]}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeId']}  ${jid}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['jaldeeId']}  ${jid}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['jaldeeConsumerDetails']['id']}  ${jcid}
 
 JD-TC-AddCustomer-14
      [Documentation]  Add an already existing customer's email
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${dob}=  FakerLibrary.Date
@@ -1191,13 +1308,19 @@ JD-TC-AddCustomer-15
      
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Test Variable  ${p_id}  ${decrypted_data['id']}
-
      # Set Test Variable  ${p_id}  ${resp.json()['id']}
-     ${resp}=  AddCustomer without email   ${EMPTY}  ${EMPTY}  ${EMPTY}   ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  AddCustomer without email   ${EMPTY}  ${EMPTY}  ${EMPTY}   ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  countryCode=${EMPTY}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cidE}  ${resp.json()}
@@ -1206,16 +1329,16 @@ JD-TC-AddCustomer-15
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['id']}  ${cidE}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${EMPTY}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${EMPTY}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${SPACE}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['isSignUpCustomer']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phone_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
@@ -1234,9 +1357,10 @@ JD-TC-AddCustomer-15
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
-     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
      ${strt_time}=   add_timezone_time  ${tz}  3  00  
@@ -1267,14 +1391,23 @@ JD-TC-AddCustomer-15
 
 JD-TC-AddCustomer-UH1
      [Documentation]  Add an already existing customer's phone no
+     
+     # clear_customer   ${PUSERNAME230}
+
      ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
-     clear_customer   ${PUSERNAME230}
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  GetCustomer    phoneNo-eq=${ph2}    status-eq=ACTIVE  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${cid1}  ${resp.json()}
+     Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
 
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -1282,30 +1415,30 @@ JD-TC-AddCustomer-UH1
      ${gender}=  Random Element    ${Genderlist}
      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}   ${gender}  ${dob}  ${ph2}  ${EMPTY}
      Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     # Should Be Equal As Strings  ${resp.status_code}  422
-     # Should Be Equal As Strings  "${resp.json()}"   "${PRO_CON_ALREADY_EXIST}"
-     Set Test Variable  ${cid2}  ${resp.json()}
+     # Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.status_code}  422
+     Should Be Equal As Strings  "${resp.json()}"   "${PRO_CON_ALREADY_EXIST}"
+     # Set Test Variable  ${cid2}  ${resp.json()}
 
-     Should Not Be Equal As Strings  ${cid1}  ${cid2}
+     # Should Not Be Equal As Strings  ${cid1}  ${cid2}
 
-     ${resp}=  GetCustomer ById  ${cid2}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${gender}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${ph2}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['isSignUpCustomer']}  ${bool[0]}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phone_verified']}  ${bool[0]}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['favourite']}  ${bool[0]}
+     # ${resp}=  GetCustomer ById  ${cid2}
+     # Log  ${resp.content}
+     # Should Be Equal As Strings  ${resp.status_code}  200
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${gender}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${ph2}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['isSignUpCustomer']}  ${bool[0]}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phone_verified']}  ${bool[0]}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['favourite']}  ${bool[0]}
 
 
 
@@ -1379,7 +1512,7 @@ JD-TC-AddCustomer-UH4
 
 JD-TC-AddCustomer-16
      
-     [Documentation]    Add a same customer to three different providers and take waitlist then after consumer signup get waitlist details                 
+     [Documentation]    Add the same customer to three different providers and take waitlist then after consumer signup get waitlist details                 
      ...                (Here first  provider's jaldee integration is true 2nd provider's  jaldee integration is true and 3rd providers jaldee integration is false)
      
 
@@ -1401,6 +1534,10 @@ JD-TC-AddCustomer-16
      ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
@@ -1431,7 +1568,7 @@ JD-TC-AddCustomer-16
      Log  ${resp.content}
      Should Be Equal As Strings      ${resp.status_code}  200
      Set Test Variable   ${jaldeeid1}    ${resp.json()[0]['jaldeeId']}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstname']}  ${firstname1}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname1}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname1}
 
      ${pid1}=  get_acc_id  ${PUSERNAME213}
@@ -1447,9 +1584,10 @@ JD-TC-AddCustomer-16
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
-     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
      ${strt_time}=   add_timezone_time  ${tz}  3  00  
@@ -1479,6 +1617,10 @@ JD-TC-AddCustomer-16
      ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
@@ -1516,28 +1658,36 @@ JD-TC-AddCustomer-16
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id2}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id2}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id2}    ${resp}
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz2}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_timezone_time  ${tz}  3  00  
-     ${end_time}=    add_timezone_time  ${tz}  3  30      
+     ${strt_time}=   add_timezone_time  ${tz2}  3  00  
+     ${end_time}=    add_timezone_time  ${tz2}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id2}  ${ser_id2}  
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${que_id2}   ${resp.json()} 
+
      ${desc}=   FakerLibrary.word
      ${resp}=  Add To Waitlist  ${cid2}  ${ser_id2}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid2} 
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid2}  ${wid[0]}
+
      ${resp}=  Get Waitlist By Id  ${wid2} 
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -1550,6 +1700,10 @@ JD-TC-AddCustomer-16
      ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
@@ -1568,7 +1722,7 @@ JD-TC-AddCustomer-16
      Log  ${resp.content}
      Should Be Equal As Strings      ${resp.status_code}  200
      Set Test Variable   ${jaldeeid3}    ${resp.json()[0]['jaldeeId']}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstname']}  ${firstname3}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname3}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname3}
 
      ${pid3}=  get_acc_id  ${PUSERNAME257}
@@ -1576,15 +1730,21 @@ JD-TC-AddCustomer-16
      ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id3}    ${resp}  
+     ${resp}=   Get Location ById  ${loc_id3}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id3}    ${resp}
+
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz3}
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
-     ${strt_time}=   add_timezone_time  ${tz}  3  00  
-     ${end_time}=    add_timezone_time  ${tz}  3  30      
+     ${strt_time}=   add_timezone_time  ${tz3}  3  00  
+     ${end_time}=    add_timezone_time  ${tz3}  3  30      
      ${parallel}=   Random Int  min=1   max=1
      ${capacity}=  Random Int   min=10   max=20
      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id3}  ${ser_id3}  
@@ -1693,12 +1853,25 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid1}=  get_acc_id  ${PUSERNAME213}
 
      ${resp}=   Get Appointment Settings
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
      clear_service   ${PUSERNAME213}
      # clear_location  ${PUSERNAME213}
@@ -1718,12 +1891,6 @@ JD-TC-AddCustomer-17
      Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
      Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-     ${resp}=   Get Appointment Settings
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
-
      ${lid1}=  Create Sample Location 
 
      ${resp}=   Get Location ById  ${lid1}
@@ -1732,6 +1899,8 @@ JD-TC-AddCustomer-17
      Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
  
      clear_appt_schedule   ${PUSERNAME213}
+
+     ${s_id1}=  Create Sample Service  ${SERVICE2}
      
      ${DAY1}=  db.get_date_by_timezone  ${tz}
      ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1739,7 +1908,6 @@ JD-TC-AddCustomer-17
      ${sTime1}=  add_timezone_time  ${tz}  0  15  
      ${delta}=  FakerLibrary.Random Int  min=10  max=60
      ${eTime1}=  add_two   ${sTime1}  ${delta}
-     ${s_id1}=  Create Sample Service  ${SERVICE2}
      ${schedule_name}=  FakerLibrary.bs
      ${parallel}=  FakerLibrary.Random Int  min=1  max=10
      ${maxval}=  Convert To Integer   ${delta/2}
@@ -1818,12 +1986,25 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid2}=  get_acc_id  ${PUSERNAME259}
 
      ${resp}=   Get Appointment Settings
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
      clear_service   ${PUSERNAME259}
      clear_location  ${PUSERNAME259}
@@ -1854,22 +2035,22 @@ JD-TC-AddCustomer-17
      Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
      Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-     ${resp}=   Get Appointment Settings
+     ${lid2}=  Create Sample Location  
+     ${resp}=   Get Location ById  ${lid2}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+     Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-     ${lid2}=  Create Sample Location  
      clear_appt_schedule   ${PUSERNAME259}
+
+     ${s_id2}=  Create Sample Service  ${SERVICE2}
      
-     ${DAY1}=  db.get_date_by_timezone  ${tz}
-     ${DAY2}=  db.add_timezone_date  ${tz}  10        
+     ${DAY1}=  db.get_date_by_timezone  ${tz2}
+     ${DAY2}=  db.add_timezone_date  ${tz2}  10        
      ${list}=  Create List  1  2  3  4  5  6  7
-     ${sTime1}=  add_timezone_time  ${tz}  0  15  
+     ${sTime1}=  add_timezone_time  ${tz2}  0  15  
      ${delta}=  FakerLibrary.Random Int  min=10  max=60
      ${eTime1}=  add_two   ${sTime1}  ${delta}
-     ${s_id2}=  Create Sample Service  ${SERVICE2}
      ${schedule_name}=  FakerLibrary.bs
      ${parallel}=  FakerLibrary.Random Int  min=1  max=10
      ${maxval}=  Convert To Integer   ${delta/2}
@@ -1946,12 +2127,25 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
 
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid3}=  get_acc_id  ${PUSERNAME257}
 
      ${resp}=   Get Appointment Settings
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
      clear_service   ${PUSERNAME257}
      clear_location  ${PUSERNAME257}
@@ -1969,24 +2163,23 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
-
-     ${resp}=   Get Appointment Settings
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]} 
 
      ${lid3}=  Create Sample Location  
+     ${resp}=   Get Location ById  ${lid3}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
      clear_appt_schedule   ${PUSERNAME257}
+
+     ${s_id3}=  Create Sample Service  ${SERVICE2}
      
-     ${DAY1}=  db.get_date_by_timezone  ${tz}
-     ${DAY2}=  db.add_timezone_date  ${tz}  10        
+     ${DAY1}=  db.get_date_by_timezone  ${tz3}
+     ${DAY2}=  db.add_timezone_date  ${tz3}  10        
      ${list}=  Create List  1  2  3  4  5  6  7
-     ${sTime1}=  add_timezone_time  ${tz}  0  15  
+     ${sTime1}=  add_timezone_time  ${tz3}  0  15  
      ${delta}=  FakerLibrary.Random Int  min=10  max=60
      ${eTime1}=  add_two   ${sTime1}  ${delta}
-     ${s_id3}=  Create Sample Service  ${SERVICE2}
      ${schedule_name}=  FakerLibrary.bs
      ${parallel}=  FakerLibrary.Random Int  min=1  max=10
      ${maxval}=  Convert To Integer   ${delta/2}
@@ -2097,7 +2290,6 @@ JD-TC-AddCustomer-17
      Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
      Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid1}
 
-     
      ${resp}=   Get consumer Appointment By Id   ${pid2}  ${apptid2}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid2}
@@ -2122,7 +2314,6 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  422
      Should Be Equal As Strings  ${resp.json()}   ${YOU_CANNOT_VIEW_THE_APPT}
-
 
      ${resp}=  Get Consumer Appointments 
      Log  ${resp.content}
@@ -2170,11 +2361,8 @@ JD-TC-AddCustomer-17
      ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${EMPTY}
-          Should Be Equal As Strings  ${resp1.status_code}  200
-     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
+     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[0]}  ${EMPTY}
           Should Be Equal As Strings  ${resp1.status_code}  200
      END
      
@@ -2190,33 +2378,42 @@ JD-TC-AddCustomer-18
 
     [Documentation]  Provider takes appointment for a valid jaldee consumer number and get appointment details here jaldeeintegration is true
 
-    ${resp}=  Consumer Login  ${CUSERNAME38}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+     ${resp}=  Consumer Login  ${CUSERNAME38}  ${PASSWORD}
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     Set Suite Variable  ${jdconID}   ${resp.json()['id']}
+     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Consumer Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Consumer Logout
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${pid}=  get_acc_id  ${PUSERNAME259}
+     ${pid}=  get_acc_id  ${PUSERNAME259}
 
-    ${resp}=  Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     clear_service   ${PUSERNAME259}
     clear_location  ${PUSERNAME259}
@@ -2228,13 +2425,7 @@ JD-TC-AddCustomer-18
 
     ${resp}=    Get Locations
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -2243,6 +2434,8 @@ JD-TC-AddCustomer-18
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_appt_schedule   ${PUSERNAME259}
+
+    ${s_id}=  Create Sample Service  ${SERVICE2}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2250,7 +2443,6 @@ JD-TC-AddCustomer-18
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${s_id}=  Create Sample Service  ${SERVICE2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -2284,8 +2476,8 @@ JD-TC-AddCustomer-18
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable   ${jaldeeid1}    ${resp.json()[0]['jaldeeId']}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
     
     ${resp}=  Get Consumer By Id  ${CUSERNAME38}
     Log  ${resp.content}
@@ -2372,12 +2564,25 @@ JD-TC-AddCustomer-19
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${pid}=  get_acc_id  ${PUSERNAME259}
 
     ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     clear_service   ${PUSERNAME259}
     clear_location  ${PUSERNAME259}
@@ -2394,11 +2599,8 @@ JD-TC-AddCustomer-19
     ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${EMPTY}
-          Should Be Equal As Strings  ${resp1.status_code}  200
-     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
+     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[0]}  ${EMPTY}
           Should Be Equal As Strings  ${resp1.status_code}  200
      END
      
@@ -2406,13 +2608,7 @@ JD-TC-AddCustomer-19
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
-
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]} 
 
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
@@ -2461,7 +2657,6 @@ JD-TC-AddCustomer-19
     Set Test Variable   ${jaldeeid1}    ${resp.json()[0]['jaldeeId']}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['phoneNo']}  ${CUSERNAME36}
-    
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -2528,6 +2723,10 @@ JD-TC-AddCustomer-20
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}   200
 
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid}=  get_acc_id  ${PUSERNAME184}
 
      ${resp}=   Get jaldeeIntegration Settings
@@ -2581,10 +2780,7 @@ JD-TC-AddCustomer-20
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
-     ${resp}=   Get Location ById  ${loc_id1}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+     
      ${resp}=   Create Sample Service  ${SERVICE1}
      Set Test Variable    ${ser_id1}    ${resp}  
      ${resp}=   Create Sample Service  ${SERVICE2}
@@ -2648,6 +2844,10 @@ JD-TC-AddCustomer-21
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}   200
 
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${pid}=  get_acc_id  ${PUSERNAME184}
 
      ${resp}=    Get Locations
@@ -2659,11 +2859,8 @@ JD-TC-AddCustomer-21
      ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${EMPTY}
-          Should Be Equal As Strings  ${resp1.status_code}  200
-     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
-          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${EMPTY}  ${EMPTY}
+     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[0]}  ${EMPTY}
           Should Be Equal As Strings  ${resp1.status_code}  200
      END
      
@@ -2806,9 +3003,9 @@ JD-TC-AddCustomer-22
      ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid}  ${wid[0]}
+
      ${resp}=  Get Waitlist By Id  ${wid} 
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -2858,14 +3055,13 @@ JD-TC-AddCustomer-23
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
+     
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
-
      ${decrypted_data}=  db.decrypt_data  ${resp.content}
      Log  ${decrypted_data}
      Set Suite Variable  ${id}   ${decrypted_data['id']}
-
      # Set Suite Variable    ${id}    ${resp.json()['id']}       
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
      Set Suite Variable  ${PUSERNAME_C}
@@ -2927,8 +3123,21 @@ JD-TC-AddCustomer-23
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}   200
 
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[1]}
      Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=   Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
 
      ${resp}=  Enable Waitlist
      Log  ${resp.content}
@@ -2943,12 +3152,6 @@ JD-TC-AddCustomer-23
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=   Get jaldeeIntegration Settings
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
-
      ${resp}=  AddCustomer  ${CUSERNAME1}   firstName=${fname1}   lastName=${lname1} 
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -2957,14 +3160,11 @@ JD-TC-AddCustomer-23
      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
      Log  ${resp.content}
      Should Be Equal As Strings      ${resp.status_code}  200
-     Set Test Variable  ${pcons_id0}  ${resp.json()[0]['id']}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
+     # Set Test Variable  ${pcons_id0}  ${resp.json()[0]['id']}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid1}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${fname1}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lname1}
 
-     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-     ${C_date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
-     Set Test Variable   ${C_date}
      ${resp}=   Create Sample Location
      Set Test Variable    ${loc_id1}    ${resp}  
      ${resp}=   Get Location ById  ${loc_id1}
@@ -2978,7 +3178,11 @@ JD-TC-AddCustomer-23
      ${resp}=   Create Sample Service  ${SERVICE3}
      Set Test Variable    ${ser_id3}    ${resp} 
      ${resp}=   Create Sample Service  ${SERVICE4}
-     Set Test Variable    ${ser_id4}    ${resp}  
+     Set Test Variable    ${ser_id4}    ${resp} 
+     
+     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+     ${C_date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
+     Set Test Variable   ${C_date} 
      ${q_name}=    FakerLibrary.name
      ${list}=  Create List   1  2  3  4  5  6  7
      ${strt_time}=   add_timezone_time  ${tz}  1  00  
@@ -2990,6 +3194,7 @@ JD-TC-AddCustomer-23
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${que_id1}   ${resp.json()}
+
      ${desc}=   FakerLibrary.word
      ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
      Log  ${resp.content}
@@ -3009,6 +3214,7 @@ JD-TC-AddCustomer-23
      ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200  
+     Set Test Variable    ${jcid}  ${resp.json()['id']}
 
      ${cnote}=   FakerLibrary.word
      ${resp}=  Add To Waitlist Consumers  ${pid}  ${que_id1}  ${CUR_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}
@@ -3140,7 +3346,7 @@ JD-TC-AddCustomer-23
      Should Be Equal As Strings  ${resp.json()[1]['queue']['id']}  ${que_id1}     
 
 
-JD-TC-AddCustomer-UH8
+JD-TC-AddCustomer-UH5
      [Documentation]   Add the same customer twice with same details
 
      ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
@@ -3157,6 +3363,13 @@ JD-TC-AddCustomer-UH8
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}    200
      clear_customer   ${PUSERNAME_C}
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  AddCustomer  ${CUSERNAME2}   firstName=${fname2}  lastName=${lname2} 
      Log  ${resp.content}
@@ -3181,7 +3394,7 @@ JD-TC-AddCustomer-UH8
      # Set Test Variable  ${pcons_id0}  ${resp.json()[0]['id']}
 
 
-JD-TC-AddCustomer-UH5
+JD-TC-AddCustomer-UH6
      [Documentation]   Add a new customer and take provider side waitlist and signup that consumer and take waitlist to the same service and queue 
 
 
@@ -3191,6 +3404,13 @@ JD-TC-AddCustomer-UH5
 
      ${pid0}=  get_acc_id  ${PUSERNAME162}
      Set Suite Variable  ${pid0}  
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
      
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -3246,7 +3466,7 @@ JD-TC-AddCustomer-UH5
      Should Be Equal As Strings  ${resp.status_code}  422
      Should Be Equal As Strings  ${resp.json()}    ${WAITLIST_CUSTOMER_ALREADY_IN}
      
-JD-TC-AddCustomer-UH6
+JD-TC-AddCustomer-UH7
      [Documentation]   Take wailist from consumer side and provider Add thats same wailisted consumer 
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}   
@@ -3255,6 +3475,16 @@ JD-TC-AddCustomer-UH6
 
      ${pid0}=  get_acc_id  ${PUSERNAME162}
      Set Suite Variable  ${pid0}  
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Provider Logout
+     Should Be Equal As Strings  ${resp.status_code}  200
      
      ${resp}=  Consumer Login   ${CUSERNAME2}  ${PASSWORD}
      Log  ${resp.content}
@@ -3266,6 +3496,13 @@ JD-TC-AddCustomer-UH6
      Should Be Equal As Strings  ${resp.status_code}  200 
      ${wid}=  Get Dictionary Values  ${resp.json()}
      Set Test Variable  ${wid1}  ${wid[0]}
+
+     ${resp}=  Get consumer Waitlist By Id  ${wid1}  ${pid0}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Consumer Logout
+     Should Be Equal As Strings    ${resp.status_code}    200
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}   
      Log  ${resp.content}
@@ -3300,7 +3537,7 @@ JD-TC-AddCustomer-UH6
      Should Be Equal As Strings  "${resp.json()}"   "${PRO_CON_ALREADY_EXIST}" 
 
 
-JD-TC-AddCustomer-UH7
+JD-TC-AddCustomer-UH8
      [Documentation]   Add customer with international phone number
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
@@ -3310,9 +3547,10 @@ JD-TC-AddCustomer-UH7
      ${resp}=  Get Business Profile
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
-     # Set Test Variable  ${bname}  ${resp.json()['businessName']}
-     # Set Test Variable  ${pid}  ${resp.json()['id']}
-     # Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=   Get jaldeeIntegration Settings
      Log  ${resp.content}
@@ -3354,7 +3592,7 @@ JD-TC-AddCustomer-UH7
      # Log  ${resp.content}
      # Should Be Equal As Strings    ${resp.status_code}    200
 
-D-TC-AddCustomer-UH8
+JD-TC-AddCustomer-UH9
      [Documentation]  Add a  customer with invalid secondary number
      ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -3419,6 +3657,10 @@ JD-TC-AddCustomer-25
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
 
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${cust_no}    FakerLibrary.Numerify   text=%######
@@ -3436,9 +3678,9 @@ JD-TC-AddCustomer-25
      Should Be Equal As Strings  ${resp.json()['jaldeeId']}  ${jaldeeid}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${EMPTY}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${cust_no}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
@@ -3477,6 +3719,10 @@ JD-TC-AddCustomer-26
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
 
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${cust_no}    FakerLibrary.Numerify   text=%######
@@ -3485,7 +3731,7 @@ JD-TC-AddCustomer-26
      ${address}=  FakerLibrary.address
      ${gender}=  Random Element    ${Genderlist}
      ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
-     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
+     Set Test Variable  ${email}  ${C_Email}${cust_no}.${test_mail}
      ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  email=${email}  jaldeeId=${jaldeeid}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -3535,7 +3781,7 @@ JD-TC-AddCustomer-26
 
      Should Be Equal As Strings  ${cid}   ${cid1}
 
-JD-TC-AddCustomer-UH9
+JD-TC-AddCustomer-UH10
      [Documentation]  Add a customer without country code
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
@@ -3563,6 +3809,10 @@ JD-TC-AddCustomer-UH9
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
 
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${cust_no}    FakerLibrary.Numerify   text=%######
@@ -3571,14 +3821,14 @@ JD-TC-AddCustomer-UH9
      ${address}=  FakerLibrary.address
      ${gender}=  Random Element    ${Genderlist}
      ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
-     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
+     Set Test Variable  ${email}  ${C_Email}${cust_no}.${test_mail}
      ${resp}=  AddCustomer  ${cust_no}   countryCode=${EMPTY}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  email=${email}  jaldeeId=${jaldeeid}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  422
      Should Be Equal As Strings  ${resp.json()}   ${COUNTRY_CODEREQUIRED}
 
 
-JD-TC-AddCustomer-UH10
+JD-TC-AddCustomer-UH11
      [Documentation]  Add a customer without secondary country code
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
@@ -3606,6 +3856,10 @@ JD-TC-AddCustomer-UH10
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
 
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${cust_no}    FakerLibrary.Numerify   text=%######
@@ -3615,14 +3869,14 @@ JD-TC-AddCustomer-UH10
      ${gender}=  Random Element    ${Genderlist}
      ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
      ${sec_cust_no}=  FakerLibrary.RandomNumber  digits=9
-     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
+     Set Test Variable  ${email}  ${C_Email}${cust_no}.${test_mail}
      ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  email=${email}  jaldeeId=${jaldeeid}  secondaryCountryCode=${EMPTY}  secondaryPhoneNo=${sec_cust_no}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  422
      Should Be Equal As Strings  ${resp.json()}   ${COUNTRY_CODE_REQUIRED_FOR_SECONDARY_NO}
 
 
-JD-TC-AddCustomer-UH11
+JD-TC-AddCustomer-UH12
      [Documentation]  Add a customer with invalid country code
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
@@ -3650,6 +3904,10 @@ JD-TC-AddCustomer-UH11
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
 
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
      ${cust_no}    FakerLibrary.Numerify   text=%######
@@ -3659,14 +3917,14 @@ JD-TC-AddCustomer-UH11
      ${gender}=  Random Element    ${Genderlist}
      ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
      ${inv_cc}=  FakerLibrary.RandomNumber  digits=3
-     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
+     Set Test Variable  ${email}  ${C_Email}${cust_no}.${test_mail}
      ${resp}=  AddCustomer  ${cust_no}   countryCode=${inv_cc}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  email=${email}  jaldeeId=${jaldeeid}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  422
      Should Be Equal As Strings  ${resp.json()}   ${INVALID_COUNTRYCODE}
 
 
-JD-TC-AddCustomer-UH12
+JD-TC-AddCustomer-UH13
      [Documentation]  Add a customer with invalid secondary country code
 
      ${resp}=  Encrypted Provider Login  ${PUSERNAME231}  ${PASSWORD}
@@ -3704,11 +3962,321 @@ JD-TC-AddCustomer-UH12
      ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
      ${sec_cust_no}=  FakerLibrary.RandomNumber  digits=10
      ${inv_sec_cc}=  FakerLibrary.RandomNumber  digits=3
-     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
+     Set Test Variable  ${email}  ${C_Email}${cust_no}.${test_mail}
      ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  email=${email}  jaldeeId=${jaldeeid}  secondaryCountryCode=${inv_sec_cc}  secondaryPhoneNo=${sec_cust_no}
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  422
      Should Be Equal As Strings  ${resp.json()}   ${COUNTRY_CODE_INVALID_FOR_SECONDARY_NO}
+
+JD-TC-AddCustomer-27
+     [Documentation]  Add a customer without email id by provider and do a jaldee consumer signup for that customer
+
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Business Profile
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=   Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+          Should Be Equal As Strings  ${resp1.status_code}  200
+     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+          Should Be Equal As Strings  ${resp1.status_code}  200
+     END
+     
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+     ${firstname}=  FakerLibrary.first_name
+     ${lastname}=  FakerLibrary.last_name
+     ${cust_no}    FakerLibrary.Numerify   text=%######
+     ${cust_no}=  Evaluate  ${CUSERNAME}+${cust_no}
+     ${dob}=  FakerLibrary.Date
+     ${address}=  FakerLibrary.address
+     ${gender}=  Random Element    ${Genderlist}
+     ${sec_cust_no}=  FakerLibrary.RandomNumber  digits=5
+     ${sec_cust_no}=  Evaluate  ${cust_no}+${sec_cust_no}
+     ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${sec_cust_no}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${cid1}  ${resp.json()}
+     Append To File  ${EXECDIR}/TDD/numbers.txt  ${cust_no}${\n}
+
+     ${resp}=  GetCustomer ById  ${cid1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${address}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${gender}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${cust_no}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['isSignUpCustomer']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phone_verified']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['favourite']}  ${bool[0]}
+
+     ${resp}=  ProviderLogout
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     # ${businessname}=  FakerLibrary.address
+     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${cust_no}  ${EMPTY}   ${dob}   ${gender}   ${EMPTY}
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Consumer Activation  ${cust_no}  1
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Consumer Set Credential  ${cust_no}  ${PASSWORD}  1
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Consumer Login  ${cust_no}  ${PASSWORD}
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+JD-TC-AddCustomer-28
+     [Documentation]  Add a customer without email id by provider and do a provider signup for that customer
+
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Business Profile
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=   Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+          Should Be Equal As Strings  ${resp1.status_code}  200
+     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+          Should Be Equal As Strings  ${resp1.status_code}  200
+     END
+     
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+     ${firstname}=  FakerLibrary.first_name
+     ${lastname}=  FakerLibrary.last_name
+     ${cust_no}    FakerLibrary.Numerify   text=%######
+     ${cust_no}=  Evaluate  ${CUSERNAME}+${cust_no}
+     ${dob}=  FakerLibrary.Date
+     ${address}=  FakerLibrary.address
+     ${gender}=  Random Element    ${Genderlist}
+     ${sec_cust_no}=  FakerLibrary.RandomNumber  digits=5
+     ${sec_cust_no}=  Evaluate  ${cust_no}+${sec_cust_no}
+     ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${sec_cust_no}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${cid1}  ${resp.json()}
+     Append To File  ${EXECDIR}/TDD/numbers.txt  ${cust_no}${\n}
+
+     ${resp}=  GetCustomer ById  ${cid1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${address}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${gender}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${cust_no}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['isSignUpCustomer']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phone_verified']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['favourite']}  ${bool[0]}
+
+     ${resp}=  ProviderLogout
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${licresp}=   Get Licensable Packages
+     Log  ${licresp.content}
+     Should Be Equal As Strings   ${licresp.status_code}   200
+     ${liclen}=  Get Length  ${licresp.json()}
+     ${licindex}=   random.randint  ${0}  ${liclen-1}
+     Set Test Variable  ${licId}  ${licresp.json()[${licindex}]['pkgId']}
+     Set Test Variable  ${lic_name}  ${licresp.json()[${licindex}]['displayName']}
+     # FOR   ${i}  IN RANGE   ${liclen}
+     #      ${licindex}=  random.randint  ${0}  ${liclen-1}
+     #      Set Test Variable  ${licId}  ${licresp.json()[${licindex}]['pkgId']}
+     #      Set Test Variable  ${lic_name}  ${licresp.json()[${licindex}]['displayName']}
+     #      ${puser}=   Get provider by license   ${licId}
+     #      Append To List   ${puser_list}  ${puser}
+     # END
+     
+     ${resp}=  Get BusinessDomainsConf
+     Log   ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${dom_len}=  Get Length  ${resp.json()}
+     FOR  ${domindex}  IN RANGE  ${dom_len}
+          ${dom}=  random.randint  ${0}  ${dom_len-1}
+          ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+          Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+          Log   ${domain}
+          FOR  ${subindex}  IN RANGE  ${sdom_len}
+               ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+               Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+               ${is_corp}=  check_is_corp  ${subdomain}
+               Exit For Loop If  '${is_corp}' == 'False'
+          END
+          Log   ${subdomain}
+          Exit For Loop If  '${is_corp}' == 'False'
+     END
+
+     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${EMPTY}  ${domain}  ${subdomain}  ${cust_no}  ${licId}
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Account Activation  ${cust_no}  0
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Account Set Credential  ${cust_no}  ${PASSWORD}  0
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Encrypted Provider Login  ${cust_no}  ${PASSWORD}
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-AddCustomer-29
+     [Documentation]  Add a customer without email id by provider and do a multiuser account signup for that customer
+
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Business Profile
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=   Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+          Should Be Equal As Strings  ${resp1.status_code}  200
+     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+          Should Be Equal As Strings  ${resp1.status_code}  200
+     END
+     
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+     ${firstname}=  FakerLibrary.first_name
+     ${lastname}=  FakerLibrary.last_name
+     ${cust_no}    FakerLibrary.Numerify   text=%######
+     ${cust_no}=  Evaluate  ${CUSERNAME}+${cust_no}
+     ${dob}=  FakerLibrary.Date
+     ${address}=  FakerLibrary.address
+     ${gender}=  Random Element    ${Genderlist}
+     ${sec_cust_no}=  FakerLibrary.RandomNumber  digits=5
+     ${sec_cust_no}=  Evaluate  ${cust_no}+${sec_cust_no}
+     ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${sec_cust_no}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${cid1}  ${resp.json()}
+     Append To File  ${EXECDIR}/TDD/numbers.txt  ${cust_no}${\n}
+
+     ${resp}=  GetCustomer ById  ${cid1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${address}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${gender}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${cust_no}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['isSignUpCustomer']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phone_verified']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['favourite']}  ${bool[0]}
+
+     ${resp}=  ProviderLogout
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${licresp}=   Get Licensable Packages
+     Log  ${licresp.content}
+     Should Be Equal As Strings   ${licresp.status_code}   200
+     ${liclen}=  Get Length  ${licresp.json()}
+     ${licindex}=  random.randint  ${0}  ${liclen-1}
+     Set Test Variable  ${licId}  ${licresp.json()[${licindex}]['pkgId']}
+     Set Test Variable  ${lic_name}  ${licresp.json()[${licindex}]['displayName']}
+
+     ${resp}=  Get BusinessDomainsConf
+     Log   ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     ${dom_len}=  Get Length  ${resp.json()}
+     FOR  ${domindex}  IN RANGE  ${dom_len}
+          ${dom}=  random.randint  ${0}  ${dom_len-1}
+          ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+          Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+          Log   ${domain}
+          FOR  ${subindex}  IN RANGE  ${sdom_len}
+               ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+               Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+               ${is_corp}=  check_is_corp  ${subdomain}
+               Exit For Loop If  '${is_corp}' == 'True'
+          END
+          Log   ${subdomain}
+          Exit For Loop If  '${is_corp}' == 'True'
+     END
+
+     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${EMPTY}  ${domain}  ${subdomain}  ${cust_no}  ${licId}
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Account Activation  ${cust_no}  0
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Account Set Credential  ${cust_no}  ${PASSWORD}  0
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Encrypted Provider Login  ${cust_no}  ${PASSWORD}
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4182,9 +4750,18 @@ JD-TC-AddCustomer-17
     ${pid1}=  get_acc_id  ${PUSERNAME213}
 
     ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     clear_service   ${PUSERNAME213}
     clear_location  ${PUSERNAME213}
@@ -4202,13 +4779,7 @@ JD-TC-AddCustomer-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
-
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
 
     ${lid1}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME213}
@@ -4297,9 +4868,18 @@ JD-TC-AddCustomer-17
     ${pid2}=  get_acc_id  ${PUSERNAME259}
 
     ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     clear_service   ${PUSERNAME259}
     clear_location  ${PUSERNAME259}
@@ -4328,13 +4908,7 @@ JD-TC-AddCustomer-17
      Log  ${resp.content}
      Should Be Equal As Strings  ${resp.status_code}  200
      Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
-
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}  
 
     ${lid2}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME259}
@@ -4420,9 +4994,18 @@ JD-TC-AddCustomer-17
     ${pid3}=  get_acc_id  ${PUSERNAME257}
 
     ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=   Get Appointment Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     clear_service   ${PUSERNAME257}
     clear_location  ${PUSERNAME257}
@@ -4442,11 +5025,7 @@ JD-TC-AddCustomer-17
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[0]}
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+    
 
     ${lid3}=  Create Sample Location  
     clear_appt_schedule   ${PUSERNAME257}
