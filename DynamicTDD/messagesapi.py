@@ -247,7 +247,7 @@ CANNOT_LOGIN_SUPPORT_USER= "Sorry, you are not allowed to login as a support use
 LOGIN_FAILED= "Login attempt failed. It looks like there have been multiple login sessions for the same customer. "
 EMAIL_NOT_VERIFIED= "Email not verified."
 EMAIL_VERIFIED= "Email already verified."
-
+NO_PERMISSION_TO_UNASSIGN_USERSERVICE= "You cannot unassign from a user-specific service."
 
 PHONE_NOT_VERIFIED= "Phone number not verified."
 PHONE_VERIFIED= "Phone number already verified."
@@ -1824,6 +1824,7 @@ CATEGORY_REQUIRES = " Sourcing Channel is Required"
 UNABLE_TO_CHANGE_INTERNAL_STATUS= "Unable to change internal status. Current Loan Application internal status is {}"
 NOMINEE_NAME_REQUIRED= "Nominee Name required"
 LOAN_APPLICATION_REF_REQ= "Loan Application Reference Required"
+ALREADY_APPROVAL_REQUESTED= "Loan Application already rejected."
 #jaldee drive
 
 UPLOAD_ATLEAST_ONEFILE= "Need to upload atleast one file"
@@ -1969,6 +1970,8 @@ DOB_REQUIRED = "DoB required"
 STATUS_IS_APPROVALREQUIRED = "Unable to change internal status. Current Loan Application internal status is ApprovalRequired"
 STATUS_IS_ALREADY_CONSUMERACCEPTED= "Unable to change internal status. Current Loan Application internal status is ConsumerAccepted"
 STATUS_IS_ALREADY_CREDITAPPROVED= "Unable to change internal status. Current Loan Application internal status is CreditApproved"
+INVALID_APPLICATION_ID = "Invalid Loan Application ID"
+INVALID_LOAN_REQUESTED_AMOUNT = "Invalid Loan Requested Amount"
 
 # Branch Master
 

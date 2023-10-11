@@ -674,7 +674,7 @@ JD-TC-ActivateVacation-UH1
     ${appt_for1}=  Create Dictionary  id=${self}   apptTime=${slot1}  
     ${apptfor1}=   Create List  ${appt_for1}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For User    ${pid_B15}  ${s_id}  ${sch_id01}  ${CUR_DAY}  ${cnote}  ${u_id2}   ${apptfor1}
+    ${resp}=   Take Appointment For User    ${pid_B15}  ${s_id1}  ${sch_id01}  ${CUR_DAY}  ${cnote}  ${u_id2}   ${apptfor1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}    ${SCHEDULE_NOT_AVAILABLE}

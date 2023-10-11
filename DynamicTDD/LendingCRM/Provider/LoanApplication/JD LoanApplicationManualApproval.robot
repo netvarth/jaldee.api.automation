@@ -1451,9 +1451,9 @@ JD-TC-Loan Application Manual Approval-UH1
     Should Be Equal As Strings             ${resp.status_code}    422
     Should Be Equal As Strings             ${resp.json()}         ${STATUS_IS_ALREADY_CREDITAPPROVED}
 
-JD-TC-Loan Application Manual Approval-2
+JD-TC-Loan Application Manual Approval-UH2
                                   
-    [Documentation]               Create Loan Application and Loan Application Approval                                                                                                                                                                                           
+    [Documentation]               Manual Approval - where loan uid is empty                                                                                                                                                                                     
 
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2812,6 +2812,97 @@ JD-TC-Loan Application Manual Approval-2
     ${note}=                               FakerLibrary.sentence
     Set Suite Variable                     ${note}
 
+    ${resp}=                               Loan Application Manual Approval        ${empty}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
+    Log    ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}    ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-Loan Application Manual Approval-UH3
+                                  
+    [Documentation]               Manual Approval - where loan uid is invalid
+
+    ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+
+    ${fake}=    FakerLibrary.Random Number
+
+    ${resp}=                               Loan Application Manual Approval        ${fake}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
+    Log    ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}    ${INVALID_APPLICATION_ID}
+
+JD-TC-Loan Application Manual Approval-UH4
+                                  
+    [Documentation]               Manual Approval - where invoice amount is empty
+
+    ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+
+    ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${empty}    ${downpaymentAmount}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
+    Log    ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}    ${INVOICE_AMOUNT_REQUIRED}
+
+JD-TC-Loan Application Manual Approval-UH5
+                                  
+    [Documentation]               Manual Approval - where down payment amount is empty
+
+    ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+
+    ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${empty}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
+    Log    ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}    ${INVALID_LOAN_REQUESTED_AMOUNT}
+
+JD-TC-Loan Application Manual Approval-UH6
+                                  
+    [Documentation]               Manual Approval - where down requested Amount is empty
+
+    ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+
+    ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${empty}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
+    Log    ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}    ${REQ_AMOUNT_REQIRED}
+
+JD-TC-Loan Application Manual Approval-UH7
+                                  
+    [Documentation]               Manual Approval - where down sanctioned Amount is empty
+
+    ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+
+    ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${empty}    loanProduct=${loanProduct}    note=${note}
+    Log    ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}    ${SANCTIONED_AMOUNT_REQIRED}
+
+JD-TC-Loan Application Manual Approval-UH8
+                                  
+    [Documentation]               Manual Approval - with another provider login
+
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME7}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+
     ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
     Log    ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}    200
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}    ${NO_PERMISSION}
+
+JD-TC-Loan Application Manual Approval-UH9
+                                  
+    [Documentation]               Manual Approval - without login
+
+    ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${empty}    loanProduct=${loanProduct}    note=${note}
+    Log    ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    419
+    Should Be Equal As Strings             ${resp.json()}    ${SESSION_EXPIRED}
+

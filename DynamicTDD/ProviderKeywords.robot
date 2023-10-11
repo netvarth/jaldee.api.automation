@@ -9198,9 +9198,10 @@ Partner Approved
 
 Create Scheme
 
-    [Arguments]   ${account}  ${schemeName}  ${schemeAliasName}  ${schemeType}  ${schemeRate}  ${noOfRepayment}  ${noOfAdvancePayment}  ${noOfAdvanceSuggested}  ${serviceCharge}  ${insuranceCharge}  ${minAmount}  ${maxAmount}  ${status}  ${description}
+    [Arguments]   ${account}  ${schemeName}  ${schemeAliasName}  ${integrationId}  ${schemeType}  ${rateType}  ${schemeRate}  ${displayRate}  ${noOfAdvancePayment}  ${noOfAdvanceSuggested}  ${minDuration}  ${maxDuration}  ${minAmount}  ${maxAmount}  ${minAge}  ${maxAge}  ${loanToValue}  ${employeeScheme}  ${subventionScheme}  ${subventionRate}  ${bureauScores}  ${processingFeeRate}    ${processingFeeAmount}  ${overdueChargeRate}    ${foreClosureCharge}    ${foirOnDeclaredIncome}  ${foirOnAssesedIncome}     ${noOfCoApplicatRequired}  ${noOfSpdcRequired}  ${noOfPdcRequired}  ${multiItem}  ${defaultScheme}  ${status}
 
-    ${data}=  Create Dictionary    account=${account}  schemeName=${schemeName}  schemeAliasName=${schemeAliasName}  schemeType=${schemeType}  schemeRate=${schemeRate}  noOfRepayment=${noOfRepayment}  noOfAdvancePayment=${noOfAdvancePayment}  noOfAdvanceSuggested=${noOfAdvanceSuggested}  serviceCharge=${serviceCharge}  insuranceCharge=${insuranceCharge}  minAmount=${minAmount}  maxAmount=${maxAmount}  status=${status}  description=${description}
+    ${data}=  Create Dictionary    account=${account}  schemeName=${schemeName}  schemeAliasName=${schemeAliasName}  integrationId=${integrationId}  schemeType=${schemeType}  rateType=${rateType}  schemeRate=${schemeRate}  displayRate=${displayRate}  noOfAdvancePayment=${noOfAdvancePayment}  noOfAdvanceSuggested=${noOfAdvanceSuggested}  minDuration=${minDuration}  maxDuration=${maxDuration}  minAmount=${minAmount}  maxAmount=${maxAmount}  minAge=${minAge}  maxAge=${maxAge}  loanToValue=${loanToValue}  employeeScheme=${employeeScheme}  subventionScheme=${subventionScheme}  subventionRate=${subventionRate}  bureauScores=${bureauScores}  processingFeeRate=${processingFeeRate}    processingFeeAmount=${processingFeeAmount}  overdueChargeRate=${overdueChargeRate}    foreClosureCharge=${foreClosureCharge}    foirOnDeclaredIncome=${foirOnDeclaredIncome}  foirOnAssesedIncome=${foirOnAssesedIncome}     noOfCoApplicatRequired=${noOfCoApplicatRequired}  noOfSpdcRequired=${noOfSpdcRequired}  noOfPdcRequired=${noOfPdcRequired}  multiItem=${multiItem}  defaultScheme=${defaultScheme}  status=${status}
+
     ${data}=  json.dumps  ${data}
 
     Check And Create YNW Session
