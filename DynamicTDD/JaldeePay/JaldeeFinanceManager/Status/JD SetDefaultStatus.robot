@@ -32,7 +32,6 @@ ${fileSize}  0.00458
 
 *** Test Cases ***
 
-
 JD-TC-Set Default status-1
 
     [Documentation]  Create statuses,and set default staus .

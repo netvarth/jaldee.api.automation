@@ -10528,7 +10528,7 @@ Get Finance Status By Id
 
     [Arguments]   ${Status_id}  
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/${Status_id}     expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/${Status_id}    expected_status=any
     [Return]  ${resp}
 
 Get default status

@@ -37,7 +37,6 @@ ${fileSize}  0.00458
 
 *** Test Cases ***
 
-
 JD-TC-Get default status by type-1
 
     [Documentation]  Get default status by type .

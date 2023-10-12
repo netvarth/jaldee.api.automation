@@ -24,7 +24,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Test Cases ***
 
-
 JD-TC-Update default status-1
 
     [Documentation]   Update default status .

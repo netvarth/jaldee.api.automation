@@ -32,7 +32,6 @@ ${fileSize}  0.00458
 
 *** Test Cases ***
 
-
 JD-TC-UpdateStatus-1
 
     [Documentation]  Update Status as New and update it as Proceed.

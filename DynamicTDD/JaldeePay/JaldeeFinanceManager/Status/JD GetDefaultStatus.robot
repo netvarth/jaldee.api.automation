@@ -22,7 +22,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Test Cases ***
 
-
 JD-TC-get Default status-1
 
     [Documentation]  Create statuses,get all status and verify default one .

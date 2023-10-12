@@ -26,7 +26,7 @@ ${xlsx}      /ebs/TDD/qnr.xlsx
 ${order}    0
 ${fileSize}  0.00458
 
-@{status}    New     Pending    Assigned     Approved    Rejected
+@{status}    New     Pending    Assigned     Approved    Rejected 
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 
 

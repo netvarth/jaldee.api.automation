@@ -16,7 +16,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
 
-
 *** Variables ***
 
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
