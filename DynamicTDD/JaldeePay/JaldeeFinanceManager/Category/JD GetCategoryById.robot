@@ -179,7 +179,7 @@ JD-TC-GetCategoryById-UH2
 
 JD-TC-GetCategoryById-UH3
 
-    [Documentation]   Get Category by Id Using another provisders category id.
+    [Documentation]   Get Category by Id Using another providers category id.
 
     ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}

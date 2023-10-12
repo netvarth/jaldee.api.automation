@@ -69,7 +69,7 @@ JD-TC-Get count of Category-1
     ${len}=  Get Length  ${resp.json()}
 
 
-    ${resp}=  Get count of Category   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   name-eq=${name}
+    ${resp}=  Get count of Category   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}   ${len}
@@ -199,7 +199,7 @@ JD-TC-Get count of Category-UH2
 
 JD-TC-Get count of Category-UH3
 
-    [Documentation]   Get count of Category Using another provisders category id.
+    [Documentation]   Get count of Category Using another providers category id.
 
     ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
@@ -223,7 +223,7 @@ JD-TC-Get count of Category-UH3
 
     ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Category Id
     
-    ${resp}=  Get count of Category   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}   
+    ${resp}=  Get count of Category   categoryType-eq=${categoryType[3]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_FIELD}

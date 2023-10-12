@@ -64,7 +64,7 @@ JD-TC-CreateCategory-2
 
 JD-TC-CreateCategory-3
 
-    [Documentation]  Create Category as Payable.
+    [Documentation]  Create Category as PaymentInOut.
 
     ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
     Log  ${resp.content}
@@ -78,22 +78,6 @@ JD-TC-CreateCategory-3
 
 JD-TC-CreateCategory-4
 
-    [Documentation]  Create Category as Income.
-
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[3]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
-
-JD-TC-CreateCategory-5
-
     [Documentation]  Create Category as Invoice.
 
     ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
@@ -104,6 +88,8 @@ JD-TC-CreateCategory-5
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
 
 
 JD-TC-CreateCategory-UH1
@@ -208,12 +194,13 @@ JD-TC-CreateCategory-UH5
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings   ${resp.json()}   ${FIELD_DISABLED}
+
 
 
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST_WITH_NAME}
 
 
 

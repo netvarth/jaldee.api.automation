@@ -2053,6 +2053,7 @@ STATUS_ALREADY_DISABLED="Status {} already disabled"
 STATUS_ALREADY_ENABLED="Status {} already enabled"
 STATUS_EXISTS_WITH_GIVEN_NAME="Status exists with the given name"
 ALREADY_DEFAULT="Already set as default Status"
+CATEGORY_EXIST_WITH_NAME="Category exists with the given name"
 
 
 # ........Membership  ...............
