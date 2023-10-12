@@ -597,7 +597,7 @@ JD-TC-UpdateHoliday-9
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
 
     ${resp}=   Delete Holiday  ${holidayId}
     Should Be Equal As Strings  ${resp.status_code}  200

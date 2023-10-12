@@ -697,7 +697,7 @@ JD-TC-AddToWaitlist-UH4
       ${resp}=  Add To Waitlist   000  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}   ${cid} 
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"  "${INVALID_ID}"
+      Should Be Equal As Strings  "${resp.json()}"  "${INVALID_CONS_ID}"
       
 JD-TC-AddToWaitlist-UH5
       [Documentation]   Waitlist for a non family member
