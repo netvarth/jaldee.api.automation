@@ -166,12 +166,15 @@ setPathVariables()
 }
 
 # Create missing paths specified as parameter
+# $1 generally output of $? from ifExists
+# $2 specifies whether to create dir with(1) or without(0) asking user
+# $3 dir to create
 createDir()
 {
-    if [ "$1" -eq 1 ] && [ "$2" = "0" ]; then
+    if [ "$1" -eq 1 ] && [ "$2" = "0" ] && [ ! -d "$3" ]; then
         mkdir -p "$3"
         echo " Created Directory $3 "
-    elif [ "$1" -eq 1 ] && [ "$2" = "1" ]; then
+    elif [ "$1" -eq 1 ] && [ "$2" = "1" ] && [ ! -d "$3" ]; then
         read -p "The given path does not exist. would you like to create it? (y/n): " reply
         if [ "$reply" = "y" ] || [ "$reply" = "yes" ] ;then
             mkdir -p "$3"

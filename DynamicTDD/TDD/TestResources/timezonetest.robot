@@ -6,8 +6,8 @@ Library     Collections
 Library     String
 Library     json
 Library     requests
-# Library     FakerLibrary
-Library    FakerLibrary    locale=en_IN
+Library     FakerLibrary
+# Library    FakerLibrary    locale=en_IN
 # Library     /ebs/TDD/db.py
 Library     /ebs/TDD/Keywordspy.py
 # Library      /ebs/TDD/test.py
@@ -39,6 +39,17 @@ Testing timezones
 
     # Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
     # Ref: https://www.nationsonline.org/oneworld/country_code_list.htm
+    ${PH1}  FakerLibrary.Phone Number
+    ${PH1}  FakerLibrary.Phone Number
+    ${PH1}  FakerLibrary.Phone Number
+    ${PH1}  FakerLibrary.Phone Number
+    ${CC1}  country_calling_code
+    ${CC1}  country_calling_code
+    ${CC1}  country_calling_code
+    ${CC1}  country_calling_code
+    ${CC1}  country_calling_code
+
+*** comment ***
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=AE  coords_only=False    #UAE -    Asia/Dubai
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=OM  coords_only=False      #OMAN -   Asia/Dubai, Asia/Muscat
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=QA  coords_only=False      #Qatar -  	Asia/Qatar

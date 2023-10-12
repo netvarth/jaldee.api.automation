@@ -22,7 +22,9 @@ ${digits}       0123456789
 @{provider_list}
 @{dom_list}
 @{multiloc_providers}
-${countryCode}   +91
+# ${countryCode}   +91
+${US_CC}   +1
+${UAE_CC}   +971
 ${AE_tz}   Asia/Dubai
 
 *** Keywords ***
@@ -423,7 +425,7 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${USProvider}  ${licpkgid}
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${USProvider}  ${licpkgid}  countryCode=${US_CC}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Account Activation  ${USProvider}  0
@@ -603,8 +605,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## UAE ##############################
 
     Comment  Provider in Middle East (UAE)
-    ${PO_Number}=  FakerLibrary.Numerify  %#####
-    ${MEProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${PO_Number}=  FakerLibrary.Numerify  %#######
+    # ${MEProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${MEProvider}=  Set Test Variable
 
     ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
 
@@ -627,7 +630,7 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${MEProvider}  ${licpkgid}
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${MEProvider}  ${licpkgid}   countryCode=${UAE_CC}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Account Activation  ${MEProvider}  0
@@ -1944,6 +1947,7 @@ JD-TC-Take Appointment in Different Timezone-4
     Comment  Multi User Account in US
     ${PO_Number}=  FakerLibrary.Numerify  %#####
     ${US_MultiUser}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${CC1}  country_calling_code
 
     # ${licresp}=   Get Licensable Packages
     # Should Be Equal As Strings  ${licresp.status_code}  200
@@ -1974,7 +1978,7 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${US_MultiUser}  ${licpkgid}
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${US_MultiUser}  ${licpkgid}  countryCode=${CC1}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Account Activation  ${US_MultiUser}  0

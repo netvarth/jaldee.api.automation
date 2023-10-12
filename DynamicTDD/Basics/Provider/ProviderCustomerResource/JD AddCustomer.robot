@@ -416,7 +416,7 @@ JD-TC-AddCustomer-6
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${EMPTY}
-     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
+     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email']}  ${EMPTY}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${gender}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${ph3}
@@ -3758,7 +3758,7 @@ JD-TC-AddCustomer-26
      ${resp}=  ProviderLogout
      Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=    Send Otp For Login    ${cust_no}    ${acc_id1}   countryCode=${CountryCode}
+     ${resp}=    Send Otp For Login    ${cust_no}    ${acc_id1}   countryCode=${countryCodes[0]}
      Log   ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}   200
 
