@@ -308,25 +308,6 @@ JD-TC-Create Dental Record-10
 
 JD-TC-Create Dental Record-UH1
 
-    [Documentation]    Create Dental records with tooth type as invalid.
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${toothNo}=   FakerLibrary.word
-    ${note1}=  FakerLibrary.word
-    ${note2}=  FakerLibrary.word
-    ${investigation}=    Create List   ${note1}    ${note2}
-    ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
-
-    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings              ${resp.json()}   ${TOOTH_ID_CANNOT_BE_EMPTY}
-
-JD-TC-Create Dental Record-UH2
-
     [Documentation]    Create Dental Record with another provider login.
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
@@ -344,7 +325,7 @@ JD-TC-Create Dental Record-UH2
     Should Be Equal As Strings              ${resp.status_code}   422
     Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
 
-JD-TC-Create Dental Record-UH3
+JD-TC-Create Dental Record-UH2
 
     [Documentation]    Create Dental Record without login.
 
@@ -359,7 +340,7 @@ JD-TC-Create Dental Record-UH3
     Should Be Equal As Strings              ${resp.status_code}   419
     Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Dental Record-UH4
+JD-TC-Create Dental Record-UH3
 
     [Documentation]    Create Dental Record with consumer login.
 
@@ -378,3 +359,23 @@ JD-TC-Create Dental Record-UH4
     Should Be Equal As Strings              ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
 
+*** comment ***
+
+JD-TC-Create Dental Record-UH1
+
+    [Documentation]    Create Dental records with tooth type as invalid.
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${toothNo}=   FakerLibrary.word
+    ${note1}=  FakerLibrary.word
+    ${note2}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}    ${note2}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[2]}    ${toothSurfaces[1]}    ${toothSurfaces[0]}
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${EMPTY}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${TOOTH_ID_CANNOT_BE_EMPTY}

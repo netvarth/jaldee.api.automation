@@ -2102,3 +2102,5 @@ NOT_ALLOWED_TO_SHAREPRESCRIPTION= "You are not allowed to cancel a shared prescr
 INVALID_EMAIL_FORMAT=  "Invalid Email format"
 TOOTH_ID_CANNOT_BE_EMPTY= "Tooth Id cannot be empty"
 INVALID_SECTION_TEMPLATE_ID= "Invalid Section Template Detail ID"
+CASE_STATUS_IS_CLOSED= "Case status is Closed"
+CASE_DESCRIPTION_NOT_EXCEED_250CHAR= "Case description should not exceed 250 chars"

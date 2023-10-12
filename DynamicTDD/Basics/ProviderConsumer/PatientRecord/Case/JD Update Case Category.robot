@@ -122,13 +122,13 @@ JD-TC-Update Case Category-2
 
 JD-TC-Update Case Category-3
 
-    [Documentation]    Update Case Category where alias name contain 255 words
+    [Documentation]    Update Case Category where alias name contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Update Case Category    ${id}  ${name}  ${description1}   ${toggle[0]}
     Log   ${resp.content}
@@ -270,7 +270,7 @@ JD-TC-Update Case Category-UH1
     ${resp}=  Encrypted Provider Login    ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    ${id1}=  FakerLibrary.Random Number
+    ${id1}=  Random Int  min=120   max=472
 
     ${resp}=    Update Case Category     ${id1}  ${name}  ${aliasName}   ${toggle[1]}
     Log   ${resp.content}

@@ -166,6 +166,7 @@ JD-TC-Update Treatment Plan-1
     # ${caseDto}=  Create Dictionary  uid=${caseUId} 
     # Set Suite Variable    ${caseDto} 
     ${treatment}=  FakerLibrary.name
+    Set Suite Variable    ${treatment} 
     ${work}=  FakerLibrary.name
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}
@@ -216,33 +217,58 @@ JD-TC-Update Treatment Plan-1
     Should Be Equal As Strings    ${resp.json()['caseDto']['category']['id']}     ${category_id} 
     Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
-    # Should Be Equal As Strings    ${resp.json()['works'][1]['status']}     ${PRStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[1]}
     # Should Be Equal As Strings    ${resp.json()['works'][1]['createdDate']}     ${DAY1}
     # Should Be Equal As Strings    ${resp.json()['works'][2]['status']}     ${QnrStatus[1]}
     # Should Be Equal As Strings    ${resp.json()['works'][2]['work']}     ${work2}
     # Should Be Equal As Strings    ${resp.json()['works'][2]['createdDate']}     ${DAY1}
 
+
 JD-TC-Update Treatment Plan-2
 
-    [Documentation]    Update Treatment Plan where treatment field contain 255 words
+    [Documentation]    Update Treatment Plan where treatment field contain 200 words
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
+ 
+    ${work}=  FakerLibrary.name
+    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
+    ${works}=  Create List  ${one}
 
-    ${treatment1}=  FakerLibrary.Text      max_nb_chars=255
+    ${resp}=    Create Treatment Plan    ${caseUId}    ${id1}  ${treatment}  ${works}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Suite Variable    ${treatmentId1}        ${resp.json()}
+
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['firstName']}     ${proconfname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['lastName']}     ${proconlname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['id']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['firstName']}     ${pdrfname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['lastName']}     ${pdrlname}
+    Should Be Equal As Strings    ${resp.json()['caseDto']['type']['id']}     ${type_id} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['category']['id']}     ${category_id} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
+    Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
+
+    ${treatment1}=  FakerLibrary.Text      max_nb_chars=200
     # ${work}=  FakerLibrary.name
     # ${work1}=  FakerLibrary.name
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # # ${two}=  Create Dictionary  work=${work1}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${treatment1}  
+    ${resp}=    Update Treatment Plan   ${treatmentId1}  ${treatment1}  ${PRStatus[0]}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
    
 
-    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
@@ -257,6 +283,8 @@ JD-TC-Update Treatment Plan-2
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment1}
     Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[0]}
+
     #  Should Be Equal As Strings    ${resp.json()['works'][1]['status']}     ${PRStatus[0]}
     # Should Be Equal As Strings    ${resp.json()['works'][1]['work']}     ${work1}
     # Should Be Equal As Strings    ${resp.json()['works'][1]['createdDate']}     ${DAY1}
@@ -270,19 +298,13 @@ JD-TC-Update Treatment Plan-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${treatment2}=  FakerLibrary.name
-    # ${work}=   FakerLibrary.Text      max_nb_chars=255
-    # ${work1}=  FakerLibrary.name
-    # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    # # ${two}=  Create Dictionary  work=${work1}   status=${PRStatus[0]}
-    # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${empty}    
+    ${resp}=    Update Treatment Plan   ${treatmentId1}  ${EMPTY}  ${PRStatus[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
   
 
-    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
@@ -297,7 +319,38 @@ JD-TC-Update Treatment Plan-3
     Should Be Equal As Strings    ${resp.json()['treatment']}     ${empty}
     Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[0]}
 
+JD-TC-Update Treatment Plan-4
+
+    [Documentation]    Trt to Update Treatment Plan where status open to closed.
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${resp}=    Update Treatment Plan   ${treatmentId1}  ${treatment}  ${PRStatus[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+  
+
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['firstName']}     ${proconfname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['lastName']}     ${proconlname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['id']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['firstName']}     ${pdrfname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['lastName']}     ${pdrlname}
+    Should Be Equal As Strings    ${resp.json()['caseDto']['type']['id']}     ${type_id} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['category']['id']}     ${category_id} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
+    Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[1]}
 
 JD-TC-Update Treatment Plan-UH1
 
@@ -307,12 +360,12 @@ JD-TC-Update Treatment Plan-UH1
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${treatment}=  FakerLibrary.name
+    # ${treatment}=  FakerLibrary.name
     # ${work}=  FakerLibrary.name
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${treatment}   
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${treatment}  ${PRStatus[0]}  
     Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
@@ -321,36 +374,49 @@ JD-TC-Update Treatment Plan-UH2
 
     [Documentation]   Update Treatment Plan without login
 
-    ${treatment}=  FakerLibrary.name
+    # ${treatment}=  FakerLibrary.name
     # ${work}=  FakerLibrary.Text      max_nb_chars=255
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}   ${treatment}   
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${treatment}  ${PRStatus[0]}   
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
+JD-TC-Update Treatment Plan-UH3
 
-JD-TC-Update Treatment Plan-UH4
-
-    [Documentation]     Update Treatment Plan where case dto uid is invalid   #Dev didnot check case dto in update section
+    [Documentation]    Trt to Update Treatment Plan where status closed to closed.
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${treatment}=  FakerLibrary.name
-    # ${work}=  FakerLibrary.name
-    # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    # ${works}=  Create List  ${one}  
-    ${fake_id}=  Random Int  min=500   max=1000
-    # ${caseDto1}=  Create Dictionary  uid=${fake_id} 
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${fake_id}    ${id1}   ${treatment}   
+    ${resp}=    Update Treatment Plan   ${treatmentId1}  ${treatment}  ${PRStatus[1]}
     Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
-    # Should Be Equal As Strings  "${resp.json()}"    "${INVALID_CASE_ID}"
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${CASE_STATUS_IS_CLOSED}
+  
+
+    # ${resp}=    Get Treatment Plan By Id   ${treatmentId1}    
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
+
+JD-TC-Update Treatment Plan-UH4
+
+    [Documentation]    Trt to Update Treatment Plan where status closed to open.
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+
+    ${resp}=    Update Treatment Plan   ${treatmentId1}  ${treatment}  ${PRStatus[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${CASE_STATUS_IS_CLOSED}
 
 JD-TC-Update Treatment Plan-UH5
 
@@ -360,31 +426,31 @@ JD-TC-Update Treatment Plan-UH5
     Log   ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${treatment}=  FakerLibrary.name
+    # ${treatment}=  FakerLibrary.name
     # ${work}=  FakerLibrary.Text      max_nb_chars=255
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
 
-    ${resp}=    Update Treatment Plan   ${treatmentId}  ${caseUId}    ${id1}  ${treatment}  
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${treatment}  ${PRStatus[0]}
     Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  400
     Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
     
 JD-TC-Update Treatment Plan-UH6
 
-    [Documentation]     Update Treatment Plan where traetment id is invalid
+    [Documentation]     Update Treatment Plan where treatment id is invalid
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${treatment}=  FakerLibrary.name
+    # ${treatment}=  FakerLibrary.name
     # ${work}=  FakerLibrary.name
     # ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     # ${works}=  Create List  ${one}  
     ${fake_id}=  Random Int  min=500   max=1000
 
-    ${resp}=    Update Treatment Plan   ${fake_id}  ${caseUId}    ${id1}  ${treatment}  
+    ${resp}=    Update Treatment Plan   ${fake_id}  ${treatment}  ${PRStatus[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"

@@ -193,9 +193,7 @@ JD-TC-Update Case Type-5
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
 
 
-
-
-JD-TC-Update Case Type-UH3
+JD-TC-Update Case Type-6
 
     [Documentation]    Update Case type where name contain numbers
 
@@ -210,7 +208,7 @@ JD-TC-Update Case Type-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Type-UH4
+JD-TC-Update Case Type-7
 
     [Documentation]    Update Case type where aliasname contain numbers
 
@@ -223,7 +221,7 @@ JD-TC-Update Case Type-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Type-UH5
+JD-TC-Update Case Type-8
 
     [Documentation]    Update Case type where name contain special characters
 
@@ -236,7 +234,7 @@ JD-TC-Update Case Type-UH5
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
-JD-TC-Update Case Type-UH6
+JD-TC-Update Case Type-9
 
     [Documentation]    Update Case type where aliasname contain special characters
 
@@ -249,7 +247,7 @@ JD-TC-Update Case Type-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Type-UH7
+JD-TC-Update Case Type-10
 
     [Documentation]    update already disabled case type
 
@@ -273,7 +271,7 @@ JD-TC-Update Case Type-UH1
     ${resp}=  Encrypted Provider Login    ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    ${id1}=  FakerLibrary.Random Number
+    ${id1}=  Random Int  min=101   max=471
 
     ${resp}=    Update Case Type    ${id1}  ${name}  ${aliasName}   ${toggle[1]}
     Log   ${resp.content}

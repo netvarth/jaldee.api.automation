@@ -301,7 +301,7 @@ JD-TC-Get Dental Record-UH1
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${id3}=   Random Int  min=12   max=47
+    ${id3}=   Random Int  min=120   max=470
 
     ${resp}=    Get DentalRecord ById   ${id3}    
     Log   ${resp.content}

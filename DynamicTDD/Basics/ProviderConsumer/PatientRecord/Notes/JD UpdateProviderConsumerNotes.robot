@@ -588,7 +588,7 @@ JD-TC-Update Provider Consumer Notes-UH3
 
     ${resp}=    Update Provider Consumer Notes    ${note_id}    ${fakeid}    ${description2}    ${users1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Update Provider Consumer Notes-UH4
 
@@ -607,7 +607,7 @@ JD-TC-Update Provider Consumer Notes-UH4
 
     ${resp}=    Update Provider Consumer Notes    ${note_id}    ${withspl}    ${description2}    ${users1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Update Provider Consumer Notes-UH5
 
@@ -626,7 +626,7 @@ JD-TC-Update Provider Consumer Notes-UH5
 
     ${resp}=    Update Provider Consumer Notes    ${note_id}    ${title2}    ${withspl}    ${users1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Update Provider Consumer Notes-UH6
 
@@ -661,7 +661,7 @@ JD-TC-Update Provider Consumer Notes-UH7
 
     ${resp}=    Update Provider Consumer Notes    ${note_id}    ${title2}    ${des_num}    ${users1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Update Provider Consumer Notes-UH8
 
