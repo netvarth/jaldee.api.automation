@@ -313,7 +313,7 @@ JD-TC-GetByIdVacation-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
 
-    ${start_time}=  add_timezone_time  ${tz}   1  20
+    ${start_time}=  add_timezone_time  ${tz}   0  20
     ${end_time}=    add_timezone_time  ${tz}  0  45   
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${desc}=    FakerLibrary.name

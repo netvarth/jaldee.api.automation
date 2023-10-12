@@ -2332,7 +2332,7 @@ JD-TC-UpdateVacation-13
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime11}
 
-    ${resp}=  Activate Vacation   ${boolean[0]}   ${v4_id}
+    ${resp}=  Activate Vacation   ${boolean[1]}   ${v4_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   02s
@@ -2378,7 +2378,7 @@ JD-TC-UpdateVacation-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Activate Vacation   ${boolean[0]}   ${v4_id}
+    ${resp}=  Activate Vacation   ${boolean[1]}   ${v4_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   02s
@@ -2555,7 +2555,7 @@ JD-TC-UpdateVacation-14
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
 
-    ${resp}=  Activate Vacation   ${boolean[0]}   ${v4_id}
+    ${resp}=  Activate Vacation   ${boolean[1]}   ${v4_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   02s
@@ -2589,7 +2589,7 @@ JD-TC-UpdateVacation-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Activate Vacation   ${boolean[0]}   ${v4_id}
+    ${resp}=  Activate Vacation   ${boolean[1]}   ${v4_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   02s
@@ -3642,7 +3642,7 @@ JD-TC-UpdateVacation-18
     Should Be Equal As Strings  ${resp.json()['provider']['id']}                   ${u_id1}
     Should Be Equal As Strings  ${resp.json()['provider']['firstName']}            ${firstname}
     Should Be Equal As Strings  ${resp.json()['provider']['lastName']}             ${lastname}
-    Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${ph1}
+    Should Be Equal As Strings  ${resp.json()['provider']['mobileNo']}             ${CUSERNAME1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
     Should Be Equal As Strings  ${resp.json()['queue']['name']}                 ${q_name}

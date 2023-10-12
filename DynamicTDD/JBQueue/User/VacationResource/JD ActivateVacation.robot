@@ -626,8 +626,8 @@ JD-TC-ActivateVacation-UH1
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${desc}=    FakerLibrary.name
 
-    ${sTime11}=  add_timezone_time  ${tz}   1  20
-    ${eTime11}=    add_timezone_time  ${tz}   4  40 
+    ${sTime11}=  add_timezone_time  ${tz}   0  20
+    ${eTime11}=    add_timezone_time  ${tz}   1  20 
     ${Last_Day}=  db.add_timezone_date  ${tz}   3
     ${resp}=  Create Vacation   ${desc}  ${u_id2}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${sTime11}  ${eTime11}  
     Log  ${resp.content}
@@ -645,6 +645,10 @@ JD-TC-ActivateVacation-UH1
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['terminator']['endDate']}             ${Last_Day}  
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime11}  
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime11}
+
+    ${resp}=  Activate Vacation    ${boolean[1]}  ${v4_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
@@ -1899,7 +1903,7 @@ JD-TC-ActivateVacation-8
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
   
     ${resp}=  View Waitlist Settings
@@ -2072,7 +2076,7 @@ JD-TC-ActivateVacation-8
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
 
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log  ${resp.content}
@@ -2215,7 +2219,7 @@ JD-TC-ActivateVacation-9
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
   
     ${resp}=  View Waitlist Settings
@@ -2319,7 +2323,7 @@ JD-TC-ActivateVacation-9
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  appointmentEncId=${encId2}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME9}
   
 
