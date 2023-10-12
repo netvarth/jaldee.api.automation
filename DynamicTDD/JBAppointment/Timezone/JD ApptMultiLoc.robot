@@ -297,7 +297,7 @@ JD-TC-Take Appointment in Different Timezone-1
     # ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id11}   ${pid01}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id11}    ${DAY1}   ${pid01}    location=${{str('${p1_l1}')}}
+    ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id11}    ${DAY3}   ${pid01}    location=${{str('${p1_l1}')}}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Verify Response  ${resp}  scheduleId=${sch_id11}
@@ -323,7 +323,7 @@ JD-TC-Take Appointment in Different Timezone-1
     ${resp}=   Get consumer Appointment By Id   ${pid01}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
+    Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY3}   appmtTime=${slot1}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                                ${cid}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
@@ -425,15 +425,16 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${USProvider}  ${licpkgid}  countryCode=${US_CC}
+    ${US_P_Email}  Set Variable  ${P_Email}${USProvider}.${test_mail}
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${US_P_Email}  ${domain}  ${subdomain}  ${USProvider}  ${licpkgid}  countryCode=${US_CC}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${USProvider}  0
+    ${resp}=  Account Activation  ${US_P_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${USProvider}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${US_P_Email}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
-    ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}  countryCode=${US_CC}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
@@ -452,7 +453,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${USProvider}.${test_mail}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${US_P_Email}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
@@ -493,9 +494,9 @@ JD-TC-Take Appointment in Different Timezone-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${USProvider}.${test_mail}
+    # Set Test Variable  ${email_id}  ${P_Email}${USProvider}.${test_mail}
 
-    ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${email_id}
+    ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${US_P_Email}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -606,8 +607,8 @@ JD-TC-Take Appointment in Different Timezone-2
 
     Comment  Provider in Middle East (UAE)
     ${PO_Number}=  FakerLibrary.Numerify  %#######
-    # ${MEProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${MEProvider}=  Set Test Variable
+    ${MEProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # ${MEProvider}=  Set Variable  
 
     ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
 
@@ -630,17 +631,18 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${MEProvider}  ${licpkgid}   countryCode=${UAE_CC}
+    ${ME_P_Email}  Set Variable  ${P_Email}${MEProvider}.${test_mail}
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${ME_P_Email}  ${domain}  ${subdomain}  ${MEProvider}  ${licpkgid}   countryCode=${UAE_CC}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${MEProvider}  0
+    ${resp}=  Account Activation  ${ME_P_Email}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Set Credential  ${MEProvider}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${ME_P_Email}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
     sleep  01s
-    ${resp}=  Encrypted Provider Login  ${MEProvider}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MEProvider}  ${PASSWORD}  countryCode=${UAE_CC}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
@@ -659,7 +661,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${MEProvider}.${test_mail}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${ME_P_Email}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
@@ -725,9 +727,9 @@ JD-TC-Take Appointment in Different Timezone-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${MEProvider}.${test_mail}
+    # Set Test Variable  ${email_id}  ${P_Email}${MEProvider}.${test_mail}
 
-    ${resp}=  Update Email   ${pid1}   ${fname}  ${lname}   ${email_id}
+    ${resp}=  Update Email   ${pid1}   ${fname}  ${lname}   ${ME_P_Email}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -809,6 +811,7 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
+    Set Test Variable  ${IN_P_Email}  ${P_Email}${INProvider}.${test_mail}
     ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${INProvider}  ${licpkgid}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -838,7 +841,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${INProvider}.${test_mail}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${IN_P_Email}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
@@ -878,9 +881,7 @@ JD-TC-Take Appointment in Different Timezone-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${INProvider}.${test_mail}
-
-    ${resp}=  Update Email   ${pid1}   ${fname}  ${lname}   ${email_id}
+    ${resp}=  Update Email   ${pid1}   ${fname}  ${lname}   ${IN_P_Email}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1978,15 +1979,16 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${fname}=  FakerLibrary.name
     ${lname}=  FakerLibrary.lastname
-    ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${US_MultiUser}  ${licpkgid}  countryCode=${CC1}
+    ${US_M_Email}  Set Variable  ${B_Email}${US_MultiUser}.${test_mail}
+    ${resp}=  Account SignUp  ${fname}  ${lname}  ${US_M_Email}  ${domain}  ${subdomain}  ${US_MultiUser}  ${licpkgid}  countryCode=${CC1}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${US_MultiUser}  0
+    ${resp}=  Account Activation  ${${US_M_Email}}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Account Set Credential  ${US_MultiUser}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${${US_M_Email}}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  01s
-    ${resp}=  Encrypted Provider Login  ${US_MultiUser}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${US_MultiUser}  ${PASSWORD}  countryCode=${CC1}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
@@ -2005,7 +2007,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${name3}=  FakerLibrary.name
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}${US_MultiUser}.${test_mail}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${US_M_Email}  ${views}
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
@@ -2046,9 +2048,9 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Set Test Variable  ${email_id}  ${P_Email}${US_MultiUser}.${test_mail}
+    # Set Test Variable  ${email_id}  ${P_Email}${US_MultiUser}.${test_mail}
 
-    ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${email_id}
+    ${resp}=  Update Email   ${pid}   ${fname}  ${lname}   ${US_M_Email}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
