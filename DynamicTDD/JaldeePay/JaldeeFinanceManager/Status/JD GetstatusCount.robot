@@ -15,14 +15,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 
-*** Keywords ***
-
-Get status count
-
-    [Arguments]   &{param} 
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  http://localhost:8080/v1/rest/provider/jp/finance/status/list/count   params=${param}   expected_status=any
-    [Return]  ${resp}
 
 *** Variables ***
 

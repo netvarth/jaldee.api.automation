@@ -14,17 +14,9 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
+
+
 *** Variables ***
-
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
-
-${order}    0
-${fileSize}  0.00458
 
 @{status}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
@@ -33,11 +25,11 @@ ${fileSize}  0.00458
 *** Test Cases ***
 
 
-JD-TC-Create status-1
+JD-TC-Update default status-1
 
-    [Documentation]  Create Status as proceed.
+    [Documentation]   Update default status .
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -66,109 +58,137 @@ JD-TC-Create status-1
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${status_id1}   ${resp.json()}
-
-    # ${resp}=  Get Category By Id   ${category_id1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    # Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
-    # Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    # Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
-
-JD-TC-Create status-2
-
-    [Documentation]  Create Status as Unassign    .
-
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${status_id0}   ${resp.json()}
 
     ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${status_id2}   ${resp.json()}
-
-JD-TC-Create status-3
-
-    [Documentation]  Create Status as Block   .
-
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${status_id1}   ${resp.json()}
 
     ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${status_id2}   ${resp.json()}
 
-JD-TC-Create status-4
-
-    [Documentation]  Create Status as   Delete .
-
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[0]} 
+    ${resp}=  Set default status    ${status_id0}    ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Create status-5
 
-    [Documentation]  Create Status as    Remove.
-
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[0]} 
+    ${resp}=  Update default status    ${status_id0}    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Create status-UH1
+    ${resp}=  Get default status    ${categoryType[1]} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.content}  ${EMPTY}
+   
+JD-TC-Update default status-2
 
-    [Documentation]   Create Status without login
+    [Documentation]   update default status as paymentinout.
 
-    ${resp}=  Create Finance Status   ${status[4]}  ${categoryType[0]} 
+    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${userName}  ${resp.json()['userName']}}
+    
+
+    ${resp}=  Update default status    ${status_id0}    ${categoryType[2]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get default status    ${categoryType[2]} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.content}  ${EMPTY}
+
+
+JD-TC-Update default status-3
+
+    [Documentation]  update default status as invoice.
+
+    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=  Update default status    ${status_id0}    ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get default status    ${categoryType[3]} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.content}  ${EMPTY}
+
+
+
+
+JD-TC-Update default status-UH1
+
+    [Documentation]   update default status without login
+
+    ${resp}=  Update default status    ${status_id0}    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create status-UH2
+JD-TC-Update default status-UH2
 
-    [Documentation]   Create Status Using Consumer Login
+    [Documentation]   update default status Using Consumer Login
 
     ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Finance Status   ${status[4]}  ${categoryType[0]} 
+     ${resp}=  Update default status    ${status_id0}    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 
-JD-TC-Create status-UH3
+JD-TC-Update default status-UH3
 
-    [Documentation]  Create Status with name as empty.
+    [Documentation]   update default status where status id is invalid.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Name
-    
-    ${resp}=  Create Category   ${EMPTY}  ${categoryType[0]} 
+
+    ${fake_id}=  Random Int  min=1000   max=1500
+
+    ${resp}=  Update default status    ${fake_id}    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_FM_STATUS_ID}
 
 
-JD-TC-Create status-UH4
+JD-TC-Update default status-UH4
 
-    [Documentation]  Create Status without enable jaldee finance.
+    [Documentation]  update default status without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -189,25 +209,26 @@ JD-TC-Create status-UH4
     
     ${FIELD_DISABLED}=  format String   ${FIELD_DISABLED}   Jaldee Finance
     
-    ${resp}=  Create Finance Status   ${status[4]}  ${categoryType[0]} 
+     ${resp}=  Update default status    ${status_id0}    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${FIELD_DISABLED}
 
-JD-TC-Create status-UH5
 
-    [Documentation]  Create same status multiple times.
+JD-TC-Update default status-UH5
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    [Documentation]  try to set same status for default again.
+
+    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
+
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance  ${toggle[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
@@ -217,10 +238,8 @@ JD-TC-Create status-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${resp}=  Create Finance Status   ${status[4]}  ${categoryType[0]} 
+    ${resp}=  Update default status    ${status_id0}    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${STATUS_EXISTS_WITH_GIVEN_NAME}
 
 
- 

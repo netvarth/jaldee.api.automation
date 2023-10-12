@@ -14,14 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
-*** Keywords ***
 
-Get status list filter
 
-    [Arguments]   &{param} 
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list   params=${param}   expected_status=any
-    [Return]  ${resp}
 
 *** Variables ***
 

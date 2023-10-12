@@ -2052,6 +2052,7 @@ FINANCE_NOT_FOUND="No finance settings found"
 STATUS_ALREADY_DISABLED="Status {} already disabled"
 STATUS_ALREADY_ENABLED="Status {} already enabled"
 STATUS_EXISTS_WITH_GIVEN_NAME="Status exists with the given name"
+ALREADY_DEFAULT="Already set as default Status"
 
 
 # ........Membership  ...............

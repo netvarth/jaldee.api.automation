@@ -10797,7 +10797,35 @@ Update PaymentsOut Status
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payableUid}/${status}     expected_status=any    headers=${headers}
     [Return]  ${resp}
 
+Get default status by type
 
+    [Arguments]  ${typeName}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/default/${typeName}/     expected_status=any
+    [Return]  ${resp}
+
+
+Get status count
+
+    [Arguments]   &{param} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list/count   params=${param}   expected_status=any
+    [Return]  ${resp}
+
+Get status list filter
+
+    [Arguments]   &{param} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list   params=${param}   expected_status=any
+    [Return]  ${resp}
+
+
+Update default status
+
+    [Arguments]    ${id}  ${typeName}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${id}/${typeName}/default     expected_status=any
+    [Return]  ${resp}
 # -------------- Patient Records-----------
 
 Add Patient Medical History

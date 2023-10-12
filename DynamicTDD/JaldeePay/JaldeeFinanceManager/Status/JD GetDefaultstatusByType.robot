@@ -1,3 +1,4 @@
+
 *** Settings ***
 
 Suite Teardown    Delete All Sessions
@@ -13,6 +14,10 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+
+
+
+
 
 *** Variables ***
 
@@ -33,11 +38,11 @@ ${fileSize}  0.00458
 *** Test Cases ***
 
 
-JD-TC-Set Default status-1
+JD-TC-Get default status by type-1
 
-    [Documentation]  Create statuses,and set default staus .
+    [Documentation]  Get default status by type .
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -82,7 +87,7 @@ JD-TC-Set Default status-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[0]} 
+    ${resp}=  Get default status by type    ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id1}
@@ -90,11 +95,11 @@ JD-TC-Set Default status-1
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[1]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
-JD-TC-Set Default status-2
+JD-TC-Get default status by type-2
 
-    [Documentation]  Create Status as Proceed and Set default status as new.
+    [Documentation]  Create Status as proceed  and Get default status by type.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}}
@@ -102,27 +107,27 @@ JD-TC-Set Default status-2
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${status_id3}   ${resp.json()}
+    Set Test Variable   ${status_id1}   ${resp.json()}
 
 
-    ${resp}=  Set default status    ${status_id3}    ${categoryType[1]} 
+    ${resp}=  Set default status    ${status_id1}    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[1]} 
+    ${resp}=  Get default status by type    ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}  ${status_id3}
+    Should Be Equal As Strings  ${resp.json()['id']}  ${status_id1}
     Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[0]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 
-JD-TC-Set Default status-3
+JD-TC-Get default status by type-3
 
-    [Documentation]  Create Status as  Unassign   and set default staus ..
+    [Documentation]  Create Status as unassign and Get default status by type..
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +140,7 @@ JD-TC-Set Default status-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[2]} 
+    ${resp}=  Get default status by type    ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
@@ -144,11 +149,11 @@ JD-TC-Set Default status-3
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
 
-JD-TC-Set Default status-4
+JD-TC-Get default status by type-4
 
-    [Documentation]  Create Status as  Block  and set default staus ..
+    [Documentation]  Create Status as block and Get default status by type ..
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +166,7 @@ JD-TC-Set Default status-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[3]} 
+    ${resp}=  Get default status by type    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
@@ -169,11 +174,11 @@ JD-TC-Set Default status-4
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[2]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
-JD-TC-Set Default status-5
+JD-TC-Get default status by type-5
 
-    [Documentation]  Create Status as  Remove and set default staus ..
+    [Documentation]  Create Status as Remove and Get default status by type ..
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -186,7 +191,7 @@ JD-TC-Set Default status-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[3]} 
+    ${resp}=  Get default status by type    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
@@ -194,11 +199,11 @@ JD-TC-Set Default status-5
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[4]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
-JD-TC-Set Default status-6
+JD-TC-Get default status by type-6
 
-    [Documentation]  Create Status as Remove and set default staus ..
+    [Documentation]  Create Status as Remove and Get default status by type ..
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -211,7 +216,7 @@ JD-TC-Set Default status-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get default status    ${categoryType[0]} 
+    ${resp}=  Get default status by type    ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${status_id2}
@@ -219,18 +224,18 @@ JD-TC-Set Default status-6
     Should Be Equal As Strings  ${resp.json()['name']}  ${New_status[4]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}  ${bool[1]}
 
-JD-TC-Set Default status-UH1
+JD-TC-Get default status by type-UH1
 
-    [Documentation]    set default staus without login
+    [Documentation]   Get default status by type without login
 
     ${resp}=  Set default status    ${status_id2}    ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Set Default status-UH2
+JD-TC-Get default status by type-UH2
 
-    [Documentation]   Set Default status Using Consumer Login
+    [Documentation]  Get default status by type Using Consumer Login
 
     ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
@@ -242,27 +247,11 @@ JD-TC-Set Default status-UH2
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 
-JD-TC-Set Default status-UH3
+JD-TC-Get default status by type-UH3
 
-    [Documentation]  Set Default status where status id is invalid.
+    [Documentation]   Get default status by type without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${fake_id}=  Random Int  min=20   max=40
-
-    ${resp}=  Set default status    ${fake_id}    ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_FM_STATUS_ID}
-
-
-JD-TC-Set Default status-UH4
-
-    [Documentation]  Set Default status without enable jaldee finance.
-
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -283,42 +272,10 @@ JD-TC-Set Default status-UH4
     
     ${FIELD_DISABLED}=  format String   ${FIELD_DISABLED}   Jaldee Finance
     
-    ${resp}=  Set default status    ${status_id2}    ${categoryType[0]} 
+    ${resp}=  Get default status by type   ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${FIELD_DISABLED}
 
 
-JD-TC-Set Default status-UH5
-
-    [Documentation]  try to set same status for default again.
-
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-
-    ${resp}=  Set default status    ${status_id1}    ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-    ${resp}=  Set default status    ${status_id1}    ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}    ${ALREADY_DEFAULT}
 

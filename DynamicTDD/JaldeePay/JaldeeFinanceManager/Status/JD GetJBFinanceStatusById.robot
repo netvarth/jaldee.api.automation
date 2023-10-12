@@ -29,14 +29,8 @@ ${fileSize}  0.00458
 @{status}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 
-*** Keywords ***
 
-Get Finance Status By Id
 
-    [Arguments]   ${Status_id}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/${Status_id}     expected_status=any
-    [Return]  ${resp}
 
 
 *** Test Cases ***
