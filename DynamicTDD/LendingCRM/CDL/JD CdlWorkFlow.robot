@@ -1103,7 +1103,7 @@ JD-TC-CdlWorkFlow-1
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
-    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
+    Run Keyword And Continue On Failure     Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
 
 
 # ....... Customer Photo .......
@@ -1136,7 +1136,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
@@ -1175,7 +1175,7 @@ JD-TC-CdlWorkFlow-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
     
 
 # ....... Verify adhaar number .......
@@ -1202,7 +1202,7 @@ JD-TC-CdlWorkFlow-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
 
@@ -1314,7 +1314,7 @@ JD-TC-CdlWorkFlow-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
 
@@ -1353,7 +1353,7 @@ JD-TC-CdlWorkFlow-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
     ${resp}=  Approval Loan Application    ${loanuid}
     Log  ${resp.content}
@@ -1369,7 +1369,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[3]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
 
 # ....... Branch Credit Head Login .......
 
@@ -1398,7 +1398,7 @@ JD-TC-CdlWorkFlow-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
 # ....... Equifax Report .......
 
@@ -1441,7 +1441,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
 
 # ....... Login Sales Officer and Request for Approval .......
 
@@ -1570,7 +1570,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[5]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime011}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime011}
 
 # ....... Branch Manager Login and Branch Approval .......
 
@@ -1607,7 +1607,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[6]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime012}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime012}
 
 # ....... Consumer Acceptance Phone .......
 
@@ -1629,7 +1629,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[7]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime013}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime013}
 
 # ....... Sales Officer Login and Sanction .......
 
@@ -1671,7 +1671,7 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[9]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime014}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime014}
 
 # ....... Loging Operational Head for Approval .......
 
@@ -1704,4 +1704,4 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[10]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime015}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime015}

@@ -91,7 +91,7 @@ JD-TC-AddLoanBankDetails-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+1475756
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -440,13 +440,21 @@ JD-TC-AddLoanBankDetails-1
     ${branchName}=                         FakerLibrary.name
     Set Suite Variable                     ${branchName}
 
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
-
-    ${state}=    Evaluate                  "${state}".title()
-    # ${state}=    String.RemoveString       ${state}    ${SPACE}
-    Set Suite Variable                     ${state}
-    Set Suite Variable                     ${district}
-    Set Suite Variable                     ${pin}
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Suite Variable  ${state}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Suite Variable  ${district}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Suite Variable  ${pin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
     
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -1101,7 +1109,7 @@ JD-TC-AddLoanBankDetails-1
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
-    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
+    Run Keyword And Continue On Failure    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
 
 
 # ....... Customer Photo .......
@@ -1134,7 +1142,7 @@ JD-TC-AddLoanBankDetails-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
+    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
@@ -1173,7 +1181,7 @@ JD-TC-AddLoanBankDetails-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
+    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
     
 
 # ....... Verify adhaar number .......
@@ -1200,7 +1208,7 @@ JD-TC-AddLoanBankDetails-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
+    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
 
@@ -1316,7 +1324,7 @@ JD-TC-AddLoanBankDetails-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
+    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
 

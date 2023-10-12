@@ -441,13 +441,21 @@ JD-TC-GenerateotpForPhoneNum-1
     ${branchName}=                         FakerLibrary.name
     Set Suite Variable                     ${branchName}
 
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
-
-    ${state}=    Evaluate                  "${state}".title()
-    # ${state}=    String.RemoveString       ${state}    ${SPACE}
-    Set Suite Variable                     ${state}
-    Set Suite Variable                     ${district}
-    Set Suite Variable                     ${pin}
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Suite Variable  ${state}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Suite Variable  ${district}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Suite Variable  ${pin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
     
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
