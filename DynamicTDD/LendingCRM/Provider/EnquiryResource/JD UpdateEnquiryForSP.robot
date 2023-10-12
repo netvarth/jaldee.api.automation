@@ -207,6 +207,9 @@ JD-TC-Update Enquiry For SP-1
     Should Be Equal As Strings  ${resp.json()['status']['name']}   ${rand_status_name}
     Should Be Equal As Strings  ${resp.json()['priority']['id']}   ${rand_priority_id}
     Should Be Equal As Strings  ${resp.json()['priority']['name']}   ${rand_priority_name}
+    ${current_datetime}=  Get Current Date
+    ${formatted_time}=  Convert Date  ${current_datetime}  result_format=dd-MM-yyyy HH:mm
+    Run Keyword And Continue On Failure     Should Contain  ${resp.json()['createdDateString']}   ${formatted_time} 
 
     ${resp}=    Get Task Status
     Log   ${resp.content}

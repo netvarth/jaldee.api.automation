@@ -140,6 +140,9 @@ JD-TC-Create Enquiry For SP-1
     Should Be Equal As Strings  ${resp.json()['id']}   ${en_id}
     Should Be Equal As Strings  ${resp.json()['uid']}   ${en_uid}
     Should Be Equal As Strings  ${resp.json()['accountId']}   ${account_id}
+    ${current_datetime}=  Get Current Date
+    ${formatted_time}=  Convert Date  ${current_datetime}  result_format=dd-MM-yyyy HH:mm
+    Run Keyword And Continue On Failure     Should Contain  ${resp.json()['createdDateString']}   ${formatted_time} 
 
     ${resp}=    Get Provider Tasks
     Log   ${resp.content}

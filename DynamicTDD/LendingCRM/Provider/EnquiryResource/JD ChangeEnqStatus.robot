@@ -245,6 +245,10 @@ JD-TC-ChangeEnqStatus-1
     Should Be Equal As Strings  ${resp.status_code}                        200
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_id1}
     Should Be Equal As Strings  ${resp.json()['status']['name']}   ${status_name1}
+    ${current_datetime}=  Get Current Date
+    ${formatted_time}=  Convert Date  ${current_datetime}  result_format=dd-MM-yyyy HH:mm
+    Run Keyword And Continue On Failure     Should Contain  ${resp.json()['createdDateString']}   ${formatted_time} 
+
 
 JD-TC-ChangeEnqStatus-2
     [Documentation]   Change Enquiry Status 2nd status to 1st status

@@ -224,6 +224,9 @@ JD-TC-GetEnqiByUid-1
     Should Be Equal As Strings  ${resp.json()['type']['name']}             ${rand_cat_type_name}
     Should Be Equal As Strings  ${resp.json()['category']['id']}           ${rand_catagory_id}
     Should Be Equal As Strings  ${resp.json()['category']['name']}         ${rand_catagory_name}
+    ${current_datetime}=  Get Current Date
+    ${formatted_time}=  Convert Date  ${current_datetime}  result_format=dd-MM-yyyy HH:mm
+    Run Keyword And Continue On Failure     Should Contain  ${resp.json()['createdDateString']}   ${formatted_time} 
 
 JD-TC-GetEnqiByUid-UH1
     [Documentation]   Get Enquiry by uid with invalid uid

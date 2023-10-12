@@ -85,12 +85,14 @@ JD-TC-Update_Provider_Schedule-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${user_id}    ${decrypted_data['id']}
     Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${account_id}  ${decrypted_data['id']}
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
@@ -127,8 +129,10 @@ JD-TC-Update_Provider_Schedule-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${user_id}    ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -178,8 +182,10 @@ JD-TC-Update_Provider_Schedule-UH2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${user_id}    ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -202,8 +208,10 @@ JD-TC-Update_Provider_Schedule-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${user_id}    ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -236,8 +244,10 @@ JD-TC-Update_Provider_Schedule-UH4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${user_id}    ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -270,8 +280,10 @@ JD-TC-Update_Provider_Schedule-UH5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${user_id}    ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -303,8 +315,10 @@ JD-TC-Update_Provider_Schedule-UH6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${user_id}    ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -337,8 +351,10 @@ JD-TC-Update_Provider_Schedule-UH7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable    ${user_id}    ${decrypted_data['id']}
+    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
