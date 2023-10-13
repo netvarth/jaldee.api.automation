@@ -1716,7 +1716,7 @@ JD-TC- Create Bill -26
         Set Test Variable  ${sd1}  ${max_party['subdomain']}
         
         FOR   ${a}  IN RANGE    ${length}    
-                ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+                ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
                 Should Be Equal As Strings    ${resp.status_code}    200
                 ${domain}=   Set Variable    ${resp.json()['sector']}
                 ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -1730,7 +1730,7 @@ JD-TC- Create Bill -26
         END
         Set Suite Variable  ${a}
         Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-        # ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         # Log  ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200 
 

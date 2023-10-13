@@ -31,11 +31,15 @@ JD-Enable_Disable_Schedule-1
     clear_service    ${PUSERNAME157}
     clear_customer   ${PUSERNAME157}
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -89,11 +93,15 @@ JD-Enable_Disable_Schedule-2
 
     [Documentation]  Disable Provider schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -131,11 +139,15 @@ JD-Enable_Disable_Schedule-UH1
 
     [Documentation]  Tried to enable already enabled schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -175,11 +187,15 @@ JD-Enable_Disable_Schedule-UH2
 
     [Documentation]  Disable already disabled Provider schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME157}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME157}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200

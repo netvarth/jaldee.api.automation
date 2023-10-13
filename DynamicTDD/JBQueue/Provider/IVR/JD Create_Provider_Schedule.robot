@@ -31,11 +31,15 @@ JD-TC-Create_Provider_Schedule-1
     clear_service    ${PUSERNAME155}
     clear_customer   ${PUSERNAME155}
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -83,11 +87,15 @@ JD-TC-Create_Provider_Schedule-2
     clear_service    ${PUSERNAME155}
     clear_customer   ${PUSERNAME155}
     
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${user_id}    ${resp.json()['id']}
-    Set Test Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Test Variable    ${user_id}    ${resp.json()['id']}
+    # Set Test Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -150,11 +158,15 @@ JD-TC-Create_Provider_Schedule-2
 JD-TC-Create_Provider_Schedule-3
 
     [Documentation]   Create 2 schedules with same time on different days
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${user_id}    ${resp.json()['id']}
-    Set Test Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Test Variable    ${user_id}    ${resp.json()['id']}
+    # Set Test Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -220,11 +232,15 @@ JD-TC-Create_Provider_Schedule-4
 
     [Documentation]  Create one schedule and disabled that schedule.
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -285,11 +301,15 @@ JD-TC-Create_Provider_Schedule-UH1
 
     [Documentation]  Schedule Conflict
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -318,11 +338,15 @@ JD-TC-Create_Provider_Schedule-UH1
 JD-TC-Create_Provider_Schedule-UH2
 
     [Documentation]   Given same Schedule name
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -354,11 +378,15 @@ JD-TC-Create_Provider_Schedule-UH2
 JD-TC-Create_Provider_Schedule-UH3
 
     [Documentation]   Create a schedule with eTime is less than sTime
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -387,11 +415,15 @@ JD-TC-Create_Provider_Schedule-UH3
 JD-TC-Create_Provider_Schedule-UH4
 
     [Documentation]   create schedule with start date, a past date
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -417,11 +449,15 @@ JD-TC-Create_Provider_Schedule-UH4
 JD-TC-Create_Provider_Schedule-UH5
 
     [Documentation]   create schedule with start date and end date, as past dates
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -448,11 +484,15 @@ JD-TC-Create_Provider_Schedule-UH6
 
     [Documentation]  Create Provider Schedule with empty Provider id
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -484,11 +524,15 @@ JD-TC-Create_Provider_Schedule-UH7
 
     [Documentation]  Create Provider Schedule with empty start date
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -518,11 +562,15 @@ JD-TC-Create_Provider_Schedule-UH8
 
     [Documentation]  Create Provider Schedule with empty end date
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -553,11 +601,15 @@ JD-TC-Create_Provider_Schedule-UH9
 
     [Documentation]  Create Provider Schedule with empty start time
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -580,11 +632,15 @@ JD-TC-Create_Provider_Schedule-UH10
 
     [Documentation]  Create Provider Schedule with empty end time
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -608,11 +664,15 @@ JD-TC-Create_Provider_Schedule-UH11
 
     [Documentation]  Create Provider Schedule with empty schedule name
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -637,11 +697,15 @@ JD-TC-Create_Provider_Schedule-UH12
     [Documentation]  date format is incorrect
     #Date is picked from Dev side,Not checked our parameters
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id1}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id1}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -665,11 +729,15 @@ JD-TC-Create_Provider_Schedule-UH13
 
     [Documentation]  Create Provider Schedule with empty start date and end date
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -702,11 +770,15 @@ JD-TC-Create_Provider_Schedule-UH13
 
     [Documentation]  Create Provider Schedule with empty recurring type
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -729,11 +801,15 @@ JD-TC-Create_Provider_Schedule-UH14
 
     [Documentation]  Repeat intervals of schedule is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -757,11 +833,15 @@ JD-TC-Create_Provider_Schedule-UH15
 
     [Documentation]  Create Provider Schedule with empty schedule state
 
-    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200

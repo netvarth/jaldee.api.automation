@@ -32,11 +32,15 @@ JD-TC-Create_Instant_Schedule-1
     clear_service    ${PUSERNAME153}
     clear_customer   ${PUSERNAME153}
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -81,7 +85,7 @@ JD-TC-Create_Instant_Schedule-UH1
 
     [Documentation]  Create Instant Schedule where schedule name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -99,7 +103,7 @@ JD-TC-Create_Instant_Schedule-UH3
 
     [Documentation]  Create Instant Schedule where list is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME182}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME182}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -121,7 +125,7 @@ JD-TC-Create_Instant_Schedule-UH4
 
     [Documentation]  Create Instant Schedule where start date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -140,7 +144,7 @@ JD-TC-Create_Instant_Schedule-UH5
 
     [Documentation]  Create Instant Schedule where start date is past date
 
-    ${resp}=  Provider Login  ${PUSERNAME184}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME184}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +165,7 @@ JD-TC-Create_Instant_Schedule-UH6
 
     [Documentation]  Create Instant Schedule where end date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -180,7 +184,7 @@ JD-TC-Create_Instant_Schedule-UH7
 
     [Documentation]  Create Instant Schedule where end date is past date
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -200,7 +204,7 @@ JD-TC-Create_Instant_Schedule-UH8
 
     [Documentation]  Create Instant Schedule where start time is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -219,7 +223,7 @@ JD-TC-Create_Instant_Schedule-UH9
 
     [Documentation]  Create Instant Schedule where end time is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -239,7 +243,7 @@ JD-TC-Create_Instant_Schedule-UH10
 
     [Documentation]  Create Instant Schedule where Schedule state is disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -259,7 +263,7 @@ JD-TC-Create_Instant_Schedule-UH12
 
     [Documentation]  Create Instant Schedule where provider id is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -290,7 +294,7 @@ JD-TC-Create_Instant_Schedule-UH11
 
     [Documentation]  Create Instant Schedule where Schedule state is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -306,7 +310,7 @@ JD-TC-Create_Instant_Schedule-UH2
 
     [Documentation]  Create Instant Schedule where recurring type is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

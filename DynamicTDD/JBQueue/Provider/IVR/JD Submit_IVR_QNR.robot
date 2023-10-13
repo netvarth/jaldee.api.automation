@@ -67,11 +67,15 @@ JD-TC-SubmitQuestionnaireForIVR-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME177}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME177}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -249,7 +253,7 @@ JD-TC-SubmitQuestionnaireForIVR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME177}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME177}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

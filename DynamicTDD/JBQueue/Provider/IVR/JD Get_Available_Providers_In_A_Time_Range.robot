@@ -32,11 +32,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     clear_service    ${PUSERNAME161}
     clear_customer   ${PUSERNAME161}
 
-    ${resp}=  Provider Login  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -99,11 +103,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-2
 
     [Documentation]  Get Avaliable Providers In A Time Range without creating schedules
 
-    ${resp}=  Provider Login  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -130,11 +138,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH1
 
     [Documentation]  Get Avaliable Providers In A Time Range with another provider details
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -182,11 +194,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH3
 
     [Documentation]  Get Avaliable Providers In A Time Range with last date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -213,11 +229,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH4
 
     [Documentation]  Get Avaliable Providers In A Time Range with start date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -244,11 +264,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH5
 
     [Documentation]  Get Avaliable Providers In A Time Range with start date is different format
 
-    ${resp}=  Provider Login  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -275,11 +299,15 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH6
 
     [Documentation]  Get Avaliable Providers In A Time Range with end date is different format
 
-    ${resp}=  Provider Login  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -577,7 +577,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-2
 JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH1
     [Documentation]  Get questionnaire by Provider login
 
-    ${resp}=    Provider Login    ${PUSERNAME169}    ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME169}    ${PASSWORD}
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

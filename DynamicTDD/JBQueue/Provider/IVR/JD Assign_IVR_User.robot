@@ -49,12 +49,17 @@ JD-TC-Assign_IVR_User-1
     [Documentation]   Assign IVR User
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -389,7 +394,7 @@ JD-TC-Assign_IVR_User-2
 
     [Documentation]   Assign IVR User is unvailable
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -410,7 +415,7 @@ JD-TC-Assign_IVR_User-UH1
 
     [Documentation]   Assign IVR User with invalid ivr uid
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -430,7 +435,7 @@ JD-TC-Assign_IVR_User-UH2
 
     [Documentation]   Assign IVR User with user type as assistance
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -447,7 +452,7 @@ JD-TC-Assign_IVR_User-UH3
 
     [Documentation]   Assign IVR User with invalid user id    
 
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -462,7 +467,7 @@ JD-TC-Assign_IVR_User-UH4
 
     [Documentation]   Assign IVR User with uid is empty
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -476,7 +481,7 @@ JD-TC-Assign_IVR_User-UH5
 
     [Documentation]   Assign IVR User with user id is empty
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -489,7 +494,7 @@ JD-TC-Assign_IVR_User-UH6
 
     [Documentation]   Assign IVR User with another provider login   
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -526,7 +531,7 @@ JD-TC-Assign_IVR_User-UH6
 
     [Documentation]   Assign IVR User with usertype is empty
     
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${list}=  Create List

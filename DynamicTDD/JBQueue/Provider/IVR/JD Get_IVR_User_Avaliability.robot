@@ -52,12 +52,17 @@ JD-TC-GET_All_IVR_USer_Avaliability-1
     clear_service    ${HLMUSERNAME2}
     clear_customer   ${HLMUSERNAME2}
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -389,12 +394,17 @@ JD-TC-GET_All_IVR_USer_Avaliability-2
 
     [Documentation]   Create sample user -that not add to ivr table and get the user availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -605,12 +615,17 @@ JD-TC-GET_All_IVR_USer_Avaliability-3
 
     [Documentation]   Delete users from ivr table ang get ivr user availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -731,12 +746,17 @@ JD-TC-GET_All_IVR_USer_Avaliability-4
 
     [Documentation]  already deleted user details update  and get ivr user availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
 
 
@@ -791,12 +811,17 @@ JD-TC-GET_All_IVR_USer_Avaliability-UH3
 
     [Documentation]   Update user availability(without user schedule) from ivr table and get ivr user availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}

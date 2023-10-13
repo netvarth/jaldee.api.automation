@@ -506,7 +506,7 @@ JD-TC-GetServiceOptionsByCatlogid-2
 JD-TC-GetServiceOptionsByCatlogid-UH1
     [Documentation]  Get Serviceoptions by Provider login
 
-    ${resp}=    Provider Login    ${PUSERNAME169}    ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME169}    ${PASSWORD}
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

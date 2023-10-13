@@ -32,7 +32,7 @@ Appointment Details
     Log                             ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     
-    ${resp}=                        Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log                             ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     

@@ -597,7 +597,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-2
 
 JD-TC-UserLevelAnalyticsForWaitlist-3
     [Documentation]   take online checkins, for a provider and check user level analytics 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -802,7 +802,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
 
 JD-TC-UserLevelAnalyticsForWaitlist-4
     [Documentation]   take checkins,for a provider and check user level analytics for waitlist actions
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -994,7 +994,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
     [Documentation]   take checkins,for a provider and check user level analytics for waitlistactions
     # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1058,7 +1058,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
 
     Log List   ${waitlist_id}
 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1139,7 +1139,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
     [Documentation]     take checkins, for a provider from consumer side and check user level analytics after reschedule it
     # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1759,7 +1759,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
        
 JD-TC-UserLevelAnalyticsForWaitlist-4
     [Documentation]   take online checkins for prepayment services and check analytics 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -49,12 +49,17 @@ JD-TC-Unassign_IVR_User-1
     [Documentation]   Unassign IVR User
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -387,12 +392,17 @@ JD-TC-Unassign_IVR_User-2
     [Documentation]  After Unassign IVR User assigned the same user again.
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -735,11 +745,15 @@ JD-TC-Update_User_Language-UH2
 
     [Documentation]   Update User Language with another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id1}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id1}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
     
     ${resp}=    Unassign IVR User    ${ivr_uid}    ${userType[0]}    ${so_id1}
     Log  ${resp.json()}
@@ -751,12 +765,17 @@ JD-TC-Unassign_IVR_User-UH3
     [Documentation]   Unassign IVR User without assigning user
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -1077,12 +1096,17 @@ JD-TC-Unassign_IVR_User-UH4
     [Documentation]   Unassign IVR User where ivr uid is invalid
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -1409,12 +1433,17 @@ JD-TC-Unassign_IVR_User-UH5
     [Documentation]   Unassign IVR User where usertype is empty
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -1740,12 +1769,17 @@ JD-TC-Unassign_IVR_User-UH6
     [Documentation]   Unassign IVR User where user id is empty
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -2071,12 +2105,17 @@ JD-TC-Unassign_IVR_User-UH7
     [Documentation]   Unassign IVR User where assigned user and unassign user is different
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}

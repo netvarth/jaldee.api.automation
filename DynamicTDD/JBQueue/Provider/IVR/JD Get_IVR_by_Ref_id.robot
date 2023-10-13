@@ -47,7 +47,10 @@ JD-TC-Get_IVR_By_Ref_Id-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${IVR_user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -320,7 +323,10 @@ JD-TC-Get_IVR_By_Ref_Id-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${IVR_user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -591,7 +597,10 @@ JD-TC-Get_IVR_By_Ref_Id-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${IVR_user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -862,7 +871,10 @@ JD-TC-Get_IVR_By_Ref_Id-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${IVR_user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -1134,7 +1146,10 @@ JD-TC-Get_IVR_By_Ref_Id-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${IVR_user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${IVR_user_id}    ${resp.json()['id']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}

@@ -304,7 +304,7 @@ JD-TC-telegramAnalytics-1
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -347,7 +347,7 @@ JD-TC-telegramAnalytics-2
 
     [Documentation]   take TELEGRAM_APPT for a provider and check account level analytics for TELEGRAM_APPMT and WEB_TOKENS.
     
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -424,7 +424,7 @@ JD-TC-telegramAnalytics-2
 
     Log List   ${appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

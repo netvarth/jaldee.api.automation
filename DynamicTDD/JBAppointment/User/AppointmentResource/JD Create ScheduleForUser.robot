@@ -373,7 +373,7 @@ JD-TC-CreateScheduleForUser-4
     [Documentation]  User create a queue with base location and verify get locations by user id.
 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -436,7 +436,7 @@ JD-TC-CreateScheduleForUser-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -468,7 +468,7 @@ JD-TC-CreateScheduleForUser-5
     [Documentation]  User create an appt schedule and take appointment for consumer with base location and verify get locations by user id.
 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -487,7 +487,7 @@ JD-TC-CreateScheduleForUser-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

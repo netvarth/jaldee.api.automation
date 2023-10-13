@@ -1168,7 +1168,7 @@ JD-TC-DepartmentWiseAnalytics-5
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

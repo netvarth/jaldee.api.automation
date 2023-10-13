@@ -569,7 +569,7 @@ JD-TC-UserLevelAnalyticsForAppointment-3
     [Documentation]   take appointments for normal service and virtual service  and check user level analytics for online appointments
     # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_appt_schedule   ${MUSERNAME_E}
 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -725,7 +725,7 @@ JD-TC-UserLevelAnalyticsForAppointment-3
 
     ${tele_ser_app_ids}=  Get Length  ${online_vertualids}
  
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
