@@ -1789,14 +1789,16 @@ def get_Subdomainfields(datas) :
     virtual_fields= {}
     for i in range(len(data)):
             name = data[i]['name']
+            print ('name: ', name)
             if data[i]['mandatory'] == True:
                 if 'Columns' in data[i]:
                     c= len(data[i]['Columns'])
                     for j in range(c):                           
                             key_name =  data[i]['Columns'][j]['key']
                             if  data[i]['Columns'][j]['type'] == 'Enum':
-                                e= len(data[i]['Columns'][j]['enumeratedConstants'])
-                                key_value = data[i]['Columns'][j]['enumeratedConstants'][0]['name']
+                                index_len= len(data[i]['Columns'][j]['enumeratedConstants'])
+                                rand_idx = random.randrange(index_len)
+                                key_value = data[i]['Columns'][j]['enumeratedConstants'][rand_idx]['name']
                                 fields[key_name]=key_value
                             elif  data[i]['Columns'][j]['type'] == 'TEXT':
                                 key_value = Generate_random_value(3,string.ascii_uppercase)
@@ -1813,7 +1815,51 @@ def get_Subdomainfields(datas) :
                     if data[i]['dataType'] == 'TEXT':
                         virtual_fields[name] =fake.name()
                     elif data[i]['dataType'] == 'Gender':
-                        virtual_fields[name] = data[i]['enumeratedConstants'][0]['name']
+                        index_len= len(data[i]['enumeratedConstants'])
+                        rand_idx = random.randrange(index_len)
+                        virtual_fields[name] = data[i]['enumeratedConstants'][rand_idx]['name']
+                    elif data[i]['dataType'] == 'EnumList':
+                        index_len= len(data[i]['enumeratedConstants'])
+                        rand_idx = random.randrange(index_len)
+                        virtual_fields[name] = data[i]['enumeratedConstants'][rand_idx]['name']
+
+                # return virtual_fields
+            else:
+                if 'Columns' in data[i]:
+                    c= len(data[i]['Columns'])
+                    for j in range(c):                           
+                            key_name =  data[i]['Columns'][j]['key']
+                            if  data[i]['Columns'][j]['type'] == 'Enum':
+                                index_len= len(data[i]['Columns'][j]['enumeratedConstants'])
+                                rand_idx = random.randrange(index_len)
+                                key_value = data[i]['Columns'][j]['enumeratedConstants'][rand_idx]['name']
+                                fields[key_name]=key_value
+                            elif  data[i]['Columns'][j]['type'] == 'TEXT':
+                                key_value = Generate_random_value(3,string.ascii_uppercase)
+                                fields[key_name]=key_value
+                            elif  data[i]['Columns'][j]['type'] == 'DT_Month':
+                                key_value = fake.month_name()
+                                fields[key_name]=key_value
+                            elif  data[i]['Columns'][j]['type'] == 'DT_Year':
+                                key_value = fake.year()
+                                fields[key_name]=key_value 
+                    fields_list.append(fields)
+                    virtual_fields[name] = fields_list
+                elif 'Columns' not in data[i]:
+                    if data[i]['dataType'] == 'TEXT':
+                        virtual_fields[name] =fake.name()
+                    elif data[i]['dataType'] == 'Gender':
+                        index_len= len(data[i]['enumeratedConstants'])
+                        rand_idx = random.randrange(index_len)
+                        virtual_fields[name] = data[i]['enumeratedConstants'][rand_idx]['name']
+                    elif data[i]['dataType'] == 'EnumList':
+                        index_len= len(data[i]['enumeratedConstants'])
+                        rand_idx = random.randrange(index_len)
+                        virtual_fields[name] = data[i]['enumeratedConstants'][rand_idx]['name']
+
+                # return virtual_fields
+                # return random.choice((virtual_fields,{}))
+
 
     return virtual_fields
 

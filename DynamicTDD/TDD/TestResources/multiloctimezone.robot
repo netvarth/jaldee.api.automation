@@ -48,8 +48,11 @@ JD-TC-Take Appointment-1
     
     ${multilocdoms}=  get_mutilocation_domains
     Log  ${multilocdoms}
-    Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
-    Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
+    # Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
+    # Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
+    ${dom}=  Set Variable  ${multilocdoms[7]['domain']}
+    ${sub_dom}=  Set Variable  ${multilocdoms[7]['subdomains'][2]}
+
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -117,7 +120,9 @@ JD-TC-Take Appointment-1
     Should Be Equal As Strings    ${fields.status_code}   200
 
     ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+    Log  ${virtual_fields}
 
+***COMMENT***
     ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -126,6 +131,7 @@ JD-TC-Take Appointment-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${spec}=  get_Specializations  ${resp.json()}
+    Log  ${spec}
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200

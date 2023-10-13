@@ -6,6 +6,7 @@ Library     Collections
 Library     String
 Library     json
 Library     requests
+Library     random
 Library     FakerLibrary
 # Library    FakerLibrary    locale=en_IN
 # Library     /ebs/TDD/db.py
@@ -18,6 +19,9 @@ Variables   /ebs/TDD/varfiles/providers.py
 Variables   /ebs/TDD/varfiles/hl_musers.py
 Variables   /ebs/TDD/varfiles/consumerlist.py
 Variables   /ebs/TDD/varfiles/consumermail.py
+
+*** Variables ***
+@{langs}   assamese  bengali  english  gujarati  hindi  kannada  Konkani  malayalam  Marathi  manipuri  oriya  punjabi  rajasthani  sanskrit  tamil  telugu  urdu  arabic
 
 *** Keywords ***
 
@@ -37,9 +41,54 @@ Get Date Time via Timezone
 *** Test Cases ***  
 Testing timezones
 
-    # Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-    # Ref: https://www.nationsonline.org/oneworld/country_code_list.htm
+    # random.choices(test_list, k=4)
     
+    Log List   ${langs}
+    ${Languages}=  random.choices  ${langs}  k=5
+    Log  ${Languages}
+    ${Languages}=  random.choices  ${langs}  k=3
+    Log  ${Languages}
+    ${Languages}=  random.choices  ${langs}  k=8
+    Log  ${Languages}
+    ${Languages}=  random.choices  ${langs}  
+    Log  ${Languages}
+    ${Languages}=  random.choices  ${langs}  
+    Log  ${Languages}
+    ${Languages}=  random.choices  ${langs}  
+    Log  ${Languages}
+    ${Languages}=  random.choices  ${langs}  
+    Log  ${Languages}
+
+    ${Languages}=  Words   ext_word_list=@{langs}  nb=5  unique=True
+    Log  ${Languages}
+    ${Languages}=  Words   ext_word_list=@{langs}   nb=3  unique=True
+    Log  ${Languages}
+    ${Languages}=  Words   ext_word_list=@{langs}   nb=8  unique=True
+    Log  ${Languages}
+    ${Languages}=  Words   ext_word_list=@{langs}    unique=True
+    Log  ${Languages}
+    ${Languages}=  Words   ext_word_list=@{langs}  unique=True
+    Log  ${Languages}
+    ${Languages}=  Words   ext_word_list=@{langs}  unique=True
+    Log  ${Languages}
+    
+    ${Languages}=  Random Elements   elements=@{langs}  length=5  unique=True
+    Log  ${Languages}
+    ${Languages}=  Random Elements   elements=@{langs}  length=3  unique=True
+    Log  ${Languages}
+    ${Languages}=  Random Elements   elements=@{langs}  length=8  unique=True
+    Log  ${Languages}
+    ${Languages}=  Random Elements   elements=@{langs}  unique=True
+    Log  ${Languages}
+    ${Languages}=  Random Elements   elements=@{langs}  unique=True
+    Log  ${Languages}
+    ${Languages}=  Random Elements   elements=@{langs}  unique=True
+    Log  ${Languages}
+
+
+    
+*** comment ***
+
     ${PH1}  FakerLibrary.Phone Number
     ${PH1}  FakerLibrary.Phone Number
     ${PH1}  FakerLibrary.Phone Number
@@ -51,6 +100,9 @@ Testing timezones
     ${CC1}  country_calling_code
 
 *** comment ***
+    # Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    # Ref: https://www.nationsonline.org/oneworld/country_code_list.htm
+
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=AE  coords_only=False    #UAE -    Asia/Dubai
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=OM  coords_only=False      #OMAN -   Asia/Dubai, Asia/Muscat
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=QA  coords_only=False      #Qatar -  	Asia/Qatar
