@@ -221,7 +221,7 @@ JD-TC- Update Bill -PRE
     ${cupn_code1}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -246,7 +246,7 @@ JD-TC- Update Bill -PRE
     ${cupn_code2}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code2}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10

@@ -193,7 +193,7 @@ JD-TC-GetReimburseReports-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_timezone_time  ${tz}  2  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable    ${strt_time}
     ${end_time}=    add_timezone_time  ${tz}       0  20 
     Set Suite Variable    ${end_time} 
@@ -550,7 +550,7 @@ JD-TC-GetReimburseReports-2
     # ${resp}=   Create Service  ${SERVICE4}  ${ser_desc}  ${ser_duratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  0  500  ${bool[0]}  ${bool[1]}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${s_id4}  ${resp.json()}
-    ${strt_time}=   subtract_timezone_time  ${tz}  2  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable    ${strt_time}
     ${end_time}=    add_timezone_time  ${tz}       0  20 
     Set Suite Variable    ${end_time} 

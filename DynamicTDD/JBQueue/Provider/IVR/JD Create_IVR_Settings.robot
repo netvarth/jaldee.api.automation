@@ -48,11 +48,15 @@ JD-TC-Create_IVR_Settings-1
     clear_service    ${PUSERNAME154}
     clear_customer   ${PUSERNAME154}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME154}
     Set Suite Variable   ${acc_id} 
@@ -62,7 +66,7 @@ JD-TC-Create_IVR_Settings-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -80,9 +84,9 @@ JD-TC-Create_IVR_Settings-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -191,7 +195,7 @@ JD-TC-Create_IVR_Settings-UH1
 
     [Documentation]   Create IVR Settings where account is is invalid
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -205,7 +209,7 @@ JD-TC-Create_IVR_Settings-UH2
 
     [Documentation]   Create IVR Settings where account is is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -217,7 +221,7 @@ JD-TC-Create_IVR_Settings-UH3
 
     [Documentation]   Create IVR Settings where call priority is low
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -229,7 +233,7 @@ JD-TC-Create_IVR_Settings-UH4
 
     [Documentation]   Create IVR Settings where call priority is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -241,7 +245,7 @@ JD-TC-Create_IVR_Settings-UH5
 
     [Documentation]   Create IVR Settings where call waiting time is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -253,7 +257,7 @@ JD-TC-Create_IVR_Settings-UH6
 
     [Documentation]   Create IVR Settings where service id is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -265,7 +269,7 @@ JD-TC-Create_IVR_Settings-UH7
 
     [Documentation]   Create IVR Settings where token is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -277,7 +281,7 @@ JD-TC-Create_IVR_Settings-UH8
 
     [Documentation]   Create IVR Settings where secret key is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -289,7 +293,7 @@ JD-TC-Create_IVR_Settings-UH9
 
     [Documentation]   Create IVR Settings where apiKey is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -301,7 +305,7 @@ JD-TC-Create_IVR_Settings-UH10
 
     [Documentation]   Create IVR Settings where company id is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -312,7 +316,7 @@ JD-TC-Create_IVR_Settings-UH11
 
     [Documentation]   Create IVR Settings where public id is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -324,7 +328,7 @@ JD-TC-Create_IVR_Settings-UH12
 
     [Documentation]   Create IVR Settings where language Reset Count is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -336,7 +340,7 @@ JD-TC-Create_IVR_Settings-UH13
 
     [Documentation]   Create IVR Settings where ivr config data is empty
     
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

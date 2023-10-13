@@ -87,7 +87,7 @@ JD-TC-UpdateVacation-1
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime}=  subtract_timezone_time  ${tz}  3  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
     Set Test Variable  ${BsTime30}  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  4  30  
     Set Test Variable  ${BeTime30}  ${eTime}
@@ -288,7 +288,7 @@ JD-TC-UpdateVacation-3
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  subtract_timezone_time  ${tz}   1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}   1  00
     ${eTime1}=  add_timezone_time  ${tz}  2  00  
     
     ${description}=  FakerLibrary.sentence
@@ -322,7 +322,7 @@ JD-TC-UpdateVacation-3
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
 
 
-    ${start_time}=  subtract_timezone_time  ${tz}   0  20
+    ${start_time}=  db.subtract_timezone_time  ${tz}   0  20
     ${end_time}=    add_timezone_time  ${tz}   1  40 
     ${Future_DAY}=  db.add_timezone_date  ${tz}  4  
     ${desc}=    FakerLibrary.name
@@ -332,7 +332,7 @@ JD-TC-UpdateVacation-3
     Set Suite Variable  ${v_id_B8}    ${resp.json()['holidayId']}
     
 
-    ${start_time3}=  subtract_timezone_time  ${tz}   0  45
+    ${start_time3}=  db.subtract_timezone_time  ${tz}   0  45
     ${end_time3}=    add_timezone_time  ${tz}  0  45  
     ${desc3}=    FakerLibrary.name
     ${resp}=  Update Vacation   ${v_id_B8}  ${desc3}  ${u_id}  ${recurringtype[1]}  ${list}  ${Future_DAY}  ${Future_DAY}  ${EMPTY}  ${start_time3}  ${end_time3}   
@@ -735,7 +735,7 @@ JD-TC-UpdateVacation-UH8
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
 
-    ${sTime1}=  subtract_timezone_time  ${tz}  0  45
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  45
     ${eTime1}=  add_timezone_time  ${tz}  2  00  
     
     ${description}=  FakerLibrary.sentence
@@ -759,7 +759,7 @@ JD-TC-UpdateVacation-UH8
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response   ${resp}    waitlist=${bool[1]}  appointment=${bool[1]}
 
-    ${sTime1}=  subtract_timezone_time  ${tz}  0  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30
     ${eTime1}=  add_timezone_time  ${tz}  4  00   
 
     ${schedule_name}=  FakerLibrary.bs
@@ -789,7 +789,7 @@ JD-TC-UpdateVacation-UH8
     Set Suite Variable  ${v_id12}    ${resp.json()['holidayId']}
     
 
-    ${start_time4}=  subtract_timezone_time  ${tz}  0  5
+    ${start_time4}=  db.subtract_timezone_time  ${tz}  0  5
     ${end_time4}=    add_timezone_time  ${tz}   1  10
     ${desc4}=    FakerLibrary.name
     ${resp}=  Update Vacation   ${v_id12}  ${desc4}  ${u_id}  ${recurringtype[1]}  ${list}  ${CUR_day}  ${CUR_day}  ${EMPTY}  ${start_time4}  ${end_time4}   

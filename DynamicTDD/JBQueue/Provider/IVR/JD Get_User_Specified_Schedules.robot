@@ -118,10 +118,10 @@ JD-TC-Get_User_Specified_Schedules-1
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -135,9 +135,9 @@ JD-TC-Get_User_Specified_Schedules-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY3}=  add_date  20      
+    ${DAY3}=  db.add_timezone_date  ${tz}  20      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime2}=  add_time  16  25
+    ${sTime2}=  db.add_timezone_time  ${tz}  16  25
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -176,10 +176,10 @@ JD-TC-Get_User_Specified_Schedules-2
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -215,10 +215,10 @@ JD-TC-Get_User_Specified_Schedules-3
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  add_date  20      
-    ${DAY2}=  add_date  30
+    ${DAY1}=  db.add_timezone_date  ${tz}  20      
+    ${DAY2}=  db.add_timezone_date  ${tz}  30
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -279,10 +279,10 @@ JD-TC-Get_User_Specified_Schedules-UH2
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs

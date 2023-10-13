@@ -210,7 +210,7 @@ JD-TC-ProviderCouponBill-1
     ${pc_amount}=  Convert To Number  ${pc_amount}  1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -371,7 +371,7 @@ JD-TC-ProviderCouponBill-1
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  55
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
     ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
@@ -386,7 +386,7 @@ JD-TC-ProviderCouponBill-1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    # ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     # ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${sTime}=  add_timezone_time  ${tz}  0  15  
     ${eTime}=  add_timezone_time  ${tz}  3  30     

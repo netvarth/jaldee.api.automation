@@ -87,7 +87,7 @@ JD-TC-JaldeeChannelAnalytics-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     

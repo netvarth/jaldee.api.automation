@@ -79,7 +79,7 @@ JD-TC-High Level Test Case-1
     ${queue_name}=  FakerLibrary.bs
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     Set Test Variable  ${qTime}   ${sTime1}-${eTime1}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${capacity}  ${lid}  ${sId_1}  ${sId_2}

@@ -3387,7 +3387,7 @@ JD-TC-Reschedule Appointment-14
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Suite Variable  ${tz}
-    ${sTime}=  subtract_timezone_time  ${tz}  1  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  1  15
     ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url

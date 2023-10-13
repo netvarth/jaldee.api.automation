@@ -1314,7 +1314,7 @@ JD-TC-Update CustomerDetails-12
 
 JD-TC-Update CustomerDetails-13
 	[Documentation]  Update a valid customer with email
-    ${resp}=  ProviderLogin  ${PUSERNAME234}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
@@ -1460,7 +1460,7 @@ JD-TC-Update CustomerDetails-UH7
 
 JD-TC-Update CustomerDetails-UH8
 	[Documentation]  Try to Update a  customer with invalid second number
-    ${resp}=  ProviderLogin  ${PUSERNAME234}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name

@@ -49,11 +49,15 @@ JD-TC-Outbound_IVR-1
     clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
@@ -63,7 +67,7 @@ JD-TC-Outbound_IVR-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -81,9 +85,9 @@ JD-TC-Outbound_IVR-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -195,8 +199,8 @@ JD-TC-Outbound_IVR-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -272,7 +276,7 @@ JD-TC-Outbound_IVR-1
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -369,11 +373,15 @@ JD-TC-Outbound_IVR-2
     clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
@@ -383,7 +391,7 @@ JD-TC-Outbound_IVR-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -401,9 +409,9 @@ JD-TC-Outbound_IVR-2
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -509,8 +517,8 @@ JD-TC-Outbound_IVR-2
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -586,7 +594,7 @@ JD-TC-Outbound_IVR-2
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -683,11 +691,15 @@ JD-TC-Outbound_IVR-3
     clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
@@ -697,7 +709,7 @@ JD-TC-Outbound_IVR-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -715,9 +727,9 @@ JD-TC-Outbound_IVR-3
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -823,8 +835,8 @@ JD-TC-Outbound_IVR-3
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -900,7 +912,7 @@ JD-TC-Outbound_IVR-3
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -1027,11 +1039,15 @@ JD-TC-Outbound_IVR-UH2
     clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
@@ -1041,7 +1057,7 @@ JD-TC-Outbound_IVR-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -1059,9 +1075,9 @@ JD-TC-Outbound_IVR-UH2
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -1167,8 +1183,8 @@ JD-TC-Outbound_IVR-UH2
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1244,7 +1260,7 @@ JD-TC-Outbound_IVR-UH2
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -1349,11 +1365,15 @@ JD-TC-Outbound_IVR-UH3
     clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
@@ -1363,7 +1383,7 @@ JD-TC-Outbound_IVR-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -1381,9 +1401,9 @@ JD-TC-Outbound_IVR-UH3
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -1489,8 +1509,8 @@ JD-TC-Outbound_IVR-UH3
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1566,7 +1586,7 @@ JD-TC-Outbound_IVR-UH3
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -1677,11 +1697,15 @@ JD-TC-Outbound_IVR-UH5
     clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME175}
     Set Suite Variable   ${acc_id} 
@@ -1691,7 +1715,7 @@ JD-TC-Outbound_IVR-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -1709,9 +1733,9 @@ JD-TC-Outbound_IVR-UH5
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -1817,8 +1841,8 @@ JD-TC-Outbound_IVR-UH5
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1894,7 +1918,7 @@ JD-TC-Outbound_IVR-UH5
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s

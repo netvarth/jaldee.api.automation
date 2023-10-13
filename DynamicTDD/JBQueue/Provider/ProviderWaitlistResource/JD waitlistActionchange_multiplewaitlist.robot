@@ -87,7 +87,7 @@ JD-TC-change Waitlist Action for multiple account-1
       Set Suite Variable    ${list}
       ${DAY1}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY1}
-      ${strt_time}=   subtract_timezone_time   ${tz}  3  00
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  3  00
       Set Suite Variable    ${strt_time}
       ${end_time}=    db.add_timezone_time  ${tz}  0  30 
       Set Suite Variable    ${end_time}   
@@ -464,7 +464,7 @@ JD-TC-change Waitlist Action for multiple account-6
       Set Suite Variable    ${list}
       ${DAY1}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY1}
-      ${strt_time}=   subtract_timezone_time   ${tz}  3  00
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  3  00
       Set Suite Variable    ${strt_time}
       ${end_time}=    db.add_timezone_time  ${tz}  0  30 
       Set Suite Variable    ${end_time}   
@@ -494,7 +494,7 @@ JD-TC-change Waitlist Action for multiple account-6
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   subtract_timezone_time   ${tz}  3  00
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  3  00
       Set Suite Variable    ${strt_time}
       ${end_time}=    db.add_timezone_time  ${tz}  0  30 
       Set Suite Variable    ${end_time}   

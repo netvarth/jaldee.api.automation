@@ -90,7 +90,7 @@ JD-TC-GetNextAvailability-1
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
 
-    ${sTime}=  subtract_timezone_time  ${tz}  3  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable  ${BsTime30}  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${BeTime30}  ${eTime}

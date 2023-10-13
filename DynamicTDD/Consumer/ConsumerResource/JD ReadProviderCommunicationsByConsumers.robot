@@ -627,10 +627,10 @@ JD-TC-Read Provider Communications-BRANCH-4
     # Set Suite Variable   ${sTime}
     # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # Set Suite Variable   ${eTime}
-    ${sTime}=  subtract_timezone_time  ${tz}  0  30
-    # ${sTime}=  subtract_timezone_time  ${tz}  0  05
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  30
+    # ${sTime}=  db.subtract_timezone_time  ${tz}  0  05
     Set Suite Variable  ${BsTime30}  ${sTime}
-    # ${eTime}=  subtract_timezone_time  ${tz}  1  00
+    # ${eTime}=  db.subtract_timezone_time  ${tz}  1  00
     ${eTime}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Update Business Profile with Schedule    ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}

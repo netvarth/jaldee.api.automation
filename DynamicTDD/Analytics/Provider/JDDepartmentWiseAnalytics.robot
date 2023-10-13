@@ -422,7 +422,7 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -458,7 +458,7 @@ JD-TC-DepartmentWiseAnalytics-1
     ${dur1}=  FakerLibrary.Random Int  min=10  max=20
     Set Suite Variable  ${dur1}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${depid1}  ${u_id1}
@@ -486,7 +486,7 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}   200
 
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${queue_name1}=  FakerLibrary.bs
@@ -525,7 +525,7 @@ JD-TC-DepartmentWiseAnalytics-1
 
     END
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${walkin_waitlist_ids}=  Create List
@@ -553,7 +553,7 @@ JD-TC-DepartmentWiseAnalytics-1
 
     # END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     FOR   ${a}  IN RANGE   ${count}
@@ -650,7 +650,7 @@ JD-TC-DepartmentWiseAnalytics-1
 JD-TC-DepartmentWiseAnalytics-2
     [Documentation]   take walkin checkins for an another user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
@@ -720,7 +720,7 @@ JD-TC-DepartmentWiseAnalytics-2
     ${service_count}=  Create List
     Set Suite Variable   ${service_count}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     FOR   ${a}  IN RANGE   ${count}
@@ -820,7 +820,7 @@ JD-TC-DepartmentWiseAnalytics-2
 JD-TC-DepartmentWiseAnalytics-3
     [Documentation]   take checkins for teleservice for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME_U2}
@@ -984,7 +984,7 @@ JD-TC-DepartmentWiseAnalytics-3
 JD-TC-DepartmentWiseAnalytics-4
     [Documentation]   take online checkins for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -1056,7 +1056,7 @@ JD-TC-DepartmentWiseAnalytics-4
     ${online_token_len}=  Evaluate  len($online_waitlist_ids) 
     Set Suite Variable   ${online_token_len}
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  01s
@@ -1093,7 +1093,7 @@ JD-TC-DepartmentWiseAnalytics-4
 JD-TC-DepartmentWiseAnalytics-5
     [Documentation]   take online checkins for a prepayment service for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     comment  prepayment service for online check-ins 

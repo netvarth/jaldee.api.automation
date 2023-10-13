@@ -193,7 +193,7 @@ JD-TC-GetQueueService-UH4
     ${queue2}=    FakerLibrary.name
     Set Suite Variable    ${queue2} 
     ${list}=  Create List  1  2  3  4  5  6
-    ${stime}=   subtract_timezone_time  ${tz}   2   00  
+    ${stime}=   db.subtract_timezone_time  ${tz}   2   00  
     Set Suite Variable   ${stime}
     ${etime}=   add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${etime}

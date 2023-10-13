@@ -730,8 +730,8 @@ JD-TC-WaitlistForUser-UH15
       Should Be Equal As Strings  ${resp.status_code}  200
       ${queue2}=    FakerLibrary.name
       Set Suite Variable    ${queue2} 
-      ${stime}=   subtract_timezone_time  ${tz}   2   00  
-      ${etime}=   get_time
+      ${stime}=   db.subtract_timezone_time  ${tz}   2   00  
+      ${etime}=   db.get_time_by_timezone  ${tz}
       ${resp}=  Create Queue   ${queue2}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc_id1}  ${ser_id1}  ${ser_id2}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${que_id7}   ${resp.json()}
@@ -752,7 +752,7 @@ JD-TC-WaitlistForUser-UH16
       ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${list}=  Create List  1  2  3  4  5  6
-      ${stime}=   subtract_timezone_time  ${tz}   2   00  
+      ${stime}=   db.subtract_timezone_time  ${tz}   2   00  
       Set Suite Variable   ${stime}
       ${etime}=   add_timezone_time  ${tz}  0  15  
       Set Suite Variable   ${etime}

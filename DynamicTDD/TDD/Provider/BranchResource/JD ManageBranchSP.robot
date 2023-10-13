@@ -107,7 +107,7 @@ JD-TC-ManageBranchSP-1
     # ${postcode}=  FakerLibrary.postcode
     # ${address}=  get_address
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${sTime}=  subtract_timezone_time  ${tz}  3  25
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  25
     ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
@@ -166,7 +166,7 @@ JD-TC-ManageBranchSP-1
     # ${postcode}=  FakerLibrary.postcode
     # ${address}=  get_address
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${sTime}=  subtract_timezone_time  ${tz}  3  25
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  25
     ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url

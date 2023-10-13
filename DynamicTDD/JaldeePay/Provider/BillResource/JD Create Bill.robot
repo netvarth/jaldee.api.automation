@@ -483,7 +483,7 @@ JD-TC- Create Bill -9
         ${cupn_code}=   FakerLibrary.word
         Set Suite Variable  ${cupn_code}
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_timezone_time  ${tz}  0  15
+        ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
         ${eTime}=  add_timezone_time  ${tz}  0  45  
         ${ST_DAY}=  db.get_date_by_timezone  ${tz}
         ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1193,7 +1193,7 @@ JD-TC- Create Bill -21
         ${coupon1_amt}=   Convert To Number   ${coupon1_amt}
         ${cupn_code1}=   FakerLibrary.word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_timezone_time  ${tz}  0  15
+        ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
         ${eTime}=  add_timezone_time  ${tz}  0  45  
         ${ST_DAY}=  db.get_date_by_timezone  ${tz}
         ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1217,7 +1217,7 @@ JD-TC- Create Bill -21
         ${coupon2_amt}=   Convert To Number   ${coupon2_amt}
         ${cupn_code2}=   FakerLibrary.word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_timezone_time  ${tz}  0  15
+        ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
         ${eTime}=  add_timezone_time  ${tz}  0  45  
         ${ST_DAY}=  db.get_date_by_timezone  ${tz}
         ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1455,7 +1455,7 @@ JD-TC- Create Bill -25
         ...    Get Bill
       
 
-        ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Get Consumer By Id  ${CUSERNAME8}
@@ -1486,10 +1486,10 @@ JD-TC- Create Bill -25
         Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
         ${lid}=  Create Sample Location
-        ${DAY1}=  get_date
-        ${DAY2}=  add_date  10      
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
+        ${DAY2}=  db.add_timezone_date  ${tz}  10      
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime1}=  add_time  0  15
+        ${sTime1}=  db.add_timezone_time  ${tz}  0  15
         ${delta}=  FakerLibrary.Random Int  min=10  max=60
         ${eTime1}=  add_two   ${sTime1}  ${delta}
         ${s_name}=  FakerLibrary.name
@@ -1700,7 +1700,7 @@ JD-TC- Create Bill -26
         Set Test Variable  ${firstName}   ${resp.json()['firstName']}
         Set Test Variable  ${lastName}   ${resp.json()['lastName']}
         Set Test Variable  ${cid}  ${resp.json()}  
-         ${DAY}=  get_date
+         ${DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY}
 
         ${resp}=  Consumer Logout
@@ -1944,7 +1944,7 @@ JD-TC- Create Bill -UH8
         ${coupon1_amt}=   Convert To Number   ${coupon1_amt}
         ${cupn_code}=   FakerLibrary.word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_timezone_time  ${tz}  0  15
+        ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
         ${eTime}=  add_timezone_time  ${tz}  0  45  
         ${ST_DAY}=  db.get_date_by_timezone  ${tz}
         ${EN_DAY}=  db.add_timezone_date  ${tz}   10

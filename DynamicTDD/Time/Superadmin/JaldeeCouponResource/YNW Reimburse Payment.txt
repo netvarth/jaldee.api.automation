@@ -30,7 +30,7 @@ JD-TC-Reimburse payment-1
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME7}
     Comment  Provider apply a coupon after waitlist ,done payment, settil bill,Request for payment then done reimburse payment through CHEQUE(full amount paid)    
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -64,7 +64,7 @@ JD-TC-Reimburse payment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Update Tax Percentage  18  13DEFBV1100M2Z6  
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -215,7 +215,7 @@ JD-TC-Reimburse payment-1
 
 JD-TC-Reimburse payment-2
     Comment     Reimburse payment of same jaldee coupon and same provider
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME7}
     ${cid}=  get_id  ${CUSERNAME}
@@ -331,7 +331,7 @@ JD-TC-Reimburse payment-UH1
 JD-TC-Reimburse payment-3
     Comment  SA do reimuburse payment of 2 jaldeee coupon and same provider
     change_system_time  0  1  
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME1}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
@@ -498,7 +498,7 @@ JD-TC-Reimburse payment-3
 
 JD-TC-Reimburse payment-UH3
     Comment  SA reimburse payment     
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME3}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
@@ -594,7 +594,7 @@ JD-TC-Reimburse payment-UH3
 
 JD-TC-Reimburse payment-4
     Comment  Check an alert is gone after payment of reimburse done    
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME7}
     ${cid}=  get_id  ${CUSERNAME4}
@@ -699,7 +699,7 @@ JD-TC-Reimburse payment-4
     Should Be Equal As Strings  ${resp.json()['balanceDue']}  0.0
 
     sleep  05s
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -721,7 +721,7 @@ JD-TC-Reimburse payment -UH5
 
 JD-TC-Reimburse payment -UH6
     Comment   Provider do Reimburse payment
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Reimburse Payment  ${invoices}
     Should Be Equal As Strings    ${resp.status_code}   419
@@ -730,7 +730,7 @@ JD-TC-Reimburse payment -UH6
 *** Comment ***
 JD-TC-Reimburse payment-UH2
     Comment  SA do invalid amount reimburse payment     
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME2}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}

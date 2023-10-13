@@ -43,7 +43,7 @@ JD-TC-GetWaitlistEncryptedIDHistory-1
     Set Suite Variable  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  subtract_timezone_time  ${tz}  1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  0  50  
     Set Suite Variable   ${eTime1}

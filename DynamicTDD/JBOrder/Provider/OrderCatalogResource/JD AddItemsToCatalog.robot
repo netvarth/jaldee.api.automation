@@ -309,7 +309,7 @@ JD-TC-Add_Items_To_Catalog-4
     clear_customer   ${PUSERNAME147}
     clear_Item   ${PUSERNAME147}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME147}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME147}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -434,16 +434,16 @@ JD-TC-Add_Items_To_Catalog-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10      
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}   11
+    ${endDate1}=  db.add_timezone_date  ${tz}  15      
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime1}=  db.add_timezone_time  ${tz}   3  30   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -531,10 +531,10 @@ JD-TC-Add_Items_To_Catalog-4
     ${pc_amount}=  Convert To Number  ${pc_amount}  1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -561,7 +561,7 @@ JD-TC-Add_Items_To_Catalog-4
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}   12
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -603,7 +603,7 @@ JD-TC-Add_Items_To_Catalog-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME147}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME147}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 

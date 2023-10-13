@@ -45,10 +45,10 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  10
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -59,23 +59,23 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    #${sTime2}=  add_time  11  15
-    ${sTime2}=  add_time  0    11
+    #${sTime2}=  db.add_timezone_time  ${tz}  11  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  0    11
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime2}=  add_time  15  20
+    ${eTime2}=  db.add_timezone_time  ${tz}  15  20
     ${schedule_name2}=  FakerLibrary.bs
     ${list2}=  Create List  1  
-    ${DAY3}=  add_date  15 
+    ${DAY3}=  db.add_timezone_date  ${tz}  15 
 
     ${resp}=  Create Provider Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime2}  ${eTime1}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
     
-    ${DAY3}=  add_date  15 
-    ${sTime3}=  add_time  16  20
+    ${DAY3}=  db.add_timezone_date  ${tz}  15 
+    ${sTime3}=  db.add_timezone_time  ${tz}  16  20
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime3}=  add_time  20  25
+    ${eTime3}=  db.add_timezone_time  ${tz}  20  25
     ${schedule_name3}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name3}  ${recurringtype[2]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime3}  ${eTime3}  ${JCstatus[0]}  ${user_id}
@@ -113,9 +113,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY2}=  add_date  10
-    ${DAY3}=  add_date  15
-    ${sTime2}=  add_time  11  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
+    ${DAY3}=  db.add_timezone_date  ${tz}  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime2}  ${delta}
 
@@ -145,9 +145,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  "${resp.json()}"   "[]"
 
-    ${DAY2}=  add_date  10
-    ${DAY3}=  add_date  15
-    ${sTime2}=  add_time  11  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
+    ${DAY3}=  db.add_timezone_date  ${tz}  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime2}  ${delta}
 
@@ -164,9 +164,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH2
     [Documentation]  Get Avaliable Providers In A Time Range without login
 
 
-    ${DAY2}=  add_date  10
-    ${DAY3}=  add_date  15
-    ${sTime2}=  add_time  11  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
+    ${DAY3}=  db.add_timezone_date  ${tz}  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime2}  ${delta}
 
@@ -196,9 +196,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY2}=  add_date  10
-    ${DAY3}=  add_date  15
-    ${sTime2}=  add_time  11  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
+    ${DAY3}=  db.add_timezone_date  ${tz}  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime2}  ${delta}
 
@@ -227,9 +227,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY2}=  add_date  10
-    ${DAY3}=  add_date  15
-    ${sTime2}=  add_time  11  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
+    ${DAY3}=  db.add_timezone_date  ${tz}  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime2}  ${delta}
 
@@ -258,9 +258,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY2}=  add_date  10
-    ${DAY3}=  add_date  15
-    ${sTime2}=  add_time  11  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
+    ${DAY3}=  db.add_timezone_date  ${tz}  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime2}  ${delta}
 
@@ -289,9 +289,9 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY2}=  add_date  10
-    ${DAY3}=  add_date  15
-    ${sTime2}=  add_time  11  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
+    ${DAY3}=  db.add_timezone_date  ${tz}  15
+    ${sTime2}=  db.add_timezone_time  ${tz}  11  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime2}  ${delta}
 

@@ -130,7 +130,7 @@ JD-TC-GetQueueLength-1
       Set Suite Variable  ${DAY2}  ${DAY2}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}  ${list}
-      ${sTime1}=  subtract_timezone_time  ${tz}  1  15
+      ${sTime1}=  db.subtract_timezone_time  ${tz}  1  15
       Set Suite Variable   ${sTime1}
       ${eTime1}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime1}

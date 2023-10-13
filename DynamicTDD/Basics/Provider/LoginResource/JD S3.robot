@@ -56,7 +56,7 @@ JD-TC-JD S3-1
     Set Suite Variable   ${postcode}
     ${address}=  get_address
     Set Suite Variable   ${address}
-    ${sTime}=  subtract_timezone_time  ${tz}  1  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  0  25  
     Set Suite Variable   ${eTime}

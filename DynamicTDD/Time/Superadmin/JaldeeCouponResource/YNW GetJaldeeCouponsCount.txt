@@ -75,12 +75,12 @@ JD-TC-GetJaldeeCouponsCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Jaldee Coupon  Coupon001  CouponZZZ  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  1000  1000  5  2  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME1}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME}
     ${p2}=  Convert To String  ${p2}
@@ -244,7 +244,7 @@ JD-TC-GetJaldeeCouponsCount -UH2
 
 JD-TC-GetJaldeeCouponsCount -UH3
     Comment   Provider try to Get jaldee coupons count
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons Count  CreatedDate-eq=${c_date}
     Should Be Equal As Strings    ${resp.status_code}   419

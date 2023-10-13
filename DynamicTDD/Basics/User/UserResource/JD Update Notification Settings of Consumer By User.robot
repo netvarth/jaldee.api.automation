@@ -98,7 +98,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     
-    ${sTime}=  subtract_timezone_time  ${tz}  0  10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  10
     Set Suite Variable  ${BsTime30}  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable  ${BeTime30}  ${eTime}
@@ -578,7 +578,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  0  05
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  05
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
@@ -800,7 +800,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  3  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  3  30
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${eTime1}

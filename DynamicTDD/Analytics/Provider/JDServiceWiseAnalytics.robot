@@ -94,7 +94,7 @@ JD-TC-ServiceWiseAnalytics-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -328,7 +328,7 @@ JD-TC-ServiceWiseAnalytics-1
 JD-TC-ServiceWiseAnalytics-2
     [Documentation]   take walkin checkins for another service for a provider and check service wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -396,7 +396,7 @@ JD-TC-ServiceWiseAnalytics-2
 JD-TC-ServiceWiseAnalytics-3
     [Documentation]   take future walkin checkins for a provider and check service wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

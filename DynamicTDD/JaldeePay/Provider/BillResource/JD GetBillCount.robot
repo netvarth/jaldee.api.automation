@@ -76,7 +76,7 @@ JD-TC-GetBillCount-1
     Set Suite Variable   ${CUR_DAY}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_timezone_time  ${tz}  0  15
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  0  15
     ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20

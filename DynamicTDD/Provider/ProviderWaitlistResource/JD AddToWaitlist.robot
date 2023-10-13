@@ -64,7 +64,7 @@ JD-TC-AddToWaitlist-0
 
       ${q_name}=    FakerLibrary.name
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${strt_time}=   subtract_timezone_time  ${tz}  5  55
+      ${strt_time}=   db.subtract_timezone_time  ${tz}  5  55
       ${end_time}=    add_timezone_time  ${tz}  5  00   
       ${parallel}=   Random Int  min=1   max=1
       ${capacity}=  Random Int   min=130   max=200
@@ -484,7 +484,7 @@ JD-TC-AddToWaitlist-11
       ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
       Set Suite Variable  ${tz}
-      ${sTime}=  subtract_timezone_time  ${tz}  3  25
+      ${sTime}=  db.subtract_timezone_time  ${tz}  3  25
       ${eTime}=  add_timezone_time  ${tz}  0  30   
       ${desc}=   FakerLibrary.sentence
       ${url}=   FakerLibrary.url
@@ -985,7 +985,7 @@ JD-TC-AddToWaitlist-UH14
       Should Be Equal As Strings  ${resp.status_code}  200
       ${queue2}=    FakerLibrary.name
       Set Suite Variable    ${queue2} 
-      ${stime}=   subtract_timezone_time  ${tz}   2   00  
+      ${stime}=   db.subtract_timezone_time  ${tz}   2   00  
       ${etime}=   db.get_time_by_timezone  ${tz}
       ${resp}=  Create Queue   ${queue2}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}  ${parallel}  ${capacity}  ${loc_id1}  ${ser_id1}  ${ser_id2}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -1008,7 +1008,7 @@ JD-TC-AddToWaitlist-UH15
       ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${list}=  Create List  1  2  3  4  5  6
-      ${stime}=   subtract_timezone_time  ${tz}   2   00  
+      ${stime}=   db.subtract_timezone_time  ${tz}   2   00  
       Set Suite Variable   ${stime}
       ${etime}=   add_timezone_time  ${tz}  0  15  
       Set Suite Variable   ${etime}

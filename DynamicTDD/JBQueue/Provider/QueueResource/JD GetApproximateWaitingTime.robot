@@ -70,7 +70,7 @@ JD-TC-Approximate Waiting Time-1
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_timezone_date  ${tz}  7      
+    ${DAY2}=  db.add_timezone_date  ${tz}  7      
     Set Suite Variable  ${DAY2}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
@@ -170,7 +170,7 @@ JD-TC-Approximate Waiting Time-2
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_timezone_date  ${tz}  7      
+    ${DAY2}=  db.add_timezone_date  ${tz}  7      
     Set Suite Variable  ${DAY2}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  

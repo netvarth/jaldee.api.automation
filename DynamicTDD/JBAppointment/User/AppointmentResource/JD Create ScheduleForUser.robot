@@ -451,11 +451,11 @@ JD-TC-CreateScheduleForUser-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY1}=  db.get_date
-    ${DAY2}=  db.add_date  10        
+    ${DAY1}=  db.db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   0  15  
-    ${eTime1}=  add_time   2  30  
+    ${sTime1}=  db.add_timezone_time  ${tz}   0  15  
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30  
     ${queue_name}=  FakerLibrary.bs
 
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id}  ${s_id} 
@@ -499,10 +499,10 @@ JD-TC-CreateScheduleForUser-5
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  db.get_date
-    ${DAY2}=  db.add_date    10        
-    ${sTime1}=  add_time    0  15  
-    ${eTime1}=  add_time   0  40  
+    ${DAY1}=  db.db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.db.add_timezone_date  ${tz}    10        
+    ${sTime1}=  db.add_timezone_time  ${tz}    0  15  
+    ${eTime1}=  db.add_timezone_time  ${tz}   0  40  
 
     ${resp}=  Create Appointment Schedule For User   ${u_id1}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}    ${lid}  ${duration}  ${bool[1]}  ${s_id}
     Log  ${resp.json()}

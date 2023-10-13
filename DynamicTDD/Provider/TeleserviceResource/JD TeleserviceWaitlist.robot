@@ -150,7 +150,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${sTime}=  subtract_timezone_time  ${tz}  1  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  1  15
     Set Suite Variable   ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  5  45  
     Set Suite Variable   ${eTime}
@@ -349,7 +349,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
     ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${sTime1}=  subtract_timezone_time  ${tz}  1  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  30
     ${eTime1}=  add_timezone_time  ${tz}  3  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
@@ -1740,7 +1740,7 @@ JD-TC-TeleserviceWaitlist-15
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${sTime}=  subtract_timezone_time  ${tz}  1  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  1  15
     Set Suite Variable   ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  5  45  
     Set Suite Variable   ${eTime}
@@ -1831,7 +1831,7 @@ JD-TC-TeleserviceWaitlist-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
     ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${sTime1}=  subtract_timezone_time  ${tz}  1  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  30
     ${eTime1}=  add_timezone_time  ${tz}  3  45  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%

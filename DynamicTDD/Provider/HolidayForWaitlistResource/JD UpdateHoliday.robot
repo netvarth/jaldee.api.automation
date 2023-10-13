@@ -646,7 +646,7 @@ JD-TC-UpdateHoliday-UH5
     Set Test Variable  ${id1}  ${resp.json()['holidayId']}
     # ${c_time}=  db.get_time_by_timezone  ${tz}  
     ${c_time}=  db.get_time_by_timezone  ${tz}  
-    ${ptime}=  subtract_timezone_time  ${tz}  0  1
+    ${ptime}=  db.subtract_timezone_time  ${tz}  0  1
     ${resp}=  Update Holiday   ${id1}  ${desc}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY1}  ${EMPTY}  ${ptime}  ${end_time}  
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${HOLIDAY_START_TIME_INCORRECT}"

@@ -951,7 +951,7 @@ JD-TC-ApplyLabelToService-13
          
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
     ${end_time}=    add_timezone_time  ${tz}  2  30   
     Set Suite Variable    ${end_time}   

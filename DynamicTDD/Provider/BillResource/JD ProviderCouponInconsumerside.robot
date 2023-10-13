@@ -136,7 +136,7 @@ JD-TC-ProviderCouponBill-1
     ${pc_amount}=  Convert To Number  ${pc_amount}  1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -283,7 +283,7 @@ JD-TC-ProviderCouponBill-2
     ${pc_amount}=  Convert To Number  ${pc_amount}  1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -386,7 +386,7 @@ JD-TC-ProviderCouponBill-UH1
     Set Suite Variable  ${pc_amount} 
     ${cupn_code3}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -493,7 +493,7 @@ JD-TC-ProviderCouponBill-UH2
     ${pc_amount}=   Random Int   min=10  max=50
     ${cupn_code4}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -542,7 +542,7 @@ JD-TC-ProviderCouponBill-UH3
     ${pc_amount}=   Random Int   min=10  max=50
     ${cupn_code5}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.add_timezone_date  ${tz}  1
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -823,7 +823,7 @@ JD-TC-ProviderCouponBill-3
     Set Suite Variable    ${s_id3}  ${resp.json()}
 
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
@@ -841,7 +841,7 @@ JD-TC-ProviderCouponBill-3
     ${cupn_code02}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code02}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1030,7 +1030,7 @@ JD-TC-ProviderCouponBill-5
     ${pc_amount1}=  Convert To Number  ${pc_amount1}  1
     ${cupn_code3}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1054,7 +1054,7 @@ JD-TC-ProviderCouponBill-5
     ${cupn_code4}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code4}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1165,7 +1165,7 @@ JD-TC-ProviderCouponBill-6
     ${pc_amount1}=  Convert To Number  ${pc_amount1}  1
     ${cupn_code5}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1193,7 +1193,7 @@ JD-TC-ProviderCouponBill-6
     ${cupn_code6}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code6}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1328,7 +1328,7 @@ JD-TC-ProviderCouponBill-UH4
     ${pc_amount}=  Convert To Number  ${pc_amount}  1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1412,7 +1412,7 @@ JD-TC-ProviderCouponBill-UH5
     ${pc_amount}=  Convert To Number  ${pc_amount}  1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10

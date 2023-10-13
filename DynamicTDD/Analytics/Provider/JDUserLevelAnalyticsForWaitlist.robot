@@ -192,7 +192,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -327,7 +327,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  02s
@@ -387,7 +387,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
 JD-TC-UserLevelAnalyticsForWaitlist-2
     [Documentation]   take checkins for teleservice for a provider and check user level analytics
 
-    ${resp}=   ProviderLogin  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -529,7 +529,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-2
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics   metricId=${tokenAnalyticsMetrics['WALK_IN_TOKEN']}    userId=${u_id}      dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -706,7 +706,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['ONLINE_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -890,7 +890,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
     ${online_token_len4}=  Evaluate  ${len}+${online_token_len3}
     Set Suite Variable  ${online_token_len4}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['CHECKED_IN_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -949,7 +949,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['STARTED_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -1093,7 +1093,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['STARTED_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -1239,7 +1239,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['RESCHEDULED_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -1396,7 +1396,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -1495,7 +1495,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     comment  take check-ins
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${PUSERNAME_N}
@@ -1527,7 +1527,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['BRAND_NEW_TOKENS']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -1606,7 +1606,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
         # Should Be Equal As Strings  ${resp.status_code}  200
         # Set Test Variable  ${cid${a}}  ${resp.json()}
 
-        ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         
@@ -1712,7 +1712,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${billed_wl_len}=  Get Length  ${waitlist_id}
@@ -1819,7 +1819,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
     ${consumer_count}=  Get length   ${online_checkins}
     Set Suite Variable  ${consumer_count}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  01s

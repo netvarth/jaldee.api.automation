@@ -77,7 +77,7 @@ JD-TC-IVRChangeReleaseStatusOfQuestionnaire-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -95,9 +95,9 @@ JD-TC-IVRChangeReleaseStatusOfQuestionnaire-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -284,8 +284,8 @@ JD-TC-IVRChangeReleaseStatusOfQuestionnaire-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -361,7 +361,7 @@ JD-TC-IVRChangeReleaseStatusOfQuestionnaire-1
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s

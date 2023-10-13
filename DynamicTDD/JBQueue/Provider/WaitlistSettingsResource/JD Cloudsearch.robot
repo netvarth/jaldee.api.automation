@@ -325,7 +325,7 @@ JD-TC-CloudSearch-8
     
 JD-TC-CloudSearch-9
     [Documentation]   search data after rating waitlist
-    ${resp}=  ProviderLogin   ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME1}
     Log   ${resp.json()}
@@ -367,7 +367,7 @@ JD-TC-CloudSearch-9
 
 JD-TC-CloudSearch-10
     [Documentation]   search data after rating updation
-    ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=   Update Rating  ${wid[0]}   2  bad
@@ -534,7 +534,7 @@ JD-TC-CloudSearch-15
 
 JD-TC-CloudSearch-16
     [Documentation]   search data after updating domain virtual fields 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Domain Level Field For healthCare   Clinic1  fever  headache  Surgery  Angiography  8years  Albany Medical Center Prize  2012  March  Dr.Ravi  www.anjalihealthcare.com
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -555,7 +555,7 @@ JD-TC-CloudSearch-16
 
 JD-TC-CloudSearch-17
     [Documentation]   search data after updating subdomain virtual fields 
-    ${resp}=  ProviderLogin   ${PUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME18}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Subdomain Field For healthCare  physiciansSurgeons  2017  January  MBBS  JUBILEE    
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -65,7 +65,7 @@ JD-TC-FixedWaitingTime-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_timezone_time  ${tz}  3  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable    ${strt_time}
     ${end_time}=    add_timezone_time  ${tz}  0  10   
     Set Suite Variable    ${end_time}  
@@ -273,9 +273,9 @@ JD-TC-FixedWaitingTime-6
     Set Suite Variable  ${longi}
     Set Suite Variable  ${postcode}
     Set Suite Variable  ${address}
-      ${sTime}=  subtract_timezone_time  ${tz}  4  15
+      ${sTime}=  db.subtract_timezone_time  ${tz}  4  15
       Set Suite Variable   ${sTime}
-      ${eTime}=  subtract_timezone_time  ${tz}  2  50
+      ${eTime}=  db.subtract_timezone_time  ${tz}  2  50
       Set Suite Variable   ${eTime}
       ${resp}=  Update Business Profile with Schedule   ${bs_name}  ${bs_desc} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  free  ${bool[0]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
       Log  ${resp.json()}
@@ -336,7 +336,7 @@ JD-TC-FixedWaitingTime-6
       Set Suite Variable    ${ser_id5}    ${resp}  
       ${q_name2}=    FakerLibrary.name
       Set Suite Variable    ${q_name2}
-      ${strt_time2}=   subtract_timezone_time  ${tz}  2  40
+      ${strt_time2}=   db.subtract_timezone_time  ${tz}  2  40
       Set Suite Variable    ${strt_time2}
       ${end_time2}=    add_timezone_time  ${tz}  0  10   
       Set Suite Variable    ${end_time2}   

@@ -49,7 +49,7 @@ JD-TC-GetWaitingTimeOfProviders-1
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
@@ -103,7 +103,7 @@ JD-TC-GetWaitingTimeOfProviders-1
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz2}  1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz2}  1  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz2}  0  30  
     Set Suite Variable   ${eTime1}
@@ -154,7 +154,7 @@ JD-TC-GetWaitingTimeOfProviders-1
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz3}  1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz3}  1  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz3}  0  30  
     Set Suite Variable   ${eTime1}
@@ -426,7 +426,7 @@ JD-TC-GetWaitingTimeOfProviders-5
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  subtract_timezone_time  ${tz}  1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}   1  58
     Set Suite Variable   ${eTime1}
@@ -503,9 +503,9 @@ JD-TC-GetWaitingTimeOfProviders-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${queue_id}  ${resp.json()[0]['id']}
-    ${sTime1}=  subtract_timezone_time  ${tz}  1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  subtract_timezone_time  ${tz}   0  58
+    ${eTime1}=  db.subtract_timezone_time  ${tz}   0  58
     Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  10  ${lid1}  ${s_id}  ${s_id1}

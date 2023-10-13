@@ -285,7 +285,7 @@ JD-TC-AdvancePaymentcalculation-7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
@@ -352,7 +352,7 @@ JD-TC-AdvancePaymentcalculation-8
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
@@ -748,7 +748,7 @@ JD-TC-AdvancePaymentcalculation-14
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
@@ -879,7 +879,7 @@ JD-TC-AdvancePaymentcalculation-15
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
@@ -1515,7 +1515,7 @@ JD-TC-AdvancePaymentcalculation-19
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100

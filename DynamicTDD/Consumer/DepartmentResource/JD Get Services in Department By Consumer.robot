@@ -79,7 +79,7 @@ JD-TC-Create Services and Enable Department
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${sTime}=  subtract_timezone_time  ${tz}  3  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable  ${BsTime30}  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable  ${BeTime30}  ${eTime}

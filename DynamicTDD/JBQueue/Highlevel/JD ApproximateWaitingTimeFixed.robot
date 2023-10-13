@@ -76,15 +76,15 @@ JD-TC-High Level Test Case-1
     Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime}=  subtract_timezone_time  ${tz}  3  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable   ${sTime}
-    ${eTime}=  subtract_timezone_time  ${tz}   2  00  
+    ${eTime}=  db.subtract_timezone_time  ${tz}   2  00  
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
-    ${sTime}=  subtract_timezone_time  ${tz}  1  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  1  00
     ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${q_name}=   FakerLibrary.word
     ${parallel}=   Random Int   min=1    max=1
@@ -394,14 +394,14 @@ JD-TC-High Level Test Case-2
     Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime}=  subtract_timezone_time  ${tz}  4  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  4  00
     Set Suite Variable   ${sTime}
-    ${eTime}=  subtract_timezone_time  ${tz}   3  00
+    ${eTime}=  db.subtract_timezone_time  ${tz}   3  00
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
-    ${sTime}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime}=  add_timezone_time  ${tz}  5  00  
     ${q_name}=   FakerLibrary.word
     ${parallel}=   Random Int   min=1    max=1

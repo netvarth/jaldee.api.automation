@@ -414,7 +414,7 @@ JD-TC-Get Customers-7
 
 JD-TC-Get Customers-8
     [Documentation]  Add a new valid customer ang get that customer using secondary phone number filter
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${firstname}=  FakerLibrary.first_name

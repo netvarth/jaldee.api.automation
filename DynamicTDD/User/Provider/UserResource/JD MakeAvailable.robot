@@ -422,7 +422,7 @@ JD-TC-MakeAvailable-5
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
-    ${sTime}=  subtract_timezone_time  ${tz}  1  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  1  15
     ${eTime}=  add_timezone_time  ${tz}  0  30  
     
     ${resp}=    Get Locations

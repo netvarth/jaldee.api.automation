@@ -65,7 +65,7 @@ JD-TC-AddDelay-1
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid}  ${resp.json()}
-      ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+      ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
       Set Suite Variable   ${sTime1}
       ${eTime1}=  add_timezone_time  ${tz}  3  30  
       Set Suite Variable   ${eTime1}

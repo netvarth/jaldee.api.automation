@@ -2241,10 +2241,10 @@ JD-TC-Add To WaitlistByConsumer-UH14
     ${p1queue1}=    FakerLibrary.word
     # ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  get_date_by_timezone  ${tz}
-    # ${psTime}=  subtract_timezone_time  ${tz}  0  30
-    # ${peTime}=  subtract_timezone_time  ${tz}   0  15
-    ${psTime}=  subtract_timezone_time  ${tz}  0  30  
-    ${peTime}=  subtract_timezone_time  ${tz}  0  15  
+    # ${psTime}=  db.subtract_timezone_time  ${tz}  0  30
+    # ${peTime}=  db.subtract_timezone_time  ${tz}   0  15
+    ${psTime}=  db.subtract_timezone_time  ${tz}  0  30  
+    ${peTime}=  db.subtract_timezone_time  ${tz}  0  15  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${psTime}  ${peTime}  ${parallel[0]}  ${capacity}  ${p1_l1}  ${p1_s1}  ${p1_s2} 
@@ -2650,9 +2650,9 @@ JD-TC-Add To WaitlistByConsumer-UH17
     Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     Set Test Variable   ${p2_l2}   ${resp.json()[1]['id']}
 
-    # ${sTime1}=  subtract_timezone_time  ${tz}  0  30
+    # ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30
     # ${eTime1}=  add_timezone_time  ${tz}  1  00  
-    ${sTime1}=  subtract_timezone_time  ${tz}  0  30  
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30  
     ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${p2queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%

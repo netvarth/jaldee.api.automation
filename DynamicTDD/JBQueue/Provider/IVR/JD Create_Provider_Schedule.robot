@@ -49,10 +49,10 @@ JD-TC-Create_Provider_Schedule-1
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -101,13 +101,13 @@ JD-TC-Create_Provider_Schedule-2
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  11     
-    ${DAY3}=  add_date  13 
-    ${DAY4}=  add_date  14     
-    ${DAY5}=  add_date  16 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  11     
+    ${DAY3}=  db.add_timezone_date  ${tz}  13 
+    ${DAY4}=  db.add_timezone_date  ${tz}  14     
+    ${DAY5}=  db.add_timezone_date  ${tz}  16 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -168,14 +168,14 @@ JD-TC-Create_Provider_Schedule-3
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  23     
-    ${DAY3}=  add_date  24 
-    ${DAY4}=  add_date  25     
-    ${DAY5}=  add_date  26 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  23     
+    ${DAY3}=  db.add_timezone_date  ${tz}  24 
+    ${DAY4}=  db.add_timezone_date  ${tz}  25     
+    ${DAY5}=  db.add_timezone_date  ${tz}  26 
     ${list}=  Create List  1  2  
     ${list1}=  Create List  3  4 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -238,10 +238,10 @@ JD-TC-Create_Provider_Schedule-4
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  add_date  27     
-    ${DAY2}=  add_date  29      
+    ${DAY1}=  db.add_timezone_date  ${tz}  27     
+    ${DAY2}=  db.add_timezone_date  ${tz}  29      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -303,10 +303,10 @@ JD-TC-Create_Provider_Schedule-UH1
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -331,13 +331,13 @@ JD-TC-Create_Provider_Schedule-UH2
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  17    
-    ${DAY3}=  add_date  19
-    ${DAY4}=  add_date  20    
-    ${DAY5}=  add_date  22 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  17    
+    ${DAY3}=  db.add_timezone_date  ${tz}  19
+    ${DAY4}=  db.add_timezone_date  ${tz}  20    
+    ${DAY5}=  db.add_timezone_date  ${tz}  22 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -369,14 +369,14 @@ JD-TC-Create_Provider_Schedule-UH3
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  17    
-    ${DAY3}=  add_date  19
-    ${DAY4}=  add_date  20    
-    ${DAY5}=  add_date  22 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  17    
+    ${DAY3}=  db.add_timezone_date  ${tz}  19
+    ${DAY4}=  db.add_timezone_date  ${tz}  20    
+    ${DAY5}=  db.add_timezone_date  ${tz}  22 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime9}=  add_time  5  15
-    ${eTime9}=  add_time   4  30
+    ${sTime9}=  db.add_timezone_time  ${tz}  5  15
+    ${eTime9}=  db.add_timezone_time  ${tz}   4  30
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime9}  ${eTime9}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
@@ -403,9 +403,9 @@ JD-TC-Create_Provider_Schedule-UH4
     Set Suite Variable    ${s_id}    ${resp} 
 
     ${DAY1}=  subtract_date  5
-    ${DAY2}=  add_date  10   
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -435,7 +435,7 @@ JD-TC-Create_Provider_Schedule-UH5
     ${DAY1}=  subtract_date  10
     ${DAY2}=  subtract_date  1   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -466,10 +466,10 @@ JD-TC-Create_Provider_Schedule-UH6
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -502,10 +502,10 @@ JD-TC-Create_Provider_Schedule-UH7
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  add_date  40
-    ${DAY2}=  add_date  42    
+    ${DAY1}=  db.add_timezone_date  ${tz}  40
+    ${DAY2}=  db.add_timezone_date  ${tz}  42    
     ${list}=  Create List  1  
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -536,10 +536,10 @@ JD-TC-Create_Provider_Schedule-UH8
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  add_date  31
-    ${DAY2}=  add_date  33      
+    ${DAY1}=  db.add_timezone_date  ${tz}  31
+    ${DAY2}=  db.add_timezone_date  ${tz}  33      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -564,10 +564,10 @@ JD-TC-Create_Provider_Schedule-UH9
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -591,10 +591,10 @@ JD-TC-Create_Provider_Schedule-UH10
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -619,10 +619,10 @@ JD-TC-Create_Provider_Schedule-UH11
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -648,11 +648,11 @@ JD-TC-Create_Provider_Schedule-UH12
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY7}=  add_date  20
-    ${DAY8}=  add_date  30      
+    ${DAY7}=  db.add_timezone_date  ${tz}  20
+    ${DAY8}=  db.add_timezone_date  ${tz}  30      
     ${list}=  Create List  1  2  3  4  5  6  7 
     ${date}=    Convert Date   ${DAY7}    result_format=%d %b %Y 
-    ${sTime1}=  add_time  0  5
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  5
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -683,10 +683,10 @@ JD-TC-Create_Provider_Schedule-UH13
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  add_date  45
-    ${DAY2}=  add_date  46    
+    ${DAY1}=  db.add_timezone_date  ${tz}  45
+    ${DAY2}=  db.add_timezone_date  ${tz}  46    
     ${list}=  Create List  1  
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -713,10 +713,10 @@ JD-TC-Create_Provider_Schedule-UH13
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -740,11 +740,11 @@ JD-TC-Create_Provider_Schedule-UH14
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${date}=    Convert Date   ${DAY1}    result_format=%d %b %Y 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -775,10 +775,10 @@ JD-TC-Create_Provider_Schedule-UH15
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs

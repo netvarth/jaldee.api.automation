@@ -91,7 +91,7 @@ JD-TC-AddDelay-1
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid}  ${resp.json()}
-      ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+      ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
       Set Suite Variable   ${sTime1}
       ${eTime1}=  add_timezone_time  ${tz}  3  30  
       Set Suite Variable   ${eTime1}
@@ -493,9 +493,9 @@ JD-TC-AddDelay-UH3
       ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${sTime2}=  subtract_timezone_time  ${tz}  5  00
+      ${sTime2}=  db.subtract_timezone_time  ${tz}  5  00
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  subtract_timezone_time  ${tz}   4  30
+      ${eTime2}=  db.subtract_timezone_time  ${tz}   4  30
       Set Suite Variable   ${eTime2}
       ${queue2}=  FakerLibrary.bs
       ${resp}=  Create Queue  ${queue2}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  15  ${lid}  ${s_id1}
@@ -643,9 +643,9 @@ JD-TC-AddDelay-UH8
       ${list}=  Create List  1  2  3  4  5  6  7
       ${date}=  db.get_date_by_timezone  ${tz}
       ${queue2}=  FakerLibrary.bs
-      ${sTime2}=  subtract_timezone_time  ${tz}  4   00
+      ${sTime2}=  db.subtract_timezone_time  ${tz}  4   00
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  subtract_timezone_time  ${tz}   3  05
+      ${eTime2}=  db.subtract_timezone_time  ${tz}   3  05
       Set Suite Variable   ${eTime2}
       ${resp}=  Create Queue  ${queue2}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  15  ${lid}  ${s_id1}
       Log  ${resp.json()}

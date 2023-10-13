@@ -820,7 +820,7 @@ JD-TC-GetAppmtServicesByLocation-10
     Set Test Variable  ${p1_s1}  ${resp.json()}    
  
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  15  
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  15  
     ${eTime1}=  add_timezone_time  ${tz}  2  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

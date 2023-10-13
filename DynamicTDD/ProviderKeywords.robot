@@ -7134,7 +7134,7 @@ Create Sample Catalog
     # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     # ${eTime1}=  add_timezone_time  ${tz}  2  30  
     ${startDate}=  get_date_by_timezone  ${timezone}
-    ${endDate}=  add_timezone_date  ${timezone}  12  
+    ${endDate}=  db.add_timezone_date  ${timezone}  12  
     ${sTime1}=  add_timezone_time  ${timezone}  0  15  
     ${eTime1}=  add_timezone_time  ${timezone}  2  30  
     ${deliveryCharge}=   Evaluate    random.uniform(1.0,50)

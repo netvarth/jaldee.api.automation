@@ -716,7 +716,7 @@ JD-TC-CreateHoliday-UH10
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${q_id}   ${resp.json()}
 
-      ${ptime}=  subtract_timezone_time  ${tz}  0  1
+      ${ptime}=  db.subtract_timezone_time  ${tz}  0  1
       ${desc}=    FakerLibrary.name
       ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${ptime}  ${end_time}  ${desc}
       Log   ${resp.json()}

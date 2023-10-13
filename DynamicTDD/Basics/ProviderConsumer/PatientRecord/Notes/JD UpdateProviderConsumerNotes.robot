@@ -40,7 +40,7 @@ JD-TC-Update Provider Consumer Notes-1
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
     Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
 
-    # ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     # Log  ${resp.json()}
     # Should Be Equal As Strings          ${resp.status_code}   200
     # Set Suite Variable    ${pid}        ${resp.json()['id']}
@@ -394,7 +394,7 @@ JD-TC-Update Provider Consumer Notes-8
     Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
 
 
-    # ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 

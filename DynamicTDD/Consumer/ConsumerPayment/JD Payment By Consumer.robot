@@ -1984,7 +1984,7 @@ JD-TC-Payment By Consumer-UH12
     ${pc_amount}=   Random Int   min=10  max=50
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -2426,7 +2426,7 @@ JD-TC-Payment By Consumer-UH13
     # ${pc_amount}=   FakerLibrary.Pyfloat  positive=True  left_digits=2  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10

@@ -140,7 +140,7 @@ JD-TC-Approximate Waiting Time Conventional-1
     Set Suite Variable  ${tz}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
-    ${sTime1}=  subtract_timezone_time  ${tz}   1  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}   1  30
     ${eTime1}=  add_timezone_time  ${tz}   3   30
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
@@ -444,7 +444,7 @@ JD-TC-Approximate Waiting Time Conventional-2
     ${24hours}    Random Element    ['True','False']
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${sTime}=  add_timezone_time  ${tz}  5  15  
     ${eTime}=  add_timezone_time  ${tz}  6  30  
@@ -719,7 +719,7 @@ JD-TC-Approximate Waiting Time Conventional-3
     ${24hours}    Random Element    ['True','False']
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30 
     ${sTime}=  add_timezone_time  ${tz}  5  15  
     ${eTime}=  add_timezone_time  ${tz}  6  30  
@@ -928,7 +928,7 @@ JD-TC-Approximate Waiting Time Conventional-4
     Set Suite Variable  ${tz}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
@@ -1183,7 +1183,7 @@ JD-TC-Approximate Waiting Time Conventional-5
     Set Suite Variable  ${tz}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30 
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
@@ -1348,7 +1348,7 @@ JD-TC-Approximate Waiting Time Conventional-6
     Set Suite Variable  ${tz}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
@@ -1581,7 +1581,7 @@ JD-TC-Approximate Waiting Time Conventional-5
     Set Suite Variable  ${tz}
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']

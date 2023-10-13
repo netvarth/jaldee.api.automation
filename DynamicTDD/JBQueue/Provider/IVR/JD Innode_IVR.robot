@@ -51,10 +51,14 @@ JD-TC-Innode_IVR-1
     clear_service    ${PUSERNAME169}
     clear_customer   ${PUSERNAME169}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME169}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME169}
     Set Suite Variable   ${acc_id} 
@@ -64,7 +68,7 @@ JD-TC-Innode_IVR-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -82,9 +86,9 @@ JD-TC-Innode_IVR-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -197,8 +201,8 @@ JD-TC-Innode_IVR-1
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
 
 
     ${clid}    Random Number 	digits=5 
@@ -229,7 +233,7 @@ JD-TC-Innode_IVR-UH1
     clear_service    ${PUSERNAME15}
     clear_customer   ${PUSERNAME15}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${acc_id}=  get_acc_id  ${PUSERNAME15}
@@ -240,7 +244,7 @@ JD-TC-Innode_IVR-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -250,8 +254,8 @@ JD-TC-Innode_IVR-UH1
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     # #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
@@ -284,8 +288,8 @@ JD-TC-Innode_IVR-UH2
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     # #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
@@ -315,7 +319,7 @@ JD-TC-Innode_IVR-UH3
     clear_service    ${PUSERNAME15}
     clear_customer   ${PUSERNAME15}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${acc_id}=  get_acc_id  ${PUSERNAME15}
@@ -326,7 +330,7 @@ JD-TC-Innode_IVR-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -336,8 +340,8 @@ JD-TC-Innode_IVR-UH3
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     # #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
@@ -364,7 +368,7 @@ JD-TC-Innode_IVR-UH4
     
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME169}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${acc_id}=  get_acc_id  ${PUSERNAME169}
@@ -375,7 +379,7 @@ JD-TC-Innode_IVR-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -385,8 +389,8 @@ JD-TC-Innode_IVR-UH4
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
    # ${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
@@ -412,7 +416,7 @@ JD-TC-Innode_IVR-UH5
     
    
 
-    ${resp}=  ProviderLogin  ${PUSERNAME169}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${acc_id}=  get_acc_id  ${PUSERNAME169}
@@ -423,7 +427,7 @@ JD-TC-Innode_IVR-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -433,8 +437,8 @@ JD-TC-Innode_IVR-UH5
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
@@ -466,7 +470,7 @@ JD-TC-Innode_IVR-UH6
     clear_service    ${PUSERNAME169}
     clear_customer   ${PUSERNAME169}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fake_id}=    FakerLibrary.Random Number
@@ -477,8 +481,8 @@ JD-TC-Innode_IVR-UH6
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
@@ -510,7 +514,7 @@ JD-TC-Innode_IVR-UH7
     clear_service    ${PUSERNAME169}
     clear_customer   ${PUSERNAME169}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fake_id}=    FakerLibrary.Random Number
@@ -521,8 +525,8 @@ JD-TC-Innode_IVR-UH7
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
    # ${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
@@ -561,7 +565,7 @@ JD-TC-Innode_IVR-UH8
     clear_service    ${PUSERNAME169}
     clear_customer   ${PUSERNAME169}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${acc_id}=  get_acc_id  ${PUSERNAME15}
@@ -572,7 +576,7 @@ JD-TC-Innode_IVR-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -582,8 +586,8 @@ JD-TC-Innode_IVR-UH8
     ${incall_uid}=  Convert To String  ${incall_uid}
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     # ${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 
@@ -609,8 +613,8 @@ JD-TC-Innode_IVR-UH9
     [Documentation]   Innode IVR -Without incall
     
     ${incall_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     # #${cons_verfy_node_value}    FakerLibrary.Random Number
 
     ${clid}    Random Number 	digits=5 

@@ -51,17 +51,21 @@ JD-TC-Enable_Disable_IVR-1
     clear_service    ${PUSERNAME158}
     clear_customer   ${PUSERNAME158}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME158}
     Set Suite Variable   ${acc_id} 
 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -79,9 +83,9 @@ JD-TC-Enable_Disable_IVR-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -193,7 +197,7 @@ JD-TC-Enable_Disable_IVR-2
 
     [Documentation]   Disabling IVR which is Enabled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -205,7 +209,7 @@ JD-TC-Enable_Disable_IVR-UH1
 
     [Documentation]   Disabling IVR which is Disabled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -219,7 +223,7 @@ JD-TC-Enable_Disable_IVR-UH2
 
     [Documentation]   Enable IVR which is already enabled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME158}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME158}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

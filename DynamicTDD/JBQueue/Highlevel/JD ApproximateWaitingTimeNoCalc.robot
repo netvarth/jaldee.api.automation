@@ -232,7 +232,7 @@ JD-TC-High Level Test Case-2
     Set Suite Variable  ${DAY1} 
     ${DAY2}=  db.add_timezone_date  ${tz}  3  
     Set Suite Variable  ${DAY2} 
-    ${strt_time}=   subtract_timezone_time  ${tz}  2  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable    ${strt_time}
     ${end_time}=    add_timezone_time  ${tz}  0  20 
     Set Suite Variable    ${end_time}  

@@ -269,8 +269,8 @@ JD-TC-OrderReport-1
     ${startDate1}=  db.get_date_by_timezone  ${tz}
     ${endDate1}=  db.add_timezone_date  ${tz}  15        
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=   subtract_timezone_time  ${tz}  2  00
-    ${eTime1}=   subtract_timezone_time  ${tz}  0  10
+    ${sTime1}=   db.subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=   db.subtract_timezone_time  ${tz}  0  10
     # ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${eTime2}=  add_timezone_time  ${tz}  0  20   
@@ -1940,8 +1940,8 @@ JD-TC-OrderReport-4
     ${startDate1}=  db.get_date_by_timezone  ${tz}
     ${endDate1}=  db.add_timezone_date  ${tz}  15        
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=   subtract_timezone_time  ${tz}  2  00
-    ${eTime1}=   subtract_timezone_time  ${tz}  0  10
+    ${sTime1}=   db.subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=   db.subtract_timezone_time  ${tz}  0  10
     # ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${eTime2}=  add_timezone_time  ${tz}  0  20   
@@ -3468,8 +3468,8 @@ JD-TC-OrderReport-8
     ${startDate1}=  db.get_date_by_timezone  ${tz}
     ${endDate1}=  db.add_timezone_date  ${tz}  15        
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=   subtract_timezone_time  ${tz}  2  00
-    ${eTime1}=   subtract_timezone_time  ${tz}  0  10
+    ${sTime1}=   db.subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=   db.subtract_timezone_time  ${tz}  0  10
     # ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${eTime2}=  add_timezone_time  ${tz}  0  20   
@@ -7253,8 +7253,8 @@ JD-TC-OrderReport-22
     ${startDate1}=  db.get_date_by_timezone  ${tz}
     ${endDate1}=  db.add_timezone_date  ${tz}  35      
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=   subtract_timezone_time  ${tz}  2  00
-    ${eTime1}=   subtract_timezone_time  ${tz}  0  10
+    ${sTime1}=   db.subtract_timezone_time  ${tz}  2  00
+    ${eTime1}=   db.subtract_timezone_time  ${tz}  0  10
     # ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${eTime2}=  add_timezone_time  ${tz}  0  20   

@@ -60,7 +60,7 @@ JD-TC-Waitlist Rating By Consumer-1
     Set Suite Variable  ${sId_4}  ${resp.json()}
 
     ${qname}=   FakerLibrary.word
-    ${sTime1}=  subtract_timezone_time  ${tz}   1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}   1  00
     ${eTime1}=   add_timezone_time  ${tz}    5   00
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %

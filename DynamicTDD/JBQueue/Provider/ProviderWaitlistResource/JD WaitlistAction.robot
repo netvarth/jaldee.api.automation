@@ -66,7 +66,7 @@ JD-TC-WaitlistAction-1
       Set Suite Variable    ${list}
       ${DAY1}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY1}
-      ${strt_time}=   subtract_timezone_time   ${tz}  3  00
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  3  00
       Set Suite Variable    ${strt_time}
       ${end_time}=    db.add_timezone_time  ${tz}  0  30 
       Set Suite Variable    ${end_time}   

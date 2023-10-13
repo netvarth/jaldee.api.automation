@@ -94,7 +94,7 @@ JD-TC-General Communication with User-1
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${sTime}=  subtract_timezone_time  ${tz}  0  30
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  30
     ${eTime}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}

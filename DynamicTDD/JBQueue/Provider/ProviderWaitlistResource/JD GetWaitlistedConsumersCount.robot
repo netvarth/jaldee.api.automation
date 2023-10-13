@@ -23,7 +23,7 @@ JD-TC-Get Waitlist Consumer count-1
     clear_location   ${PUSERNAME5}
     clear_service    ${PUSERNAME5}
     # clear waitlist   ${PUSERNAME5}
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 ***comment***
     ${pid}=  get_acc_id  ${PUSERNAME5}
@@ -45,9 +45,9 @@ JD-TC-Get Waitlist Consumer count-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  5  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  5  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -142,7 +142,7 @@ JD-TC-Get Waitlist Consumer count-1
 JD-TC-Get Waitlist Consumer count-2
     [Documentation]  count waitlisted consumer by first name
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count  firstName-eq=${f_name1}
     Log   ${resp.json()}
@@ -152,7 +152,7 @@ JD-TC-Get Waitlist Consumer count-2
 JD-TC-Get Waitlist Consumer count-3
     [Documentation]  count waitlisted consumer by date
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count  date-eq=${DAY1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -162,7 +162,7 @@ JD-TC-Get Waitlist Consumer count-3
 JD-TC-Get Waitlist Consumer count-4
     [Documentation]  count waitlisted consumer consumre by Phone number
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count  primaryMobileNo-eq=${phone2}
     Log   ${resp.json()}
@@ -172,7 +172,7 @@ JD-TC-Get Waitlist Consumer count-4
 JD-TC-Get Waitlist Consumer count-5
     [Documentation]  count waitlisted consumer by email id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count  email-eq=${email}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -182,7 +182,7 @@ JD-TC-Get Waitlist Consumer count-5
 JD-TC-Get Waitlist Consumer count-6
     [Documentation]  count waitlisted consumer by  day and phone number 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count  date-eq=${DAY}   primaryMobileNo-eq=${phone3}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -191,7 +191,7 @@ JD-TC-Get Waitlist Consumer count-6
 JD-TC-Get Waitlist Consumer count-7
     [Documentation]  count waitlisted by day and email
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count  date-eq=${DAY}  email-eq=${email}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -200,7 +200,7 @@ JD-TC-Get Waitlist Consumer count-7
 JD-TC-Get Waitlist Consumer count-8
     [Documentation]  count waitlisted consumer  by name  and date
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count   date-eq=${DAY1}   firstName-eq=${f_name1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -209,7 +209,7 @@ JD-TC-Get Waitlist Consumer count-8
 JD-TC-Get Waitlist Consumer count-9
     [Documentation]  count waitlisted consumer  by name and phone number
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count   firstName-eq=${f_name1}  primaryMobileNo-eq=${phone2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -218,7 +218,7 @@ JD-TC-Get Waitlist Consumer count-9
 JD-TC-Get Waitlist Consumer count-10
     [Documentation]  count waitlisted consumer by name and email
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}    
     ${resp}=  Get Waitlisted Consumers Count   firstName-eq=${f_name1}  email-eq=${email}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
@@ -226,7 +226,7 @@ JD-TC-Get Waitlist Consumer count-10
 JD-TC-Get Waitlist Consumer count-11
     [Documentation]  count waitlisted customer by name, email,phone
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count   firstName-eq=${f_name1}  email-eq=${email}   primaryMobileNo-eq=${phoneno}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -235,7 +235,7 @@ JD-TC-Get Waitlist Consumer count-11
 JD-TC-Get Waitlist Consumer count-12
     [Documentation]  count waitlisted consumer by  name, email,phone, date
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count   firstName-eq=${f_name1}  email-eq=${email}   primaryMobileNo-eq=${phoneno}  date-eq=${DAY}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -244,7 +244,7 @@ JD-TC-Get Waitlist Consumer count-12
 JD-TC-Get Waitlist Consumer count-13
     [Documentation]  count waitlisted customer by without input 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlisted Consumers Count   
     Should Be Equal As Strings  ${resp.status_code}  200

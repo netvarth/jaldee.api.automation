@@ -61,7 +61,7 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}  ${DAY1}
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_timezone_time  ${tz}  1  0
+        ${sTime}=  db.subtract_timezone_time  ${tz}  1  0
         Set Suite Variable  ${BsTime30}  ${sTime}
         ${eTime}=  add_timezone_time  ${tz}  4  00  
         Set Suite Variable  ${BeTime30}  ${eTime}
@@ -1966,8 +1966,8 @@ JD-TC-Add To Waitlist of User ByConsumer-UH13
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${BRANCH_sid2}  ${resp.json()}
 
-        ${psTime}=  subtract_timezone_time  ${tz}  0  45
-        ${peTime}=  subtract_timezone_time  ${tz}   0  10
+        ${psTime}=  db.subtract_timezone_time  ${tz}  0  45
+        ${peTime}=  db.subtract_timezone_time  ${tz}   0  10
         ${list}=  Create List  1  2  3  4  5  6  7
         ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${BRANCH_QUEUE2}=  FakerLibrary.name

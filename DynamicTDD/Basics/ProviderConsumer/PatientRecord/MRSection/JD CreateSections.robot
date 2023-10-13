@@ -124,7 +124,7 @@ JD-TC-Create Sections-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}

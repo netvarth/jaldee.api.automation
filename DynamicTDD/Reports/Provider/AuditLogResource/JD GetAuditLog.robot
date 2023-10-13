@@ -760,7 +760,7 @@ JD-TC-GetAuditLog -26
     Set Suite Variable   ${cupn_code}
     ${calc_type}=  Random Element   ['Fixed', 'Percentage']
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1424,7 +1424,7 @@ JD-TC-GetAuditLog-41
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
     
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable   ${eTime1}

@@ -187,7 +187,7 @@ JD-TC-Take Appointment-1
     Set Suite Variable   ${pid}
     ${DAY1}=  get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  add_time  0  15  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -334,7 +334,7 @@ JD-TC-Take Appointment-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot3}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY3}=  add_timezone_date  3
+    ${DAY3}=  db.add_timezone_date  ${tz}  3
     ${cnote}=   FakerLibrary.name
     ${resp}=    Take Appointment with ApptMode For Provider    ${appointmentMode[2]}   ${pid}  ${s_id2}  ${sch_id2}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -685,7 +685,7 @@ JD-TC-Take Appointment-6
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY3}=   add_timezone_date   3
+    ${DAY3}=   db.add_timezone_date  ${tz}   3
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -748,7 +748,7 @@ JD-TC-Take Appointment-7
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot1}    firstName=${family_fname}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY5}=   add_timezone_date   5
+    ${DAY5}=   db.add_timezone_date  ${tz}   5
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY5}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -808,7 +808,7 @@ JD-TC-Take Appointment-8
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY4}=   add_timezone_date   4
+    ${DAY4}=   db.add_timezone_date  ${tz}   4
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY4}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -854,7 +854,7 @@ JD-TC-Take Appointment-8
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY3}=   add_timezone_date   3
+    ${DAY3}=   db.add_timezone_date  ${tz}   3
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id2}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -1026,7 +1026,7 @@ JD-TC-Take Appointment-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    ${DAY2}=  add_timezone_date  ${tz1}  10   
+    ${DAY2}=  db.add_timezone_date  ${tz1}  10   
     ${sTime1}=  add_timezone_time  ${tz1}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -1075,7 +1075,7 @@ JD-TC-Take Appointment-9
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY2}=  add_timezone_date  ${tz}  10         
+    ${DAY2}=  db.add_timezone_date  ${tz}  10         
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${p1_l2}  ${duration}  ${bool1}  ${p1_s2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1445,7 +1445,7 @@ JD-TC-Take Appointment-12
     ${apptfor1}=  Create Dictionary  id=${cidfor}   apptTime=${slot1}   firstName=${family_fname1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${FUT_DAY}=  add_timezone_date  4
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}  4
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid01}  ${p1_s2}  ${sch_id21}  ${FUT_DAY}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -1473,7 +1473,7 @@ JD-TC-Take Appointment-12
     ${apptfor2}=  Create Dictionary  id=${cidfor}   apptTime=${slot2}    firstName=${family_fname1}
     ${apptfor2}=   Create List  ${apptfor2}
     
-    ${FUT_DAY1}=  add_timezone_date  5  ${tz}
+    ${FUT_DAY1}=  db.add_timezone_date  ${tz}  5
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid01}  ${p1_s2}  ${sch_id21}  ${FUT_DAY1}  ${cnote}   ${apptfor2}
     Log  ${resp.content}
@@ -1548,7 +1548,7 @@ JD-TC-Take Appointment-13
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}   
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${FUT_DAY}=  add_timezone_date  5  ${tz}
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}  5
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid01}  ${p1_s2}  ${sch_id11}  ${FUT_DAY}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -1585,7 +1585,7 @@ JD-TC-Take Appointment-13
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}   
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${FUT_DAY}=  add_timezone_date  5  ${tz}
+    ${FUT_DAY}=  db.add_timezone_date  ${tz}  5
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid01}  ${p1_s2}  ${sch_id11}  ${FUT_DAY}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -1681,7 +1681,7 @@ JD-TC-Take Appointment-14
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10       
+    ${DAY2}=  db.add_timezone_date  ${tz}  10       
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -1834,7 +1834,7 @@ JD-TC-Take Appointment-15
     
     clear_appt_schedule   ${billable_providers[3]}
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10      ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=40  max=80
@@ -2079,7 +2079,7 @@ JD-TC-Take Appointment-16
     
     clear_appt_schedule   ${billable_providers[3]}
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10      ${tz}   
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=40  max=80
@@ -2319,7 +2319,7 @@ JD-TC-Take Appointment-17
     
     clear_appt_schedule   ${billable_providers[3]}
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10      ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=40  max=80
@@ -2501,7 +2501,7 @@ JD-TC-Take Appointment-UH1
     ${DAY}=  get_date_by_timezone  ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2609,7 +2609,7 @@ JD-TC-Take Appointment-UH2
     ${DAY}=  get_date_by_timezone  ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2684,7 +2684,7 @@ JD-TC-Take Appointment-UH3
     ${DAY}=  get_date_by_timezone  ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz}  10       
+    ${DAY2}=  db.add_timezone_date  ${tz}  10       
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2769,7 +2769,7 @@ JD-TC-Take Appointment-UH4
     ${DAY}=  get_date_by_timezone  ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2850,7 +2850,7 @@ JD-TC-Take Appointment-UH5
     ${DAY}=  get_date_by_timezone  ${tz}
     ${DAY1}=  get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2963,8 +2963,8 @@ JD-TC-Take Appointment-UH6
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10         
-    ${DAY3}=  add_timezone_date  5  ${tz} 
+    ${DAY2}=  db.add_timezone_date  ${tz}  10         
+    ${DAY3}=  db.add_timezone_date  ${tz}  5 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -3079,7 +3079,7 @@ JD-TC-Take Appointment-UH7
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[0]}  
     
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -3207,7 +3207,7 @@ JD-TC-Take Appointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -3311,7 +3311,7 @@ JD-TC-Take Appointment-UH9
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz}  10         
+    ${DAY2}=  db.add_timezone_date  ${tz}  10         
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${Empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}   ${p1_s1}
@@ -3410,7 +3410,7 @@ JD-TC-Take Appointment-UH11
     Set Suite Variable   ${parallel}
     ${DAY1}=  get_date_by_timezone  ${tz2}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  10   ${tz2}      
+    ${DAY2}=  db.add_timezone_date  ${tz2}  10      
     Set Suite Variable   ${DAY2}   
  
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${Empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l2}  ${duration}  ${bool1}   ${p1_s1}
@@ -3623,7 +3623,7 @@ JD-TC-Take Appointment-UH12
     Set Suite Variable   ${list}
     ${DAY1}=  get_date_by_timezone  ${tz1}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz1}  10         
+    ${DAY2}=  db.add_timezone_date  ${tz1}  10         
     Set Suite Variable   ${DAY2}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}   ${p1_s1}
     Log  ${resp.content}
@@ -3636,12 +3636,12 @@ JD-TC-Take Appointment-UH12
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
     
     FOR   ${i}  IN RANGE   1   3
-        ${DAYQ}=  add_timezone_date  ${i}
+        ${DAYQ}=  db.add_timezone_date  ${tz}  ${i}
         ${DAYQ_weekday}=  get_weekday_by_date  ${DAYQ}
         Continue For Loop If   '${DAYQ_weekday}' == '7'
         Exit For Loop If  '${DAYQ_weekday}' != '7'
     END
-    # ${DAYQ}=  add_timezone_date  2     
+    # ${DAYQ}=  db.add_timezone_date  ${tz}  2     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAYQ}  ${p1_s1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3677,7 +3677,7 @@ JD-TC-Take Appointment-UH12
 
     ${curr_weekday}=  get_timezone_weekday  ${tz}
     ${daygap}=  Evaluate  7-${curr_weekday}
-    ${DAYUH12}=  add_timezone_date  ${daygap}  ${tz1}
+    ${DAYUH12}=  db.add_timezone_date  ${tz1}  ${daygap}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid_12}  ${p1_s1}  ${sch_id1}  ${DAYUH12}  ${cnote}   ${apptfor}
@@ -3762,7 +3762,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
@@ -4026,8 +4026,8 @@ JD-TC-Take Appointment-19
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
-    ${DAY3}=  add_timezone_date  4  ${tz} 
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
+    ${DAY3}=  db.add_timezone_date  ${tz}  4 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -4169,8 +4169,8 @@ JD-TC-Take Appointment-20
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
-    ${DAY3}=  add_timezone_date  4  ${tz} 
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
+    ${DAY3}=  db.add_timezone_date  ${tz}  4 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -4371,7 +4371,7 @@ JD-TC-Take Appointment-21
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${DAY1}=  get_date_by_timezone  ${tz}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -4572,7 +4572,7 @@ JD-TC-Take Appointment-UH14
     Set Suite Variable   ${pid}
     ${DAY1}=  get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_timezone_date  ${tz}  10          
+    ${DAY2}=  db.add_timezone_date  ${tz}  10          
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  add_time  0  15  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60

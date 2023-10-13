@@ -38,8 +38,8 @@ JD-TC-WaitlistStateChange-1
 
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       ${list}=  Create List   1  2  3  4  5  6  7
-      ${sTime3}=  subtract_timezone_time  ${tz}  4  55
-      ${eTime3}=  subtract_timezone_time  ${tz}   3  60
+      ${sTime3}=  db.subtract_timezone_time  ${tz}  4  55
+      ${eTime3}=  db.subtract_timezone_time  ${tz}   3  60
       ${queue1}=    FakerLibrary.name
       ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  1  5  ${loc_id1}  ${ser_id1}
       Log  ${resp.json()}
@@ -47,7 +47,7 @@ JD-TC-WaitlistStateChange-1
       Set Suite Variable  ${que_id1}  ${resp.json()}
       ${queue1}=    FakerLibrary.name
       Set Suite Variable    ${queue1}    
-      ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+      ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
       Set Suite Variable    ${strt_time}
       ${end_time}=    add_timezone_time  ${tz}   5  25 
       Set Suite Variable    ${end_time}    

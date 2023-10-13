@@ -30,7 +30,7 @@ JD-TC-Get reimbursement byInvoiceId-1
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME7}
     Comment  Get reimbursement report    
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -64,7 +64,7 @@ JD-TC-Get reimbursement byInvoiceId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Update Tax Percentage  18  13DEFBV1100M2Z6  
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -205,7 +205,7 @@ JD-TC-Get reimbursement byInvoiceId-1
 JD-TC-Get reimbursement byInvoiceId-2
     change_system_time  0  5
     Comment     Reimburse payment of same jaldee coupon and same provider and Get reimbursement report 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME7}
     ${cid}=  get_id  ${CUSERNAME}
@@ -302,7 +302,7 @@ JD-TC-Get reimbursement byInvoiceId-2
 JD-TC-Get reimbursement byInvoiceId-3
     Comment  SA do reimuburse payment of 2 jaldeee coupon and same provider
     change_system_time  0  5  
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME1}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
@@ -468,7 +468,7 @@ JD-TC-Get reimbursement byInvoiceId -UH2
 
 JD-TC-Get reimbursement byInvoiceId -UH3
     Comment   Provider do Get reimbursement byInvoiceId
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimbursement By InvoiceId  ${invoice_id}
     Should Be Equal As Strings    ${resp.status_code}   419

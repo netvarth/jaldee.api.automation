@@ -51,7 +51,7 @@ JD-TC-Update Patient Medical History-1
 
     Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
-    # ${resp}=   ProviderLogin  ${PUSERNAME12}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD} 
     # Log  ${resp.json()}
     # Should Be Equal As Strings          ${resp.status_code}   200
     # Set Suite Variable    ${pid}        ${resp.json()['id']}

@@ -321,7 +321,7 @@ JD-TC-UserLevelAnalyticsForAppointment-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get User Level Analytics  metricId=${appointmentAnalyticsMetrics['WALK_IN_APPMT']}  userId=${u_id}   accId=${accid}  dateFrom=${DAY1}  dateTo=${DAY1}  frequency=DAILY
@@ -356,7 +356,7 @@ JD-TC-UserLevelAnalyticsForAppointment-1
 JD-TC-UserLevelAnalyticsForAppointment-2
     [Documentation]   take appointments for teleservice for a user and check user level analytics
 
-    ${resp}=   ProviderLogin  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -515,7 +515,7 @@ JD-TC-UserLevelAnalyticsForAppointment-2
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get User Level Analytics   metricId=${appointmentAnalyticsMetrics['WALK_IN_APPMT']}    userId=${u_id}   accId=${accid}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=DAILY
@@ -742,7 +742,7 @@ JD-TC-UserLevelAnalyticsForAppointment-3
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get User Level Analytics  metricId=${appointmentAnalyticsMetrics['TELE_SERVICE_APPMT']}  userId=${u_id}   accId=${accid}  dateFrom=${DAY1}  dateTo=${DAY1}  frequency=DAILY

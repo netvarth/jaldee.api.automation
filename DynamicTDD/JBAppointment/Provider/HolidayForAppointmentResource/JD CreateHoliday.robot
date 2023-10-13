@@ -730,7 +730,7 @@ JD-TC-CreateHoliday-UH3
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${ptime}=  subtract_timezone_time  ${tz}  0  1
+    ${ptime}=  db.subtract_timezone_time  ${tz}  0  1
     ${DAY}=  db.add_timezone_date  ${tz}  3  
     ${desc}=    FakerLibrary.name
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY}  ${EMPTY}  ${ptime}  ${eTime1}  ${desc}

@@ -158,7 +158,7 @@ JD-TC-MonthlySchedule-2
     ${list}=  Create List  1  2  3  4  5  6  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${sTime1}=  subtract_timezone_time  ${tz}  0  ${delta+15}
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  ${delta+15}
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${SERVICE1}=    FakerLibrary.Word

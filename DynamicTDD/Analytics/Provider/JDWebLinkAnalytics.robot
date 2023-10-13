@@ -88,11 +88,11 @@ JD-TC-weblinkLevelAnalytics-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  

@@ -104,7 +104,7 @@ JD-TC-EncryptedProviderLogin-1
 
 
 
-JD-TC-ProviderLogin-2
+JD-TC-EncryptedProviderLogin-2
     [Documentation]    Login valid provider and enable Multi Factor Authentication then again try to login.
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD} 
@@ -179,70 +179,70 @@ JD-TC-ProviderLogin-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${branchid1}  ${resp.json()['id']} 
     
-JD-TC-ProviderLogin-UH1
+JD-TC-EncryptedProviderLogin-UH1
     [Documentation]    Login using valid userid and invalid password
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  ${SPASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
-JD-TC-ProviderLogin-UH2
+JD-TC-EncryptedProviderLogin-UH2
     [Documentation]    Login using invalid  userid and invalid password
 
     ${resp}=   Encrypted Provider Login  ${invalid_provider}  ${SPASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
     
-JD-TC-ProviderLogin-UH3
+JD-TC-EncryptedProviderLogin-UH3
     [Documentation]    Login using empty userid and invalid password
 
     ${resp}=   Encrypted Provider Login  ${EMPTY}  ${SPASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}     ${ENTER_PHONE_EMAIL}
     
-JD-TC-ProviderLogin-UH4
+JD-TC-EncryptedProviderLogin-UH4
     [Documentation]    Login using empty userid and empty password
 
     ${resp}=   Encrypted Provider Login  ${EMPTY}  ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}    ${ENTER_PHONE_EMAIL}
 # *** comment ***
-JD-TC-ProviderLogin-UH5
+JD-TC-EncryptedProviderLogin-UH5
     [Documentation]    Login using valid userid and empty password
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}    ${PASSWORD_EMPTY}
 
-JD-TC-ProviderLogin-UH6
+JD-TC-EncryptedProviderLogin-UH6
     [Documentation]    Login using valid consumer userid and  password
 
     ${resp}=   Encrypted Provider Login  ${CUSERNAME8}   ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}      ${NOT_REGISTERED_PROVIDER}
     
-JD-TC-ProviderLogin-UH7
+JD-TC-EncryptedProviderLogin-UH7
     [Documentation]    Login using valid consumer userid and  invalid password
 
     ${resp}=   Encrypted Provider Login  ${CUSERNAME8}   ${SPASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}      ${NOT_REGISTERED_PROVIDER}
     
-JD-TC-ProviderLogin-UH8
+JD-TC-EncryptedProviderLogin-UH8
     [Documentation]    Login using valid consumer userid and  empty password
 
     ${resp}=   Encrypted Provider Login  ${CUSERNAME8}   ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${PASSWORD_EMPTY}
 
-JD-TC-ProviderLogin-UH9
+JD-TC-EncryptedProviderLogin-UH9
     [Documentation]    Login using valid  userid and  sql injection in password
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}   '' or '1'='1'
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
-JD-TC-ProviderLogin-UH10
+JD-TC-EncryptedProviderLogin-UH10
     [Documentation]    Login using valid userid and previous valid password
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
@@ -257,14 +257,14 @@ JD-TC-ProviderLogin-UH10
     ${resp}=  Provider Change Password  ${PASSWORD2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-ProviderLogin-UH11
+JD-TC-EncryptedProviderLogin-UH11
     [Documentation]    Login using valid consumer mob no and  password
 
     ${resp}=   Encrypted Provider Login  ${CUSERNAME9}   ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
     
-JD-TC-ProviderLogin-UH12
+JD-TC-EncryptedProviderLogin-UH12
     [Documentation]    Login using invalid provider id and password
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+85263
@@ -273,7 +273,7 @@ JD-TC-ProviderLogin-UH12
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}       ${NOT_REGISTERED_PROVIDER}
 
-JD-TC-ProviderLogin-UH13
+JD-TC-EncryptedProviderLogin-UH13
     [Documentation]    Login provider with different country code
     # ${country_code}    Generate random string    2    0123456789
     FOR  ${i}  IN RANGE   3
@@ -284,7 +284,7 @@ JD-TC-ProviderLogin-UH13
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
 
-JD-TC-ProviderLogin-UH14
+JD-TC-EncryptedProviderLogin-UH14
     [Documentation]    Login using valid userid and invalid password 2 times
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD} 
@@ -334,7 +334,7 @@ JD-TC-ProviderLogin-UH14
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
-JD-TC-ProviderLogin-UH15
+JD-TC-EncryptedProviderLogin-UH15
     [Documentation]    Login using valid userid and invalid password 2 times(multiFactorAuthenticationRequired is false)
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
@@ -377,7 +377,7 @@ JD-TC-ProviderLogin-UH15
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
-JD-TC-ProviderLogin-UH16
+JD-TC-EncryptedProviderLogin-UH16
     [Documentation]    Login using valid userid and invalid password 2 times(without login)
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  1245asuf
@@ -401,7 +401,7 @@ JD-TC-ProviderLogin-UH16
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
 
-JD-TC-ProviderLogin-UH17
+JD-TC-EncryptedProviderLogin-UH17
     [Documentation]    Login using valid userid and invalid password 2 times(Consumer)
 
     # ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD} 
@@ -428,7 +428,7 @@ JD-TC-ProviderLogin-UH17
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
-JD-TC-ProviderLogin-UH18
+JD-TC-EncryptedProviderLogin-UH18
     [Documentation]    Login valid provider and enable Multi Factor Authentication then again try to login with invalid otp(multiFactorAuthenticationLogin is false).
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD} 
@@ -463,7 +463,7 @@ JD-TC-ProviderLogin-UH18
     Should Be Equal As Strings    ${resp.json()}     ${ENTER_VALID_OTP}
 
 
-JD-TC-ProviderLogin-UH19
+JD-TC-EncryptedProviderLogin-UH19
     [Documentation]    Login valid provider and enable Multi Factor Authentication then again try to login with EMPTY otp (multiFactorAuthenticationLogin is false).
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
@@ -497,7 +497,7 @@ JD-TC-ProviderLogin-UH19
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}     ${OTP_REQUIRED}
 
-JD-TC-ProviderLogin-UH20
+JD-TC-EncryptedProviderLogin-UH20
     [Documentation]    Login valid provider and enable Multi Factor Authentication then again try to login with invalid otp(multiFactorAuthenticationLogin is true).
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD} 
@@ -532,7 +532,7 @@ JD-TC-ProviderLogin-UH20
     Should Be Equal As Strings    ${resp.json()}     ${ENTER_VALID_OTP}
 
 
-JD-TC-ProviderLogin-UH21
+JD-TC-EncryptedProviderLogin-UH21
     [Documentation]    Login valid provider and enable Multi Factor Authentication then again try to login with EMPTY otp (multiFactorAuthenticationLogin is true).
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 

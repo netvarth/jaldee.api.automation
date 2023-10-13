@@ -1810,7 +1810,7 @@ JD-TC-GetLabelPremissions-UH3
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz} 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_timezone_time  ${tz}     3   00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}     3   00
     ${end_time}=    add_timezone_time  ${tz}  0  30   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=20

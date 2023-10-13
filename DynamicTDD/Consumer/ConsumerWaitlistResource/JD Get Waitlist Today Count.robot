@@ -39,7 +39,7 @@ JD-TC-Get waitlist Today count-1
     Set Suite Variable    ${q_name1}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_timezone_time  ${tz}  3  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable    ${strt_time}
     ${end_time}=    add_timezone_time  ${tz}  0  10   
     Set Suite Variable    ${end_time}  

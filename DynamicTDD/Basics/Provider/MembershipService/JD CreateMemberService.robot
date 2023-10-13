@@ -190,7 +190,7 @@ JD-TC-Create_Member_Service-UH11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveFrompast}=    add_date  -10
+    ${effectiveFrompast}=    db.add_timezone_date  ${tz}  -10
 
     ${resp}=    Create Membership Service     ${description}    ${name}    ${displayname}    ${effectiveFrompast}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
     Log  ${resp.content}
@@ -205,7 +205,7 @@ JD-TC-Create_Member_Service-UH12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveTopast}=    add_date  -10
+    ${effectiveTopast}=    db.add_timezone_date  ${tz}  -10
 
     ${resp}=    Create Membership Service     ${description}    ${name}    ${displayname}    ${effectiveFrom}    ${effectiveTopast}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
     Log  ${resp.content}

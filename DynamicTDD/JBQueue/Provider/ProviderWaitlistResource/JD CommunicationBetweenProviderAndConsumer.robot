@@ -150,7 +150,7 @@ JD-TC-Communication Between Provider And Consumer-1
     Set Suite Variable    ${list}
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
-    ${strt_time}=   subtract_timezone_time   ${tz}     3   00
+    ${strt_time}=   db.subtract_timezone_time   ${tz}     3   00
     Set Suite Variable    ${strt_time}
     ${end_time}=    db.add_timezone_time  ${tz}  0  30 
     Set Suite Variable    ${end_time}   

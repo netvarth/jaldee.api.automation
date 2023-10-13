@@ -3594,7 +3594,7 @@ JD-TC-AddCustomer-UH8
 
 JD-TC-AddCustomer-UH9
      [Documentation]  Add a  customer with invalid secondary number
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${firstname}=  FakerLibrary.first_name
@@ -3609,7 +3609,7 @@ JD-TC-AddCustomer-UH9
     
 JD-TC-AddCustomer-24
      [Documentation]  Add a new valid customer without Secondary phone number
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${firstname}=  FakerLibrary.first_name

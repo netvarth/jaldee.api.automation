@@ -89,7 +89,7 @@ JD-TC-CreateVacation-1
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     
-    ${sTime}=  subtract_timezone_time  ${tz}  3  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable  ${BsTime30}  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${BeTime30}  ${eTime}
@@ -683,7 +683,7 @@ JD-TC-CreateVacation-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
 
-    ${start_time}=  subtract_timezone_time  ${tz}  0  30
+    ${start_time}=  db.subtract_timezone_time  ${tz}  0  30
     ${end_time}=    add_timezone_time  ${tz}  0  45   
     ${DAY6}=  db.add_timezone_date  ${tz}  6        
     ${desc}=    FakerLibrary.name
@@ -704,7 +704,7 @@ JD-TC-CreateVacation-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
 
-    ${start_time}=  subtract_timezone_time  ${tz}  0  30
+    ${start_time}=  db.subtract_timezone_time  ${tz}  0  30
     ${end_time}=    add_timezone_time  ${tz}  2  00  
     ${DAY6}=  db.add_timezone_date  ${tz}  6  
     ${desc}=    FakerLibrary.name
@@ -723,7 +723,7 @@ JD-TC-CreateVacation-UH8
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    ${start_time}=  subtract_timezone_time  ${tz}  0  05
+    ${start_time}=  db.subtract_timezone_time  ${tz}  0  05
     ${end_time}=    add_timezone_time  ${tz}  1  05  
     ${desc}=    FakerLibrary.name
     ${resp}=  Create Vacation  ${desc}  ${u_id3}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${CUR_DAY}  ${EMPTY}  ${start_time}  ${end_time}  
@@ -1316,7 +1316,7 @@ JD-TC-CreateVacation-UH16
  
     ${desc}=    FakerLibrary.name
     Set Test Variable      ${desc}
-    ${sTime1}=  subtract_timezone_time  ${tz}   0  15
+    ${sTime1}=  db.subtract_timezone_time  ${tz}   0  15
     ${eTime1}=  add_timezone_time  ${tz}  2  00  
     ${resp}=  Create Vacation  ${desc}  ${p1_id}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY}  ${EMPTY}  ${sTime1}  ${eTime1}   
     Log  ${resp.json()}

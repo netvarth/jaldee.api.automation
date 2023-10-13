@@ -87,7 +87,7 @@ JD-TC-AddDelay-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${lid}  ${resp.json()}
 
-      ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+      ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
       ${eTime1}=  add_timezone_time  ${tz}  3  30  
       Set Test Variable  ${qTime}   ${sTime1}-${eTime1}
 

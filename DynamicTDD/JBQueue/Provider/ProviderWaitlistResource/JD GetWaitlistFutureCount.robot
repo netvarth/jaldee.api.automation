@@ -52,7 +52,7 @@ JD-TC-GetWaitlistFutureCount-1
       Set Suite Variable  ${DAY1} 
       ${DAY2}=  db.add_timezone_date  ${tz}  3
       Set Suite Variable  ${DAY2}
-      ${strt_time}=   subtract_timezone_time   ${tz}  2  00
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  2  00
       Set Suite Variable    ${strt_time}
       ${end_time}=    db.add_timezone_time  ${tz}       0  20 
       Set Suite Variable    ${end_time}   
@@ -691,7 +691,7 @@ JD-TC-GetWaitlistFutureCount-56
       Set Suite Variable    ${ser_id11}    ${resp}  
       
       ${q_name1}=    FakerLibrary.name
-      ${strt_time}=   subtract_timezone_time   ${tz}  2  00
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  2  00
       ${end_time}=    db.add_timezone_time  ${tz}       0  20 
       ${parallel}=   Random Int  min=1   max=2
       ${capacity}=  Random Int   min=10   max=20

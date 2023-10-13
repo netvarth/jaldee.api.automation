@@ -721,9 +721,9 @@ Jaldee-TC-UpdateIQ-UH-1
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['queueState']}   ${Qstate[0]}
 
-    ${old_stime}=  subtract_timezone_time  ${tz}   0  30
+    ${old_stime}=  db.subtract_timezone_time  ${tz}   0  30
     Set Test Variable   ${old_stime}  
-    ${old_etime}=  subtract_timezone_time  ${tz}   0  15
+    ${old_etime}=  db.subtract_timezone_time  ${tz}   0  15
     Set Test Variable   ${old_etime}
 
     ${resp}=  Update Instant Queue  ${p1_q1}  ${p1queue1}  ${recurringtype[4]}  ${ri}  ${DAY1}  ${EMPTY}  ${old_stime}  ${old_etime}  ${parallel}  ${capacity}  ${lid1}  ${sid1} 

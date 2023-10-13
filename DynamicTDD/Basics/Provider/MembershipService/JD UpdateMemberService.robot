@@ -160,7 +160,7 @@ JD-TC-Update_Member_Service-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveFrom2}=    add_date  2
+    ${effectiveFrom2}=    db.add_timezone_date  ${tz}  2
     Set Suite Variable    ${effectiveFrom2}
 
     ${resp}=    Update Membership Service     ${memberid}    ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
@@ -189,7 +189,7 @@ JD-TC-Update_Member_Service-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveTo2}=    add_date  2
+    ${effectiveTo2}=    db.add_timezone_date  ${tz}  2
     Set Suite Variable    ${effectiveTo2}
 
     ${resp}=    Update Membership Service     ${memberid}    ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo2}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
@@ -447,7 +447,7 @@ JD-TC-Update_Member_Service-UH12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveFrom3}=    add_date  -5
+    ${effectiveFrom3}=    db.add_timezone_date  ${tz}  -5
     Set Suite Variable    ${effectiveFrom3}
 
     ${resp}=    Update Membership Service     ${memberid}    ${description2}    ${name2}    ${displayname2}    ${effectiveFrom3}    ${effectiveTo2}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
@@ -476,7 +476,7 @@ JD-TC-Update_Member_Service-UH13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveTo3}=    add_date  -5
+    ${effectiveTo3}=    db.add_timezone_date  ${tz}  -5
     Set Suite Variable    ${effectiveTo3}
 
     ${resp}=    Update Membership Service     ${memberid}    ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo3}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}

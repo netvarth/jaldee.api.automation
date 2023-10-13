@@ -313,7 +313,7 @@ JD-TC-WaitlistAdvancePaymentdetails-1
     
 
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
@@ -427,7 +427,7 @@ JD-TC-WaitlistAdvancePaymentdetails-4
     ${cupn_code}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -666,7 +666,7 @@ JD-TC-WaitlistAdvancePaymentdetails-UH6
     ${cupn_code1}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.add_timezone_date  ${tz}  1
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10

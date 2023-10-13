@@ -137,7 +137,7 @@ JD-TC-Approximate Waiting Time Conventional-1
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}   1  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}   1  30
     ${eTime1}=  add_timezone_time  ${tz}   3   30
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
@@ -436,7 +436,7 @@ JD-TC-Approximate Waiting Time Conventional-2
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
@@ -708,7 +708,7 @@ JD-TC-Approximate Waiting Time Conventional-3
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
@@ -917,7 +917,7 @@ JD-TC-Approximate Waiting Time Conventional-4
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
@@ -1169,7 +1169,7 @@ JD-TC-Approximate Waiting Time Conventional-5
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
@@ -1331,7 +1331,7 @@ JD-TC-Approximate Waiting Time Conventional-6
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
@@ -1561,7 +1561,7 @@ JD-TC-Approximate Waiting Time Conventional-5
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']

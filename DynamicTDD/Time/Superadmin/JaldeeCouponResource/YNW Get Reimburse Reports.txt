@@ -30,7 +30,7 @@ JD-TC-Get Reimburse reports-1
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME7}
     Comment  Get reimbursement report   
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -64,7 +64,7 @@ JD-TC-Get Reimburse reports-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Update Tax Percentage  18  13DEFBV1100M2Z6  
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -211,7 +211,7 @@ JD-TC-Get Reimburse reports-1
     Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimburse Reports By Provider  id-eq=${invoice_id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -230,7 +230,7 @@ JD-TC-Get Reimburse reports-1
 
 JD-TC-Get Reimburse reports-2
     Comment     Reimburse payment of same jaldee coupon and same provider and Get reimbursement report 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME7}
     ${cid}=  get_id  ${CUSERNAME}
@@ -333,7 +333,7 @@ JD-TC-Get Reimburse reports-2
     Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  50.0
 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimburse Reports By Provider  id-eq=${invoice_id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -354,7 +354,7 @@ JD-TC-Get Reimburse reports-2
 JD-TC-Get Reimburse reports-3
     Comment  SA do reimuburse payment of 2 jaldeee coupon and same provider
     change_system_time  0  1  
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME1}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
@@ -520,7 +520,7 @@ JD-TC-Get Reimburse reports-3
     Should Be Equal As Strings  ${resp.json()[0]['subJbankTotalPaid']}  0.0
     Should Be Equal As Strings  ${resp.json()[0]['totalPaid']}  100.0
 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimburse Reports By Provider  id-eq=${invoice_id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -553,7 +553,7 @@ JD-TC-Get Reimburse reports -UH2
 
 JD-TC-Get Reimburse reports -UH3
     Comment   Provider do Reimburse payment
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimburse Reports
     Should Be Equal As Strings    ${resp.status_code}   419

@@ -39,7 +39,7 @@ JD-TC-WalkinConsumer1
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable   ${eTime1}
@@ -119,7 +119,7 @@ JD-TC-WalkinConsumer2
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable   ${eTime1}

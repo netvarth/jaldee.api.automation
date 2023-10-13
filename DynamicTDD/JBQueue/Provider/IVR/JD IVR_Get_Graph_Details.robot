@@ -49,11 +49,15 @@ JD-TC-Get_IVR_Graph_Details-1
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
@@ -63,7 +67,7 @@ JD-TC-Get_IVR_Graph_Details-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -81,9 +85,9 @@ JD-TC-Get_IVR_Graph_Details-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -195,8 +199,8 @@ JD-TC-Get_IVR_Graph_Details-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -422,11 +426,15 @@ JD-TC-Get_IVR_Graph_Details-2
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
@@ -443,7 +451,7 @@ JD-TC-Get_IVR_Graph_Details-2
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -464,7 +472,7 @@ JD-TC-Get_IVR_Graph_Details-UH1
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -480,11 +488,15 @@ JD-TC-Get_IVR_Graph_Details-UH2
     clear_service    ${PUSERNAME14}
     clear_customer   ${PUSERNAME14}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME14}
     Set Suite Variable   ${acc_id} 
@@ -501,7 +513,7 @@ JD-TC-Get_IVR_Graph_Details-UH2
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -520,11 +532,15 @@ JD-TC-Get_IVR_Graph_Details-UH3
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
@@ -541,7 +557,7 @@ JD-TC-Get_IVR_Graph_Details-UH3
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[4]}   ${start_date}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -560,11 +576,15 @@ JD-TC-Get_IVR_Graph_Details-UH4
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
@@ -581,7 +601,7 @@ JD-TC-Get_IVR_Graph_Details-UH4
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${SPACE}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -596,11 +616,15 @@ JD-TC-Get_IVR_Graph_Details-UH5
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
@@ -617,7 +641,7 @@ JD-TC-Get_IVR_Graph_Details-UH5
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${empty}    ${CUR_DAY}
     Log  ${resp.json()}
@@ -632,11 +656,15 @@ JD-TC-Get_IVR_Graph_Details-UH6
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
@@ -653,7 +681,7 @@ JD-TC-Get_IVR_Graph_Details-UH6
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${SPACE}
     Log  ${resp.json()}
@@ -668,11 +696,15 @@ JD-TC-Get_IVR_Graph_Details-UH7
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 
@@ -689,7 +721,7 @@ JD-TC-Get_IVR_Graph_Details-UH7
     ${start1} =  Convert Date  ${start1}   result_format=%Y-%m-%d %H:%M:%S.%f
     ${start2}=    DateTime.Add Time To Date    ${start1}    -7 days
     ${start_date}=    Convert Date  ${start2}   result_format=%Y-%m-%d 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=    Get IVR Graph Details  ${Report_Date_Category[5]}   ${start_date}    ${empty}
     Log  ${resp.json()}
@@ -704,11 +736,15 @@ JD-TC-Get_IVR_Graph_Details-UH8
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME171}
     Set Suite Variable   ${acc_id} 

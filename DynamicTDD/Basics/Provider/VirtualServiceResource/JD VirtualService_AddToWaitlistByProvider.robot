@@ -2584,8 +2584,8 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH8
     Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
     Set Suite Variable  ${p1_tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     ${DAY}=  db.get_date_by_timezone  ${tz}
-    ${sTime1}=  subtract_timezone_time  ${tz}  0  30
-    ${eTime1}=  subtract_timezone_time  ${tz}   0  20
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30
+    ${eTime1}=  db.subtract_timezone_time  ${tz}   0  20
 
     ${p1queue8}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
