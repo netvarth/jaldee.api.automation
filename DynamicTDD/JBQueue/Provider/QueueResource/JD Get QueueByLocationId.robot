@@ -116,8 +116,8 @@ JD-TC-Get Queue By Location Id-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get Queue Location  ${lid2}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${QUEUES_NOT_FOUND_WITH_LOCATION}" 
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}" 
    
 JD-TC-Get Queue By Location Id-UH4
 	[Documentation]  Get Queues by Location Id using invalid id
