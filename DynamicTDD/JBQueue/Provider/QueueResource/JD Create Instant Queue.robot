@@ -1106,8 +1106,8 @@ Jaldee-TC-CreateIQ-UH-5
     ${parallel}=  FakerLibrary.Numerify  %
     ${resp}=  Create Instant Queue  ${queue15}  ${recurringtype[4]}  ${ri}  ${DAY1}  ${EMPTY}  ${stime1}  ${etime1}  ${parallel}  ${capacity}  ${EMPTY}  ${p1_s1}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_LOCATION_REQUIRED}"
+    Should Be Equal As Strings  ${resp.status_code}  404
+    Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_NOT_FOUND}"
 
 Jaldee-TC-CreateIQ-UH-6
     [Documentation]    Create an instant queue with another providers location details
@@ -1239,6 +1239,8 @@ Jaldee-TC-CreateIQ-UH-9
     [Documentation]    Create an instant queue with time different from service time
     ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    clear_service   ${PUSERNAME112}
     ${DAY1}=  db.get_date_by_timezone  ${p2tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}

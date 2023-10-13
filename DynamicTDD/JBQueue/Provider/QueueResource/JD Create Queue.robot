@@ -894,8 +894,8 @@ JD-TC-CreateQueue-UH4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  1  5  ${EMPTY}  ${s_id2}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_LOCATION_REQUIRED}"
+    Should Be Equal As Strings  ${resp.status_code}  404
+    Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_NOT_FOUND}"
 
 JD-TC-CreateQueue-UH6
     [Documentation]    Create a queue with another providers location details
