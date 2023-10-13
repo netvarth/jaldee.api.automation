@@ -27,7 +27,7 @@ ${order}    0
 ${fileSize}  0.00458
 
 @{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
+@{New_status}    Proceed     Unassign    Block     Delete    Remove   Removed   Add
 
 
 *** Test Cases ***
@@ -36,7 +36,7 @@ JD-TC-UpdateStatus-1
 
     [Documentation]  Update Status as New and update it as Proceed.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -74,11 +74,11 @@ JD-TC-UpdateStatus-2
 
     [Documentation]  Update Status as Unassign.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update Finance Status   ${New_status[1]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[5]}  ${categoryType[0]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -86,11 +86,11 @@ JD-TC-UpdateStatus-3
 
     [Documentation]  Update Status as Block.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Update Finance Status   ${New_status[2]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[6]}  ${categoryType[0]}   ${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -98,7 +98,7 @@ JD-TC-UpdateStatus-4
 
     [Documentation]  Update Status as Delete.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -111,7 +111,7 @@ JD-TC-UpdateStatus-5
 
     [Documentation]  Update Status as Remove.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -179,7 +179,7 @@ JD-TC-UpdateStatus-UH4
 
     [Documentation]  Update Status With EMPTY Status .
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -188,16 +188,16 @@ JD-TC-UpdateStatus-UH4
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${STATUS_BOARD_NAME_NOT_EMPTY}
     
-JD-TC-UpdateStatus-6
+JD-TC-UpdateStatus-UH5
 
     [Documentation]  Update Status With not created categoryType.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[2]}   ${status_id1}
+    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[0]}   ${status_id1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings   ${resp.json()}   ${STATUS_BOARD_NAME_NOT_EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${STATUS_EXISTS_WITH_GIVEN_NAME}
 

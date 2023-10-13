@@ -2054,6 +2054,13 @@ STATUS_ALREADY_ENABLED="Status {} already enabled"
 STATUS_EXISTS_WITH_GIVEN_NAME="Status exists with the given name"
 ALREADY_DEFAULT="Already set as default Status"
 CATEGORY_EXIST_WITH_NAME="Category exists with the given name"
+INVALID_VENDOR_ID="Invalid Vendor Type Id"
+CANT_SET_PAYMENT="Can't set. Given id is not Payments In Out category"
+CANT_SET="Can't set. Given id is not {} category"
+CANT_SET_PAYMENT_STATUS="Can't set. Given id is not Payments In Out status"
+CANT_SET_STATUS="Can't set. Given id is not {} status"
+ALREADY_DEFAULT_STATUS="Already set as default Status"
+NO_PERMISSION_TO_DO="No permission to do this operation!!"
 
 
 # ........Membership  ...............

@@ -1180,3 +1180,132 @@ JD-TC-UpdateVendor-20
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['lastPaymentModeUsed']}    ${jaldeePaymentmode[0]}
 
     Should Be Equal As Strings    ${resp.json()['uploadedDocuments']}   []
+
+
+JD-TC-UpdateVendor-UH1
+
+    [Documentation]     Update vendor without Login.
+
+    ${bank_accno1}=        db.Generate_random_value    size=11    chars=${digits} 
+
+    ${bankIfsc1}           Random Number    digits=5 
+    ${bankIfsc1}=          Evaluate         f'{${bankIfsc1}:0>7d}'
+    Log                   ${bankIfsc1}
+    ${bankName1}           FakerLibrary.name
+    ${upiId1}              FakerLibrary.name
+    ${branchName1}=        FakerLibrary.name
+    ${pan}                Random Number    digits=5 
+    ${pan1}=               Evaluate         f'{${pan}:0>5d}'
+
+    ${gstin}              Random Number        digits=5 
+    ${gstin1}=             Evaluate             f'{${gstin}:0>8d}'
+
+    ${preferredPaymentMode}=    Create List          ${jaldeePaymentmode[1]}
+    ${bankInfo}=                Create Dictionary    bankaccountNo=${bank_accno1}    ifscCode=${bankIfsc1}    bankName=${bankName1}    upiId=${upiId1}    branchName=${branchName1}    pancardNo=${pan1}    gstNumber=${gstin1}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
+    ${bankInfo}=                Create List          ${bankInfo}                    
+    ${pin1}=              FakerLibrary.city
+
+    # ${vendor_ph2}=          Evaluate                  ${PUSERNAME}+1235246
+    ${emails}=       Create List            ${email1}    
+    Set Suite Variable    ${emails}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[2]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+
+    ${resp}=  Upload Finance Vendor Attachment   ${vendor_uid1}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+
+    ${resp}=                      Update Vendor          ${vendor_uid1}    ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno1}    ${emails}    bankInfo=${bankInfo}    attachments=${attachments}
+    Log                           ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-UpdateVendor-UH2
+
+    [Documentation]    update vendor using another provider login .
+
+    ${resp}=                      Provider Login         ${PUSERNAME5}    ${PASSWORD}
+    Log                           ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${bank_accno1}=        db.Generate_random_value    size=11    chars=${digits} 
+
+    ${bankIfsc1}           Random Number    digits=5 
+    ${bankIfsc1}=          Evaluate         f'{${bankIfsc1}:0>7d}'
+    Log                   ${bankIfsc1}
+    ${bankName1}           FakerLibrary.name
+    ${upiId1}              FakerLibrary.name
+    ${branchName1}=        FakerLibrary.name
+    ${pan}                Random Number    digits=5 
+    ${pan1}=               Evaluate         f'{${pan}:0>5d}'
+
+    ${gstin}              Random Number        digits=5 
+    ${gstin1}=             Evaluate             f'{${gstin}:0>8d}'
+
+    ${preferredPaymentMode}=    Create List          ${jaldeePaymentmode[1]}
+    ${bankInfo}=                Create Dictionary    bankaccountNo=${bank_accno1}    ifscCode=${bankIfsc1}    bankName=${bankName1}    upiId=${upiId1}    branchName=${branchName1}    pancardNo=${pan1}    gstNumber=${gstin1}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
+    ${bankInfo}=                Create List          ${bankInfo}                    
+    ${pin1}=              FakerLibrary.city
+
+    # ${vendor_ph2}=          Evaluate                  ${PUSERNAME}+1235246
+    ${emails}=       Create List            ${email1}    
+    Set Suite Variable    ${emails}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[2]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+
+    ${resp}=  Upload Finance Vendor Attachment   ${vendor_uid1}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=                      Update Vendor          ${vendor_uid1}    ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno1}    ${emails}    bankInfo=${bankInfo}    attachments=${attachments}
+    Log                           ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_VENDOR_ID}  
+
+   

@@ -149,7 +149,7 @@ JD-TC-UpdateCategory-UH3
 
     [Documentation]  update Category with another providers category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

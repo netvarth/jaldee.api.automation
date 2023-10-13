@@ -28,7 +28,8 @@ ${order}    0
 ${fileSize}  0.00458
 
 @{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
+@{New_status}    Proceed     Unassign    Block     Delete    Remove   Removed   Add
+
 
 
 *** Test Cases ***
@@ -36,7 +37,7 @@ ${fileSize}  0.00458
 
 JD-TC-Getstatuscount-1
 
-    [Documentation]  Create Status as New for Vendor then Get status count.
+    [Documentation]  Create Status as Proceed  for Vendor then Get status count.
 
     ${resp}=  Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log  ${resp.content}
@@ -69,18 +70,16 @@ JD-TC-Getstatuscount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Get Finance Status By Id   ${status_id1}  
+
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
 
-    ${resp}=  Get status count   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   name-eq=${New_status[0]}
-    Log  ${resp.json()}
+    ${resp}=  Get status count   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}   ${len}
    
-
-*** comment ***
 
 JD-TC-Getstatuscount-2
 
@@ -89,13 +88,34 @@ JD-TC-Getstatuscount-2
     ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Get Finance Status By Id   ${status_id2}  
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
@@ -108,7 +128,7 @@ JD-TC-Getstatuscount-2
 
 JD-TC-Getstatuscount-3
 
-    [Documentation]  Create Status as New and Get status count.
+    [Documentation]  Create Status as    Block and Get status count.
 
     ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
@@ -116,12 +136,12 @@ JD-TC-Getstatuscount-3
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
 
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Get Finance Status By Id   ${status_id1}  
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
@@ -139,12 +159,12 @@ JD-TC-Getstatuscount-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[5]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Get Finance Status By Id   ${status_id2}  
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
@@ -163,7 +183,7 @@ JD-TC-Getstatuscount-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[6]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${status_id2}   ${resp.json()}
@@ -173,7 +193,7 @@ JD-TC-Getstatuscount-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Finance Status By Id   ${status_id2}  
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
@@ -202,11 +222,10 @@ JD-TC-Getstatuscount-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Finance Status By Id   ${status_id2}  
+    ${resp}=  Get status list filter   categoryType-eq=${categoryType[2]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
-
     ${resp}=  Get status count   categoryType-eq=${categoryType[2]}    account-eq=${account_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

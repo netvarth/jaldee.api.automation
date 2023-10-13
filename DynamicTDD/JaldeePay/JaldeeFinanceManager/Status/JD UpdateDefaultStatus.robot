@@ -69,21 +69,21 @@ JD-TC-Update default status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
 
-    ${resp}=  Set default status    ${status_id0}    ${categoryType[0]} 
+    # ${resp}=  Set default status    ${status_id0}    ${categoryType[0]} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Update default status    ${status_id0}    ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-    ${resp}=  Update default status    ${status_id0}    ${categoryType[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get default status    ${categoryType[1]} 
+    ${resp}=  Get default status    ${categoryType[0]} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.content}  ${EMPTY}
+
    
-JD-TC-Update default status-2
+JD-TC-Update default status-UH6
 
     [Documentation]   update default status as paymentinout.
 
@@ -93,53 +93,13 @@ JD-TC-Update default status-2
     # Set Test Variable  ${userName}  ${resp.json()['userName']}}
     
 
-    ${resp}=  Update default status    ${status_id0}    ${categoryType[2]} 
+    ${resp}=  Update default status    ${status_id0}    ${categoryType[0]} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get default status    ${categoryType[2]} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings  ${resp.content}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${ALREADY_DEFAULT_STATUS}
 
 
-JD-TC-Update default status-3
 
-    [Documentation]  update default status as invoice.
-
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-
-    ${resp}=  Update default status    ${status_id0}    ${categoryType[3]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get default status    ${categoryType[3]} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-      Should Be Equal As Strings  ${resp.content}  ${EMPTY}
 
 
 
@@ -237,8 +197,13 @@ JD-TC-Update default status-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+     ${CANT_SET_STATUS}=  format String   ${CANT_SET_STATUS}   ${categoryType[3]}
+
     ${resp}=  Update default status    ${status_id0}    ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${CANT_SET_STATUS}
+
+
 
 

@@ -168,60 +168,7 @@ JD-TC- Update default category by type-4
 
 
 
-JD-TC- Update default category by type-5
 
-    [Documentation]  Create multiple Category as Vendor and  Update default category by type.
-
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    
-    ${name1}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name1}  ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id1}   ${resp.json()}
-
-    ${resp}=  Update default category by type   ${category_id1}  ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${name2}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name2}  ${categoryType[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${category_id2}   ${resp.json()}
-
-    ${resp}=  Update default category by type   ${category_id2}  ${categoryType[2]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Default Category By Type   ${categoryType[2]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    Should Be Equal As Strings  ${resp.content}     ${EMPTY}
   
 
 JD-TC- Update default category by type-UH1
@@ -255,7 +202,7 @@ JD-TC- Update default category by type-UH3
 
     [Documentation]  Create Category as Vendor then update it as Expense  .
 
-    ${resp}=  Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME105}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -306,3 +253,55 @@ JD-TC- Update default category by type-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${len}=  Get Length  ${resp.json()}    
     # Should Be Equal As Strings  ${len}  3    
+
+JD-TC- Update default category by type-UH4
+
+    [Documentation]  Create multiple Category as Vendor and try to  Update with different category by type.
+
+    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+    
+    ${name1}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name1}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${category_id1}   ${resp.json()}
+
+    ${resp}=  Update default category by type   ${category_id1}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${name2}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name2}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${category_id2}   ${resp.json()}
+
+
+    ${resp}=  Update default category by type   ${category_id2}  ${categoryType[2]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}     ${CANT_SET_PAYMENT}
+

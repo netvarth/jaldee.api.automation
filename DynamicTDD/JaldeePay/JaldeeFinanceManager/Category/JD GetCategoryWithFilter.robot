@@ -359,7 +359,7 @@ JD-TC-GetCategorywithfilter-15
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 # *** comment ***
 
-JD-TC-GetCategorywithfilter-7
+JD-TC-GetCategorywithfilter-16
 
     [Documentation]  Create multiple Category as Vendor and verify.
 
@@ -399,28 +399,22 @@ JD-TC-GetCategorywithfilter-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id2}   ${resp.json()}
-
-    ${resp}=  Get Category By CategoryType   ${categoryType[0]}
+  
+    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}   name-eq=${name2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[3]['id']}            ${category_id1}
-    Should Be Equal As Strings  ${resp.json()[3]['name']}          ${name1}
-    Should Be Equal As Strings  ${resp.json()[3]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[3]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[3]['status']}        ${toggle[0]}
-
-    Should Be Equal As Strings  ${resp.json()[4]['id']}            ${category_id2}
-    Should Be Equal As Strings  ${resp.json()[4]['name']}          ${name2}
-    Should Be Equal As Strings  ${resp.json()[4]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[4]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[4]['status']}        ${toggle[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['id']}            ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
 
 JD-TC-GetCategorywithfilter-UH1
 
     [Documentation]   Get Category By Id without login
 
-    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}
+    ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}

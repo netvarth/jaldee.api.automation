@@ -155,7 +155,7 @@ JD-TC-UploadAttachment-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-UploadAttachment-3
+JD-TC-UploadAttachment-4
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Invoice)
 
