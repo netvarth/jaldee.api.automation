@@ -114,7 +114,7 @@ JD-TC-UpdateQueue-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Update Queue without service  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  3  ${EMPTY}  
+    ${resp}=  Update Queue without service  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  3  ${lid}  
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Queue ById  ${qid}
@@ -301,10 +301,18 @@ JD-TC-UpdateQueue-UH3
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
 
 JD-TC-UpdateQueue-UH4
-    [Documentation]    Update a queue without queue id and queue name
+    [Documentation]    Update a queue without queue id 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Update Queue  ${EMPTY}  ${EMPTY}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id2}  ${s_id3}
+    ${resp}=  Update Queue  ${EMPTY}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id2}  ${s_id3}
+    Should Be Equal As Strings  ${resp.status_code}  404  
+    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_NOT_FOUND}"
+
+JD-TC-UpdateQueue-UH5
+    [Documentation]    Update a queue without queue name
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Update Queue  ${qid}  ${EMPTY}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  422  
     Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_NAME_REQUIRED}"
 
@@ -328,7 +336,7 @@ JD-TC-UpdateQueue-6
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid3}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-UpdateQueue-UH5
+JD-TC-UpdateQueue-UH6
     [Documentation]  Update another provider's queue
     ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -336,7 +344,7 @@ JD-TC-UpdateQueue-UH5
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
 
-JD-TC-UpdateQueue-UH6
+JD-TC-UpdateQueue-UH7
     [Documentation]  Update queue using consumer login
     ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -344,13 +352,13 @@ JD-TC-UpdateQueue-UH6
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
 
-JD-TC-UpdateQueue-UH7
+JD-TC-UpdateQueue-UH8
     [Documentation]  Update queue without login
     ${resp}=  Update Queue  ${qid5}  ${queue_name5}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid3}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
     
-JD-TC-UpdateQueue-UH8
+JD-TC-UpdateQueue-UH9
     [Documentation]  Update queue with another provider's location
     ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -358,7 +366,7 @@ JD-TC-UpdateQueue-UH8
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
 
-JD-TC-UpdateQueue-UH9
+JD-TC-UpdateQueue-UH10
     [Documentation]  Update queue with another provider's services
     ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
