@@ -920,9 +920,9 @@ Jaldee-TC-CreateIQ-UH-1
     ${ri}=  Create List  @{EMPTY}
     ${queue11}=    FakerLibrary.word
     Set Suite Variable  ${queue11}
-    ${old_stime}=  subtract_timezone_time  ${tz1}   0  30
+    ${old_stime}=  db.subtract_timezone_time  ${tz1}   0  30
     Set Suite Variable   ${old_stime}  
-    ${old_etime}=  subtract_timezone_time  ${tz1}   0  15
+    ${old_etime}=  db.subtract_timezone_time  ${tz1}   0  15
     Set Suite Variable   ${old_etime}
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
