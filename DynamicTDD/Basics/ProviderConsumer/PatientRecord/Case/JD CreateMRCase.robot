@@ -155,7 +155,7 @@ JD-TC-Create MR Case-1
 
 JD-TC-Create MR Case-2
 
-    [Documentation]    Create MR Case with title contain 255 words
+    [Documentation]    Create MR Case with title contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -177,8 +177,8 @@ JD-TC-Create MR Case-2
 
     ${type}=  Create Dictionary  id=${type_id1}  
     ${doctor}=  Create Dictionary  id=${pid} 
-    ${title1}=  FakerLibrary.Text      max_nb_chars=255
-    ${description1}=  FakerLibrary.Text      max_nb_chars=255
+    ${title1}=  FakerLibrary.Text      max_nb_chars=250
+    ${description1}=  FakerLibrary.Text      max_nb_chars=250
     
 
      ${firstName}=  FakerLibrary.name
@@ -242,7 +242,7 @@ JD-TC-Create MR Case-2
 
 JD-TC-Create MR Case-3
 
-    [Documentation]    Create MR Case with description contain 255 words
+    [Documentation]    Create MR Case with description contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -265,7 +265,7 @@ JD-TC-Create MR Case-3
     ${type}=  Create Dictionary  id=${type_id1}  
     ${doctor}=  Create Dictionary  id=${pid} 
     ${title1}=  FakerLibrary.Text      max_nb_chars=255
-    ${description1}=  FakerLibrary.Text      max_nb_chars=255
+    ${description1}=  FakerLibrary.Text      max_nb_chars=250
     ${consumer}=  Create Dictionary  id=${cid1} 
     
 

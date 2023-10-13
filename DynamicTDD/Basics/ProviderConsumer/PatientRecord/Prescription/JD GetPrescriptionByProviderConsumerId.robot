@@ -15,70 +15,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-*** Keywords  ***
-
-Create Prescription 
-    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}      @{vargs}    &{kwargs}
-    ${len}=  Get Length  ${vargs}
-    ${mrPrescriptions}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${mrPrescriptions}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
-    Check And Create YNW Session
-     FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update Prescription 
-    [Arguments]    ${prescriptionId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    @{vargs}  &{kwargs}
-    ${len}=  Get Length  ${vargs}
-    ${mrPrescriptions}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${mrPrescriptions}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    userId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
-    Check And Create YNW Session
-     FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionId}    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Get Prescription By Provider consumer Id
-    [Arguments]    ${providerConsumerId} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/${providerConsumerId}      expected_status=any
-    [Return]  ${resp}
-
-Remove Prescription 
-    Check And Create YNW Session
-    [Arguments]    ${providerConsumerId}
-    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/${prescriptionId}       expected_status=any
-    [Return]  ${resp}
-
-
-Get Prescription By Filter
-    [Arguments]    &{kwargs} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription   params=${kwargs}   expected_status=any
-    [Return]  ${resp}
-
-Get Prescription Count By Filter
-    [Arguments]    &{param} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
-    [Return]  ${resp}
-
-
 *** Variables ***
 
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -327,14 +263,14 @@ JD-TC-Get Prescription By Provider Consumer Id-1
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id}   ${resp.content}
+    Set Suite Variable    ${prescription_uid}   ${resp.json()}
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
@@ -372,16 +308,16 @@ JD-TC-Get Prescription By Provider Consumer Id-2
      ${mrPrescriptions1}=  Create Dictionary  medicineName=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     Set Suite Variable    ${mrPrescriptions1}
 
-    ${resp}=   Update Prescription   ${prescription_id}   ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}     ${mrPrescriptions1}
+    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}     ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${empty} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
@@ -407,7 +343,7 @@ JD-TC-Get Prescription By Provider Consumer Id-3
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id1}   ${resp.content}
+    Set Suite Variable    ${prescription_uid1}   ${resp.json()}
 
     ${med_name2}=      FakerLibrary.name
     Set Suite Variable    ${med_name2}
@@ -426,19 +362,19 @@ JD-TC-Get Prescription By Provider Consumer Id-3
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id2}   ${resp.content}
+    Set Suite Variable    ${prescription_uid2}   ${resp.json()}
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id3}   ${resp.content}
+    Set Suite Variable    ${prescription_uid3}   ${resp.json()}
 
     ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id} 
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
@@ -449,9 +385,9 @@ JD-TC-Get Prescription By Provider Consumer Id-3
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-    Should Be Equal As Strings    ${resp.json()[1]['id']}     ${prescription_id1} 
+    Should Be Equal As Strings    ${resp.json()[1]['uid']}     ${prescription_uid1} 
     Should Be Equal As Strings    ${resp.json()[1]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[1]['userId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[1]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[1]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[1]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[1]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
@@ -462,9 +398,9 @@ JD-TC-Get Prescription By Provider Consumer Id-3
     Should Be Equal As Strings    ${resp.json()[1]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[1]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[1]['prescriptionCreatedDate']}     ${DAY1}
-    Should Be Equal As Strings    ${resp.json()[2]['id']}     ${prescription_id2} 
+    Should Be Equal As Strings    ${resp.json()[2]['uid']}     ${prescription_uid2} 
     Should Be Equal As Strings    ${resp.json()[2]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[2]['userId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[2]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[2]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[2]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[2]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
@@ -475,9 +411,9 @@ JD-TC-Get Prescription By Provider Consumer Id-3
     Should Be Equal As Strings    ${resp.json()[2]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[2]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[2]['prescriptionCreatedDate']}     ${DAY1}
-    Should Be Equal As Strings    ${resp.json()[3]['id']}     ${prescription_id3} 
+    Should Be Equal As Strings    ${resp.json()[3]['uid']}     ${prescription_uid3} 
     Should Be Equal As Strings    ${resp.json()[3]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[3]['userId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[3]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[3]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[3]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[3]['mrPrescriptions'][0]['medicineName']}     ${med_name2} 
@@ -533,14 +469,14 @@ JD-TC-Get Prescription By Provider Consumer Id-3
     ${resp}=    Create Prescription    ${cid1}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${prescription_id2}   ${resp.content}
+    Set Suite Variable    ${prescription_uid2}   ${resp.json()}
 
      ${resp}=    Get Prescription By Provider consumer Id   ${cid1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-     Should Be Equal As Strings    ${resp.json()[0]['id']}     ${prescription_id2} 
+     Should Be Equal As Strings   ${resp.json()[0]['uid']}     ${prescription_uid2} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid1} 
-    Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
@@ -561,7 +497,7 @@ JD-TC-Get Prescription By Provider Consumer Id-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Remove Prescription   ${prescription_id}   
+    ${resp}=    Remove Prescription   ${prescription_uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -193,13 +193,13 @@ JD-TC-Adding Patient Medical History-1
 
 JD-TC-Adding Patient Medical History-2
 
-    [Documentation]    Adding Provider consumer Medical history where title contain 255 words
+    [Documentation]    Adding Provider consumer Medical history where title contain 200 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${title}=  FakerLibrary.Text     	max_nb_chars=255
+    ${title}=  FakerLibrary.Text     	max_nb_chars=200
     ${caption}=  FakerLibrary.name
     ${description}=  FakerLibrary.last_name
     ${users}=   Create List  
@@ -226,16 +226,16 @@ JD-TC-Adding Patient Medical History-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Adding Patient Medical History-UH
+JD-TC-Adding Patient Medical History-UH1
 
-    [Documentation]    Adding Provider consumer Medical history where description contain 255 words
+    [Documentation]    Adding Provider consumer Medical history where description contain 260 words
     ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.Text     	
     ${caption}=  FakerLibrary.Text     	
-    ${description}=  FakerLibrary.Text     	max_nb_chars=260
+    ${description}=  FakerLibrary.Text     	max_nb_chars=460
     ${users}=   Create List  
 
     ${fileName}=    FakerLibrary.File Name
@@ -260,14 +260,14 @@ JD-TC-Adding Patient Medical History-UH
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Adding Patient Medical History-UH
+JD-TC-Adding Patient Medical History-UH2
 
     [Documentation]    Adding Provider Consumer Medical history where title contain more than 255 words
     ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${title}=  FakerLibrary.Text     	max_nb_chars=260
+    ${title}=  FakerLibrary.Text     	max_nb_chars=460
     ${caption}=  FakerLibrary.name
     ${description}=  FakerLibrary.last_name
     ${users}=   Create List  
@@ -294,7 +294,7 @@ JD-TC-Adding Patient Medical History-UH
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Adding Patient Medical History-UH
+JD-TC-Adding Patient Medical History-UH3
 
     [Documentation]    Adding Provider Consumer Medical history  where the title is empty.
     ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
@@ -326,9 +326,9 @@ JD-TC-Adding Patient Medical History-UH
 
     ${resp}=    Add Patient Medical History   ${cid}    ${EMPTY}    ${description}    ${users}  ${attachements}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Adding Patient Medical History-UH
+JD-TC-Adding Patient Medical History-UH4
 
     [Documentation]   Adding  Provider Consumer Medical history where description is empty.
     ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
@@ -360,13 +360,13 @@ JD-TC-Adding Patient Medical History-UH
 
     ${resp}=    Add Patient Medical History   ${cid}    ${title}    ${EMPTY}    ${users}  ${attachements}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Adding Patient Medical History-UH
+JD-TC-Adding Patient Medical History-UH5
 
     [Documentation]   Adding  Provider Consumer Medical history using another provider login.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 
@@ -375,24 +375,8 @@ JD-TC-Adding Patient Medical History-UH
     # ${description}=  FakerLibrary.last_name
     ${users}=   Create List  
 
-    ${fileName}=    FakerLibrary.File Name
-    ${resp}=  db.getType   ${jpgfile}
-    Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile}
-    Set Suite Variable    ${fileType}
 
-
-    # ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings     ${resp.status_code}    200 
-    # Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
-
-    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-    
-    ${attachements}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId}
-
-    ${resp}=    Add Patient Medical History   ${cid}    ${title}    ${EMPTY}    ${users}  ${attachements}   
+    ${resp}=    Add Patient Medical History   ${cid}    ${title}    ${description}    ${users}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}

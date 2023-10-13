@@ -80,7 +80,7 @@ findsqlfile()
             # echo "$file"
             SQL_FILE="$file"
             
-        done < <(find $ynwdir -name "$1" -print0)
+        done < <(find "$ynwdir" -name "$1" -print0)
     else
         echo "Please specify a sql file as your 2nd argument."
     fi
@@ -148,7 +148,7 @@ backup()
     
     ##### Remove backups older than {BACKUP_RETAIN_DAYS} days  #####
     echo -e "\nDeleting backup files older than ${BACKUP_RETAIN_DAYS} days, if exists."
-    find "${DB_BACKUP_PATH}" -mindepth 1 -type f -mtime +${BACKUP_RETAIN_DAYS} -print -delete
+    find "$DB_BACKUP_PATH" -mindepth 1 -type f -mtime +${BACKUP_RETAIN_DAYS} -print -delete
 }
 
 populatePostalCodeTable()

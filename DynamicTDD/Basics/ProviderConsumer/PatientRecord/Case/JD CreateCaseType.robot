@@ -124,6 +124,76 @@ JD-TC-Create Case Type-3
     Should Be Equal As Strings    ${resp.json()['name']}     ${name1}
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${description1}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
+   
+JD-TC-Create Case Type-4
+
+    [Documentation]    Create Case type where aliasname is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${name1}=  FakerLibrary.name
+
+    ${resp}=    Create Case Type     ${name1}  ${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-Create Case Type-5
+
+    [Documentation]    Create Case type where name contain numbers
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${title1}=  FakerLibrary.Random Number
+    Set Suite Variable     ${title1}
+
+    ${resp}=    Create Case Type    ${title1}  ${aliasName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Case Type-6
+
+    [Documentation]    Create Case type where aliasname contain numbers
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    ${name1}=  FakerLibrary.name
+
+    ${resp}=    Create Case Type     ${name1}  ${title1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Case Type-7
+
+    [Documentation]    Create Case type where name contain special characters
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=   Create Case Type     ${titles}  ${aliasName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Case Type-8
+
+    [Documentation]    Create Case type where aliasname contain special characters
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${name1}=  FakerLibrary.name
+    ${resp}=    Create Case Type     ${name1}  ${titles}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
 
 JD-TC-Create Case Type-UH1
 
@@ -137,21 +207,18 @@ JD-TC-Create Case Type-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.content}   "${NAME_REQUIRED}"
-   
+
+
 JD-TC-Create Case Type-UH2
 
-    [Documentation]    Create Case type where aliasname is empty
+    [Documentation]    Create Case Category without login
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${name1}=  FakerLibrary.name
-
-    ${resp}=    Create Case Type     ${name1}  ${empty}
+    ${resp}=    Create Case Type    ${name}  ${aliasName}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
+*** comment ***
 JD-TC-Create Case Type-UH3
 
     [Documentation]    Create Case type with another provider login
@@ -165,68 +232,6 @@ JD-TC-Create Case Type-UH3
     Should Be Equal As Strings    ${resp.status_code}  401
     Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
 
-JD-TC-Create Case Type-UH4
-
-    [Documentation]    Create Case Category without login
-
-    ${resp}=    Create Case Type    ${name}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Create Case Type-UH5
-
-    [Documentation]    Create Case type where name contain numbers
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${title1}=  FakerLibrary.Random Number
-    Set Suite Variable     ${title1}
-
-    ${resp}=    Create Case Type    ${title1}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Create Case Type-UH6
-
-    [Documentation]    Create Case type where aliasname contain numbers
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-    ${name1}=  FakerLibrary.name
-
-    ${resp}=    Create Case Type     ${name1}  ${title1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Create Case Type-UH7
-
-    [Documentation]    Create Case type where name contain special characters
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=   Create Case Type     ${titles}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Create Case Type-UH8
-
-    [Documentation]    Create Case type where aliasname contain special characters
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${name1}=  FakerLibrary.name
-    ${resp}=    Create Case Type     ${name1}  ${titles}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
 JD-TC-Create Case Type-UH9
 
     [Documentation]    Create Case type with already created case details
@@ -238,6 +243,3 @@ JD-TC-Create Case Type-UH9
     ${resp}=    Create Case Type     ${name}  ${titles}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-
-
-

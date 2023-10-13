@@ -15,78 +15,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-
-*** Keywords  ***
-
-Create Sections 
-    [Arguments]    ${uid}    ${id}    ${templateDetailId}       ${sectionType}    ${sectionValue}    @{vargs}  &{kwargs}
-     Check And Create YNW Session
-    ${mrCase}=    Create Dictionary  uid=${uid}
-    ${doctor}=      Create Dictionary    id=${id}
-     ${len}=  Get Length  ${vargs}
-    ${attachments}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${attachments}  ${vargs[${index}]}
-    END
-
-    ${data}=    Create Dictionary    mrCase=${mrCase}    doctor=${doctor}    templateDetailId=${templateDetailId}      sectionType=${sectionType}    sectionValue=${sectionValue}    attachments=${attachments}   
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    ${resp}=    POST On Session    ynw    /provider/medicalrecord/section    data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Update MR Sections
-    [Arguments]    ${uid}   ${sectionValue}   ${attachments}   @{vargs}   &{kwargs}
-    Check And Create YNW Session
-    ${len}=  Get Length  ${vargs}
-    ${attachments}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${attachments}  ${vargs[${index}]}
-    END
-    ${data}=    Create Dictionary    sectionValue=${sectionValue}    attachments=${attachments}        
-    $FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END
-    ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/section/${uid}   data=${data}    expected_status=any
-    [Return]  ${resp}
-
-Get Section Template
-    [Arguments]    ${caseUid} 
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/template/case/${caseUid}    expected_status=any
-    [Return]  ${resp}
-
-Get Sections By UID
-    [Arguments]    ${uid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/${uid}    expected_status=any
-    [Return]  ${resp}
-
-Get Sections Filter
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section    expected_status=any
-    [Return]  ${resp}
-
-Get MR Sections By Case
-    [Arguments]    ${uid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/case/${uid}    expected_status=any
-    [Return]  ${resp}
-
-Delete MR Sections 
-    Check And Create YNW Session
-    [Arguments]    ${uid} 
-    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/section/${uid}       expected_status=any
-    [Return]  ${resp}
-
-
 *** Variables ***
 
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -115,7 +43,7 @@ JD-TC-Create Sections-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+97799802
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+977669802
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -349,12 +277,20 @@ JD-TC-Create Sections-1
     ${voiceAttachments}=  Create List   ${voiceAttachments}
     Set Suite Variable    ${voiceAttachments}
 
+    ${resp}=    Create Section Template    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=    Get Section Template   ${caseUId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${temp_id}    ${resp.json()[0]['id']}
+    Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
 
     ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}
     Set Suite Variable    ${CHIEFCOMPLAINT}
 
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temId}       CHIEFCOMPLAINT    ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}      ${enumName}     ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${Sec_Id}    ${resp.json()['id']}

@@ -11217,13 +11217,13 @@ Update Patient Medical History
     [Return]  ${resp}
 
 Delete Patient Medical History
-
+    Check And Create YNW Session
     [Arguments]    ${medicalHistoryId}  
     ${resp}=    DELETE On Session    ynw   /provider/medicalrecord/medicalHistory/${medicalHistoryId}        expected_status=any
     [Return]  ${resp}
 
 Get Patient Medical History
-
+    Check And Create YNW Session
     [Arguments]    ${providerConsumerId}  
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/medicalHistory/${providerConsumerId}        expected_status=any
     [Return]  ${resp}
@@ -11246,11 +11246,13 @@ Update Provider Consumer Notes
 
 Delete Provider Consumer Notes
     [Arguments]    ${notesId}  
+    Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /provider/customers/notes/${notesId}        expected_status=any
     [Return]  ${resp}
 
 Get Provider Consumer Notes
     [Arguments]    ${providerConsumerId}  
+    Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/customers/notes/${providerConsumerId}        expected_status=any
     [Return]  ${resp}  
 
@@ -11290,31 +11292,31 @@ Update DentalRecord
     [Return]  ${resp}
 
 Update DentalRecord Status
-
+    Check And Create YNW Session
     [Arguments]      ${dentalid}   ${healthRecordSectionEnum} 
     ${resp}=    PUT On Session    ynw   /provider/dental/${dentalid}/status/${healthRecordSectionEnum}       expected_status=any
     [Return]  ${resp}
 
 Delete DentalRecord
-
+    Check And Create YNW Session
     [Arguments]    ${Id}  
     ${resp}=    DELETE On Session    ynw    /provider/dental/${Id}       expected_status=any
     [Return]  ${resp}
 
 Get DentalRecord ById
-
+    Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw    /provider/dental/${Id}        expected_status=any
     [Return]  ${resp}
 
 Get DentalRecord ByProviderConsumerId
-
+    Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw    /provider/dental/providerconsumer/${Id}        expected_status=any
     [Return]  ${resp}
 
 Get DentalRecord ByCaseId
-
+    Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw   /provider/dental/mr/${Id}    expected_status=any
     [Return]  ${resp}
@@ -11439,8 +11441,11 @@ Get Case Count Filter
 
 Create Treatment Plan
 
-    [Arguments]      ${caseDto}  ${treatment}  ${works}  &{kwargs}
-    ${data}=  Create Dictionary    caseDto=${caseDto}  treatment=${treatment}  works=${works} 
+    [Arguments]      ${caseDto}   ${dental_id}   ${treatment}  ${works}  &{kwargs}
+    ${caseDto}=  Create Dictionary  uid=${caseDto} 
+    ${dentalRecord}=  Create Dictionary  id=${dental_id}
+
+    ${data}=  Create Dictionary    caseDto=${caseDto}    dentalRecord=${dentalRecord}  treatment=${treatment}  works=${works} 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -11451,8 +11456,9 @@ Create Treatment Plan
 
 Update Treatment Plan
 
-    [Arguments]     ${id}  ${caseDto}  ${treatment}  ${works}  &{kwargs}
-    ${data}=  Create Dictionary    id=${id}  caseDto=${caseDto}  treatment=${treatment}  works=${works} 
+    [Arguments]     ${id}    ${treatment}    ${status}    &{kwargs}
+
+    ${data}=  Create Dictionary    id=${id}      treatment=${treatment}    status=${status}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
@@ -11465,6 +11471,13 @@ Update Treatment Plan Work status
     [Arguments]     ${treatmentId}  ${workId}  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/${treatmentId}/${workId}/${status}   expected_status=any
+    [Return]  ${resp}
+
+Update Work list in Treatment Plan
+    [Arguments]     ${treatmentId}    ${works}
+    ${data}=  json.dumps  ${works}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/work/${treatmentId}    data=${data}  expected_status=any
     [Return]  ${resp}
 
 Get Treatment Plan By Id
@@ -11525,4 +11538,170 @@ Get MedicalPrescription Template By Id
     [Arguments]    ${temId} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
+    [Return]  ${resp}
+
+Create Prescription 
+    [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}      @{vargs}    &{kwargs}
+    ${len}=  Get Length  ${vargs}
+    ${mrPrescriptions}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${mrPrescriptions}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
+    Check And Create YNW Session
+     FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Update Prescription 
+    [Arguments]    ${prescriptionUId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    @{vargs}  &{kwargs}
+    ${len}=  Get Length  ${vargs}
+    ${mrPrescriptions}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${mrPrescriptions}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    providerConsumerId=${providerConsumerId}    doctorId=${userId}    caseId=${caseId}      dentalRecordId=${dentalRecordId}    html=${html}    mrPrescriptions=${mrPrescriptions}    
+    Check And Create YNW Session
+     FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Get Prescription By Provider consumer Id
+    [Arguments]    ${providerConsumerId} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/${providerConsumerId}      expected_status=any
+    [Return]  ${resp}
+
+Remove Prescription 
+    Check And Create YNW Session
+    [Arguments]    ${prescriptionUId}
+    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}       expected_status=any
+    [Return]  ${resp}
+
+
+Get Prescription By Filter
+    [Arguments]    &{kwargs} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription   params=${kwargs}   expected_status=any
+    [Return]  ${resp}
+
+Get Prescription Count By Filter
+    [Arguments]    &{param} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
+    [Return]  ${resp}
+
+
+Create Sections 
+    [Arguments]    ${uid}    ${id}    ${templateDetailId}       ${sectionType}    ${sectionValue}    @{vargs}  &{kwargs}
+     Check And Create YNW Session
+    ${mrCase}=    Create Dictionary  uid=${uid}
+    ${doctor}=      Create Dictionary    id=${id}
+     ${len}=  Get Length  ${vargs}
+    ${attachments}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${attachments}  ${vargs[${index}]}
+    END
+
+    ${data}=    Create Dictionary    mrCase=${mrCase}    doctor=${doctor}    templateDetailId=${templateDetailId}      sectionType=${sectionType}    sectionValue=${sectionValue}    attachments=${attachments}   
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/medicalrecord/section    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Update MR Sections
+    [Arguments]    ${uid}    ${sectionType}   ${sectionValue}   ${attachments}   @{vargs}   &{kwargs}
+    Check And Create YNW Session
+    ${len}=  Get Length  ${vargs}
+    ${attachments}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${attachments}  ${vargs[${index}]}
+    END
+    ${data}=    Create Dictionary    sectionType=${sectionType}     sectionValue=${sectionValue}    attachments=${attachments}        
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${resp}=    PUT On Session    ynw    /provider/medicalrecord/section/${uid}   data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Create Section Template
+
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw   /provider/medicalrecord/section/createdefaulttemplates    expected_status=any
+    [Return]  ${resp}
+
+Get Section Template
+    [Arguments]    ${caseUid} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/template/case/${caseUid}    expected_status=any
+    [Return]  ${resp}
+
+Get Sections By UID
+    [Arguments]    ${uid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/${uid}    expected_status=any
+    [Return]  ${resp}
+
+Get Sections Filter
+    [Arguments]    &{kwargs}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section    params=${kwargs}    expected_status=any
+    [Return]  ${resp}
+
+Get MR Sections By Case
+    [Arguments]    ${uid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/case/${uid}    expected_status=any
+    [Return]  ${resp}
+
+Delete MR Sections 
+    Check And Create YNW Session
+    [Arguments]    ${uid} 
+    ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/section/${uid}       expected_status=any
+    [Return]  ${resp}
+
+Share Prescription To Patient
+    [Arguments]   ${prescriptionUid}   ${msg}   ${email}   ${telegram}  ${sms}    ${whatsapp}  
+    Check And Create YNW Session
+    ${medium}=  Create Dictionary  email=${email}  telegram=${telegram}   sms=${sms}   whatsapp=${whatsapp}
+    ${data}=  Create Dictionary  message=${msg}   medium=${medium}  
+    ${data}=    json.dumps    ${data}
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/${prescriptionUid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Share Prescription To ThirdParty
+    [Arguments]   ${prescriptionUid}   ${msg}   ${email}     ${sms}    ${whatsapp}  ${telegram}
+    Check And Create YNW Session 
+    ${data}=  Create Dictionary  message=${msg}   email=${email}    sms=${sms}   whatsapp=${whatsapp}   telegram=${telegram} 
+    ${data}=    json.dumps    ${data}
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/thirdParty/${prescriptionUid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+    
+Get Treatment Plan By ProviderConsumer Id
+    [Arguments]     ${id}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/consumer/${id}  expected_status=any
+    [Return]  ${resp}
+
+Get Treatment Plan By Dental Id
+    [Arguments]     ${id}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/dental/${id}  expected_status=any
     [Return]  ${resp}

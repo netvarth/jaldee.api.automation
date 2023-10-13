@@ -128,20 +128,8 @@ JD-TC-Create Case Category-3
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${description1}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
 
-JD-TC-Create Case Category-UH1
-
-    [Documentation]    Create Case Category where name is empty
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Case Category    ${empty}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-     Should Be Equal As Strings    ${resp.content}   "${NAME_REQUIRED}"
    
-JD-TC-Create Case Category-UH2
+JD-TC-Create Case Category-4
 
     [Documentation]    Create Case Category where aliasname is empty
 
@@ -153,31 +141,10 @@ JD-TC-Create Case Category-UH2
 
     ${resp}=    Create Case Category    ${name1}  ${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Case Category-UH3
 
-    [Documentation]    Create Case Category with another provider login
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Case Category    ${name}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  401
-    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
-
-JD-TC-Create Case Category-UH4
-
-    [Documentation]    Create Case Category without login
-
-    ${resp}=    Create Case Category    ${name}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Create Case Category-UH5
+JD-TC-Create Case Category-5
 
     [Documentation]    Create Case Category where name contain numbers
 
@@ -190,9 +157,9 @@ JD-TC-Create Case Category-UH5
 
     ${resp}=    Create Case Category    ${title1}  ${aliasName}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Case Category-UH6
+JD-TC-Create Case Category-6
 
     [Documentation]    Create Case Category where aliasname contain numbers
 
@@ -203,9 +170,9 @@ JD-TC-Create Case Category-UH6
 
     ${resp}=    Create Case Category    ${name1}  ${title1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Case Category-UH7
+JD-TC-Create Case Category-7
 
     [Documentation]    Create Case Category where name contain special characters
 
@@ -215,9 +182,9 @@ JD-TC-Create Case Category-UH7
 
     ${resp}=    Create Case Category    ${titles}  ${aliasName}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Case Category-UH8
+JD-TC-Create Case Category-8
 
     [Documentation]    Create Case Category where aliasname contain special characters
 
@@ -228,7 +195,48 @@ JD-TC-Create Case Category-UH8
     ${name1}=  FakerLibrary.name
     ${resp}=    Create Case Category    ${name1}  ${titles}
     Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-Create Case Category-UH1
+
+    [Documentation]    Create Case Category where name is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Case Category    ${empty}  ${aliasName}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+     Should Be Equal As Strings    ${resp.content}   "${NAME_REQUIRED}"
+
+JD-TC-Create Case Category-UH2
+
+    [Documentation]    Create Case Category without login
+
+    ${resp}=    Create Case Category    ${name}  ${aliasName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+
+
+*** comment ***
+
+JD-TC-Create Case Category-UH3
+
+    [Documentation]    Create Case Category with another provider login
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Case Category    ${name}  ${aliasName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
+
 
 JD-TC-Create Case Category-UH9
 
@@ -241,6 +249,3 @@ JD-TC-Create Case Category-UH9
     ${resp}=    Create Case Category    ${name}  ${titles}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-
-
-

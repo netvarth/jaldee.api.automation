@@ -242,8 +242,9 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{CDLTypeCibil}                     cibil
 @{toothType}                        ADULT  CHILD
 @{toothSurfaces}                    BUCCAL   LINGUAL  PALATAL
-@{PRStatus}                         OPEN  COMPLETED 
+@{PRStatus}                         OPEN  CLOSED  COMPLETED 
 @{RateType}                         Diminishing  Flat
+
 
 *** Keywords ***
 Login

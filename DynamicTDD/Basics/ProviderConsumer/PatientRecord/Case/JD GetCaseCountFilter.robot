@@ -193,14 +193,14 @@ JD-TC-Get Case Count Filter-2
 
 JD-TC-Get Case Count Filter-3
 
-    [Documentation]    Update MR Case description contain 255 words  and Get Case Count Filter
+    [Documentation]    Update MR Case description contain 250 words  and Get Case Count Filter
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}

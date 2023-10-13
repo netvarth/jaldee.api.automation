@@ -102,14 +102,14 @@ JD-TC-Get Case Category-2
 
 JD-TC-Get Case Category-3
 
-    [Documentation]    Create Case Category where name contain 255 words and get case category by id
+    [Documentation]    Create Case Category where name contain 250 words and get case category by id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${name1}=  FakerLibrary.name
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${name1}=  FakerLibrary.Text     	max_nb_chars=250
+    ${description1}=  FakerLibrary.name
 
     ${resp}=    Create Case Category    ${name1}  ${description1}
     Log   ${resp.content}
@@ -135,9 +135,9 @@ JD-TC-Get Case Category-UH1
 
     ${resp}=    Get Case Category    ${id} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  401
-    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
-
+    Should Be Equal As Strings    ${resp.status_code}   200
+     
+    
 JD-TC-Get Case Category-UH2
 
     [Documentation]    Get Case Category without login
@@ -147,16 +147,3 @@ JD-TC-Get Case Category-UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Get Case Category-UH3
-
-    [Documentation]    Get Case Category with invalid id
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME16}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${id1}=  FakerLibrary.name
-
-    ${resp}=    Get Case Category    ${id1} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422

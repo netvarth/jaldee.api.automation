@@ -140,14 +140,36 @@ JD-TC-Update Treatment Plan Work status-1
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
 
-    ${caseDto}=  Create Dictionary  uid=${caseUId} 
-    Set Suite Variable    ${caseDto} 
+    ${toothNo}=   Random Int  min=10   max=47
+    ${note1}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[0]}    ${toothSurfaces[1]}
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Suite Variable       ${id1}          ${resp.json()}
+    # Set Test Variable      ${uid}           ${resp.json()["uid"]}
+
+    ${resp}=    Get DentalRecord ById   ${id1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id1} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[0]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]}
+
+    # ${caseDto}=  Create Dictionary  uid=${caseUId} 
+    # Set Suite Variable    ${caseDto} 
     ${treatment}=  FakerLibrary.name
     ${work}=  FakerLibrary.name
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}
 
-    ${resp}=    Create Treatment Plan    ${caseDto}  ${treatment}  ${works}  
+    ${resp}=    Create Treatment Plan    ${caseUId}    ${id1}   ${treatment}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${treatmentId}        ${resp.json()}
@@ -266,19 +288,6 @@ JD-TC-Update Treatment Plan Work status-UH5
     Should Be Equal As Strings              ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"    "${INVALID_WORK_ID}"
 
-JD-TC-Update Treatment Plan Work status-UH6
-
-    [Documentation]    Update Treatment Plan Work status where status invalid
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${fake_id}=  Random Int  min=500   max=1000
-   ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${fake_id}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"                 # They cant fix this,because of enum value
 
 JD-TC-Update Treatment Plan Work status-UH7
 
@@ -297,6 +306,23 @@ JD-TC-Update Treatment Plan Work status-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}   ${STATUS_OPEN}
+
+
+*** comment ***
+
+JD-TC-Update Treatment Plan Work status-UH6
+
+    [Documentation]    Update Treatment Plan Work status where status invalid
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME16}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${fake_id}=  Random Int  min=500   max=1000
+   ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${fake_id}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"                 # They cant fix this,because of enum value
 
     
 

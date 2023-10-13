@@ -16,6 +16,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 
 ${self}   0
 @{countryCode}   91  +91  48 
+@{empty_list}
 
 
 *** Test Cases ***
@@ -364,3 +365,172 @@ JD-TC-CreateScheduleForUser-3
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
     Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
+
+
+# one user create a service then another user try to take appointment for tht service
+JD-TC-CreateScheduleForUser-4
+
+    [Documentation]  User create a queue with base location and verify get locations by user id.
+
+
+    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Locations
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${resp}=  Get User
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF   not '${resp.content}' == '${emptylist}'
+        ${len}=  Get Length  ${resp.json()}
+    END
+    FOR   ${i}  IN RANGE   0   ${len}
+        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+        IF   not '${user_phone}' == '${HLMUSERNAME10}'
+            clear_users  ${user_phone}
+        END
+    END
+
+    ${resp2}=   Get Business Profile
+    Log  ${resp2.json()}
+    Should Be Equal As Strings    ${resp2.status_code}    200
+    Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
+
+    ${u_id}=  Create Sample User  admin=${bool[0]}
+    Set Suite Variable  ${u_id}
+
+    ${resp}=  Get User By Id  ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
+
+    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${description}=  FakerLibrary.sentence
+    ${dur}=  FakerLibrary.Random Int  min=05  max=10
+    ${amt}=  FakerLibrary.Random Int  min=200  max=500
+    ${amt}=  Convert To Number  ${amt}  1
+    ${SERVICE1}=  FakerLibrary.word
+
+    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${s_id}  ${resp.json()}
+
+    ${DAY1}=  db.get_date
+    ${DAY2}=  db.add_date  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_time   0  15  
+    ${eTime1}=  add_time   2  30  
+    ${queue_name}=  FakerLibrary.bs
+
+    ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id}  ${s_id} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${q_id}  ${resp.json()}
+
+JD-TC-CreateScheduleForUser-5
+
+    [Documentation]  User create an appt schedule and take appointment for consumer with base location and verify get locations by user id.
+
+
+    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${u_id1}=  Create Sample User  admin=${bool[0]}
+    Set Suite Variable  ${u_id1}
+
+    ${resp}=  Get User By Id  ${u_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${PUSERNAME_U2}  ${resp.json()['mobileNo']}
+
+    ${resp}=  SendProviderResetMail   ${PUSERNAME_U2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${PUSERNAME_U2}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${duration}=  FakerLibrary.Random Int  min=2  max=10
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY1}=  db.get_date
+    ${DAY2}=  db.add_date    10        
+    ${sTime1}=  add_time    0  15  
+    ${eTime1}=  add_time   0  40  
+
+    ${resp}=  Create Appointment Schedule For User   ${u_id1}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}    ${lid}  ${duration}  ${bool[1]}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${resp}=  AddCustomer  ${CUSERNAME8}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  User Take Appointment For Consumer    ${u_id1}  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${SERVICE_NOT_AVAILABLE_IN_SCHEDULE}

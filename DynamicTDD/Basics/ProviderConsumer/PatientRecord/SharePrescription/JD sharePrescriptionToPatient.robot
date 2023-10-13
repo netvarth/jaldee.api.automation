@@ -14,6 +14,8 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
+Library           /ebs/TDD/db.py
+Library           /ebs/TDD/Imageupload.py
 
 
 
@@ -31,9 +33,9 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Create Prescription-1
+JD-TC-Share Prescription To Patient-1
 
-    [Documentation]    Create Prescription with valid details.
+    [Documentation]    Share Prescription To Patient.
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
      Log  ${iscorp_subdomains}
@@ -45,7 +47,7 @@ JD-TC-Create Prescription-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9778812
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+97788120
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -118,7 +120,7 @@ JD-TC-Create Prescription-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  get_date
     Set Suite Variable    ${DAY1}
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}
@@ -250,11 +252,12 @@ JD-TC-Create Prescription-1
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption1}
 
-
      ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+
 
     ${prescriptionAttachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}  driveId=${driveId}
     Log  ${prescriptionAttachments}
@@ -264,6 +267,18 @@ JD-TC-Create Prescription-1
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
 
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${MUSERNAME_E}  ${PASSWORD}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   uploadDigitalSign   ${pid}   ${cookie}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get digital sign   ${pid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -271,13 +286,10 @@ JD-TC-Create Prescription-1
 
      ${resp}=    Get Prescription By Provider consumer Id   ${cid}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${referenceId}   ${resp.json()[0]['referenceId']}   
+    Should Be Equal As Strings    ${resp.status_code}   200 
     Set Suite Variable  ${uid}   ${resp.json()[0]['uid']}
     Set Suite Variable  ${prescriptionStatus}   ${resp.json()[0]['prescriptionStatus']} 
-
-    
-
+ 
     ${resp1}=  Get Prescription By Filter   providerConsumerId-eq=${cid}  uid-eq=${uid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
@@ -295,12 +307,18 @@ JD-TC-Create Prescription-1
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-    
- 
 
-JD-TC-Create Prescription-2
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
 
-    [Documentation]    Create Prescription with Empty dentalRecordId.
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+JD-TC-Share Prescription To Patient-2
+
+    [Documentation]    Create Prescription with Empty dentalRecordId and Share Prescription To Patient.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -318,7 +336,6 @@ JD-TC-Create Prescription-2
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${empty} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration} 
@@ -328,9 +345,17 @@ JD-TC-Create Prescription-2
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
-JD-TC-Create Prescription-3
+     ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
 
-    [Documentation]    upload paper Prescription with Empty html.
+    ${resp}=    Share Prescription To Patient   ${prescription_uid1}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+JD-TC-Share Prescription To Patient-3
+
+    [Documentation]    upload paper Prescription with Empty html and Share Prescription To Patient.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -340,30 +365,19 @@ JD-TC-Create Prescription-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${prescription_uid1}   ${resp.json()}
-    
-    ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   referenceId-eq=${referenceId}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileName']}     ${pdffile} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['owner']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileSize']}     ${fileSize} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileType']}     ${fileType} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['order']}     ${order} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['action']}     ${LoanAction[0]} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname}  
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
 
 
+     ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
 
-JD-TC-Create Prescription-4
+    ${resp}=    Share Prescription To Patient   ${prescription_uid1}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-    [Documentation]    Create Two Prescription with same details.
+JD-TC-Share Prescription To Patient-4
+
+    [Documentation]    Share multiple  Prescription To Patients.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -372,174 +386,230 @@ JD-TC-Create Prescription-4
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${prescription_uid1}   ${resp.json()}
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+     Set Test Variable    ${prescription_uid2}   ${resp.json()}
 
-JD-TC-Create Prescription-UH1
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
 
-    [Documentation]    Create Prescription with Empty ProviderConsumer id.
+    ${resp}=    Share Prescription To Patient   ${prescription_uid1}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+    ${message1}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message1}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid1}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+JD-TC-Share Prescription To Patient-5
+
+    [Documentation]    Share Prescription To Patient with empty email.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${EMPTY}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}   
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${empty}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.content}     "${INVALID_PROVIDERCONSUMER_ID}"
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Create Prescription-UH2
+JD-TC-Share Prescription To Patient-6
 
-    [Documentation]    Create Prescription with Empty userId.
+    [Documentation]    Share Prescription To Patient with empty telegram number.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${EMPTY}    ${caseId}       ${id1}    ${html}    prescriptionAttachments=${prescriptionAttachments}   
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${empty}    ${bool[1]}    ${bool[1]}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.content}     "${INVALID_Doctor_ID}"
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Create Prescription-UH3
+JD-TC-Share Prescription To Patient-7
 
-    [Documentation]    Create Prescription with another provider login
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME4}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-   
-
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    prescriptionAttachments=${prescriptionAttachments}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings    ${resp.json()}     ${NO_PERMISSION}
-
-JD-TC-Create Prescription-UH4
-
-    [Documentation]    Create Two Prescription methods at same time.
+    [Documentation]    Share Prescription To Patient with empty phone number.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions}   prescriptionAttachments=${prescriptionAttachments}
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${empty}    ${bool[1]}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings  ${resp.json()}    ${EITHER_ONE}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-JD-TC-Create Prescription-UH5
+JD-TC-Share Prescription To Patient-8
 
-    [Documentation]    Create Prescription with Empty caseId.
+    [Documentation]    Share Prescription To Patient with empty whatsapp number.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}     ${mrPrescriptions}
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${empty}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    #  Set Test Variable    ${prescription_uid1}   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
-    # ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   dentalRecordId-eq=${id1}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    #  Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid1} 
-    # Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
-    # Should Be Equal As Strings    ${resp.json()[0]['userId']}     ${pid} 
-    # Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${empty} 
-    # Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['instructions']}     ${instrn} 
-    # Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['dosage']}     ${dosage} 
-    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
-    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
-    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
+JD-TC-Share Prescription To Patient-9
 
-JD-TC-Create Prescription-UH6
-
-    [Documentation]    Manual Prescription with Empty html.
+    [Documentation]    Share Prescription To Patient with empty email ,whatsapp and sms.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}     ${mrPrescriptions}   
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${empty}       ${bool[1]}    ${empty}    ${empty}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
 
 
-JD-TC-Create Prescription-UH7
+JD-TC-Share Prescription To Patient-UH1
 
-    [Documentation]    create prescription using usertype as assistant
+    [Documentation]    Share Prescription To Patient with invalid uid.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
+    ${invalid}=  Random Int  min=500   max=1000
+    Set Suite Variable    ${invalid}
 
-    ${PO_Number}    Generate random string    4    0123456789
-    ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    clear_users  ${PUSERPH0}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${email}=   FakerLibrary.email
-    ${gender}=  Random Element    ${Genderlist}
-    # ${pin}=  get_pincode
+     ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
 
-    # ${resp}=  Get LocationsByPincode     ${pin}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} = 	Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+    ${PRESCRIPTION_NOT_FOUND}=  Format String    ${PRESCRIPTION_NOT_FOUND}    ${invalid}
 
-    ${whpnum}=  Evaluate  ${PUSERPH0}+336245
-    ${tlgnum}=  Evaluate  ${PUSERPH0}+336345
 
-    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH0}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[0]}  ${PUSERPH0}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id}  ${resp.json()}
-
-    ${resp}=    Create Prescription    ${cid}    ${u_id}    ${caseId}       ${EMPTY}    ${html}      ${mrPrescriptions}
+    ${resp}=    Share Prescription To Patient   ${invalid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings   ${resp.json()}   ${ONLY_USER_TYPE_DOCTOR_CAN_ADD_PRESCRIPTION}
+    Should Be Equal As Strings    ${resp.json()}     ${PRESCRIPTION_NOT_FOUND}
 
-JD-TC-Create Prescription-UH8
+JD-TC-Share Prescription To Patient-UH2
 
-    [Documentation]    create precription with empty drive id.
+    [Documentation]    Share Prescription To Patient with empty message.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${prescriptionAttachments1}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}  
-    Log  ${prescriptionAttachments1}
-    ${prescriptionAttachments1}=  Create List   ${prescriptionAttachments1}
-    Set Suite Variable    ${prescriptionAttachments1}
-
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments1}   
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${empty}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_DRIVE_ID}
+    Should Be Equal As Strings    ${resp.json()}    ${MESSAGE_REQUIRED_TO_SHARE_PRESCRIPTION}
+
+
+JD-TC-Share Prescription To Patient-UH3
+
+    [Documentation]    Try to remove shared prescription.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[1]}       ${bool[1]}    ${bool[1]}    ${bool[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${bool[1]}
+
+    ${resp}=    Remove Prescription   ${prescription_uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${NOT_ALLOWED_TO_SHAREPRESCRIPTION}
+
+JD-TC-Share Prescription To Patient-UH4
+
+    [Documentation]     shared prescription To Patient where all medium is empty.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${empty}        ${empty}     ${empty}     ${empty}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}     ${INVALID_MEDIUM}
+
+JD-TC-Share Prescription To Patient-UH5
+
+    [Documentation]    shared prescription To Patient where all medium is given as false.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[0]}       ${bool[0]}    ${bool[0]}    ${bool[0]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}     ${INVALID_MEDIUM}
+ 
+JD-TC-Share Prescription To Patient-UH6
+
+    [Documentation]   shared prescription To Patient  with another provider login
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    
+
+     ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[0]}       ${bool[0]}    ${bool[0]}    ${bool[0]}  
+    Log   ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
+
+JD-TC-Share Prescription To Patient-UH7
+
+    [Documentation]   shared prescription To Patient  without login
+
+    ${message}=  Fakerlibrary.Sentence
+    Set Test Variable    ${message}
+
+    ${resp}=    Share Prescription To Patient   ${prescription_uid}    ${message}    ${bool[0]}       ${bool[0]}    ${bool[0]}    ${bool[0]}  
+    Log   ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+
+
 
     
-   
+ 

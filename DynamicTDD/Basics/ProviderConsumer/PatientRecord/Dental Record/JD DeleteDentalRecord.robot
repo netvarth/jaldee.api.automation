@@ -140,7 +140,7 @@ JD-TC-Delete Dental Record-1
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -175,7 +175,7 @@ JD-TC-Delete Dental Record-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}

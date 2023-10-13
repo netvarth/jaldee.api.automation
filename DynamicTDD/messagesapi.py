@@ -2100,6 +2100,18 @@ HTML_REQUIRED= "Prescription html required for updation "
 PROVIDER_CONSUMER_ID_NEEDED_IN_FILTER= "Provider consumer Id needed in Filter"
 EITHER_ONE= "Either manual prescription or upload prescription is allowed"
 INVALID_MR_CASE_ID= "Invalid MR Case ID"
+INVALID_Doctor_ID= "Invalid Doctor ID"
+ONLY_USER_TYPE_DOCTOR_CAN_ADD_PRESCRIPTION= "Only User of Type Doctor can be added to prescription"
+PRESCRIPTION_CANNOT_UPDATE_BY_CHANGEDOCTOR= "Prescription cannot be updated by changing Doctor"
+PRESCRIPTION_NOT_FOUND= "Prescription not found with ID {}"
+INVALID_DRIVE_ID= "invalid drive id for Prescription upload"
+MESSAGE_REQUIRED_TO_SHARE_PRESCRIPTION= "Message required to share prescription"
+NOT_ALLOWED_TO_SHAREPRESCRIPTION= "You are not allowed to cancel a shared prescription"
+INVALID_EMAIL_FORMAT=  "Invalid Email format"
+TOOTH_ID_CANNOT_BE_EMPTY= "Tooth Id cannot be empty"
+INVALID_SECTION_TEMPLATE_ID= "Invalid Section Template Detail ID"
+CASE_STATUS_IS_CLOSED= "Case status is Closed"
+CASE_DESCRIPTION_NOT_EXCEED_250CHAR= "Case description should not exceed 250 chars"
 
 # Provider Consumer
 

@@ -120,6 +120,16 @@ def log_request(response):
 
 # def connect_db(host, user, passwd, db):
 #     try:
+#         return pymysql.connect(host=host,
+#                                user=user,
+#                                passwd=passwd,
+#                                db=db)
+#     except Exception as e:
+#         print ("Exception:", e)
+#         print ("Exception at line no:", e.__traceback__.tb_lineno)
+
+# def connect_db(host, user, passwd, db):
+#     try:
 #         return mysql.connector.connect (host=host,
 #                                user=user,
 #                                passwd=passwd,

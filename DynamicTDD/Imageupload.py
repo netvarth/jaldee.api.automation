@@ -63,6 +63,29 @@ clinicalnotespty='/ebs/TDD/clinicalnotes.json'
 # cimg='/ebs/TDD/image.jpg'
 # cprop='/ebs/TDD/proper.json'
 
+# def log_response(response):
+#     logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
+#                                               response.url) +
+#                 "status=%s, reason=%s \n " % (response.status_code,
+#                                               response.reason) +
+#                 "headers=%s \n " % response.headers +
+#                 "body=%s \n " % (response.text))
+
+
+# def log_request(response):
+#     request = response.request
+#     if response.history:
+#         original_request = response.history[0].request
+#         redirected = '(redirected) '
+#     else:
+#         original_request = request
+#         redirected = ''
+#     logger.info("%s Request : " % original_request.method.upper() +
+#                 "url=%s %s\n " % (original_request.url, redirected) +
+#                 "path_url=%s \n " % original_request.path_url +
+#                 "headers=%s \n " % original_request.headers +
+#                 "body=%s \n " % (original_request.body))
+
 # Service Provider Login
 def spLogin(phno,pswd,countrycode=91):
     s = requests.Session()
@@ -3257,3 +3280,4 @@ def UploadQNRfiletoTempLocation(cookie_dict, proid, qnrid, caption, mimeType, ke
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
+
