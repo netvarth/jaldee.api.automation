@@ -51,15 +51,11 @@ JD-TC-Update_User_Language-1
 
     [Documentation]  Update User Language
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -72,7 +68,7 @@ JD-TC-Update_User_Language-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -204,8 +200,8 @@ JD-TC-Update_User_Language-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -324,7 +320,7 @@ JD-TC-Update_User_Language-2
 
     [Documentation]  Update User Language two times with different language
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${user_id}    ${resp.json()['id']}
@@ -363,7 +359,7 @@ JD-TC-Update_User_Language-UH2
 
     [Documentation]   Update User Language with another provider login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id1}    ${resp.json()['id']}
@@ -378,7 +374,7 @@ JD-TC-Update_User_Language-UH3
 
     [Documentation]  Update User Language with invalid user id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -399,7 +395,7 @@ JD-TC-Update_User_Language-UH4
 
     [Documentation]  Update User Language with empty language
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -421,7 +417,7 @@ JD-TC-Update_User_Language-UH4
 
     [Documentation]  Update User Language with empty user id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}

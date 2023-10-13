@@ -47,17 +47,12 @@ JD-TC-GET_All_IVR_USer_Details-1
 
     [Documentation]   Get all IVR user details
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
-    # Log   ${resp.content}
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
-    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -95,14 +90,9 @@ JD-TC-GET_All_IVR_USer_Details-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
-        ${resp}=   Get Location ById  ${locId}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
         Set Suite Variable  ${pin}  ${resp.json()[0]['pinCode']}
     END
 
@@ -134,12 +124,9 @@ JD-TC-GET_All_IVR_USer_Details-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
+    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
-    ${resp}=   Get Location ById  ${loc_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
@@ -155,10 +142,9 @@ JD-TC-GET_All_IVR_USer_Details-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz1}
-    ${strt_time}=   db.add_timezone_time  ${tz1}  0  00
+    ${strt_time}=   add_time  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    db.add_timezone_time  ${tz1}  2  00 
+    ${end_time}=    add_time  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -251,7 +237,7 @@ JD-TC-GET_All_IVR_USer_Details-1
     Log  ${resp}
     Set Suite Variable  ${ivr_config_data}   ${resp}
 
-    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}
+    ${resp}=    Create_IVR_Settings    ${acc_id}    ${ivr_callpriority[0]}    ${callWaitingTime}    ${ser_id1}    ${token}    ${secretKey}    ${apiKey}    ${companyId}    ${publicId}    ${languageResetCount}    ${ivr_config_data}   ${bool[1]}   ${bool[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -270,8 +256,8 @@ JD-TC-GET_All_IVR_USer_Details-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
-    ${call_time}=    db.get_tz_time_secs  ${tz}
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -350,7 +336,7 @@ JD-TC-GET_All_IVR_USer_Details-1
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    db.get_date_by_timezone  ${tz}
+    ${dates}=    get_date
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -389,17 +375,12 @@ JD-TC-GET_All_IVR_USer_Details-2
 
     [Documentation]   Create sample user -that not add to ivr table and get the user details
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
-    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -475,7 +456,7 @@ JD-TC-GET_All_IVR_USer_Details-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -487,8 +468,8 @@ JD-TC-GET_All_IVR_USer_Details-2
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
     ${cons_verfy_node_value}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -606,17 +587,12 @@ JD-TC-GET_All_IVR_USer_Details-3
 
     [Documentation]   Delete users from ivr table ang get ivr details
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
-    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -692,7 +668,7 @@ JD-TC-GET_All_IVR_USer_Details-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -704,8 +680,8 @@ JD-TC-GET_All_IVR_USer_Details-3
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
     ${cons_verfy_node_value}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -736,17 +712,12 @@ JD-TC-GET_All_IVR_USer_Details-4
 
     [Documentation]  already deleted user details update  and get ivr details
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
-    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
 
 
@@ -780,17 +751,12 @@ JD-TC-GET_All_IVR_USer_Details-UH2
 
     [Documentation]   Get all IVR user details with another provider login
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
-    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
 
     ${resp}=    Get All IVR User Details
@@ -802,17 +768,12 @@ JD-TC-GET_All_IVR_USer_Details-UH3
 
     [Documentation]   Update user availability(without user schedule) from ivr table and get ivr details
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
-    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    # Set Suite Variable  ${user_id}   ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
-    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${user_id}   ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -888,7 +849,7 @@ JD-TC-GET_All_IVR_USer_Details-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -900,8 +861,8 @@ JD-TC-GET_All_IVR_USer_Details-UH3
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
     ${cons_verfy_node_value}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}

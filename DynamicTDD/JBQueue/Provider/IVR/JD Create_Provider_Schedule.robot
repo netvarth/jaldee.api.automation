@@ -31,15 +31,11 @@ JD-TC-Create_Provider_Schedule-1
     clear_service    ${PUSERNAME155}
     clear_customer   ${PUSERNAME155}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -47,20 +43,16 @@ JD-TC-Create_Provider_Schedule-1
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
     ${ser_name}=   FakerLibrary.word
     Set Suite Variable    ${ser_name}
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -91,15 +83,11 @@ JD-TC-Create_Provider_Schedule-2
     clear_service    ${PUSERNAME155}
     clear_customer   ${PUSERNAME155}
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${user_id}    ${resp.json()['id']}
+    Set Test Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -113,13 +101,13 @@ JD-TC-Create_Provider_Schedule-2
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  11     
-    ${DAY3}=  db.add_timezone_date  ${tz}  13 
-    ${DAY4}=  db.add_timezone_date  ${tz}  14     
-    ${DAY5}=  db.add_timezone_date  ${tz}  16 
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  11     
+    ${DAY3}=  add_date  13 
+    ${DAY4}=  add_date  14     
+    ${DAY5}=  add_date  16 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -162,15 +150,11 @@ JD-TC-Create_Provider_Schedule-2
 JD-TC-Create_Provider_Schedule-3
 
     [Documentation]   Create 2 schedules with same time on different days
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${user_id}    ${resp.json()['id']}
+    Set Test Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -184,14 +168,14 @@ JD-TC-Create_Provider_Schedule-3
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  23     
-    ${DAY3}=  db.add_timezone_date  ${tz}  24 
-    ${DAY4}=  db.add_timezone_date  ${tz}  25     
-    ${DAY5}=  db.add_timezone_date  ${tz}  26 
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  23     
+    ${DAY3}=  add_date  24 
+    ${DAY4}=  add_date  25     
+    ${DAY5}=  add_date  26 
     ${list}=  Create List  1  2  
     ${list1}=  Create List  3  4 
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -236,7 +220,7 @@ JD-TC-Create_Provider_Schedule-4
 
     [Documentation]  Create one schedule and disabled that schedule.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -254,10 +238,10 @@ JD-TC-Create_Provider_Schedule-4
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.add_timezone_date  ${tz}  27     
-    ${DAY2}=  db.add_timezone_date  ${tz}  29      
+    ${DAY1}=  add_date  27     
+    ${DAY2}=  add_date  29      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -301,7 +285,7 @@ JD-TC-Create_Provider_Schedule-UH1
 
     [Documentation]  Schedule Conflict
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -319,10 +303,10 @@ JD-TC-Create_Provider_Schedule-UH1
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -334,7 +318,7 @@ JD-TC-Create_Provider_Schedule-UH1
 JD-TC-Create_Provider_Schedule-UH2
 
     [Documentation]   Given same Schedule name
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -347,13 +331,13 @@ JD-TC-Create_Provider_Schedule-UH2
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
     
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  17    
-    ${DAY3}=  db.add_timezone_date  ${tz}  19
-    ${DAY4}=  db.add_timezone_date  ${tz}  20    
-    ${DAY5}=  db.add_timezone_date  ${tz}  22 
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  17    
+    ${DAY3}=  add_date  19
+    ${DAY4}=  add_date  20    
+    ${DAY5}=  add_date  22 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -370,7 +354,7 @@ JD-TC-Create_Provider_Schedule-UH2
 JD-TC-Create_Provider_Schedule-UH3
 
     [Documentation]   Create a schedule with eTime is less than sTime
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -385,14 +369,14 @@ JD-TC-Create_Provider_Schedule-UH3
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  17    
-    ${DAY3}=  db.add_timezone_date  ${tz}  19
-    ${DAY4}=  db.add_timezone_date  ${tz}  20    
-    ${DAY5}=  db.add_timezone_date  ${tz}  22 
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  17    
+    ${DAY3}=  add_date  19
+    ${DAY4}=  add_date  20    
+    ${DAY5}=  add_date  22 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime9}=  db.add_timezone_time  ${tz}  5  15
-    ${eTime9}=  db.add_timezone_time  ${tz}   4  30
+    ${sTime9}=  add_time  5  15
+    ${eTime9}=  add_time   4  30
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY2}  ${DAY3}  ${EMPTY}  ${sTime9}  ${eTime9}  ${JCstatus[0]}  ${user_id}
     Log  ${resp.json()}
@@ -403,7 +387,7 @@ JD-TC-Create_Provider_Schedule-UH3
 JD-TC-Create_Provider_Schedule-UH4
 
     [Documentation]   create schedule with start date, a past date
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -418,10 +402,10 @@ JD-TC-Create_Provider_Schedule-UH4
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.subtract_timezone_date  ${tz}  5
-    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    ${DAY1}=  subtract_date  5
+    ${DAY2}=  add_date  10   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -433,7 +417,7 @@ JD-TC-Create_Provider_Schedule-UH4
 JD-TC-Create_Provider_Schedule-UH5
 
     [Documentation]   create schedule with start date and end date, as past dates
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -448,10 +432,10 @@ JD-TC-Create_Provider_Schedule-UH5
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.subtract_timezone_date  ${tz}  10
-    ${DAY2}=  db.subtract_timezone_date  ${tz}  1   
+    ${DAY1}=  subtract_date  10
+    ${DAY2}=  subtract_date  1   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -464,7 +448,7 @@ JD-TC-Create_Provider_Schedule-UH6
 
     [Documentation]  Create Provider Schedule with empty Provider id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -482,10 +466,10 @@ JD-TC-Create_Provider_Schedule-UH6
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -500,7 +484,7 @@ JD-TC-Create_Provider_Schedule-UH7
 
     [Documentation]  Create Provider Schedule with empty start date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -518,10 +502,10 @@ JD-TC-Create_Provider_Schedule-UH7
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.add_timezone_date  ${tz}  40
-    ${DAY2}=  db.add_timezone_date  ${tz}  42    
+    ${DAY1}=  add_date  40
+    ${DAY2}=  add_date  42    
     ${list}=  Create List  1  
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -534,7 +518,7 @@ JD-TC-Create_Provider_Schedule-UH8
 
     [Documentation]  Create Provider Schedule with empty end date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -552,10 +536,10 @@ JD-TC-Create_Provider_Schedule-UH8
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.add_timezone_date  ${tz}  31
-    ${DAY2}=  db.add_timezone_date  ${tz}  33      
+    ${DAY1}=  add_date  31
+    ${DAY2}=  add_date  33      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -569,7 +553,7 @@ JD-TC-Create_Provider_Schedule-UH9
 
     [Documentation]  Create Provider Schedule with empty start time
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -580,10 +564,10 @@ JD-TC-Create_Provider_Schedule-UH9
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -596,7 +580,7 @@ JD-TC-Create_Provider_Schedule-UH10
 
     [Documentation]  Create Provider Schedule with empty end time
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -607,10 +591,10 @@ JD-TC-Create_Provider_Schedule-UH10
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -624,7 +608,7 @@ JD-TC-Create_Provider_Schedule-UH11
 
     [Documentation]  Create Provider Schedule with empty schedule name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -635,10 +619,10 @@ JD-TC-Create_Provider_Schedule-UH11
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -653,7 +637,7 @@ JD-TC-Create_Provider_Schedule-UH12
     [Documentation]  date format is incorrect
     #Date is picked from Dev side,Not checked our parameters
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id1}    ${resp.json()['id']}
@@ -664,11 +648,11 @@ JD-TC-Create_Provider_Schedule-UH12
     Set Test Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY7}=  db.add_timezone_date  ${tz}  20
-    ${DAY8}=  db.add_timezone_date  ${tz}  30      
+    ${DAY7}=  add_date  20
+    ${DAY8}=  add_date  30      
     ${list}=  Create List  1  2  3  4  5  6  7 
     ${date}=    Convert Date   ${DAY7}    result_format=%d %b %Y 
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  5
+    ${sTime1}=  add_time  0  5
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -681,7 +665,7 @@ JD-TC-Create_Provider_Schedule-UH13
 
     [Documentation]  Create Provider Schedule with empty start date and end date
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -699,10 +683,10 @@ JD-TC-Create_Provider_Schedule-UH13
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.add_timezone_date  ${tz}  45
-    ${DAY2}=  db.add_timezone_date  ${tz}  46    
+    ${DAY1}=  add_date  45
+    ${DAY2}=  add_date  46    
     ${list}=  Create List  1  
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -718,7 +702,7 @@ JD-TC-Create_Provider_Schedule-UH13
 
     [Documentation]  Create Provider Schedule with empty recurring type
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -729,10 +713,10 @@ JD-TC-Create_Provider_Schedule-UH13
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -745,7 +729,7 @@ JD-TC-Create_Provider_Schedule-UH14
 
     [Documentation]  Repeat intervals of schedule is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -756,11 +740,11 @@ JD-TC-Create_Provider_Schedule-UH14
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
  
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${date}=    Convert Date   ${DAY1}    result_format=%d %b %Y 
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -773,7 +757,7 @@ JD-TC-Create_Provider_Schedule-UH15
 
     [Documentation]  Create Provider Schedule with empty schedule state
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${user_id}    ${resp.json()['id']}
@@ -791,10 +775,10 @@ JD-TC-Create_Provider_Schedule-UH15
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY1}=  get_date
+    ${DAY2}=  add_date  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
+    ${sTime1}=  add_time  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs

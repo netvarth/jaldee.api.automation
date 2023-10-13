@@ -50,18 +50,14 @@ JD-TC-Incall_IVR-1
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
 
 
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -193,8 +189,8 @@ JD-TC-Incall_IVR-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -265,12 +261,8 @@ JD-TC-Incall_IVR-2
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -286,8 +278,8 @@ JD-TC-Incall_IVR-2
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${created_date}=  get_date
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -363,12 +355,8 @@ JD-TC-Incall_IVR-3
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -384,9 +372,9 @@ JD-TC-Incall_IVR-3
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -446,7 +434,7 @@ JD-TC-Incall_IVR-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Incall_IVR-4
+JD-TC-Incall_IVR-UH1
 
     [Documentation]   Passing different account id
     
@@ -458,12 +446,8 @@ JD-TC-Incall_IVR-4
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -482,9 +466,9 @@ JD-TC-Incall_IVR-4
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -544,7 +528,7 @@ JD-TC-Incall_IVR-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Incall_IVR-5
+JD-TC-Incall_IVR-UH2
 
     [Documentation]   Passing empty incall uid on "Incoming call on server" 
     
@@ -556,12 +540,8 @@ JD-TC-Incall_IVR-5
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -580,9 +560,9 @@ JD-TC-Incall_IVR-5
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -656,12 +636,8 @@ JD-TC-Incall_IVR-UH3
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -680,9 +656,9 @@ JD-TC-Incall_IVR-UH3
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -768,9 +744,9 @@ JD-TC-Incall_IVR-UH4
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -866,9 +842,9 @@ JD-TC-Incall_IVR-UH6
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -941,12 +917,8 @@ JD-TC-Incall_IVR-UH7
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -965,9 +937,9 @@ JD-TC-Incall_IVR-UH7
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1044,12 +1016,8 @@ JD-TC-Incall_IVR-UH8
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -1065,9 +1033,9 @@ JD-TC-Incall_IVR-UH8
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${future_date}=     add_date  +10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1139,12 +1107,8 @@ JD-TC-Incall_IVR-UH9
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -1160,9 +1124,9 @@ JD-TC-Incall_IVR-UH9
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${future_date}=     add_date  +10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1234,12 +1198,8 @@ JD-TC-Incall_IVR-UH10
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -1258,9 +1218,9 @@ JD-TC-Incall_IVR-UH10
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1335,12 +1295,8 @@ JD-TC-Incall_IVR-UH11
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -1359,9 +1315,9 @@ JD-TC-Incall_IVR-UH11
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1436,12 +1392,8 @@ JD-TC-Incall_IVR-UH12
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -1460,9 +1412,9 @@ JD-TC-Incall_IVR-UH12
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -1537,12 +1489,8 @@ JD-TC-Incall_IVR-UH13
     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
-    Set Suite Variable    ${user_name}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME152}
     Set Suite Variable   ${acc_id} 
@@ -1561,9 +1509,9 @@ JD-TC-Incall_IVR-UH13
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${created_date}=  get_date
     ${Past_date}=     add_date  -10
-    ${call_time}=  db.get_tz_time_secs  ${tz}
+    ${call_time}=    db.get_time_secs
     ${cclid}    Random Number 	digits=2 
     ${cclid}=    Evaluate    f'{${cclid}:0>9d}'
     Log  ${cclid}
