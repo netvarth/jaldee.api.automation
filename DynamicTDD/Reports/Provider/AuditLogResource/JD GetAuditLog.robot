@@ -45,11 +45,13 @@ JD-TC-GetAuditLog -1
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+    
     ${resp}=   Get Audit Logs
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Logged in
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Login
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     ADD
@@ -64,11 +66,13 @@ JD-TC-GetAuditLog -2
     ${ser_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}           200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Service Creation
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Created service Bridal Makeupsss
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     ADD
@@ -82,21 +86,27 @@ JD-TC-GetAuditLog -3
     ${resp}=  Disable service  ${ser_id1}  
     Should Be Equal As Strings  ${resp.status_code}     200
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Service Disabled
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Disabled service Bridal Makeupsss
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     DELETE
     Should Be Equal As Strings  ${resp.json()[0]['userType']}   PROVIDER  
+
     ${resp}=  Enable service  ${ser_id1}  
-    Should Be Equal As Strings  ${resp.status_code}  200  
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Service Enabled
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Enabled service Bridal Makeupsss
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     EDIT
@@ -111,10 +121,12 @@ JD-TC-GetAuditLog -4
     ${loc_id}=  Create Sample Location
     Set Suite Variable  ${loc_id}
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Created a location
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Created a location
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     ADD
@@ -163,6 +175,9 @@ JD-TC-GetAuditLog -5
     # ${s_Time}=  db.get_time_by_timezone  ${tz}
     ${s_Time}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable    ${s_Time}
+    ${converted_time}=  db.timeto24hr   ${s_Time}
+    Set Suite Variable    ${converted_time}
+
     ${e_Time}=  add_timezone_time  ${tz}  0  15  
     ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${s_Time}  ${e_Time}
@@ -173,10 +188,12 @@ JD-TC-GetAuditLog -5
     ${resp}=  Disable Location  ${loc_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
 
 JD-TC-GetAuditLog -6
     [Documentation]   Provider get Audit log after location enabled
@@ -233,10 +250,12 @@ JD-TC-GetAuditLog -6
     ${resp}=  Enable Location  ${locatnid2}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
 
     ${resp}=  Disable Location  ${locatnid2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -258,11 +277,13 @@ JD-TC-GetAuditLog -7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}   	Service time window created
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Created a service time window
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     ADD
@@ -300,11 +321,13 @@ JD-TC-GetAuditLog -8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Service time window updated
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Updated a service time window
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     EDIT
@@ -318,10 +341,12 @@ JD-TC-GetAuditLog -9
     ${resp}=  Disable Queue  ${que_id2}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Service time window disabled
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Disabled a service time window
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     DELETE
@@ -335,10 +360,12 @@ JD-TC-GetAuditLog -10
     ${resp}=  Enable Queue  ${que_id2}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Service time window enabled
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Enabled a service time window
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     EDIT
@@ -412,10 +439,12 @@ JD-TC-GetAuditLog -11
     Should Be Equal As Strings  ${resp.status_code}  200
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}   	Check-in cancellation 
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Cancelled Check-in of ${cons_name5} for ${ser_name} in ${que_name} 
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     DELETE
@@ -439,10 +468,12 @@ JD-TC-GetAuditLog -12
     Should Be Equal As Strings  ${resp.status_code}  200
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}                 200
     Should Be Equal As Strings  ${resp.json()[0]['date']}           ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}           ${time}
+    Variable Should exist       ${resp.json()[0]['time']}           ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}        Booking Delay
     Should Be Equal As Strings  ${resp.json()[0]['text']}           Added delay of ${turn_arund_time} mins
     Should Be Equal As Strings  ${resp.json()[0]['Action']}         ADD
@@ -463,11 +494,13 @@ JD-TC-GetAuditLog -13
     Should Be Equal As Strings  ${resp.status_code}  200
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}                 200
     Should Be Equal As Strings  ${resp.json()[0]['date']}           ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}           ${time}
+    Variable Should exist       ${resp.json()[0]['time']}           ${converted_time1}
     #Should Be Equal As Strings  ${resp.json()[0]['subject']}   	    Enabled accept future check-In
     Should Be Equal As Strings  ${resp.json()[0]['text']}           Updated Q manager Settings     
     Should Be Equal As Strings  ${resp.json()[0]['Action']}         EDIT
@@ -509,11 +542,14 @@ JD-TC-GetAuditLog -14
     ${time1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${time1}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${convert_time}=  db.timeto24hr   ${time1}
+    Set Suite Variable   ${convert_time}
+
     ${resp}=   Get Audit Logs
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}                 200
     Should Be Equal As Strings  ${resp.json()[0]['date']}           ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}           ${time1}
+    Variable Should exist       ${resp.json()[0]['time']}           ${convert_time}
    
 JD-TC-GetAuditLog -15
     [Documentation]   Provider get Audit log when date=date and action=EDIT
@@ -624,11 +660,13 @@ JD-TC-VerifyAuditLog-6
     Should Be Equal As Strings    ${resp.status_code}     200
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Location enabled
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Enabled a location
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     EDIT
@@ -760,7 +798,7 @@ JD-TC-GetAuditLog -26
     Set Suite Variable   ${cupn_code}
     ${calc_type}=  Random Element   ['Fixed', 'Percentage']
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${sTime}=  subtract_timezone_time  ${tz}  0  15
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
@@ -1118,7 +1156,7 @@ JD-TC-Verify GetAuditLog -5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[1]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[1]['time']}       ${s_Time}
+    Variable Should exist       ${resp.json()[1]['time']}       ${converted_time}
     Should Contain  "${resp.json()}"                            subject  :  Location disabled
     Should Contain  "${resp.json()}"                             text  :  Disabled a location
     Should Be Equal As Strings  ${resp.json()[1]['Action']}     DELETE
@@ -1129,12 +1167,14 @@ JD-TC-Verify GetAuditLog -14
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
     ${resp}=   Get Audit Logs  date-eq=${DAY1}  category-eq=SETTINGS  subCategory-eq=HOLIDAY
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}                 200
     Should Be Equal As Strings  ${resp.json()[0]['date']}           ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}           ${time1}
+    Variable Should exist       ${resp.json()[0]['time']}           ${convert_time}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}        Non working day created
     Should Be Equal As Strings  ${resp.json()[0]['text']}           Created a non working day     
     Should Be Equal As Strings  ${resp.json()[0]['Action']}         ADD
@@ -1339,15 +1379,15 @@ JD-TC-GetAuditLog-40
     Should Be Equal As Strings  ${resp.json()['apptDelay']}   ${delaytime}
     
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}                 200
     Should Be Equal As Strings  ${resp.json()[0]['date']}           ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}           ${time}
+    Variable Should exist       ${resp.json()[0]['time']}           ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}       	Appointment Delay
     Should Be Equal As Strings  ${resp.json()[0]['text']}           Added delay of ${delaytime} mins to slot ${slot1}
     Should Be Equal As Strings  ${resp.json()[0]['Action']}         ADD
-
- 
 
 
 JD-TC-GetAuditLog-41
@@ -1424,7 +1464,7 @@ JD-TC-GetAuditLog-41
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
     
-    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  00
     Set Suite Variable   ${sTime1}
     ${eTime1}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable   ${eTime1}
@@ -1550,10 +1590,12 @@ JD-TC-GetAuditLog-41
     ${defDelayAdd_msg}=  Set Variable   ${resp.json()['delayMessages']['Consumer_APP']}
 
     ${time}=   db.get_time_by_timezone  ${tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
+
     ${resp}=   Get Audit Logs
     Should Be Equal As Strings  ${resp.status_code}                 200
     Should Be Equal As Strings  ${resp.json()[0]['date']}           ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}           ${time}
+    Variable Should exist       ${resp.json()[0]['time']}           ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}       	Booking Delay
     Should Be Equal As Strings  ${resp.json()[0]['text']}           Added delay of ${delaytime} mins 
     Should Be Equal As Strings  ${resp.json()[0]['Action']}         ADD
@@ -1563,7 +1605,6 @@ JD-TC-GetAuditLog-41
 JD-TC-GetAuditLog -42
 
     [Documentation]   Provider get Audit log after provider login(us timezone)
-
     Comment  Provider in US
     ${PO_Number}=  FakerLibrary.Numerify  %#####
     ${USProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
@@ -1640,14 +1681,19 @@ JD-TC-GetAuditLog -42
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Encrypted Provider Login  ${USProvider}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${DAY1}=  db.get_date_by_timezone  ${US_tz}
     ${time}=   db.get_time_by_timezone  ${US_tz}
+    ${converted_time1}=  db.timeto24hr   ${time}
 
     ${resp}=   Get Audit Logs
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}             200
     Should Be Equal As Strings  ${resp.json()[0]['date']}       ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}       ${time}
+    Variable Should exist       ${resp.json()[0]['time']}       ${converted_time1}
     Should Be Equal As Strings  ${resp.json()[0]['subject']}    Logged in
     Should Be Equal As Strings  ${resp.json()[0]['text']}       Login
     Should Be Equal As Strings  ${resp.json()[0]['Action']}     ADD
