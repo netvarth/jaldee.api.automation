@@ -34,6 +34,16 @@ JD-TC-CreateReminder-1
 
     [Documentation]    Provider create a reminder for his provider consumer.
 
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=  Consumer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -49,11 +59,12 @@ JD-TC-CreateReminder-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
+    clear_customer    ${PUSERNAME132}
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME18}  
+        ${resp1}=  AddCustomer  ${CUSERNAME18}   firstName=${fname}  lastName=${lname} 
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Suite Variable  ${pcid18}   ${resp1.json()}
