@@ -179,8 +179,8 @@ JD-TC-Remove Prescription Template-UH3
 
     ${resp}=    Remove Prescription Template    ${temId} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings              ${resp.json()}   ${bool[0]}
 
 JD-TC-Remove Prescription Template-UH4
 

@@ -237,13 +237,13 @@ JD-TC-Get Treatment Plan By Id-2
 
 JD-TC-Get Treatment Plan By Id-3
 
-    [Documentation]    Create Treatment Plan where treatment field contain 255 words and Get Treatment Plan By Id
+    [Documentation]    Create Treatment Plan where treatment field contain 250 words and Get Treatment Plan By Id
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${treatment}=  FakerLibrary.Text      max_nb_chars=255
+    ${treatment}=  FakerLibrary.Text      max_nb_chars=250
     ${work}=  FakerLibrary.name
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}  

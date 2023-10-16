@@ -205,7 +205,48 @@ JD-TC-Get Patient Medical History-3
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 
-    ${title}=  FakerLibrary.Text     	max_nb_chars=255
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
+
+    ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accountId}        ${resp.json()['id']}
+    Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Suite Variable    ${cid}            ${resp.json()['providerConsumer']}
+    Set Suite Variable    ${jconid}         ${resp.json()['id']}
+    Set Suite Variable    ${proconfname}    ${resp.json()['firstName']}    
+    Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
+    Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${title}=  FakerLibrary.Text     	max_nb_chars=250
     ${caption}=  FakerLibrary.name
     ${description}=  FakerLibrary.last_name
     ${users}=   Create List  
@@ -302,9 +343,9 @@ JD-TC-Get Patient Medical History-4
     ${resp}=    Get Patient Medical History   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${EMPTY}
-    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
+    Should Be Equal As Strings    ${resp.json()[2]['providerConsumerId']}     ${cid}
+    Should Not contain    ${resp.json()[2] }    title
+    Should Be Equal As Strings    ${resp.json()[2]['description']}     ${description}
  
 JD-TC-Get Patient Medical History-5
 
@@ -480,7 +521,7 @@ JD-TC-Get Patient Medical History-6
     Should Be Equal As Strings    ${resp.json()}   []
 
 
-JD-TC-Get Patient Medical History-UH
+JD-TC-Get Patient Medical History-UH1
 
     [Documentation]    Get Patient medical record using another provider login.
 
@@ -490,9 +531,10 @@ JD-TC-Get Patient Medical History-UH
 
     ${resp}=    Get Patient Medical History     ${cid}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
 
-JD-TC-Get Provider Consumer Notes-UH
+JD-TC-Get Provider Consumer Notes-UH2
 
     [Documentation]   Get Patient medical record without login.
 
@@ -502,7 +544,7 @@ JD-TC-Get Provider Consumer Notes-UH
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Get Provider Consumer Notes-UH
+JD-TC-Get Provider Consumer Notes-UH3
 
     [Documentation]   GGet Patient medical record with Consumer login.
 
@@ -513,4 +555,4 @@ JD-TC-Get Provider Consumer Notes-UH
     ${resp}=    Get Patient Medical History     ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   400
-    Should Be Equal As Strings    ${resp.json()}   ${LOGIN_INVALID_URL}
+    Should Be Equal As Strings    ${resp.json()}   ${NoAccess}

@@ -591,11 +591,11 @@ JD-TC-Create Treatment Plan-13
     Should Be Equal As Strings    ${resp.json()['prescriptionDto'][0]['dosage']}     ${dosage1}
 JD-TC-Create Treatment Plan-UH1
 
-    [Documentation]   Create MedicalRecordPrescription Template with another provider login
+    [Documentation]   Create MedicalRecordPrescription Template with Consumer login.
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
+    ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
     
 
     ${prescription}=    Create Dictionary    frequency=${frequency}  duration=${duration}  instructions=${instructions}  dosage=${dosage}   medicineName=${medicineName} 
@@ -603,7 +603,7 @@ JD-TC-Create Treatment Plan-UH1
     ${resp}=    Create MedicalRecordPrescription Template    ${templateName}  ${prescription}
     Log   ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
+    Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
 
 JD-TC-Create Treatment Plan-UH2
 
@@ -657,6 +657,7 @@ JD-TC-Create Treatment Plan-UH3
     ${resp}=    Create MedicalRecordPrescription Template    ${empty}  ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${TEMPLATE_NAME_REQUIRED}
   
 JD-TC-Create Treatment Plan-UH4
 
@@ -670,7 +671,9 @@ JD-TC-Create Treatment Plan-UH4
     ${templateName1}=  Random Int  min=500   max=1000
     Set Test Variable    ${templateName1}
 
-    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}  
+    ${prescription}=    Create Dictionary    frequency=${EMPTY}  duration=${EMPTY}  instructions=${EMPTY}  dosage=${EMPTY}   medicineName=${EMPTY} 
+
+    ${resp}=    Create MedicalRecordPrescription Template    ${templateName1}    ${prescription}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${temId1}    ${resp.json()}

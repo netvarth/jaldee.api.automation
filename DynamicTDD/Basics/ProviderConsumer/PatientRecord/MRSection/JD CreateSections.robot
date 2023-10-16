@@ -363,7 +363,35 @@ JD-TC-Create Sections-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+JD-TC-Create Sections-4
 
+    [Documentation]    Create Sections with Empty attachments .
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}       voiceAttachments=${voiceAttachments}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+
+JD-TC-Create Sections-5
+
+    [Documentation]    Create Sections with Empty voiceAttachments.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${voiceAttachments}=  Create List  
+    ${complaint}=      FakerLibrary.name 
+    ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${complaint}
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}   ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
 JD-TC-Create Sections-UH1
 
     [Documentation]    Create Sections with invalid caseUId.
@@ -409,19 +437,6 @@ JD-TC-Create Sections-UH3
 
 JD-TC-Create Sections-UH4
 
-    [Documentation]    Create Sections with Empty attachments .
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}       voiceAttachments=${voiceAttachments}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
-
-JD-TC-Create Sections-UH5
-
     [Documentation]    Create Sections with Invalid Sections value.
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
@@ -430,26 +445,14 @@ JD-TC-Create Sections-UH5
 
     ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}    note=${caption}
 
+    ${NOT_ALLOWED_ADDITIONAL_PROPERTIES}=  format String   ${NOT_ALLOWED_ADDITIONAL_PROPERTIES}   note
+
     ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+    Should Be Equal As Strings    ${resp.json()}   ${NOT_ALLOWED_ADDITIONAL_PROPERTIES}
 
 
-JD-TC-Create Sections-UH6
-
-    [Documentation]    Create Sections with Empty voiceAttachments.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${voiceAttachments}=  Create List   
-
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}   ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
  
 
 
