@@ -218,6 +218,10 @@ JD-TC-DeActivate Service Provider -3
     # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
+    ${resp}=  Enable Waitlist
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -276,7 +280,7 @@ JD-TC-DeActivate Service Provider -3
 
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}  ${status[0]}   ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre1}  ${Tot1}  ${bool[1]}  ${bool[0]}  department=${dep_id}   provider=${pro_id}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_duratn}  ${status[0]}   ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre1}  ${Tot1}  ${bool[1]}  ${bool[0]}  department=${dep_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}

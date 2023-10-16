@@ -296,7 +296,7 @@ NW-TC-ListFamilyMemberByProvider-UH2
       ${resp}=  ListFamilyMemberByProvider   0
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"  "${INVALID_ID}"
+      Should Be Equal As Strings  "${resp.json()}"  "${INVALID_CONS_ID}"
 
 
 # JD-TC-ListFamilyMemberByProvider-3
