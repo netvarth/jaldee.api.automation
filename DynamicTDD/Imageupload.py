@@ -1,6 +1,4 @@
-# import pycurl,os,sys
-import os
-
+import pycurl,os,sys
 try:
     from io import StringIO  ## for Python 3
 except ImportError:
@@ -13,8 +11,7 @@ import logging
 from RequestsLibrary.utils import is_file_descriptor
 from robot.api import logger
 from faker import Faker
-from db import ecrypt_data, decrypt_data
-from Keywordspy import second_password, log_response, log_request
+from Keywordspy import *
 BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP
 SA_BASE_URL = "http://"+HOST+"/superadmin/rest/mgmt"
@@ -64,41 +61,39 @@ clinicalnotespty='/ebs/TDD/clinicalnotes.json'
 # cimg='/ebs/TDD/image.jpg'
 # cprop='/ebs/TDD/proper.json'
 
-# def log_response(response):
-#     logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
-#                                               response.url) +
-#                 "status=%s, reason=%s \n " % (response.status_code,
-#                                               response.reason) +
-#                 "headers=%s \n " % response.headers +
-#                 "body=%s \n " % (response.text))
+def log_response(response):
+    logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
+                                              response.url) +
+                "status=%s, reason=%s \n " % (response.status_code,
+                                              response.reason) +
+                "headers=%s \n " % response.headers +
+                "body=%s \n " % (response.text))
 
 
-# def log_request(response):
-#     request = response.request
-#     if response.history:
-#         original_request = response.history[0].request
-#         redirected = '(redirected) '
-#     else:
-#         original_request = request
-#         redirected = ''
-#     logger.info("%s Request : " % original_request.method.upper() +
-#                 "url=%s %s\n " % (original_request.url, redirected) +
-#                 "path_url=%s \n " % original_request.path_url +
-#                 "headers=%s \n " % original_request.headers +
-#                 "body=%s \n " % (original_request.body))
+def log_request(response):
+    request = response.request
+    if response.history:
+        original_request = response.history[0].request
+        redirected = '(redirected) '
+    else:
+        original_request = request
+        redirected = ''
+    logger.info("%s Request : " % original_request.method.upper() +
+                "url=%s %s\n " % (original_request.url, redirected) +
+                "path_url=%s \n " % original_request.path_url +
+                "headers=%s \n " % original_request.headers +
+                "body=%s \n " % (original_request.body))
 
 # Service Provider Login
 def spLogin(phno,pswd,countrycode=91):
     s = requests.Session()
-    url = BASE_URL+'/provider/login/encrypt'
+    url = BASE_URL+'/provider/login'
     try:
         headers = {
                 'Content-type': "application/json",
                 'Accept': "application/json",
             }
-        jsondata = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
-        encrypted_data=  ecrypt_data(jsondata)
-        data =  json.dumps(encrypted_data)
+        data = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
         r = s.post(url, data=data, headers=headers)
         # print s.cookies
         # print "--------------"
@@ -3268,4 +3263,3 @@ def UploadQNRfiletoTempLocation(cookie_dict, proid, qnrid, caption, mimeType, ke
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
-

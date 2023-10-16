@@ -86,6 +86,7 @@ JD-TC-GetVendorListWithFilter-1
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
+    Set Suite Variable  ${bank_accno}
     ${branch}=   db.get_place
     ${ifsc_code}=   db.Generate_ifsc_code
     # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
@@ -140,6 +141,9 @@ JD-TC-GetVendorListWithFilter-1
     ${resp}=  Get Vendor By Id   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${userId}   ${resp.json()['userId']}
+    Set Suite Variable  ${vendorStatus}   ${resp.json()['vendorStatus']}
+    Set Suite Variable  ${vendorStatusName}   ${resp.json()['vendorStatusName']}
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id1}
@@ -283,13 +287,13 @@ JD-TC-GetVendorListWithFilter-7
 
 JD-TC-GetVendorListWithFilter-8
 
-    [Documentation]  Create Vendor for an SP and get with filter -status.
+    [Documentation]  Create Vendor for an SP and get with filter -vendorStatus.
 
     ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Vendor List with filter    status-eq=${vender_name}
+    ${resp}=  Get Vendor List with filter    vendorStatus-eq=${vendorStatus} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
@@ -300,6 +304,7 @@ JD-TC-GetVendorListWithFilter-8
     Should Be Equal As Strings  ${resp.json()[0]['vendorName']}  ${vender_name}
     Should Be Equal As Strings  ${resp.json()[0]['contactPersonName']}  ${contactPersonName}
     Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+    
 
 JD-TC-GetVendorListWithFilter-9
 
@@ -309,7 +314,7 @@ JD-TC-GetVendorListWithFilter-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Vendor List with filter    userId-eq=${account_id1}
+    ${resp}=  Get Vendor List with filter    userId-eq=${userId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
@@ -332,3 +337,84 @@ JD-TC-GetVendorListWithFilter-10
     ${resp}=  Get Vendor List with filter    userId-eq=${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-GetVendorListWithFilter-11
+
+    [Documentation]  Create Vendor for an SP and get with filter -vendorStatusName.
+
+    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Vendor List with filter    vendorStatusName-eq=${vendorStatusName} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorType']}  ${category_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorTypeName']}  ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorId']}  ${vendorId}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorName']}  ${vender_name}
+    Should Be Equal As Strings  ${resp.json()[0]['contactPersonName']}  ${contactPersonName}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+
+JD-TC-GetVendorListWithFilter-12
+
+    [Documentation]  Create Vendor for an SP and get with filter -state
+
+    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Vendor List with filter    contactInfo-eq=state::${state} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorType']}  ${category_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorTypeName']}  ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorId']}  ${vendorId}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorName']}  ${vender_name}
+    Should Be Equal As Strings  ${resp.json()[0]['contactPersonName']}  ${contactPersonName}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+    
+JD-TC-GetVendorListWithFilter-13
+
+    [Documentation]  Create Vendor for an SP and get with filter -bank_accno
+
+    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Vendor List with filter    bankInfo-eq=bankaccountNo::${bank_accno} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorType']}  ${category_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorTypeName']}  ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorId']}  ${vendorId}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorName']}  ${vender_name}
+    Should Be Equal As Strings  ${resp.json()[0]['contactPersonName']}  ${contactPersonName}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+    
+
+JD-TC-GetVendorListWithFilter-14
+
+    [Documentation]  Create Vendor for an SP and get with filter -bankName
+
+    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Vendor List with filter    bankInfo-eq=bankName::${bankName} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorType']}  ${category_id1}
+    # Should Be Equal As Strings  ${resp.json()[0]['vendorTypeName']}  ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorId']}  ${vendorId}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorName']}  ${vender_name}
+    Should Be Equal As Strings  ${resp.json()[0]['contactPersonName']}  ${contactPersonName}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}

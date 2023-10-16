@@ -217,7 +217,7 @@ JD-TC-UpdateVendor-2
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
     Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
 
-JD-TC-UpdateVendor-UH
+JD-TC-UpdateVendor-3
 
     [Documentation]    Try to Update vendor vendorCategory.
 
@@ -1306,6 +1306,6 @@ JD-TC-UpdateVendor-UH2
     ${resp}=                      Update Vendor          ${vendor_uid1}    ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno1}    ${emails}    bankInfo=${bankInfo}    attachments=${attachments}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_VENDOR_ID}  
+    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION_TO_DO}  
 
    

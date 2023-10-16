@@ -139,6 +139,9 @@ JD-TC-GetVendorListWithFilter-1
     ${resp}=  Get Vendor By Id   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${userId}   ${resp.json()['userId']}
+    Set Suite Variable  ${vendorStatus}   ${resp.json()['vendorStatus']}
+    Set Suite Variable  ${vendorStatusName}   ${resp.json()['vendorStatusName']}
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id1}
@@ -238,13 +241,13 @@ JD-TC-GetVendorListWithFilter-7
 
 JD-TC-GetVendorListWithFilter-8
 
-    [Documentation]  Create Vendor for an SP and get with filter -status.
+    [Documentation]  Create Vendor for an SP and get with filter -vendorStatus..
 
     ${resp}=  Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Vendor List with Count filter    status-eq=${vender_name}
+    ${resp}=  Get Vendor List with Count filter    vendorStatus-eq=${vendorStatus} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
@@ -258,7 +261,7 @@ JD-TC-GetVendorListWithFilter-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Vendor List with Count filter    userId-eq=${account_id1}
+    ${resp}=  Get Vendor List with Count filter    userId-eq=${userId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1

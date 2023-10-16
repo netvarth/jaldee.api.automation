@@ -1,5 +1,5 @@
-import MySQLdb
-# import pymysql
+# import MySQLdb
+import pymysql
 # import mysql.connector
 import time
 import subprocess
@@ -48,25 +48,25 @@ def_profile='/ebs/TDD/defaultpaymentprofile.txt'
 queue_service_metric_id=20
 multiuser_metric_id=21
 
-def connect_db(host, user, passwd, db):
-    try:
-        return MySQLdb.connect(host=host,
-                               user=user,
-                               passwd=passwd,
-                               db=db)
-    except MySQLdb.Error as e:
-        print ("Exception:", e)
-        print ("Exception at line no:", e.__traceback__.tb_lineno)
-
 # def connect_db(host, user, passwd, db):
 #     try:
-#         return pymysql.connect(host=host,
+#         return MySQLdb.connect(host=host,
 #                                user=user,
 #                                passwd=passwd,
 #                                db=db)
-#     except Exception as e:
+#     except MySQLdb.Error as e:
 #         print ("Exception:", e)
-#         print ("Exception at line no:", e.__traceback__.tb_lineno)
+        # print ("Exception at line no:", e.__traceback__.tb_lineno)
+
+def connect_db(host, user, passwd, db):
+    try:
+        return pymysql.connect(host=host,
+                               user=user,
+                               passwd=passwd,
+                               db=db)
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 # def connect_db(host, user, passwd, db):
 #     try:

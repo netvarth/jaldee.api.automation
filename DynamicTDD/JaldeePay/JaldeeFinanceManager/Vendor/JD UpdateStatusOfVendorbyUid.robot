@@ -28,7 +28,7 @@ Update Vendor Status
 *** Test Cases ***
 
 
-JD-TC-UpdateVendorStatus-1
+JD-TC-UpdateVendorStatus-UH1
 
     [Documentation]  Create Vendor for an SP then update default status enable to disable.
 
@@ -131,6 +131,7 @@ JD-TC-UpdateVendorStatus-1
     ${resp}=  Get Vendor By Id   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${vendorStatus}   ${resp.json()['vendorStatus']}
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id1}
@@ -140,15 +141,18 @@ JD-TC-UpdateVendorStatus-1
     Should Be Equal As Strings  ${resp.json()['contactPersonName']}  ${contactPersonName}
     Should Be Equal As Strings  ${resp.json()['vendorUid']}  ${vendor_uid1}
 
+    ${ALREADY_IN_GIVEN_STATUS}=  format String   ${ALREADY_IN_GIVEN_STATUS}   ${vendorStatus}
 
-    ${resp}=  Update Vendor Status   ${vendor_uid1}  ${toggle[1]} 
+
+    ${resp}=  Update Vendor Status   ${vendor_uid1}  ${vendorStatus} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}   ${ALREADY_IN_GIVEN_STATUS}
 
     ${resp}=  Get Vendor By Id   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[1]}
+    Should Be Equal As Strings  ${resp.json()['vendorStatus']}  ${vendorStatus}
 
 
 JD-TC-UpdateVendorStatus-2

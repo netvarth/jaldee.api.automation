@@ -2061,6 +2061,8 @@ CANT_SET_PAYMENT_STATUS="Can't set. Given id is not Payments In Out status"
 CANT_SET_STATUS="Can't set. Given id is not {} status"
 ALREADY_DEFAULT_STATUS="Already set as default Status"
 NO_PERMISSION_TO_DO="No permission to do this operation!!"
+INVALID_VENDOR_CATEGORY_ID="Invalid Vendor Category Id"
+PHONE_NO_CANNOT_BE_EMPTY="Phone Number cannot be empty"
 
 
 # ........Membership  ...............
