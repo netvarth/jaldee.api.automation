@@ -213,6 +213,7 @@ JD-TC-Delete Dental Record-UH1
     ${resp}=    Delete DentalRecord   ${id1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Delete Dental Record-UH2
 
@@ -227,6 +228,7 @@ JD-TC-Delete Dental Record-UH2
     ${resp}=    Delete DentalRecord   ${invalid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Delete Dental Record-UH3
 
@@ -238,8 +240,8 @@ JD-TC-Delete Dental Record-UH3
 
     ${resp}=    Delete DentalRecord   ${id}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Delete Dental Record-UH4
 

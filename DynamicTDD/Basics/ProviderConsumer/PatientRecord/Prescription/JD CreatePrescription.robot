@@ -541,5 +541,17 @@ JD-TC-Create Prescription-UH8
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_DRIVE_ID}
 
-    
+JD-TC-Create Prescription-UH9
+
+    [Documentation]    create Manual precription with empty medicineName .
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
    
+    ${mrPrescriptions}=  Create Dictionary  medicineName=${EMPTY}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
+    Set Suite Variable    ${mrPrescriptions}
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${mrPrescriptions}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200

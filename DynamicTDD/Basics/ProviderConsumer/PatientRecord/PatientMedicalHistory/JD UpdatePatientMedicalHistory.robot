@@ -232,7 +232,7 @@ JD-TC-Update Patient Medical History-3
     ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}
     
 
-    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${EMPTY}    ${description1}    ${users1}   ${attachements3}
+    ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${SPACE}    ${description1}    ${users1}   ${attachements3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -240,7 +240,7 @@ JD-TC-Update Patient Medical History-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${EMPTY}
+    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${SPACE}
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
 
 JD-TC-Update Patient Medical History-4
@@ -348,7 +348,7 @@ JD-TC-Update Patient Medical History-6
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
 
-JD-TC-Update Patient Medical History-UH
+JD-TC-Update Patient Medical History-UH1
 
     [Documentation]    Update Provider Consumer Medical history where medicalHistory id is invalid.
 
@@ -371,24 +371,24 @@ JD-TC-Update Patient Medical History-UH
 
     ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}
     
-    ${medicalHistory_id}=  FakerLibrary.name     	
+    ${medicalHistory_id}=  Random Int  min=1000   max=47000  	
 
     ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${description1}    ${users1}   ${attachements3}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
 
-    ${resp}=    Get Patient Medical History    ${cid}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
-    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
+    # ${resp}=    Get Patient Medical History    ${cid}    
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
+    # Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
+    # Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
 
-JD-TC-Update Patient Medical History-UH
+JD-TC-Update Patient Medical History-UH2
 
     [Documentation]    Update Provider Consumer Medical history where the title contains numbers.
 
-     ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -418,7 +418,7 @@ JD-TC-Update Patient Medical History-UH
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
 
-JD-TC-Update Patient Medical History-UH
+JD-TC-Update Patient Medical History-UH3
 
     [Documentation]    Update Provider Consumer Medical history where the title contains special characters.
 
@@ -452,7 +452,7 @@ JD-TC-Update Patient Medical History-UH
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${titles}
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description1}
 
-JD-TC-Update Patient Medical History-UH
+JD-TC-Update Patient Medical History-UH4
 
     [Documentation]    Update Provider Consumer Medical history where the description contains special characters.
 
@@ -486,7 +486,7 @@ JD-TC-Update Patient Medical History-UH
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1}
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${descriptions}
 
-JD-TC-Update Patient Medical History-UH
+JD-TC-Update Patient Medical History-UH5
 
     [Documentation]    Update Provider Consumer Medical history using another provider login.
 
@@ -514,7 +514,7 @@ JD-TC-Update Patient Medical History-UH
     Should Be Equal As Strings    ${resp.status_code}  401
     Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
 
-JD-TC-Update Patient Medical History-UH
+JD-TC-Update Patient Medical History-UH6
 
     [Documentation]    Update Provider Consumer Medical history using another consumer login.
 
@@ -533,7 +533,7 @@ JD-TC-Update Patient Medical History-UH
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}   ${NoAccess}
 
-JD-TC-Update Patient Medical History-UH
+JD-TC-Update Patient Medical History-UH7
 
     [Documentation]    Update Provider Consumer Medical history without login.
 

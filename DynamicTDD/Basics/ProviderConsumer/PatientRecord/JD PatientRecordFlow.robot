@@ -34,6 +34,15 @@ ${fileSize}    0.00458
 ${title1}    @sdf@123
 ${description1}    &^7gsdkqwrrf
 
+${waitlistedby}           PROVIDER
+${SERVICE1}               SERVICE1001
+${SERVICE2}               SERVICE2002
+${SERVICE3}               SERVICE3003
+${SERVICE4}               SERVICE4004
+${SERVICE5}               SERVICE3005
+${SERVICE6}               SERVICE4006
+${sample}                     4452135820
+
 *** Test Cases ***
 
 JD-TC-Patient Record Flow-1
@@ -81,22 +90,25 @@ JD-TC-Patient Record Flow-1
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
 
-     ${resp}=  Toggle Department Enable
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     sleep  2s
-     ${resp}=  Get Departments
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    #  ${resp}=  Toggle Department Enable
+    #  Log   ${resp.json()}
+    #  Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
+    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    Set Suite Variable  ${ser_id}  ${resp.json()['departments'][0]['serviceIds'][0]}
+
+     
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -145,3 +157,49 @@ JD-TC-Patient Record Flow-1
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+    Log    ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${CUR_DAY}=  get_date
+    ${resp}=   Create Sample Location
+    Set Test Variable    ${loc_id1}    ${resp}  
+    # ${resp}=   Create Sample Service  ${SERVICE1}
+    # Set Test Variable    ${ser_id1}    ${resp}  
+    # ${resp}=   Create Sample Service  ${SERVICE2}
+    # Set Test Variable    ${ser_id2}    ${resp}  
+    # ${resp}=   Create Sample Service  ${SERVICE3}
+    # Set Test Variable    ${ser_id3}    ${resp}  
+
+    ${q_name}=    FakerLibrary.name
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${strt_time}=   subtract_time  5  55
+    ${end_time}=    add_time  5  00 
+    ${parallel}=   Random Int  min=1   max=1
+    ${capacity}=  Random Int   min=130   max=200
+
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${que_id1}   ${resp.json()}
+    
+    ${waitlist_ids}=  Create List
+
+    ${desc}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+            
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid${a}}  ${wid[0]}
+
+    

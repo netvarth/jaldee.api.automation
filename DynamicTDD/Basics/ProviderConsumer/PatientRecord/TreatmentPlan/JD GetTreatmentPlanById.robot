@@ -381,8 +381,8 @@ JD-TC-Get Treatment Plan By Id-UH3
 
     ${resp}=    Get Treatment Plan By Id   ${fake_id}    
     Log   ${resp.content}
-    Should Be Equal As Strings              ${resp.status_code}   200
-    Should Be Equal As Strings  ${resp.content}    ${empty}
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}    ${INVALID_TREATMENT_ID}
 
 
 JD-TC-Get Treatment Plan By Id-UH4

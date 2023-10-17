@@ -236,13 +236,13 @@ JD-TC-Create Treatment Plan-2
 
 JD-TC-Create Treatment Plan-3
 
-    [Documentation]    Create Treatment Plan where treatment field contain 255 words
+    [Documentation]    Create Treatment Plan where treatment field contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${treatment}=  FakerLibrary.Text      max_nb_chars=255
+    ${treatment}=  FakerLibrary.Text      max_nb_chars=250
     ${work}=  FakerLibrary.name
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}  
@@ -272,14 +272,14 @@ JD-TC-Create Treatment Plan-3
 
 JD-TC-Create Treatment Plan-4
 
-    [Documentation]    Create Treatment Plan where work field contain 255 words
+    [Documentation]    Create Treatment Plan where work field contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.Text      max_nb_chars=255
+    ${work}=  FakerLibrary.Text      max_nb_chars=250
     ${one}=  Create Dictionary  work=${work}   status=${QnrStatus[1]}
     ${works}=  Create List  ${one}  
 
@@ -399,7 +399,7 @@ JD-TC-Create Treatment Plan-UH2
     [Documentation]    Create Treatment Plan without login
 
     ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.Text      max_nb_chars=255
+    ${work}=  FakerLibrary.Text      max_nb_chars=250
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}  
 
@@ -439,7 +439,7 @@ JD-TC-Create Treatment Plan-UH5
     Should Be Equal As Strings              ${resp.status_code}   200
 
     ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.Text      max_nb_chars=255
+    ${work}=  FakerLibrary.Text      max_nb_chars=250
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}  
 

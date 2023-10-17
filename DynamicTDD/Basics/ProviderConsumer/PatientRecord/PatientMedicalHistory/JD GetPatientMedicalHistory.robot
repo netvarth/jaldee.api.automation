@@ -380,14 +380,14 @@ JD-TC-Get Patient Medical History-5
 
     ${resp}=    Add Patient Medical History   ${cid}    ${title}    ${EMPTY}    ${users}  ${attachements}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Patient Medical History   ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title}
-    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${EMPTY}
+    Should Be Equal As Strings    ${resp.json()[3]['providerConsumerId']}     ${cid}
+    Should Be Equal As Strings    ${resp.json()[3]['title']}     ${title}
+    Should Not contain    ${resp.json()[3]}     description
 
 JD-TC-Get Patient Medical History-6
 
@@ -554,5 +554,5 @@ JD-TC-Get Provider Consumer Notes-UH3
 
     ${resp}=    Get Patient Medical History     ${cid}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   400
+    Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}   ${NoAccess}

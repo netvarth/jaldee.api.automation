@@ -329,7 +329,7 @@ JD-TC-Get Dental Record-UH3
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Get Dental Record-UH3
+JD-TC-Get Dental Record-UH4
 
     [Documentation]    Get Dental Record with consumer login.
 
