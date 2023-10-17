@@ -263,6 +263,6 @@ JD-TC-UploadAttachment-UH6
     ${resp}=  Upload Finance Vendor Attachment   ${vendor_uid1}     ${Attachments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${NoAccess}
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_VENDOR}  
 
 

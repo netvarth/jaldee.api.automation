@@ -2064,6 +2064,9 @@ NO_PERMISSION_TO_DO="No permission to do this operation!!"
 INVALID_VENDOR_CATEGORY_ID="Invalid Vendor Category Id"
 PHONE_NO_CANNOT_BE_EMPTY="Phone Number cannot be empty"
 INVALID_VENDOR="Invalid Vendor Id"
+INVALID_EXPENSE_CATEGORY="Invalid Expense Category"
+EXPENSE_DATE_CANNOT_BE_EMPTY="Expense Date cannot be empty"
+INVALID_EXPENSE_AMOUNT="Invalid Expense Amount"
 
 
 

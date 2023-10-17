@@ -301,7 +301,7 @@ JD-TC-UpdateVendorStatus-UH3
 
     [Documentation]  update vendor status with another login
 
-    ${resp}=  Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -330,7 +330,7 @@ JD-TC-UpdateVendorStatus-UH3
     ${resp}=  Update Vendor Status   ${vendor_uid1}  ${status_id1} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION_TO_DO}  
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_VENDOR}  
 
 JD-TC-UpdateVendorStatus-UH4
 
