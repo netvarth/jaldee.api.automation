@@ -173,13 +173,15 @@ JD-TC-UploadAttachment-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
 
+     ${invalid}=  Random Int  min=500  max=1000
+
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
 
-    ${resp}=  Upload Finance Vendor Attachment   ${account_id1}    ${categoryType[0]}    ${Attachments}
+    ${resp}=  Upload Finance Vendor Attachment   ${invalid}      ${Attachments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_CATEGORY_ID}
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_VENDOR}
 
 
 JD-TC-UploadAttachment-UH3
@@ -210,3 +212,57 @@ JD-TC-UploadAttachment-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
+
+JD-TC-UploadAttachment-UH5
+
+    [Documentation]  Upload finance vendor attachment with empty attachment.
+
+    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+     ${invalid}=  Random Int  min=500  max=1000
+
+    ${Attachments}=    Create Dictionary   
+    Log  ${Attachments}
+
+    ${resp}=  Upload Finance Vendor Attachment   ${vendor_uid1}      ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${FILE_NAME_NOT_FOUND}
+
+JD-TC-UploadAttachment-UH6
+
+    [Documentation]   upload a attachment using another provider login.
+
+    ${resp}=   Provider Login  ${PUSERNAME81}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+
+    ${resp}=  Upload Finance Vendor Attachment   ${vendor_uid1}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${NoAccess}
+
+
