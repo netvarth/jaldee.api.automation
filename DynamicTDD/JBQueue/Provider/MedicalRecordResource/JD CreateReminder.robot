@@ -93,12 +93,12 @@ JD-TC-CreateReminder-1
 
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    sleep  2s
+  
     ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    
+    sleep  2s
     ${resp}=  Get Consumer Communications
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
