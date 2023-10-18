@@ -116,7 +116,6 @@ JD-TC-CreateReminder-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    sleep  5s
     ${resp}=  Get Consumer Communications
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
