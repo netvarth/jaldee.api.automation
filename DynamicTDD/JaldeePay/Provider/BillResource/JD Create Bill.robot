@@ -188,6 +188,11 @@ JD-TC-Create Bill -1
         Set Suite Variable  ${gstper}
         ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
         Should Be Equal As Strings    ${resp.status_code}   200
+
+        ${resp}=  Get Tax Percentage
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        
         ${resp}=  Enable Tax
         Should Be Equal As Strings    ${resp.status_code}   200
 
