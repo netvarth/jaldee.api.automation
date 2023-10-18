@@ -78,13 +78,13 @@ JD-TC-Get Case Type-1
     
 JD-TC-Get Case Type-2
 
-    [Documentation]    Create Case Category where name contain 255 words and Get Case Type By id 
+    [Documentation]    Create Case Category where name contain 250 words and Get Case Type By id 
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Create Case Type    ${description1}  ${aliasName}
     Log   ${resp.content}

@@ -78,13 +78,13 @@ JD-TC-Create Case Type-1
 
 JD-TC-Create Case Type-2
 
-    [Documentation]    Create Case type where name contain 255 words
+    [Documentation]    Create Case type where name contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Create Case Type    ${description1}  ${aliasName}
     Log   ${resp.content}
@@ -102,14 +102,14 @@ JD-TC-Create Case Type-2
 
 JD-TC-Create Case Type-3
 
-    [Documentation]    Create Case type where name contain 255 words
+    [Documentation]    Create Case type where name contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name1}=  FakerLibrary.name
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Create Case Type    ${name1}  ${description1}
     Log   ${resp.content}

@@ -372,10 +372,12 @@ JD-TC-Update Patient Medical History-UH1
     ${attachements3}=  Create Dictionary   fileName=${jpgfile}   fileSize=${fileSize}   fileType= ${fileType}   action=${file_action[0]}  driveId=${driveId3}
     
     ${medicalHistory_id}=  Random Int  min=1000   max=47000  	
-
+    ${MEDICAL_HISTORY_NOT_FOUND}=  Format String  ${MEDICAL_HISTORY_NOT_FOUND}  ${medicalHistory_id}
+    
     ${resp}=    Update Patient Medical History   ${medicalHistory_id}    ${title1}    ${description1}    ${users1}   ${attachements3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${MEDICAL_HISTORY_NOT_FOUND}
 
     # ${resp}=    Get Patient Medical History    ${cid}    
     # Log   ${resp.content}

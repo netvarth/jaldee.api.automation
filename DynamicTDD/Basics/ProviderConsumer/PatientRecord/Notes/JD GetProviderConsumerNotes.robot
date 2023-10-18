@@ -277,7 +277,7 @@ JD-TC-Get Provider Consumer Notes-UH1
 
     [Documentation]    Adding Provider consumer notes using another provider login and get the notes details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 

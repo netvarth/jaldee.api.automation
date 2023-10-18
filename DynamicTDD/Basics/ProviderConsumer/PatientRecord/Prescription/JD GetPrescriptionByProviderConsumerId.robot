@@ -271,6 +271,8 @@ JD-TC-Get Prescription By Provider Consumer Id-1
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[0]['doctorName']}     ${pdrname} 
+
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
@@ -281,8 +283,6 @@ JD-TC-Get Prescription By Provider Consumer Id-1
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-
-
 
 
 JD-TC-Get Prescription By Provider Consumer Id-2
@@ -318,7 +318,7 @@ JD-TC-Get Prescription By Provider Consumer Id-2
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${empty} 
+    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 

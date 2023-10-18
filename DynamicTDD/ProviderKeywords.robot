@@ -10809,7 +10809,7 @@ Update Patient Medical History
     ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}   medicalHistoryAttachments=${AttachmentList}
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${medicalHistoryId}    data=${data}     expected_status=any
+    ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${id}    data=${data}     expected_status=any
     [Return]  ${resp}
 
 Delete Patient Medical History

@@ -447,7 +447,7 @@ JD-TC-Update Prescription-7
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${order}      ${id1}    ${html}     ${mrPrescriptions}
+    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${order}      ${id1}    ${html}     ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -457,7 +457,7 @@ JD-TC-Update Prescription-7
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${order} 
+    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 

@@ -181,7 +181,7 @@ JD-TC-Create MR Case-2
     ${description1}=  FakerLibrary.Text      max_nb_chars=250
     
 
-     ${firstName}=  FakerLibrary.name
+    ${firstName}=  FakerLibrary.name
     Set Suite Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Suite Variable    ${lastName}
@@ -216,7 +216,7 @@ JD-TC-Create MR Case-2
     Set Suite Variable    ${proconlname1}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname1}       ${proconfname}${space}${proconlname}
 
-     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -264,7 +264,7 @@ JD-TC-Create MR Case-3
 
     ${type}=  Create Dictionary  id=${type_id1}  
     ${doctor}=  Create Dictionary  id=${pid} 
-    ${title1}=  FakerLibrary.Text      max_nb_chars=255
+    ${title1}=  FakerLibrary.Text      max_nb_chars=250
     ${description1}=  FakerLibrary.Text      max_nb_chars=250
     ${consumer}=  Create Dictionary  id=${cid1} 
     

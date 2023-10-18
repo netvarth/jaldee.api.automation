@@ -168,7 +168,7 @@ JD-TC-Delete Provider Consumer Notes-3
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.name
-    ${description}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description}=  FakerLibrary.Text     	max_nb_chars=250
     ${users}=   Create List  
 
     ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
@@ -418,7 +418,7 @@ JD-TC-Delete Provider Consumer Notes-6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
-    ${title2}=  FakerLibrary.Text     max_nb_chars=255
+    ${title2}=  FakerLibrary.Text     max_nb_chars=250
 
     ${resp}=    Delete Provider Consumer Notes    ${note_id1}    
     Log   ${resp.content}
@@ -428,9 +428,9 @@ JD-TC-Delete Provider Consumer Notes-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Provider Consumer Notes-7
+JD-TC-Delete Provider Consumer Notes-7
 
-    [Documentation]  Update provider consumer notes from user login and remove the notes details from main provider login.
+    [Documentation]  Update Provider Consumer Notes from user login and remove the notes details from main provider login.
 
 
     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
@@ -555,7 +555,7 @@ JD-TC-Update Provider Consumer Notes-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
-    ${title2}=  FakerLibrary.Text     max_nb_chars=255
+    ${title2}=  FakerLibrary.Text     max_nb_chars=250
 
     ${resp}=    Update Provider Consumer Notes    ${note_id1}    ${title2}    ${description}    ${users1}
     Log   ${resp.content}
@@ -581,7 +581,7 @@ JD-TC-Update Provider Consumer Notes-7
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.content}     []
 
-JD-TC-Update Provider Consumer Notes-8
+JD-TC-Delete Provider Consumer Notes-8
 
     [Documentation]  update provider consumer notes from user login and delete the notes from user login.
 
@@ -708,7 +708,7 @@ JD-TC-Update Provider Consumer Notes-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
-    ${title2}=  FakerLibrary.Text     max_nb_chars=255
+    ${title2}=  FakerLibrary.Text     max_nb_chars=250
 
     ${resp}=    Update Provider Consumer Notes    ${note_id1}    ${title2}    ${description}    ${users1}
     Log   ${resp.content}
@@ -731,7 +731,7 @@ JD-TC-Update Provider Consumer Notes-8
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.content}     []
 
-JD-TC-Update Provider Consumer Notes-9
+JD-TC-Delete Provider Consumer Notes-9
 
     [Documentation]  Add 2 provider consumer notes from user login and remove one notes  from main provider login.
 
@@ -845,7 +845,7 @@ JD-TC-Update Provider Consumer Notes-9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${users1}=   Create List   ${u_id}
-    ${title2}=  FakerLibrary.Text     max_nb_chars=255
+    ${title2}=  FakerLibrary.Text     max_nb_chars=250
 
     ${resp}=    Provider Consumer Add Notes    ${cid1}    ${title3}    ${description3}    ${users1}
     Log   ${resp.content}
@@ -905,11 +905,12 @@ JD-TC-Delete Provider Consumer Notes-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${fake_id}=  FakerLibrary.Text  
+    ${fake_id}=  Random Int  min=100   max=999
 
     ${resp}=    Delete Provider Consumer Notes    ${fake_id}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${PROVIDER_CONSUMER_NOTES_NOT_FOUND}
 
 JD-TC-Delete Provider Consumer Notes-UH2
 

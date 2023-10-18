@@ -258,12 +258,15 @@ JD-TC-Adding Provider Consumer Notes-UH4
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.Text     	
-    ${description}=  FakerLibrary.Text     	
-    ${users}=   Create List   ${title}
+    ${description}=  FakerLibrary.Text  
+    ${fakeid}=    Random Int  min=1000   max=9999	
+    ${users}=   Create List   ${fakeid}
+    ${USER_NOT_FOUND_WITH_ID}=  Format String  ${USER_NOT_FOUND_WITH_ID}  ${fakeid}
 
     ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${USER_NOT_FOUND_WITH_ID}
 
 JD-TC-Adding Provider Consumer Notes-UH5
 

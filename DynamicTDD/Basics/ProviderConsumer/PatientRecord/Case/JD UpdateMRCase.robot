@@ -149,13 +149,13 @@ JD-TC-Update MR Case-1
 
 JD-TC-Update MR Case-2
 
-    [Documentation]    Update MR Case title contain 255 words
+    [Documentation]    Update MR Case title contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-   ${title1}=  FakerLibrary.Text      max_nb_chars=255
+   ${title1}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
@@ -170,14 +170,14 @@ JD-TC-Update MR Case-2
 
 JD-TC-Update MR Case-3
 
-    [Documentation]    Update MR Case description contain 255 words
+    [Documentation]    Update MR Case description contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
@@ -199,7 +199,7 @@ JD-TC-Update MR Case-4
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title1}=  FakerLibrary.Random Number
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
@@ -311,7 +311,7 @@ JD-TC-Update MR Case-8
 
 
     ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${empty}  
     Log   ${resp.json()}

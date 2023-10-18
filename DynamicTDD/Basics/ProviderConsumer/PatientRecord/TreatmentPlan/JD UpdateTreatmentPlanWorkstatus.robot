@@ -211,14 +211,15 @@ JD-TC-Update Treatment Plan Work status-2
 
     ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${WorkStatus[1]}  
     Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${ALREADY_UPDATED_STATUS}
 
     # ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${WorkStatus[2]}  
     # Log   ${resp.json()}
     # Should Be Equal As Strings              ${resp.status_code}   200
-    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    # ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
 
 JD-TC-Update Treatment Plan Work status-UH1
 

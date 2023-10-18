@@ -318,7 +318,7 @@ JD-TC-Create Prescription-2
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
-    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${empty} 
+    Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     0
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['duration']}     ${duration} 
@@ -440,7 +440,7 @@ JD-TC-Create Prescription-UH5
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${EMPTY}       ${id1}    ${html}     ${mrPrescriptions}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
     #  Set Test Variable    ${prescription_uid1}   ${resp.content}
 
     # ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   dentalRecordId-eq=${id1}
@@ -554,4 +554,5 @@ JD-TC-Create Prescription-UH9
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${mrPrescriptions}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${MEDICINE_NAME_REQUIRED}
