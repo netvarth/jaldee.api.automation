@@ -93,7 +93,7 @@ JD-TC-SalesOfficerWithRbac-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+6478249
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+5469888
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -1161,7 +1161,7 @@ JD-TC-SalesOfficerWithRbac-6
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
-    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
+    Run Keyword And Continue On Failure     Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
 
 # ....... Customer Photo .......
 
@@ -1193,7 +1193,7 @@ JD-TC-SalesOfficerWithRbac-6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Suite Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
@@ -1232,7 +1232,7 @@ JD-TC-SalesOfficerWithRbac-6
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
     
 
 # ....... Verify adhaar number .......
@@ -1259,7 +1259,7 @@ JD-TC-SalesOfficerWithRbac-6
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
 
@@ -1372,7 +1372,7 @@ JD-TC-SalesOfficerWithRbac-6
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
 
@@ -1411,7 +1411,7 @@ JD-TC-SalesOfficerWithRbac-6
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
     ${resp}=  Approval Loan Application    ${loanuid}
     Log  ${resp.content}
@@ -1427,7 +1427,7 @@ JD-TC-SalesOfficerWithRbac-6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[3]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
 
 JD-TC-SalesOfficerWithRbac-7
 
@@ -1451,7 +1451,7 @@ JD-TC-SalesOfficerWithRbac-7
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
 # ....... Equifax Report .......
 
@@ -1516,7 +1516,7 @@ JD-TC-SalesOfficerWithRbac-8
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
 # ....... Equifax Report .......
 
@@ -1559,7 +1559,7 @@ JD-TC-SalesOfficerWithRbac-8
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
 
 # ....... Login Sales Officer and Request for Approval .......
 
@@ -1688,7 +1688,7 @@ JD-TC-SalesOfficerWithRbac-8
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[5]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime011}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime011}
 
 JD-TC-SalesOfficerWithRbac-9
 
@@ -1744,7 +1744,7 @@ JD-TC-SalesOfficerWithRbac-10
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[6]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime012}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime012}
 
 # ....... Consumer Acceptance Phone .......
 
@@ -1766,7 +1766,7 @@ JD-TC-SalesOfficerWithRbac-10
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[7]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime013}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime013}
 
 # ....... Sales Officer Login and Sanction .......
 
@@ -1808,7 +1808,7 @@ JD-TC-SalesOfficerWithRbac-10
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[9]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime014}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime014}
 
 JD-TC-SalesOfficerWithRbac-11
 
@@ -1868,6 +1868,6 @@ JD-TC-SalesOfficerWithRbac-12
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[10]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime015}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime015}
 
 

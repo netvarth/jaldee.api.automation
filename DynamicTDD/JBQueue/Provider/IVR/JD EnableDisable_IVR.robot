@@ -47,7 +47,7 @@ JD-TC-Enable_Disable_IVR-1
     [Documentation]   Enable Disable IVR
     
     clear_queue      ${PUSERNAME158}
-    clear_location   ${PUSERNAME158}
+    # clear_location   ${PUSERNAME158}
     clear_service    ${PUSERNAME158}
     clear_customer   ${PUSERNAME158}
 
@@ -64,6 +64,11 @@ JD-TC-Enable_Disable_IVR-1
     ${acc_id}=  get_acc_id  ${PUSERNAME158}
     Set Suite Variable   ${acc_id} 
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

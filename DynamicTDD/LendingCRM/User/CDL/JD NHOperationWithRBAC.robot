@@ -63,12 +63,13 @@ ${maxAge}                            60
 ${minAmount}                         5000
 ${maxAmount}                         300000
 
+
 *** Test Cases ***
 
-JD-TC-SalesHeadWithRBAC-1
-                                  
-    [Documentation]               createBranch Using Sales Head Role with RBAC
+JD-TC-NHOperation-1
 
+    [Documentation]   NH Operation - view partner.
+    
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
     ${length}=  Get Length  ${resp.json()}
@@ -92,9 +93,8 @@ JD-TC-SalesHeadWithRBAC-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+1347892
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+5473154
     ${highest_package}=  get_highest_license_pkg
-    Set Suite Variable      ${NBFCMUSERNAME1}
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -435,57 +435,7 @@ JD-TC-SalesHeadWithRBAC-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
     Set Suite Variable                     ${locname1}              ${resp.json()['place']}
-
-# ....User  :Branch Manager...
-
-    ${capabilities}=    Create List
-    ${role1}=           Create Dictionary  id=${role_id3}  roleName=${role_name3}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
-    ${user_roles}=      Create List        ${role1}
-    ${user_ids}=        Create List        ${BM}  
-
-    ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}   200
-
-    ${resp}=  Get User By Id               ${BM}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}   200
-    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id3}
-    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['roleName']}           ${role_name3}
-    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['defaultRole']}        ${bool[1]}
-    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['capabilities']}       ${capability3}
-    Should Be Equal As Strings             ${resp.json()['defaultRoleName']}                    ${role_name3}
-
-# ....User  :Sales Head...
-
-    ${role1}=           Create Dictionary  id=${role_id2}  roleName=${role_name2}  defaultRole=${bool[1]}  scope=${user_scope}   capabilities=${capabilities}
-    ${user_roles}=      Create List        ${role1}
-    ${user_ids}=        Create List        ${BSH}  
-
-    ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}   200
-
-    ${resp}=  Get User By Id               ${BSH}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}   200
-    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id2}
-    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['roleName']}           ${role_name2}
-    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['defaultRole']}        ${bool[1]}
-    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['capabilities']}       ${capability2}
-    Should Be Equal As Strings             ${resp.json()['defaultRoleName']}                    ${role_name2}
-
-    ${resp}=  SendProviderResetMail        ${BSH_USERNAME}
-    Should Be Equal As Strings             ${resp.status_code}   200
-
-    ${resp}=  ResetProviderPassword        ${BSH_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings             ${resp[0].status_code}   200
-    Should Be Equal As Strings             ${resp[1].status_code}   200
-
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}   200
-
+    
 # .... Create Branch1....
 
     ${branchCode}=                         FakerLibrary.Random Number
@@ -493,13 +443,13 @@ JD-TC-SalesHeadWithRBAC-1
     Set Suite Variable                     ${branchName}
 
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
-    Set Suite Variable      ${city}
 
     ${state}=    Evaluate                  "${state}".title()
     # ${state}=    String.RemoveString       ${state}    ${SPACE}
     Set Suite Variable                     ${state}
     Set Suite Variable                     ${district}
     Set Suite Variable                     ${pin}
+    Set Suite Variable                     ${city}
     
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -520,43 +470,7 @@ JD-TC-SalesHeadWithRBAC-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-
-JD-TC-SalesHeadWithRBAC-2
-                                  
-    [Documentation]               Update Branch Using Sales Head Role with RBAC
-
-    ${resp}=  Encrypted Provider Login  ${BSH_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${branchCode}=    FakerLibrary.Random Number
-    Set Suite Variable    ${branchCode}
-    ${branchName2}=    FakerLibrary.name
-    Set Suite Variable    ${branchName2}
-
-    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
-
-    ${state}=    Evaluate     "${state}".title()
-    ${state}=    String.RemoveString  ${state}    ${SPACE}
-
-    ${resp}=    Update BranchMaster    ${branchid}     ${branchCode}    ${branchName2}    ${locId}    ${status[0]}   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get BranchMaster
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-JD-TC-SalesHeadWithRBAC-3
-                                  
-    [Documentation]               Sales Head - approval request
-
-    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ....User 1 :Sales Officer...
+# ....User 1 :Sales Officer...
 
     ${location_id}=     Create List        ${locId}   
     ${branches_id}=     Create List        ${branchid} 
@@ -632,13 +546,13 @@ JD-TC-SalesHeadWithRBAC-3
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}      users=${users_id}    partners=${partners}
     ${role1}=           Create Dictionary  id=${role_id4}  roleName=${role_name4}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
     ${user_roles}=      Create List        ${role1}
-    ${user_ids}=        Create List        ${BOH}  
+    ${user_ids}=        Create List        ${NHO}  
 
     ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=  Get User By Id               ${BOH}
+    ${resp}=  Get User By Id               ${NHO}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
     Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id4}
@@ -783,11 +697,11 @@ JD-TC-SalesHeadWithRBAC-3
     Set Suite Variable                     ${phone}  555${PH_Number}
 
     ${dealerfname}=                        FakerLibrary.name
-    Set Suite Variable      ${dealerfname}
+    Set Suite Variable  ${dealerfname}
     ${dealername}=                         FakerLibrary.bs
-    Set Suite Variable      ${dealername}
+    Set Suite Variable  ${dealername}
     ${dealerlname}=                        FakerLibrary.last_name
-    Set Suite Variable      ${dealerlname}
+    Set Suite Variable  ${dealerlname}
     ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
     ${dob}=  Convert To String             ${dob} 
     Set Suite Variable      ${dob}
@@ -1012,43 +926,47 @@ JD-TC-SalesHeadWithRBAC-3
 
 # ....... Approval Request .......
 
-    ${resp}=  SendProviderResetMail        ${BSH_USERNAME}
-    Should Be Equal As Strings             ${resp.status_code}      200
-
-    @{resp}=  ResetProviderPassword        ${BSH_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings             ${resp[0].status_code}   200
-    Should Be Equal As Strings             ${resp[1].status_code}   200
-
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}      200
-
     ${resp}=   Partner Approval Request    ${partuid1}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-JD-TC-SalesHeadWithRBAC-UH1
-                                  
-    [Documentation]               Sales Head - Approve Dealer By Branch Manager
+# ......branch operation head view partner.......
 
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}      200
+    ${resp}=  SendProviderResetMail   ${NHO_USERNAME}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${note}=                               FakerLibrary.sentence
-    Set Suite Variable   ${note}
+    @{resp}=  ResetProviderPassword  ${NHO_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   Partner Approved            ${partuid1}              ${note}
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Partner by UID    ${partuid1}
     Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}      422
-    Should Be Equal As Strings             ${resp.json()}           ${NO_PERMISSION_FOR_REQUEST}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.json()['partnerName']}   ${dealername}
 
+JD-TC-NHOperation-2
 
-JD-TC-SalesHeadWithRBAC-4
-                                   
-    [Documentation]               Sales Head - Update Sales Officer and Credit officer
+    [Documentation]  NH Operation -approve partner.
 
-# .....Approve Dealer By Branch Manager......
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${note}=    FakerLibrary.sentence
+    Set Suite Variable    ${note}
+
+    ${resp}=   Partner Approved    ${partuid1}    ${note}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}  ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-NHOperation-3
+
+    [Documentation]  NH Operation -try to approve partner who is already approved.
 
     ${resp}=  SendProviderResetMail        ${BM_USERNAME}
     Should Be Equal As Strings             ${resp.status_code}      200
@@ -1068,11 +986,22 @@ JD-TC-SalesHeadWithRBAC-4
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
 
-# ...... Update sales officer and credit officer for dealer1 & activate dealer1 by branch operation head....
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}      200
+    ${resp}=   Partner Approved    ${partuid1}    ${note}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.content}       "${NO_PERMISSION_FOR_REQUEST}"
+    
+JD-TC-NHOperation-4
+
+    [Documentation]     NH Operation -  Update Sales Officer
+
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Salesofficer}=  Create Dictionary    id=${SO}  isDefault=${bool[1]}
 
@@ -1080,27 +1009,36 @@ JD-TC-SalesHeadWithRBAC-4
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
+JD-TC-NHOperation-5
+
+    [Documentation]     NH Operation -  Update Credit Officer
+
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${Creditofficer}=  Create Dictionary   id=${BCH}    isDefault=${bool[1]}
 
     ${resp}=    Update Credit Officer      ${partuid1}      ${Creditofficer}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-JD-TC-SalesHeadWithRBAC-5
-                                   
-    [Documentation]               Sales Head - Activate Partner
+JD-TC-NHOperation-6
 
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}      200
+    [Documentation]     NH Operation -  Activate Partner
+
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Activate Partner           ${partuid1}     ${bool[1]}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-JD-TC-SalesHeadWithRBAC-UH2
-                                   
-    [Documentation]               Sales Head - Create Loan 
+
+JD-TC-NHOperation-7
+
+    [Documentation]     NH Operation -  Create Loan Application
 
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1112,9 +1050,9 @@ JD-TC-SalesHeadWithRBAC-UH2
     Set Suite Variable                     ${cust}  555${cust}
 
     ${fname}=                              FakerLibrary.name
-    Set Suite Variable      ${fname}
+    Set Suite Variable   ${fname}
     ${lname}=                              FakerLibrary.name
-    Set Suite Variable      ${lname}
+    Set Suite Variable   ${lname}
     
     ${resp}=  GetCustomer                  phoneNo-eq=${cust}  
     Log  ${resp.content}
@@ -1128,9 +1066,8 @@ JD-TC-SalesHeadWithRBAC-UH2
         Set Suite Variable  ${cust_id}      ${resp.json()[0]['id']}
     END
 
-    Set Suite Variable  ${cust_emailid}           ${fname}${C_Email}.ynwtest@jaldee.com
-    ${cust_email}=    String.RemoveString       ${cust_emailid}    ${SPACE}
-    Set Suite Variable      ${cust_email}
+    Set Suite Variable  ${cust_email}           ${cust}${C_Email}.test@jaldee.com
+    ${cust_email}=    String.RemoveString       ${cust_email}  ${SPACE}
 
     updateEnquiryStatus                    ${account_id1}
     sleep  01s
@@ -1205,12 +1142,10 @@ JD-TC-SalesHeadWithRBAC-UH2
     Should Be Equal As Strings             ${resp.json()['id']}    ${en_id}
     Should Be Equal As Strings             ${resp.json()['uid']}   ${en_uid}
 
-# ....... Create Loan - Generate and verify phone for loan.......
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}      200
-    
     ${resp}=                               Generate Loan Application Otp for Phone Number    ${cust}  ${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
@@ -1223,19 +1158,16 @@ JD-TC-SalesHeadWithRBAC-UH2
     ${resp}=                               Verify Phone and Create Loan Application with customer details  ${cust}  ${OtpPurpose['ConsumerVerifyPhone']}  ${cust_id}  ${locId}   ${kyc_list1}  firstName=${fname}  lastName=${lname}  phoneNo=${cust}  countryCode=${countryCodes[0]}  gender=${gender}  dob=${dob}     
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    422
-    Should Be Equal As Strings             ${resp.json()}           ${NO_PERMISSION_FOR_REQUEST}
+    Should Be Equal As Strings             ${resp.content}       "${NO_PERMISSION_FOR_REQUEST}"
 
+JD-TC-NHOperation-8
 
-JD-TC-SalesHeadWithRBAC-UH3
-                                   
-    [Documentation]               Sales Head - Approval Request
-
-    # ....... Create Loan - Generate and verify phone for loan.......
+    [Documentation]     NH Operation -  Lan appliation Approval Request 
 
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}    200
-    
+
     ${resp}=                               Generate Loan Application Otp for Phone Number    ${cust}  ${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
@@ -1261,19 +1193,11 @@ JD-TC-SalesHeadWithRBAC-UH3
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime1}    ${resp.json()}   
-    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=                               Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
+    Set Suite Variable                     ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
-    Run Keyword And Continue On Failure     Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
-
 
 # ....... Customer Photo .......
 
@@ -1295,17 +1219,10 @@ JD-TC-SalesHeadWithRBAC-UH3
 
 # ....... Save Customer Details .......
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime2}    ${resp.json()} 
-    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Set Suite Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
+    Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
@@ -1335,17 +1252,9 @@ JD-TC-SalesHeadWithRBAC-UH3
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime3}    ${resp.json()} 
-    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
-    
 
 # ....... Verify adhaar number .......
 
@@ -1362,16 +1271,9 @@ JD-TC-SalesHeadWithRBAC-UH3
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime4}    ${resp.json()} 
-    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
 
@@ -1435,7 +1337,7 @@ JD-TC-SalesHeadWithRBAC-UH3
     ${loanProducts}=  Create Dictionary    id=${Productid}  categoryId=${categoryid}    typeId=${typeid}
     ${loanProducts}=  Create List          ${loanProducts}
     ${partner}=       Create Dictionary    id=${partid1}
-    Set Suite Variable      ${partner}
+    Set Suite Variable   ${partner}
     ${customerIntegrationId}               FakerLibrary.Random Number
     ${referralEmployeeCode}                FakerLibrary.Random Number
 
@@ -1475,16 +1377,9 @@ JD-TC-SalesHeadWithRBAC-UH3
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime5}    ${resp.json()} 
-    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
 
@@ -1514,29 +1409,23 @@ JD-TC-SalesHeadWithRBAC-UH3
 
 # ....... Loan application approvalrequest .......
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime6}    ${resp.json()} 
-    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}      200
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Approval Loan Application    ${loanuid}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    422
-    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+    Should Be Equal As Strings             ${resp.content}       "${NO_PERMISSION_FOR_REQUEST}"
 
-JD-TC-SalesHeadWithRBAC-6
-                                   
-    [Documentation]               Sales Head - get Equifax, Mafil and Cibil score    
+
+JD-TC-NHOperation-9
+
+    [Documentation]     NH Operation -  Manual Approval 
 
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1546,9 +1435,16 @@ JD-TC-SalesHeadWithRBAC-6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}      200
+    ${resp}=  SendProviderResetMail        ${BCH_USERNAME}
+    Should Be Equal As Strings             ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword        ${BCH_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings             ${resp[0].status_code}        200
+    Should Be Equal As Strings             ${resp[1].status_code}        200
+
+    ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
@@ -1574,14 +1470,6 @@ JD-TC-SalesHeadWithRBAC-6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-JD-TC-SalesHeadWithRBAC-UH4
-                                   
-    [Documentation]               Sales Head - Loan Application Manual Approval
-
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}      200
-
 # ....... Manual Approval .......
 
     ${loanScheme}=   Create Dictionary     id=${Schemeid1}  
@@ -1589,48 +1477,17 @@ JD-TC-SalesHeadWithRBAC-UH4
     ${note}=                               FakerLibrary.sentence
     Set Suite Variable                     ${note}
 
-    ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
-    Log    ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}    422
-    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
-
-JD-TC-SalesHeadWithRBAC-7
-                                   
-    [Documentation]               Sales Head - Loan Application Scheme approval
-
-    ${resp}=  SendProviderResetMail        ${BCH_USERNAME}
-    Should Be Equal As Strings             ${resp.status_code}  200
-
-    @{resp}=  ResetProviderPassword        ${BCH_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings             ${resp[0].status_code}        200
-    Should Be Equal As Strings             ${resp[1].status_code}        200
-
-    ${resp}=  Encrypted Provider Login     ${BCH_USERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}  200
-
-    ${loanScheme}=   Create Dictionary     id=${Schemeid1}  
-    ${loanProduct}=  Create Dictionary     id=${Productid} 
-    ${note}=                               FakerLibrary.sentence
-    Set Suite Variable                     ${note}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
     Log    ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime10}    ${resp.json()} 
-    ${datetime010}    Convert Date    ${datetime10}    result_format=%Y-%m-%d %H:%M
+JD-TC-NHOperation-10
 
-    ${resp}=                               Get Loan Application By uid           ${loanuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}                   200
-    Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
-
-# ....... Login Sales Officer and Request for Approval .......
+    [Documentation]     NH Operation -  Scheme Approval 
 
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1743,46 +1600,55 @@ JD-TC-SalesHeadWithRBAC-7
     ${dayofmonth}=        Random Int       min=1   max=20
     Set Suite Variable    ${dayofmonth}
 
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  salesofficer Approval        ${loanuid}    ${sch1}     ${tenu1}    ${noOfAdvanceEmi}   ${dayofmonth}    partner=${partner}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}  200
 
-JD-TC-SalesHeadWithRBAC-UH5
-                                   
-    [Documentation]               Sales Head - Loan Application Branchapproval
+JD-TC-NHOperation-11
 
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}  200
-
-    ${resp}=  Get Loan Application By uid  ${loanuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}                   200
-
-    ${note}=                               FakerLibrary.bs
-
-    ${resp}=                               Loan Application Branchapproval       ${loanuid}   ${note}
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}    422
-    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
-
-JD-TC-SalesHeadWithRBAC-UH6
-                                   
-    [Documentation]               Sales Head - Loan Sanctioned
+    [Documentation]     NH Operation -  Branch Approval
 
     ${resp}=  Encrypted Provider Login     ${BM_USERNAME}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}      200
 
+    ${resp}=    Equifax Report             ${loanuid}  ${cust}  ${kycid}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
     ${note}=                               FakerLibrary.bs
+
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=                               Loan Application Branchapproval       ${loanuid}   ${note}
     Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}  200
+    Should Be Equal As Strings             ${resp.status_code}   422
+    Should Be Equal As Strings             ${resp.content}       "${NO_PERMISSION_FOR_REQUEST}"
+
+JD-TC-NHOperation-12
+
+    [Documentation]     NH Operation -  loan Sanctioned
+
+    ${resp}=  Encrypted Provider Login     ${BM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
+
+    ${resp}=                               Loan Application Branchapproval       ${loanuid}   ${note}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    ${resp}=  Get Loan Application By uid  ${loanuid} 
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}                   200
+    Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[6]}
+
+# ....... Consumer Acceptance Phone .......
 
     ${resp}=                               Otp for Consumer Acceptance Phone     ${cust}  ${email}   ${countryCodes[0]}
     Log  ${resp.content}
@@ -1792,17 +1658,10 @@ JD-TC-SalesHeadWithRBAC-UH6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}  200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime13}    ${resp.json()} 
-    ${datetime013}    Convert Date    ${datetime13}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[7]}
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime013}
 
 # ....... Sales Officer Login and Sanction .......
 
@@ -1828,57 +1687,11 @@ JD-TC-SalesHeadWithRBAC-UH6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-# ....... Loan Sanctioned .......
-
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}  200
-
-    ${resp}=  Partner Accepted    ${loanuid}    ${SO}    ${pdffile}    ${fileSize}   ${caption}  ${fileType}    ${LoanAction[0]}  invoice  ${order}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
-
-
-JD-TC-SalesHeadWithRBAC-UH7
-                                   
-    [Documentation]               Sales Head - Operation Approval
-
-    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-    ${resp}=  Partner Accepted    ${loanuid}    ${SO}    ${pdffile}    ${fileSize}   ${caption}  ${fileType}    ${LoanAction[0]}  invoice  ${order}
+    ${resp}=  Encrypted Provider Login  ${NHO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Loan Application By uid  ${loanuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}                   200
-    Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[9]}
-
-# ....... Loging Operational Head for Approval .......
-
-    ${resp}=  SendProviderResetMail        ${BOH_USERNAME}
-    Should Be Equal As Strings             ${resp.status_code}  200
-
-    @{resp}=  ResetProviderPassword        ${BOH_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings             ${resp[0].status_code}        200
-    Should Be Equal As Strings             ${resp[1].status_code}        200
-
-    ${resp}=  Encrypted Provider Login     ${BOH_USERNAME}  ${PASSWORD}
+    ${resp}=  Partner Accepted    ${loanuid}    ${SO}    ${pdffile}    ${fileSize}   ${caption}  ${fileType}    ${LoanAction[0]}  invoice  ${order}
     Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}  200
-
-# ....... Operation Approval .......
-
-    ${resp}=  Encrypted Provider Login     ${BSH_USERNAME}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}  200
-
-    ${note}=      FakerLibrary.sentence
-
-    ${resp}=    Loan Application Operational Approval   ${loanuid}   ${note}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}          ${NO_PERMISSION_FOR_REQUEST}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings             ${resp.content}       "${NO_PERMISSION_FOR_REQUEST}"

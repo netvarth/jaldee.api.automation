@@ -135,46 +135,6 @@ JD-TC-SendMessage-3
 
 JD-TC-SendMessage-4
 
-    [Documentation]   Provider send a message to a provider consumer with one attachment.
-
-
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${fname}=  Fakerlibrary.firstname
-    ${lname}=  Fakerlibrary.lastname
-    ${PO_Number}=  Generate Random Phone Number
-    ${phone}=  Convert To Integer    ${PO_Number}
-        ${resp}=  GetCustomer  phoneNo-eq=${phone}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${phone}  firstName=${fname}   lastName=${lname}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${pcid}   ${resp1.json()}
-    ELSE
-        Set Test Variable  ${pcid}  ${resp.json()[0]['id']}
-    END
-
-    ${caption}=  Fakerlibrary.Sentence
-    ${resp}=  db.getType   ${jpgfile}
-    Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile}
-    ${attachment_list}=  Create Dictionary         owner=${provider_id}   fileName=${jpgfile}    fileSize= 0.00458     caption=${caption}     fileType=${fileType}   action=${file_action[0]}  order=${order}
-
-    ${comm_msg}=  Fakerlibrary.sentence
-    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id}  ${userType[0]}  ${pcid}  ${userType[3]}  ${messageType[0]}  ${attachment_list}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-JD-TC-SendMessage-5
-
     [Documentation]   Provider send a message to a partner with one attachment.
 
     ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
@@ -260,7 +220,7 @@ JD-TC-SendMessage-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-JD-TC-SendMessage-6
+JD-TC-SendMessage-5
 
     [Documentation]   User send a message to a jaldee consumer with one attachment.
 
@@ -359,7 +319,7 @@ JD-TC-SendMessage-6
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-JD-TC-SendMessage-7
+JD-TC-SendMessage-6
 
     [Documentation]   Provider send a message to a jaldee consumer without any message.
 
@@ -395,7 +355,9 @@ JD-TC-SendMessage-UH1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider1}  ${decrypted_data['id']}
     
     ${resp}=  ProviderLogout  
     Log  ${resp.content}
@@ -456,57 +418,6 @@ JD-TC-SendMessage-UH2
 
 
 JD-TC-SendMessage-UH3
-
-    [Documentation]   Provider send a message to another providers provider consumer.
-
-
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME45}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-  
-    ${fname}=  Fakerlibrary.firstname
-    ${lname}=  Fakerlibrary.lastname
-    ${PO_Number}=  Generate Random Phone Number
-    ${phone}=  Convert To Integer    ${PO_Number}
-        ${resp}=  GetCustomer  phoneNo-eq=${phone}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${phone}  firstName=${fname}   lastName=${lname}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${pcid}   ${resp1.json()}
-    ELSE
-        Set Test Variable  ${pcid}  ${resp.json()[0]['id']}
-    END
-
-    ${resp}=  ProviderLogout
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME68}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    clear_customer   ${MUSERNAME68}
-
-    ${caption}=  Fakerlibrary.Sentence
-    ${resp}=  db.getType   ${jpgfile}
-    Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile}
-    ${attachment_list}=  Create Dictionary         owner=${provider_id}   fileName=${jpgfile}    fileSize= 0.00458     caption=${caption}     fileType=${fileType}   action=${file_action[0]}  order=${order}
-
-    ${comm_msg}=  Fakerlibrary.sentence
-    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id}  ${userType[0]}  ${pcid}  ${userType[3]}  ${messageType[0]}  ${attachment_list}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.content}   "${INVALID_CONSUMER_ID}"
-
-
-JD-TC-SendMessage-UH4
 
     [Documentation]   create a user in one location and partner in another location , then user try to send message to that partner.
 
@@ -665,7 +576,7 @@ JD-TC-SendMessage-UH4
     Should Be Equal As Strings  ${resp.content}   "${INVALID_CONSUMER_ID}"
 
 
-JD-TC-SendMessage-UH5
+JD-TC-SendMessage-UH4
 
     [Documentation]   Provider send a message to a jaldee consumer without provider_id.
 
@@ -696,7 +607,7 @@ JD-TC-SendMessage-UH5
     Should Be Equal As Strings  ${resp.content}   "${INVALID_USER_ID}"
 
 
-JD-TC-SendMessage-UH6
+JD-TC-SendMessage-UH5
 
     [Documentation]   Provider send a message to a jaldee consumer without consumer id.
 

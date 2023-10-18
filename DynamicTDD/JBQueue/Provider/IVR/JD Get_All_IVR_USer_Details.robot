@@ -128,6 +128,11 @@ JD-TC-GET_All_IVR_USer_Details-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

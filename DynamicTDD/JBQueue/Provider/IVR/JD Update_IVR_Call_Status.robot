@@ -45,7 +45,7 @@ JD-TC-Update_IVR_Call_Status-1
     [Documentation]   Update IVR Call Status
     
     clear_queue      ${PUSERNAME178}
-    clear_location   ${PUSERNAME178}
+    # clear_location   ${PUSERNAME178}
     clear_service    ${PUSERNAME178}
     clear_customer   ${PUSERNAME178}
 
@@ -66,6 +66,12 @@ JD-TC-Update_IVR_Call_Status-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

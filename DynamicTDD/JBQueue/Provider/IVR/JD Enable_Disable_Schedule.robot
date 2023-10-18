@@ -27,7 +27,7 @@ JD-Enable_Disable_Schedule-1
     [Documentation]  Enable Provider schedule
 
     clear_queue      ${PUSERNAME157}
-    clear_location   ${PUSERNAME157}
+    # clear_location   ${PUSERNAME157}
     clear_service    ${PUSERNAME157}
     clear_customer   ${PUSERNAME157}
 
@@ -47,6 +47,12 @@ JD-Enable_Disable_Schedule-1
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      

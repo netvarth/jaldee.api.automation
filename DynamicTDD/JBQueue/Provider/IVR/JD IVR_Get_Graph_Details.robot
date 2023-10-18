@@ -45,7 +45,7 @@ JD-TC-Get_IVR_Graph_Details-1
     [Documentation]   Get IVR Graph Details
     
     clear_queue      ${PUSERNAME171}
-    clear_location   ${PUSERNAME171}
+    # clear_location   ${PUSERNAME171}
     clear_service    ${PUSERNAME171}
     clear_customer   ${PUSERNAME171}
 
@@ -66,6 +66,12 @@ JD-TC-Get_IVR_Graph_Details-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

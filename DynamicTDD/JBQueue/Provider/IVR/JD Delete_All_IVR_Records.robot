@@ -45,7 +45,7 @@ JD-TC-Outbound_IVR-1
     [Documentation]   Outbound IVR
     
     clear_queue      ${PUSERNAME143}
-    clear_location   ${PUSERNAME143}
+    # clear_location   ${PUSERNAME143}
     clear_service    ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
 
@@ -61,6 +61,12 @@ JD-TC-Outbound_IVR-1
 
     ${acc_id}=  get_acc_id  ${PUSERNAME143}
     Set Suite Variable   ${acc_id} 
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}

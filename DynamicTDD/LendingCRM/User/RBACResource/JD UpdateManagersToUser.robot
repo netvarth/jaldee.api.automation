@@ -30,7 +30,9 @@ JD-TC-UpdateManagersToUser-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME49}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}

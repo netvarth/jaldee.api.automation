@@ -32,8 +32,10 @@ JD-TC-AppendUserScope-1
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${locId1}=  Create Sample Location
     Set Suite Variable   ${locId1}
@@ -462,8 +464,10 @@ JD-TC-AppendUserScope-9
     ${resp}=  Encrypted Provider Login  ${MUSERNAME125}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -713,8 +717,10 @@ JD-TC-AppendUserScope-10
     ${resp}=  Encrypted Provider Login  ${MUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -1107,8 +1113,10 @@ JD-TC-AppendUserScope-11
     ${resp}=  Encrypted Provider Login  ${MUSERNAME129}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -1536,7 +1544,9 @@ JD-TC-AppendUserScope-UH3
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -1702,8 +1712,10 @@ JD-TC-AppendUserScope-UH8
     ${resp}=  Encrypted Provider Login  ${MUSERNAME126}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get roles
     Log  ${resp.json()}

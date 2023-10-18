@@ -28,7 +28,7 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
     [Documentation]  Get Avaliable Providers In A Time Range
 
     clear_queue      ${PUSERNAME161}
-    clear_location   ${PUSERNAME161}
+    # clear_location   ${PUSERNAME161}
     clear_service    ${PUSERNAME161}
     clear_customer   ${PUSERNAME161}
 
@@ -48,6 +48,12 @@ JD-Get_Avaliable_Providers_In_A_Time_Range-1
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      

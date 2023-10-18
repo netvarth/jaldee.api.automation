@@ -57,7 +57,7 @@ JD-TC-Get_IVR_By_Ref_Id-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
     clear_queue      ${PUSERNAME162}
-    clear_location   ${PUSERNAME162}
+    # clear_location   ${PUSERNAME162}
     clear_service    ${PUSERNAME162}
     clear_customer   ${PUSERNAME162}
 
@@ -74,6 +74,11 @@ JD-TC-Get_IVR_By_Ref_Id-1
     ${acc_id}=  get_acc_id  ${PUSERNAME162}
     Set Suite Variable   ${acc_id} 
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

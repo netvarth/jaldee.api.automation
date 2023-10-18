@@ -52,7 +52,7 @@ JD-TC-Add_Notes_in_IVR-1
     [Documentation]   Add notes in IVR
     
     clear_queue      ${PUSERNAME150}
-    clear_location   ${PUSERNAME150}
+    # clear_location   ${PUSERNAME150}
     clear_service    ${PUSERNAME150}
     clear_customer   ${PUSERNAME150}
 
@@ -69,6 +69,11 @@ JD-TC-Add_Notes_in_IVR-1
     ${acc_id}=  get_acc_id  ${PUSERNAME150}
     Set Suite Variable   ${acc_id} 
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

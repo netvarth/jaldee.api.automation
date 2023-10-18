@@ -48,7 +48,7 @@ JD-TC-Get_User_Specified_Schedules-1
     [Documentation]   Get all IVR user details
 
     clear_queue      ${HLMUSERNAME6}
-    clear_location   ${HLMUSERNAME6}
+    # clear_location   ${HLMUSERNAME6}
     clear_service    ${HLMUSERNAME6}
     clear_customer   ${HLMUSERNAME6}
     
@@ -122,6 +122,12 @@ JD-TC-Get_User_Specified_Schedules-1
 
     ${so_id1}=  Create Sample User 
     Set Suite Variable  ${so_id1}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      

@@ -27,7 +27,7 @@ JD-Get_all_schedules_of_an_account-1
     [Documentation]  Get all schedules of an account
 
     clear_queue      ${PUSERNAME160}
-    clear_location   ${PUSERNAME160}
+    # clear_location   ${PUSERNAME160}
     clear_service    ${PUSERNAME160}
     clear_customer   ${PUSERNAME160}
 
@@ -47,6 +47,12 @@ JD-Get_all_schedules_of_an_account-1
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      

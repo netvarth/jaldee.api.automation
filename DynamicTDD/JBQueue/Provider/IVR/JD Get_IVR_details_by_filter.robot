@@ -46,7 +46,7 @@ JD-TC-Get_IVR_Details_By_Filter-1
     [Documentation]   Get IVR Details By Filter
     
     clear_queue      ${PUSERNAME165}
-    clear_location   ${PUSERNAME165}
+    # clear_location   ${PUSERNAME165}
     clear_service    ${PUSERNAME165}
     clear_customer   ${PUSERNAME165}
 
@@ -67,6 +67,12 @@ JD-TC-Get_IVR_Details_By_Filter-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

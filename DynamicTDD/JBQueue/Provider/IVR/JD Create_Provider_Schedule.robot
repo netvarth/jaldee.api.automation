@@ -27,7 +27,7 @@ JD-TC-Create_Provider_Schedule-1
     [Documentation]  Create Provider Schedule
 
     clear_queue      ${PUSERNAME155}
-    clear_location   ${PUSERNAME155}
+    # clear_location   ${PUSERNAME155}
     clear_service    ${PUSERNAME155}
     clear_customer   ${PUSERNAME155}
 
@@ -52,6 +52,12 @@ JD-TC-Create_Provider_Schedule-1
     Set Suite Variable    ${ser_name}
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      

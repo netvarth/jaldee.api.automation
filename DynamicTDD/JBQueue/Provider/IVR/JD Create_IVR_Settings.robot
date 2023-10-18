@@ -44,7 +44,7 @@ JD-TC-Create_IVR_Settings-1
     [Documentation]   Create IVR Settings
     
     clear_queue      ${PUSERNAME154}
-    clear_location   ${PUSERNAME154}
+    # clear_location   ${PUSERNAME154}
     clear_service    ${PUSERNAME154}
     clear_customer   ${PUSERNAME154}
 
@@ -65,6 +65,12 @@ JD-TC-Create_IVR_Settings-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

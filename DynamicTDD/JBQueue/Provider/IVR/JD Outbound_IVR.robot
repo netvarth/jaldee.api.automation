@@ -45,7 +45,7 @@ JD-TC-Outbound_IVR-1
     [Documentation]   Outbound IVR
     
     clear_queue      ${PUSERNAME175}
-    clear_location   ${PUSERNAME175}
+    # clear_location   ${PUSERNAME175}
     clear_service    ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
@@ -66,6 +66,12 @@ JD-TC-Outbound_IVR-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

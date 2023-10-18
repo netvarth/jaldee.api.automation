@@ -46,7 +46,7 @@ JD-TC-Aftercall_IVR-1
     [Documentation]   Aftercall IVR
     
     clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
@@ -63,6 +63,11 @@ JD-TC-Aftercall_IVR-1
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location

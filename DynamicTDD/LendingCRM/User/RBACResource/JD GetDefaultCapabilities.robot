@@ -80,7 +80,9 @@ JD-TC-GetDefaultCapabilities-3
     ${resp}=  Encrypted Provider Login  ${MUSERNAME39}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}

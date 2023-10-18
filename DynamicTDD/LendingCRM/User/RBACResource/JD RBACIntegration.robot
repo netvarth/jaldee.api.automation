@@ -1,84 +1,67 @@
 *** Settings ***
-Suite Teardown    Delete All Sessions
-Test Teardown     Delete All Sessions
-Force Tags        RBAC
-Library           Collections
-Library           String
-Library           json
-# Library           FakerLibrary
-Library           FakerLibrary    locale=en_IN
-Library           /ebs/TDD/db.py
-Resource          /ebs/TDD/ProviderKeywords.robot
-Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/ProviderPartnerKeywords.robot
-Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
-Variables         /ebs/TDD/varfiles/hl_musers.py
-Resource          /ebs/TDD/Keywords.robot
-
-
+Suite Teardown     Delete All Sessions
+Test Teardown      Delete All Sessions
+Force Tags         RBAC
+Library            Collections
+Library            String
+Library            json
+Library            FakerLibrary
+Library            /ebs/TDD/db.py
+Library            /ebs/TDD/excelfuncs.py
+Resource           /ebs/TDD/ProviderKeywords.robot
+Resource           /ebs/TDD/ConsumerKeywords.robot
+Resource           /ebs/TDD/ProviderPartnerKeywords.robot
+Variables          /ebs/TDD/varfiles/providers.py
+Variables          /ebs/TDD/varfiles/consumerlist.py 
+Variables          /ebs/TDD/varfiles/musers.py
+Variables          /ebs/TDD/varfiles/hl_musers.py
 
 
 *** Variables ***
 
 @{emptylist}
+${invoiceAmount}                     80000
+${downpaymentAmount}                 20000
+${requestedAmount}                   60000
+${sanctionedAmount}                  60000
 
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
+${jpgfile}                           /ebs/TDD/uploadimage.jpg
+${pngfile}                           /ebs/TDD/upload.png
+${pdffile}                           /ebs/TDD/sample.pdf
+${jpgfile2}                          /ebs/TDD/small.jpg
+${gif}                               /ebs/TDD/sample.gif
+${xlsx}                              /ebs/TDD/qnr.xlsx
 
-${order}    0
-${fileSize}  0.00458
-${digits}       0123456789
+${order}                             0
+${fileSize}                          0.00458
 
-# ${consumernumber}     5550000032
-# ${aadhaar}   555555555555
-# ${pan}       5555523145
-# ${bankAccountNo}    5555534564
-# ${bankIfsc}         5555566
-# ${bankPin}       5555533
+${aadhaar}                           555555555555
 
-# ${bankAccountNo2}    5555534587
-# ${bankIfsc2}         55555688
-# ${bankPin2}       5555589
-# ${montlyIncome}  50000
+${monthlyIncome}                     80000
+${emiPaidAmountMonthly}              2000
+${start}                             12
 
-# ${invoiceAmount}    60000
-# ${downpaymentAmount}    2000
-# ${requestedAmount}    58000
+${customerEducation}                 1    
+${customerEmployement}               1   
+${salaryRouting}                     1
+${familyDependants}                  1
+${noOfYearsAtPresentAddress}         1  
+${currentResidenceOwnershipStatus}   1  
+${ownedMovableAssets}                1
+${goodsFinanced}                     1
+${earningMembers}                    1
+${existingCustomer}                  1
+${autoApprovalUptoAmount}            50000
+${autoApprovalUptoAmount2}           70000
+${cibilScore}                        850
 
-# ${invoiceAmount1}    22001
-# ${downpaymentAmount1}    2000
-# ${requestedAmount1}    20001
-
-# ${monthlyIncome}    80000
-# ${emiPaidAmountMonthly}    2000
-
-# ${invoiceAmount}    500000
-# ${downpaymentAmount}    4500000
-# ${requestedAmount}    50000
-
-# ${invoiceAmount1}    500000
-# ${downpaymentAmount1}    20000
-# ${requestedAmount1}    50000
-
-# ${monthlyIncome}    50000
-# ${emiPaidAmountMonthly}    50
-
-${invoiceAmount}    60000
-${downpaymentAmount}    2000
-${requestedAmount}    58000
-
-${invoiceAmount1}    22001
-${downpaymentAmount1}    2000
-${requestedAmount1}    20001
-
-${monthlyIncome}    80000
-${emiPaidAmountMonthly}    2000
-
-${autoApprovalUptoAmount}    50000
-${autoApprovalUptoAmount2}    70000
-
+${minCreditScoreRequired}            50
+${minEquifaxScoreRequired}           690
+${minCibilScoreRequired}             690
+${minAge}                            23
+${maxAge}                            60
+${minAmount}                         5000
+${maxAmount}                         300000
 
 *** Keywords ***
 Account with Multiple Users in NBFC
@@ -94,10 +77,12 @@ Account with Multiple Users in NBFC
     FOR   ${a}  ${start}   IN RANGE   ${length}   
         ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        Set Test Variable  ${Dom}   ${resp.json()['sector']}
-        Set Test Variable  ${SubDom}   ${resp.json()['subSector']}
-        ${name}=  Set Variable  ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
+        ${decrypted_data}=  db.decrypt_data   ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        Set Test Variable  ${Dom}   ${decrypted_data['sector']}
+        Set Test Variable  ${SubDom}   ${decrypted_data['subSector']}
+        ${name}=  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
         Continue For Loop If  '${Dom}' != "finance"
         Continue For Loop If  '${SubDom}' != "nbfc"
@@ -122,341 +107,408 @@ JD-TC-RBAC-CDL-1
  
     [Documentation]  sales officer creates loan for new provider customer and check the loan can be viewed by branch credit head
 
-    ${MUAcct}=  Account with Multiple Users in NBFC
-    Log  ${MUAcct}
-    
-    # ${resp}=  Encrypted Provider Login  ${MUAcct}  ${PASSWORD}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
+    ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
-    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    ${length}=  Get Length  ${resp.json()}
+    FOR   ${domindex}  IN RANGE   ${length}
+        IF  "${resp.json()[${domindex}]['domain']}" == "finance"
+            ${sublen}=  Get Length  ${resp.json()[${domindex}]['subDomains']}
+            FOR   ${subdomindex}  IN RANGE   ${sublen}
+                IF  "${resp.json()[${domindex}]['subDomains'][${subdomindex}]['subDomain']}" == "nbfc"
+                    Set Test Variable  ${domains}  ${resp.json()[${domindex}]['domain']}
+                    Set Test Variable  ${sub_domains}  ${resp.json()[${domindex}]['subDomains'][${subdomindex}]['subDomain']}
+                    
+                    Exit For Loop
+                END
+            END
+        END
+    END
+    ${firstname_A}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname_A}
+    ${lastname_A}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_A}
 
-    # ${resp}=  categorytype  ${account_id}
-    # ${resp}=  tasktype  ${account_id}
-    ${resp}=  loanStatus  ${account_id}
-    # ${resp}=  loanProducttype  ${account_id}
-    # ${resp}=  LoanProductCategory  ${account_id}
-    # ${resp}=  loanProducts  ${account_id}
-    # ${resp}=  loanScheme  ${account_id}
-    # ${resp}=  partnercategorytype   ${account_id}
-    # ${resp}=  partnertype  ${account_id}
+# ..... SignUp Business Head
 
-    ${resp}=  Get Accountsettings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+8745922
+    ${highest_package}=  get_highest_license_pkg
+
+    ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}    200
+    
+    ${resp}=  Account Activation          ${NBFCMUSERNAME1}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Account Set Credential      ${NBFCMUSERNAME1}  ${PASSWORD}  0
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    
+    Set Suite Variable  ${BH}   ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}         ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
 
     IF  ${resp.json()['enableRbac']}==${bool[0]}
-        ${resp1}=  Enable Disable RBAC  ${toggle[0]}
+        ${resp1}=  Enable Disable RBAC    ${toggle[0]}
         Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
+        Should Be Equal As Strings        ${resp1.status_code}  200
     END
 
     IF  ${resp.json()['enableCdl']}==${bool[0]}
         ${resp1}=  Enable Disable CDL  ${toggle[0]}
         Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
+        Should Be Equal As Strings        ${resp1.status_code}  200
     END
+
+    ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[0]}    ${bool[1]}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan    autoEmiDeductionRequire=${bool[1]}   partnerRequired=${bool[0]}  documentSignatureRequired=${bool[0]}   digitalSignatureRequired=${bool[1]}   emandateRequired=${bool[1]}   creditScoreRequired=${bool[1]}   equifaxScoreRequired=${bool[1]}   cibilScoreRequired=${bool[1]}   minCreditScoreRequired=${minCreditScoreRequired}   minEquifaxScoreRequired=${minEquifaxScoreRequired}   minCibilScoreRequired=${minCibilScoreRequired}   minAge=${minAge}   maxAge=${maxAge}   minAmount=${minAmount}   maxAmount=${maxAmount}   bankStatementVerificationRequired=${bool[1]}   eStamp=DIGIO 
+    Log  ${resp.content}
+    Should Be Equal As Strings            ${resp.status_code}   200
+
+    ${resp}=  Get account level cdl setting
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+
+    ${resp}=  Get roles
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${role_id1}       ${resp.json()[0]['id']}
+    Set Suite Variable  ${role_name1}     ${resp.json()[0]['roleName']}
+    Set Suite Variable  ${capability1}    ${resp.json()[0]['capabilityList']}
+
+    Set Suite Variable  ${role_id2}       ${resp.json()[1]['id']}
+    Set Suite Variable  ${role_name2}     ${resp.json()[1]['roleName']}
+    Set Suite Variable  ${capability2}    ${resp.json()[1]['capabilityList']}
+
+    Set Suite Variable  ${role_id3}       ${resp.json()[2]['id']}
+    Set Suite Variable  ${role_name3}     ${resp.json()[2]['roleName']}
+    Set Suite Variable  ${capability3}    ${resp.json()[2]['capabilityList']}
+
+    Set Suite Variable  ${role_id4}       ${resp.json()[3]['id']}
+    Set Suite Variable  ${role_name4}     ${resp.json()[3]['roleName']}
+    Set Suite Variable  ${capability4}    ${resp.json()[3]['capabilityList']}
+
+    Set Suite Variable  ${role_id5}       ${resp.json()[4]['id']}
+    Set Suite Variable  ${role_name5}     ${resp.json()[4]['roleName']}
+    Set Suite Variable  ${capability5}    ${resp.json()[4]['capabilityList']}
+
+    Set Suite Variable  ${role_id6}       ${resp.json()[5]['id']}
+    Set Suite Variable  ${role_name6}     ${resp.json()[5]['roleName']}
+    Set Suite Variable  ${capability6}    ${resp.json()[5]['capabilityList']}
+
+    Set Suite Variable  ${role_id7}       ${resp.json()[6]['id']}
+    Set Suite Variable  ${role_name7}     ${resp.json()[6]['roleName']}
+    Set Suite Variable  ${capability7}    ${resp.json()[6]['capabilityList']}
+
+    Set Suite Variable  ${role_id8}       ${resp.json()[7]['id']}
+    Set Suite Variable  ${role_name8}     ${resp.json()[7]['roleName']}
+    Set Suite Variable  ${capability8}    ${resp.json()[7]['capabilityList']}
+
+    Set Suite Variable  ${role_id9}       ${resp.json()[8]['id']}
+    Set Suite Variable  ${role_name9}     ${resp.json()[8]['roleName']}
+    Set Suite Variable  ${capability9}    ${resp.json()[8]['capabilityList']}
+
+    Set Suite Variable  ${role_id10}      ${resp.json()[9]['id']}
+    Set Suite Variable  ${role_name10}    ${resp.json()[9]['roleName']}
+    Set Suite Variable  ${capability10}   ${resp.json()[9]['capabilityList']}
+
+    Set Suite Variable  ${role_id11}      ${resp.json()[10]['id']}
+    Set Suite Variable  ${role_name11}    ${resp.json()[10]['roleName']}
+    Set Suite Variable  ${capability11}   ${resp.json()[10]['capabilityList']}
+
+    Set Suite Variable  ${role_id12}      ${resp.json()[11]['id']}
+    Set Suite Variable  ${role_name12}    ${resp.json()[11]['roleName']}
+    Set Suite Variable  ${capability12}   ${resp.json()[11]['capabilityList']}
+
+    Set Suite Variable  ${role_id13}      ${resp.json()[12]['id']}
+    Set Suite Variable  ${role_name13}    ${resp.json()[12]['roleName']}
+    Set Suite Variable  ${capability13}   ${resp.json()[12]['capabilityList']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable                    ${account_id1}       ${resp.json()['id']}
+    Set Suite Variable                    ${sub_domain_id}     ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
     IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp1}=  Toggle Department Enable
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings        ${resp.status_code}  200
 
-    ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[0]}    ${bool[1]}    ${empty}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    END
 
     ${resp}=  Get Departments
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings            ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        ${resp1}=  Create Department      ${dep_name1}  ${dep_code1}  ${dep_desc1} 
         Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${dep_id}  ${resp1.json()}
+        Should Be Equal As Strings        ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}      ${resp1.json()}
     ELSE
-        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+        Set Test Variable  ${dep_id}      ${resp.json()['departments'][0]['departmentId']}
     END
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${locId}=  Create Sample Location
-        Set Suite Variable  ${locId}
-        ${resp}=   Get Location ById  ${locId}
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    ELSE
-        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
-    END
+# ..... Default Status Updation for loan creation....
 
-    ${resp}=  Get roles
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${role_id1}     ${resp.json()[0]['id']}
-    Set Suite Variable  ${role_name1}   ${resp.json()[0]['roleName']}
-    Set Suite Variable  ${capability1}  ${resp.json()[0]['capabilityList']}
-
-    Log Many  ${role_id1} 	${role_name1}  ${capability1}
-
-    Set Suite Variable  ${role_id2}     ${resp.json()[1]['id']}
-    Set Suite Variable  ${role_name2}   ${resp.json()[1]['roleName']}
-    Set Suite Variable  ${capability2}  ${resp.json()[1]['capabilityList']}
-
-    Log Many  ${role_id2} 	${role_name2}  ${capability2}
-
-    Set Suite Variable  ${role_id3}     ${resp.json()[2]['id']}
-    Set Suite Variable  ${role_name3}   ${resp.json()[2]['roleName']}
-    Set Suite Variable  ${capability3}  ${resp.json()[2]['capabilityList']}
-
-    Log Many  ${role_id3} 	${role_name3}  ${capability3}
-
-    Set Suite Variable  ${role_id4}     ${resp.json()[3]['id']}
-    Set Suite Variable  ${role_name4}   ${resp.json()[3]['roleName']}
-    Set Suite Variable  ${capability4}  ${resp.json()[3]['capabilityList']}
-
-    Log Many  ${role_id4} 	${role_name4}  ${capability4}
-
-    Set Suite Variable  ${role_id5}     ${resp.json()[4]['id']}
-    Set Suite Variable  ${role_name5}   ${resp.json()[4]['roleName']}
-    Set Suite Variable  ${capability5}  ${resp.json()[4]['capabilityList']}
-
-    Log Many  ${role_id5} 	${role_name5}  ${capability5}
-
-    Set Suite Variable  ${role_id6}     ${resp.json()[5]['id']}
-    Set Suite Variable  ${role_name6}   ${resp.json()[5]['roleName']}
-    Set Suite Variable  ${capability6}  ${resp.json()[5]['capabilityList']}
-
-    Log Many  ${role_id6} 	${role_name6}  ${capability6}
-
-    Set Suite Variable  ${role_id7}     ${resp.json()[6]['id']}
-    Set Suite Variable  ${role_name7}   ${resp.json()[6]['roleName']}
-    Set Suite Variable  ${capability7}  ${resp.json()[6]['capabilityList']}
-
-    Log Many  ${role_id7} 	${role_name7}  ${capability7}
-
-    ${user_scope}=  Create Dictionary
-    ${capabilities}=  Create List
-    ${role1}=  Create Dictionary   id=${role_id7}  roleName=${role_name7}  defaultRole=${bool[1]}
-    ...   scope=${user_scope}   capabilities=${capabilities}
-    ${user_roles}=  Create List   ${role1}
-
-    ${User1_SO}=  Evaluate  ${PUSERNAME}+3366590
-    clear_users  ${User1_SO}
-    Set Suite Variable  ${User1_SO}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    ${whpnum}=  Set Variable  ${User1_SO}
-    ${tlgnum}=  Set Variable  ${User1_SO}
-    FOR    ${i}    IN RANGE    3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =  Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-    Set Test Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${resp}=  Create User With Roles And Scope  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  
-    ...   ${P_Email}${User1_SO}.${test_mail}   ${userType[0]}  ${pin}  
-    ...   ${countryCodes[1]}  ${User1_SO}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  
-    ...   ${countryCodes[1]}  ${whpnum}  ${countryCodes[0]}  ${tlgnum}  ${user_roles}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_id}  ${resp.json()}
-
-    ${resp}=  Get User By Id  ${so_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['id']}  ${role_id7}
-
-    ${user_scope}=  Create Dictionary
-    ${capabilities}=  Create List
-    ${role5}=  Create Dictionary   id=${role_id5}  roleName=${role_name5}  defaultRole=${bool[1]}
-    ...   scope=${user_scope}   capabilities=${capabilities}
-    ${user_roles5}=  Create List   ${role5}
-    ${User2_CO}=  Evaluate  ${PUSERNAME}+3766757
-    clear_users  ${User2_CO}
-    Set Suite Variable  ${User2_CO}
-    ${firstname}=  FakerLibrary.name
-    ${lastname}=  FakerLibrary.last_name
-    ${dob}=  FakerLibrary.Date
-    ${whpnum1}=  Set Variable  ${User2_CO}
-    ${tlgnum1}=  Set Variable  ${User2_CO}
-    
-    ${resp}=  Create User With Roles And Scope  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  
-    ...   ${P_Email}${User2_CO}.${test_mail}   ${userType[0]}  ${pin}  
-    ...   ${countryCodes[1]}  ${User2_CO}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  
-    ...   ${countryCodes[1]}  ${whpnum1}  ${countryCodes[0]}  ${tlgnum1}  ${user_roles5}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${co1_id}  ${resp.json()}
-
-    ${resp}=  Get User By Id  ${co1_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['id']}  ${role_id5}
-    
-    ${co2_id}=  Create Sample User 
-    Set Suite Variable  ${co2_id}
-
-    ${resp}=  Get User By Id  ${co2_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${User3_CO2}  ${resp.json()['mobileNo']}
-
-    ${user_ids}=  Create List   ${co2_id}
-
-    ${resp}=  Append User Scope  ${rbac_feature[0]}  ${user_ids}  ${user_roles5} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get User By Id  ${co2_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['id']}  ${role_id5}
-
-    ${bh_id}=  Create Sample User   
-    Set Suite Variable  ${bh_id}
-
-    ${resp}=  Get User By Id  ${bh_id}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${User4_BH}  ${resp.json()['mobileNo']}
-
-    ${user_ids}=  Create List   ${bh_id}
-    ${role1}=  Create Dictionary   id=${role_id1}  roleName=${role_name1}  defaultRole=${bool[1]}
-    ...   scope=${user_scope}   capabilities=${capabilities}
-    ${user_roles1}=  Create List   ${role1}
-
-    ${resp}=  Append User Scope  ${rbac_feature[0]}  ${user_ids}  ${user_roles1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get User By Id  ${bh_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['id']}  ${role_id1}
-
-    reset_user_metric  ${account_id}
-
-    ${boh_id}=  Create Sample User 
-    Set Suite Variable  ${boh_id}
-
-    ${resp}=  Get User By Id  ${boh_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${User5_BOH}  ${resp.json()['mobileNo']}
-
-    ${user_ids}=  Create List   ${boh_id}
-    ${role4}=  Create Dictionary   id=${role_id4}  roleName=${role_name4}  defaultRole=${bool[1]}
-    ...   scope=${user_scope}   capabilities=${capabilities}
-    ${user_roles4}=  Create List   ${role4}
-
-    ${resp}=  Append User Scope  ${rbac_feature[0]}  ${user_ids}  ${user_roles4} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get User By Id  ${boh_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['userRoles'][0]['id']}  ${role_id4}
+    ${resp}=  partnercategorytype         ${account_id1}
+    ${resp}=  partnertype                 ${account_id1}
+    ${resp}=  categorytype                ${account_id1}
+    ${resp}=  tasktype                    ${account_id1}
+    ${resp}=  loanStatus                  ${account_id1}
+    ${resp}=  loanProducttype             ${account_id1}
+    ${resp}=  LoanProductCategory         ${account_id1}
+    ${resp}=  loanProducts                ${account_id1}
+    ${resp}=  loanScheme                  ${account_id1}
+    ${resp}=  CDLcategorytype             ${account_id1}
+    ${resp}=  CDLtype                     ${account_id1}
+    ${resp}=  CDLEnqStatus                   ${account_id1}
 
     ${resp}=  Get User
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings            ${resp.status_code}    200
+    IF   not '${resp.content}' == '${emptylist}'
+        ${len}=  Get Length               ${resp.json()}
+    END
+    FOR   ${i}  IN RANGE   0   ${len}
+        Set Test Variable                 ${user_phone}         ${resp.json()[${i}]['mobileNo']}
+    END
 
-    ${resp}=  Provider Logout
-    Should Be Equal As Strings    ${resp.status_code}    200
+    reset_user_metric  ${account_id1}
 
-    ${resp}=  SendProviderResetMail   ${User1_SO}
-    Should Be Equal As Strings  ${resp.status_code}  200
+# ..... Create Sample User for Branch Sales Head
 
-    @{resp}=  ResetProviderPassword  ${User1_SO}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-  
-    ${resp}=  SendProviderResetMail   ${User2_CO}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    @{resp}=  ResetProviderPassword  ${User2_CO}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings  ${resp[0].status_code}  200
+    ${BSH}=  Create Sample User 
+    Set Suite Variable                    ${BSH}
+    
+    ${resp}=  Get User By Id              ${BSH}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${BSH_USERNAME}   ${resp.json()['mobileNo']}
 
-    ${resp}=  SendProviderResetMail   ${User3_CO2}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    @{resp}=  ResetProviderPassword  ${User3_CO2}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings  ${resp[0].status_code}  200
+# ..... Create Sample User for Branch Manager
 
-    ${resp}=  SendProviderResetMail   ${User4_BH}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    @{resp}=  ResetProviderPassword  ${User4_BH}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings  ${resp[0].status_code}  200
+    ${BM}=  Create Sample User 
+    Set Suite Variable                    ${BM}
 
-    ${resp}=  SendProviderResetMail   ${User5_BOH}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    @{resp}=  ResetProviderPassword  ${User5_BOH}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
-    Should Be Equal As Strings  ${resp[0].status_code}  200
+    ${resp}=  Get User By Id              ${BM}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable  ${BM_USERNAME}     ${resp.json()['mobileNo']}
 
-    ${resp}=  Encrypted Provider Login  ${User4_BH}  ${PASSWORD}
+# ..... Create Sample User for Branch Operational Head
+
+    ${BOH}=  Create Sample User 
+    Set Suite Variable                    ${BOH}
+
+    ${resp}=  Get User By Id              ${BOH}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${BOH_USERNAME}   ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for Branch Credit Head
+
+    ${BCH}=  Create Sample User 
+    Set Suite Variable                    ${BCH}
+    
+    ${resp}=  Get User By Id              ${BCH}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${BCH_USERNAME}   ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for Sales Executive
+
+    ${SE}=  Create Sample User 
+    Set suite Variable                    ${SE}
+    
+    ${resp}=  Get User By Id              ${SE}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${SE_USERNAME}    ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for Sales Officer
+
+    ${SO}=  Create Sample User 
+    Set suite Variable                    ${SO}
+    
+    ${resp}=  Get User By Id              ${SO}
+    Log   ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Suite Variable  ${SO_USERNAME}    ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for NH Sales
+
+    ${NHSO}=  Create Sample User 
+    Set suite Variable                     ${NHSO}
+    
+    ${resp}=  Get User By Id               ${NHSO}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+    Set Suite Variable  ${NHSO_USRNME}     ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for NH Operation
+
+    ${NHO}=  Create Sample User 
+    Set suite Variable                     ${NHO}
+    
+    ${resp}=  Get User By Id               ${NHO}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+    Set Suite Variable  ${NHO_USERNAME}    ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for NH Credit
+
+    ${NHC}=  Create Sample User 
+    Set suite Variable                     ${NHC}
+    
+    ${resp}=  Get User By Id               ${NHC}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+    Set Suite Variable  ${NHC_USERNME}     ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for Regional Manager
+
+    ${RM}=  Create Sample User 
+    Set suite Variable                     ${RM}
+    
+    ${resp}=  Get User By Id               ${RM}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+    Set Suite Variable  ${RM_USERNAME}     ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for Auditor
+
+    ${ADT}=  Create Sample User 
+    Set suite Variable                     ${ADT}
+    
+    ${resp}=  Get User By Id               ${ADT}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+    Set Suite Variable  ${ADT_USERNME}     ${resp.json()['mobileNo']}
+
+# ..... Create Sample User for Support User
+
+    ${SPT}=  Create Sample User 
+    Set suite Variable                     ${SPT}
+    
+    ${resp}=  Get User By Id               ${SPT}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+    Set Suite Variable  ${SPT_USERNME}     ${resp.json()['mobileNo']}
+
+
+
+# ....User 1 :Bussiness Head...
+
+    ${location_id}=  Create List           all
+    ${branches_id}=  Create List           all
+    ${users_id}=     Create List           all
+    ${partners}=     Create List           all
+    ${user_scope}=   Create Dictionary     businessLocations=${location_id}  branches=${branches_id}   users=${users_id}     partners=${partners}
+    ${role1}=        Create Dictionary     id=${role_id1}  roleName=${role_name1}  defaultRole=${bool[1]}  scope=${user_scope}  
+    ${user_roles}=   Create List           ${role1}
+
+    ${user_ids}=  Create List              ${BH}  
+
+    ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+    
+    ${resp}=  Get User By Id               ${BH}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  200
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}               ${role_id1}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['roleName']}         ${role_name1}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['defaultRole']}      ${bool[1]}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['capabilities']}     ${capability1}
+    Should Be Equal As Strings             ${resp.json()['defaultRoleId']}                    ${role_id1}
+    Should Be Equal As Strings             ${resp.json()['defaultRoleName']}                  ${role_name1}
+
+
+# .....Create Location.....
+
+    ${resp}=    Get Locations
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings             ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId}=  Create Sample Location
+        Set Suite Variable  ${locId}
 
-    ${branchCode}=    FakerLibrary.Random Number
-    ${branchName}=    FakerLibrary.City
-    # ${branchName2}=    FakerLibrary.Street Name
+        ${resp}=   Get Location ById       ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings         ${resp.status_code}  200
+        Set Suite Variable                 ${locname}                   ${resp.json()['place']}
+        Set Suite Variable                 ${address1}                  ${resp.json()['address']}
+        ${address2}                        FakerLibrary.Street name
+        Set Suite Variable                 ${address2}
+        
+    ELSE
+        Set Suite Variable                 ${locId}                     ${resp.json()[0]['id']}
+        Set Suite Variable                 ${locname}                   ${resp.json()[0]['place']}
+        Set Suite Variable                 ${address1}                  ${resp.json()[0]['address']}
+        ${address2}                        FakerLibrary.Street name
+        Set Suite Variable                 ${address2}
+    END                         
+
+    ${resp}=   Get Location ById           ${locid}  
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}      200
+    Set Suite Variable                     ${locname1}              ${resp.json()['place']}
+    
+# .... Create Branch1....
+
+    ${branchCode}=                         FakerLibrary.Random Number
+    ${branchName}=                         FakerLibrary.name
+    Set Suite Variable                     ${branchName}
 
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 
-    ${state}=    Evaluate     "${state}".title()
-    ${state}=    String.RemoveString  ${state}    ${SPACE}
-
+    ${state}=    Evaluate                  "${state}".title()
+    # ${state}=    String.RemoveString       ${state}    ${SPACE}
+    Set Suite Variable                     ${state}
+    Set Suite Variable                     ${district}
+    Set Suite Variable                     ${pin}
+    
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings             ${resp.status_code}    200
 
     IF  ${resp.json()['enableBranchMaster']}==${bool[0]}
-        ${resp1}=  Enable Disable Branch    ${status[0]}
+        ${resp1}=  Enable Disable Branch   ${status[0]}
         Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
+        Should Be Equal As Strings         ${resp1.status_code}  200
     END
-
-    ${resp}=    Create BranchMaster    ${branchCode}    ${branchName}    ${locId}    ${status[0]}    
+   
+    ${resp}=    Create BranchMaster        ${branchCode}    ${branchName}    ${locId}    ${status[0]}     
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${branchId1}  ${resp.json()['id']}
+    Should Be Equal As Strings             ${resp.status_code}    200
+    Set Suite Variable                     ${branchid}            ${resp.json()['id']}
 
     ${resp}=    Get BranchMaster
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${MUAcct}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${NBFCMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${userids}=  Create List  ${so_id}   ${co1_id}    ${account_id}
     ${branch1}=  Create Dictionary   id=${branchid1}    isDefault=${bool[1]}
@@ -471,8 +523,10 @@ JD-TC-RBAC-CDL-1
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -567,8 +621,10 @@ JD-TC-RBAC-CDL-2
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -650,8 +706,10 @@ JD-TC-RBAC-CDL-3
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -733,8 +791,10 @@ JD-TC-RBAC-CDL-UH1
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -775,8 +835,10 @@ JD-TC-RBAC-CDL-UH2
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -817,8 +879,10 @@ JD-TC-RBAC-CDL-UH3
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -859,8 +923,10 @@ JD-TC-RBAC-CDL-UH4
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -901,8 +967,10 @@ JD-TC-RBAC-CDL-UH5
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -942,8 +1010,10 @@ JD-TC-RBAC-CDL-2
     ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${so_proid}  ${resp.json()['id']}
-    Set Test Variable  ${pro_name}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${so_proid}  ${decrypted_data['id']}
+    Set Test Variable  ${pro_name}  ${decrypted_data['userName']}
 
     ${resp}=    Get BranchMaster
     Log  ${resp.content}

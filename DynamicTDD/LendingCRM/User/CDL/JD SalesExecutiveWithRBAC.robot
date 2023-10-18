@@ -66,9 +66,9 @@ ${maxAmount}                         300000
 
 *** Test Cases ***
 
-JD-TC-SalesOfficerWithRbac-1
+JD-TC-SalesExecutiveWithRbac-1
 
-    [Documentation]  Sales Officer - Create Dealer
+    [Documentation]  Sales Executive - Create Dealer
 
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -93,7 +93,7 @@ JD-TC-SalesOfficerWithRbac-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+6478249
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+5469873
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -483,13 +483,13 @@ JD-TC-SalesOfficerWithRbac-1
     ${role1}=           Create Dictionary  id=${role_id7}  roleName=${role_name7}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
     ${user_roles}=      Create List        ${role1}
 
-    ${user_ids}=        Create List        ${SO} 
+    ${user_ids}=        Create List        ${SE} 
 
     ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=  Get User By Id               ${SO}
+    ${resp}=  Get User By Id               ${SE}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
     Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id7}
@@ -521,7 +521,7 @@ JD-TC-SalesOfficerWithRbac-1
 
     ${location_id}=     Create List        ${locId}   
     ${branches_id}=     Create List        ${branchid} 
-    ${users_id}=        Create List        ${SO}
+    ${users_id}=        Create List        ${SE}
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}    users=${users_id}
     ${role1}=           Create Dictionary  id=${role_id5}  roleName=${role_name5}  defaultRole=${bool[1]}  scope=${user_scope}   capabilities=${capabilities}
     ${user_roles}=      Create List        ${role1}
@@ -544,7 +544,7 @@ JD-TC-SalesOfficerWithRbac-1
 
     ${location_id}=     Create List        ${locId}   
     ${branches_id}=     Create List        ${branchid} 
-    ${users_id}=        Create List        ${BCH}   ${SO}
+    ${users_id}=        Create List        ${BCH}   ${SE}
     ${partners}=        Create List        all
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}      users=${users_id}    partners=${partners}
     ${role1}=           Create Dictionary  id=${role_id4}  roleName=${role_name4}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
@@ -604,7 +604,7 @@ JD-TC-SalesOfficerWithRbac-1
 
 # ....Assiging Branch to users
 
-    ${userids}=         Create List        ${SO}   ${BCH}
+    ${userids}=         Create List        ${SE}   ${BCH}
     ${branch}=          Create Dictionary  id=${branchid}    isDefault=${bool[1]}
 
     ${resp}=  Assigning Branches to Users  ${userids}     ${branch}
@@ -731,9 +731,9 @@ JD-TC-SalesOfficerWithRbac-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-JD-TC-SalesOfficerWithRbac-2
+JD-TC-SalesExecutiveWithRbac-2
 
-    [Documentation]  Sales Officer - Approval Request
+    [Documentation]  Sales Executive - Approval Request
 
     ${resp}=  Encrypted Provider Login     ${SE_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -942,9 +942,9 @@ JD-TC-SalesOfficerWithRbac-2
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-JD-TC-SalesOfficerWithRbac-3
+JD-TC-SalesExecutiveWithRbac-3
 
-    [Documentation]  Sales Officer - Partner Approved
+    [Documentation]  Sales Executive - Partner Approved
 
     ${resp}=  Encrypted Provider Login     ${SE_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -958,9 +958,9 @@ JD-TC-SalesOfficerWithRbac-3
     Should Be Equal As Strings             ${resp.status_code}      422
     Should Be Equal As Strings             ${resp.json()}  ${NO_PERMISSION_FOR_REQUEST}
 
-JD-TC-SalesOfficerWithRbac-4
+JD-TC-SalesExecutiveWithRbac-4
 
-    [Documentation]  Sales Officer - Create Lead
+    [Documentation]  Sales Executive - Create Lead
 
 
 # .....Approve Dealer By Branch Manager......
@@ -985,7 +985,7 @@ JD-TC-SalesOfficerWithRbac-4
 
 # ...... Update sales officer and credit officer for dealer1 & activate dealer1 by branch operation head....
 
-    ${Salesofficer}=  Create Dictionary    id=${SO}  isDefault=${bool[1]}
+    ${Salesofficer}=  Create Dictionary    id=${SE}  isDefault=${bool[1]}
 
     ${resp}=    Update Sales Officer       ${partuid1}    ${Salesofficer}
     Log  ${resp.content}
@@ -1069,7 +1069,7 @@ JD-TC-SalesOfficerWithRbac-4
 
     ${en_temp_name}=    FakerLibrary.name
 
-    enquiryTemplate                        ${account_id1}  ${en_temp_name}  ${enq_sts_new_id}  category_id=${rand_catagory_id}  type_id=${rand_cat_type_id}  creator_provider_id=${SO} 
+    enquiryTemplate                        ${account_id1}  ${en_temp_name}  ${enq_sts_new_id}  category_id=${rand_catagory_id}  type_id=${rand_cat_type_id}  creator_provider_id=${SE} 
 
     ${resp}=  Get Enquiry Template  
     Log  ${resp.content}
@@ -1106,9 +1106,9 @@ JD-TC-SalesOfficerWithRbac-4
     Should Be Equal As Strings             ${resp.json()['id']}    ${en_id}
     Should Be Equal As Strings             ${resp.json()['uid']}   ${en_uid}
 
-JD-TC-SalesOfficerWithRbac-5
+JD-TC-SalesExecutiveWithRbac-5
 
-    [Documentation]  Sales Officer - Create Loan
+    [Documentation]  Sales Executive - Create Loan
 
     ${resp}=  Encrypted Provider Login     ${SE_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1132,9 +1132,9 @@ JD-TC-SalesOfficerWithRbac-5
     Set Suite VAriable                     ${loanid}              ${resp.json()['id']}
     Set Suite VAriable                     ${loanuid}             ${resp.json()['uid']}
 
-JD-TC-SalesOfficerWithRbac-6   
+JD-TC-SalesExecutiveWithRbac-6   
 
-    [Documentation]  Sales Officer - Approval Loan Application
+    [Documentation]  Sales Executive - Approval Loan Application
 
     ${resp}=  Encrypted Provider Login     ${SE_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1161,7 +1161,7 @@ JD-TC-SalesOfficerWithRbac-6
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
-    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
+    Run Keyword And Continue On Failure     Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
 
 # ....... Customer Photo .......
 
@@ -1193,7 +1193,7 @@ JD-TC-SalesOfficerWithRbac-6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Suite Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
@@ -1232,7 +1232,7 @@ JD-TC-SalesOfficerWithRbac-6
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
     
 
 # ....... Verify adhaar number .......
@@ -1259,7 +1259,7 @@ JD-TC-SalesOfficerWithRbac-6
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
 
@@ -1372,7 +1372,7 @@ JD-TC-SalesOfficerWithRbac-6
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
 
@@ -1411,7 +1411,7 @@ JD-TC-SalesOfficerWithRbac-6
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
     ${resp}=  Approval Loan Application    ${loanuid}
     Log  ${resp.content}
@@ -1427,11 +1427,11 @@ JD-TC-SalesOfficerWithRbac-6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[3]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
 
-JD-TC-SalesOfficerWithRbac-7
+JD-TC-SalesExecutiveWithRbac-7
 
-    [Documentation]  Sales Officer - Manual Approval
+    [Documentation]  Sales Executive - Manual Approval
 
     ${resp}=  Encrypted Provider Login     ${SE_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1451,7 +1451,7 @@ JD-TC-SalesOfficerWithRbac-7
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
 # ....... Equifax Report .......
 
@@ -1485,9 +1485,9 @@ JD-TC-SalesOfficerWithRbac-7
     Should Be Equal As Strings             ${resp.status_code}    422
     Should Be Equal As Strings             ${resp.json()}  ${NO_PERMISSION_FOR_REQUEST}
 
-JD-TC-SalesOfficerWithRbac-8
+JD-TC-SalesExecutiveWithRbac-8
 
-    [Documentation]  Sales Officer - Sales Officer Approval
+    [Documentation]  Sales Executive - Sales Officer Approval
 
 # ....... Branch Credit Head Login .......
 
@@ -1516,7 +1516,7 @@ JD-TC-SalesOfficerWithRbac-8
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
 # ....... Equifax Report .......
 
@@ -1559,7 +1559,7 @@ JD-TC-SalesOfficerWithRbac-8
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
 
 # ....... Login Sales Officer and Request for Approval .......
 
@@ -1688,11 +1688,11 @@ JD-TC-SalesOfficerWithRbac-8
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[5]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime011}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime011}
 
-JD-TC-SalesOfficerWithRbac-9
+JD-TC-SalesExecutiveWithRbac-9
 
-    [Documentation]  Sales Officer - Branch Approval
+    [Documentation]  Sales Executive - Branch Approval
 
     ${resp}=  Encrypted Provider Login     ${SE_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1705,9 +1705,9 @@ JD-TC-SalesOfficerWithRbac-9
     Should Be Equal As Strings             ${resp.status_code}  422
     Should Be Equal As Strings             ${resp.json()}  ${NO_PERMISSION_FOR_REQUEST}
 
-JD-TC-SalesOfficerWithRbac-10
+JD-TC-SalesExecutiveWithRbac-10
 
-    [Documentation]  Sales Officer - Loan Sanctioned
+    [Documentation]  Sales Executive - Loan Sanctioned
 
 # ....... Branch Manager Login and Branch Approval .......
 
@@ -1744,7 +1744,7 @@ JD-TC-SalesOfficerWithRbac-10
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[6]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime012}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime012}
 
 # ....... Consumer Acceptance Phone .......
 
@@ -1766,7 +1766,7 @@ JD-TC-SalesOfficerWithRbac-10
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[7]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime013}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime013}
 
 # ....... Sales Officer Login and Sanction .......
 
@@ -1794,7 +1794,7 @@ JD-TC-SalesOfficerWithRbac-10
 
 # ....... Loan Sanctioned .......
 
-    ${resp}=  Partner Accepted    ${loanuid}    ${SO}    ${pdffile}    ${fileSize}   ${caption}  ${fileType}    ${LoanAction[0]}  invoice  ${order}
+    ${resp}=  Partner Accepted    ${loanuid}    ${SE}    ${pdffile}    ${fileSize}   ${caption}  ${fileType}    ${LoanAction[0]}  invoice  ${order}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1808,11 +1808,11 @@ JD-TC-SalesOfficerWithRbac-10
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[9]}
-    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime014}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime014}
 
-JD-TC-SalesOfficerWithRbac-11
+JD-TC-SalesExecutiveWithRbac-11
 
-    [Documentation]  Sales Officer - Operational Head Approval
+    [Documentation]  Sales Executive - Operational Head Approval
 
     ${resp}=  Encrypted Provider Login     ${SE_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1827,9 +1827,9 @@ JD-TC-SalesOfficerWithRbac-11
     Should Be Equal As Strings     ${resp.status_code}    422
     Should Be Equal As Strings             ${resp.json()}  ${NO_PERMISSION_FOR_REQUEST}
 
-JD-TC-SalesOfficerWithRbac-12
+JD-TC-SalesExecutiveWithRbac-12
 
-    [Documentation]  Sales Officer - Get Loan Application
+    [Documentation]  Sales Executive - Get Loan Application
 
 # ....... Loging Operational Head for Approval .......
 
@@ -1868,6 +1868,6 @@ JD-TC-SalesOfficerWithRbac-12
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[10]}
-    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime015}
+    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime015}
 
 

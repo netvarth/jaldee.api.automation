@@ -27,7 +27,7 @@ JD-Get_schedules_Using_Id-1
     [Documentation]  Get schedules using id
 
     clear_queue      ${PUSERNAME168}
-    clear_location   ${PUSERNAME168}
+    # clear_location   ${PUSERNAME168}
     clear_service    ${PUSERNAME168}
     clear_customer   ${PUSERNAME168}
 
@@ -47,6 +47,12 @@ JD-Get_schedules_Using_Id-1
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
