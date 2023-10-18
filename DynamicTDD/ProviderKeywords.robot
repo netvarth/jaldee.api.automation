@@ -3287,8 +3287,11 @@ Manage Branch SP
     [Return]  ${resp}
 
 Create Consumer Notification Settings
-    [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${persons_ahead}
+    [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${persons_ahead}  &{kwargs}
     ${data}=  Create Dictionary  resourceType=${resource_type}  eventType=${event_type}  email=${email}  sms=${sms}  pushNotification=${push_notf}  commonMessage=${common_msg}  personsAhead=${persons_ahead}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
