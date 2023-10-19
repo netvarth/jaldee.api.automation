@@ -229,7 +229,7 @@ JD-TC-Create_Catalog_For_ShoppingList-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${catalogName6}=   FakerLibrary.firstname 
+    ${catalogName6}=   FakerLibrary.word 
     Set Suite Variable  ${catalogName6}
 
     ${resp}=  Create Catalog For ShoppingList   ${catalogName6}  ${EMPTY}   ${catalogSchedule}   ${orderType2}   ${paymentType}   ${StatusesList}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   

@@ -391,7 +391,7 @@ JD-TC-Change_Catalog_Status-4
     clear_queue    ${PUSERNAME112}
     clear_service  ${PUSERNAME112}
     clear_customer   ${PUSERNAME112}
-    clear_Item   ${PUSERNAME112}
+    # clear_Item   ${PUSERNAME112}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Log  ${resp.json()}
