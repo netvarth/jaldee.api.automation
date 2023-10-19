@@ -29,6 +29,15 @@ Get Appointment Reminder
     [Return]  ${resp}
 
 
+Create Appointment Reminder Settings
+    [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${reminder_time}
+    ${data}=  Create Dictionary  resourceType=${resource_type}  eventType=${event_type}  email=${email}  sms=${sms}  
+                ...    pushNotification=${push_notf}  commonMessage=${common_msg}  time=${reminder_time}
+    ${data}=   json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
+    [Return]  ${resp}
+
 
 *** Test Cases ***
 
@@ -72,8 +81,8 @@ JD-TC-ConsumerNotificationSettings-1
     ${person_ahead}=   Random Int   min=2   max=5
     ${reminder_time}=  Random Int   min=5   max=5
 
-    ${resp}=  Create Consumer Notification Settings  ${NotificationResourceType[1]}  ${EventType[11]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  
-                                  ...   ${msg}  ${person_ahead}   time=${reminder_time}
+    ${resp}=  Create Appointment Reminder Settings  ${NotificationResourceType[1]}  ${EventType[11]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  
+                                  ...   ${msg}  ${reminder_time}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
@@ -86,7 +95,7 @@ JD-TC-ConsumerNotificationSettings-1
     Should Be Equal As Strings  ${resp.json()[0]['sms']}                ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['pushNotification']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()[0]['commonMessage']}      ${msg}
-    Should Be Equal As Strings  ${resp.json()[0]['personsAhead']}       ${person_ahead}
+    Should Be Equal As Strings  ${resp.json()[0]['time']}               ${reminder_time}
 
     ${resp}=   Get Service
     Log  ${resp.content}
