@@ -70,7 +70,7 @@ JD-TC-ConsumerNotificationSettings-1
 
     ${msg}=  FakerLibrary.word
     ${person_ahead}=   Random Int   min=2   max=5
-    ${reminder_time}=  Random Int   min=1   max=1
+    ${reminder_time}=  Random Int   min=5   max=5
 
     ${resp}=  Create Consumer Notification Settings  ${NotificationResourceType[1]}  ${EventType[11]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  
                                   ...   ${msg}  ${person_ahead}   time=${reminder_time}
@@ -101,7 +101,7 @@ JD-TC-ConsumerNotificationSettings-1
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
 
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${sTime1}=  add_timezone_time  ${tz}  0  10  
     ${eTime1}=  add_timezone_time  ${tz}  1  15  
 
     
@@ -143,14 +143,15 @@ JD-TC-ConsumerNotificationSettings-1
     ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    @{slots}=  Create List
-    FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-    END
-    ${num_slots}=  Get Length  ${slots}
-    ${j}=  Random Int  max=${num_slots-1}
-    Set Suite Variable   ${slot1}   ${slots[${j}]}
+    Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    # ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    # @{slots}=  Create List
+    # FOR   ${i}  IN RANGE   0   ${no_of_slots}
+    #     Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    # END
+    # ${num_slots}=  Get Length  ${slots}
+    # ${j}=  Random Int  max=${num_slots-1}
+    # Set Suite Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
