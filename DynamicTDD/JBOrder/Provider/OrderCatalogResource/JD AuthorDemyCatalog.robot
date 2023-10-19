@@ -29,8 +29,8 @@ JD-TC-CreateCatalogForAuthorDemy-1
 
     [Documentation]  Provider Create order catalog for AuthorDemy with catalog type as submission.
 
-    clear_Item  ${PUSERNAME30}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    clear_Item  ${PUSERNAME45}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get jaldeeIntegration Settings
@@ -47,7 +47,7 @@ JD-TC-CreateCatalogForAuthorDemy-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${accId}=  get_acc_id  ${PUSERNAME30}
+    ${accId}=  get_acc_id  ${PUSERNAME45}
     Set Suite Variable  ${accId}
 
     ${resp}=  Get Order Settings by account id
@@ -305,7 +305,7 @@ JD-TC-CreateCatalogForAuthorDemy-4
 
     [Documentation]  Provider Create order catalog for AuthorDemy and create order from consumer side and do the payment.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -330,7 +330,7 @@ JD-TC-CreateCatalogForAuthorDemy-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -342,7 +342,7 @@ JD-TC-CreateCatalogForAuthorDemy-5
 
     [Documentation]  Provider Create order catalog for AuthorDemy and create order from provider side.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -355,7 +355,7 @@ JD-TC-CreateCatalogForAuthorDemy-5
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -383,7 +383,7 @@ JD-TC-CreateCatalogForAuthorDemy-6
 
     [Documentation]  Provider Create order catalog for AuthorDemy and create order from provider side and do the payment.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -412,7 +412,7 @@ JD-TC-CreateCatalogForAuthorDemy-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

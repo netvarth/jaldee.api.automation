@@ -78,7 +78,6 @@ JD-TC-ConsumerNotificationSettings-1
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${msg}=  FakerLibrary.word
-    ${person_ahead}=   Random Int   min=2   max=5
     ${reminder_time}=  Random Int   min=5   max=5
 
     ${resp}=  Create Appointment Reminder Settings  ${NotificationResourceType[1]}  ${EventType[11]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  
