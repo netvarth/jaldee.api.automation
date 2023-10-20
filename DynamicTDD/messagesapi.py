@@ -2070,6 +2070,7 @@ INVALID_EXPENSE_AMOUNT="Invalid Expense Amount"
 
 
 
+
 # ........Membership  ...............
 
 MEMBER_SERVICE_DATE_FROM_REQUIRED = "Effective from date required"

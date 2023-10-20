@@ -64,6 +64,7 @@ JD-TC-GetExpenseWithFilter-1
     Set Suite Variable   ${category_id}   ${resp.json()}
     
     ${name}=   FakerLibrary.word
+    Set Suite Variable   ${name}
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -153,11 +154,12 @@ JD-TC-GetExpenseWithFilter-1
     ${expenseFor}=   FakerLibrary.word
     ${expenseDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
+        ${amount}=  Convert To Number  ${amount}  1
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
     ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
     ${rate}=   Random Int  min=50  max=1000
-    ${amount}=   Random Int  min=50  max=1000
     ${deptId}=   Random Int  min=50  max=100
     ${deptName}=  FakerLibrary.word
     ${userName}=    FakerLibrary.name
@@ -194,9 +196,477 @@ JD-TC-GetExpenseWithFilter-1
 
     ${resp}=  Get Expense By Id   ${expense_uid}
     Log  ${resp.json()}
+    Set Suite Variable  ${userId}   ${resp.json()['userId']}
+    Set Suite Variable  ${expenseStatus}   ${resp.json()['expenseStatus']}
+ 
+
+    ${resp}=  Get Expense With Filter    categoryName-eq=${name}   userId-eq=${userId}  expenseStatus-eq=${expenseStatus}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+      Should Be Equal As Strings  ${resp.json()[0]['expenseCategoryId']}  ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseDate']}  ${expenseDate}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseFor']}  ${expenseFor}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+
+JD-TC-GetExpenseWithFilter-2
+
+    [Documentation]   update expense and get expense by id.
+
+    ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${expenseFor}=   FakerLibrary.word
+    ${expenseDate}=   db.get_date
+    ${employeeName}=   FakerLibrary.name
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+    ${amount}=  Convert To Number  ${amount}  1
+    ${deptId}=   Random Int  min=50  max=100
+    ${deptName}=  FakerLibrary.word
+    ${userName}=    FakerLibrary.name
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+    ${departmentList}=  Create Dictionary  deptId=${deptId}   deptName=${deptName}  
+    ${departmentList}=    Create List    ${departmentList}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${jpgfile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}
+    Log  ${Attachments}
+    ${uploadedDocuments}=    Create List    ${Attachments}
+
+    ${resp}=  Update Expense   ${expense_uid}   ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}     ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Expense With Filter   vendorUid-eq=${vendor_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['expenseCategoryId']}  ${category_id1}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['expenseDate']}  ${expenseDate}
+    Should Be Equal As Strings  ${resp.json()['expenseFor']}  ${expenseFor}
+    Should Be Equal As Strings  ${resp.json()['expenseFor']}  ${expenseFor}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()['departmentList'][0]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${jpgfile}
+
+JD-TC-GetExpenseWithFilter-3
+
+    [Documentation]  Create Expense for an SP With empty expensefor and GetExpenseWithFilter.
+
+    ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${expenseFor}=   FakerLibrary.word
+    ${expenseDate}=   db.get_date
+    ${employeeName}=   FakerLibrary.name
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+        ${amount}=  Convert To Number  ${amount}  1
+    ${deptId}=   Random Int  min=50  max=100
+    ${deptName}=  FakerLibrary.word
+    ${userName}=    FakerLibrary.name
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+    ${departmentList}=  Create Dictionary  deptId=${deptId}   deptName=${deptName}  
+    ${departmentList}=    Create List    ${departmentList}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+    ${uploadedDocuments}=    Create List    ${Attachments}
+
+
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Expense With Filter   expenseDate-eq=${expenseDate}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['expenseCategoryId']}  ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseDate']}  ${expenseDate}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseFor']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+JD-TC-GetExpenseWithFilter-4
+
+    [Documentation]  GetExpenseWithFilter with expensfor filter
+
+    ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${expenseFor}=   FakerLibrary.word
+    ${expenseDate}=   db.get_date
+    ${employeeName}=   FakerLibrary.name
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+        ${amount}=  Convert To Number  ${amount}  1
+    ${deptId}=   Random Int  min=50  max=100
+    ${deptName}=  FakerLibrary.word
+    ${userName}=    FakerLibrary.name
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+    ${departmentList}=  Create Dictionary  deptId=${deptId}   deptName=${deptName}  
+    ${departmentList}=    Create List    ${departmentList}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+    ${uploadedDocuments}=    Create List    ${Attachments}
+
+
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Expense With Filter   expenseFor-eq=${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['expenseCategoryId']}  ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseDate']}  ${expenseDate}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseFor']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+
+JD-TC-GetExpenseWithFilter-5
+
+    [Documentation]  GetExpenseWithFilter with amount filter
+
+    ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${expenseFor}=   FakerLibrary.word
+    ${expenseDate}=   db.get_date
+    ${employeeName}=   FakerLibrary.name
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+        ${amount}=  Convert To Number  ${amount}  1
+    ${deptId}=   Random Int  min=50  max=100
+    ${deptName}=  FakerLibrary.word
+    ${userName}=    FakerLibrary.name
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+    ${departmentList}=  Create Dictionary  deptId=${deptId}   deptName=${deptName}  
+    ${departmentList}=    Create List    ${departmentList}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+    ${uploadedDocuments}=    Create List    ${Attachments}
+
+
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${expense_uid2}   ${resp.json()['uid']}
+
+     ${resp}=  Get Expense With Filter   expenseUid-eq=${expense_uid2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['expenseCategoryId']}  ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseDate']}  ${expenseDate}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseFor']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+
+JD-TC-GetExpenseWithFilter-6
+
+    [Documentation]  GetExpenseWithFilter with amount filter
+
+    ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${expenseFor}=   FakerLibrary.word
+    ${expenseDate}=   db.get_date
+    ${employeeName}=   FakerLibrary.name
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+        ${quantity}=  Convert To Number  ${quantity}  1
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+        ${amount}=  Convert To Number  ${amount}  1
+    ${deptId}=   Random Int  min=50  max=100
+    ${deptName}=  FakerLibrary.word
+    ${userName}=    FakerLibrary.name
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+    ${departmentList}=  Create Dictionary  deptId=${deptId}   deptName=${deptName}  
+    ${departmentList}=    Create List    ${departmentList}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+    ${uploadedDocuments}=    Create List    ${Attachments}
+
+
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Expense With Filter   amount-eq=${amount}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['expenseCategoryId']}  ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseDate']}  ${expenseDate}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseFor']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+
+
+
+JD-TC-GetExpenseWithFilter-7
+
+    [Documentation]  GetExpenseWithFilter with referenceNo filter
+
+    ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${expenseFor}=   FakerLibrary.word
+    ${expenseDate}=   db.get_date
+    ${employeeName}=   FakerLibrary.name
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+        ${amount}=  Convert To Number  ${amount}  1
+    ${deptId}=   Random Int  min=50  max=100
+    ${deptName}=  FakerLibrary.word
+    ${userName}=    FakerLibrary.name
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+    ${departmentList}=  Create Dictionary  deptId=${deptId}   deptName=${deptName}  
+    ${departmentList}=    Create List    ${departmentList}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+    ${uploadedDocuments}=    Create List    ${Attachments}
+
+
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Expense With Filter   referenceNo-eq=${referenceNo}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['expenseCategoryId']}  ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseDate']}  ${expenseDate}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseFor']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+
+
+JD-TC-GetExpenseWithFilter-UH1
+
+    [Documentation]  GetExpenseWithFilter  without login.
 
     ${resp}=  Get Expense With Filter   
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetExpenseWithFilter-UH2
+
+    [Documentation]  GetExpenseWithFilter  with another login.
+
+    ${resp}=  Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=  Get Expense With Filter   
+    Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}    []
+
 

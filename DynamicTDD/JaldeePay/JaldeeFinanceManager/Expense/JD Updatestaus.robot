@@ -15,7 +15,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
-
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${pdffile}      /ebs/TDD/sample.pdf
@@ -26,18 +25,29 @@ ${xlsx}      /ebs/TDD/qnr.xlsx
 ${order}    0
 ${fileSize}  0.00458
 
+@{status}    New     Pending    Assigned     Approved    Rejected
+@{New_status}    Proceed     Unassign    Block     Delete    Remove
+
+*** Keywords ***
+
+Update Expense Status
+
+    [Arguments]    ${uid}  ${expenseStatus}  
+     
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/expense/${uid}/${expenseStatus}     expected_status=any    headers=${headers}
+    [Return]  ${resp}
 
 *** Test Cases ***
 
 
-JD-TC-UploadAttachment-1
+JD-TC-Update Expense Status-1
 
-    [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Vendor)
+    [Documentation]  Update Expense Status-.
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -188,16 +198,63 @@ JD-TC-UploadAttachment-1
     ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
     ${uploadedDocuments}=    Create List    ${Attachments}
-    
-    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}      ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
+
+
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${expense_uid}   ${resp.json()['uid']}
-    Set Suite Variable   ${expense_id}   ${resp.json()['id']}
+
+
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${status_id1}   ${resp.json()}
+
+
+    ${resp}=  Update Expense Status   ${expense_uid}  ${status_id1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
     ${resp}=  Get Expense By Id   ${expense_uid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['expenseStatus']}  ${status_id1}
+
+
+
+JD-TC-Update Expense Status-UH1
+
+    [Documentation]  Update Expense Status-with already updated status.
+
+    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${expenseFor}=   FakerLibrary.word
+    ${expenseDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${employeeName}=   FakerLibrary.name
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+    ${rate}=   Random Int  min=50  max=1000
+    ${amount}=   Random Int  min=50  max=1000
+    ${deptId}=   Random Int  min=50  max=100
+    ${deptName}=  FakerLibrary.word
+    ${userName}=    FakerLibrary.name
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=    Create List    ${itemList}
+
+    ${departmentList}=  Create Dictionary  deptId=${deptId}   deptName=${deptName}  
+    ${departmentList}=    Create List    ${departmentList}
 
     ${resp}=  db.getType   ${pdffile} 
     Log  ${resp}
@@ -213,65 +270,42 @@ JD-TC-UploadAttachment-1
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption1}
     
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    ${Attachments}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
+    ${uploadedDocuments}=    Create List    ${Attachments}
 
-    ${resp}=  Upload Finance Expense Attachment   ${expense_uid}     ${Attachments}
+
+    ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${empty}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    Set Test Variable   ${expense_uid}   ${resp.json()['uid']}
 
+    ${resp}=  Get Expense By Id   ${expense_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${expenseStatus}  ${resp.json()['expenseStatus']}  
+    Set Test Variable  ${expenseStatusName}  ${resp.json()['expenseStatusName']}  
 
-JD-TC-UploadAttachment-UH1
+    ${ALREADY_IN_GIVEN_STATUS}=  format String   ${ALREADY_IN_GIVEN_STATUS}   ${expenseStatusName}
 
-    [Documentation]  Create Category and upload a attachment with invalid Vendor id.
-
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance Expense Attachment   ${account_id1}      ${Attachments}
+    ${resp}=  Update Expense Status   ${expense_uid}  ${expenseStatus} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_EXPENSE_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${ALREADY_IN_GIVEN_STATUS}
+    
+JD-TC-Update Expense Status--UH2
 
+    [Documentation]   Update Expense Status- without  login.
 
-JD-TC-UploadAttachment-UH3
-
-    [Documentation]   upload a attachment using consumer login.
-
-    ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance Expense Attachment   ${vendor_uid1}     ${Attachments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.json()}  ${NoAccess}
-
-JD-TC-UploadAttachment-UH4
-
-    [Documentation]   upload a attachment without  login.
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance Expense Attachment   ${vendor_uid1}     ${Attachments}
+    ${resp}=  Update Expense Status   ${expense_uid}  ${status_id1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
 
-JD-TC-UploadAttachment-UH5
+JD-TC-Update Expense Status--UH3
 
-    [Documentation]   upload a attachment using another provider login.
+    [Documentation]   Update Expense Status- using another provider login.
 
     ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
@@ -294,27 +328,26 @@ JD-TC-UploadAttachment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance Expense Attachment   ${expense_uid}     ${Attachments}
+    ${resp}=  Update Expense Status   ${expense_uid}  ${status_id1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_EXPENSE_ID}
 
-JD-TC-UploadAttachment-UH6
+JD-TC-Update Expense Status--UH4
 
-    [Documentation]  Create Category and upload a attachment with empty attachment .
+    [Documentation]   Update Expense Status- using another provider login.
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
 
-    ${Attachments}=    Create Dictionary  
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance Expense Attachment   ${expense_uid}      ${Attachments}
+      ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${status_id1}   ${resp.json()}
+
+
+    ${resp}=  Update Expense Status   ${expense_uid}  ${status_id1} 
+    Log  ${resp.json()}                                                 
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${FILE_NAME_NOT_FOUND}
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_FM_STATUS_ID}
