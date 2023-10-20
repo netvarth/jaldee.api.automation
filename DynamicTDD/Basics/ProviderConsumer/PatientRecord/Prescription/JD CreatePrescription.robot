@@ -554,5 +554,5 @@ JD-TC-Create Prescription-UH9
 
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}    ${mrPrescriptions}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings   ${resp.json()}   ${MEDICINE_NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings   ${resp.json()}   ${MEDICINE_NAME_REQUIRED}  # Rest changed to happy case
