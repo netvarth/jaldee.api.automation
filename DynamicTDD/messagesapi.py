@@ -2124,3 +2124,5 @@ COUNTRY_CODE_REQUIRED_FOR_TERTIARY_NO = "Country code required for Tertiary Phon
 		
 COUNTRY_CODE_INVALID_FOR_SECONDARY_NO = "Invalid secondary phone No country code."
 COUNTRY_CODE_INVALID_FOR_TERTIARY_NO = "Invalid tertiary phone No country code."
+
+appmntReminder_Consumer_APP= "[consumer],\n[appttime] reminder for your appointment with\n[provider],\n[time],[date]\n[service]"

@@ -347,7 +347,6 @@ JD-TC-providerConsumerAppointment-3
     ${resp}=  ListFamilyMember
     Verify Response List  ${resp}  0  user=${fid}
 
-
     ${resp}=    Add FamilyMember As ProviderConsumer     ${fid}     ${cid}   ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

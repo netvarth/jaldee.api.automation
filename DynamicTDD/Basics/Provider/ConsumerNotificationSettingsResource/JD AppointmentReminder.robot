@@ -18,6 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${Zero_person_ahead}   0
 ${One_person_ahead}    1
 ${self}         0
+${globaluser}         0
 
 *** Keywords ***
 
@@ -58,6 +59,7 @@ JD-TC-ConsumerNotificationSettings-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${businessName}  ${resp.json()['businessName']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
@@ -139,6 +141,7 @@ JD-TC-ConsumerNotificationSettings-1
     Set Suite Variable  ${f_Name}  ${resp.json()['firstName']}
     Set Suite Variable  ${l_Name}  ${resp.json()['lastName']}
     Set Suite Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
 
     ${resp}=  Get Appointment Schedules Consumer  ${account_id}
     Log  ${resp.content}
@@ -190,9 +193,27 @@ JD-TC-ConsumerNotificationSettings-1
     ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[consumer] 	${userName}
+    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[appttime] 	First
+    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[provider] 	${businessName}
+    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[time] 	${slot1}
+    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[date] 	${DAY1}
+    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[service] 	${SERVICE1}
+    ${service_format_date}=   DateTime.Convert Date    ${DAY1}   result_format="%a, %d %b %Y"
+    ${service_format}=  ${SERVICE1}${SPACE}on${SPACE}${service_format_date}
     
     ${resp}=  Get Consumer Communications
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}             ${prov_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}  ${globaluser}
+    Should Be Equal As Strings  ${resp.json()[0]['owner']['userType']}  ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['msg']}  ${appmntReminder_Consumer_APP}
+    Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}  ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}  ${cid}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['accountName']}  ${businessName}
+    Should Be Equal As Strings  ${resp.json()[0]['service']}  ${service_format}
+    Should Be Equal As Strings  ${resp.json()[0]['read']}  ${boolean[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['timeZone']}  ${tz}
  
