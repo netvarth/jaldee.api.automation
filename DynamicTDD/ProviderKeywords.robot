@@ -10585,8 +10585,8 @@ Upload Finance Vendor Attachment
 
 Create Expense
 
-    [Arguments]    ${expenseCategoryId}  ${amount}  ${expenseDate}   ${expenseFor}    ${vendorId}  ${description}  ${referenceNo}   ${employeeName}    ${itemList}    ${departmentList}    ${uploadedDocuments}  &{kwargs}
-    ${data}=  Create Dictionary  expenseCategoryId=${expenseCategoryId}   amount=${amount}  expenseDate=${expenseDate}   expenseFor=${expenseFor}  vendorId=${vendorId}    description=${description}  referenceNo=${referenceNo}    employeeName=${employeeName}    itemList=${itemList}    departmentList=${departmentList}    uploadedDocuments=${uploadedDocuments}
+    [Arguments]    ${expenseCategoryId}  ${amount}  ${expenseDate}   ${expenseFor}    ${vendorUid}  ${description}  ${referenceNo}   ${employeeName}    ${itemList}    ${departmentList}    ${uploadedDocuments}  &{kwargs}
+    ${data}=  Create Dictionary  expenseCategoryId=${expenseCategoryId}   amount=${amount}  expenseDate=${expenseDate}   expenseFor=${expenseFor}  vendorUid=${vendorUid}    description=${description}  referenceNo=${referenceNo}    employeeName=${employeeName}    itemList=${itemList}    departmentList=${departmentList}    uploadedDocuments=${uploadedDocuments}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -10597,8 +10597,8 @@ Create Expense
 
 Update Expense
 
-    [Arguments]    ${uid}    ${expenseCategoryId}  ${amount}  ${expenseDate}   ${expenseFor}    ${vendorId}  ${description}  ${referenceNo}   ${employeeName}    ${itemList}    ${departmentList}    ${uploadedDocuments}  &{kwargs}
-    ${data}=  Create Dictionary  expenseCategoryId=${expenseCategoryId}   amount=${amount}  expenseDate=${expenseDate}   expenseFor=${expenseFor}  vendorId=${vendorId}    description=${description}  referenceNo=${referenceNo}    employeeName=${employeeName}    itemList=${itemList}    departmentList=${departmentList}    uploadedDocuments=${uploadedDocuments}
+    [Arguments]    ${uid}    ${expenseCategoryId}  ${amount}  ${expenseDate}   ${expenseFor}    ${vendorUid}  ${description}  ${referenceNo}   ${employeeName}    ${itemList}    ${departmentList}    ${uploadedDocuments}  &{kwargs}
+    ${data}=  Create Dictionary  expenseCategoryId=${expenseCategoryId}   amount=${amount}  expenseDate=${expenseDate}   expenseFor=${expenseFor}  vendorUid=${vendorUid}    description=${description}  referenceNo=${referenceNo}    employeeName=${employeeName}    itemList=${itemList}    departmentList=${departmentList}    uploadedDocuments=${uploadedDocuments}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END

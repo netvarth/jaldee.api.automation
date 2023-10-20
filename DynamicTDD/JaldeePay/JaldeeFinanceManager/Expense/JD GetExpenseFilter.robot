@@ -25,6 +25,13 @@ ${xlsx}      /ebs/TDD/qnr.xlsx
 ${order}    0
 ${fileSize}  0.00458
 
+*** Keywords ***
+
+Get Expense Without Filter 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/expense        expected_status=any
+    [Return]  ${resp}
+
 *** Test Cases ***
 
 
@@ -268,20 +275,28 @@ JD-TC-GetExpenseWithFilter-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+       ${resp}=  Get Vendor List with filter
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Expense Without Filter 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+  
+
 
     ${resp}=  Get Expense With Filter   vendorUid-eq=${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['expenseCategoryId']}  ${category_id1}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['expenseDate']}  ${expenseDate}
-    Should Be Equal As Strings  ${resp.json()['expenseFor']}  ${expenseFor}
-    Should Be Equal As Strings  ${resp.json()['expenseFor']}  ${expenseFor}
-    Should Be Equal As Strings  ${resp.json()['itemList'][0]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp.json()['departmentList'][0]['deptId']}  ${deptId}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${jpgfile}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseCategoryId']}  ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseDate']}  ${expenseDate}
+    Should Be Equal As Strings  ${resp.json()[0]['expenseFor']}  ${expenseFor}
+    Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${jpgfile}
 
 JD-TC-GetExpenseWithFilter-3
 
