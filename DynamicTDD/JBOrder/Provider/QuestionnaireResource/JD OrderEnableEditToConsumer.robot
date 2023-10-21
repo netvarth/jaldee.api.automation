@@ -105,7 +105,7 @@ JD-TC-OrderEnableEditToConsumer-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -195,7 +195,7 @@ JD-TC-OrderEnableEditToConsumer-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -260,7 +260,7 @@ JD-TC-OrderEnableEditToConsumer-1
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${orderid1}  ${orderid[0]}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -287,7 +287,7 @@ JD-TC-OrderEnableEditToConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME6}   ${PASSWORD}
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME43}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
     Set Suite Variable    ${cookie}
@@ -296,7 +296,7 @@ JD-TC-OrderEnableEditToConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +337,7 @@ JD-TC-OrderEnableEditToConsumer-1
 JD-TC-OrderEnableEditToConsumer-UH1
     [Documentation]  Order Enable Edit To Consumer where release status is unreleased
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -376,7 +376,7 @@ JD-TC-OrderEnableEditToConsumer-UH1
 JD-TC-OrderEnableEditToConsumer-UH2
     [Documentation]  Order Enable Edit To Consumer Where status is false
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -414,7 +414,7 @@ JD-TC-OrderEnableEditToConsumer-UH2
 JD-TC-OrderEnableEditToConsumer-UH3
     [Documentation]  Resubmiting QNS Without Enables Edit for consumer
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -464,7 +464,7 @@ JD-TC-OrderEnableEditToConsumer-UH3
 JD-TC-OrderEnableEditToConsumer-UH4
     [Documentation]  Order Enable Edit To Consumer With invalid gnr id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -498,7 +498,7 @@ JD-TC-OrderEnableEditToConsumer-UH4
 JD-TC-OrderEnableEditToConsumer-UH5
     [Documentation]  Order Enable Edit To Consumer With invalid Order id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -533,7 +533,7 @@ JD-TC-OrderEnableEditToConsumer-UH5
 JD-TC-OrderEnableEditToConsumer-UH6
     [Documentation]  Order Enable Edit To Consumer Without qnr id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -561,7 +561,7 @@ JD-TC-OrderEnableEditToConsumer-UH6
 JD-TC-OrderEnableEditToConsumer-UH7
     [Documentation]  Order Enable Edit To Consumer Without Order id
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
