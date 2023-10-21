@@ -2026,4 +2026,18 @@ Update Reimbursement By InvoiceId
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session   synw    /jc/reimburse/${invoice_id}    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+    
+Get Reminder Notification
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    POST On Session    synw    /userAgent/reminderNotificationTask    expected_status=any  
     [Return]  ${resp} 
+
+    
+Get Appointment Reminder
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    POST On Session    synw    /userAgent/apptNotificationTask    expected_status=any  
+    [Return]  ${resp}

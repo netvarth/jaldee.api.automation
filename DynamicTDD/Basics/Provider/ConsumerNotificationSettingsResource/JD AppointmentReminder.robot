@@ -20,24 +20,6 @@ ${One_person_ahead}    1
 ${self}         0
 ${globaluser}         0
 
-*** Keywords ***
-
-    
-Get Appointment Reminder
-
-    Check And Create YNW SuperAdmin Session
-    ${resp}=    POST On Session    synw    /userAgent/apptNotificationTask    expected_status=any  
-    [Return]  ${resp}
-
-
-Create Appointment Reminder Settings
-    [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${reminder_time}
-    ${data}=  Create Dictionary  resourceType=${resource_type}  eventType=${event_type}  email=${email}  sms=${sms}  
-                ...    pushNotification=${push_notf}  commonMessage=${common_msg}  time=${reminder_time}
-    ${data}=   json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
-    [Return]  ${resp}
 
 
 *** Test Cases ***
@@ -49,6 +31,10 @@ JD-TC-ConsumerNotificationSettings-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
 
     clear_consumer_notification_settings  ${PUSERNAME45}
     clear_service   ${PUSERNAME45}

@@ -19,16 +19,6 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 @{empty_list}
 ${self}         0
 
-*** Keywords ***
-
-    
-Get Bill Count
-
-    [Arguments]      &{param}
-    Check And Create YNW Session
-    ${resp}=    Get On Session    ynw    /provider/bill/count      params=${param}   expected_status=any  
-    [Return]  ${resp}
-
 
 *** Test Cases ***
 

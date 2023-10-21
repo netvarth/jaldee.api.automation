@@ -11708,3 +11708,12 @@ Get Treatment Plan By Dental Id
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/dental/${id}  expected_status=any
     [Return]  ${resp}
+
+Create Appointment Reminder Settings
+    [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${reminder_time}
+    ${data}=  Create Dictionary  resourceType=${resource_type}  eventType=${event_type}  email=${email}  sms=${sms}  
+                ...    pushNotification=${push_notf}  commonMessage=${common_msg}  time=${reminder_time}
+    ${data}=   json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
+    [Return]  ${resp}

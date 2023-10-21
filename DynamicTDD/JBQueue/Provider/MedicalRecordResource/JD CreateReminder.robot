@@ -18,16 +18,6 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 @{emptylist}
 
 
-*** Keywords ***
-
-    
-Get Reminder Notification
-
-    Check And Create YNW SuperAdmin Session
-    ${resp}=    POST On Session    synw    /userAgent/reminderNotificationTask    expected_status=any  
-    [Return]  ${resp}
-
-
 *** Test Cases ***
 
 JD-TC-CreateReminder-1
