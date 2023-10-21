@@ -20,7 +20,120 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Test Cases ***
 
-JD-TC-GetReminders-1
+
+JD-TC-CreateReminder-1
+
+    [Documentation]    Provider create a reminder for his provider consumer.
+
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=  Consumer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+    clear_customer    ${PUSERNAME156}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME18}   firstName=${fname}  lastName=${lname} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcid18}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcid18}  ${resp.json()[0]['id']}
+    END
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  db.add_timezone_time  ${tz}  3  15
+    ${msg}=  FakerLibrary.word
+
+    ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${rem_id}  ${resp.content}
+
+
+    ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Reminder Notification
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SuperAdmin Logout 
+    Should Be Equal As Strings  ${resp.status_code}  200
+  
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Consumer Communications
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}             ${prov_id1}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME156}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Reminders   completed-eq=${bool[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    Should Be Equal As Strings  ${resp.json()[0]['id']}                                   ${rem_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['startDate']}                ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['terminator']['endDate']}    ${DAY2}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['timeSlots'][0]['sTime']}    ${sTime1}
+    Should Be Equal As Strings  ${resp.json()[0]['schedule']['timeSlots'][0]['eTime']}    ${eTime1}
+    Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}                       ${prov_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}               ${pcid18}
+    Should Be Equal As Strings  ${resp.json()[0]['message']}                              ${msg}
+    # Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Email']}              ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Sms']}                ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['PushNotification']}   ${bool[1]}
+
+
+JD-TC-GetReminders-2
 
     [Documentation]    Provider create a reminder for his consumer and verify it.
 
@@ -129,7 +242,7 @@ JD-TC-GetReminders-1
     # Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['Sms']}                ${bool[1]}
     # Should Be Equal As Strings  ${resp.json()[0]['reminderSource']['PushNotification']}   ${bool[1]}
 
-JD-TC-GetReminders-2
+JD-TC-GetReminders-3
 
     [Documentation]    Provider create more than one reminder for his consumer and verify it(with same schedule).
 
@@ -164,7 +277,7 @@ JD-TC-GetReminders-2
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}               ${pcid18}
     Should Be Equal As Strings  ${resp.json()[0]['message']}                              ${msg}
 
-JD-TC-GetReminders-3
+JD-TC-GetReminders-4
 
     [Documentation]    Provider create more than one reminder for his consumer and verify it(with different schedule).
 
@@ -222,7 +335,7 @@ JD-TC-GetReminders-3
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}               ${pcid18}
     Should Be Equal As Strings  ${resp.json()[0]['message']}                              ${msg1}
    
-JD-TC-GetReminders-4
+JD-TC-GetReminders-5
 
     [Documentation]    Provider create more than one reminder for his consumers and verify it(with same schedule).
 
@@ -287,7 +400,7 @@ JD-TC-GetReminders-4
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}               ${pcid13}
     Should Be Equal As Strings  ${resp.json()[0]['message']}                              ${msg}
 
-JD-TC-GetReminders-5
+JD-TC-GetReminders-6
 
     [Documentation]    Provider create more than one reminder for his consumers and verify it(with different schedule).
 
@@ -363,7 +476,7 @@ JD-TC-GetReminders-5
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}               ${pcid13}
     Should Be Equal As Strings  ${resp.json()[0]['message']}                              ${msg2}
 
-JD-TC-GetReminders-6
+JD-TC-GetReminders-7
 
     [Documentation]    Get reminder with filter id.
 
@@ -384,7 +497,7 @@ JD-TC-GetReminders-6
     Should Be Equal As Strings  ${resp.json()[0]['providerConsumer']['id']}               ${pcid18}
     Should Be Equal As Strings  ${resp.json()[0]['message']}                              ${msg}
 
-JD-TC-GetReminders-7
+JD-TC-GetReminders-8
 
     [Documentation]    Get reminder with filter id.
 

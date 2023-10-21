@@ -32,10 +32,6 @@ JD-TC-ConsumerNotificationSettings-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
-
     clear_consumer_notification_settings  ${PUSERNAME45}
     clear_service   ${PUSERNAME45}
     clear_multilocation  ${PUSERNAME45}    
