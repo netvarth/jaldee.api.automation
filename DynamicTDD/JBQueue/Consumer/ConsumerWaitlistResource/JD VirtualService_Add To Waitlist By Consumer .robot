@@ -2529,7 +2529,7 @@ JD-TC-VirtualService_Add To WaitlistByConsumer-UH13
     ${DAY}=  db.get_date_by_timezone  ${tz}
     ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${eTime1}=  add_timezone_time  ${tz}  4  00  
-    ${p1queue6}=    FakerLibrary.word
+    ${p1queue6}=    FakerLibrary.firstname
     ${list}=  Create List  1  2  3  4  5  6  7
     ${resp}=  Create Queue  ${p1queue6}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  1  ${p1_l1}  ${p1_s1}  ${p1_s2}
     Log  ${resp.json()}
