@@ -510,6 +510,7 @@ case $ENV_KEY in
         echo "Executing case *- local- Signup flag APre"
         runAPre VariablesForLocalServer.py TDD/APre
         execQueries
+        backupDB
     fi
 
     if [ "$FULL_RUN" == "True" ]; then
