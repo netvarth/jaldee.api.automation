@@ -66,9 +66,9 @@ ${maxAmount}                         300000
 
 *** Test Cases ***
 
-JD-TC-CdlWorkFlow-1
+JD-TC-RegionalManager-1
 
-    [Documentation]  CDL work flow with Login to a multi account provider, enable rbac and create users.
+    [Documentation]  Regional Manager - Create Branch
 
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -93,8 +93,9 @@ JD-TC-CdlWorkFlow-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+1476854
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+2314854
     ${highest_package}=  get_highest_license_pkg
+    Set Suite Variable      ${NBFCMUSERNAME1}
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -275,7 +276,7 @@ JD-TC-CdlWorkFlow-1
     ${resp}=  Get User By Id              ${BM}
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable  ${BM_USERNAME}     ${resp.json()['mobileNo']}
+    Set Suite Variable  ${BM_USERNAME}     ${resp.json()['mobileNo']}
 
 # ..... Create Sample User for Branch Operational Head
 
@@ -435,9 +436,27 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
     Set Suite Variable                     ${locname1}              ${resp.json()['place']}
-    
-# .... Create Branch1....
 
+# ....User  :Branch Manager...
+
+    ${capabilities}=    Create List
+    ${role1}=           Create Dictionary  id=${role_id3}  roleName=${role_name3}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
+    ${user_roles}=      Create List        ${role1}
+    ${user_ids}=        Create List        ${BM}  
+
+    ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    ${resp}=  Get User By Id               ${BM}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id3}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['roleName']}           ${role_name3}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['defaultRole']}        ${bool[1]}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['capabilities']}       ${capability3}
+    Should Be Equal As Strings             ${resp.json()['defaultRoleName']}                    ${role_name3}
+    
     ${branchCode}=                         FakerLibrary.Random Number
     ${branchName}=                         FakerLibrary.name
     Set Suite Variable                     ${branchName}
@@ -445,10 +464,10 @@ JD-TC-CdlWorkFlow-1
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 
     ${state}=    Evaluate                  "${state}".title()
-    # ${state}=    String.RemoveString       ${state}    ${SPACE}
     Set Suite Variable                     ${state}
     Set Suite Variable                     ${district}
     Set Suite Variable                     ${pin}
+    Set Suite Variable                     ${city}
     
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -493,6 +512,31 @@ JD-TC-CdlWorkFlow-1
     Should Be Equal As Strings             ${resp.json()['userRoles'][0]['defaultRole']}        ${bool[1]}
     Should Be Equal As Strings             ${resp.json()['userRoles'][0]['capabilities']}       ${capability7}
     Should Be Equal As Strings             ${resp.json()['defaultRoleName']}                    ${role_name7}
+
+# ....Regional Manager...
+
+    ${location_id}=     Create List        ${locId}   
+    ${branches_id}=     Create List        ${branchid} 
+    ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}  
+    ${capabilities}=    Create List
+
+    ${role1}=           Create Dictionary  id=${role_id11}  roleName=${role_name11}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
+    ${user_roles}=      Create List        ${role1}
+
+    ${user_ids}=        Create List        ${RM} 
+
+    ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    ${resp}=  Get User By Id               ${RM}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id11}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['roleName']}           ${role_name11}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['defaultRole']}        ${bool[1]}
+    Should Be Equal As Strings             ${resp.json()['userRoles'][0]['capabilities']}       ${capability11}
+    Should Be Equal As Strings             ${resp.json()['defaultRoleName']}                    ${role_name11}
 
 # ....User  :Sales Executive...
 
@@ -689,6 +733,17 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
     Set Suite Variable                     ${loanproductSubcatid}   ${resp.json()[0]['id']}
+
+    ${resp}=  SendProviderResetMail        ${RM_USERNAME}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    ${resp}=  ResetProviderPassword        ${RM_USERNAME}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings             ${resp[0].status_code}   200
+    Should Be Equal As Strings             ${resp[1].status_code}   200
+
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
    
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
@@ -700,6 +755,42 @@ JD-TC-CdlWorkFlow-1
     ${dealerlname}=                        FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
     ${dob}=  Convert To String             ${dob} 
+    Set Suite Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
+   
+    ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}   200
+   
+    ${branch}=      Create Dictionary      id=${branchid}
+
+    ${resp}=                               Verify Phone Partner Creation    ${phone}   ${OtpPurpose['ProviderVerifyPhone']}    ${dealerfname}   ${dealerlname}   branch=${branch}    partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+
+
+JD-TC-RegionalManager-2
+
+    [Documentation]  Regional Manager - approval request
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Suite Variable                     ${phone}  555${PH_Number}
+
+    ${dealerfname}=                        FakerLibrary.name
+    Set Suite Variable      ${dealerfname}
+    ${dealername}=                         FakerLibrary.bs
+    Set Suite Variable      ${dealername}
+    ${dealerlname}=                        FakerLibrary.last_name
+    Set Suite Variable      ${dealerlname}
+    ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String             ${dob} 
+    Set Suite Variable      ${dob}
     Set Test Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
    
     ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
@@ -921,11 +1012,33 @@ JD-TC-CdlWorkFlow-1
 
 # ....... Approval Request .......
 
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
     ${resp}=   Partner Approval Request    ${partuid1}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-# .....Approve Dealer By Branch Manager......
+JD-TC-RegionalManager-3
+
+    [Documentation]  Regional Manager - Partner approved
+
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
+
+    ${note}=                               FakerLibrary.sentence
+    Set Suite Variable   ${note}
+
+    ${resp}=   Partner Approved            ${partuid1}              ${note}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}      422
+    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-RegionalManager-4
+
+    [Documentation]  Regional Manager - Update Sales and Credit officer
 
     ${resp}=  SendProviderResetMail        ${BM_USERNAME}
     Should Be Equal As Strings             ${resp.status_code}      200
@@ -947,6 +1060,10 @@ JD-TC-CdlWorkFlow-1
 
 # ...... Update sales officer and credit officer for dealer1 & activate dealer1 by branch operation head....
 
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
+
     ${Salesofficer}=  Create Dictionary    id=${SO}  isDefault=${bool[1]}
 
     ${resp}=    Update Sales Officer       ${partuid1}    ${Salesofficer}
@@ -958,6 +1075,27 @@ JD-TC-CdlWorkFlow-1
     ${resp}=    Update Credit Officer      ${partuid1}      ${Creditofficer}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+
+JD-TC-RegionalManager-5
+
+    [Documentation]  Regional Manager - Activate Partner 
+
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
+
+    ${resp}=    Activate Partner           ${partuid1}     ${bool[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-RegionalManager-6
+
+    [Documentation]  Regional Manager - Create CDL Enq 
+
+    ${resp}=  Encrypted Provider Login     ${BM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
 
     ${resp}=    Activate Partner           ${partuid1}     ${bool[1]}
     Log  ${resp.content}
@@ -975,7 +1113,9 @@ JD-TC-CdlWorkFlow-1
     Set Suite Variable                     ${cust}  555${cust}
 
     ${fname}=                              FakerLibrary.name
+    Set Suite Variable      ${fname}
     ${lname}=                              FakerLibrary.name
+    Set Suite Variable      ${lname}
     
     ${resp}=  GetCustomer                  phoneNo-eq=${cust}  
     Log  ${resp.content}
@@ -989,8 +1129,9 @@ JD-TC-CdlWorkFlow-1
         Set Suite Variable  ${cust_id}      ${resp.json()[0]['id']}
     END
 
-    Set Suite Variable  ${cust_email}           ${fname}${C_Email}.ynwtest@jaldee.com
-    ${cust_email}=    String.RemoveString       ${cust_email}    ${SPACE}
+    Set Test Variable  ${cust_email1}           ${fname}${C_Email}.ynwtest@jaldee.com
+    ${cust_email}=    String.RemoveString       ${cust_email1}    ${SPACE}
+    Set Suite Variable      ${cust_email}
 
     updateEnquiryStatus                    ${account_id1}
     sleep  01s
@@ -1044,29 +1185,46 @@ JD-TC-CdlWorkFlow-1
     Log  ${pan2}
     Set Suite Variable                     ${pan2}  55555${pan2}
 
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
+
     ${resp}=  Create CDL Enquiry           ${category}  ${cust_id}  ${city}  ${aadhaar}  ${pan2}  ${state}  ${pin}  ${locId}  ${en_temp_id}  ${minAmount} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}     200
     Set Suite Variable                     ${en_id}                ${resp.json()['id']}
     Set Suite Variable                     ${en_uid}               ${resp.json()['uid']}
 
-    ${resp}=  Get Provider Enquiry Status  
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}     200
-    ${len}  Get Length  ${resp.json()}
-    FOR   ${i}  IN RANGE   ${len}
-        Set Test Variable                  ${status_id${i}}        ${resp.json()[${i}]['id']}
-        Set Test Variable                  ${status_name${i}}      ${resp.json()[${i}]['name']}
-    END
+JD-TC-RegionalManager-7
 
-    ${resp}=  Get Enquiry by Uuid          ${en_uid}  
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}     200
-    Should Be Equal As Strings             ${resp.json()['id']}    ${en_id}
-    Should Be Equal As Strings             ${resp.json()['uid']}   ${en_uid}
+    [Documentation]  Regional Manager - Create Loan Application
 
-# ....... Create Loan - Generate and verify phone for loan.......
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}      200
+
+    ${resp}=                               Generate Loan Application Otp for Phone Number    ${cust}  ${countryCodes[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${gender}    Random Element            ${Genderlist}
+    ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
+    ${dob}=  Convert To String             ${dob} 
+    ${kyc_list1}=  Create Dictionary       isCoApplicant=${bool[0]}
+
+    ${resp}=                               Verify Phone and Create Loan Application with customer details  ${cust}  ${OtpPurpose['ConsumerVerifyPhone']}  ${cust_id}  ${locId}   ${kyc_list1}  firstName=${fname}  lastName=${lname}  phoneNo=${cust}  countryCode=${countryCodes[0]}  gender=${gender}  dob=${dob}     
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    # Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-RegionalManager-8
+
+    [Documentation]  Regional Manager - Approval Request
     
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
     ${resp}=                               Generate Loan Application Otp for Phone Number    ${cust}  ${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
@@ -1082,7 +1240,7 @@ JD-TC-CdlWorkFlow-1
     Set Suite VAriable                     ${loanid}              ${resp.json()['id']}
     Set Suite VAriable                     ${loanuid}             ${resp.json()['uid']}
 
-# ....... Generate and verify email for loan .......
+    # ....... Generate and verify email for loan .......
 
     ${resp}=                               Generate Loan Application Otp for Email  ${cust_email}
     Log  ${resp.content}
@@ -1135,7 +1293,7 @@ JD-TC-CdlWorkFlow-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
+    Set Suite Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
     Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
@@ -1266,6 +1424,7 @@ JD-TC-CdlWorkFlow-1
     ${loanProducts}=  Create Dictionary    id=${Productid}  categoryId=${categoryid}    typeId=${typeid}
     ${loanProducts}=  Create List          ${loanProducts}
     ${partner}=       Create Dictionary    id=${partid1}
+    Set Suite Variable      ${partner}
     ${customerIntegrationId}               FakerLibrary.Random Number
     ${referralEmployeeCode}                FakerLibrary.Random Number
 
@@ -1355,23 +1514,109 @@ JD-TC-CdlWorkFlow-1
     Should Be Equal As Strings             ${resp.status_code}    200
     Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    ${resp}=  Approval Loan Application    ${loanuid}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-RegionalManager-9
+
+    [Documentation]  Regional Manager - Equifax, Mafil and Credit score
+
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}   200
+
+    ${resp}=  Get Loan Application By uid  ${loanuid} 
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-RegionalManager-10
+
+    [Documentation]  Regional Manager - Equifax score
+
+    ${resp}=  Encrypted Provider Login     ${SOUSERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
     ${resp}=  Approval Loan Application    ${loanuid}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime7}    ${resp.json()} 
-    ${datetime07}    Convert Date    ${datetime7}    result_format=%Y-%m-%d %H:%M
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Loan Application By uid  ${loanuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}                   200
-    Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[3]}
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
+# ....... Equifax Report .......
 
-# ....... Branch Credit Head Login .......
+    ${resp}=    Equifax Report             ${loanuid}  ${cust}  ${kycid}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+JD-TC-RegionalManager-11
+
+    [Documentation]  Regional Manager - Mafil score
+
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=    MAFIL Score                ${loanuid}  ${kycid}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+
+JD-TC-RegionalManager-12
+
+    [Documentation]  Regional Manager - Cibil score
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=    MAFIL Score                ${loanuid}  ${kycid}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+# ....... Cibil Score .......
+
+    ${cibilreport}   Create Dictionary     fileName=${pdffile}   fileSize=${fileSize}   caption=${caption3}   fileType=${fileType3}   action=${FileAction[0]}  type=${CDLTypeCibil[0]}   order=${order}
+
+    ${resp}=    Cibil Score                ${kycid}  ${cibilScore}  ${cibilreport}
+    Log  ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+JD-TC-RegionalManager-13
+
+    [Documentation]  Regional Manager - Manual Approval
+
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${loanScheme}=   Create Dictionary     id=${Schemeid1}  
+    Set Suite Variable      ${loanScheme}
+    ${loanProduct}=  Create Dictionary     id=${Productid} 
+    Set Suite Variable      ${loanProduct}
+    ${note}=                               FakerLibrary.sentence
+    Set Suite Variable                     ${note}
+
+    ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
+    Log    ${resp.content}
+    Should Be Equal As Strings             ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-RegionalManager-14
+
+    [Documentation]  Regional Manager - Manual Approval
 
     ${resp}=  SendProviderResetMail        ${BCH_USERNAME}
     Should Be Equal As Strings             ${resp.status_code}  200
@@ -1384,66 +1629,13 @@ JD-TC-CdlWorkFlow-1
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}  200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime8}    ${resp.json()} 
-
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime9}    ${resp.json()} 
-    ${datetime09}    Convert Date    ${datetime9}    result_format=%Y-%m-%d %H:%M
-
-    ${resp}=  Get Loan Application By uid  ${loanuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
-
-# ....... Equifax Report .......
-
-    ${resp}=    Equifax Report             ${loanuid}  ${cust}  ${kycid}
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-# ....... MAFIL Score .......
-
-    ${resp}=    MAFIL Score                ${loanuid}  ${kycid}
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-# ....... Cibil Score .......
-
-    ${cibilreport}   Create Dictionary     fileName=${pdffile}   fileSize=${fileSize}   caption=${caption3}   fileType=${fileType3}   action=${FileAction[0]}  type=${CDLTypeCibil[0]}   order=${order}
-
-    ${resp}=    Cibil Score                ${kycid}  ${cibilScore}  ${cibilreport}
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}    200
-
-# ....... Manual Approval .......
-
-    ${loanScheme}=   Create Dictionary     id=${Schemeid1}  
-    ${loanProduct}=  Create Dictionary     id=${Productid} 
-    ${note}=                               FakerLibrary.sentence
-    Set Suite Variable                     ${note}
-
     ${resp}=                               Loan Application Manual Approval        ${loanuid}    ${loanScheme}   ${invoiceAmount}    ${downpaymentAmount}    ${requestedAmount}    ${requestedAmount}    loanProduct=${loanProduct}    note=${note}
     Log    ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime10}    ${resp.json()} 
-    ${datetime010}    Convert Date    ${datetime10}    result_format=%Y-%m-%d %H:%M
+JD-TC-RegionalManager-15
 
-    ${resp}=                               Get Loan Application By uid           ${loanuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}                   200
-    Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
-
-# ....... Login Sales Officer and Request for Approval .......
+    [Documentation]  Regional Manager - Scheme Approval
 
     ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
     Log   ${resp.json()}
@@ -1556,23 +1748,26 @@ JD-TC-CdlWorkFlow-1
     ${dayofmonth}=        Random Int       min=1   max=20
     Set Suite Variable    ${dayofmonth}
 
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${resp}=  salesofficer Approval        ${loanuid}    ${sch1}     ${tenu1}    ${noOfAdvanceEmi}   ${dayofmonth}    partner=${partner}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}  422
+    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}
+
+JD-TC-RegionalManager-16
+
+    [Documentation]  Regional Manager - Scheme Approval
+
+    ${resp}=  Encrypted Provider Login     ${SO_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
     ${resp}=  salesofficer Approval        ${loanuid}    ${sch1}     ${tenu1}    ${noOfAdvanceEmi}   ${dayofmonth}    partner=${partner}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}  200
-
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime11}    ${resp.json()} 
-    ${datetime011}    Convert Date    ${datetime11}    result_format=%Y-%m-%d %H:%M
-
-    ${resp}=  Get Loan Application By uid  ${loanuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}                   200
-    Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[5]}
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime011}
-
-# ....... Branch Manager Login and Branch Approval .......
 
     ${resp}=  Encrypted Provider Login     ${BM_USERNAME}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1688,20 +1883,13 @@ JD-TC-CdlWorkFlow-1
 
 # ....... Operation Approval .......
 
+    ${resp}=  Encrypted Provider Login     ${RM_USERNAME}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings             ${resp.status_code}    200
+
     ${note}=      FakerLibrary.sentence
 
     ${resp}=    Loan Application Operational Approval   ${loanuid}   ${note}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime15}    ${resp.json()} 
-    ${datetime015}    Convert Date    ${datetime15}    result_format=%Y-%m-%d %H:%M
-
-    ${resp}=  Get Loan Application By uid  ${loanuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}                   200
-    Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[10]}
-    Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime015}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings             ${resp.json()}         ${NO_PERMISSION_FOR_REQUEST}

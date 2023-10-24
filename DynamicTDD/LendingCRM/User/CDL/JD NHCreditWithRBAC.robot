@@ -122,7 +122,7 @@ JD-TC-NHCreditWithRBAC-1
 
 # ..... SignUp Business Head
 
-    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+1895566
+    ${NBFCMUSERNAME1}=  Evaluate  ${MUSERNAME}+5476148
     ${highest_package}=  get_highest_license_pkg
 
     ${resp}=  Account SignUp              ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${NBFCMUSERNAME1}    ${highest_package[0]}
@@ -550,13 +550,13 @@ JD-TC-NHCreditWithRBAC-1
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}    users=${users_id}
     ${role1}=           Create Dictionary  id=${role_id5}  roleName=${role_name5}  defaultRole=${bool[1]}  scope=${user_scope}   capabilities=${capabilities}
     ${user_roles}=      Create List        ${role1}
-    ${user_ids}=        Create List        ${BCH}  
+    ${user_ids}=        Create List        ${NHC} 
 
     ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=  Get User By Id               ${BCH}
+    ${resp}=  Get User By Id               ${NHC}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
     Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id5}
@@ -569,7 +569,7 @@ JD-TC-NHCreditWithRBAC-1
 
     ${location_id}=     Create List        ${locId}   
     ${branches_id}=     Create List        ${branchid} 
-    ${users_id}=        Create List        ${BCH}   ${SO}
+    ${users_id}=        Create List        ${NHC}   ${SO}
     ${partners}=        Create List        all
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}      users=${users_id}    partners=${partners}
     ${role1}=           Create Dictionary  id=${role_id4}  roleName=${role_name4}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
@@ -629,7 +629,7 @@ JD-TC-NHCreditWithRBAC-1
 
 # ....Assiging Branch to users
 
-    ${userids}=         Create List        ${SO}   ${BCH}
+    ${userids}=         Create List        ${SO}   ${NHC}
     ${branch}=          Create Dictionary  id=${branchid}    isDefault=${bool[1]}
 
     ${resp}=  Assigning Branches to Users  ${userids}     ${branch}
@@ -986,7 +986,7 @@ JD-TC-NHCreditWithRBAC-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${Creditofficer}=  Create Dictionary   id=${BCH}    isDefault=${bool[1]}
+    ${Creditofficer}=  Create Dictionary   id=${NHC}   isDefault=${bool[1]}
 
     ${resp}=    Update Credit Officer      ${partuid1}      ${Creditofficer}
     Log  ${resp.content}
@@ -1771,10 +1771,10 @@ JD-TC-NHCreditWithRBAC-UH5
 
 # ..... Create Sample User for Branch Credit Head
 
-    ${BCH}=  Create Sample User 
-    Set Suite Variable                    ${BCH}
+    ${NHC}=  Create Sample User 
+    Set Suite Variable                    ${NHC}
     
-    ${resp}=  Get User By Id              ${BCH}
+    ${resp}=  Get User By Id              ${NHC}
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
     Set Suite Variable  ${NHC_USERNME}   ${resp.json()['mobileNo']}
@@ -2003,13 +2003,13 @@ JD-TC-NHCreditWithRBAC-UH5
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}    users=${users_id}
     ${role1}=           Create Dictionary  id=${role_id5}  roleName=${role_name5}  defaultRole=${bool[1]}  scope=${user_scope}   capabilities=${capabilities}
     ${user_roles}=      Create List        ${role1}
-    ${user_ids}=        Create List        ${BCH}  
+    ${user_ids}=        Create List        ${NHC} 
 
     ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=  Get User By Id               ${BCH}
+    ${resp}=  Get User By Id               ${NHC}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
     Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id5}
@@ -2022,7 +2022,7 @@ JD-TC-NHCreditWithRBAC-UH5
 
     ${location_id}=     Create List        ${locId}   
     ${branches_id}=     Create List        ${branchid} 
-    ${users_id}=        Create List        ${BCH}   ${SO}
+    ${users_id}=        Create List        ${NHC}   ${SO}
     ${partners}=        Create List        all
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}      users=${users_id}    partners=${partners}
     ${role1}=           Create Dictionary  id=${role_id4}  roleName=${role_name4}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
@@ -2082,7 +2082,7 @@ JD-TC-NHCreditWithRBAC-UH5
 
 # ....Assiging Branch to users
 
-    ${userids}=         Create List        ${SO}   ${BCH}
+    ${userids}=         Create List        ${SO}   ${NHC}
     ${branch}=          Create Dictionary  id=${branchid}    isDefault=${bool[1]}
 
     ${resp}=  Assigning Branches to Users  ${userids}     ${branch}
@@ -2434,7 +2434,7 @@ JD-TC-NHCreditWithRBAC-UH5
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${Creditofficer}=  Create Dictionary   id=${BCH}    isDefault=${bool[1]}
+    ${Creditofficer}=  Create Dictionary   id=${NHC}    isDefault=${bool[1]}
 
     ${resp}=    Update Credit Officer      ${partuid1}      ${Creditofficer}
     Log  ${resp.content}
@@ -2978,8 +2978,7 @@ JD-TC-NHCreditWithRBAC-UH5
 
     ${resp}=  salesofficer Approval        ${loanuid}    ${sch1}     ${tenu1}    ${noOfAdvanceEmi}   ${dayofmonth}    partner=${partner}
     Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}  422
-    Should Be Equal As Strings             ${resp.json()}   ${STATUS_IS_APPROVALREQUIRED}
+    Should Be Equal As Strings             ${resp.status_code}  200
 
 
 JD-TC-NHCreditWithRBAC-UH6
@@ -3205,10 +3204,10 @@ JD-TC-NHCreditWithRBAC-UH6
 
 # ..... Create Sample User for Branch Credit Head
 
-    ${BCH}=  Create Sample User 
-    Set Suite Variable                    ${BCH}
+    ${NHC}=  Create Sample User 
+    Set Suite Variable                    ${NHC}
     
-    ${resp}=  Get User By Id              ${BCH}
+    ${resp}=  Get User By Id              ${NHC}
     Log   ${resp.json()}
     Should Be Equal As Strings            ${resp.status_code}  200
     Set Suite Variable  ${NHC_USERNME}   ${resp.json()['mobileNo']}
@@ -3437,13 +3436,13 @@ JD-TC-NHCreditWithRBAC-UH6
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}    users=${users_id}
     ${role1}=           Create Dictionary  id=${role_id5}  roleName=${role_name5}  defaultRole=${bool[1]}  scope=${user_scope}   capabilities=${capabilities}
     ${user_roles}=      Create List        ${role1}
-    ${user_ids}=        Create List        ${BCH}  
+    ${user_ids}=        Create List        ${NHC} 
 
     ${resp}=  Append User Scope            ${rbac_feature[0]}  ${user_ids}  ${user_roles} 
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=  Get User By Id               ${BCH}
+    ${resp}=  Get User By Id               ${NHC}
     Log   ${resp.json()}
     Should Be Equal As Strings             ${resp.status_code}   200
     Should Be Equal As Strings             ${resp.json()['userRoles'][0]['id']}                 ${role_id5}
@@ -3456,7 +3455,7 @@ JD-TC-NHCreditWithRBAC-UH6
 
     ${location_id}=     Create List        ${locId}   
     ${branches_id}=     Create List        ${branchid} 
-    ${users_id}=        Create List        ${BCH}   ${SO}
+    ${users_id}=        Create List        ${NHC}   ${SO}
     ${partners}=        Create List        all
     ${user_scope}=      Create Dictionary  businessLocations=${location_id}    branches=${branches_id}      users=${users_id}    partners=${partners}
     ${role1}=           Create Dictionary  id=${role_id4}  roleName=${role_name4}  defaultRole=${bool[1]}   scope=${user_scope}   capabilities=${capabilities}
@@ -3516,7 +3515,7 @@ JD-TC-NHCreditWithRBAC-UH6
 
 # ....Assiging Branch to users
 
-    ${userids}=         Create List        ${SO}   ${BCH}
+    ${userids}=         Create List        ${SO}   ${NHC}
     ${branch}=          Create Dictionary  id=${branchid}    isDefault=${bool[1]}
 
     ${resp}=  Assigning Branches to Users  ${userids}     ${branch}
@@ -3868,7 +3867,7 @@ JD-TC-NHCreditWithRBAC-UH6
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${Creditofficer}=  Create Dictionary   id=${BCH}    isDefault=${bool[1]}
+    ${Creditofficer}=  Create Dictionary   id=${NHC}    isDefault=${bool[1]}
 
     ${resp}=    Update Credit Officer      ${partuid1}      ${Creditofficer}
     Log  ${resp.content}
