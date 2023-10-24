@@ -251,7 +251,7 @@ JD-TC-Create Prescription-1
     Set Suite Variable    ${caption1}
 
 
-     ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
@@ -264,7 +264,8 @@ JD-TC-Create Prescription-1
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}  
+    ${note}=  FakerLibrary.Text  max_nb_chars=42                                                                                                                                                            
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}    prescriptionNotes=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${prescription_uid}   ${resp.json()}
@@ -295,6 +296,7 @@ JD-TC-Create Prescription-1
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionNotes']}     ${note}
     
  
 
@@ -376,6 +378,45 @@ JD-TC-Create Prescription-4
     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Prescription-5
+
+    [Documentation]    upload paper Prescription with Empty prescriptionNotes.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.Text  max_nb_chars=42 
+
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}     prescriptionNotes=${SPACE}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${prescription_uid1}   ${resp.json()}
+    
+    # ${resp}=  Get Prescription By Filter   providerConsumerId-eq=${cid}   referenceId-eq=${referenceId}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Prescription By UID   ${prescription_uid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    Should Be Equal As Strings    ${resp.json()['providerConsumerId']}     ${cid} 
+    Should Be Equal As Strings    ${resp.json()['doctorId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()['caseId']}     ${caseId} 
+    Should Be Equal As Strings    ${resp.json()['dentalRecordId']}     ${id1} 
+    # Should Be Equal As Strings    ${resp.json()['prescriptionAttachments'][0]['fileName']}     ${pdffile} 
+    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['owner']}     ${pid} 
+    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileSize']}     ${fileSize} 
+    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileType']}     ${fileType} 
+    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['order']}     ${order} 
+    # Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['action']}     ${LoanAction[0]} 
+    Should Be Equal As Strings    ${resp.json()['prescriptionCreatedByName']}     ${pdrname}  
+    Should Be Equal As Strings    ${resp.json()['prescriptionCreatedByName']}     ${pdrname} 
+    Should Be Equal As Strings    ${resp.json()['prescriptionCreatedBy']}     ${id} 
+    Should Be Equal As Strings    ${resp.json()['prescriptionCreatedDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['prescriptionNotes']}     ${SPACE}
 
 JD-TC-Create Prescription-UH1
 

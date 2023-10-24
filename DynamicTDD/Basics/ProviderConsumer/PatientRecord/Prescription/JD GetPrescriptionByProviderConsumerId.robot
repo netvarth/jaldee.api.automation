@@ -259,8 +259,9 @@ JD-TC-Get Prescription By Provider Consumer Id-1
     ${prescriptionAttachments1}=  Create List 
     Set Suite Variable    ${prescriptionAttachments1}
   
+    ${note}=  FakerLibrary.Text  max_nb_chars=42 
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}       ${mrPrescriptions}    prescriptionNotes=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${prescription_uid}   ${resp.json()}
@@ -283,6 +284,7 @@ JD-TC-Get Prescription By Provider Consumer Id-1
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionNotes']}     ${note}
 
 
 JD-TC-Get Prescription By Provider Consumer Id-2

@@ -11205,6 +11205,12 @@ Get Prescription Count By Filter
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
     [Return]  ${resp}
 
+Get Prescription By UID
+    [Arguments]    ${uid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/uid/${uid}    expected_status=any
+    [Return]  ${resp}
+
 
 Create Sections 
     [Arguments]    ${uid}    ${id}    ${templateDetailId}       ${sectionType}    ${sectionValue}    @{vargs}  &{kwargs}
