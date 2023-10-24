@@ -1301,7 +1301,7 @@ JD-TC-UpdateVendor-UH2
 
     ${resp}=  Upload Finance Vendor Attachment   ${vendor_uid1}     ${Attachments}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
 
     ${resp}=                      Update Vendor          ${vendor_uid1}    ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno1}    ${emails}    bankInfo=${bankInfo}    attachments=${attachments}
     Log                           ${resp.json()}

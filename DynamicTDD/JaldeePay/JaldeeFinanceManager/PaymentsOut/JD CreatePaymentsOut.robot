@@ -164,3 +164,1484 @@ JD-TC-Create PaymentsOut-1
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
+JD-TC-Create PaymentsOut-2
+
+    [Documentation]  Create Paymentout with empty  amount.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${empty}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Create PaymentsOut-3
+
+    [Documentation]  Create a Payable with payableLabel.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${EMPTY}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-4
+
+    [Documentation]  Create a Payable with empty description.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${EMPTY}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-5
+
+    [Documentation]  Create a Payable with empty vendor id.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${EMPTY}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-6
+
+    [Documentation]  Create a Payable with empty status id.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${EMPTY}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-7
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is cc.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-8
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is DC.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[12]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-9
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is NB.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[8]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-10
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is UPI.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[6]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-11
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is other.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[7]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-12
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is Store credit.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-13
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is PAYLATER.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-14
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is offline.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[3]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-15
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is Wallet.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[10]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-16
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is PayLater.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[13]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+JD-TC-Create PaymentsOut-17
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is PAYTM_PostPaid.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[14]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Create PaymentsOut-18
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is EMI.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[2]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-19
+
+    [Documentation]  Create a Payable where payment status is success and payment mode is Bank_Transfer.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[15]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Create PaymentsOut-20
+
+    [Documentation]  Create a Payable with payment status as failed and payment mode is cash.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-21
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is cc.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-22
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is DC.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[12]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-23
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is NB.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[8]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-24
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is UPI.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[6]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-25
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is other.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[7]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-26
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is Store credit.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[9]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-27
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is PAYLATER.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[4]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-28
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is offline.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[3]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-29
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is Wallet.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[10]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-30
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is PayLater.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[13]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+JD-TC-Create PaymentsOut-31
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is PAYTM_PostPaid.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[14]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Create PaymentsOut-32
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is EMI.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[2]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-33
+
+    [Documentation]  Create a Payable where payment status is failed and payment mode is Bank_Transfer.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[15]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Create PaymentsOut-34
+
+    [Documentation]  Create a Payable with payment status as incomplete and payment mode is cash.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-35
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is cc.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-36
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is DC.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[12]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-37
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is NB.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[8]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-38
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is UPI.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[6]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-39
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is other.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[7]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-40
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is Store credit.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[9]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-41
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is PAYLATER.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[4]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-42
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is offline.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[3]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-43
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is Wallet.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[10]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-44
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is PayLater.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[13]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+JD-TC-Create PaymentsOut-45
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is PAYTM_PostPaid.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[14]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Create PaymentsOut-46
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is EMI.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[2]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-47
+
+    [Documentation]  Create a Payable where payment status is incomplete and payment mode is Bank_Transfer.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[2]}    ${finance_payment_modes[15]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-48
+
+    [Documentation]  Create a Payable with payment status as VOID and payment mode is cash.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-49
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is cc.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-50
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is DC.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[12]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-51
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is NB.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[8]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-52
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is UPI.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[6]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-53
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is other.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[7]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-54
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is Store credit.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[9]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-55
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is PAYLATER.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[4]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-56
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is offline.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[3]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-57
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is Wallet.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[10]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-58
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is PayLater.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[13]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+JD-TC-Create PaymentsOut-59
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is PAYTM_PostPaid.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[14]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Create PaymentsOut-60
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is EMI.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[2]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Create PaymentsOut-61
+
+    [Documentation]  Create a Payable where payment status is VOID and payment mode is Bank_Transfer.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[3]}    ${finance_payment_modes[15]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Create PaymentsOut-UH1
+
+    [Documentation]  Create a Payable with empty category id..
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${EMPTY}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTOUT_CATEGORY}
+
+JD-TC-Create PaymentsOut-UH2
+
+    [Documentation]  Create a Payable with empty due date.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${EMPTY}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${PAID_DATE_CANNOT_BE_EMPTY}
+
+JD-TC-Create PaymentsOut-UH3
+
+    [Documentation]   Create Paymentsout without login
+
+     ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${EMPTY}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-Create PaymentsOut-UH4
+
+    [Documentation]   Create Category Using Consumer Login
+
+    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${EMPTY}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}

@@ -2067,6 +2067,9 @@ INVALID_VENDOR="Invalid Vendor Id"
 INVALID_EXPENSE_CATEGORY="Invalid Expense Category"
 EXPENSE_DATE_CANNOT_BE_EMPTY="Expense Date cannot be empty"
 INVALID_EXPENSE_AMOUNT="Invalid Expense Amount"
+INVALID_PAYMENTOUT_CATEGORY="Invalid PaymentsOut Category"
+PAID_DATE_CANNOT_BE_EMPTY="Paid Date cannot be empty"
+INVALID_PAYMENTSOUT_ID="Invalid PaymentsOut Id"
 
 
 

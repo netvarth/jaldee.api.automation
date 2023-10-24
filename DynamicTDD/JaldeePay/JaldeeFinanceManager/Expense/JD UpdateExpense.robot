@@ -545,7 +545,7 @@ JD-TC-UpdateExpense-UH2
     ${resp}=  Update Expense   ${expense_uid1}   ${category_id1}  ${amount}  ${empty}   ${expenseFor}     ${vendor_uid1}   ${description1}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings  ${resp.json()}   ${INVALID_EXPENSE_CATEGORY_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${EXPENSE_DATE_CANNOT_BE_EMPTY}
 
 JD-TC-UpdateExpense-UH3
 
@@ -729,6 +729,7 @@ JD-TC-UpdateExpense-UH5
     ${resp}=  Update Expense   ${expense_uid1}   ${category_id1}  ${EMPTY}  ${expenseDate}   ${expenseFor}     ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_EXPENSE_AMOUNT}
 
 JD-TC-UpdateExpense-UH6
 
@@ -784,6 +785,7 @@ JD-TC-UpdateExpense-UH6
     ${resp}=  Update Expense   ${expense_uid1}   ${EMPTY}  ${amount}  ${expenseDate}   ${expenseFor}     ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_EXPENSE_CATEGORY}
 
 
 
