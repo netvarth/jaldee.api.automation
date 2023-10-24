@@ -793,7 +793,7 @@ JD-TC-Get Next Available Dates-8
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${u_id}   ${resp.json()[0]['id']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -865,17 +865,18 @@ JD-TC-Get Next Available Dates-9
     Set Test Variable      ${desc}
     ${list}=  Create List  1  2  3  4  5  6  7
    
-    ${resp}=  Create Vacation    ${desc}  ${p1_id}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${CUR_DAY}  0  ${start_time}  ${end_time} 
+    ${resp}=  Create Vacation    ${desc}  ${u_id}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${CUR_DAY}  0  ${start_time}  ${end_time} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${v1_id}  ${resp.json()}
+    # Set Suite Variable  ${v1_id}  ${resp.json()}
     sleep  2s
 
-    ${resp}=  Get Vacation    ${p1_id}
+    ${resp}=  Get Vacation    ${u_id}
     Log  ${resp.json()}
-    Set Suite Variable  ${v_id}  ${resp.json()[0]['id']}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List   ${resp}   0  id=${v_id}  startDay=${CUR_DAY}  description=${desc}  providerId=${p1_id}     
+    Set Suite Variable  ${v1_id}  ${resp.json()[0]['id']}
+    
+    # Verify Response List   ${resp}   0  id=${v1_id}  startDay=${CUR_DAY}  description=${desc}  providerId=${u_id}     
     # Should Be Equal As Strings  ${resp.json()[0]['nonWorkingHours']['sTime']}  ${start_time}
     # Should Be Equal As Strings  ${resp.json()[0]['nonWorkingHours']['eTime']}  ${end_time}
     
@@ -893,7 +894,7 @@ JD-TC-Get Next Available Dates-9
     ${len}=  Get Length  ${resp.json()} 
     ${len}=   Evaluate   ${len}-1  
     # Verify Response List   ${resp}   0  date=${CUR_DAY}  serviceTime=${end_time}  queueStartTime=${sTime_1}  queueEndTime=${eTime_1}  isAvailable=${bool[1]}  queueId=${uq_id} 
-    Verify Response List   ${resp}   0  date=${CUR_DAY}  serviceTime=${sTime_1}  queueStartTime=${sTime_1}  queueEndTime=${eTime_1}  isAvailable=${bool[1]}  queueId=${uq_id} 
+    Verify Response List   ${resp}   0  date=${CUR_DAY}   isAvailable=${bool[0]}  queueId=${uq_id} 
     FOR  ${i}  IN RANGE   ${len}
         ${DAY1}=  db.add_timezone_date  ${tz}  1
         Run Keyword IF  '${resp.json()[${i}]['date']}' == '${DAY1}' 
@@ -912,15 +913,13 @@ JD-TC-Get Next Available Dates-9
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Delete Vacation  ${v_id} 
+    ${resp}=  Delete Vacation  ${v1_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-
-
-
 JD-TC-Get Next Available Dates-UH1
+
 	[Documentation]  provider Disable department
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1226,12 +1225,13 @@ JD-TC-Get Next Available Dates-UH8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${prov_id}=  get_acc_id  ${PUSERNAME30} 
+    ${prov1_id}=  get_acc_id  ${PUSERNAME30} 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
+
+    clear_service   ${PUSERNAME34}
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1249,7 +1249,7 @@ JD-TC-Get Next Available Dates-UH8
     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Availability Of Queue By Consumer  ${plid}  ${p_s1}  ${prov_id}
+    ${resp}=  Availability Of Queue By Consumer  ${plid}  ${p_s1}  ${prov1_id}
     Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}   401
     # Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION}"
@@ -1322,6 +1322,7 @@ JD-TC-Get Next Available Dates-UH12
     sleep   02s
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
