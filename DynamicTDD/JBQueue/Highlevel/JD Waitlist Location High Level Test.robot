@@ -636,8 +636,7 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
     ${resp}=   Get Waitlist EncodedId    ${wid3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Suite Variable   ${W_uuid3}   ${resp.json()}
-    
+    # Set Suite Variable   ${W_uuid3}   ${resp.json()}   
     Set Suite Variable  ${W_encId3}  ${resp.json()}
 
     ${resp}=  Get Appointment Messages
@@ -645,6 +644,10 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
     Should Be Equal As Strings  ${resp.status_code}   200
     ${confirmAppt_push}=  Set Variable   ${resp.json()['confirmationMessages']['SP_APP']} 
     ${defconsumerCancel_msg}=  Set Variable   ${resp.json()['cancellationMessages']['Consumer_APP']}
+
+    ${provider_msg}=   Set Variable  Message from [providerName] : [message] 
+    ${provider_msg}=   Replace String  ${provider_msg}  [providerName]   ${bname}
+    ${provider_msg}=   Replace String  ${provider_msg}  [message]        other
     
     ${bookingid}=  Format String  ${bookinglink}  ${W_encId3}  ${W_encId3}
     ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [consumer]   ${uname}
@@ -652,7 +655,7 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
 
     ${defaultmsg}=  Replace String  ${defconsumerCancel_msg}  [consumer]   ${uname}
     ${defconsumerCancel_msg}=  Replace String  ${defaultmsg}  [bookingId]   ${W_encId3}
-    ${defconsumerCancel_msg}=  Replace String  ${defconsumerCancel_msg}  [providerMessage]   ${EMPTY}
+    ${defconsumerCancel_msg}=  Replace String  ${defconsumerCancel_msg}  [providerMessage]   ${provider_msg} 
 
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}   200   
