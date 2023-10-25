@@ -1314,6 +1314,13 @@ JD-TC-GetFutureAppointment-10
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
+    ${loc_id1}=  Create Sample Location
+
+    ${resp}=  Get Location By Id   ${loc_id1} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${DAY2}=  db.add_timezone_date  ${tz}  9      
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  5  00  
@@ -1330,8 +1337,7 @@ JD-TC-GetFutureAppointment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
-    ${loc_id1}=  Create Sample Location
-
+   
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500

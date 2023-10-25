@@ -588,7 +588,7 @@ JD-TC-GetAppointmentRating-8
     ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Location By Id   ${lid} 
+    ${resp}=  Get Location By Id   ${lid1} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
