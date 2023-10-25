@@ -495,12 +495,10 @@ JD-TC-High Level Test Case-2
     
     Verify Response List  ${resp}  0  ynwUuid=${wid1}  appxWaitingTime=0
     Verify Response List  ${resp}  1  ynwUuid=${wid2}  appxWaitingTime=10
-
-*** comment ***
-    Verify Response List  ${resp}  2  ynwUuid=${wid3}  appxWaitingTime=10
-    Verify Response List  ${resp}  3  ynwUuid=${wid4}  appxWaitingTime=10
-    Verify Response List  ${resp}  4  ynwUuid=${wid5}  appxWaitingTime=10
-    Verify Response List  ${resp}  5  ynwUuid=${wid6}  appxWaitingTime=10
+    # Verify Response List  ${resp}  2  ynwUuid=${wid3}  appxWaitingTime=10
+    # Verify Response List  ${resp}  3  ynwUuid=${wid4}  appxWaitingTime=10
+    # Verify Response List  ${resp}  4  ynwUuid=${wid5}  appxWaitingTime=10
+    # Verify Response List  ${resp}  5  ynwUuid=${wid6}  appxWaitingTime=10
     Comment  Start 1st waitlist
     ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -511,6 +509,8 @@ JD-TC-High Level Test Case-2
 
     Verify Response List  ${resp}  0  ynwUuid=${wid1}  appxWaitingTime=0  waitlistStatus=${wl_status[2]}
     Verify Response List  ${resp}  1  ynwUuid=${wid2}  appxWaitingTime=0
+
+*** comment ***
     Verify Response List  ${resp}  2  ynwUuid=${wid3}  appxWaitingTime=10
     Verify Response List  ${resp}  3  ynwUuid=${wid4}  appxWaitingTime=10
     Verify Response List  ${resp}  4  ynwUuid=${wid5}  appxWaitingTime=10
