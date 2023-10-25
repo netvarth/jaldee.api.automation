@@ -605,7 +605,7 @@ JD-TC-UpdateExpense-UH4
 
     [Documentation]  Update expense with another provider  login.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -188,7 +188,7 @@ JD-TC-EnableDisableFinanceManager-UH4
 
     [Documentation]  disable jaldee finance which is already disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

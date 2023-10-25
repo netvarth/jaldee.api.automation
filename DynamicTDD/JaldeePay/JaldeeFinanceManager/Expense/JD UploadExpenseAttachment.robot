@@ -273,7 +273,7 @@ JD-TC-UploadAttachment-UH5
 
     [Documentation]   upload a attachment using another provider login.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME139}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}

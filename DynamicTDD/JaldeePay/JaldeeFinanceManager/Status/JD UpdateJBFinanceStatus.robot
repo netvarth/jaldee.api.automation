@@ -27,7 +27,7 @@ ${order}    0
 ${fileSize}  0.00458
 
 @{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove   Removed   Add
+@{New_status}    Proceed     Unassign    Block     Delete    Remove   Removed   Add  Check   sum
 
 
 *** Test Cases ***
@@ -190,13 +190,23 @@ JD-TC-UpdateStatus-UH4
     
 JD-TC-UpdateStatus-UH5
 
-    [Documentation]  Update Status With not created categoryType.
+    [Documentation]  Update Status With already created status name.
 
     ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update Finance Status   ${New_status[4]}  ${categoryType[0]}   ${status_id1}
+    ${resp}=  Create Finance Status   ${New_status[7]}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${status_id2}   ${resp.json()}
+
+    ${resp}=  Create Finance Status   ${New_status[8]}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${status_id3}   ${resp.json()}
+
+    ${resp}=  Update Finance Status   ${New_status[8]}  ${categoryType[0]}   ${status_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${STATUS_EXISTS_WITH_GIVEN_NAME}

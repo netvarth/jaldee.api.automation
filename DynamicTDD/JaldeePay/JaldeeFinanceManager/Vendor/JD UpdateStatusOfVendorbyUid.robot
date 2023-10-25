@@ -301,7 +301,7 @@ JD-TC-UpdateVendorStatus-UH3
 
     [Documentation]  update vendor status with another login
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
