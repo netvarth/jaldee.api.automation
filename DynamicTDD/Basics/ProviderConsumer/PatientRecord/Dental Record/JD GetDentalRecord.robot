@@ -140,7 +140,7 @@ JD-TC-Get Dental Record-1
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -199,7 +199,7 @@ JD-TC-Get Dental Record-2
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -252,9 +252,8 @@ JD-TC-Get Dental Record-3
 
     ${resp}=    Get DentalRecord ById   ${id1}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Get Dental Record-4
 
@@ -264,7 +263,7 @@ JD-TC-Get Dental Record-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}    ${toothSurfaces[1]}
@@ -301,7 +300,7 @@ JD-TC-Get Dental Record-UH1
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${id3}=   Random Int  min=12   max=47
+    ${id3}=   Random Int  min=120   max=470
 
     ${resp}=    Get DentalRecord ById   ${id3}    
     Log   ${resp.content}
@@ -329,7 +328,7 @@ JD-TC-Get Dental Record-UH3
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Get Dental Record-UH3
+JD-TC-Get Dental Record-UH4
 
     [Documentation]    Get Dental Record with consumer login.
 

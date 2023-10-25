@@ -140,7 +140,7 @@ JD-TC-Update Dental Record-1
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     Set Suite Variable      ${toothNo}
     ${note1}=  FakerLibrary.word
     Set Suite Variable      ${note1}

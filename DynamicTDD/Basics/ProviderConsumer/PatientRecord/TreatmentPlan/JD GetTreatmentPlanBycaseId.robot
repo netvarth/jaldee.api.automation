@@ -134,20 +134,42 @@ JD-TC-Get Treatment Plan By case Id-1
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
 
-     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
 
-    ${caseDto}=  Create Dictionary  uid=${caseUId} 
-    Set Suite Variable    ${caseDto} 
+    ${toothNo}=   Random Int  min=10   max=47
+    ${note1}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[0]}    ${toothSurfaces[1]}
+
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Suite Variable       ${id1}          ${resp.json()}
+    # Set Test Variable      ${uid}           ${resp.json()["uid"]}
+
+    ${resp}=    Get DentalRecord ById   ${id1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id1} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[0]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]} 
+
+    # ${caseDto}=  Create Dictionary  uid=${caseUId} 
+    # Set Suite Variable    ${caseDto} 
     ${treatment}=  FakerLibrary.name
     ${work}=  FakerLibrary.name
     ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
     ${works}=  Create List  ${one}
 
-    ${resp}=    Create Treatment Plan    ${caseDto}  ${treatment}  ${works}  
+    ${resp}=    Create Treatment Plan    ${caseUId}   ${id1}   ${treatment}  ${works}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${treatmentId}        ${resp.json()}

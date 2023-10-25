@@ -1,4 +1,6 @@
-import pycurl,os,sys
+# import pycurl,os,sys
+import os
+
 try:
     from io import StringIO  ## for Python 3
 except ImportError:
@@ -11,7 +13,8 @@ import logging
 from RequestsLibrary.utils import is_file_descriptor
 from robot.api import logger
 from faker import Faker
-from Keywordspy import *
+from db import ecrypt_data, decrypt_data
+from Keywordspy import second_password, log_response, log_request
 BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP
 SA_BASE_URL = "http://"+HOST+"/superadmin/rest/mgmt"
@@ -61,28 +64,28 @@ clinicalnotespty='/ebs/TDD/clinicalnotes.json'
 # cimg='/ebs/TDD/image.jpg'
 # cprop='/ebs/TDD/proper.json'
 
-def log_response(response):
-    logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
-                                              response.url) +
-                "status=%s, reason=%s \n " % (response.status_code,
-                                              response.reason) +
-                "headers=%s \n " % response.headers +
-                "body=%s \n " % (response.text))
+# def log_response(response):
+#     logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
+#                                               response.url) +
+#                 "status=%s, reason=%s \n " % (response.status_code,
+#                                               response.reason) +
+#                 "headers=%s \n " % response.headers +
+#                 "body=%s \n " % (response.text))
 
 
-def log_request(response):
-    request = response.request
-    if response.history:
-        original_request = response.history[0].request
-        redirected = '(redirected) '
-    else:
-        original_request = request
-        redirected = ''
-    logger.info("%s Request : " % original_request.method.upper() +
-                "url=%s %s\n " % (original_request.url, redirected) +
-                "path_url=%s \n " % original_request.path_url +
-                "headers=%s \n " % original_request.headers +
-                "body=%s \n " % (original_request.body))
+# def log_request(response):
+#     request = response.request
+#     if response.history:
+#         original_request = response.history[0].request
+#         redirected = '(redirected) '
+#     else:
+#         original_request = request
+#         redirected = ''
+#     logger.info("%s Request : " % original_request.method.upper() +
+#                 "url=%s %s\n " % (original_request.url, redirected) +
+#                 "path_url=%s \n " % original_request.path_url +
+#                 "headers=%s \n " % original_request.headers +
+#                 "body=%s \n " % (original_request.body))
 
 # Service Provider Login
 def spLogin(phno,pswd,countrycode=91):

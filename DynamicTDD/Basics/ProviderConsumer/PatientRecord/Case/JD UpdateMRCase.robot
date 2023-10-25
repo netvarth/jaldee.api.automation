@@ -38,7 +38,7 @@ JD-TC-Update MR Case-1
 
     [Documentation]    Update MR Case
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -121,7 +121,7 @@ JD-TC-Update MR Case-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -149,13 +149,13 @@ JD-TC-Update MR Case-1
 
 JD-TC-Update MR Case-2
 
-    [Documentation]    Update MR Case title contain 255 words
+    [Documentation]    Update MR Case title contain 250 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-   ${title1}=  FakerLibrary.Text      max_nb_chars=255
+   ${title1}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
@@ -170,14 +170,14 @@ JD-TC-Update MR Case-2
 
 JD-TC-Update MR Case-3
 
-    [Documentation]    Update MR Case description contain 255 words
+    [Documentation]    Update MR Case description contain 250 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
@@ -194,12 +194,12 @@ JD-TC-Update MR Case-4
 
     [Documentation]    Update MR Case title contain numbers
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title1}=  FakerLibrary.Random Number
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
@@ -216,7 +216,7 @@ JD-TC-Update MR Case-5
 
     [Documentation]    Update MR Case description contain numbers
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -238,11 +238,11 @@ JD-TC-Update MR Case-7
 
     [Documentation]    Update MR Case title is empty
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      
 
     ${resp}=    Update MR Case    ${caseUId}  ${empty}  ${description}  
     Log   ${resp.json()}
@@ -259,7 +259,7 @@ JD-TC-Update MR Case-8
 
     [Documentation]    Update MR Case from user login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -311,7 +311,7 @@ JD-TC-Update MR Case-8
 
 
     ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${empty}  
     Log   ${resp.json()}
@@ -328,7 +328,7 @@ JD-TC-Update MR Case-UH1
 
     [Documentation]    Update MR Case description contain more than 255 words
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -337,14 +337,9 @@ JD-TC-Update MR Case-UH1
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
+    Should Be Equal As Strings              ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}    ${CASE_DESCRIPTION_NOT_EXCEED_250CHAR}
 
-    ${resp}=   Get Case Filter   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
-    Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
-    Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
 JD-TC-Update MR Case-UH2
 

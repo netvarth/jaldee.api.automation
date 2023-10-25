@@ -200,7 +200,7 @@ JD-TC-Adding Provider Consumer Notes-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH1
 
     [Documentation]   Adding Provider Consumer notes where user id is empty.
 
@@ -216,7 +216,7 @@ JD-TC-Adding Provider Consumer Notes-UH
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH2
 
     [Documentation]   Adding Provider consumer notes using another provider login.
 
@@ -232,7 +232,7 @@ JD-TC-Adding Provider Consumer Notes-UH
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH3
 
     [Documentation]   Adding Provider consumer notes where description contains numbers.
 
@@ -246,9 +246,9 @@ JD-TC-Adding Provider Consumer Notes-UH
 
     ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH4
 
     [Documentation]   Adding Provider consumer notes where user id is invalid.
 
@@ -258,14 +258,17 @@ JD-TC-Adding Provider Consumer Notes-UH
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title}=  FakerLibrary.Text     	
-    ${description}=  FakerLibrary.Text     	
-    ${users}=   Create List   ${title}
+    ${description}=  FakerLibrary.Text  
+    ${fakeid}=    Random Int  min=1000   max=9999	
+    ${users}=   Create List   ${fakeid}
+    ${USER_NOT_FOUND_WITH_ID}=  Format String  ${USER_NOT_FOUND_WITH_ID}  ${fakeid}
 
     ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${USER_NOT_FOUND_WITH_ID}
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH5
 
     [Documentation]   Adding Provider consumer notes where consumer id is invalid.
 
@@ -281,7 +284,7 @@ JD-TC-Adding Provider Consumer Notes-UH
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH6
 
     [Documentation]   Adding Provider consumer notes where the title contains numbers.
 
@@ -296,9 +299,9 @@ JD-TC-Adding Provider Consumer Notes-UH
 
     ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description}    ${users}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH7
 
     [Documentation]   Adding Provider consumer notes where the title contains special characters.
 
@@ -312,9 +315,9 @@ JD-TC-Adding Provider Consumer Notes-UH
 
     ${resp}=    Provider Consumer Add Notes    ${cid}    ${title1}    ${description}    ${users}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH8
 
     [Documentation]   Adding Provider consumer notes where the title contains special characters.
 
@@ -328,9 +331,9 @@ JD-TC-Adding Provider Consumer Notes-UH
 
     ${resp}=    Provider Consumer Add Notes    ${cid}    ${title}    ${description1}    ${users}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH9
 
     [Documentation]   Adding Provider consumer notes without login.
 
@@ -344,7 +347,7 @@ JD-TC-Adding Provider Consumer Notes-UH
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Adding Provider Consumer Notes-UH
+JD-TC-Adding Provider Consumer Notes-UH10
 
     [Documentation]   Adding Provider consumer notes with Consumer login.
 

@@ -141,17 +141,42 @@ JD-TC-Update Work list in Treatment Plan-1
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
 
-    ${caseDto}=  Create Dictionary  uid=${caseUId} 
-    Set Suite Variable    ${caseDto} 
-    ${treatment}=  FakerLibrary.name
-    ${work}=  FakerLibrary.name
-    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
-    ${works}=  Create List  ${one}
+    ${toothNo}=   Random Int  min=10   max=47
+    ${note1}=  FakerLibrary.word
+    ${investigation}=    Create List   ${note1}
+    ${toothSurfaces}=    Create List   ${toothSurfaces[0]}    ${toothSurfaces[1]}
 
-    ${resp}=    Create Treatment Plan    ${caseDto}  ${treatment}  ${works}  
+    ${resp}=    Create DentalRecord    ${toothNo}  ${toothType[0]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${treatmentId}        ${resp.json()}
+    Set Suite Variable       ${id1}          ${resp.json()}
+    # Set Test Variable      ${uid}           ${resp.json()["uid"]}
+
+    ${resp}=    Get DentalRecord ById   ${id1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id1} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[0]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][0]}     ${toothSurfaces[0]} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces'][1]}     ${toothSurfaces[1]}
+
+    # ${caseDto}=  Create Dictionary  uid=${caseUId} 
+    # Set Suite Variable    ${caseDto} 
+    ${treatment}=  FakerLibrary.name
+    Set Suite Variable    ${treatment}
+    ${work}=  FakerLibrary.name
+    Set Suite Variable    ${work}
+    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
+    ${works}=  Create List  ${one}
+    Set Suite Variable    ${works}
+
+    ${resp}=    Create Treatment Plan    ${caseUId}    ${id1}    ${treatment}    ${works}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Suite Variable    ${treatmentId}     ${resp.json()}      
 
     ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
     Log   ${resp.content}
@@ -181,7 +206,8 @@ JD-TC-Update Work list in Treatment Plan-1
     ${resp}=    Update Work list in Treatment Plan   ${treatmentId}  ${works}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
-    Set Suite Variable    ${updatetreatmentId}        ${resp.json()}
+        Should Be Equal As Strings        ${resp.json()}        ${bool[1]}
+
  
     ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
     Log   ${resp.content}
@@ -241,7 +267,7 @@ JD-TC-Update Work list in Treatment Plan-UH1
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-     ${resp}=    Update Work list in Treatment Plan   ${treatmentId}  ${works1}
+     ${resp}=    Update Work list in Treatment Plan   ${treatmentId}  ${works}
     Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
@@ -250,7 +276,7 @@ JD-TC-Update Work list in Treatment Plan-UH2
 
     [Documentation]   Update Work list in Treatment Plan without login
 
-    ${resp}=    Update Work list in Treatment Plan   ${treatmentId}  ${works1}
+    ${resp}=    Update Work list in Treatment Plan   ${treatmentId}  ${works}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -263,7 +289,7 @@ JD-TC-Update Work list in Treatment Plan-UH4
     Log   ${resp.content}
     Should Be Equal As Strings              ${resp.status_code}   200
     
-    ${resp}=    Update Work list in Treatment Plan   ${treatmentId}  ${works1}
+    ${resp}=    Update Work list in Treatment Plan   ${treatmentId}  ${works}
     Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  400
     Should Be Equal As Strings  ${resp.json()}    ${LOGIN_INVALID_URL}
@@ -278,9 +304,9 @@ JD-TC-Update Work list in Treatment Plan-UH6
 
     ${fake_id}=  Random Int  min=500   max=1000
 
-    ${resp}=    Update Work list in Treatment Plan   ${fake_id}  ${works1}
+    ${resp}=    Update Work list in Treatment Plan   ${fake_id}  ${works}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_ID}"
+    Should Be Equal As Strings  "${resp.json()}"    "${INVALID_TREATMENT_REQUEST}"
 
 

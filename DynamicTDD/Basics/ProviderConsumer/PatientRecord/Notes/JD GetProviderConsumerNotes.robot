@@ -185,8 +185,9 @@ JD-TC-Get Provider Consumer Notes-4
     ${resp}=    Get Provider Consumer Notes    ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Contain   ${resp.json()[4]}    title
+    # Should Be Equal As Strings    ${resp.json()[4]['title']}     ${EMPTY}
     Should Be Equal As Strings    ${resp.json()[4]['providerConsumerId']}     ${cid}
-    Should Be Equal As Strings    ${resp.json()[4]['title']}     ${EMPTY}
     Should Be Equal As Strings    ${resp.json()[4]['description']}     ${description}
 
 JD-TC-Get Provider Consumer Notes-5
@@ -207,9 +208,10 @@ JD-TC-Get Provider Consumer Notes-5
     ${resp}=    Get Provider Consumer Notes    ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Contain   ${resp.json()[5]}    description
     Should Be Equal As Strings    ${resp.json()[5]['providerConsumerId']}     ${cid}
     Should Be Equal As Strings    ${resp.json()[5]['title']}     ${title}
-    Should Be Equal As Strings    ${resp.json()[5]['description']}     ${EMPTY}
+    # Should Be Equal As Strings    ${resp.json()[5]['description']}     ${EMPTY}
 
 JD-TC-Get Provider Consumer Notes-6
 
@@ -267,13 +269,15 @@ JD-TC-Get Provider Consumer Notes-7
     ${resp}=    Get Provider Consumer Notes    ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[6]['providerConsumerId']}     ${cid}
+    Should Not Contain   ${resp.json()}    ${note_id} 
 
-JD-TC-Get Provider Consumer Notes-UH
+    # Should Be Equal As Strings    ${resp.json()[6]['providerConsumerId']}     ${cid}
+
+JD-TC-Get Provider Consumer Notes-UH1
 
     [Documentation]    Adding Provider consumer notes using another provider login and get the notes details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
 
@@ -281,17 +285,17 @@ JD-TC-Get Provider Consumer Notes-UH
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
-JD-TC-Get Provider Consumer Notes-UH
+JD-TC-Get Provider Consumer Notes-UH2
 
     [Documentation]   Get Provider consumer notes without login.
 
-    Get Provider Consumer Notes    ${cid}    
+    ${resp}=  Get Provider Consumer Notes    ${cid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Get Provider Consumer Notes-UH
+JD-TC-Get Provider Consumer Notes-UH3
 
     [Documentation]   Get Provider consumer notes with Consumer login.
 
@@ -299,7 +303,7 @@ JD-TC-Get Provider Consumer Notes-UH
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Get Provider Consumer Notes    ${cid}    
+    ${resp}=  Get Provider Consumer Notes    ${cid}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   400
-    Should Be Equal As Strings    ${resp.json()}   ${LOGIN_INVALID_URL}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}   ${NoAccess}

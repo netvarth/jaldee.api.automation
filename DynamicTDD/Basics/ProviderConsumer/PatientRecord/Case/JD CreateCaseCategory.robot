@@ -81,13 +81,13 @@ JD-TC-Create Case Category-1
 
 JD-TC-Create Case Category-2
 
-    [Documentation]    Create Case Category where name contain 255 words
+    [Documentation]    Create Case Category where name contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Create Case Category    ${description1}  ${aliasName}
     Log   ${resp.content}
@@ -105,14 +105,14 @@ JD-TC-Create Case Category-2
 
 JD-TC-Create Case Category-3
 
-    [Documentation]    Create Case Category where name contain 255 words
+    [Documentation]    Create Case Category where name contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name1}=  FakerLibrary.name
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Create Case Category    ${name1}  ${description1}
     Log   ${resp.content}
@@ -128,6 +128,76 @@ JD-TC-Create Case Category-3
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${description1}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
 
+   
+JD-TC-Create Case Category-4
+
+    [Documentation]    Create Case Category where aliasname is empty
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${name1}=  FakerLibrary.name
+
+    ${resp}=    Create Case Category    ${name1}  ${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-Create Case Category-5
+
+    [Documentation]    Create Case Category where name contain numbers
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${title1}=  FakerLibrary.Random Number
+    Set Suite Variable     ${title1}
+
+    ${resp}=    Create Case Category    ${title1}  ${aliasName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Case Category-6
+
+    [Documentation]    Create Case Category where aliasname contain numbers
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    ${name1}=  FakerLibrary.name
+
+    ${resp}=    Create Case Category    ${name1}  ${title1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Case Category-7
+
+    [Documentation]    Create Case Category where name contain special characters
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Case Category    ${titles}  ${aliasName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Case Category-8
+
+    [Documentation]    Create Case Category where aliasname contain special characters
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${name1}=  FakerLibrary.name
+    ${resp}=    Create Case Category    ${name1}  ${titles}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
 JD-TC-Create Case Category-UH1
 
     [Documentation]    Create Case Category where name is empty
@@ -140,20 +210,19 @@ JD-TC-Create Case Category-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
      Should Be Equal As Strings    ${resp.content}   "${NAME_REQUIRED}"
-   
+
 JD-TC-Create Case Category-UH2
 
-    [Documentation]    Create Case Category where aliasname is empty
+    [Documentation]    Create Case Category without login
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${name1}=  FakerLibrary.name
-
-    ${resp}=    Create Case Category    ${name1}  ${empty}
+    ${resp}=    Create Case Category    ${name}  ${aliasName}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+
+
+*** comment ***
 
 JD-TC-Create Case Category-UH3
 
@@ -168,67 +237,6 @@ JD-TC-Create Case Category-UH3
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
 
-JD-TC-Create Case Category-UH4
-
-    [Documentation]    Create Case Category without login
-
-    ${resp}=    Create Case Category    ${name}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Create Case Category-UH5
-
-    [Documentation]    Create Case Category where name contain numbers
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${title1}=  FakerLibrary.Random Number
-    Set Suite Variable     ${title1}
-
-    ${resp}=    Create Case Category    ${title1}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Create Case Category-UH6
-
-    [Documentation]    Create Case Category where aliasname contain numbers
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-    ${name1}=  FakerLibrary.name
-
-    ${resp}=    Create Case Category    ${name1}  ${title1}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Create Case Category-UH7
-
-    [Documentation]    Create Case Category where name contain special characters
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Case Category    ${titles}  ${aliasName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Create Case Category-UH8
-
-    [Documentation]    Create Case Category where aliasname contain special characters
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME14}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${name1}=  FakerLibrary.name
-    ${resp}=    Create Case Category    ${name1}  ${titles}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
 
 JD-TC-Create Case Category-UH9
 
@@ -241,6 +249,3 @@ JD-TC-Create Case Category-UH9
     ${resp}=    Create Case Category    ${name}  ${titles}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-
-
-

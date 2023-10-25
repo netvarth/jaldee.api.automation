@@ -140,7 +140,7 @@ JD-TC-Update Dental Record-1
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     Set Suite Variable      ${toothNo}
     ${note1}=  FakerLibrary.word
     Set Suite Variable      ${note1}
@@ -223,7 +223,7 @@ JD-TC-Update Dental Record-2
     Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
     Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
 
-JD-TC-Update Dental Record-2
+JD-TC-Update Dental Record-3
 
     [Documentation]    Update Dental record with Investigation is empty.
 
@@ -254,7 +254,7 @@ JD-TC-Update Dental Record-2
     Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
     Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
 
-JD-TC-Update Dental Record-3
+JD-TC-Update Dental Record-4
 
     [Documentation]    Update Dental records with Investigation notes containing numbers.
 
@@ -287,7 +287,7 @@ JD-TC-Update Dental Record-3
     Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
     Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
 
-JD-TC-Update Dental Record-4
+JD-TC-Update Dental Record-5
 
     [Documentation]    Updating a Dental record with a tooth surface is LINGUAL.
 
@@ -319,7 +319,7 @@ JD-TC-Update Dental Record-4
     Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
     Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
 
-JD-TC-Update Dental Record-5
+JD-TC-Update Dental Record-6
 
     [Documentation]    Updating a Dental record with a tooth surface is PALATAL.
 
@@ -351,7 +351,7 @@ JD-TC-Update Dental Record-5
     Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
     Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
 
-JD-TC-Update Dental Record-6
+JD-TC-Update Dental Record-7
 
     [Documentation]    Update Dental record with multiple  tooth surfaces.
 
@@ -386,7 +386,7 @@ JD-TC-Update Dental Record-6
     Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
     Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname}
 
-JD-TC-Update Dental Record-7
+JD-TC-Update Dental Record-8
 
     [Documentation]    Update Dental records with the tooth surface empty.
 
@@ -412,7 +412,7 @@ JD-TC-Update Dental Record-7
     Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
     Should Be Equal As Strings    ${resp.json()['toothSurfaces']}     ${toothSurfaces1} 
 
-JD-TC-Update Dental Record-8
+JD-TC-Update Dental Record-9
 
     [Documentation]    Update Dental records with the tooth surface empty.
 
@@ -423,48 +423,23 @@ JD-TC-Update Dental Record-8
     ${toothSurfaces1}=  Create List   
     ${id3}=    FakerLibrary.name
 
-    ${resp}=    Update DentalRecord    ${id3}    ${toothNo1}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces1}
+    ${resp}=    Update DentalRecord    ${id}    ${toothNo1}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces1}
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=    Get DentalRecord ById   ${id3}    
+    ${resp}=    Get DentalRecord ById   ${id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['id']}     ${id3} 
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
     Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo1} 
     Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[1]} 
     Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
 
-    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${investigation} 
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${note1} 
     Should Be Equal As Strings    ${resp.json()['toothSurfaces']}     ${toothSurfaces1} 
 
-JD-TC-Update Dental Record-9
 
-    [Documentation]    UUpdating Dental records with the tooth surface is invalid.
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${id3}=    FakerLibrary.name
-    ${toothSurfaces1}=  Create List   ${id3}
-
-    ${resp}=    Update DentalRecord    ${id3}    ${toothNo1}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
-
-    ${resp}=    Get DentalRecord ById   ${id3}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['id']}     ${id3} 
-    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo1} 
-    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[1]} 
-    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
-
-    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${investigation} 
-    Should Be Equal As Strings    ${resp.json()['toothSurfaces']}     ${toothSurfaces1} 
-
-JD-TC-Update Dental Record-UH
+JD-TC-Update Dental Record-UH1
 
     [Documentation]    Update Dental Record with another provider login.
 
@@ -478,7 +453,7 @@ JD-TC-Update Dental Record-UH
     Should Be Equal As Strings              ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
 
-JD-TC-Update Dental Record-UH
+JD-TC-Update Dental Record-UH2
 
     [Documentation]   Update Dental Record without login.
 
@@ -487,7 +462,7 @@ JD-TC-Update Dental Record-UH
     Should Be Equal As Strings              ${resp.status_code}   419
     Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Update Dental Record-UH
+JD-TC-Update Dental Record-UH3
 
     [Documentation]   Update Dental Record with consumer login.
 
@@ -499,3 +474,31 @@ JD-TC-Update Dental Record-UH
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
+
+*** comment ***
+
+JD-TC-Update Dental Record-9
+
+    [Documentation]    UUpdating Dental records with the tooth surface is invalid.
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${id3}=    FakerLibrary.name
+    ${toothSurfaces1}=  Create List   ${id3}
+
+    ${resp}=    Update DentalRecord    ${id}    ${toothNo1}  ${toothType[1]}  ${caseUId}    investigation=${investigation}    toothSurfaces=${toothSurfaces1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=    Get DentalRecord ById   ${id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
+    Should Be Equal As Strings    ${resp.json()['toothNo']}     ${toothNo1} 
+    Should Be Equal As Strings    ${resp.json()['toothType']}     ${toothType[1]} 
+    Should Be Equal As Strings    ${resp.json()['orginUid']}     ${caseUId} 
+
+    Should Be Equal As Strings    ${resp.json()['investigation'][0]}     ${investigation} 
+    Should Be Equal As Strings    ${resp.json()['toothSurfaces']}     ${toothSurfaces1} 

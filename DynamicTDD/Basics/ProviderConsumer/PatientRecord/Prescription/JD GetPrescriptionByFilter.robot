@@ -24,8 +24,8 @@ ${pdffile}      /ebs/TDD/sample.pdf
 ${order}    0
 ${fileSize}  0.00458
 
-${titles}    @sdf@123
-${description1}    &^7gsdkqwrrf
+${uploadfile}    prescription.pdf
+
 
 *** Test Cases ***
 
@@ -90,17 +90,6 @@ JD-TC-Get Prescription By Filter-1
      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    # Log  ${resp.json()}         
-    # Should Be Equal As Strings            ${resp.status_code}    200
-
-    # ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    # Log  ${decrypted_data}
-
-    # Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    # Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
-    # Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
-    # Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
@@ -261,8 +250,9 @@ JD-TC-Get Prescription By Filter-1
 
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
+    ${note}=  FakerLibrary.Text  max_nb_chars=42 
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}     ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}     ${mrPrescriptions}    prescriptionNotes=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${prescription_uid}   ${resp.json()}
@@ -281,6 +271,8 @@ JD-TC-Get Prescription By Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['uid']}    ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[0]['doctorName']}     ${pdrname} 
+
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name} 
@@ -291,7 +283,7 @@ JD-TC-Get Prescription By Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-    
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionNotes']}     ${note}
  
 
 JD-TC-Get Prescription By Filter-2
@@ -387,9 +379,11 @@ JD-TC-Get Prescription By Filter-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()[0]['doctorName']}     ${pdrname} 
+
     Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
-    Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileName']}     ${pdffile} 
+    Should Contain    ${resp.json()[0]['prescriptionAttachments'][0]['fileName']}     ${uploadfile} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['owner']}     ${pid} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileSize']}     ${fileSize} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionAttachments'][0]['fileType']}     ${fileType} 

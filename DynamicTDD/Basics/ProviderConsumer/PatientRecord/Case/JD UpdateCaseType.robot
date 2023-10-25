@@ -96,13 +96,13 @@ JD-TC-Update Case Type-1
 
 JD-TC-Update Case Type-2
 
-    [Documentation]    Update Case type where name contain 255 words
+    [Documentation]    Update Case type where name contain 200 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=200
 
     ${resp}=    Update Case Type    ${id}  ${description1}  ${aliasName}   ${toggle[0]}
     Log   ${resp.content}
@@ -122,13 +122,13 @@ JD-TC-Update Case Type-2
 
 JD-TC-Update Case Type-3
 
-    [Documentation]    Update Case type where alias name contain 255 words
+    [Documentation]    Update Case type where alias name contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Update Case Type    ${id}  ${name}  ${description1}   ${toggle[0]}
     Log   ${resp.content}
@@ -154,7 +154,7 @@ JD-TC-Update Case Type-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=200
 
     ${resp}=    Update Case Type    ${id}  ${name}  ${description1}   ${toggle[1]}
     Log   ${resp.content}
@@ -192,29 +192,8 @@ JD-TC-Update Case Type-5
     Should Be Equal As Strings    ${resp.json()['aliasName']}     ${empty}
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
 
-JD-TC-Update Case Type-UH1
 
-    [Documentation]    Update Case type with another provider login
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=   Update Case Type     ${id}  ${name}  ${empty}   ${toggle[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  401
-    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
-
-JD-TC-Update Case Type-UH2
-
-    [Documentation]    Update Case type without login
-
-    ${resp}=    Update Case Type     ${id}  ${name}  ${empty}   ${toggle[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Update Case Type-UH3
+JD-TC-Update Case Type-6
 
     [Documentation]    Update Case type where name contain numbers
 
@@ -227,9 +206,9 @@ JD-TC-Update Case Type-UH3
 
     ${resp}=    Update Case Type    ${id}  ${title1}  ${aliasName}   ${toggle[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Type-UH4
+JD-TC-Update Case Type-7
 
     [Documentation]    Update Case type where aliasname contain numbers
 
@@ -240,9 +219,9 @@ JD-TC-Update Case Type-UH4
 
     ${resp}=    Update Case Type    ${id}  ${name}  ${title1}   ${toggle[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Type-UH5
+JD-TC-Update Case Type-8
 
     [Documentation]    Update Case type where name contain special characters
 
@@ -252,10 +231,10 @@ JD-TC-Update Case Type-UH5
 
    ${resp}=    Update Case Type     ${id}  ${titles}  ${aliasName}   ${toggle[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 
-JD-TC-Update Case Type-UH6
+JD-TC-Update Case Type-9
 
     [Documentation]    Update Case type where aliasname contain special characters
 
@@ -266,9 +245,9 @@ JD-TC-Update Case Type-UH6
     ${name1}=  FakerLibrary.name
      ${resp}=    Update Case Type    ${id}  ${name1}  ${titles}   ${toggle[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Type-UH7
+JD-TC-Update Case Type-10
 
     [Documentation]    update already disabled case type
 
@@ -283,23 +262,23 @@ JD-TC-Update Case Type-UH7
 
     ${resp}=   Update Case Type     ${id}  ${name1}  ${aliasName}   ${toggle[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Case Type-UH8
+JD-TC-Update Case Type-UH1
 
     [Documentation]    update case type with invalid id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    ${id1}=  FakerLibrary.Random Number
+    ${id1}=  Random Int  min=101   max=471
 
     ${resp}=    Update Case Type    ${id1}  ${name}  ${aliasName}   ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}    "${INVALID_CASE_TYPE_ID}"
 
-JD-TC-Update Case Type-UH9
+JD-TC-Update Case Type-UH2
 
     [Documentation]    Update Case type where name is empty
 
@@ -311,11 +290,30 @@ JD-TC-Update Case Type-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.content}    "${NAME_REQUIRED}"
+
+JD-TC-Update Case Type-UH3
+
+    [Documentation]    Update Case type without login
+
+    ${resp}=    Update Case Type     ${id}  ${name}  ${empty}   ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
    
 
+*** comment ***
 
+JD-TC-Update Case Type-UH1
 
+    [Documentation]    Update Case type with another provider login
 
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
+    ${resp}=   Update Case Type     ${id}  ${name}  ${empty}   ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  401
+    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION}
 
 

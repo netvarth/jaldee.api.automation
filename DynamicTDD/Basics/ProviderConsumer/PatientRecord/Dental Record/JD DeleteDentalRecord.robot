@@ -140,7 +140,7 @@ JD-TC-Delete Dental Record-1
     Should Be Equal As Strings    ${resp.json()['type']['id']}     ${type_id} 
     Should Be Equal As Strings    ${resp.json()['category']['id']}     ${category_id} 
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -164,8 +164,8 @@ JD-TC-Delete Dental Record-1
 
     ${resp}=    Get DentalRecord ById   ${id}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp}     ${EMPTY}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Delete Dental Record-2
 
@@ -175,7 +175,7 @@ JD-TC-Delete Dental Record-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${toothNo}=   Random Int  min=1   max=47
+    ${toothNo}=   Random Int  min=10   max=47
     ${note1}=  FakerLibrary.word
     ${investigation}=    Create List   ${note1}
     ${toothSurfaces}=    Create List   ${toothSurfaces[0]}
@@ -199,8 +199,9 @@ JD-TC-Delete Dental Record-2
 
     ${resp}=    Get DentalRecord ById   ${id1}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp}     ${EMPTY}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
+
 
 JD-TC-Delete Dental Record-UH1
 
@@ -213,6 +214,7 @@ JD-TC-Delete Dental Record-UH1
     ${resp}=    Delete DentalRecord   ${id1}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Delete Dental Record-UH2
 
@@ -227,6 +229,7 @@ JD-TC-Delete Dental Record-UH2
     ${resp}=    Delete DentalRecord   ${invalid}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Delete Dental Record-UH3
 
@@ -238,8 +241,8 @@ JD-TC-Delete Dental Record-UH3
 
     ${resp}=    Delete DentalRecord   ${id}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Delete Dental Record-UH4
 

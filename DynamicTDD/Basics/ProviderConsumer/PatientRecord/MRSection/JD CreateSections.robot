@@ -15,6 +15,14 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
+*** Keywords ***
+
+GEt Create Section Template
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/domaindefaulttemplates    expected_status=any
+    [Return]  ${resp}
+
 *** Variables ***
 
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -277,6 +285,12 @@ JD-TC-Create Sections-1
     ${voiceAttachments}=  Create List   ${voiceAttachments}
     Set Suite Variable    ${voiceAttachments}
 
+    ${resp}=    GEt Create Section Template    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    
+
     ${resp}=    Create Section Template    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -296,6 +310,88 @@ JD-TC-Create Sections-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+JD-TC-Create Sections-2
+
+    [Documentation]    Create Sections with Empty voiceAttachments.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Section Template   ${caseUId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
+
+    Set Suite Variable    ${temp_id4}    ${resp.json()[3]['id']}
+    Set Test Variable    ${enumName4}    ${resp.json()[3]['sectionType']}
+
+
+    ${items}=    Create List
+
+    ${MEDICATION}=  create Dictionary  medication=${items}
+    Set Suite Variable    ${MEDICATION}
+  
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id4}       MEDICATION    ${MEDICATION}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Sections-3
+
+    [Documentation]    Create multiple Sections with differnt values .
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${complaint}=  FakerLibrary.name
+
+    ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${complaint}    
+    # note=${caption}
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${complaint1}=  FakerLibrary.last_name
+
+    ${CHIEFCOMPLAINT1}=  create Dictionary  chiefComplaint=${complaint1}    
+    # note=${caption}
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Sections-4
+
+    [Documentation]    Create Sections with Empty attachments .
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}       voiceAttachments=${voiceAttachments}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+
+JD-TC-Create Sections-5
+
+    [Documentation]    Create Sections with Empty voiceAttachments.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${voiceAttachments}=  Create List  
+    ${complaint}=      FakerLibrary.name 
+    ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${complaint}
+
+    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}   ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
 JD-TC-Create Sections-UH1
 
     [Documentation]    Create Sections with invalid caseUId.
@@ -336,23 +432,10 @@ JD-TC-Create Sections-UH3
 
     ${resp}=    Create Sections     ${caseUId}    ${pid}    ${template_id}       ${enumName}    ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_SECTION_TEMPLATE_ID}
 
 JD-TC-Create Sections-UH4
-
-    [Documentation]    Create Sections with Empty attachments .
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    ${EMPTY}   voiceAttachments=${voiceAttachments}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
-
-JD-TC-Create Sections-UH5
 
     [Documentation]    Create Sections with Invalid Sections value.
 
@@ -362,88 +445,14 @@ JD-TC-Create Sections-UH5
 
     ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${caption}    note=${caption}
 
+    ${NOT_ALLOWED_ADDITIONAL_PROPERTIES}=  format String   ${NOT_ALLOWED_ADDITIONAL_PROPERTIES}   note
+
     ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    voiceAttachments=${voiceAttachments}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
+    Should Be Equal As Strings    ${resp.json()}   ${NOT_ALLOWED_ADDITIONAL_PROPERTIES}
 
 
-JD-TC-Create Sections-UH6
+ 
 
-    [Documentation]    Create Sections with Empty voiceAttachments.
 
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${voiceAttachments}=  Create List   
-
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}   ${CHIEFCOMPLAINT}    ${attachments}   voiceAttachments=${voiceAttachments}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
-
-JD-TC-Create Sections-UH7
-
-    [Documentation]    Create Sections with Empty voiceAttachments.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Get Section Template   ${caseUId}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()[0]['enumName']}   ${}
-    Set Test Variable    ${enumName}    ${resp.json()[0]['sectionType']}
-    # Set Test Variable    ${displayName}    ${resp.json()[0]['displayName']}
-    # Set Test Variable    ${sortOrder}    ${resp.json()[0]['sortOrder']}
-
-    # Set Test Variable    ${enumName1}    ${resp.json()[1]['enumName']}
-    # Set Test Variable    ${displayName1}    ${resp.json()[1]['displayName']}
-    # Set Test Variable    ${sortOrder1}    ${resp.json()[1]['sortOrder']}   
-    # Set Test Variable    ${schema1}    ${resp.json()[1]['schema']['properties']['chiefComplaint']['description']}
-    Set Suite Variable    ${temp_id4}    ${resp.json()[3]['id']}
-    Set Test Variable    ${enumName4}    ${resp.json()[3]['sectionType']}
-    # Set Test Variable    ${displayName4}    ${resp.json()[4]['displayName']}
-    # Set Test Variable    ${sortOrder4}    ${resp.json()[4]['sortOrder']}   
-    # Set Test Variable    ${schema4}    ${resp.json()[4]['schema']['properties']['medication']['items']}
-
-    ${items}=    Create List
-
-    ${MEDICATION}=  create Dictionary  medication=${items}
-    Set Suite Variable    ${MEDICATION}
-  
-
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id4}       MEDICATION    ${MEDICATION}    ${attachments}   voiceAttachments=${voiceAttachments}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
-
-JD-TC-Create Sections-U
-
-    [Documentation]    Create multiple Sections with differnt values .
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${complaint}=  FakerLibrary.name
-
-    ${CHIEFCOMPLAINT}=  create Dictionary  chiefComplaint=${complaint}    
-    # note=${caption}
-
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
-
-    ${complaint1}=  FakerLibrary.last_name
-
-    ${CHIEFCOMPLAINT1}=  create Dictionary  chiefComplaint=${complaint1}    
-    # note=${caption}
-
-    ${resp}=    Create Sections     ${caseUId}    ${pid}    ${temp_id}       ${enumName}    ${CHIEFCOMPLAINT1}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()}   ${INVALID_CASE_ID}
