@@ -108,8 +108,13 @@ JD-TC-Provider_Signup-1
         # Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${account_id}  ${resp.json()['id']}
+
         ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
-        Log  ${fields.json()}
+        Log  ${fields.content}
         Should Be Equal As Strings    ${fields.status_code}   200
 
         ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
@@ -128,7 +133,7 @@ JD-TC-Provider_Signup-1
         Should Be Equal As Strings    ${resp.status_code}   200
 
         ${resp}=  Get Features  ${subdomain}
-        Log  ${resp.json()}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
         #Set Test Variable  ${service_amt}  ${resp.json()['features']['defaultServices'][0]['amount']}
@@ -136,9 +141,18 @@ JD-TC-Provider_Signup-1
         Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}    
 
         ${resp}=  Get Service
-        Log  ${resp.json()}
+        Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
+
+        ${resp}=  Get Order Settings by account id
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+        Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
+        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
+        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
+        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${ph}
         
     END
 

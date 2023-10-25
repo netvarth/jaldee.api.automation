@@ -80,7 +80,7 @@ JD-TC-Branch_Signup-1
 
     ${BUSER}=  Evaluate  ${BUSER}-${count}
     
-    
+    sleep  01s
     FOR  ${no}  IN RANGE  ${count}
         ${BUSER}=  Evaluate  ${BUSER}+1
         ${resp}=  Encrypted Provider Login  ${BUSER}  ${PASSWORD}
@@ -90,10 +90,19 @@ JD-TC-Branch_Signup-1
         Log  ${decrypted_data}
         Set Test Variable  ${sub_domain}  ${decrypted_data['subSector']}
         # Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
+        ${fname}=  Set Variable  ${decrypted_data['firstName']}
+        ${lname}=  Set Variable  ${decrypted_data['lastName']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${account_id}  ${resp.json()['id']}
+
         ${resp}=  View Waitlist Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
+
         #${resp}=  Get Queues
         #Log  ${resp.json()}
         #Should Be Equal As Strings  ${resp.status_code}  200
@@ -109,17 +118,28 @@ JD-TC-Branch_Signup-1
         Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
         #Set Test Variable  ${service_amt}  ${resp.json()['features']['defaultServices'][0]['amount']}
         Set Test Variable  ${service_duration}  ${resp.json()['features']['defaultServices'][0]['duration']}
-        Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}        
+        Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}  
+
         ${resp}=  Get Service
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Run Keyword And Continue On Failure  Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
         #Verify Response List   ${resp}  0  totalAmount=${service_amt}
+
         ${resp}=   Get Appointment Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
         Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+        ${resp}=  Get Order Settings by account id
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${BUSER}
     END
 
      
