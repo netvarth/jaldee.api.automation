@@ -22,6 +22,8 @@ Variables   /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
 @{langs}   assamese  bengali  english  gujarati  hindi  kannada  Konkani  malayalam  Marathi  manipuri  oriya  punjabi  rajasthani  sanskrit  tamil  telugu  urdu  arabic
+${CC1}      +44 7911
+${US_CC}   +1
 
 *** Keywords ***
 
@@ -42,7 +44,13 @@ Get Date Time via Timezone
 Testing timezones
 
     # random.choices(test_list, k=4)
-    
+    ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
+    ${CC1}=  Set Variable  ${splitCC}[0]
+
+    ${splitCC}=  Split String    ${US_CC}  separator=${SPACE}  max_split=1
+    ${US_CC}=  Set Variable  ${splitCC}[0]
+
+***COMMENT***
     Log List   ${langs}
     ${Languages}=  random.choices  ${langs}  k=5
     Log  ${Languages}

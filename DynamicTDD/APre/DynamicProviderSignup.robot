@@ -15,6 +15,9 @@ ${nods}  0
 @{Views}  self  all  customersOnly
 ${BR}  ${0}
 # ${defaultCount}  260
+${PUSER}      ${PUSERNAME}
+
+
 *** Test Cases ***
 
 Remove Files
@@ -65,29 +68,40 @@ JD-TC-Provider_Signup-1
         Run Keyword If    '${US}' == '${count}'    Exit For Loop
         License Loop  ${liclen}  ${licresp}
     END
-    Log  ${PUSERNAME}
+    Log  ${PUSER}
 
     ${count}=  Set Variable If  ${count}==${totnods}  ${totnoncorpnods}   ${provider_count}
     Log  ${count}
 
     Log  \n${count} service provider accounts signed up   console=yes
 
-    ${PUSERNAME}=  Evaluate  ${PUSERNAME}-${count}
+    ${PUSER}=  Evaluate  ${PUSER}-${count}
     
     Log  ${count}
+    sleep  01s
     FOR  ${no}  IN RANGE  ${count}
-        ${PUSERNAME}=  Evaluate  ${PUSERNAME}+1
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
+        ${PUSER}=  Evaluate  ${PUSER}+1
+        ${resp}=  Encrypted Provider Login  ${PUSER}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
         Log  ${decrypted_data}
         Set Test Variable  ${sub_domain}  ${decrypted_data['subSector']}
         # Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
+        ${fname}=  Set Variable  ${decrypted_data['firstName']}
+        ${lname}=  Set Variable  ${decrypted_data['lastName']}
+        Should Be Equal As Strings  ${decrypted_data['primaryPhoneNumber']}  ${PUSER}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${account_id}  ${resp.json()['id']}
+
         ${resp}=  View Waitlist Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
+
         #${resp}=  Get Queues
         #Log  ${resp.json()}
         #Should Be Equal As Strings  ${resp.status_code}  200
@@ -103,17 +117,28 @@ JD-TC-Provider_Signup-1
         Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
         #Set Test Variable  ${service_amt}  ${resp.json()['features']['defaultServices'][0]['amount']}
         Set Test Variable  ${service_duration}  ${resp.json()['features']['defaultServices'][0]['duration']}
-        Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}        
+        Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}   
+
         ${resp}=  Get Service
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Run Keyword And Continue On Failure  Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
         #Verify Response List   ${resp}  0  totalAmount=${service_amt}
+
         ${resp}=   Get Appointment Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
         Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+        ${resp}=  Get Order Settings by account id
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${PUSER}
     END
     
 *** Keywords ***
@@ -126,44 +151,47 @@ SignUp Account
         ${is_corp}=  check_is_corp  ${sd}
         Log  ${is_corp}
         Continue For Loop If  '${is_corp}' == 'True'
-        ${PUSERNAME}=  Evaluate  ${PUSERNAME}+1
-        Set Global Variable  ${PUSERNAME}
+        ${PUSER}=  Evaluate  ${PUSER}+1
+        Set Global Variable  ${PUSER}
         ${firstname}=  FakerLibrary.name
         ${lastname}=  FakerLibrary.last_name
-        ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d}  ${sd}  ${PUSERNAME}  ${pkgId}
+        ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d}  ${sd}  ${PUSER}  ${pkgId}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Activation  ${PUSERNAME}  0
+        ${resp}=  Account Activation  ${PUSER}  0
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
+        ${resp}=  Account Set Credential  ${PUSER}  ${PASSWORD}  0
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         # ${is_corp}=  check_is_corp  ${sd}
         # Log  ${is_corp}
-        # Run Keyword If  '${is_corp}' == 'True'  Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${BC}=${PUSERNAME}${\n}
-        # Run Keyword If  '${is_corp}' == 'False'  Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${PC}=${PUSERNAME}${\n}
-        # Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${PUSERNAME}${\n}
-        # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}
+        # Run Keyword If  '${is_corp}' == 'True'  Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${BC}=${PUSER}${\n}
+        # Run Keyword If  '${is_corp}' == 'False'  Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${PC}=${PUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${PUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSER}${\n}
         ${highest_pkg}=  get_highest_license_pkg
         IF  '${pkgId}' == '${highest_pkg[0]}'
-        Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${PUSERNAME}${\n}
+        Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${PUSER}${\n}
         END
         ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
         Set Global Variable  ${BR}
 
         sleep  01s
 
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSER}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
         Log  ${decrypted_data}
         Set Suite Variable  ${pid}  ${decrypted_data['id']}
+        Should Be Equal As Strings  ${decrypted_data['firstName']}  ${firstname}
+        Should Be Equal As Strings  ${decrypted_data['lastName']}  ${lastname}
+        Should Be Equal As Strings  ${decrypted_data['primaryPhoneNumber']}  ${PUSER}
         
-        Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${PUSERNAME}${\n}
-        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}
+        Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${PUSER}${\n}
+        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSER}${\n}
 
-        Set Test Variable  ${email_id}  ${P_EMAIL}${PUSERNAME}.${test_mail}
+        Set Test Variable  ${email_id}  ${P_EMAIL}${PUSER}.${test_mail}
 
         ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
         Log  ${resp.json()}
@@ -179,8 +207,8 @@ SignUp Account
         # Set Suite Variable  ${DAY1}  ${DAY1}
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list}  ${list}
-        ${ph1}=  Evaluate  ${PUSERNAME}+1000000000
-        ${ph2}=  Evaluate  ${PUSERNAME}+2000000000
+        ${ph1}=  Evaluate  ${PUSER}+1000000000
+        ${ph2}=  Evaluate  ${PUSER}+2000000000
         ${views}=  Evaluate  random.choice($Views)  random
         ${name1}=  FakerLibrary.name
         ${name2}=  FakerLibrary.name
@@ -218,7 +246,7 @@ SignUp Account
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${account_id}  ${resp.json()['id']}
-        Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs} Desc  shortName=${companySuffix}  status=ACTIVE  createdDate=${DAY1}  licence=${pkg_name}  verifyLevel=NONE  enableSearch=False  accountLinkedPhNo=${PUSERNAME}  licensePkgID=${pkgId}  #accountType=INDEPENDENT_SP
+        Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs} Desc  shortName=${companySuffix}  status=ACTIVE  createdDate=${DAY1}  licence=${pkg_name}  verifyLevel=NONE  enableSearch=False  accountLinkedPhNo=${PUSER}  licensePkgID=${pkgId}  #accountType=INDEPENDENT_SP
         Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${d}
         Should Be Equal As Strings  ${resp.json()['serviceSubSector']['subDomain']}  ${sd}
         Should Be Equal As Strings  ${resp.json()['emails'][0]['label']}  ${name3}
@@ -240,7 +268,7 @@ SignUp Account
         #Should Be Equal As Strings  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${sTime}
         #Should Be Equal As Strings  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
         
-        #${resp}=  pyproviderlogin  ${PUSERNAME}  ${PASSWORD}
+        #${resp}=  pyproviderlogin  ${PUSER}  ${PASSWORD}
         #Should Be Equal As Strings  ${resp}  200      
         #@{resp}=  uploadLogoImages 
         #Should Be Equal As Strings  ${resp[1]}  200

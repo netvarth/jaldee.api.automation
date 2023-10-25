@@ -1949,7 +1949,9 @@ JD-TC-Take Appointment in Different Timezone-4
     ${PO_Number}=  FakerLibrary.Numerify  %#####
     ${US_MultiUser}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${CC1}  country_calling_code
-    ${CC1}=    Remove String    ${CC1}    ${SPACE}
+    # ${CC1}=    Remove String    ${CC1}    ${SPACE}
+    ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
+    ${CC1}=  Set Variable  ${splitCC}[0]
 
     # ${licresp}=   Get Licensable Packages
     # Should Be Equal As Strings  ${licresp.status_code}  200
@@ -2081,11 +2083,6 @@ JD-TC-Take Appointment in Different Timezone-4
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
-
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2095,6 +2092,28 @@ JD-TC-Take Appointment in Different Timezone-4
         Should Be Equal As Strings  ${resp.status_code}  200
 
     END
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${p1_l1}   ${resp.json()[0]['id']}
+
+    ${city}=   FakerLibrary.City
+    ${postcode}=  FakerLibrary.postcode
+    ${address}=  get_address
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz1}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${US_tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    ${DAY1}=  db.get_date_by_timezone  ${US_tz1}
+    ${DAY2}=  db.add_timezone_date  ${US_tz1}  10     
+    ${sTime1}=  add_timezone_time  ${US_tz1}  0  30  
+    ${eTime1}=  add_timezone_time  ${US_tz1}  1  00  
+    ${parking}    Random Element     ${parkingType} 
+    ${24hours}    Random Element    ['True','False']
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_l2}  ${resp.json()}
 
     ${resp}=  Get Departments
     Log  ${resp.content}
@@ -2189,7 +2208,6 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${bs}=  FakerLibrary.bs
     ${bs_des}=  FakerLibrary.word
-
     ${resp}=  User Profile Updation  ${bs}  ${bs_des}  ${spec}  ${Languages}  ${sub_domain_id}  ${us_uid1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2211,23 +2229,6 @@ JD-TC-Take Appointment in Different Timezone-4
     ${resp}=  Get Services in Department  ${dep_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${city}=   FakerLibrary.City
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz1}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
-    ${US_tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    ${DAY1}=  db.get_date_by_timezone  ${US_tz1}
-    ${DAY2}=  db.add_timezone_date  ${US_tz1}  10     
-    ${sTime1}=  add_timezone_time  ${US_tz1}  0  30  
-    ${eTime1}=  add_timezone_time  ${US_tz1}  1  00  
-    ${parking}    Random Element     ${parkingType} 
-    ${24hours}    Random Element    ['True','False']
-    ${url}=   FakerLibrary.url
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p1_l2}  ${resp.json()}
 
     # clear_appt_schedule   ${PUSERNAME_X}
 
