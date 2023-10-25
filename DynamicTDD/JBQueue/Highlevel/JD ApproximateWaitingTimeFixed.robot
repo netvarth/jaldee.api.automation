@@ -455,12 +455,12 @@ JD-TC-High Level Test Case-2
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
 
-    # ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${mem_id1}  ${mem_id2}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # ${wid}=  Get Dictionary Values  ${resp.json()}
-    # Set Test Variable  ${wid3}  ${wid[0]}
-    # Set Test Variable  ${wid4}  ${wid[1]}
+    ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${qid}  ${DAY}  ${word}  ${bool[1]}  ${mem_id1}  ${mem_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid3}  ${wid[0]}
+    Set Test Variable  ${wid4}  ${wid[1]}
 
     # ${cid}=  get_id  ${CUSERNAME2}
 
@@ -495,8 +495,8 @@ JD-TC-High Level Test Case-2
     
     Verify Response List  ${resp}  0  ynwUuid=${wid1}  appxWaitingTime=0
     Verify Response List  ${resp}  1  ynwUuid=${wid2}  appxWaitingTime=10
-    # Verify Response List  ${resp}  2  ynwUuid=${wid3}  appxWaitingTime=10
-    # Verify Response List  ${resp}  3  ynwUuid=${wid4}  appxWaitingTime=10
+    Verify Response List  ${resp}  2  ynwUuid=${wid3}  appxWaitingTime=10
+    Verify Response List  ${resp}  3  ynwUuid=${wid4}  appxWaitingTime=10
     # Verify Response List  ${resp}  4  ynwUuid=${wid5}  appxWaitingTime=10
     # Verify Response List  ${resp}  5  ynwUuid=${wid6}  appxWaitingTime=10
     Comment  Start 1st waitlist
@@ -509,10 +509,11 @@ JD-TC-High Level Test Case-2
 
     Verify Response List  ${resp}  0  ynwUuid=${wid1}  appxWaitingTime=0  waitlistStatus=${wl_status[2]}
     Verify Response List  ${resp}  1  ynwUuid=${wid2}  appxWaitingTime=0
-
-*** comment ***
     Verify Response List  ${resp}  2  ynwUuid=${wid3}  appxWaitingTime=10
     Verify Response List  ${resp}  3  ynwUuid=${wid4}  appxWaitingTime=10
+
+
+*** comment ***
     Verify Response List  ${resp}  4  ynwUuid=${wid5}  appxWaitingTime=10
     Verify Response List  ${resp}  5  ynwUuid=${wid6}  appxWaitingTime=10
 
