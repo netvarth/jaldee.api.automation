@@ -190,7 +190,7 @@ JD-TC-Create PaymentsOut-2
 
 JD-TC-Create PaymentsOut-3
 
-    [Documentation]  Create a Payable with payableLabel.
+    [Documentation]  Create a Payable with empty payableLabel.
 
     ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}

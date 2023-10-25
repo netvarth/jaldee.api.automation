@@ -2070,6 +2070,8 @@ INVALID_EXPENSE_AMOUNT="Invalid Expense Amount"
 INVALID_PAYMENTOUT_CATEGORY="Invalid PaymentsOut Category"
 PAID_DATE_CANNOT_BE_EMPTY="Paid Date cannot be empty"
 INVALID_PAYMENTSOUT_ID="Invalid PaymentsOut Id"
+INVALID_PAYMENTS_OUT_STATUS_ID="Invalid Payments Out Status Id"
+
 
 
 

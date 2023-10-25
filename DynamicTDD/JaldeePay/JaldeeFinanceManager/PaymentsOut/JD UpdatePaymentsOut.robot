@@ -849,7 +849,7 @@ JD-TC-Update PaymentOut-18
     ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${SPACE}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['description']}  ${description}
@@ -937,7 +937,7 @@ JD-TC-Update PaymentOut-20
     Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
     Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${SPACE}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
 
 JD-TC-Update PaymentOut-UH1
@@ -1014,3 +1014,30 @@ JD-TC-Update PaymentOut-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
+JD-TC-Update PaymentOut-UH4
+
+    [Documentation]  Update PaymentOut and Get PaymentsOut By Id
+
+    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+    
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    ${fake}=      FakerLibrary.Random Number
+
+
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${fake}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTS_OUT_STATUS_ID}
