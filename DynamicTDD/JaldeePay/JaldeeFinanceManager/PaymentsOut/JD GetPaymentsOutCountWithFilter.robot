@@ -70,6 +70,7 @@ JD-TC-GetPayableCountWithFilter-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
+    Set Suite Variable    ${name1}
     ${resp}=  Create Category   ${name1}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -160,6 +161,209 @@ JD-TC-GetPayableCountWithFilter-1
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
     Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get PaymentsOut Count With Filter    paymentsOutUid-eq=${payable_uid1}
+    ${resp}=  Get PaymentsOut With Filter    payInOutUuid-eq=${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsOut Count With Filter    payInOutUuid-eq=${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+JD-TC-GetPayableCountWithFilter-2
+
+    [Documentation]  Create Paymentout with empty  amount.
+
+    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
+
+    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=${name1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsOut Count With Filter    paymentsInOutCategory-eq=${name1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+
+JD-TC-GetPayableCountWithFilter-3
+
+    [Documentation]  Update PaymentOut and Get PaymentsOut By Id
+
+    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+    
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+
+
+
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get PaymentsOut With Filter    payInOutUuid-eq=${payable_uid1}    paymentsInOutStatus-eq=${status_id0} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsOut Count With Filter    payInOutUuid-eq=${payable_uid1}   PaymentsInOutStatus-eq=${status_id0} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+
+JD-TC-GetPayableCountWithFilter-4
+
+    [Documentation]  Update PaymentsOut Status and Get PaymentsOut By Id
+
+    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[2]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${status_id1}   ${resp.json()}
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+
+
+
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+     ${resp}=  Update PaymentsOut Status   ${payable_uid1}    ${status_id1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get PaymentsOut With Filter    paidDate-eq=${dueDate}    paymentLabel-eq=${payableLabel} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsOut Count With Filter    paidDate-eq=${dueDate}    paymentLabel-eq=${payableLabel} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+
+JD-TC-GetPayableCountWithFilter-5
+
+    [Documentation]  Create a Payable with empty payableLabel and  Get PaymentsOut By Id .
+
+    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${EMPTY}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${payable_uid2}   ${resp.json()['uid']}
+
+    ${resp}=  Get PaymentsOut With Filter    amount-eq=${amount}    referenceNo-eq=${referenceNo} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsOut Count With Filter    amount-eq=${amount}    referenceNo-eq=${referenceNo} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+JD-TC-GetPayableCountWithFilter-UH1
+
+    [Documentation]   Get PaymentsOut By Id  without login.
+
+    ${resp}=  Get PaymentsOut Count With Filter    amount-eq=${amount}    referenceNo-eq=${referenceNo} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetPayableCountWithFilter-UH2
+
+    [Documentation]   Get PaymentsOut By Id using another provider login
+
+    ${resp}=  Provider Login  ${PUSERNAME134}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${fakeid}=   FakerLibrary.Random Number
+
+     ${resp}=  Get PaymentsOut Count With Filter    amount-eq=${amount}    referenceNo-eq=${referenceNo} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}
+
+
+
+

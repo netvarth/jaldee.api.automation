@@ -300,7 +300,7 @@ JD-TC-GetVendorById-UH2
     ${resp}=  Get Vendor By Id   ${vendor_uid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION_TO_DO}"
+    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_VENDOR}"
 
 JD-TC-GetVendorById-UH3
 

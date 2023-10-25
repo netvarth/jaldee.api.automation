@@ -164,29 +164,6 @@ JD-TC-Create PaymentsOut-1
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Create PaymentsOut-2
-
-    [Documentation]  Create Paymentout with empty  amount.
-
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${referenceNo}=   Random Int  min=5  max=200
-    ${referenceNo}=  Convert To String  ${referenceNo}
-
-    ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
-    ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${paymentsOutStatus}=   FakerLibrary.word
-    ${paymentStatus}=   FakerLibrary.word
-
-    ${resp}=  Create PaymentsOut   ${empty}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
 
 JD-TC-Create PaymentsOut-3
 
@@ -1645,3 +1622,27 @@ JD-TC-Create PaymentsOut-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
+JD-TC-Create PaymentsOut-UH5
+
+    [Documentation]  Create Paymentout with empty  amount.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${empty}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_AMOUNT}
