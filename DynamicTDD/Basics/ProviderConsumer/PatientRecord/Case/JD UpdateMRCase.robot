@@ -64,13 +64,16 @@ JD-TC-Update MR Case-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-
+    ${DAY1}=  get_date
+    Set Suite Variable    ${DAY1}
+    
     ${resp}=    Create Case Category    ${name}  ${aliasName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${category_id}    ${resp.json()['id']} 
 
     ${category}=  Create Dictionary  id=${category_id}  
+    Set Suite Variable    ${category}
 
     ${resp}=    Create Case Type    ${name}  ${aliasName}
     Log   ${resp.content}
@@ -78,13 +81,17 @@ JD-TC-Update MR Case-1
     Set Suite Variable    ${type_id}    ${resp.json()['id']}  
 
     ${type}=  Create Dictionary  id=${type_id}  
+    Set Suite Variable    ${type}
+
     ${doctor}=  Create Dictionary  id=${pid} 
+    Set Suite Variable    ${doctor}
+
     ${title}=  FakerLibrary.name
     Set Suite Variable    ${title}
     ${description}=  FakerLibrary.last_name
     Set Suite Variable    ${description}
 
-     ${firstName}=  FakerLibrary.name
+    ${firstName}=  FakerLibrary.name
     Set Suite Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Suite Variable    ${lastName}
@@ -126,8 +133,9 @@ JD-TC-Update MR Case-1
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${consumer}=  Create Dictionary  id=${cid} 
+    Set Suite Variable    ${consumer}
 
-     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
@@ -311,7 +319,7 @@ JD-TC-Update MR Case-8
 
 
     ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=250
+    ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${empty}  
     Log   ${resp.json()}
@@ -323,6 +331,59 @@ JD-TC-Update MR Case-8
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${empty}
+
+JD-TC-Update MR Case-9
+
+    [Documentation]    Create a MR Case with Assign Then Update MR Case Assignee with another user.
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${u_id2}=  Create Sample User
+    Set Test Variable  ${u_id2}
+
+    ${usr}=  Create List      ${u_id}
+
+    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  assignees=${usr}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}  200
+    Set Test Variable    ${caseUId1}    ${resp.json()['uid']}
+
+    ${resp}=    Get MR Case By UID   ${caseUId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
+    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
+    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
+    Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['title']}     ${title}
+    Should Be Equal As Strings    ${resp.json()['description']}     ${description}
+    Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id}
+    Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
+
+    ${title1}=  FakerLibrary.name
+    ${description}=  FakerLibrary.Text      max_nb_chars=250
+
+    ${usr}=  Create List      ${u_id2}
+
+    ${resp}=    Update MR Case    ${caseUId1}  ${title1}  ${description}   assignees=${usr} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+
+    ${resp}=    Get MR Case By UID   ${caseUId1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
+    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
+    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
+    Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['title']}     ${title1}
+    Should Be Equal As Strings    ${resp.json()['description']}     ${description}
+    Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id2}
+    Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
 
 JD-TC-Update MR Case-UH1
 

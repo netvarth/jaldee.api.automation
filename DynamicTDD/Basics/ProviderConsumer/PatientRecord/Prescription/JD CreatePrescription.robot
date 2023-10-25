@@ -526,7 +526,7 @@ JD-TC-Create Prescription-UH7
     ${PO_Number}    Generate random string    4    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    clear_users  ${PUSERPH0}
+    # clear_users  ${PUSERPH0}
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address

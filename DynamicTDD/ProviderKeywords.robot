@@ -11088,6 +11088,12 @@ Get Treatment Plan By case Id
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/case/${uid}  expected_status=any
     [Return]  ${resp}
 
+Get NonDental Treatment Plan By case Id
+    [Arguments]     ${uid}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/nondental/case/${uid}  expected_status=any
+    [Return]  ${resp}
+
 Encrypted Provider Login
     [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
     ${data}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
