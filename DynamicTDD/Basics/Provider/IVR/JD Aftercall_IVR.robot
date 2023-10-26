@@ -46,21 +46,30 @@ JD-TC-Aftercall_IVR-1
     [Documentation]   Aftercall IVR
     
     clear_queue      ${PUSERNAME151}
-    clear_location   ${PUSERNAME151}
+    # clear_location   ${PUSERNAME151}
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -78,9 +87,9 @@ JD-TC-Aftercall_IVR-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -193,8 +202,8 @@ JD-TC-Aftercall_IVR-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -276,7 +285,7 @@ JD-TC-Aftercall_IVR-1
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Suite Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${dates}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     Set Suite Variable   ${start}
@@ -325,11 +334,15 @@ JD-TC-Aftercall_IVR-2
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -350,11 +363,15 @@ JD-TC-Aftercall_IVR-3
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -375,11 +392,15 @@ JD-TC-Aftercall_IVR-4
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -400,11 +421,15 @@ JD-TC-Aftercall_IVR-5
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -425,11 +450,15 @@ JD-TC-Aftercall_IVR-6
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -450,11 +479,15 @@ JD-TC-Aftercall_IVR-7
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -475,11 +508,15 @@ JD-TC-Aftercall_IVR-8
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -500,11 +537,15 @@ JD-TC-Aftercall_IVR-9
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -525,11 +566,15 @@ JD-TC-Aftercall_IVR-10
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -550,11 +595,15 @@ JD-TC-Aftercall_IVR-11
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -575,11 +624,15 @@ JD-TC-Aftercall_IVR-12
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -600,11 +653,15 @@ JD-TC-Aftercall_IVR-13
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -625,11 +682,15 @@ JD-TC-Aftercall_IVR-14
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -650,11 +711,15 @@ JD-TC-Aftercall_IVR-15
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -675,11 +740,15 @@ JD-TC-Aftercall_IVR-16
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -700,11 +769,15 @@ JD-TC-Aftercall_IVR-17
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -725,11 +798,15 @@ JD-TC-Aftercall_IVR-18
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -750,11 +827,15 @@ JD-TC-Aftercall_IVR-19
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -779,11 +860,15 @@ JD-TC-Aftercall_IVR-UH1
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -805,11 +890,15 @@ JD-TC-Aftercall_IVR-UH2
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -830,11 +919,15 @@ JD-TC-Aftercall_IVR-UH3
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -855,11 +948,15 @@ JD-TC-Aftercall_IVR-UH4
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -880,11 +977,15 @@ JD-TC-Aftercall_IVR-UH5
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -905,11 +1006,15 @@ JD-TC-Aftercall_IVR-UH6
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -931,11 +1036,15 @@ JD-TC-Aftercall_IVR-UH7
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -957,11 +1066,15 @@ JD-TC-Aftercall_IVR-UH8
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -982,11 +1095,15 @@ JD-TC-Aftercall_IVR-UH9
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -1010,11 +1127,15 @@ JD-TC-Aftercall_IVR-UH10
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -1038,11 +1159,15 @@ JD-TC-Aftercall_IVR-UH11
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -1066,11 +1191,15 @@ JD-TC-Aftercall_IVR-UH12
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -1094,11 +1223,15 @@ JD-TC-Aftercall_IVR-UH13
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -1122,11 +1255,15 @@ JD-TC-Aftercall_IVR-UH14
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -1150,11 +1287,15 @@ JD-TC-Aftercall_IVR-UH15
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 
@@ -1178,11 +1319,15 @@ JD-TC-Aftercall_IVR-UH16
     clear_service    ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME151}
     Set Suite Variable   ${acc_id} 

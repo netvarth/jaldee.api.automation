@@ -71,7 +71,7 @@ JD-TC-Branch_Signup-1
         Exit For Loop If    '${US}' == '${count}'
         License Loop  ${liclen}  ${licresp}
     END
-    Log  ${BUSER}
+    Log Many  ${BUSER}  ${count}  ${US}
 
     ${count}=  Set Variable If  ${count}==${totnods}  ${totiscorpnods}   ${branch_count}
     Log  ${count}
