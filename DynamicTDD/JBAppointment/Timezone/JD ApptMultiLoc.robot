@@ -2227,15 +2227,16 @@ JD-TC-Take Appointment in Different Timezone-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Services in Department  ${dep_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_s1}  ${resp.json()['services'][0]['id']}
 
     # clear_appt_schedule   ${PUSERNAME_X}
 
-    ${DAY3}=  db.get_date_by_timezone  ${tz1}
-    ${DAY4}=  db.add_timezone_date  ${tz1}  10  
-    ${sTime2}=  add_timezone_time  ${tz1}  1  00  
-    ${eTime2}=  add_timezone_time  ${tz1}  1  30  
+    ${DAY3}=  db.get_date_by_timezone  ${US_tz1}
+    ${DAY4}=  db.add_timezone_date  ${US_tz1}  10  
+    ${sTime2}=  add_timezone_time  ${US_tz1}  1  00  
+    ${eTime2}=  add_timezone_time  ${US_tz1}  1  30  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
@@ -2244,11 +2245,11 @@ JD-TC-Take Appointment in Different Timezone-4
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p1_l1}  ${duration}  ${bool1}  ${p1_s1}   ${p1_s2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id11}  ${resp.json()}
+    Set Test Variable  ${US_sch1}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id11}  
+    ${resp}=  Get Appointment Schedule ById  ${US_sch1}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id11}   name=${schedule_name}  apptState=${Qstate[0]}
+    Verify Response  ${resp}  id=${US_sch1}   name=${schedule_name}  apptState=${Qstate[0]}
 
     
