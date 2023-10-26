@@ -11045,6 +11045,9 @@ Create Treatment Plan
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
+    IF  '${dental_id}' == '${EMPTY}'
+        Remove From Dictionary 	${data} 	dentalRecord
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
@@ -11092,6 +11095,12 @@ Get NonDental Treatment Plan By case Id
     [Arguments]     ${uid}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/nondental/case/${uid}  expected_status=any
+    [Return]  ${resp}
+
+Delete Treatment Plan Work By id
+    [Arguments]     ${id}
+    Check And Create YNW Session
+    ${resp}=   DELETE On Session  ynw  /provider/medicalrecord/treatment/work/${id}  expected_status=any
     [Return]  ${resp}
 
 Encrypted Provider Login

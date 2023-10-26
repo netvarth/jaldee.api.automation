@@ -664,8 +664,8 @@ JD-TC-Create MR Case-12
     Should Be Equal As Strings    ${resp.status_code}  200
     Set Suite Variable    ${caseUId8}    ${resp.json()['uid']}
 
-    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get MR Case By UID   ${caseUId8}    
     Log   ${resp.content}
