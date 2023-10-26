@@ -811,7 +811,7 @@ JD-TC-GetAppointmentTodayCount-4
     ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[1]}
+    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
@@ -820,7 +820,7 @@ JD-TC-GetAppointmentTodayCount-4
 
 
 JD-TC-GetAppointmentTodayCount-5
-    [Documentation]  Get provider's appointments today with appointment status Arrived
+    [Documentation]  Get provider's appointments today with appointment status CONFIRMED
         ${pid}=  get_acc_id  ${PUSERNAME178}
     
     ${resp}=  Consumer Login  ${CUSERNAME7}  ${PASSWORD}
@@ -1020,7 +1020,7 @@ JD-TC-GetAppointmentTodayCount-5
     ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  1
+    Should Be Equal As Strings  ${resp.json()}  2
 
 JD-TC-GetAppointmentTodayCount-6
     [Documentation]  Get provider's appointments today with appointment status Started

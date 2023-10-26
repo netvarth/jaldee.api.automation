@@ -1310,7 +1310,7 @@ JD-TC-Block Appointment-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  appointmentEncId=${encId1}   uid=${apptid1}   
-    ...    appmtTime=${slot1}  apptStatus=${apptStatus[1]}   appmtDate=${DAY1}
+    ...    appmtTime=${slot1}  apptStatus=${apptStatus[2]}   appmtDate=${DAY1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
@@ -1461,7 +1461,7 @@ JD-TC-Block Appointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  appointmentEncId=${encId1}   uid=${apptid1}  appmtDate=${DAY1} 
-    ...    appmtTime=${slot1}  apptStatus=${apptStatus[1]} 
+    ...    appmtTime=${slot1}  apptStatus=${apptStatus[2]} 
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}

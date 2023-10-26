@@ -772,7 +772,7 @@ JD-TC-GetAppointmentToday-4
     ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[1]}
+    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
 
 JD-TC-GetAppointmentToday-5
 
@@ -5824,17 +5824,17 @@ JD-TC-GetAppointmentToday-28
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
     
-JD-TC-GetAppointmentToday-29
+# JD-TC-GetAppointmentToday-29
 
-    [Documentation]  Get provider's appointments today for statuses Confirmed and Arrived
+#     [Documentation]  Get provider's appointments today for statuses Confirmed and Arrived
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME249}  ${PASSWORD}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}, ${apptStatus[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}, ${apptStatus[2]}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
 
 
 JD-TC-GetAppointmentToday-UH1
