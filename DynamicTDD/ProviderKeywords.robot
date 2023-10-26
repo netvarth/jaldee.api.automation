@@ -9094,6 +9094,13 @@ Get Reminders
     ${resp}=  GET On Session  ynw  /provider/mr/reminder  params=${param}  expected_status=any
     [Return]  ${resp}
 
+Get Reminders With Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/mr/reminders  params=${param}  expected_status=any
+    [Return]  ${resp}
+
+
 Delete Reminder
    [Arguments]   ${reminder_id}
    Check And Create YNW Session

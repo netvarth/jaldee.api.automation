@@ -227,7 +227,7 @@ JD-TC-Communication Between Consumer and Provider-1
     Set Test Variable   ${p1_q1}  ${resp.json()}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cons_id}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cons_id}
+    ${resp}=  Add To Waitlist  ${cons_id}  ${p1_s1}  ${p1_q1}  ${DAY}  ${cnote}  ${bool[1]}  ${cons_id}   location=${p1_l1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -323,7 +323,7 @@ JD-TC-Communication Between Consumer and Provider-2
     Should Be Equal As Strings  ${resp.status_code}  200     
        
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}  location=${p1_l1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
