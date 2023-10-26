@@ -45,15 +45,19 @@ JD-TC-IVR_Request_Call_Back_Token-1
     [Documentation]   IVR Request Call Back Token
     
     clear_queue      ${PUSERNAME173}
-    clear_location   ${PUSERNAME173}
+    # clear_location   ${PUSERNAME173}
     clear_service    ${PUSERNAME173}
     clear_customer   ${PUSERNAME173}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME173}
     Set Suite Variable   ${acc_id} 
@@ -63,7 +67,13 @@ JD-TC-IVR_Request_Call_Back_Token-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -81,9 +91,9 @@ JD-TC-IVR_Request_Call_Back_Token-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -195,8 +205,8 @@ JD-TC-IVR_Request_Call_Back_Token-1
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -272,7 +282,7 @@ JD-TC-IVR_Request_Call_Back_Token-1
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -318,11 +328,15 @@ JD-TC-IVR_Request_Call_Back_Token-2
     clear_service    ${PUSERNAME173}
     clear_customer   ${PUSERNAME173}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME173}
     Set Suite Variable   ${acc_id} 
@@ -332,7 +346,7 @@ JD-TC-IVR_Request_Call_Back_Token-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -350,9 +364,9 @@ JD-TC-IVR_Request_Call_Back_Token-2
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -458,8 +472,8 @@ JD-TC-IVR_Request_Call_Back_Token-2
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -535,7 +549,7 @@ JD-TC-IVR_Request_Call_Back_Token-2
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -583,11 +597,15 @@ JD-TC-IVR_Request_Call_Back_Token-3
     clear_service    ${PUSERNAME173}
     clear_customer   ${PUSERNAME173}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME173}
     Set Suite Variable   ${acc_id} 
@@ -597,7 +615,7 @@ JD-TC-IVR_Request_Call_Back_Token-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]} 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
 
@@ -615,9 +633,9 @@ JD-TC-IVR_Request_Call_Back_Token-3
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  0  00
+    ${strt_time}=   db.add_timezone_time  ${tz}  0  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  2  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -723,8 +741,8 @@ JD-TC-IVR_Request_Call_Back_Token-3
     ${incall_uid}    FakerLibrary.Random Number
     ${reference_id}    FakerLibrary.Random Number
     ${company_id}    FakerLibrary.Random Number
-    ${created_date}=  get_date
-    ${call_time}=    db.get_time_secs
+    ${created_date}=  db.get_date_by_timezone  ${tz}
+    ${call_time}=    db.get_tz_time_secs  ${tz}
     ${clid}    Random Number 	digits=5 
     ${clid}=    Evaluate    f'{${clid}:0>9d}'
     Log  ${clid}
@@ -814,7 +832,7 @@ JD-TC-IVR_Request_Call_Back_Token-3
     Set Suite Variable  ${agent_contact}  9${numb}
     Set Test Variable     ${agent_contact_with_cc}    ${countryCodes[0]}${numb}
     
-    ${dates}=    get_date
+    ${dates}=    db.get_date_by_timezone  ${tz}
     ${start}=    Get Current Date    result_format=%H:%M:%S
     ${start1}=    Get Current Date
     ${start_time}=    DateTime.Convert Date    ${start1}   result_format=%s
@@ -843,7 +861,7 @@ JD-TC-IVR_Request_Call_Back_Token-UH1
 
     [Documentation]   IVR Request Call Back Token twice
 
-    ${resp}=  ProviderLogin  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -855,7 +873,7 @@ JD-TC-IVR_Request_Call_Back_Token-UH2
 
     [Documentation]   IVR Request Call Back Token where uid is invalid
 
-    ${resp}=  ProviderLogin  ${PUSERNAME173}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME173}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -879,7 +897,7 @@ JD-TC-IVR_Request_Call_Back_Token-UH4
 
     [Documentation]   IVR Request Call Back Token with Another provider login
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

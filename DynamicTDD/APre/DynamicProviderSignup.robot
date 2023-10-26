@@ -35,7 +35,7 @@ JD-TC-Provider_Signup-1
     # Set Global Variable  ${BR}  ${0}
     # Set Global Variable  ${BC}  0
     # Set Global Variable  ${PC}  0
-    
+    Log Many  ${PUSERNAME}  ${PUSER}
     ${domresp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${domresp.status_code}  200
     ${len}=  Get Length  ${domresp.json()}
@@ -45,6 +45,7 @@ JD-TC-Provider_Signup-1
     END
     
     ${corp_resp}=   get_iscorp_subdomains  0
+    # ${corp_resp}=   get_iscorp_subdomains  1
     ${noncorpnods}=   Get Length  ${corp_resp}
 
     ${licresp}=   Get Licensable Packages
@@ -68,7 +69,7 @@ JD-TC-Provider_Signup-1
         Run Keyword If    '${US}' == '${count}'    Exit For Loop
         License Loop  ${liclen}  ${licresp}
     END
-    Log  ${PUSER}
+    Log Many  ${PUSER}  ${count}  ${US}
 
     ${count}=  Set Variable If  ${count}==${totnods}  ${totnoncorpnods}   ${provider_count}
     Log  ${count}
@@ -151,6 +152,7 @@ SignUp Account
         ${is_corp}=  check_is_corp  ${sd}
         Log  ${is_corp}
         Continue For Loop If  '${is_corp}' == 'True'
+        # Continue For Loop If  '${is_corp}' == 'False'
         ${PUSER}=  Evaluate  ${PUSER}+1
         Set Global Variable  ${PUSER}
         ${firstname}=  FakerLibrary.name
