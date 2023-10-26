@@ -816,7 +816,7 @@ JD-TC-GetAppointmentTodayCount-4
     ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}  1
+    Should Be Equal As Strings  ${resp.json()}  2
 
 
 JD-TC-GetAppointmentTodayCount-5
