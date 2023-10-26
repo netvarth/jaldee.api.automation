@@ -163,12 +163,12 @@ JD-TC-UpdatePayableStatus-1
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-    ${resp}=  Create Finance Status   ${status[0]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
-    ${resp}=  Create Finance Status   ${status[1]}  ${categoryType[0]} 
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id2}   ${resp.json()}
@@ -195,7 +195,84 @@ JD-TC-UpdatePayableStatus-1
     Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
 
     # ${status}=   FakerLibrary.firstname
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[2]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${status_id3}   ${resp.json()}
 
-    ${resp}=  Update PaymentsOut Status   ${payable_uid1}    ${status_id0} 
+    ${resp}=  Update PaymentsOut Status   ${payable_uid1}    ${status_id3} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-UpdatePayableStatus-UH1
+
+    [Documentation]  Update PaymentOut status with already updated one.
+
+    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${ALREADY_IN_GIVEN_STATUS}=  format String   ${ALREADY_IN_GIVEN_STATUS}   ${New_status[0]}
+
+    ${resp}=  Update PaymentsOut Status   ${payable_uid1}    ${status_id3} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${ALREADY_IN_GIVEN_STATUS}
+
+JD-TC-UpdatePayableStatus-UH2
+
+    [Documentation]  Update PaymentOut status without login.
+
+    ${resp}=  Update PaymentsOut Status   ${payable_uid1}    ${status_id3} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-UpdatePayableStatus-UH3
+
+    [Documentation]  Update PaymentOut status with another login
+
+    ${resp}=  Provider Login  ${PUSERNAME137}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+        ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id2}  ${resp.json()['id']}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+
+    ${resp}=  Update PaymentsOut Status   ${payable_uid1}    ${status_id3} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}  
+
+JD-TC-UpdatePayableStatus-UH4
+
+    [Documentation]  Update PaymentOut status with invalid status id.
+
+    ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Update PaymentsOut Status   ${payable_uid1}    ${status_id2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_STATUS_ID}

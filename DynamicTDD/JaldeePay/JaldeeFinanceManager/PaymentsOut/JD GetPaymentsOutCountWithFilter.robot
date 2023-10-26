@@ -154,6 +154,7 @@ JD-TC-GetPayableCountWithFilter-1
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}     ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
@@ -173,7 +174,7 @@ JD-TC-GetPayableCountWithFilter-1
 
 JD-TC-GetPayableCountWithFilter-2
 
-    [Documentation]  Create Paymentout with empty  amount.
+    [Documentation]  GetPayableCountWithFilter with paymentsInOutCategoryId.
 
     ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
@@ -187,6 +188,7 @@ JD-TC-GetPayableCountWithFilter-2
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
@@ -195,12 +197,12 @@ JD-TC-GetPayableCountWithFilter-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
 
-    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=${name1}
+    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=${category_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}  
 
-    ${resp}=  Get PaymentsOut Count With Filter    paymentsInOutCategory-eq=${name1}
+    ${resp}=  Get PaymentsOut Count With Filter    paymentsInOutCategory-eq=${category_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   ${len}
@@ -208,7 +210,7 @@ JD-TC-GetPayableCountWithFilter-2
 
 JD-TC-GetPayableCountWithFilter-3
 
-    [Documentation]  Update PaymentOut and Get PaymentsOut By Id
+    [Documentation]  GetPayableCountWithFilter with payInOutUuid and  PaymentsInOutStatus.
 
     ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
@@ -237,7 +239,7 @@ JD-TC-GetPayableCountWithFilter-3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}  
 
-    ${resp}=  Get PaymentsOut Count With Filter    payInOutUuid-eq=${payable_uid1}   PaymentsInOutStatus-eq=${status_id0} 
+    ${resp}=  Get PaymentsOut Count With Filter    payInOutUuid-eq=${payable_uid1}   paymentsInOutStatus-eq=${status_id0} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   ${len}
@@ -245,7 +247,7 @@ JD-TC-GetPayableCountWithFilter-3
 
 JD-TC-GetPayableCountWithFilter-4
 
-    [Documentation]  Update PaymentsOut Status and Get PaymentsOut By Id
+    [Documentation]  GetPayableCountWithFilter with paidDate and  paymentLabel.
 
     ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
@@ -291,7 +293,7 @@ JD-TC-GetPayableCountWithFilter-4
 
 JD-TC-GetPayableCountWithFilter-5
 
-    [Documentation]  Create a Payable with empty payableLabel and  Get PaymentsOut By Id .
+    [Documentation]  GetPayableCountWithFilter with amount and  referenceNo. .
 
     ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
@@ -324,11 +326,67 @@ JD-TC-GetPayableCountWithFilter-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   ${len}
 
+JD-TC-GetPayableCountWithFilter-6
+
+    [Documentation]  GetPayableCountWithFilter with category id and category name.
+
+    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=id::${category_id2}    paymentsInOutCategory-eq=name::${name1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsOut Count With Filter    paymentsInOutCategory-eq=id::${category_id2}     paymentsInOutCategory-eq=name::${name1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+JD-TC-GetPayableCountWithFilter-7
+
+    [Documentation]  GetPayableCountWithFilter with vendor id.
+
+    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get PaymentsOut With Filter    vendorUid-eq=${vendor_uid1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsOut Count With Filter    vendorUid-eq=${vendor_uid1}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+
+JD-TC-GetPayableCountWithFilter-8
+
+    [Documentation]  GetPayableCountWithFilter with user id.
+
+    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get PaymentsOut With Filter    provider-eq=${pid}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsOut Count With Filter    provider-eq=${pid}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+
 JD-TC-GetPayableCountWithFilter-UH1
 
     [Documentation]   Get PaymentsOut By Id  without login.
 
-    ${resp}=  Get PaymentsOut Count With Filter    amount-eq=${amount}    referenceNo-eq=${referenceNo} 
+    ${resp}=  Get PaymentsOut Count With Filter    payInOutUuid-eq=${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -357,12 +415,15 @@ JD-TC-GetPayableCountWithFilter-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${fakeid}=   FakerLibrary.Random Number
-
-     ${resp}=  Get PaymentsOut Count With Filter    amount-eq=${amount}    referenceNo-eq=${referenceNo} 
+    ${resp}=  Get PaymentsOut With Filter    payInOutUuid-eq=${payable_uid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+     ${resp}=  Get PaymentsOut Count With Filter    payInOutUuid-eq=${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
 
 
 

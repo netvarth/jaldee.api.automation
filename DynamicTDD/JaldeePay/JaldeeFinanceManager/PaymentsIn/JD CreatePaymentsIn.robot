@@ -14,7 +14,6 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
-
 *** Variables ***
 
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -30,14 +29,30 @@ ${fileSize}  0.00458
 @{status}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 
+*** Keywords ***
+
+Create PaymentsIn
+
+    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
+
+    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsIn    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
 
 *** Test Cases ***
 
-JD-TC-UploadPayableAttachment-1
+JD-TC-Create PaymentsIn-1
 
-    [Documentation]  Create a Payable then Upload Payable Attachment.
+    [Documentation]  Create a PaymentIn.
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -146,139 +161,170 @@ JD-TC-UploadPayableAttachment-1
     Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${referenceNo}=   Random Int  min=5  max=200
-    ${referenceNo}=  Convert To String  ${referenceNo}
-
-    ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
-    ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}     ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
-    Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
-
-    ${resp}=  db.getType   ${pdffile} 
+    ${resp}=  db.getType   ${pdffile}
     Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile}
     Set Suite Variable    ${fileType}
     ${caption}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption}
 
-    ${resp}=  db.getType   ${jpgfile}
+    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+    ${uploadDocuments}=    Create List         ${Attachments}  
+
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+ 
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+JD-TC-Create PaymentsIn-2
+
+    [Documentation]  Create a PaymentIn with an attchment contain drive id.
+
+    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+
+     ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
     Set Suite Variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption1}
-    
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
 
-    ${resp}=  Upload Finance PaymentsOut Attachment   ${payable_uid1}     ${Attachments}
+
+
+    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${userName}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
+    Log  ${Attachments}
+    ${uploadDocuments}=  Create List   ${Attachments}
+    Set Suite Variable    ${uploadDocuments}
+
+ 
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-UploadPayableAttachment-UH1
 
-    [Documentation]  Create PaymentsOut and upload a attachment with invalid Paymentout id.
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+JD-TC-Create PaymentsIn-3
+
+    [Documentation]  Create a Payable with empty vendor id.
+
+    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
 
-     ${invalid}=  Random Int  min=500  max=1000
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
 
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${EMPTY}    uploadDocuments=${uploadDocuments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Upload Finance PaymentsOut Attachment   ${invalid}     ${Attachments}
+
+
+
+
+
+JD-TC-Create PaymentsIn-UH1
+
+    [Documentation]  Create a Payable with empty category id..
+
+    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+ 
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${EMPTY}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_PAYMENTSOUT_ID}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTOUT_CATEGORY}
 
+JD-TC-Create PaymentsIn-UH2
 
-JD-TC-UploadPayableAttachment-UH3
+    [Documentation]  Create a Payable with empty received date.
 
-    [Documentation]   upload a attachment using consumer login.
-
-    ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
 
-    ${resp}=  Upload Finance PaymentsOut Attachment   ${payable_uid1}     ${Attachments}
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${EMPTY}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.json()}  ${NoAccess}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${PAID_DATE_CANNOT_BE_EMPTY}
 
-JD-TC-UploadPayableAttachment-UH4
+JD-TC-Create PaymentsIn-UH3
 
-    [Documentation]   upload a attachment without  login.
+    [Documentation]   Create PaymentsIn without login
 
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
 
-    ${resp}=  Upload Finance PaymentsOut Attachment   ${payable_uid1}     ${Attachments}
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-UploadPayableAttachment-UH5
+JD-TC-Create PaymentsIn-UH4
 
-    [Documentation]  Upload finance vendor attachment with empty attachment.
+    [Documentation]   Create Category Using Consumer Login
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
+JD-TC-Create PaymentsIn-UH5
+
+    [Documentation]  Create Paymentout with empty  amount.
+
+    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
 
-     ${invalid}=  Random Int  min=500  max=1000
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
 
-    ${Attachments}=    Create Dictionary   
-    Log  ${Attachments}
 
-    ${resp}=  Upload Finance PaymentsOut Attachment   ${payable_uid1}     ${Attachments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${FILE_NAME_NOT_FOUND}
-
-JD-TC-UploadPayableAttachment-UH6
-
-    [Documentation]   upload a attachment using another provider login.
-
-    ${resp}=   Provider Login  ${PUSERNAME30}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-
-    ${resp}=  Upload Finance PaymentsOut Attachment   ${payable_uid1}     ${Attachments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}  
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_AMOUNT}
