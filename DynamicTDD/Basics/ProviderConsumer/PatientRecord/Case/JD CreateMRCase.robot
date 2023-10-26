@@ -134,7 +134,7 @@ JD-TC-Create MR Case-1
     ${consumer}=  Create Dictionary  id=${cid} 
     Set Suite Variable    ${consumer} 
 
-     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}    
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
@@ -181,7 +181,7 @@ JD-TC-Create MR Case-2
     ${description1}=  FakerLibrary.Text      max_nb_chars=250
     
 
-     ${firstName}=  FakerLibrary.name
+    ${firstName}=  FakerLibrary.name
     Set Suite Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Suite Variable    ${lastName}
@@ -216,7 +216,7 @@ JD-TC-Create MR Case-2
     Set Suite Variable    ${proconlname1}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname1}       ${proconfname}${space}${proconlname}
 
-     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -264,7 +264,7 @@ JD-TC-Create MR Case-3
 
     ${type}=  Create Dictionary  id=${type_id1}  
     ${doctor}=  Create Dictionary  id=${pid} 
-    ${title1}=  FakerLibrary.Text      max_nb_chars=255
+    ${title1}=  FakerLibrary.Text      max_nb_chars=250
     ${description1}=  FakerLibrary.Text      max_nb_chars=250
     ${consumer}=  Create Dictionary  id=${cid1} 
     
@@ -584,7 +584,7 @@ JD-TC-Create MR Case-10
    
 JD-TC-Create MR Case-11
 
-    [Documentation]    Gwt MR case with another user login (This user is not added in any case)
+    [Documentation]    Get MR case with another user login (This user is not added in any case)
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -639,7 +639,6 @@ JD-TC-Create MR Case-11
     ${resp}=    Get MR Case By UID   ${caseUId7}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
     Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
@@ -649,6 +648,40 @@ JD-TC-Create MR Case-11
     Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()['title']}     ${title}
     Should Be Equal As Strings    ${resp.json()['description']}     ${description}
+
+JD-TC-Create MR Case-12
+
+    [Documentation]    Create a MR case, then assign a user. 
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME9}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${usr}=  Create List      ${u_id}
+
+    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  assignees=${usr}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}  200
+    Set Suite Variable    ${caseUId8}    ${resp.json()['uid']}
+
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get MR Case By UID   ${caseUId8}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
+    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
+    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
+    Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
+    # Should Be Equal As Strings    ${resp.json()['doctor']['firstName']}     ${ufname} 
+    # Should Be Equal As Strings    ${resp.json()['doctor']['lastName']}     ${ulname}
+    Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['title']}     ${title}
+    Should Be Equal As Strings    ${resp.json()['description']}     ${description}
+    Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id}
+    Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
+
 
 JD-TC-Create MR Case-UH1
 

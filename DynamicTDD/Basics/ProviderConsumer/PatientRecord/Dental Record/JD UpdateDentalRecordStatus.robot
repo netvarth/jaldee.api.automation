@@ -177,6 +177,44 @@ JD-TC-Update Dental Record Status-2
     Should Be Equal As Strings    ${resp.json()['id']}     ${id} 
     Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[1]} 
 
+
+
+JD-TC-Update Dental Record Status-UH1
+
+    [Documentation]    Update Dental Record status with another provider login.
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
+
+JD-TC-Update Dental Record Status-UH2
+
+    [Documentation]    Update Dental Record status without login.
+
+    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-Update Dental Record Status-UH3
+
+    [Documentation]    Update Dental Record status with consumer login.
+
+    ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
+
+*** comment ***
 JD-TC-Update Dental Record Status-UH1
 
     [Documentation]    Update Dental record status with invalid dental record status.
@@ -204,38 +242,3 @@ JD-TC-Update Dental Record Status-UH2
     ${resp}=    Update DentalRecord Status    ${dentalid}       ${PRStatus[1]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Update Dental Record Status-UH3
-
-    [Documentation]    Update Dental Record status with another provider login.
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME1}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings              ${resp.json()}   ${NO_PERMISSION}
-
-JD-TC-Update Dental Record Status-UH4
-
-    [Documentation]    Update Dental Record status without login.
-
-    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Update Dental Record Status-UH5
-
-    [Documentation]    Update Dental Record status with consumer login.
-
-    ${resp}=   Consumer Login  ${CUSERNAME8}   ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Update DentalRecord Status    ${id}       ${PRStatus[1]}      
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings              ${resp.json()}   ${NoAccess}

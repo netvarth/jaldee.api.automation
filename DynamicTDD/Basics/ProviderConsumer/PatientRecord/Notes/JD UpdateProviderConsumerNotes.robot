@@ -543,13 +543,15 @@ JD-TC-Update Provider Consumer Notes-UH1
     # Set Suite Variable    ${pid}        ${resp.json()['id']}
     # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
-    ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    ${fakeid}=    Random Int  min=1000   max=9999
+    ${users1}=   Create List   ${fakeid}
     ${title2}=  FakerLibrary.Text     max_nb_chars=255
+    ${USER_NOT_FOUND_WITH_ID}=  Format String  ${USER_NOT_FOUND_WITH_ID}  ${fakeid}
 
     ${resp}=    Update Provider Consumer Notes    ${note_id}    ${title2}    ${description2}    ${users1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${USER_NOT_FOUND_WITH_ID}
 
 JD-TC-Update Provider Consumer Notes-UH2
 
@@ -562,7 +564,7 @@ JD-TC-Update Provider Consumer Notes-UH2
     # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
 
     ${test}=   FakerLibrary.Text 
-    ${users1}=   Create List   ${test}
+    ${users1}=   Create List   
     ${title2}=  FakerLibrary.Text     max_nb_chars=255
     ${fakeid}=   FakerLibrary.Random Number
 

@@ -428,32 +428,8 @@ JD-TC-Create Sections-6
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
     Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
 
+
 JD-TC-Create Sections-7
-
-    [Documentation]    Create Sections with valid details then filter by spInternalStatus.
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    Get Sections Filter   spInternalStatus-eq=${enumName}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
-    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
-    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
-    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
-    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
-    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
-    Should Be Equal As Strings     ${resp.json()[0]['doctor']['lastName']}    ${pdrlname}
-    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
-    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
-    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
-    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
-
-JD-TC-Create Sections-8
 
     [Documentation]    Create Sections with valid details then filter by createdDate.
 
@@ -478,7 +454,7 @@ JD-TC-Create Sections-8
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
     Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
 
-JD-TC-Create Sections-9
+JD-TC-Create Sections-8
 
     [Documentation]    Create Sections with valid details then filter by updatedDate.
 
@@ -521,3 +497,29 @@ JD-TC-Create Sections-9
     Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}
     Should Be Equal As Strings     ${resp.json()[0]['updatedDate']}    ${DAY1}
     Should Be Equal As Strings     ${resp.json()[0]['updatedDateString']}    ${DAY1} ${UpdatedTime}
+
+*** comment ***
+JD-TC-Create Sections-7
+
+    [Documentation]    Create Sections with valid details then filter by spInternalStatus.
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Sections Filter   spInternalStatus-eq=${enumName}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings     ${resp.json()[0]['uid']}    ${Sec_UId}
+    Should Be Equal As Strings     ${resp.json()[0]['account']}    ${accountId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['id']}    ${caseId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['uid']}    ${caseUId}
+    Should Be Equal As Strings     ${resp.json()[0]['mrCase']['title']}    ${title}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['id']}    ${pid}
+    Should Be Equal As Strings     ${resp.json()[0]['doctor']['lastName']}    ${pdrlname}
+    Should Be Equal As Strings     ${resp.json()[0]['templateDetailId']}    ${temp_id}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionType']}    ${enumName}
+    Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
+    Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY1}
+    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY1} ${start}

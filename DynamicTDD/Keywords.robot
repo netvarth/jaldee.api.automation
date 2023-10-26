@@ -245,6 +245,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{toothSurfaces}                    BUCCAL   LINGUAL  PALATAL
 @{PRStatus}                         OPEN  CLOSED  COMPLETED 
 @{RateType}                         Diminishing  Flat
+@{WorkStatus}                       OPEN  CANCELED  COMPLETE
 
 
 *** Keywords ***

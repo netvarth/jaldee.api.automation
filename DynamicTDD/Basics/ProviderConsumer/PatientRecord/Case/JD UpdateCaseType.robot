@@ -122,13 +122,13 @@ JD-TC-Update Case Type-2
 
 JD-TC-Update Case Type-3
 
-    [Documentation]    Update Case type where alias name contain 255 words
+    [Documentation]    Update Case type where alias name contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Update Case Type    ${id}  ${name}  ${description1}   ${toggle[0]}
     Log   ${resp.content}

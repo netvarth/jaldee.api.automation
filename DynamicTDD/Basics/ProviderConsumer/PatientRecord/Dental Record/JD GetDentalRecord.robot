@@ -252,9 +252,8 @@ JD-TC-Get Dental Record-3
 
     ${resp}=    Get DentalRecord ById   ${id1}    
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings              ${resp.json()}   ${INVALID_ID}
 
 JD-TC-Get Dental Record-4
 
@@ -329,7 +328,7 @@ JD-TC-Get Dental Record-UH3
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings              ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Get Dental Record-UH3
+JD-TC-Get Dental Record-UH4
 
     [Documentation]    Get Dental Record with consumer login.
 

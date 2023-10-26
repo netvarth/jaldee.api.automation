@@ -2112,6 +2112,12 @@ TOOTH_ID_CANNOT_BE_EMPTY= "Tooth Id cannot be empty"
 INVALID_SECTION_TEMPLATE_ID= "Invalid Section Template Detail ID"
 CASE_STATUS_IS_CLOSED= "Case status is Closed"
 CASE_DESCRIPTION_NOT_EXCEED_250CHAR= "Case description should not exceed 250 chars"
+NOT_ALLOWED_ADDITIONAL_PROPERTIES ="{}: is not defined in the schema and the schema does not allow additional properties\n"
+INVALID_TREATMENT_ID="Invalid Treatment ID"
+MEDICINE_NAME_REQUIRED="Medicine name required for prescription creation"
+MEDICAL_HISTORY_NOT_FOUND= "Medical History not found with ID {}"
+ALREADY_UPDATED_STATUS="work status is COMPLETE"
+TIME_IS_OVER_UPDATION="Prescription cannot be updated since allowed edit time is over"
 
 # Provider Consumer
 
@@ -2126,3 +2132,4 @@ COUNTRY_CODE_INVALID_FOR_SECONDARY_NO = "Invalid secondary phone No country code
 COUNTRY_CODE_INVALID_FOR_TERTIARY_NO = "Invalid tertiary phone No country code."
 
 appmntReminder_Consumer_APP= "[consumer],\n[appttime] reminder for your appointment with\n[provider],\n[time],[date]\n[service]"
+

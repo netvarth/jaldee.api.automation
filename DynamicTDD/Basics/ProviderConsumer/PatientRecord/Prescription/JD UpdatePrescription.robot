@@ -260,8 +260,9 @@ JD-TC-Update Prescription-1
 
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
+    ${note}=  FakerLibrary.Text  max_nb_chars=42 
 
-     ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}  
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${EMPTY}    prescriptionAttachments=${prescriptionAttachments}      prescriptionNotes=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${prescription_uid}   ${resp.json()}
@@ -277,20 +278,20 @@ JD-TC-Update Prescription-1
     ${med_name1}=      FakerLibrary.name
     Set Suite Variable    ${med_name1}
     ${frequency1}=     FakerLibrary.word
-     Set Suite Variable     ${frequency1}
+    Set Suite Variable     ${frequency1}
     ${duration1}=      FakerLibrary.sentence
-     Set Suite Variable     ${duration1}
+    Set Suite Variable     ${duration1}
     ${instrn1}=        FakerLibrary.sentence
-     Set Suite Variable    ${instrn1}
+    Set Suite Variable    ${instrn1}
     ${dosage1}=        FakerLibrary.sentence
-      Set Suite Variable     ${dosage1}
+    Set Suite Variable     ${dosage1}
 
-     ${mrPrescriptions1}=  Create Dictionary  medicineName=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
+    ${mrPrescriptions1}=  Create Dictionary  medicineName=${med_name1}  frequency=${frequency1}  duration=${duration1}  instructions=${instrn1}  dosage=${dosage1}
     Set Suite Variable    ${mrPrescriptions1}
 
     
 
-    ${resp}=    Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions1}
+    ${resp}=    Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${caseId}       ${id1}    ${html}      ${mrPrescriptions1}    prescriptionNotes=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -310,6 +311,7 @@ JD-TC-Update Prescription-1
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionNotes']}     ${note}
 
 
 
@@ -447,7 +449,7 @@ JD-TC-Update Prescription-7
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${order}      ${id1}    ${html}     ${mrPrescriptions}
+    ${resp}=   Update Prescription   ${prescription_uid}   ${cid}    ${pid}    ${order}      ${id1}    ${html}     ${mrPrescriptions1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -457,7 +459,7 @@ JD-TC-Update Prescription-7
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${prescription_uid} 
     Should Be Equal As Strings    ${resp.json()[0]['providerConsumerId']}     ${cid} 
     Should Be Equal As Strings    ${resp.json()[0]['doctorId']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${order} 
+    Should Be Equal As Strings    ${resp.json()[0]['caseId']}     ${caseId} 
     Should Be Equal As Strings    ${resp.json()[0]['dentalRecordId']}     ${id1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['medicineName']}     ${med_name1} 
     Should Be Equal As Strings    ${resp.json()[0]['mrPrescriptions'][0]['frequency']}     ${frequency1} 

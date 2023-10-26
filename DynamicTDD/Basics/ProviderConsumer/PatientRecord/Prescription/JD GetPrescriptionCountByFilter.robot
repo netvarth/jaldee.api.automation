@@ -262,8 +262,9 @@ JD-TC-Get Prescription Count By Filter-1
 
     ${mrPrescriptions}=  Create Dictionary  medicineName=${med_name}  frequency=${frequency}  duration=${duration}  instructions=${instrn}  dosage=${dosage}
     Set Suite Variable    ${mrPrescriptions}
+    ${note}=  FakerLibrary.Text  max_nb_chars=42 
 
-    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}     ${mrPrescriptions}
+    ${resp}=    Create Prescription    ${cid}    ${pid}    ${caseId}       ${id1}    ${html}     ${mrPrescriptions}    prescriptionNotes=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${prescription_uid}   ${resp.json()}
@@ -292,9 +293,8 @@ JD-TC-Get Prescription Count By Filter-1
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedByName']}     ${pdrname} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedBy']}     ${id} 
     Should Be Equal As Strings    ${resp.json()[0]['prescriptionCreatedDate']}     ${DAY1}
-    
+    Should Be Equal As Strings    ${resp.json()[0]['prescriptionNotes']}     ${note}
  
-
 JD-TC-Get Prescription Count By Filter-2
 
     [Documentation]    Create Prescription with Empty caseId Get Prescription Count By Filter.

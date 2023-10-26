@@ -11216,7 +11216,7 @@ Update Patient Medical History
     ${data}=    Create Dictionary    id=${id}  title=${title}  description=${description}    viewByUsers=${viewByUsers}   medicalHistoryAttachments=${AttachmentList}
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
-    ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${medicalHistoryId}    data=${data}     expected_status=any
+    ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${id}    data=${data}     expected_status=any
     [Return]  ${resp}
 
 Delete Patient Medical History
@@ -11495,6 +11495,12 @@ Get Treatment Plan By case Id
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/case/${uid}  expected_status=any
     [Return]  ${resp}
 
+Get NonDental Treatment Plan By case Id
+    [Arguments]     ${uid}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/nondental/case/${uid}  expected_status=any
+    [Return]  ${resp}
+
 Create MedicalRecordPrescription Template
     [Arguments]    ${templateName}    @{vargs}
     ${len}=  Get Length  ${vargs}
@@ -11602,6 +11608,12 @@ Get Prescription Count By Filter
     [Arguments]    &{param} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
+    [Return]  ${resp}
+
+Get Prescription By UID
+    [Arguments]    ${uid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/uid/${uid}    expected_status=any
     [Return]  ${resp}
 
 

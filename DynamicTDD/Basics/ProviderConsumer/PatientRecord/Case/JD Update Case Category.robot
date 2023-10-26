@@ -96,13 +96,13 @@ JD-TC-Update Case Category-1
 
 JD-TC-Update Case Category-2
 
-    [Documentation]    Update Case Category where name contain 255 words
+    [Documentation]    Update Case Category where name contain 250 words
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Update Case Category    ${id}  ${description1}  ${aliasName}   ${toggle[0]}
     Log   ${resp.content}
@@ -154,7 +154,7 @@ JD-TC-Update Case Category-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Update Case Category    ${id}  ${name}  ${description1}   ${toggle[1]}
     Log   ${resp.content}

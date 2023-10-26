@@ -193,14 +193,14 @@ JD-TC-Get Case Filter-2
 
 JD-TC-Get Case Filter-3
 
-    [Documentation]    Update MR Case description contain 255 words  and get case filter
+    [Documentation]    Update MR Case description contain 250 words  and get case filter
 
     ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
@@ -222,7 +222,7 @@ JD-TC-Get Case Filter-4
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${title1}=  FakerLibrary.Random Number
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
     Log   ${resp.json()}
@@ -265,7 +265,7 @@ JD-TC-Get Case Filter-6
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${empty}  ${description}  
     Log   ${resp.json()}
@@ -334,7 +334,7 @@ JD-TC-Get Case Filter-7
 
 
     ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=255
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${empty}  
     Log   ${resp.json()}

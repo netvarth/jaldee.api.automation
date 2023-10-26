@@ -96,13 +96,13 @@ JD-TC-Get Case Category Filter-1
 
 JD-TC-Get Case Category Filter-2
 
-    [Documentation]    Update Case Category where name contain 255 words and Get Case Category Filter
+    [Documentation]    Update Case Category where name contain 250 words and Get Case Category Filter
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${description1}=  FakerLibrary.Text     	max_nb_chars=255
+    ${description1}=  FakerLibrary.Text     	max_nb_chars=250
 
     ${resp}=    Update Case Category    ${id}  ${description1}  ${aliasName}   ${toggle[0]}
     Log   ${resp.content}
