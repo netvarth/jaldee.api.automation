@@ -21,7 +21,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 *** Test Cases ***
 
 
-JD-TC-CreateReminder-1
+JD-TC-GetRemindersWithFilter-1
 
     [Documentation]    Provider create a reminder for his provider consumer.
 
@@ -80,13 +80,12 @@ JD-TC-CreateReminder-1
     END
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10    
-    ${list}=  Create List  1  2  3  4  5  6  7
+    ${list}=  Create List  
     ${sTime1}=  db.get_time_by_timezone  ${tz}  
     ${eTime1}=  db.add_timezone_time  ${tz}  3  15
     ${msg}=  FakerLibrary.word
 
-    ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[4]}  ${list}  ${DAY1}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${rem_id}  ${resp.content}
@@ -115,6 +114,10 @@ JD-TC-CreateReminder-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Reminders With Filter  completed-eq=${bool[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Reminders With Filter  completed-eq=${bool[1]}
     Log  ${resp.content}
