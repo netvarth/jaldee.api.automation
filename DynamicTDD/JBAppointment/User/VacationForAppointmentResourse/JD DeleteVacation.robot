@@ -581,7 +581,7 @@ JD-TC-DeleteVacation-UH5
 
 JD-TC-DeleteVacation-UH6
     [Documentation]	   Trying to Delete Vacation using Invalid ID
-    ${resp} = Encrypted Provider Login   ${MUSERNAME_E1}    ${PASSWORD}
+    ${resp} =   Encrypted Provider Login   ${MUSERNAME_E1}    ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp} =    Delete Vacation    0

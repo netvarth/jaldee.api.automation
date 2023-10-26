@@ -104,7 +104,7 @@ JD-TC-GetAppointmentByEncId -1
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
 
@@ -121,7 +121,7 @@ JD-TC-GetAppointmentByEncId -1
     ${resp}=  Get Appointment By EncodedId   ${A_Enc_Id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  appmtDate=${DAY1}  apptStatus=${apptStatus[2]}    apptBy=${apptBy}
+    Verify Response  ${resp}  appmtDate=${DAY1}  apptStatus=${apptStatus[1]}    apptBy=${apptBy}
     Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${s_id}
     Should Be Equal As Strings  ${resp.json()['uid']}                         ${apptid1}

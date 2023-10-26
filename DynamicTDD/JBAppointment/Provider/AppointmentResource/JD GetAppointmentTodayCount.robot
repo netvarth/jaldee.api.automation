@@ -1012,12 +1012,12 @@ JD-TC-GetAppointmentTodayCount-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  2
 
-    ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[2]}
+    ${resp}=  Get Appointments Today   apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[2]}
+    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
 
-    ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[2]}
+    ${resp}=  Get Today Appointment Count  apptStatus-eq=${apptStatus[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
@@ -3816,7 +3816,7 @@ JD-TC-GetAppointmentTodayCount-18
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  #apptStatus=${apptStatus[2]}
+    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  #apptStatus=${apptStatus[1]}
     Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=CONSUMER   paymentStatus=${paymentStatus[1]}  appointmentMode=${appointmentMode[2]}  #apptStatus=${apptStatus[1]}
 
     ${resp}=  Get Today Appointment Count
@@ -5659,7 +5659,7 @@ JD-TC-GetAppointmentTodayCount-26
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  ${count_male}
-    # Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[2]}
+    # Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
     # # Should Be Equal As Strings  ${resp.json()[0]['consumer']['userProfile']['gender']}  ${Genderlist[1]}
 
     ${resp}=  Get Today Appointment Count  gender-eq=${Genderlist[1]}
@@ -5672,7 +5672,7 @@ JD-TC-GetAppointmentTodayCount-26
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  ${count_female}
-    # Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[2]}
+    # Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
     # # Should Be Equal As Strings  ${resp.json()[0]['consumer']['userProfile']['gender']}  ${Genderlist[0]}
 
     ${resp}=  Get Today Appointment Count  gender-eq=${Genderlist[0]}
@@ -6190,7 +6190,7 @@ JD-TC-GetAppointmentTodayCount-UH3
     ${resp}=  Get Appointments Today   account-eq=${pid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[1]}  apptStatus=${apptStatus[2]}
+    # Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[1]}  apptStatus=${apptStatus[1]}
     # # Should Be Equal As Strings  ${resp.json()[0]['consumer']['userProfile']['dob']}  ${dob2}
 
     ${resp}=  Get Today Appointment Count  account-eq=${pid}

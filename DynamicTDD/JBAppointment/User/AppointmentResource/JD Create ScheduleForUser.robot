@@ -451,8 +451,8 @@ JD-TC-CreateScheduleForUser-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY1}=  db.db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.db.add_timezone_date  ${tz}  10        
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.add_timezone_time  ${tz}   0  15  
     ${eTime1}=  db.add_timezone_time  ${tz}   2  30  
@@ -499,8 +499,8 @@ JD-TC-CreateScheduleForUser-5
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  db.db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.db.add_timezone_date  ${tz}    10        
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}    10        
     ${sTime1}=  db.add_timezone_time  ${tz}    0  15  
     ${eTime1}=  db.add_timezone_time  ${tz}   0  40  
 

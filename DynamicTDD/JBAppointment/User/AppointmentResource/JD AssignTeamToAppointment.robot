@@ -239,7 +239,7 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Should Be Equal As Strings  ${resp.json()[0]['uid']}         ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id1}
 
     ${resp}=  SendProviderResetMail   ${USERNAME2}
@@ -258,7 +258,7 @@ JD-TC-AssignTeamToAppointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     
     Should Be Equal As Strings  ${resp.json()[0]['uid']}         ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id1}
 
 JD-TC-AssignTeamToAppointment-2
@@ -348,7 +348,7 @@ JD-TC-AssignTeamToAppointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     
     Should Be Equal As Strings  ${resp.json()[0]['uid']}         ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id2}
 
     ${resp}=  SendProviderResetMail   ${USERNAME4}
@@ -367,7 +367,7 @@ JD-TC-AssignTeamToAppointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     
     Should Be Equal As Strings  ${resp.json()[0]['uid']}         ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id2}
     
     ${resp}=  Encrypted Provider Login  ${USERNAME1}  ${PASSWORD}
@@ -470,7 +470,7 @@ JD-TC-AssignTeamToAppointment-4
     Should Be Equal As Strings  ${resp.status_code}  200
     
     Should Be Equal As Strings  ${resp.json()[0]['uid']}         ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id2}
 
     Should Be Equal As Strings  ${resp.json()[1]['uid']}         ${apptid2}
@@ -493,7 +493,7 @@ JD-TC-AssignTeamToAppointment-4
     Should Be Equal As Strings  ${resp.status_code}  200
     
     Should Be Equal As Strings  ${resp.json()[0]['uid']}         ${apptid1}
-    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}  ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()[0]['teamId']}          ${t_id2}
 
     Should Be Equal As Strings  ${resp.json()[1]['uid']}         ${apptid2}

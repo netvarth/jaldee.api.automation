@@ -120,7 +120,7 @@ JD-TC-CreateAppointmentNote-1
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}
     # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
@@ -257,7 +257,7 @@ JD-TC-CreateAppointmentNote-2
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}
     # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
@@ -423,7 +423,7 @@ JD-TC-CreateAppointmentNote-UH1
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}
     # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}

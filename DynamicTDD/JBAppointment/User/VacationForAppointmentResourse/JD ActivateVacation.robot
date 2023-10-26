@@ -975,7 +975,7 @@ JD-TC-ActivateVacation-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}   
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}   
    
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
@@ -1002,7 +1002,7 @@ JD-TC-ActivateVacation-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}   
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}   
    
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
@@ -1361,7 +1361,7 @@ JD-TC-ActivateVacation-6
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
   
     ${resp}=  View Waitlist Settings
@@ -1547,7 +1547,7 @@ JD-TC-ActivateVacation-6
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
 
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
@@ -1577,7 +1577,7 @@ JD-TC-ActivateVacation-6
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
 
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}

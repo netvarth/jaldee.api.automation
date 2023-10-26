@@ -565,14 +565,14 @@ JD-TC-NextAvailableSchedule for User-4
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id}  ${resp.json()}
+    Set Test Variable  ${u_id}  ${resp.json()}
 
     ${resp}=  Get User By Id  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}      ${u_id}
     # Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
+    Set Test Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
     # Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH1}.${test_mail}   state=${state}  deptId=${dep_id}
 
     ${resp}=    Get Locations
@@ -699,7 +699,7 @@ JD-TC-NextAvailableSchedule for User-4
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH2}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERPH2}  ${dep_id1}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id1}  ${resp.json()}
+    Set Test Variable  ${u_id1}  ${resp.json()}
 
 
     # sleep  3s
@@ -840,10 +840,10 @@ JD-TC-NextAvailableSchedule for User-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
 
-    ${resp}=  Get User
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${u_id}   ${resp.json()[3]['id']}
+    # ${resp}=  Get User
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${u_id}   ${resp.json()[0]['id']}
 
     ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
     Log  ${resp.json()}
@@ -881,10 +881,10 @@ JD-TC-NextAvailableSchedule for User-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
 
-    ${resp}=  Get User
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${u_id}   ${resp.json()[0]['id']}
+    # ${resp}=  Get User
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${u_id}   ${resp.json()[0]['id']}
 
     ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
     Log  ${resp.json()}

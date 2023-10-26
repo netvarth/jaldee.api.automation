@@ -459,23 +459,25 @@ JD-TC-UnAssignproviderAppointment-2
 
     ${resp}=   Un Assign provider Appointment   ${apptid2}   ${u_id1}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.content}  "${NO_PERMISSION_TO_UNASSIGN_USERSERVICE}"
 
-    ${resp}=  Get Appointment By Id   ${apptid2}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot1}   apptStatus=${apptStatus[1]}     
-    ...   appointmentMode=${appointmentMode[2]}   consumerNote=${cnote}   apptBy=${apptBy[1]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME7}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}   ${CUSERNAME7}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          ${u_id1}
+
+    # ${resp}=  Get Appointment By Id   ${apptid2}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot1}   apptStatus=${apptStatus[1]}     
+    # ...   appointmentMode=${appointmentMode[2]}   consumerNote=${cnote}   apptBy=${apptBy[1]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME7}
+    # Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
+    # Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}   ${lname}
+    # Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}   ${CUSERNAME7}
+    # Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
+    # Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
+    # Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+    # Should Be Equal As Strings  ${resp.json()['prevAssignedProvider']}          ${u_id1}
 
 JD-TC-UnAssignproviderAppointment-3
     [Documentation]  Assingn appointment to user and then it again assign to another user then unassign

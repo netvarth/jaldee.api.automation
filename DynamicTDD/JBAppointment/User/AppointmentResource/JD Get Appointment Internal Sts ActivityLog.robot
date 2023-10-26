@@ -535,7 +535,12 @@ JD-TC-AppointmentGetInternalStsActivityLog-3
     Should Be Equal As Strings  ${resp[1].status_code}  200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${fullname}   ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fullname}  ${decrypted_data['userName']}
+
+    # Set Suite Variable  ${fullname}   ${resp.json()['userName']}
 
     ${resp}=  AddCustomer  ${CUSERNAME19}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}

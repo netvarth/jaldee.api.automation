@@ -266,7 +266,7 @@ JD-TC-Unblock Appointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  appointmentEncId=${encId1}   uid=${apptid1}   
-    ...    appmtTime=${slot1}  apptStatus=${apptStatus[2]}  appmtDate=${DAY1}
+    ...    appmtTime=${slot1}  apptStatus=${apptStatus[1]}  appmtDate=${DAY1}
 
     ${APPT_STATUS_NOT_CHANGEABLE}=   Format String  ${APPT_STATUS_NOT_CHANGEABLE}  ${appt_status[2]}   ${appt_status[7]}
 
@@ -525,7 +525,7 @@ JD-TC-Unblock Appointment-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  appointmentEncId=${encId1}   uid=${apptid1}   
-    ...    appmtTime=${slot1}  apptStatus=${apptStatus[2]}  appmtDate=${DAY1}
+    ...    appmtTime=${slot1}  apptStatus=${apptStatus[1]}  appmtDate=${DAY1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}

@@ -163,7 +163,7 @@ JD-TC-AssignproviderAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
     # Should Be Equal As Strings  ${resp.json()['providerAccount']['id']}   ${pid}
     # Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}   ${bname}
@@ -314,7 +314,7 @@ JD-TC-AssignproviderAppointment-1
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -341,7 +341,7 @@ JD-TC-AssignproviderAppointment-1
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -473,7 +473,7 @@ JD-TC-AssignproviderAppointment-2
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
@@ -576,7 +576,7 @@ JD-TC-AssignproviderAppointment-2
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -602,7 +602,7 @@ JD-TC-AssignproviderAppointment-2
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -734,7 +734,7 @@ JD-TC-AssignproviderAppointment-3
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -788,7 +788,7 @@ JD-TC-AssignproviderAppointment-3
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -922,7 +922,7 @@ JD-TC-AssignproviderAppointment-4
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1024,7 +1024,7 @@ JD-TC-AssignproviderAppointment-4
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1050,7 +1050,7 @@ JD-TC-AssignproviderAppointment-4
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1076,7 +1076,7 @@ JD-TC-AssignproviderAppointment-4
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1210,7 +1210,7 @@ JD-TC-AssignproviderAppointment-5
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1311,7 +1311,7 @@ JD-TC-AssignproviderAppointment-5
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1341,7 +1341,7 @@ JD-TC-AssignproviderAppointment-5
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1477,7 +1477,7 @@ JD-TC-AssignproviderAppointment-6
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId1}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote1}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1514,7 +1514,7 @@ JD-TC-AssignproviderAppointment-6
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  appointmentEncId=${encId2}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote2}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME9}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid1}
@@ -1551,7 +1551,7 @@ JD-TC-AssignproviderAppointment-6
     ${resp}=  Get Appointment By Id   ${apptid3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid3}  appmtDate=${DAY1}   appmtTime=${slot3}  appointmentEncId=${encId3}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid3}  appmtDate=${DAY1}   appmtTime=${slot3}  appointmentEncId=${encId3}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote3}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME10}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid2}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
@@ -1622,7 +1622,7 @@ JD-TC-AssignproviderAppointment-6
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId1}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote1}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1651,7 +1651,7 @@ JD-TC-AssignproviderAppointment-6
     ${resp}=  Get Appointment By Id   ${apptid3}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid3}  appmtDate=${DAY1}   appmtTime=${slot3}  appointmentEncId=${encId3}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid3}  appmtDate=${DAY1}   appmtTime=${slot3}  appointmentEncId=${encId3}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote3}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME10}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid2}
@@ -1788,7 +1788,7 @@ JD-TC-AssignproviderAppointment-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
@@ -1924,7 +1924,7 @@ JD-TC-AssignproviderAppointment-7
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -1954,7 +1954,7 @@ JD-TC-AssignproviderAppointment-7
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[2]}
+    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
     Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
 
 
@@ -2066,7 +2066,7 @@ JD-TC-AssignproviderAppointment-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME18}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
@@ -2143,7 +2143,7 @@ JD-TC-AssignproviderAppointment-8
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME18}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -2271,7 +2271,7 @@ JD-TC-AssignproviderAppointment-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME17}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
@@ -2497,7 +2497,7 @@ JD-TC-AssignproviderAppointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME11}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname}
@@ -2574,7 +2574,7 @@ JD-TC-AssignproviderAppointment-10
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME11}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -2864,7 +2864,7 @@ JD-TC-AssignproviderAppointment-UH2
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
 
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -3035,7 +3035,7 @@ JD-TC-AssignproviderAppointment-UH3
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
   
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -3309,7 +3309,7 @@ JD-TC-AssignproviderAppointment-UH4
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
    
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -3473,7 +3473,7 @@ JD-TC-AssignproviderAppointment-UH5
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
    
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}
@@ -3665,7 +3665,7 @@ JD-TC-AssignproviderAppointment-UH6
     ${resp}=  Get Appointment By Id   ${apptid6}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid6}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}     
+    Verify Response   ${resp}  uid=${apptid6}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
     
     Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}   ${cid}

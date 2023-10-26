@@ -168,7 +168,7 @@ JD-TC-Confirm Blocked Appointment-1
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -182,7 +182,7 @@ JD-TC-Confirm Blocked Appointment-1
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     
@@ -337,7 +337,7 @@ JD-TC-Confirm Blocked Appointment-2
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
 
 JD-TC-Confirm Blocked Appointment-3
@@ -509,7 +509,7 @@ JD-TC-Confirm Blocked Appointment-3
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${firstname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lastname}
 
@@ -525,7 +525,7 @@ JD-TC-Confirm Blocked Appointment-3
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${firstname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lastname}
 
@@ -680,7 +680,7 @@ JD-TC-Confirm Blocked Appointment-4
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
 
 JD-TC-Confirm Blocked Appointment-5
@@ -835,7 +835,7 @@ JD-TC-Confirm Blocked Appointment-5
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -848,7 +848,7 @@ JD-TC-Confirm Blocked Appointment-5
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -1007,7 +1007,7 @@ JD-TC-Confirm Blocked Appointment-6
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -1036,7 +1036,7 @@ JD-TC-Confirm Blocked Appointment-6
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
@@ -1177,7 +1177,7 @@ JD-TC-Confirm Blocked Appointment-UH1
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Confirm Blocked Appointment   ${cid}   ${apptid1}  ${apptfor}
     Log  ${resp.json()}
@@ -1335,7 +1335,7 @@ JD-TC-Confirm Blocked Appointment-UH2
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Confirm Blocked Appointment   ${cid1}   ${apptid1}  ${apptfor}
     Log  ${resp.json()}
@@ -1466,7 +1466,7 @@ JD-TC-Confirm Blocked Appointment-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  appointmentEncId=${encId1}   uid=${apptid1}   
-    ...    appmtTime=${slot1}  apptStatus=${apptStatus[2]}  appmtDate=${DAY1}
+    ...    appmtTime=${slot1}  apptStatus=${apptStatus[1]}  appmtDate=${DAY1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}

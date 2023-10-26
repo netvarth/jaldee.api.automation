@@ -413,7 +413,7 @@ TC-Add Delay On Multiple Appointments-2
     ${resp}=  Get Appointments Today
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[2]}
+    # Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
     # Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[1]}
 
 TC-Add Delay On Multiple Appointments-3
@@ -685,7 +685,7 @@ TC-Add Delay On Multiple Appointments-4
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}

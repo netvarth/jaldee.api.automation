@@ -298,7 +298,7 @@ JD-TC-AppointmentByUserLogin-1
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -317,7 +317,7 @@ JD-TC-AppointmentByUserLogin-1
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
 
@@ -517,7 +517,7 @@ JD-TC-AppointmentByUserLogin-3
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${mem_fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -536,7 +536,7 @@ JD-TC-AppointmentByUserLogin-3
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${mem_fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
 
@@ -640,7 +640,7 @@ JD-TC-AppointmentByUserLogin-4
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${mem_fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -658,7 +658,7 @@ JD-TC-AppointmentByUserLogin-4
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -857,7 +857,7 @@ JD-TC-AppointmentByUserLogin-6
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -1064,7 +1064,7 @@ JD-TC-AppointmentByUserLogin-8
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -1082,7 +1082,7 @@ JD-TC-AppointmentByUserLogin-8
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -1193,7 +1193,7 @@ JD-TC-AppointmentByUserLogin-9
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -1336,7 +1336,7 @@ JD-TC-AppointmentByUserLogin-10
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -1534,7 +1534,7 @@ JD-TC-AppointmentByUserLogin-11
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -1694,7 +1694,7 @@ JD-TC-AppointmentByUserLogin-12
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -1858,7 +1858,7 @@ JD-TC-AppointmentByUserLogin-13
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -1876,7 +1876,7 @@ JD-TC-AppointmentByUserLogin-13
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -2022,7 +2022,7 @@ JD-TC-AppointmentByUserLogin-14
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -2040,7 +2040,7 @@ JD-TC-AppointmentByUserLogin-14
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -2156,7 +2156,7 @@ JD-TC-AppointmentByUserLogin-15
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -2245,7 +2245,7 @@ JD-TC-AppointmentByUserLogin-15
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -2354,7 +2354,7 @@ JD-TC-AppointmentByUserLogin-16
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -2557,7 +2557,7 @@ JD-TC-AppointmentByUserLogin-17
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -2651,7 +2651,7 @@ JD-TC-AppointmentByUserLogin-17
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -2760,7 +2760,7 @@ JD-TC-AppointmentByUserLogin-18
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -2854,7 +2854,7 @@ JD-TC-AppointmentByUserLogin-18
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -2968,7 +2968,7 @@ JD-TC-AppointmentByUserLogin-19
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -3069,7 +3069,7 @@ JD-TC-AppointmentByUserLogin-19
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id2}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -3187,7 +3187,7 @@ JD-TC-AppointmentByUserLogin-20
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -3231,7 +3231,7 @@ JD-TC-AppointmentByUserLogin-20
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -3344,7 +3344,7 @@ JD-TC-AppointmentByUserLogin-21
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -3478,7 +3478,7 @@ JD-TC-AppointmentByUserLogin-22
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${mem_fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -3496,7 +3496,7 @@ JD-TC-AppointmentByUserLogin-22
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -3629,7 +3629,7 @@ JD-TC-AppointmentByUserLogin-23
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -3812,7 +3812,7 @@ JD-TC-AppointmentByUserLogin-24
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${mem_fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -3830,7 +3830,7 @@ JD-TC-AppointmentByUserLogin-24
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -4000,7 +4000,7 @@ JD-TC-AppointmentByUserLogin-25
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -4129,7 +4129,7 @@ JD-TC-AppointmentByUserLogin-26
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -4355,7 +4355,7 @@ JD-TC-AppointmentByUserLogin-27
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -4570,7 +4570,7 @@ JD-TC-AppointmentByUserLogin-28
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -4762,7 +4762,7 @@ JD-TC-AppointmentByUserLogin-29
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -4911,7 +4911,7 @@ JD-TC-AppointmentByUserLogin-29
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname1}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -5090,7 +5090,7 @@ JD-TC-AppointmentByUserLogin-30
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -5340,7 +5340,7 @@ JD-TC-AppointmentByUserLogin-32
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -5492,7 +5492,7 @@ JD-TC-AppointmentByUserLogin-33
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -5832,7 +5832,7 @@ JD-TC-AppointmentByUserLogin-35
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -6726,7 +6726,7 @@ JD-TC-AppointmentByUserLogin-39
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['id']}   ${cid}
     # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
@@ -6877,7 +6877,7 @@ JD-TC-AppointmentByUserLogin-39
 #     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
 #     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
 #     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-#     Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+#     Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
 #     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${mem_fname}
 #     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
 #     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -6896,7 +6896,7 @@ JD-TC-AppointmentByUserLogin-39
 #     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
-#     Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+#     Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
 #     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${mem_fname}
 #     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
 
@@ -7517,7 +7517,7 @@ JD-TC-AppointmentByUserLogin-UH10
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id1}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -7998,7 +7998,7 @@ JD-TC-AppointmentByUserLogin-UH15
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -8283,7 +8283,7 @@ JD-TC-AppointmentByUserLogin-UH18
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -8708,7 +8708,7 @@ JD-TC-AppointmentByUserLogin-UH22
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -8855,7 +8855,7 @@ JD-TC-AppointmentByUserLogin-UH23
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
     # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
@@ -8969,7 +8969,7 @@ JD-TC-AppointmentByUserLogin-UH24
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}
     # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
@@ -9135,7 +9135,7 @@ JD-TC-AppointmentByUserLogin-UH25
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -9511,7 +9511,7 @@ JD-TC-AppointmentByUserLogin-UH28
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -9637,7 +9637,7 @@ JD-TC-AppointmentByUserLogin-UH29
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -9826,7 +9826,7 @@ JD-TC-AppointmentByUserLogin-40
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -9963,7 +9963,7 @@ JD-TC-AppointmentByUserLogin-41
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -10093,7 +10093,7 @@ JD-TC-AppointmentByUserLogin-42
     Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${mem_fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -10116,6 +10116,6 @@ JD-TC-AppointmentByUserLogin-42
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${mem_fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${mem_lname}
