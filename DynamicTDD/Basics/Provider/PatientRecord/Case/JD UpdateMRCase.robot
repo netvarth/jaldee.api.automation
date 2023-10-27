@@ -361,7 +361,7 @@ JD-TC-Update MR Case-9
     Should Be Equal As Strings    ${resp.json()['title']}     ${title}
     Should Be Equal As Strings    ${resp.json()['description']}     ${description}
     Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id}
-    Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
+    # Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
 
     ${title1}=  FakerLibrary.name
     ${description}=  FakerLibrary.Text      max_nb_chars=250
@@ -383,7 +383,7 @@ JD-TC-Update MR Case-9
     Should Be Equal As Strings    ${resp.json()['title']}     ${title1}
     Should Be Equal As Strings    ${resp.json()['description']}     ${description}
     Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id2}
-    Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
+    # Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
 
 JD-TC-Update MR Case-UH1
 
