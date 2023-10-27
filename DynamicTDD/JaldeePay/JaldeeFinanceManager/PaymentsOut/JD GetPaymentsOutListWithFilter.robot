@@ -148,13 +148,16 @@ JD-TC-GetPayableWithFilter-1
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
-
+    Set Suite Variable  ${referenceNo}  
     ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
+    Set Suite Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
+    Set Suite Variable  ${payableLabel}   
     ${dueDate}=   db.get_date
+    Set Suite Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
+    Set Suite Variable  ${amount}  
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}     ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
@@ -170,6 +173,7 @@ JD-TC-GetPayableWithFilter-1
     Should Be Equal As Strings  ${resp.json()[0]['paymentsOutLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
     Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
     Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${dueDate}
     Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid1}
@@ -177,6 +181,52 @@ JD-TC-GetPayableWithFilter-1
     Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 JD-TC-GetPayableWithFilter-2
+
+    [Documentation]  Get PaymentsOut With Filter with category id and category name.
+
+    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=id::${category_id2}    paymentsInOutCategory-eq=name::${name1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id0}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+
+JD-TC-GetPayableWithFilter-3
+
+    [Documentation]  Get PaymentsOut With Filter with vendor uid.
+
+    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get PaymentsOut With Filter    vendorUid-eq=${vendor_uid1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id0}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+
+JD-TC-GetPayableWithFilter-4
 
     [Documentation]  Get PaymentsOut With Filter with paymentsInOutCategoryId.
 
@@ -186,59 +236,43 @@ JD-TC-GetPayableWithFilter-2
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
+    Set Test Variable  ${referenceNo}  
 
     ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
+    Set Test Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
+    Set Test Variable  ${payableLabel}  
     ${dueDate}=   db.get_date
+    Set Test Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
-    ${paymentsOutStatus}=   FakerLibrary.word
-    ${paymentStatus}=   FakerLibrary.word
+    Set Test Variable  ${amount}  
+
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
 
-    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=${category_id2}
+    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=id::${category_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
-
-JD-TC-GetPayableWithFilter-7
-
-    [Documentation]  Get PaymentsOut With Filter with vendor id.
-
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get PaymentsOut With Filter    vendorUid-eq=${vendor_uid1}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${EMPTY}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id0}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
 
 
-JD-TC-GetPayableWithFilter-3
+
+
+JD-TC-GetPayableWithFilter-5
 
     [Documentation]  Get PaymentsOut With Filter  with payInOutUuid and  PaymentsInOutStatus.
 
@@ -250,13 +284,17 @@ JD-TC-GetPayableWithFilter-3
     
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
+    Set Test Variable  ${referenceNo}  
 
     ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
+    Set Test Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
+    Set Test Variable  ${payableLabel}     
     ${dueDate}=   db.get_date
+    Set Test Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
+    Set Test Variable  ${amount}  
 
 
 
@@ -264,22 +302,23 @@ JD-TC-GetPayableWithFilter-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get PaymentsOut With Filter    payInOutUuid-eq=${payable_uid1}    paymentsInOutStatus-eq=${status_id0} 
+    ${resp}=  Get PaymentsOut With Filter    payInOutUuid-eq=${payable_uid1}    paymentsInOutStatus-eq=id::${status_id0} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id0}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
 
 
-JD-TC-GetPayableWithFilter-4
+JD-TC-GetPayableWithFilter-6
 
     [Documentation]  Get PaymentsOut With Filter  with paidDate and  paymentLabel.
 
@@ -296,13 +335,17 @@ JD-TC-GetPayableWithFilter-4
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
+    Set Test Variable  ${referenceNo}  
 
     ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
+    Set Test Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
+    Set Test Variable  ${payableLabel}     
     ${dueDate}=   db.get_date
+    Set Test Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
+    Set Test Variable  ${amount}  
 
 
 
@@ -327,9 +370,10 @@ JD-TC-GetPayableWithFilter-4
     Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id1}
     Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
 
 
-JD-TC-GetPayableWithFilter-5
+JD-TC-GetPayableWithFilter-7
 
     [Documentation]   Get PaymentsOut With Filter with amount and  referenceNo. .
 
@@ -339,15 +383,17 @@ JD-TC-GetPayableWithFilter-5
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
+    Set Test Variable  ${referenceNo}  
 
     ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
+    Set Test Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
+    Set Test Variable  ${payableLabel}     
     ${dueDate}=   db.get_date
+    Set Test Variable  ${dueDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
-    ${paymentsOutStatus}=   FakerLibrary.word
-    ${paymentStatus}=   FakerLibrary.word
+    Set Test Variable  ${amount}  
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${EMPTY}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
@@ -367,28 +413,9 @@ JD-TC-GetPayableWithFilter-5
     Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid2}
     Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
 
-JD-TC-GetPayableWithFilter-6
 
-    [Documentation]  Get PaymentsOut With Filter with category id and category name.
-
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=${category_id2}    paymentsInOutCategory-eq=name::${name1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${EMPTY}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 
@@ -453,8 +480,8 @@ JD-TC-GetPayableWithFilter-UH2
 
      ${resp}=  Get PaymentsOut With Filter     payInOutUuid-eq=${payable_uid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 
 
 

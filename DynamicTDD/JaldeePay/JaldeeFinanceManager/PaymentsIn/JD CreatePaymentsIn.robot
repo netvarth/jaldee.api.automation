@@ -36,7 +36,7 @@ Create PaymentsIn
     [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -170,14 +170,14 @@ JD-TC-Create PaymentsIn-1
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
-    ${uploadDocuments}=    Create List         ${Attachments}  
+    ${uploadedDocuments}=    Create List         ${Attachments}  
 
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
  
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -211,34 +211,14 @@ JD-TC-Create PaymentsIn-2
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
     Log  ${Attachments}
-    ${uploadDocuments}=  Create List   ${Attachments}
-    Set Suite Variable    ${uploadDocuments}
+    ${uploadedDocuments}=  Create List   ${Attachments}
+    Set Suite Variable    ${uploadedDocuments}
 
  
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
-JD-TC-Create PaymentsIn-3
-
-    [Documentation]  Create a Payable with empty vendor id.
-
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${EMPTY}    uploadDocuments=${uploadDocuments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
 
 
@@ -256,10 +236,10 @@ JD-TC-Create PaymentsIn-UH1
     ${amount}=   Random Int  min=500  max=2000
  
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${EMPTY}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${EMPTY}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTOUT_CATEGORY}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSIN_CATEGORY}
 
 JD-TC-Create PaymentsIn-UH2
 
@@ -274,10 +254,10 @@ JD-TC-Create PaymentsIn-UH2
     ${receivedDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${EMPTY}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${EMPTY}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${PAID_DATE_CANNOT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${RECEIVED_DATE_CANNOT_BE_EMPTY}
 
 JD-TC-Create PaymentsIn-UH3
 
@@ -288,7 +268,7 @@ JD-TC-Create PaymentsIn-UH3
     ${amount}=   Random Int  min=500  max=2000
 
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -306,7 +286,7 @@ JD-TC-Create PaymentsIn-UH4
     ${amount}=   Random Int  min=500  max=2000
 
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -324,7 +304,24 @@ JD-TC-Create PaymentsIn-UH5
     ${amount}=   Random Int  min=500  max=2000
 
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${EMPTY}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_AMOUNT}
+
+JD-TC-Create PaymentsIn-UH6
+
+    [Documentation]  Create a Payable with empty vendor id.
+
+    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${EMPTY}    uploadedDocuments=${uploadedDocuments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_VENDOR}

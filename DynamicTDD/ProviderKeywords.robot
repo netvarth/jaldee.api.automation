@@ -10725,10 +10725,10 @@ Upload Finance Invoice Attachment
 
 Create PaymentsOut
 
-    [Arguments]    ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorId}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
+    [Arguments]    ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorId=${vendorId}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -10739,10 +10739,10 @@ Create PaymentsOut
 
 Update PaymentsOut
 
-    [Arguments]    ${payable_uid}     ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorId}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
+    [Arguments]    ${payable_uid}     ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
     
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorId=${vendorId}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END

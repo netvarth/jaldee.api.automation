@@ -197,12 +197,12 @@ JD-TC-GetPayableCountWithFilter-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
 
-    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=${category_id2}
+    ${resp}=  Get PaymentsOut With Filter    paymentsInOutCategory-eq=id::${category_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}  
 
-    ${resp}=  Get PaymentsOut Count With Filter    paymentsInOutCategory-eq=${category_id2}
+    ${resp}=  Get PaymentsOut Count With Filter    paymentsInOutCategory-eq=id::${category_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   ${len}
@@ -234,12 +234,12 @@ JD-TC-GetPayableCountWithFilter-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get PaymentsOut With Filter    payInOutUuid-eq=${payable_uid1}    paymentsInOutStatus-eq=${status_id0} 
+    ${resp}=  Get PaymentsOut With Filter    payInOutUuid-eq=${payable_uid1}    paymentsInOutStatus-eq=id::${status_id0} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}  
 
-    ${resp}=  Get PaymentsOut Count With Filter    payInOutUuid-eq=${payable_uid1}   paymentsInOutStatus-eq=${status_id0} 
+    ${resp}=  Get PaymentsOut Count With Filter    payInOutUuid-eq=${payable_uid1}   paymentsInOutStatus-eq=id::${status_id0} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   ${len}

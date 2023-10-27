@@ -36,7 +36,7 @@ Create PaymentsIn
     [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -46,10 +46,10 @@ Create PaymentsIn
     [Return]  ${resp}
 
 Update PaymentsIn
-    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
+    [Arguments]   ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -213,12 +213,12 @@ JD-TC-Get PaymentsIn-1
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
     Log  ${Attachments}
-    ${uploadDocuments}=  Create List   ${Attachments}
-    Set Suite Variable    ${uploadDocuments}
+    ${uploadedDocuments}=  Create List   ${Attachments}
+    Set Suite Variable    ${uploadedDocuments}
 
  
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -227,16 +227,17 @@ JD-TC-Get PaymentsIn-1
     ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
 
 JD-TC-Get PaymentsIn-2
 
@@ -253,7 +254,7 @@ JD-TC-Get PaymentsIn-2
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -261,16 +262,17 @@ JD-TC-Get PaymentsIn-2
     ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
 
 JD-TC-Get PaymentsIn-3
 
@@ -292,7 +294,7 @@ JD-TC-Get PaymentsIn-3
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -303,16 +305,17 @@ JD-TC-Get PaymentsIn-3
     ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id1}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
 
 JD-TC-Get PaymentsIn-4
 
@@ -329,7 +332,7 @@ JD-TC-Get PaymentsIn-4
 
 
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${EMPTY}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${EMPTY}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid2}   ${resp.json()['uid']}
@@ -337,16 +340,18 @@ JD-TC-Get PaymentsIn-4
     ${resp}=  Get PaymentsIn By Id   ${payable_uid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${EMPTY}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid2}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid2}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+
 
 JD-TC-Get PaymentsIn-UH1
 
@@ -361,7 +366,7 @@ JD-TC-Get PaymentsIn-UH1
     ${resp}=  Get PaymentsIn By Id   ${fakeid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSIN_ID}
 
 JD-TC-Get PaymentsIn-UH2
 
@@ -401,5 +406,5 @@ JD-TC-Get PaymentsIn-UH3
     ${resp}=  Get PaymentsIn By Id   ${payable_uid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSIN_ID}
     

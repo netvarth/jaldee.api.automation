@@ -36,7 +36,7 @@ Create PaymentsIn
     [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -46,10 +46,10 @@ Create PaymentsIn
     [Return]  ${resp}
 
 Update PaymentsIn
-    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
+    [Arguments]    ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -206,12 +206,12 @@ JD-TC-Update PaymentIn-1
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
     Log  ${Attachments}
-    ${uploadDocuments}=  Create List   ${Attachments}
-    Set Suite Variable    ${uploadDocuments}
+    ${uploadedDocuments}=  Create List   ${Attachments}
+    Set Suite Variable    ${uploadedDocuments}
 
  
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -220,7 +220,7 @@ JD-TC-Update PaymentIn-1
     ${amount1}=   Random Int  min=500  max=2000
     ${amount1}=     roundval    ${amount1}   1
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount1}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount1}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -228,16 +228,20 @@ JD-TC-Update PaymentIn-1
     ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount1}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()['vendorUid']}  ${vendor_uid1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+
+
 
 
 
@@ -257,7 +261,7 @@ JD-TC-Update PaymentIn-2
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -265,16 +269,18 @@ JD-TC-Update PaymentIn-2
     ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+
 
 JD-TC-Update PaymentIn-3
 
@@ -294,62 +300,26 @@ JD-TC-Update PaymentIn-3
     ${fakeid}=   FakerLibrary.Random Number
 
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${EMPTY}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${EMPTY}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
-
-JD-TC-Update PaymentIn-4
-
-    [Documentation]  Update PaymentIn with  vendor_uid is empty
-
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
-    
-    ${referenceNo}=   Random Int  min=5  max=200
-    ${referenceNo}=  Convert To String  ${referenceNo}
-
-    ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
 
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${EMPTY}    uploadDocuments=${uploadDocuments}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
 
 
 
@@ -375,10 +345,10 @@ JD-TC-Update PaymentIn-UH1
     ${fakeid}=   FakerLibrary.Random Number
 
 
-     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSIN_ID}
 
 
 
@@ -398,7 +368,7 @@ JD-TC-Update PaymentIn-UH2
     ${fakeid}=   FakerLibrary.Random Number
 
 
-     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -423,8 +393,34 @@ JD-TC-Update PaymentIn-UH3
     ${fakeid}=   FakerLibrary.Random Number
 
 
-     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
+
+JD-TC-Update PaymentIn-UH4
+
+    [Documentation]  Update PaymentIn with  vendor_uid is empty
+
+    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+    
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+
+
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${EMPTY}    uploadedDocuments=${uploadedDocuments}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_VENDOR}
 

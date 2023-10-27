@@ -37,7 +37,7 @@ Create PaymentsIn
     [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -47,10 +47,10 @@ Create PaymentsIn
     [Return]  ${resp}
 
 Update PaymentsIn
-    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
+    [Arguments]    ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -73,7 +73,7 @@ Update PaymentsIn Status
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payableUid}/${status}     expected_status=any    headers=${headers}
     [Return]  ${resp}
 
-Get PaymentsOut With Filter
+Get PaymentsIn With Filter
 
     [Arguments]   &{param}
     Check And Create YNW Session
@@ -219,12 +219,12 @@ JD-TC-GetPaymentInWithFilter-1
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
     Log  ${Attachments}
-    ${uploadDocuments}=  Create List   ${Attachments}
-    Set Suite Variable    ${uploadDocuments}
+    ${uploadedDocuments}=  Create List   ${Attachments}
+    Set Suite Variable    ${uploadedDocuments}
 
  
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -233,16 +233,42 @@ JD-TC-GetPaymentInWithFilter-1
     ${resp}=  Get PaymentsIn With Filter    payInOutUuid-eq=${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+
+
+JD-TC-GetPaymentInWithFilter-7
+
+    [Documentation]  Get PaymentsIn With Filter with vendor id.
+
+    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get PaymentsIn With Filter    vendorUid-eq=${vendor_uid1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+
 
 JD-TC-GetPaymentInWithFilter-2
 
@@ -265,19 +291,19 @@ JD-TC-GetPaymentInWithFilter-2
 
 
 
-    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${userName}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${userName}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
     Log  ${Attachments}
-    ${uploadDocuments}=  Create List   ${Attachments}
-    Set Suite Variable    ${uploadDocuments}
+    ${uploadedDocuments}=  Create List   ${Attachments}
+    Set Suite Variable    ${uploadedDocuments}
 
  
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -285,38 +311,20 @@ JD-TC-GetPaymentInWithFilter-2
     ${resp}=  Get PaymentsIn With Filter    paymentsInOutCategory-eq=${category_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
 
-JD-TC-GetPaymentInWithFilter-7
 
-    [Documentation]  Get PaymentsIn With Filter with vendor id.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get PaymentsIn With Filter    vendorUid-eq=${vendor_uid1}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${EMPTY}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 JD-TC-GetPaymentInWithFilter-3
@@ -334,28 +342,30 @@ JD-TC-GetPaymentInWithFilter-3
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get PaymentsIn With Filter    payInOutUuid-eq=${payable_uid1}    paymentsInOutStatus-eq=${status_id0} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+
 
 
 JD-TC-GetPaymentInWithFilter-4
 
-    [Documentation]  Get PaymentsIn With Filter  with paidDate and  paymentLabel.
+    [Documentation]  Get PaymentsIn With Filter  with receivedDate and  paymentLabel.
 
     ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
@@ -373,7 +383,7 @@ JD-TC-GetPaymentInWithFilter-4
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}    
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -381,19 +391,21 @@ JD-TC-GetPaymentInWithFilter-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get PaymentsIn With Filter    paidDate-eq=${dueDate}    paymentLabel-eq=${payableLabel} 
+    ${resp}=  Get PaymentsIn With Filter    receivedDate-eq=${receivedDate}    paymentLabel-eq=${payableLabel} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+
 
 
 JD-TC-GetPaymentInWithFilter-5
@@ -426,12 +438,12 @@ JD-TC-GetPaymentInWithFilter-5
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
     Log  ${Attachments}
-    ${uploadDocuments}=  Create List   ${Attachments}
-    Set Suite Variable    ${uploadDocuments}
+    ${uploadedDocuments}=  Create List   ${Attachments}
+    Set Suite Variable    ${uploadedDocuments}
 
  
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadDocuments=${uploadDocuments}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -441,16 +453,17 @@ JD-TC-GetPaymentInWithFilter-5
     ${resp}=  Get PaymentsIn With Filter    amount-eq=${amount}    referenceNo-eq=${referenceNo} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutLabel']}  ${EMPTY}
-    Should Be Equal As Strings  ${resp.json()[0]['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()[0]['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()[0]['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutUid']}  ${payable_uid2}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
 
 JD-TC-GetPaymentInWithFilter-6
 
@@ -463,16 +476,17 @@ JD-TC-GetPaymentInWithFilter-6
     ${resp}=  Get PaymentsIn With Filter    paymentsInOutCategory-eq=${category_id2}    paymentsInOutCategory-eq=name::${name1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${EMPTY}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
     Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
 
 
 
@@ -488,15 +502,15 @@ JD-TC-GetPaymentInWithFilter-8
     ${resp}=  Get PaymentsIn With Filter    provider-eq=${pid}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${EMPTY}
+    # Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${EMPTY}
     # Should Be Equal As Strings  ${resp.json()['description']}  ${description}
     # Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
     # Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    # Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    # Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    # Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
+    # Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    # Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    # Should Be Equal As Strings  ${resp.json()['paymentsInStatus']}  ${status_id0}
     # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
