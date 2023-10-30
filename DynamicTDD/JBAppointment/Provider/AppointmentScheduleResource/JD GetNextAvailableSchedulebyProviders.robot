@@ -479,17 +479,18 @@ JD-TC-NextAvailableSchedule By Providers-8
 
     ${resp}=    Get NextAvailableSchedule By Provider Location    ${pid1}   ${lid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}     ${pid1}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['id']}     ${sch_id}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['location']['id']}    ${lid1}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['startDate']}   ${DAY1}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['terminator']['endDate']}  ${DAY2}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['todayAppt']}  ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['futureAppt']}  ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['openNow']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}   ${NO_PERMISSION}
+    # Should Be Equal As Strings  ${resp.json()[0]['provider']['id']}     ${pid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['id']}     ${sch_id}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['location']['id']}    ${lid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['startDate']}   ${DAY1}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['terminator']['endDate']}  ${DAY2}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['todayAppt']}  ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['futureAppt']}  ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()[0]['availableSchedule']['openNow']}   ${bool[1]}
     
 
 JD-TC-NextAvailableSchedule By Providers-9

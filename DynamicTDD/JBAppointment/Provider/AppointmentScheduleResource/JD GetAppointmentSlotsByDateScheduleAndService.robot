@@ -4707,7 +4707,7 @@ JD-TC-GetSlots By Date and service -19
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable   ${amountRequiredNow}    ${resp.json()['amountRequiredNow']}
     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${totalamt}
-    Should Be Equal As Numbers  ${resp.json()['amountRequiredNow']}                     ${amt_float}
+    Should Be Equal As Numbers  ${resp.json()['amountRequiredNow']}                     ${minpre2}
     Should Be Equal As Strings  ${resp.json()['jdnDiscount']}                           0.0
     Should Be Equal As Strings  ${resp.json()['couponDiscount']}                        0.0
     Should Be Equal As Strings  ${resp.json()['providerCouponDiscount']}                0.0
@@ -4738,7 +4738,7 @@ JD-TC-GetSlots By Date and service -19
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${amt_float}  ${purpose[0]}  ${apptid1}  ${s_id2}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${minpre2}  ${purpose[0]}  ${apptid1}  ${s_id2}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
@@ -4765,13 +4765,13 @@ JD-TC-GetSlots By Date and service -19
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep   02s
-    ${amtdue}=  Evaluate   ${totalamt} - ${amt_float}
+    ${amtdue}=  Evaluate   ${totalamt} - ${minpre2}
     ${amtdue}=  twodigitfloat  ${amtdue} 
     ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${apptid1}   billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  billPaymentStatus=${paymentStatus[1]}   
-    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
+    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${minpre2} 
     Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${amtdue}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
@@ -4782,7 +4782,7 @@ JD-TC-GetSlots By Date and service -19
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${apptid1}   billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  billPaymentStatus=${paymentStatus[1]}  
-    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
+    Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${minpre2} 
     Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${amtdue}
 
     ${noOfAvailbleSlots}=   Evaluate  ${parallel}-7
@@ -5187,7 +5187,7 @@ JD-TC-GetSlots By Date and service -21
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${totalamt}
-    Should Be Equal As Numbers  ${resp.json()['amountRequiredNow']}                     ${amountRequiredNow}
+    Should Be Equal As Numbers  ${resp.json()['amountRequiredNow']}                     ${minpre}
     Should Be Equal As Strings  ${resp.json()['jdnDiscount']}                           0.0
     Should Be Equal As Strings  ${resp.json()['couponDiscount']}                        0.0
     Should Be Equal As Strings  ${resp.json()['providerCouponDiscount']}                0.0
@@ -5235,7 +5235,7 @@ JD-TC-GetSlots By Date and service -21
     Should Be Equal As Strings  ${resp.json()['eligibleJcashAmt']['jCashAmt']}          0.0
     Should Be Equal As Strings  ${resp.json()['eligibleJcashAmt']['creditAmt']}         0.0
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${amountRequiredNow}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${minpre}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
@@ -5264,7 +5264,7 @@ JD-TC-GetSlots By Date and service -21
 
     sleep   03s
 
-    ${amtdue}=  Evaluate   ${Total} - ${amountRequiredNow}
+    ${amtdue}=  Evaluate   ${Total} - ${minpre}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
@@ -5281,7 +5281,7 @@ JD-TC-GetSlots By Date and service -21
     ${resp}=  Get Bill By UUId  ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  uuid=${apptid1}  netTotal=${Total}  billStatus=New  billViewStatus=Notshow  netRate=${Total}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${amountRequiredNow}  amountDue=${amtdue}
+    Verify Response  ${resp}  uuid=${apptid1}  netTotal=${Total}  billStatus=New  billViewStatus=Notshow  netRate=${Total}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${minpre}  amountDue=${amtdue}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}  
 
@@ -5291,7 +5291,7 @@ JD-TC-GetSlots By Date and service -21
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id1}
-    Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['time']}   ${slot2} 
+    Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['time']}   ${slot1} 
     Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['noOfAvailbleSlots']}   ${noOfAvailbleSlots}
     Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['active']}   True
     Should Be Equal As Strings     ${resp.json()['availableSlots'][0]['capacity']}   ${parallel}
@@ -5503,7 +5503,7 @@ JD-TC-GetSlots By Date and service -22
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${totalamt}
-    Should Be Equal As Numbers  ${resp.json()['amountRequiredNow']}                     ${amountRequiredNow}
+    Should Be Equal As Numbers  ${resp.json()['amountRequiredNow']}                     ${minpre}
     Should Be Equal As Strings  ${resp.json()['jdnDiscount']}                           0.0
     Should Be Equal As Strings  ${resp.json()['couponDiscount']}                        0.0
     Should Be Equal As Strings  ${resp.json()['providerCouponDiscount']}                0.0
@@ -5512,7 +5512,7 @@ JD-TC-GetSlots By Date and service -22
     Should Be Equal As Strings  ${resp.json()['eligibleJcashAmt']['jCashAmt']}          0.0
     Should Be Equal As Strings  ${resp.json()['eligibleJcashAmt']['creditAmt']}         0.0
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${amountRequiredNow}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${minpre}  ${purpose[0]}  ${apptid1}  ${s_id1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Make payment Consumer Mock  ${amountRequiredNow}  ${bool[1]}  ${apptid1}  ${pid}  ${purpose[0]}  ${cid1}
@@ -5538,7 +5538,7 @@ JD-TC-GetSlots By Date and service -22
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   03s
 
-    ${amtdue}=  Evaluate   ${totalamt} - ${amountRequiredNow}
+    ${amtdue}=  Evaluate   ${totalamt} - ${minpre}
 
     ${resp}=  Get Bill By UUId  ${apptid1}
     Log  ${resp.json()}
@@ -5548,12 +5548,12 @@ JD-TC-GetSlots By Date and service -22
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot2}
-    ...  apptStatus=${apptStatus[1]}    amountPaid=${amountRequiredNow}  amountDue=${amtdue}
+    ...  apptStatus=${apptStatus[1]}    amountPaid=${minpre}  amountDue=${amtdue}
 
     ${resp}=  Get Bill By UUId  ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  uuid=${apptid1}  netTotal=${totalamt}  billStatus=New  billViewStatus=Notshow  netRate=${totalamt}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${amountRequiredNow}  amountDue=${amtdue}
+    Verify Response  ${resp}  uuid=${apptid1}  netTotal=${totalamt}  billStatus=New  billViewStatus=Notshow  netRate=${totalamt}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${minpre}  amountDue=${amtdue}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}  
 

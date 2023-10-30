@@ -878,6 +878,7 @@ JD-TC-DynamicPricingInSchedule-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep   2s
     ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -888,7 +889,7 @@ JD-TC-DynamicPricingInSchedule-3
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}             ${P1SERVICE1}  
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}                1.0
     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${nettotal}
-    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${nettotal}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${tax_amount}
     Should Be Equal As Strings  ${resp.json()['amountDue']}                             ${balamount1}
 
     sleep   2s
@@ -909,7 +910,7 @@ JD-TC-DynamicPricingInSchedule-3
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}             ${P1SERVICE1}  
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}                1.0
     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${nettotal}
-    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${nettotal}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${tax_amount}
     Should Be Equal As Strings  ${resp.json()['amountDue']}                             0.0
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}

@@ -794,6 +794,7 @@ JD-TC-MonthlySchedule-7
     Log   ${licresp.json()}
     # FOR  ${pos}  IN RANGE  ${liclen}
     Set Test Variable  ${pkgId}  ${licresp.json()[0]['pkgId']}
+    ${pkgId}    Convert To Integer  ${pkgId}
     Set Test Variable  ${pkg_name}  ${licresp.json()[0]['displayName']}
     # END
     ${mlp_length}=   Get Length   ${multilocPro}
@@ -806,7 +807,7 @@ JD-TC-MonthlySchedule-7
 
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
         Log  ${decrypted_data}
-        Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' ==  ${pkgId}
+        Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' ==  '${pkgId}'
                 
     END
 
