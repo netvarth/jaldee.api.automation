@@ -591,7 +591,7 @@ JD-TC-UpdateHoliday-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid2}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
 
       # ${cur_time}=  db.get_time_by_timezone  ${tz}  
     ${cur_time}=  db.get_time_by_timezone  ${tz}    

@@ -2146,7 +2146,7 @@ JD-TC-ChangeAnsStatusForAppt-6
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[2]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Check Answers   ${resp}  ${data}  ${QnrStatus[0]}  ${QnrStatus[0]}
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
