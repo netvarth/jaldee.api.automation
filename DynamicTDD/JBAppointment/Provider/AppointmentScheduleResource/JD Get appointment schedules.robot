@@ -8,6 +8,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Variables ***
 ${SERVICE1}  manicure 
@@ -174,7 +175,7 @@ JD-TC-Get Appointment schedules-3
 JD-TC-Get Appointment schedules-4
     [Documentation]  Get appointment schedule by provider
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -221,6 +222,19 @@ JD-TC-Get Appointment schedules-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()}
+
+    ${resp}=  Get User
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF   not '${resp.content}' == '${emptylist}'
+        ${len}=  Get Length  ${resp.json()}
+    END
+    FOR   ${i}  IN RANGE   0   ${len}
+        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+        IF   not '${user_phone}' == '${HLMUSERNAME9}'
+            clear_users  ${user_phone}
+        END
+    END
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+345
     clear_users  ${PUSERPH0}

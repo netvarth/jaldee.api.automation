@@ -45,7 +45,8 @@ JD-TC-ApplyLabelToService-1
     Set Suite Variable  ${prov_id}  ${decrypted_data['id']}
     # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
-    clear_Label  ${PUSERNAME110}  
+    clear_Label  ${PUSERNAME110} 
+    clear_service   ${PUSERNAME110}  
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

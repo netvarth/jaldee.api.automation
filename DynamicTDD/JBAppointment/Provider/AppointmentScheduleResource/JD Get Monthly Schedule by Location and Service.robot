@@ -803,7 +803,10 @@ JD-TC-MonthlySchedule-7
         ${resp}=  Encrypted Provider Login  ${ml_pro}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' == '${pkgId}'
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' ==  ${pkgId}
                 
     END
 

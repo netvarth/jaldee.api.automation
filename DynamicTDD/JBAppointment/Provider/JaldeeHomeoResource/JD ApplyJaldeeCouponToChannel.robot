@@ -870,8 +870,8 @@ JD-TC-ApplyJaldeeCouponToChannel-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    # Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Jaldee Coupons By Provider  
     Log  ${resp.content}
