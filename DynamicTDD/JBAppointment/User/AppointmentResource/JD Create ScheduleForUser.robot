@@ -417,10 +417,11 @@ JD-TC-CreateScheduleForUser-4
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
     ${resp}=    Get Locations
-    Log  ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
-
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
     ${u_id}=  Create Sample User  admin=${bool[0]}
     Set Suite Variable  ${u_id}
 
@@ -494,6 +495,12 @@ JD-TC-CreateScheduleForUser-5
     ${resp}=  Get Service
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

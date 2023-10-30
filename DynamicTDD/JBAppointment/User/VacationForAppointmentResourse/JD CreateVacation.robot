@@ -425,7 +425,7 @@ JD-TC-CreateVacation-4
     ${resp}=  Create Department  ${dep_name2}  ${dep_code2}  ${dep_desc2}  
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id01}  ${resp.json()}
-    ${number}=  Random Int  min=3000  max=3999
+    ${number}=  Random Int  min=3000  max=5999
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+${number}
     clear_users  ${PUSERNAME_U2}
     Set Suite Variable  ${PUSERNAME_U2}
