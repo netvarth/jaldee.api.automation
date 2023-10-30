@@ -636,8 +636,12 @@ JD-TC-GetQuestionnaireListByProvider-3
         Should Be Equal As Strings  ${resp.json()[${i}]['transactionType']}   ${transactionTypeVal[0]}
         Should Be Equal As Strings  ${resp.json()[${i}]['channel']}   ${ChannelVal[0]}
         Run Keyword And Ignore Error  Should Be Equal As Strings  ${resp.json()[${i}]['captureTime']}   ${captureTimeVal[0]}
-        Check Questions   ${i}   ${resp}   ${unique_qnrids2[${x}]}   ${sheet2}
-        
+        # Check Questions   ${i}   ${resp}   ${unique_qnrids2[${x}]}   ${sheet2}
+        IF   '${status}' == 'PASS'  
+            Check Questions   ${i}   ${resp}   ${unique_qnrids2[${x}]}   ${sheet2}
+        ELSE IF   '${status}' == 'FAIL'  
+            Check Questions   ${i}    ${resp}   ${unique_qnrids[${x}]}   ${sheet1}
+        END
     END
 
 JD-TC-GetQuestionnaireListByProvider-UH1

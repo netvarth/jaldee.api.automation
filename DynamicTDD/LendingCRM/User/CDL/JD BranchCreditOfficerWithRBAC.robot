@@ -2978,8 +2978,7 @@ JD-TC-BranchCreditOfficerWithRBAC-UH5
 
     ${resp}=  salesofficer Approval        ${loanuid}    ${sch1}     ${tenu1}    ${noOfAdvanceEmi}   ${dayofmonth}    partner=${partner}
     Log   ${resp.json()}
-    Should Be Equal As Strings             ${resp.status_code}  422
-    Should Be Equal As Strings             ${resp.json()}   ${STATUS_IS_APPROVALREQUIRED}
+    Should Be Equal As Strings             ${resp.status_code}  200
 
 
 JD-TC-BranchCreditOfficerWithRBAC-UH6

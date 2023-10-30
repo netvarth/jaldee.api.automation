@@ -102,10 +102,18 @@ Check Questions
         # Set Test Variable  ${labelValuesVal${i}}   ${lv} 
         IF  '${type}' == 'list' and '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'
             Set Test Variable  ${labelValuesVal${i}}   ${lv[0]}
+        # ELSE IF  '${type}' == 'list' and '${FieldDTVal${i}}' == '${QnrDatatypes[2]}'
+        #     Set Test Variable  ${labelValuesVal${i}}   ${lv}
         ELSE IF   '${type}' == 'int'
             ${float_lv}=  Convert To Number  ${lv[0]}
             Set Test Variable  ${labelValuesVal${i}}   ${float_lv}
         ELSE IF   '${type}' == 'float'
+            Set Test Variable  ${labelValuesVal${i}}   ${lv}
+        ELSE IF   '${type}' == 'str'
+            Set Test Variable  ${labelValuesVal${i}}   ${lv}
+        ELSE IF   '${type}' == 'NoneType'
+            Set Test Variable  ${labelValuesVal${i}}   ${lv}
+        ELSE IF   '${type}' == 'list'
             Set Test Variable  ${labelValuesVal${i}}   ${lv}
         ELSE
             Set Test Variable  ${labelValuesVal${i}}   ${lv[0]}
@@ -186,8 +194,10 @@ Check Questions
 
         ${value2}=    evaluate    False if $labelValuesVal${x} is None else True
         # Run Keyword If   '${resp.json()['questions'][${i}]['fieldDataType']}' not in @{if_dt_list} and '$labelValuesVal${x}' is not ${None}
-        Run Keyword If   '${resp.json()['questions'][${i}]['fieldDataType']}' not in @{if_dt_list} and '${value2}' != 'False'
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['questions'][${i}]['labelValues']}   ${labelValuesVal${x}}
+        IF   '${resp.json()['questions'][${i}]['fieldDataType']}' not in @{if_dt_list} and '${value2}' != 'False'
+            Log  ${labelValuesVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['questions'][${i}]['labelValues']}   ${labelValuesVal${x}}
+        END 
         
         Run Keyword If  '${resp.json()['questions'][${i}]['fieldDataType']}' == '${QnrDatatypes[1]}'
         ...    Run Keywords
@@ -362,7 +372,7 @@ JD-TC-ProviderGetQuestionnaireById-1
         
     END
 
-*** COMMENT *** 
+# *** COMMENT *** 
 
 JD-TC-ProviderGetQuestionnaireById-2
     [Documentation]  Get questionnaire by id after uploading the same file again

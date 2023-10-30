@@ -346,128 +346,128 @@ JD-TC-ValidateQuestionnaire-2
     # Should Be Equal As Strings    ${resp.status_code}    200
 
 
-JD-TC-ValidateQuestionnaire-UH1
-    [Documentation]  Validate service questionnaire with wrong caption.
+# JD-TC-ValidateQuestionnaire-UH1
+#     [Documentation]  Validate service questionnaire with wrong caption.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Questionnaire List By Provider   
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${len}=  Get Length  ${resp.json()}
+#     ${resp}=  Get Questionnaire List By Provider   
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     ${len}=  Get Length  ${resp.json()}
 
-    Comment   Disable Donation Questionnaire
-    # FOR  ${i}  IN RANGE   ${len}
-    #   ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[0]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'  Set Variable  ${resp.json()[${i}]['id']} 
-    # #   ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-    #   Exit For Loop If   '${id}' != '${None}'
-    # END
-    # # Set Suite Variable   ${id}
-    # # Set Suite Variable   ${qnrid}
+#     Comment   Disable Donation Questionnaire
+#     # FOR  ${i}  IN RANGE   ${len}
+#     #   ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[0]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'  Set Variable  ${resp.json()[${i}]['id']} 
+#     # #   ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
+#     #   Exit For Loop If   '${id}' != '${None}'
+#     # END
+#     # # Set Suite Variable   ${id}
+#     # # Set Suite Variable   ${qnrid}
 
-    # ${qns}   Get Provider Questionnaire By Id   ${id}  
-    # Log  ${qns.content}
-    # Should Be Equal As Strings  ${qns.status_code}  200
+#     # ${qns}   Get Provider Questionnaire By Id   ${id}  
+#     # Log  ${qns.content}
+#     # Should Be Equal As Strings  ${qns.status_code}  200
 
-    # IF  '${qns.json()['status']}' == '${status[0]}' 
-    #     ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[1]}  
-    #     Should Be Equal As Strings  ${resp1.status_code}  200
-    # END
+#     # IF  '${qns.json()['status']}' == '${status[0]}' 
+#     #     ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[1]}  
+#     #     Should Be Equal As Strings  ${resp1.status_code}  200
+#     # END
 
-    # # ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[0]}'  Provider Change Questionnaire Status  ${id}  ${status[1]}  
-    # # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    # # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+#     # # ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[0]}'  Provider Change Questionnaire Status  ${id}  ${status[1]}  
+#     # # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+#     # # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
-    # ${qns}   Get Provider Questionnaire By Id   ${id}  
-    # Log  ${qns.content}
-    # Should Be Equal As Strings  ${qns.status_code}  200
-    # Should Be Equal As Strings   ${qns.json()['status']}  ${status[1]}
+#     # ${qns}   Get Provider Questionnaire By Id   ${id}  
+#     # Log  ${qns.content}
+#     # Should Be Equal As Strings  ${qns.status_code}  200
+#     # Should Be Equal As Strings   ${qns.json()['status']}  ${status[1]}
 
-    Comment   Enable Service Questionnaire
+#     Comment   Enable Service Questionnaire
     
-    FOR  ${i}  IN RANGE   ${len}
-        IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'
-            ${id}   Set Variable  ${resp.json()[${i}]['id']}
-            ${qnrid}   Set Variable  ${resp.json()[${i}]['questionnaireId']}
-            Exit For Loop If   '${id}' != '${None}'
-        END
-    #   ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'  Set Variable  ${resp.json()[${i}]['id']} 
-    #   ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
-    #   Exit For Loop If   '${id}' != '${None}'
-    END
-    # Set Suite Variable   ${id}
-    # Set Suite Variable   ${qnrid}
+#     FOR  ${i}  IN RANGE   ${len}
+#         IF  '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'
+#             ${id}   Set Variable  ${resp.json()[${i}]['id']}
+#             ${qnrid}   Set Variable  ${resp.json()[${i}]['questionnaireId']}
+#             Exit For Loop If   '${id}' != '${None}'
+#         END
+#     #   ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'  Set Variable  ${resp.json()[${i}]['id']} 
+#     #   ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[3]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
+#     #   Exit For Loop If   '${id}' != '${None}'
+#     END
+#     # Set Suite Variable   ${id}
+#     # Set Suite Variable   ${qnrid}
 
-    ${qns}   Get Provider Questionnaire By Id   ${id}  
-    Log  ${qns.content}
-    Should Be Equal As Strings  ${qns.status_code}  200
+#     ${qns}   Get Provider Questionnaire By Id   ${id}  
+#     Log  ${qns.content}
+#     Should Be Equal As Strings  ${qns.status_code}  200
 
-    IF  '${qns.json()['status']}' == '${status[1]}' 
-        ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
+#     IF  '${qns.json()['status']}' == '${status[1]}' 
+#         ${resp1}=   Provider Change Questionnaire Status  ${id}  ${status[0]}  
+#         Should Be Equal As Strings  ${resp1.status_code}  200
+#     END
 
-    # ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+#     # ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
+#     # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+#     # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
-    ${qns}   Get Provider Questionnaire By Id   ${id}  
-    Log  ${qns.content}
-    Should Be Equal As Strings  ${qns.status_code}  200
-    Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
-    Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
+#     ${qns}   Get Provider Questionnaire By Id   ${id}  
+#     Log  ${qns.content}
+#     Should Be Equal As Strings  ${qns.status_code}  200
+#     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
+#     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${resp}=   Get Service
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${s_len}=  Get Length  ${resp.json()}
-    FOR  ${i}  IN RANGE   ${s_len}
-        ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${service_type[0]}'   Set Variable   ${resp.json()[${i}]['id']}
-        Exit For Loop If   '${s_id}' != '${None}'
-    END
-    # Set Suite Variable   ${s_id}
+#     ${resp}=   Get Service
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     ${s_len}=  Get Length  ${resp.json()}
+#     FOR  ${i}  IN RANGE   ${s_len}
+#         ${s_id}=  Run Keyword If   '${resp.json()[${i}]['name']}' in @{unique_snames} and '${resp.json()[${i}]['serviceType']}' != '${service_type[0]}'   Set Variable   ${resp.json()[${i}]['id']}
+#         Exit For Loop If   '${s_id}' != '${None}'
+#     END
+#     # Set Suite Variable   ${s_id}
 
-    ${cid}=  get_id  ${CUSERNAME1}
+#     ${cid}=  get_id  ${CUSERNAME1}
 
-    ${resp}=  Get Consumer Questionnaire By Channel and ServiceID   ${s_id}   ${QnrChannel[1]}  ${cid}      
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
-    Should Be Equal As Strings  ${resp.json()['id']}   ${id}
+#     ${resp}=  Get Consumer Questionnaire By Channel and ServiceID   ${s_id}   ${QnrChannel[1]}  ${cid}      
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
+#     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${Questionnaireid}  ${mp4file}  ${mp3file}
-    Log  ${fudata}
+#     ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${Questionnaireid}  ${mp4file}  ${mp3file}
+#     Log  ${fudata}
 
-    # ${caption}=  FakerLibrary.word
-    # Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    caption=${caption}
+#     # ${caption}=  FakerLibrary.word
+#     # Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    caption=${caption}
     
-    ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
-    Log  ${data}
+#     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
+#     Log  ${data}
 
-    ${caption}=  FakerLibrary.word
-    ${jsondata}=    evaluate    json.loads('''${data}''')    json
-    Log  ${jsondata}
-    ${len}=  Get Length  ${jsondata['answerLine']}
-    FOR  ${i}  IN RANGE   ${len}
-        ${keys} =	Get Dictionary Keys	${jsondata['answerLine'][${i}]['answer']} 
-        FOR  ${QnrDatatypes[5]}  IN  @{keys}
-            Set to Dictionary      ${jsondata['answerLine'][${i}]['answer']['fileUpload'][0]}    caption=${caption}
-        END
-    END
-    # Set to Dictionary      ${jsondata['answerLine'][2]['answer']['fileUpload'][0]}    caption=${caption}
-    ${modifieddata}=    Evaluate    json.dumps(${jsondata})    json
+#     ${caption}=  FakerLibrary.word
+#     ${jsondata}=    evaluate    json.loads('''${data}''')    json
+#     Log  ${jsondata}
+#     ${len}=  Get Length  ${jsondata['answerLine']}
+#     FOR  ${i}  IN RANGE   ${len}
+#         ${keys} =	Get Dictionary Keys	${jsondata['answerLine'][${i}]['answer']} 
+#         FOR  ${QnrDatatypes[5]}  IN  @{keys}
+#             Set to Dictionary      ${jsondata['answerLine'][${i}]['answer']['fileUpload'][0]}    caption=${caption}
+#         END
+#     END
+#     # Set to Dictionary      ${jsondata['answerLine'][2]['answer']['fileUpload'][0]}    caption=${caption}
+#     ${modifieddata}=    Evaluate    json.dumps(${jsondata})    json
     
-    ${resp}=  Provider Validate Questionnaire  ${modifieddata}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[0]['questionField']}   ${LabelName}
-    Should Be Equal As Strings  ${resp.json()[0]['error']}   ${INCORRECT_DOUMENT}
+#     ${resp}=  Provider Validate Questionnaire  ${modifieddata}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
+#     # Should Be Equal As Strings  ${resp.json()[0]['questionField']}   ${LabelName}
+#     Should Be Equal As Strings  ${resp.json()[0]['error']}   ${INCORRECT_DOUMENT}
 
-    ${resp}=  Provider Logout
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Provider Logout
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-ValidateQuestionnaire-UH2

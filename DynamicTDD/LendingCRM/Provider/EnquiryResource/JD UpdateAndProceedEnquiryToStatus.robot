@@ -111,8 +111,11 @@ JD-TC-UpdateandProceedEnquiry-1
     Should Be Equal As Strings  ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_id1}
     Should Be Equal As Strings  ${resp.json()['status']['name']}  ${status_name1}
-    ${current_datetime}=  Get Current Date
-    ${formatted_time}=  Convert Date  ${current_datetime}  result_format=dd-MM-yyyy HH:mm
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime}    ${time.json()} 
+    ${formatted_time}    Convert Date    ${datetime}    result_format=%d-%m-%Y %H:%M
     Run Keyword And Continue On Failure     Should Contain  ${resp.json()['createdDateString']}   ${formatted_time} 
 
 

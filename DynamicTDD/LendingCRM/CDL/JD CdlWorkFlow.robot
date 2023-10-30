@@ -1698,10 +1698,10 @@ JD-TC-CdlWorkFlow-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime15}    ${resp.json()} 
-    ${datetime015}    Convert Date    ${datetime15}    result_format=%Y-%m-%d %H:%M
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[10]}
+    ${datetime015}    Convert Date    ${datetime15}    result_format=%Y-%m-%d %H:%M
     Run Keyword And Continue On Failure     Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime015}

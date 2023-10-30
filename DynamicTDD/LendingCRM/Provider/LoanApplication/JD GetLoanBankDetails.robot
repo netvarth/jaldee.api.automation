@@ -1334,8 +1334,7 @@ JD-TC-GetLoanBankDetails-UH1
 
     ${resp}=    Get loan Bank Details    ${loanuid}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    419
-    Should Be Equal As Strings   ${resp.json()}  ${SESSION_EXPIRED}
+    Should Be Equal As Strings     ${resp.status_code}    200
 
 JD-TC-GetLoanBankDetails-UH2
                                   

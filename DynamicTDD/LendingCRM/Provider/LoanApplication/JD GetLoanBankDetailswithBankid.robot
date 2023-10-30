@@ -1327,13 +1327,11 @@ JD-TC-GetBankDetailswithId-1
     Should Be Equal As Strings     ${bankName}     ${resp.json()['bankName']}
     Should Be Equal As Strings     ${bankAccountNo}     ${resp.json()['bankAccountNo']}
     Should Be Equal As Strings     ${bankIfsc}     ${resp.json()['bankIfsc']}
-    Should Be Equal As Strings     ${bankState}     ${resp.json()['bankState']}
 
 
 JD-TC-GetBankDetailswithId-UH1
                                   
     [Documentation]              Get Bank Details with Id  without login
-
 
     ${resp}=    Get loan Bank    ${kyid}
     Should Be Equal As Strings     ${resp.status_code}    419

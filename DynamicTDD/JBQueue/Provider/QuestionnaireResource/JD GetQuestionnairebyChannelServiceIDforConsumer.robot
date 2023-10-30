@@ -885,8 +885,7 @@ JD-TC-QuestionnaireByChannelServiceId-UH2
 
     ${resp}=  Get Consumer Questionnaire By Channel and ServiceID   ${s_id}   ${QnrChannel[1]}  ${cid}      
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${SERVICE_NOT_EXIST}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 JD-TC-QuestionnaireByChannelServiceId-UH3

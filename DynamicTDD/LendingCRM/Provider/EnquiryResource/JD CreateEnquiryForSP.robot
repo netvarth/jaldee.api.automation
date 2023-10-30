@@ -20,6 +20,7 @@ ${en_temp_name}   EnquiryName
 
 *** Test Cases ***
 JD-TC-Create Enquiry For SP-1
+
     [Documentation]   Create Enquiry for an Independant Service Provider.
 
     ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD} 
@@ -140,8 +141,11 @@ JD-TC-Create Enquiry For SP-1
     Should Be Equal As Strings  ${resp.json()['id']}   ${en_id}
     Should Be Equal As Strings  ${resp.json()['uid']}   ${en_uid}
     Should Be Equal As Strings  ${resp.json()['accountId']}   ${account_id}
-    ${current_datetime}=  Get Current Date
-    ${formatted_time}=  Convert Date  ${current_datetime}  result_format=dd-MM-yyyy HH:mm
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime}    ${time.json()} 
+    ${formatted_time}    Convert Date    ${datetime}    result_format=%d-%m-%Y %H:%M
     Run Keyword And Continue On Failure     Should Contain  ${resp.json()['createdDateString']}   ${formatted_time} 
 
     ${resp}=    Get Provider Tasks
@@ -150,6 +154,7 @@ JD-TC-Create Enquiry For SP-1
 
 
 JD-TC-Create Enquiry For SP-2
+
     [Documentation]   Create Enquiry with title and description. 
 
     # clear_enquiry  ${PUSERNAME26}
