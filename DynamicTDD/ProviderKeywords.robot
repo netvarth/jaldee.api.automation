@@ -11363,3 +11363,18 @@ Get Treatment Plan By Dental Id
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/dental/${id}  expected_status=any
     [Return]  ${resp}
+
+# --------- Finance ----------
+Auto Invoice Generation For Catalog
+
+   [Arguments]  ${catalogId}      ${toggle} 
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/catalog/${catalogId}/invoicegeneration/${toggle}   expected_status=any
+   [Return]  ${resp}
+
+Auto Invoice Generation For Service
+
+   [Arguments]  ${serviceId}      ${toggle} 
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/services/${serviceId}/invoicegeneration/${toggle}   expected_status=any
+   [Return]  ${resp}
