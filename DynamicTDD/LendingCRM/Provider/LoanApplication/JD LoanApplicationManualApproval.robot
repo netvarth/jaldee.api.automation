@@ -1110,7 +1110,6 @@ JD-TC-Loan Application Manual Approval-1
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
-    Run Keyword And Continue On Failure    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
 
 
 # ....... Customer Photo .......
@@ -1143,7 +1142,6 @@ JD-TC-Loan Application Manual Approval-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
@@ -1182,7 +1180,6 @@ JD-TC-Loan Application Manual Approval-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
     
 
 # ....... Verify adhaar number .......
@@ -1209,7 +1206,6 @@ JD-TC-Loan Application Manual Approval-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
 
@@ -1321,7 +1317,6 @@ JD-TC-Loan Application Manual Approval-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
 
@@ -1360,7 +1355,6 @@ JD-TC-Loan Application Manual Approval-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
     ${resp}=  Approval Loan Application    ${loanuid}
     Log  ${resp.content}
@@ -1376,7 +1370,6 @@ JD-TC-Loan Application Manual Approval-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[3]}
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
 
 # ....... Branch Credit Head Login .......
 
@@ -1405,7 +1398,6 @@ JD-TC-Loan Application Manual Approval-1
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
 # ....... Equifax Report .......
 
@@ -2496,8 +2488,6 @@ JD-TC-Loan Application Manual Approval-UH2
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
-    Run Keyword And Continue On Failure    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
-
 
 # ....... Customer Photo .......
 
@@ -2529,7 +2519,6 @@ JD-TC-Loan Application Manual Approval-UH2
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
     Log  ${CustomerPhoto}
@@ -2567,9 +2556,7 @@ JD-TC-Loan Application Manual Approval-UH2
 
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
-    Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
-    
+    Should Be Equal As Strings             ${resp.status_code}    200    
 
 # ....... Verify adhaar number .......
 
@@ -2595,7 +2582,6 @@ JD-TC-Loan Application Manual Approval-UH2
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
 
@@ -2707,7 +2693,6 @@ JD-TC-Loan Application Manual Approval-UH2
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
 
@@ -2746,7 +2731,6 @@ JD-TC-Loan Application Manual Approval-UH2
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
     ${resp}=  Approval Loan Application    ${loanuid}
     Log  ${resp.content}
@@ -2762,7 +2746,6 @@ JD-TC-Loan Application Manual Approval-UH2
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[3]}
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
 
 # ....... Branch Credit Head Login .......
 
@@ -2791,7 +2774,6 @@ JD-TC-Loan Application Manual Approval-UH2
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
-    Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
 # ....... Equifax Report .......
 

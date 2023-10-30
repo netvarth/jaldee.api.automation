@@ -1099,17 +1099,18 @@ JD-TC-Loan Approval-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime1}    ${resp.json()}   
-    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=                               Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]} 
     Set Suite Variable                     ${ref_no}              ${resp.json()['referenceNo']}
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime1}    ${time.json()}   
+    ${datetime01}    Convert Date    ${datetime1}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain                         ${resp.json()["lastStatusUpdatedDate"]}    ${datetime01}
 
 
@@ -1133,16 +1134,17 @@ JD-TC-Loan Approval-1
 
 # ....... Save Customer Details .......
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime2}    ${resp.json()} 
-    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
     Set Test Variable                      ${kycid}               ${resp.json()["loanApplicationKycList"][0]["id"]}
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime2}    ${time.json()} 
+    ${datetime02}    Convert Date    ${datetime2}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime02}
 
     ${CustomerPhoto}=  Create Dictionary   action=${LoanAction[0]}    owner=${cust_id}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}    driveId=${driveId}   ownerType=${ownerType[0]}   type=photo
@@ -1173,15 +1175,17 @@ JD-TC-Loan Approval-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime3}    ${resp.json()} 
-    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime3}    ${time.json()} 
+    ${datetime03}    Convert Date    ${datetime3}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime03}
     
 
@@ -1200,15 +1204,16 @@ JD-TC-Loan Approval-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime4}    ${resp.json()} 
-    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime4}    ${time.json()} 
+    ${datetime04}    Convert Date    ${datetime4}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime04}
 
 # ....... Customer PAN attachment .......
@@ -1313,15 +1318,16 @@ JD-TC-Loan Approval-1
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime5}    ${resp.json()} 
-    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime5}    ${time.json()} 
+    ${datetime05}    Convert Date    ${datetime5}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime05}
 
 # ....... Update Bank Details to loan .......
@@ -1352,31 +1358,33 @@ JD-TC-Loan Approval-1
 
 # ....... Loan application approvalrequest .......
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime6}    ${resp.json()} 
-    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime6}    ${time.json()} 
+    ${datetime06}    Convert Date    ${datetime6}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime06}
 
     ${resp}=  Approval Loan Application    ${loanuid}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime7}    ${resp.json()} 
-    ${datetime07}    Convert Date    ${datetime7}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[3]}
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime7}    ${time.json()} 
+    ${datetime07}    Convert Date    ${datetime7}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime07}
 
 # ....... Branch Credit Head Login .......
@@ -1397,15 +1405,16 @@ JD-TC-Loan Approval-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${datetime8}    ${resp.json()} 
 
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime9}    ${resp.json()} 
-    ${datetime09}    Convert Date    ${datetime9}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=  Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime9}    ${time.json()} 
+    ${datetime09}    Convert Date    ${datetime9}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime09}
 
 # ....... Equifax Report .......
@@ -1439,17 +1448,17 @@ JD-TC-Loan Approval-1
     Log    ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-
-    ${resp}=  Get Date Time by Timezone  ${tz}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${datetime10}    ${resp.json()} 
-    ${datetime010}    Convert Date    ${datetime10}    result_format=%Y-%m-%d %H:%M
-
     ${resp}=                               Get Loan Application By uid           ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}                   200
     Should Be Equal As Strings             ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
+
+    ${time}=  Get Date Time by Timezone  ${tz}
+    Log  ${time.content}
+    Should Be Equal As Strings  ${time.status_code}  200
+    Set Suite Variable      ${datetime10}    ${time.json()} 
+    ${datetime010}    Convert Date    ${datetime10}    result_format=%Y-%m-%d %H:%M
+
     Run Keyword And Continue On Failure    Should Contain             ${resp.json()["lastStatusUpdatedDate"]}    ${datetime010}
 
 # ....... Login Sales Officer and Request for Approval .......

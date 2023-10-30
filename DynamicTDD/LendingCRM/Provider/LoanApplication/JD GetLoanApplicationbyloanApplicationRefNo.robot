@@ -702,30 +702,30 @@ JD-TC-GetLoanApplicationbyRefNo-1
     Log  ${PH_Number}
     Set Suite Variable                     ${phone}  555${PH_Number}
 
-    ${dealerfname}=                        FakerLibrary.name
-    ${dealername}=                         FakerLibrary.bs
-    ${dealerlname}=                        FakerLibrary.last_name
+    ${dlrfname}=                        FakerLibrary.name
+    ${dlrname}=                         FakerLibrary.bs
+    ${dlrlname}=                        FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date Of Birth    minimum_age=23   maximum_age=55
     ${dob}=  Convert To String             ${dob} 
-    Set Test Variable                      ${email}  ${phone}.${dealerfname}.${test_mail}
+    Set Test Variable                      ${email}  ${phone}.${dlrfname}.${test_mail}
    
-    ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dealername}   partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
+    ${resp}=                               Generate Phone Partner Creation   ${phone}    ${countryCodes[0]}    partnerName=${dlrname}   partnerUserFirstName=${dlrfname}  partnerUserLastName=${dlrlname}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}   200
    
     ${branch}=      Create Dictionary      id=${branchid}
 
-    ${resp}=                               Verify Phone Partner Creation    ${phone}   ${OtpPurpose['ProviderVerifyPhone']}    ${dealerfname}   ${dealerlname}   branch=${branch}    partnerUserFirstName=${dealerfname}  partnerUserLastName=${dealerlname}
+    ${resp}=                               Verify Phone Partner Creation    ${phone}   ${OtpPurpose['ProviderVerifyPhone']}    ${dlrfname}   ${dlrlname}   branch=${branch}    partnerUserFirstName=${dlrfname}  partnerUserLastName=${dlrlname}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}   200
-    Set Suite Variable                     ${partid1}            ${resp.json()['id']}
-    Set Suite Variable                     ${partuid1}           ${resp.json()['uid']} 
+    Set Suite Variable                     ${partnerid}            ${resp.json()['id']}
+    Set Suite Variable                     ${partneruid}           ${resp.json()['uid']} 
 
     ${resp}=                               Generate OTP for partner Email  ${email}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}   200
 
-    ${resp}=                               Verify OTP for Partner Email  ${email}  ${partid1}
+    ${resp}=                               Verify OTP for Partner Email  ${email}  ${partnerid}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}   200
 
@@ -738,7 +738,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${caption}=                            Fakerlibrary.Sentence
     Set Suite Variable   ${caption}
 
-    ${resp}=                               upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    ${resp}=                               upload file to temporary location    ${file_action[0]}    ${partnerid}    ${ownerType[0]}    ${dlrfname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}   200 
     Set Test Variable                      ${driveId}    ${resp.json()[0]['driveId']}
@@ -756,7 +756,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${caption2}=                           Fakerlibrary.Sentence
     Set Suite Variable   ${caption2}
 
-    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pngfile}    ${fileSize}    ${caption2}    ${fileType2}    ${EMPTY}    ${order}
+    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partnerid}    ${ownerType[0]}    ${dlrfname}    ${pngfile}    ${fileSize}    ${caption2}    ${fileType2}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200 
     Set Test Variable                      ${driveId}             ${resp.json()[0]['driveId']}
@@ -774,7 +774,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${caption3}=                           Fakerlibrary.Sentence
     Set Suite Variable   ${caption3}
 
-    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${EMPTY}    ${order}
+    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partnerid}    ${ownerType[0]}    ${dlrfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200 
     Set Test Variable                      ${driveId}        ${resp.json()[0]['driveId']}
@@ -792,7 +792,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${caption4}=                           Fakerlibrary.Sentence
     Set Suite Variable  ${caption4}
 
-    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${jpgfile2}    ${fileSize}    ${caption4}    ${fileType4}    ${EMPTY}    ${order}
+    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partnerid}    ${ownerType[0]}    ${dlrfname}    ${jpgfile2}    ${fileSize}    ${caption4}    ${fileType4}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200 
     Set Test Variable                      ${driveId}    ${resp.json()[0]['driveId']}
@@ -808,7 +808,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     Log  ${pan}
     Set Suite Variable                     ${pan}  55555${pan}
 
-    ${resp}=                               Update Partner Pan  ${pan}    ${partuid1}    ${LoanAction[0]}    ${partid1}    ${jpgfile2}    ${fileSize}    ${caption4}    ${fileType4}    ${order}
+    ${resp}=                               Update Partner Pan  ${pan}    ${partneruid}    ${LoanAction[0]}    ${partnerid}    ${jpgfile2}    ${fileSize}    ${caption4}    ${fileType4}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
@@ -821,7 +821,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${caption3}=                           Fakerlibrary.Sentence
     Set Suite Variable   ${caption3}
 
-    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${EMPTY}    ${order}
+    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partnerid}    ${ownerType[0]}    ${dlrfname}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200 
     Set Test Variable                      ${driveId}    ${resp.json()[0]['driveId']}
@@ -837,7 +837,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     Log  ${gstin}
     Set Suite Variable                     ${gstin}  55555${gstin}
 
-    ${resp}=    Validate Gst               ${partuid1}  ${gstin}
+    ${resp}=    Validate Gst               ${partneruid}  ${gstin}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
@@ -850,7 +850,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${caption}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption}
 
-    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partnerid}    ${ownerType[0]}    ${dlrfname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200 
     Set Test Variable                      ${driveId}    ${resp.json()[0]['driveId']}
@@ -868,7 +868,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${caption2}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption2}
 
-    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partid1}    ${ownerType[0]}    ${dealerfname}    ${pngfile}    ${fileSize}    ${caption2}    ${fileType2}    ${EMPTY}    ${order}
+    ${resp}                                upload file to temporary location    ${file_action[0]}    ${partnerid}    ${ownerType[0]}    ${dlrfname}    ${pngfile}    ${fileSize}    ${caption2}    ${fileType2}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200 
     Set Test Variable                      ${driveId}    ${resp.json()[0]['driveId']}
@@ -890,45 +890,45 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${bankName}                            FakerLibrary.name
     Set Suite Variable   ${bankName}
 
-    ${resp}    Verify Partner Bank         ${partid1}    ${partuid1}     ${bankAccountNo}    ${bankIfsc}     bankName=${bankName}
+    ${resp}    Verify Partner Bank         ${partnerid}    ${partneruid}     ${bankAccountNo}    ${bankIfsc}     bankName=${bankName}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}    Update Partner Bank         ${bankAccountNo}    ${bankIfsc}    ${bankName}    ${partuid1}    ${LoanAction[0]}    ${partid1}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${order}
+    ${resp}    Update Partner Bank         ${bankAccountNo}    ${bankIfsc}    ${bankName}    ${partneruid}    ${LoanAction[0]}    ${partnerid}    ${pdffile}    ${fileSize}    ${caption3}    ${fileType3}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200 
 
 # ....... Partner Details .......
 
-    ${aadhaarAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${partid1}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
+    ${aadhaarAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${partnerid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption3}  fileType=${fileType3}  order=${order}
     ${aadhaarAttachments}=                 Create List  ${aadhaarAttachments}
 
-    ${panAttachments}=                     Create Dictionary   action=${LoanAction[0]}  owner=${partid1}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}
+    ${panAttachments}=                     Create Dictionary   action=${LoanAction[0]}  owner=${partnerid}  fileName=${pngfile}  fileSize=${fileSize}  caption=${caption2}  fileType=${fileType2}  order=${order}
     ${panAttachments}=                     Create List  ${panAttachments}
 
-    ${gstAttachments}=                     Create Dictionary   action=${LoanAction[0]}  owner=${partid1}  fileName=${jpgfile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    ${gstAttachments}=                     Create Dictionary   action=${LoanAction[0]}  owner=${partnerid}  fileName=${jpgfile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     ${gstAttachments}=                     Create List  ${gstAttachments}
 
-    ${licenceAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${partid1}  fileName=${jpgfile2}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
+    ${licenceAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${partnerid}  fileName=${jpgfile2}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
     ${licenceAttachments}=                 Create List  ${licenceAttachments}
 
-    ${partnerAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${partid1}  fileName=${gif}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
+    ${partnerAttachments}=                 Create Dictionary   action=${LoanAction[0]}  owner=${partnerid}  fileName=${gif}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
     ${partnerAttachments}=                 Create List  ${partnerAttachments}
 
-    ${storeAttachments}=                   Create Dictionary   action=${LoanAction[0]}  owner=${partid1}  fileName=${xlsx}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
+    ${storeAttachments}=                   Create Dictionary   action=${LoanAction[0]}  owner=${partnerid}  fileName=${xlsx}  fileSize=${fileSize}  caption=${caption4}  fileType=${fileType4}  order=${order}
     ${storeAttachments}=                   Create List  ${storeAttachments}
 
     ${description}=                        FakerLibrary.sentence
     ${partnerCity}=                        FakerLibrary.city
     ${partnerAliasName}                    FakerLibrary.name
 
-    ${resp}=    Partner Details            ${partuid1}    ${dealername}    ${phone}    ${email}    ${description}     ${Ptypeid}    ${Pcategoryid}    ${address1}    ${address2}    ${pin}    ${partnerCity}    ${district}    ${state}    ${aadhaar}    ${pan}    ${gstin}    ${branch}    ${partnerAliasName}    ${aadhaarAttachments}    ${panAttachments}    ${gstAttachments}    ${licenceAttachments}    ${partnerAttachments}    ${storeAttachments}   
+    ${resp}=    Partner Details            ${partneruid}    ${dlrname}    ${phone}    ${email}    ${description}     ${Ptypeid}    ${Pcategoryid}    ${address1}    ${address2}    ${pin}    ${partnerCity}    ${district}    ${state}    ${aadhaar}    ${pan}    ${gstin}    ${branch}    ${partnerAliasName}    ${aadhaarAttachments}    ${panAttachments}    ${gstAttachments}    ${licenceAttachments}    ${partnerAttachments}    ${storeAttachments}   
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200 
 
 # ....... Approval Request .......
 
-    ${resp}=   Partner Approval Request    ${partuid1}
+    ${resp}=   Partner Approval Request    ${partneruid}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
@@ -948,7 +948,7 @@ JD-TC-GetLoanApplicationbyRefNo-1
     ${note}=                               FakerLibrary.sentence
     Set Suite Variable   ${note}
 
-    ${resp}=   Partner Approved            ${partuid1}              ${note}
+    ${resp}=   Partner Approved            ${partneruid}              ${note}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}      200
 
@@ -956,17 +956,17 @@ JD-TC-GetLoanApplicationbyRefNo-1
 
     ${Salesofficer}=  Create Dictionary    id=${SO}  isDefault=${bool[1]}
 
-    ${resp}=    Update Sales Officer       ${partuid1}    ${Salesofficer}
+    ${resp}=    Update Sales Officer       ${partneruid}    ${Salesofficer}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
     ${Creditofficer}=  Create Dictionary   id=${BCH}    isDefault=${bool[1]}
 
-    ${resp}=    Update Credit Officer      ${partuid1}      ${Creditofficer}
+    ${resp}=    Update Credit Officer      ${partneruid}      ${Creditofficer}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 
-    ${resp}=    Activate Partner           ${partuid1}     ${bool[1]}
+    ${resp}=    Activate Partner           ${partneruid}     ${bool[1]}
     Log  ${resp.content}
     Should Be Equal As Strings             ${resp.status_code}    200
 

@@ -697,9 +697,9 @@ JD-TC-Update loan Application Kyc Details-1
     Set Suite Variable                     ${loanproductSubcatid}   ${resp.json()[0]['id']}
    
     ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>6d}'
     Log  ${PH_Number}
-    Set Suite Variable                     ${phone}  555${PH_Number}
+    Set Suite Variable                     ${phone}  5555${PH_Number}
 
     ${dealerfname}=                        FakerLibrary.name
     ${dealername}=                         FakerLibrary.bs
