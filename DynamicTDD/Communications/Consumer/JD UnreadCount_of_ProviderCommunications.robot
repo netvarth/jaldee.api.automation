@@ -571,6 +571,24 @@ JD-TC-Unread Count of Provider Communications-BRANCH-5
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep   02s
 
+    ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
