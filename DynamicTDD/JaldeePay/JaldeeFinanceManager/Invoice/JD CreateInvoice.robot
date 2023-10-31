@@ -14,6 +14,21 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
+*** Variables ***
+
+${jpgfile}      /ebs/TDD/uploadimage.jpg
+${pngfile}      /ebs/TDD/upload.png
+${pdffile}      /ebs/TDD/sample.pdf
+${jpgfile2}      /ebs/TDD/small.jpg
+${gif}      /ebs/TDD/sample.gif
+${xlsx}      /ebs/TDD/qnr.xlsx
+
+${order}    0
+${fileSize}  0.00458
+
+@{status}    New     Pending    Assigned     Approved    Rejected
+@{New_status}    Proceed     Unassign    Block     Delete    Remove
+
 *** Test Cases ***
 
 
@@ -61,7 +76,7 @@ JD-TC-CreateInvoice-1
 
     ${name1}=   FakerLibrary.word
     Set Suite Variable   ${name1}
-    ${resp}=  Create Category   ${name1}  ${categoryType[4]} 
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
@@ -144,7 +159,10 @@ JD-TC-CreateInvoice-1
     ${resp1}=  AddCustomer  ${CUSERNAME11}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Set Suite Variable  ${pcid18}   ${resp1.json()}
+    Set Suite Variable   ${pcid18}   ${resp1.content}
+
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Suite Variable  ${providerConsumerIdList}   
 
 
     ${referenceNo}=   Random Int  min=5  max=200
@@ -157,8 +175,22 @@ JD-TC-CreateInvoice-1
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
+
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+    ${rate}=   Random Int  min=50  max=1000
+
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    # ${itemList}=    Create List    ${itemList}
+
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${status_id1}   ${resp.json()}
+
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uid']}
@@ -194,7 +226,7 @@ JD-TC-CreateInvoice-2
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${EMPTY}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    ${resp}=  Create Invoice   ${category_id2}  ${EMPTY}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_INVOICE_AMOUNT}

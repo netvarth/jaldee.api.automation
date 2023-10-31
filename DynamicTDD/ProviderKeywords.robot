@@ -10648,8 +10648,17 @@ Upload Finance Expense Attachment
 
 Create Invoice
 
-    [Arguments]    ${invoiceCategoryId}  ${amount}  ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorId}  ${invoiceId}    ${providerConsumerId}    &{kwargs}
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}   amount=${amount}  invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorId=${vendorId}  invoiceId=${invoiceId}    providerConsumerId=${providerConsumerId}
+    [Arguments]    ${invoiceCategoryId}  ${amount}  ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorId}  ${invoiceId}    ${providerConsumerIdList}  @{vargs}   &{kwargs}
+
+     ${len}=  Get Length  ${vargs}
+    ${itemList}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${itemList}  ${vargs[${index}]}
+    END
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}   amount=${amount}  invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorId=${vendorId}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   itemList=${itemList} 
+
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
