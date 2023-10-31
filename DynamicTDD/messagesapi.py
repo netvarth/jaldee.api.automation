@@ -2075,7 +2075,7 @@ INVALID_PAYMENTSOUT_AMOUNT="Invalid PaymentsOut Amount"
 RECEIVED_DATE_CANNOT_BE_EMPTY="PaymentsIn Received Date cannot be empty"
 INVALID_PAYMENTSIN_CATEGORY="Invalid PaymentsIn Category"
 INVALID_PAYMENTSIN_ID="Invalid PaymentsIn Id"
-
+JALDEE_FINANCE_DISABLED="Jaldee Finance disabled"
 
 
 

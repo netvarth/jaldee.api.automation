@@ -77,3 +77,50 @@ JD-TC-AutoInvoiceGeneration-1
     # ${resp}=   Get Service By Id  ${s_id1}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-AutoInvoiceGeneration-2
+
+    [Documentation]  Try to Enable Auto Invoice Generation for Catalog without jaldee finance enable.
+
+    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${SERVICE1}=    FakerLibrary.name
+    ${s_id1}=  Create Sample Service  ${SERVICE1} 
+    Set Suite Variable  ${s_id1}
+
+    ${resp}=   Get Service By Id  ${s_id1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[0]}
+
+    ${itemdata}=   FakerLibrary.words    	nb=6
+    ${itemdata}=    Remove Duplicates    ${itemdata}
+
+    ${displayName1}=   FakerLibrary.user name    
+    ${price1}=  Evaluate    random.uniform(50.0,300) 
+    ${itemName1}=   Set Variable     ${itemdata[0]} 
+    ${itemCode1}=   Set Variable     ${itemdata[1]}
+    ${resp}=  Create Sample Item   ${displayName1}   ${itemName1}  ${itemCode1}  ${price1}  ${bool[0]}     
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${item_id1}  ${resp.json()}
+
+    ${unique_cnames}=   FakerLibrary.user name    
+    ${resp}=   Create Sample Catalog    ${unique_cnames}    ${item_id1}   
+    Set Suite Variable  ${catalod_id1}    ${resp}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Order Catalog    ${catalod_id1}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[0]}
+
+    ${resp}=  Auto Invoice Generation For Catalog   ${catalod_id1}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${JALDEE_FINANCE_DISABLED}
