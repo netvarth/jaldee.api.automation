@@ -187,7 +187,11 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id8}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id8}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id8}  ${resp.json()['id']}
     ${account_id1}=  get_acc_id  ${PUSERNAME8}
     ${resp}=  Get provider Unread message Count
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -261,16 +265,17 @@ JD-TC-Verify Get Unread Message Count-INDEPENDENT_SP-3
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id7}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id7}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id7}  ${resp.json()['id']}
 
     ${resp}=  Get provider Unread message Count
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  2
     ${resp}=  Get provider communications
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
 
     ${resp}=  Get provider communications
     Log   ${resp.json()}
@@ -281,8 +286,6 @@ JD-TC-Verify Get Unread Message Count-INDEPENDENT_SP-3
     Set Test Variable  ${msgId2}  ${resp.json()[1]['messageId']}
 
     Set Test Variable  ${msgId1}  ${resp.json()[0]['messageId']}
-
-
 
     ${resp}=  Reading Consumer Communications  ${c1_id}  ${msgId1}-${msgId2}    0
     Log   ${resp.json()}
@@ -373,6 +376,24 @@ JD-TC-Get Unread Message Count-BRANCH-5
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep   02s
 
+    ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -451,7 +472,11 @@ JD-TC-Get Unread Message Count-BRANCH-5
     ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pR_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
     ${account_id1}=  get_acc_id  ${MUSERNAME_E1}
     Set Suite Variable  ${account_id1}
 
