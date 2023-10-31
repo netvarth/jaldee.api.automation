@@ -71,6 +71,7 @@ JD-TC-Create PaymentsIn-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
+    Set Suite Variable  ${name1}
     ${resp}=  Create Category   ${name1}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -160,11 +161,30 @@ JD-TC-Create PaymentsIn-1
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
  
 
     ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
+
+    ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+
+
 
 
 
@@ -179,6 +199,7 @@ JD-TC-Create PaymentsIn-2
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
 
      ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}
@@ -204,6 +225,24 @@ JD-TC-Create PaymentsIn-2
     ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
+
+    ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+
 
 
 

@@ -2077,6 +2077,7 @@ INVALID_PAYMENTSIN_CATEGORY="Invalid PaymentsIn Category"
 INVALID_PAYMENTSIN_ID="Invalid PaymentsIn Id"
 JALDEE_FINANCE_DISABLED="Jaldee Finance disabled"
 INVALID_PAYMENTSIN_AMOUNT="Invalid PaymentsIn Amount"
+INVALID_PAYMENTSOUT_CATEGORY="Invalid PaymentsOut Category"
 
 
 

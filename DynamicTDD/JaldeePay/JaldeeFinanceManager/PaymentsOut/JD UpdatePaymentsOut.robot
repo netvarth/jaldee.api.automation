@@ -820,87 +820,9 @@ JD-TC-Update PaymentOut-17
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
 
+
+
 JD-TC-Update PaymentOut-18
-
-    [Documentation]  Update PaymentOut with  with empty category id
-
-    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
-    
-    ${referenceNo}=   Random Int  min=5  max=200
-    ${referenceNo}=  Convert To String  ${referenceNo}
-
-    ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
-    ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
-    ${fakeid}=   FakerLibrary.Random Number
-
-
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${SPACE}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
-
-JD-TC-Update PaymentOut-19
-
-    [Documentation]  Update PaymentOut with  vendor_uid is empty
-
-    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
-    
-    ${referenceNo}=   Random Int  min=5  max=200
-    ${referenceNo}=  Convert To String  ${referenceNo}
-
-    ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
-    ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
-
-
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${EMPTY}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-    ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
-
-JD-TC-Update PaymentOut-20
 
     [Documentation]  Update PaymentOut with  empty status id
 
@@ -1041,3 +963,56 @@ JD-TC-Update PaymentOut-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTS_OUT_STATUS_ID}
+
+JD-TC-Update PaymentOut-UH5
+
+    [Documentation]  Update PaymentOut with  with empty category id
+
+    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+    
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    ${fakeid}=   FakerLibrary.Random Number
+
+
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${SPACE}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_CATEGORY}
+
+JD-TC-Update PaymentOut-UH6
+
+    [Documentation]  Update PaymentOut with  vendor_uid is empty
+
+    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+    
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+
+
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${EMPTY}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_VENDOR}

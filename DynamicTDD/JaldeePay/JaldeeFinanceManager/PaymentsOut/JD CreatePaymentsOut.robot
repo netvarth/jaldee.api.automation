@@ -70,6 +70,7 @@ JD-TC-Create PaymentsOut-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
+    Set Suite Variable  ${name1}
     ${resp}=  Create Category   ${name1}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -153,16 +154,28 @@ JD-TC-Create PaymentsOut-1
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
 
-    # ${resp}=  Create PaymentsOut   ${amount}  ${category_id1}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 JD-TC-Create PaymentsOut-3
@@ -181,12 +194,28 @@ JD-TC-Create PaymentsOut-3
     ${payableLabel}=   FakerLibrary.word
     ${dueDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${EMPTY}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
+
+    ${resp}=  Get PaymentsOut By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['paymentsOutCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['description']}  ${description}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
+    Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 JD-TC-Create PaymentsOut-4
 
@@ -212,29 +241,7 @@ JD-TC-Create PaymentsOut-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Create PaymentsOut-5
 
-    [Documentation]  Create a Payable with empty vendor id.
-
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-    ${referenceNo}=   Random Int  min=5  max=200
-    ${referenceNo}=  Convert To String  ${referenceNo}
-
-    ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
-    ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${paymentsOutStatus}=   FakerLibrary.word
-    ${paymentStatus}=   FakerLibrary.word
-
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${EMPTY}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Create PaymentsOut-6
 
@@ -1646,3 +1653,27 @@ JD-TC-Create PaymentsOut-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_AMOUNT}
+
+JD-TC-Create PaymentsOut-UH6
+
+    [Documentation]  Create a Payable with empty vendor id.
+
+    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${EMPTY}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_VENDOR}
