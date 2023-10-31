@@ -11378,3 +11378,91 @@ Auto Invoice Generation For Service
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/services/${serviceId}/invoicegeneration/${toggle}   expected_status=any
    [Return]  ${resp}
+
+Create PaymentsIn
+
+    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
+
+    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsIn    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Update PaymentsIn
+    [Arguments]    ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
+
+    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get PaymentsIn By Id
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}     expected_status=any
+    [Return]  ${resp}
+
+
+Get PaymentsIn With Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn   params=${param}     expected_status=any
+    [Return]  ${resp}
+
+Get PaymentsIn Count With Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/count    params=${param}     expected_status=any
+    [Return]  ${resp}
+
+Update PaymentsIn Status
+
+    [Arguments]    ${payableUid}     ${status} 
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payableUid}/${status}     expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get PaymentsOut Log List UId
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/${uid}/statelist     expected_status=any
+    [Return]  ${resp}
+
+Get PaymentsIn Log List UId
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}/statelist     expected_status=any
+    [Return]  ${resp}
+
+Upload Finance PaymentsIn Attachment
+    [Arguments]    ${payable_uid}      @{vargs}
+
+    ${len}=  Get Length  ${vargs}
+    ${attachments}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${attachments}  ${vargs[${index}]}
+    END
+    
+    ${data}=  Create Dictionary      attachments=${attachments}
+
+   ${data}=  json.dumps  ${data}
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/jp/finance/paymentsIn/${payable_uid}/attachments  data=${data}  expected_status=any
+   [Return]  ${resp}

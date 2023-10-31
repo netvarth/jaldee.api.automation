@@ -30,63 +30,13 @@ ${fileSize}  0.00458
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 
 
-*** Keywords ***
-
-Create PaymentsIn
-
-    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
-
-    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsIn    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Update PaymentsIn
-    [Arguments]    ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
-
-    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Get PaymentsIn By Id
-
-    [Arguments]   ${uid}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}     expected_status=any
-    [Return]  ${resp}
-
-Update PaymentsIn Status
-
-    [Arguments]    ${payableUid}     ${status} 
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payableUid}/${status}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Get PaymentsIn With Filter
-
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn   params=${param}     expected_status=any
-    [Return]  ${resp}
-
-
 
 *** Test Cases ***
 
-JD-TC-GetPaymentInWithFilter-1
 
-    [Documentation]  Create a Payable then Get PaymentsIn With Filter.
+JD-TC-GetPayableWithFilter-1
+
+    [Documentation]  Create a Paymentin then Get PaymentsIn With Filter.
 
     ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
@@ -198,10 +148,21 @@ JD-TC-GetPaymentInWithFilter-1
     Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+    Set Suite Variable  ${referenceNo}  
+    ${description}=   FakerLibrary.word
+    Set Suite Variable  ${description}  
+
+    
     ${payableLabel}=   FakerLibrary.word
+    Set Suite Variable  ${payableLabel}   
     ${receivedDate}=   db.get_date
+    Set Suite Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
+    Set Suite Variable  ${amount}  
+
 
     ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}
@@ -239,16 +200,38 @@ JD-TC-GetPaymentInWithFilter-1
     Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
     Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
-    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption}
-    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
 
+JD-TC-GetPayableWithFilter-2
 
-JD-TC-GetPaymentInWithFilter-7
+    [Documentation]  Get PaymentsIn With Filter with category id and category name.
 
-    [Documentation]  Get PaymentsIn With Filter with vendor id.
+    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get PaymentsIn With Filter    paymentsInOutCategory-eq=id::${category_id2}    paymentsInOutCategory-eq=name::${name1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+
+JD-TC-GetPayableWithFilter-3
+
+    [Documentation]  Get PaymentsIn With Filter with vendor uid.
 
     ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
@@ -263,14 +246,13 @@ JD-TC-GetPaymentInWithFilter-7
     Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
     Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${fileName}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
 
-
-JD-TC-GetPaymentInWithFilter-2
+JD-TC-GetPayableWithFilter-4
 
     [Documentation]  Get PaymentsIn With Filter with paymentsInOutCategoryId.
 
@@ -278,151 +260,22 @@ JD-TC-GetPaymentInWithFilter-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+    Set Test Variable  ${referenceNo}  
+
+    ${description}=   FakerLibrary.word
+    Set Test Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
+    Set Test Variable  ${payableLabel}  
     ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-     ${resp}=  db.getType   ${jpgfile}
-    Log  ${resp}
-    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
-    Set Suite Variable    ${fileType1}
-    ${caption1}=  Fakerlibrary.Sentence
-    Set Suite Variable    ${caption1}
-
-
-
-    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${userName}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200 
-    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
-    Log  ${Attachments}
-    ${uploadedDocuments}=  Create List   ${Attachments}
-    Set Suite Variable    ${uploadedDocuments}
-
- 
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
-
-    ${resp}=  Get PaymentsIn With Filter    paymentsInOutCategory-eq=${category_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
-
-
-
-
-
-JD-TC-GetPaymentInWithFilter-3
-
-    [Documentation]  Get PaymentsIn With Filter  with payInOutUuid and  PaymentsInOutStatus.
-
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
-    
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
-
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get PaymentsIn With Filter    payInOutUuid-eq=${payable_uid1}    paymentsInOutStatus-eq=${status_id0} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Set Test Variable  ${amount}  
 
 
-
-JD-TC-GetPaymentInWithFilter-4
-
-    [Documentation]  Get PaymentsIn With Filter  with receivedDate and  paymentLabel.
-
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
-
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[2]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${status_id1}   ${resp.json()}
-
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
-
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-     ${resp}=  Update PaymentsIn Status   ${payable_uid1}    ${status_id1} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get PaymentsIn With Filter    receivedDate-eq=${receivedDate}    paymentLabel-eq=${payableLabel} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
-
-
-
-JD-TC-GetPaymentInWithFilter-5
-
-    [Documentation]   Get PaymentsIn With Filter with amount and  referenceNo. .
-
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
- 
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
-
-    ${resp}=  db.getType   ${jpgfile}
+   ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
     Set Suite Variable    ${fileType1}
@@ -449,49 +302,192 @@ JD-TC-GetPaymentInWithFilter-5
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
     Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
 
-
-    ${resp}=  Get PaymentsIn With Filter    amount-eq=${amount}    referenceNo-eq=${referenceNo} 
+    ${resp}=  Get PaymentsIn With Filter    paymentsInOutCategory-eq=id::${category_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+     Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
 
-JD-TC-GetPaymentInWithFilter-6
 
-    [Documentation]  Get PaymentsIn With Filter with category id and category name.
+
+
+JD-TC-GetPayableWithFilter-5
+
+    [Documentation]  Get PaymentsIn With Filter  with payInOutUuid and  PaymentsInOutStatus.
+
+    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+    
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+    Set Test Variable  ${referenceNo}  
+
+    ${description}=   FakerLibrary.word
+    Set Test Variable  ${description}  
+    ${payableLabel}=   FakerLibrary.word
+    Set Test Variable  ${payableLabel}     
+    ${receivedDate}=   db.get_date
+    Set Test Variable  ${receivedDate}  
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    Set Test Variable  ${amount}  
+
+
+
+
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get PaymentsIn With Filter    payInOutUuid-eq=${payable_uid1}    paymentsInOutStatus-eq=id::${status_id0} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+
+
+JD-TC-GetPayableWithFilter-6
+
+    [Documentation]  Get PaymentsIn With Filter  with receivedDate and  paymentLabel.
+
+    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[2]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${status_id1}   ${resp.json()}
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+    Set Test Variable  ${referenceNo}  
+
+    ${description}=   FakerLibrary.word
+    Set Test Variable  ${description}  
+    ${payableLabel}=   FakerLibrary.word
+    Set Test Variable  ${payableLabel}     
+    ${receivedDate}=   db.get_date
+    Set Test Variable  ${receivedDate}  
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    Set Test Variable  ${amount}  
+
+
+
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+     ${resp}=  Update PaymentsIn Status    ${payable_uid1}    ${status_id1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get PaymentsIn With Filter     receivedDate-eq=${receivedDate}    paymentLabel-eq=${payableLabel} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+
+
+JD-TC-GetPayableWithFilter-7
+
+    [Documentation]   Get PaymentsIn With Filter with amount .
 
     ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get PaymentsIn With Filter    paymentsInOutCategory-eq=${category_id2}    paymentsInOutCategory-eq=name::${name1} 
+
+
+    ${payableLabel}=   FakerLibrary.word
+    Set Test Variable  ${payableLabel}     
+    ${receivedDate}=   db.get_date
+    Set Test Variable  ${receivedDate}  
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    Set Test Variable  ${amount}  
+
+   ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+
+
+
+    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${userName}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
+    Log  ${Attachments}
+    ${uploadedDocuments}=  Create List   ${Attachments}
+    Set Suite Variable    ${uploadedDocuments}
+
+ 
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
-    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
-    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${fileName}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
-    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
+
+    ${resp}=  Get PaymentsIn With Filter    amount-eq=${amount}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()[0]['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
 
 
 
 
-JD-TC-GetPaymentInWithFilter-8
+
+
+JD-TC-GetPayableWithFilter-8
 
     [Documentation]  Get PaymentsIn With Filter with user id.
 
@@ -504,28 +500,28 @@ JD-TC-GetPaymentInWithFilter-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['paymentsInCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp.json()[0]['categoryName']}  ${name1}
-    # Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${EMPTY}
+    # Should Be Equal As Strings  ${resp.json()['paymentsOutLabel']}  ${EMPTY}
     # Should Be Equal As Strings  ${resp.json()['description']}  ${description}
     # Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
     # Should Be Equal As Strings  ${resp.json()['referenceNo']}  ${referenceNo}
-    # Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
-    # Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
-    # Should Be Equal As Strings  ${resp.json()['paymentsInStatus']}  ${status_id0}
+    # Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
+    # Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
+    # Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
-JD-TC-GetPaymentInWithFilter-UH1
+JD-TC-GetPayableWithFilter-UH1
 
-    [Documentation]   Get PaymentsIn By Id  without login.
+    [Documentation]   Get PaymentsOut By Id  without login.
 
     ${resp}=  Get PaymentsIn With Filter     payInOutUuid-eq=${payable_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-GetPaymentInWithFilter-UH2
+JD-TC-GetPayableWithFilter-UH2
 
-    [Documentation]   Get PaymentsIn By Id using another provider login
+    [Documentation]   Get PaymentsOut By Id using another provider login
 
     ${resp}=  Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.content}
@@ -551,9 +547,6 @@ JD-TC-GetPaymentInWithFilter-UH2
 
      ${resp}=  Get PaymentsIn With Filter     payInOutUuid-eq=${payable_uid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}
-
-
-
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 

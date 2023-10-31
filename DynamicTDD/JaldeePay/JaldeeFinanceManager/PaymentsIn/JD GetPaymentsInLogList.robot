@@ -14,6 +14,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
+
+
 *** Variables ***
 
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -30,14 +32,13 @@ ${fileSize}  0.00458
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 
 
-
 *** Test Cases ***
 
-JD-TC-Create PaymentsIn-1
+JD-TC-Get PaymentsOut Log List-1
 
-    [Documentation]  Create a PaymentIn.
+    [Documentation]  do a paymentOut then get it's log list.
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -146,41 +147,13 @@ JD-TC-Create PaymentsIn-1
     Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  db.getType   ${pdffile}
-    Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile}
-    Set Suite Variable    ${fileType}
-    ${caption}=  Fakerlibrary.Sentence
-    Set Suite Variable    ${caption}
-
-    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
-    Log  ${Attachments}
-    ${uploadedDocuments}=    Create List         ${Attachments}  
-
     ${payableLabel}=   FakerLibrary.word
     ${receivedDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
- 
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-
-JD-TC-Create PaymentsIn-2
-
-    [Documentation]  Create a PaymentIn with an attchment contain drive id.
-
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-     ${resp}=  db.getType   ${jpgfile}
+    ${resp}=  db.getType   ${jpgfile}
     Log  ${resp}
     ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
     Set Suite Variable    ${fileType1}
@@ -189,7 +162,7 @@ JD-TC-Create PaymentsIn-2
 
 
 
-    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${userName}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${userName}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
@@ -199,114 +172,27 @@ JD-TC-Create PaymentsIn-2
     ${uploadedDocuments}=  Create List   ${Attachments}
     Set Suite Variable    ${uploadedDocuments}
 
- 
+     
+    ${DAY}=  get_date
+    Set Suite Variable    ${DAY}
+    ${time_now}=    Get Current Date
+    ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
 
     ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
 
 
-
-
-JD-TC-Create PaymentsIn-UH1
-
-    [Documentation]  Create a Payable with empty category id..
-
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
- 
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${EMPTY}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
+    ${resp}=  Get PaymentsIn Log List UId   ${payable_uid1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSIN_CATEGORY}
-
-JD-TC-Create PaymentsIn-UH2
-
-    [Documentation]  Create a Payable with empty received date.
-
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${EMPTY}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${RECEIVED_DATE_CANNOT_BE_EMPTY}
-
-JD-TC-Create PaymentsIn-UH3
-
-    [Documentation]   Create PaymentsIn without login
-
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Create PaymentsIn-UH4
-
-    [Documentation]   Create Category Using Consumer Login
-
-    ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
-    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['account']}  ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['isPaymentsIn']}  ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['date']}  ${DAY}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['time']}  ${time_now}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['userType']}  ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['localUserId']}  ${pid}
 
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
-
-JD-TC-Create PaymentsIn-UH5
-
-    [Documentation]  Create Paymentout with empty  amount.
-
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-
-    ${resp}=  Create PaymentsIn   ${EMPTY}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    uploadedDocuments=${uploadedDocuments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSIN_AMOUNT}
-
-JD-TC-Create PaymentsIn-UH6
-
-    [Documentation]  Create a Payable with empty vendor id.
-
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${EMPTY}    uploadedDocuments=${uploadedDocuments}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_VENDOR}

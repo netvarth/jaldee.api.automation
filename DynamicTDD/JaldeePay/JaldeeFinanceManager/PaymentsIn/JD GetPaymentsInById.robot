@@ -29,50 +29,6 @@ ${fileSize}  0.00458
 @{status}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 
-*** Keywords ***
-
-Create PaymentsIn
-
-    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
-
-    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsIn    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Update PaymentsIn
-    [Arguments]   ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}   &{kwargs}
-
-    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}  
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Get PaymentsIn By Id
-
-    [Arguments]   ${uid}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}     expected_status=any
-    [Return]  ${resp}
-
-Update PaymentsIn Status
-
-    [Arguments]    ${payableUid}     ${status} 
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payableUid}/${status}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-
 
 
 *** Test Cases ***
