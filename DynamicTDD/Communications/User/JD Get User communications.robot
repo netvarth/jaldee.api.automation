@@ -336,12 +336,17 @@ JD-TC-Get User communications-1
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${WaitlistNotify_msg}=  Set Variable   ${resp.json()['confirmationMessages']['Consumer_APP']} 
+    ${WaitlistNotify_msg}=  Set Variable   ${resp.json()['confirmationMessages']['Consumer_APP']}
+
+    ${provider_msg}=   Set Variable  Message from [providerName] : [message] 
+    ${provider_msg}=   Replace String  ${provider_msg}  [providerName]   ${bsname}
+    ${provider_msg}=   Replace String  ${provider_msg}  [message]        other
    
     ${bookingid}=  Format String  ${bookinglink}  ${W_encId}  ${W_encId}
     ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [consumer]   ${cname}
     ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [bookingId]   ${W_encId}
-
+    ${defconsumerCancel_msg}=  Replace String  ${defconsumerCancel_msg}  [providerMessage]   ${provider_msg}
+ 
     ${resp}=  Get User communications   ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}                     200

@@ -202,8 +202,19 @@ JD-TC-General Communication with User-1
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${msg2}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
-    Log  ${resp.json()}
+    # ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get User communications   ${u_id1}
