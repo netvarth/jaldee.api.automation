@@ -68,22 +68,26 @@ JD-TC-MakeAvailable-1
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    Set Suite Variable  ${DAY2}
-    
+    # Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
+
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
-    ${sTime1}=  db.get_time_by_timezone  ${tz}
-    Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_timezone_time  ${tz}  1  00  
-    Set Suite Variable   ${eTime1}
+    
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY2}
+
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
+    Set Suite Variable   ${eTime1}
 
     ${resp}=  SendProviderResetMail   ${ph1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -327,13 +331,14 @@ JD-TC-MakeAvailable-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${sTime4}=  db.get_time_by_timezone  ${tz}
+    # ${sTime4}=  db.get_time_by_timezone  ${tz}
     ${eTime4}=  add_timezone_time  ${tz}  1  00  
    
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -349,6 +354,7 @@ JD-TC-MakeAvailable-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response    ${resp}   availableNow=${bool[0]}
 
+    ${sTime4}=  db.get_time_by_timezone  ${tz}
     ${list}=  Create List   1  2  3  4  5  6  7
     ${queue}=    FakerLibrary.word
     ${resp}=  Make Available   ${queue}   ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${sTime4}  ${eTime4}  ${lid1}  ${p1_id1}
@@ -429,6 +435,7 @@ JD-TC-MakeAvailable-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid2}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  SendProviderResetMail   ${ph2}
     Should Be Equal As Strings  ${resp.status_code}  200
