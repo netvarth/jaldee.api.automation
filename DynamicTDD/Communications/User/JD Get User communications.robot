@@ -411,7 +411,7 @@ JD-TC-Get User communications-2
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${WaitlistNotify_msg}=  Set Variable   ${resp.json()['cancellationMessages']['SP_APP']} 
+    ${WaitlistNotify_msg}=  Set Variable   ${resp.json()['cancellationMessages']['Consumer_APP']} 
    
     # ${bookingid}=  Format String  ${bookinglink}  ${W_encId}  ${W_encId}
     # ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [consumer]   ${uname1}
@@ -437,7 +437,7 @@ JD-TC-Get User communications-2
 
     Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        ${u_id1}
     Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${cwid0}
-    Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${WaitlistNotify_msg}${SPACE}
+    Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${WaitlistNotify_msg}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${cid}
 
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
@@ -634,7 +634,12 @@ JD-TC-Get User communications-5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${P_Sector}  ${decrypted_data['sector']}
+
+    # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
