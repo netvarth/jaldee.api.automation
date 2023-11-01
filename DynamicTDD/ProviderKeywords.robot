@@ -10662,6 +10662,7 @@ Create Invoice
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
+    log  ${data}
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/invoice    data=${data}  expected_status=any    headers=${headers}
@@ -10734,12 +10735,19 @@ Upload Finance Invoice Attachment
 
 Create PaymentsOut
 
-    [Arguments]    ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
+    [Arguments]    ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}   @{vargs}    &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE  1  ${len}
+        # ${ap}=  Create Dictionary  id=${vargs[${index}]}
+        Append To List  ${vargs}   ${ap}
+        
+    END
     ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
+        Set To Dictionary  ${paymentMode}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session

@@ -157,9 +157,9 @@ JD-TC-CreateInvoice-1
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
-    Log  ${resp1.content}
+    Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Set Suite Variable   ${pcid18}   ${resp1.content}
+    Set Suite Variable   ${pcid18}   ${resp1.json()}
 
     ${providerConsumerIdList}=  Create List  ${pcid18}
     Set Suite Variable  ${providerConsumerIdList}   
