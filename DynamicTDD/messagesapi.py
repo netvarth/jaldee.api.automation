@@ -2043,9 +2043,9 @@ INVALID_FM_CATEGORY_ID= "Invalid Category Id"
 INVALID_FM_STATUS_ID= "Invalid Status Id"
 CATEGORY_ALREADY_DISABLED="Category {} already disabled"
 CATEGORY_ALREADY_ENABLED="Category {} already enabled"
-INVALID_INVOICE_AMOUNT="Invalid Invocie Amount"
-INVALID_INVOICE_CATEGORY="Invalid Invocie Category"
-INVOICE_DATE_CANNOT_EMPTY="Invocie Date cannot be empty"
+INVALID_INVOICE_AMOUNT="Invalid Invoice Amount"
+INVALID_INVOICE_CATEGORY="Invalid Invoice Category"
+INVOICE_DATE_CANNOT_EMPTY="Invoice Date cannot be empty"
 INVALID_FM_EXPENSE_ID= "Invalid Expense Id"
 INVALID_EXPENSE_CATEGORY_ID="Invalid Expense Category Id"
 FINANCE_NOT_FOUND="No finance settings found"
@@ -2078,6 +2078,7 @@ INVALID_PAYMENTSIN_ID="Invalid PaymentsIn Id"
 JALDEE_FINANCE_DISABLED="Jaldee Finance disabled"
 INVALID_PAYMENTSIN_AMOUNT="Invalid PaymentsIn Amount"
 INVALID_PAYMENTSOUT_CATEGORY="Invalid PaymentsOut Category"
+
 
 
 

@@ -59,7 +59,7 @@ JD-TC-UpdateInvoice-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name1}  ${categoryType[4]} 
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
@@ -144,6 +144,9 @@ JD-TC-UpdateInvoice-1
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
 
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Suite Variable  ${providerConsumerIdList}  
+
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -155,14 +158,27 @@ JD-TC-UpdateInvoice-1
     ${amount}=   Random Int  min=500  max=2000
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  
+
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uid']}
-    Set Suite Variable   ${invoice_id}   ${resp.json()['id']}
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
 
     ${amount1}=   Random Int  min=500  max=2000
+   ${amount1}=     roundval    ${amount1}   1
 
     ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}  ${amount1}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount1}

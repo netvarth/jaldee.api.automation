@@ -14,12 +14,28 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
+*** Variables ***
+
+${jpgfile}      /ebs/TDD/uploadimage.jpg
+${pngfile}      /ebs/TDD/upload.png
+${pdffile}      /ebs/TDD/sample.pdf
+${jpgfile2}      /ebs/TDD/small.jpg
+${gif}      /ebs/TDD/sample.gif
+${xlsx}      /ebs/TDD/qnr.xlsx
+
+${order}    0
+${fileSize}  0.00458
+
+@{status}    New     Pending    Assigned     Approved    Rejected
+@{New_status}    Proceed     Unassign    Block     Delete    Remove
+
+
 *** Test Cases ***
 
 
-JD-TC-CreateInvoice-1
+JD-TC-GetInvoice by uid-1
 
-    [Documentation]  Create a invoice with valid details and update the amount.
+    [Documentation]  Create a invoice with valid details  and GetInvoice by uid.
 
     ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
@@ -47,6 +63,7 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${name}=   FakerLibrary.word
+    Set Suite Variable   ${name}
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -59,7 +76,8 @@ JD-TC-CreateInvoice-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name1}  ${categoryType[4]} 
+    Set Suite Variable   ${name1}
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
@@ -140,9 +158,12 @@ JD-TC-CreateInvoice-1
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
-    Log  ${resp1.content}
+    Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Set Suite Variable  ${pcid18}   ${resp1.json()}
+    Set Suite Variable   ${pcid18}   ${resp1.json()}
+
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Suite Variable  ${providerConsumerIdList}   
 
 
     ${referenceNo}=   Random Int  min=5  max=200
@@ -155,12 +176,26 @@ JD-TC-CreateInvoice-1
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
-    
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+
+    ${item}=   FakerLibrary.word
+    ${quantity}=   Random Int  min=5  max=10
+    ${rate}=   Random Int  min=50  max=1000
+
+
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    # ${itemList}=    Create List    ${itemList}
+
+    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uid']}
-    Set Suite Variable   ${invoice_id}   ${resp.json()['id']}    
+    Set Test Variable   ${status_id1}   ${resp.json()}
+
+    
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp1.content}
@@ -172,3 +207,96 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
+
+JD-TC-GetInvoice by uid-2
+
+    [Documentation]  Create multiple invoice using multiple provider consumers and GetInvoice by uid.
+
+    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    ${invoiceId}=   FakerLibrary.word
+
+    ${resp1}=  AddCustomer  ${CUSERNAME10}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid10}   ${resp1.json()}
+
+    ${resp1}=  AddCustomer  ${CUSERNAME9}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid9}   ${resp1.json()}
+
+    ${providerConsumerIdList}=  Create List  ${pcid10}  ${pcid9}
+    Set Test Variable  ${providerConsumerIdList}   
+
+    
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
+    Set Suite Variable  ${invoice_uid2}   ${resp.json()['uidList'][1]}  
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid10}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid2}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid9}
+
+JD-TC-GetInvoice by uid-3
+
+    [Documentation]  update invoice and GetInvoice by uid.
+
+    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+   ${amount1}=   Random Int  min=500  max=2000
+   ${amount1}=     roundval    ${amount1}   1
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+
+    ${resp}=  Update Invoice   ${invoice_uid1}    ${category_id2}  ${amount1}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount1}
+

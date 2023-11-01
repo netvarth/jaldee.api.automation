@@ -193,8 +193,8 @@ JD-TC-CreateInvoice-1
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uid']}
-    Set Suite Variable   ${invoice_id}   ${resp.json()['id']}    
+    Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp1.content}
@@ -208,6 +208,70 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
 
 JD-TC-CreateInvoice-2
+
+    [Documentation]  Create multiple invoice using multiple provider consumers.
+
+    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    ${invoiceId}=   FakerLibrary.word
+
+    ${resp1}=  AddCustomer  ${CUSERNAME10}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid10}   ${resp1.json()}
+
+    ${resp1}=  AddCustomer  ${CUSERNAME9}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid9}   ${resp1.json()}
+
+    ${providerConsumerIdList}=  Create List  ${pcid10}  ${pcid9}
+    Set Test Variable  ${providerConsumerIdList}   
+
+    
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
+    Set Suite Variable  ${invoice_uid2}   ${resp.json()['uidList'][1]}  
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid10}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid2}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid9}
+
+
+JD-TC-CreateInvoice-UH1
 
     [Documentation]  Create a invoice with EMPTY Amount.
 
@@ -231,7 +295,7 @@ JD-TC-CreateInvoice-2
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_INVOICE_AMOUNT}
 
-JD-TC-CreateInvoice-3
+JD-TC-CreateInvoice-UH2
 
     [Documentation]  Create a invoice with EMPTY invoiceCategoryId.
 
@@ -250,12 +314,12 @@ JD-TC-CreateInvoice-3
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${EMPTY}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    ${resp}=  Create Invoice   ${EMPTY}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_INVOICE_CATEGORY}
 
-JD-TC-CreateInvoice-4
+JD-TC-CreateInvoice-UH3
 
     [Documentation]  Create a invoice with EMPTY invoiceDate.
 
@@ -274,12 +338,12 @@ JD-TC-CreateInvoice-4
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${EMPTY}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${EMPTY}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVOICE_DATE_CANNOT_EMPTY}
 
-JD-TC-CreateInvoice-5
+JD-TC-CreateInvoice-UH4
 
     [Documentation]  Create a invoice with EMPTY invoiceLabel.
 
@@ -298,7 +362,7 @@ JD-TC-CreateInvoice-5
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${EMPTY}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${EMPTY}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()}  ${INVALID_INVOICE_AMOUNT}
