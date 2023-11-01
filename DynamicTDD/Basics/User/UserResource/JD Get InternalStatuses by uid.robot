@@ -183,16 +183,18 @@ JD-TC-GetInternalStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
-
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${CUR_DAY}
+   
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}
 
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY}
+
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
@@ -542,7 +544,7 @@ JD-TC-GetInternalStatus-5
     Set Suite Variable  ${sts}
     ${internal_sts}=  MultiUser_InternalStatus  ${sts}  ${pid}
 
-    ${resp}=  AddCustomer  ${CUSERNAME3}
+    ${resp}=  AddCustomer  ${CUSERNAME9}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}

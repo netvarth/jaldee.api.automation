@@ -226,13 +226,13 @@ JD-TC-Update_Notification_Settings_of_User-1
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p2_id}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${p1_id}   ${resp.json()[1]['id']}
-    Set Suite Variable   ${p0_id}   ${resp.json()[2]['id']}
+    # Set Suite Variable   ${p2_id}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${u_id1}   ${resp.json()[1]['id']}
+    # Set Suite Variable   ${p0_id}   ${resp.json()[2]['id']}
 
     Set Suite Variable  ${countryCode_CC0}    ${countryCodes[0]}
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLISTADD
@@ -287,7 +287,7 @@ JD-TC-Update_Notification_Settings_of_User-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLISTADD-initial
@@ -329,11 +329,11 @@ JD-TC-Update_Notification_Settings_of_User-3
     # Set Test Variable  @{PushMSG_Num_list}   ${PUSERNAME_U1}
     
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U12_list}  ${PUser12_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U12_list}  ${PUser12_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLISTADD-updated
@@ -356,7 +356,7 @@ JD-TC-Update_Notification_Settings_of_User-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLIST-CANCEL-initial
@@ -384,11 +384,11 @@ JD-TC-Update_Notification_Settings_of_User-4
     ${PushMSG}=  Create Dictionary   number=${PUSERNAME_U1}   countryCode=${countryCode_CC0}
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[0]}  ${EventType[1]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[0]}  ${EventType[1]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLIST-CANCEL-updated
@@ -410,7 +410,7 @@ JD-TC-Update_Notification_Settings_of_User-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   APPOINTMENTADD-initial
@@ -440,11 +440,11 @@ JD-TC-Update_Notification_Settings_of_User-5
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
 
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[1]}  ${EventType[7]}  ${PUSERNAME_U14_list}  ${PUser14_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[1]}  ${EventType[7]}  ${PUSERNAME_U14_list}  ${PUser14_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   APPOINTMENTADD-updated
@@ -466,7 +466,7 @@ JD-TC-Update_Notification_Settings_of_User-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   APPOINTMENT-CANCEL-initial
@@ -496,11 +496,11 @@ JD-TC-Update_Notification_Settings_of_User-6
     ${PushMSG}=  Create Dictionary   number=${PUSERNAME_U1}   countryCode=${countryCode_CC0}
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[1]}  ${EventType[8]}  ${PUSERNAME_U15_list}  ${PUser15_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[1]}  ${EventType[8]}  ${PUSERNAME_U15_list}  ${PUser15_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   APPOINTMENT-CANCEL-updated
@@ -603,23 +603,23 @@ JD-TC-Update_Notification_Settings_of_User-8
     ${totalamt}=  Convert To Number  ${amt}  1
     Set Suite Variable  ${totalamt}
 
-    ${resp}=  Get User Profile  ${p1_id}
+    ${resp}=  Get User Profile  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
 
-    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${p1_id}
+    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id1}  ${resp.json()}
 
-    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${p1_id}
+    ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${totalamt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id2}  ${resp.json()}
 
     ${queue_name}=  FakerLibrary.name
-    ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${p1_id}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${que_id}  ${resp.json()}
@@ -636,7 +636,7 @@ JD-TC-Update_Notification_Settings_of_User-8
     ${msg}=  FakerLibrary.word
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${CUR_DAY}=  db.add_timezone_date  ${tz}  7   
-    ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
+    ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${u_id1}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -756,7 +756,7 @@ JD-TC-Update_Notification_Settings_of_User-9
     Set Suite Variable  ${schedule_name}
     ${bool1}=  Random Element  ${bool}
     ${noOfOccurance}=  Random Int  min=5  max=15
-    ${resp}=  Create Appointment Schedule For User  ${p1_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${noOfOccurance}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${service_duration[0]}  ${bool1}   ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule For User  ${u_id1}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${noOfOccurance}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${service_duration[0]}  ${bool1}   ${s_id1}  ${s_id2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -792,7 +792,7 @@ JD-TC-Update_Notification_Settings_of_User-9
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For User    ${p_id}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${p1_id}   ${apptfor}
+    ${resp}=   Take Appointment For User    ${p_id}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${u_id1}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -862,11 +862,11 @@ JD-TC-Update_Notification_Settings_of_User-10
     Should Be Equal As Strings   ${resp.json()[0]['id']}   ${p2_id}
     Should Be Equal As Strings   ${resp.json()[0]['mobileNo']}   ${PUSERNAME_U2}
 
-    Should Be Equal As Strings   ${resp.json()[1]['id']}   ${p1_id}
+    Should Be Equal As Strings   ${resp.json()[1]['id']}   ${u_id1}
     Should Be Equal As Strings   ${resp.json()[1]['mobileNo']}   ${PUSERNAME_U1}
 
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   APPOINTMENTADD-initial
@@ -885,11 +885,11 @@ JD-TC-Update_Notification_Settings_of_User-10
     ${PushMSG}=  Create Dictionary   number=${PUSERNAME_U2}   countryCode=${countryCode_CC0}
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[1]}  ${EventType[7]}  ${PUSERNAME_U14_list}  ${PUser14_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[1]}  ${EventType[7]}  ${PUSERNAME_U14_list}  ${PUser14_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   APPOINTMENTADD-updated
@@ -911,7 +911,7 @@ JD-TC-Update_Notification_Settings_of_User-11
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLISTADD-initial
@@ -925,11 +925,11 @@ JD-TC-Update_Notification_Settings_of_User-11
     # Should Be Equal As Strings  ${resp.json()[0]['sms'][0]}  ${PUSERNAME_U12}
     # Should Be Equal As Strings  ${resp.json()[0]['pushMsg'][0]}  ${PUSERNAME_U1}
     
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U12_list}  ${PUser12_EMAIL_list}  ${EMPTY_List}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U12_list}  ${PUser12_EMAIL_list}  ${EMPTY_List}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLISTADD-updated
@@ -949,7 +949,7 @@ JD-TC-Update_Notification_Settings_of_User-12
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   APPOINTMENT-CANCEL-initial
@@ -969,11 +969,11 @@ JD-TC-Update_Notification_Settings_of_User-12
     ${PushMSG}=  Create Dictionary   number=${PUSERNAME_U1}   countryCode=${countryCode_CC0}
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[1]}  ${EventType[8]}  ${EMPTY_List}  ${PUser15_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[1]}  ${EventType[8]}  ${EMPTY_List}  ${PUser15_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   APPOINTMENT-CANCEL-updated
@@ -993,7 +993,7 @@ JD-TC-Update_Notification_Settings_of_User-13
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLIST-CANCEL-initial
@@ -1012,11 +1012,11 @@ JD-TC-Update_Notification_Settings_of_User-13
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
     Set Suite Variable  @{PUser_EMAIL_EMPTY}   ${EMPTY}
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[0]}  ${EventType[1]}  ${PUSERNAME_U13_list}  ${EMPTY_List}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[0]}  ${EventType[1]}  ${PUSERNAME_U13_list}  ${EMPTY_List}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Notification Settings of User  ${p1_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLIST-CANCEL-updated
@@ -1462,7 +1462,7 @@ JD-TC-Update_Notification_Settings_of_User-20
 
 JD-TC-Update_Notification_Settings_of_User-UH1
     [Documentation]   Update notification settings without login 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${EMPTY_List}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${EMPTY_List}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
@@ -1470,17 +1470,17 @@ JD-TC-Update_Notification_Settings_of_User-UH1
     # Set Test Variable  @{PushMSG_Num_list}   ${PUSERNAME_U1}
     ${PushMSG}=  Create Dictionary   number=${PUSERNAME_U1}   countryCode=${countryCode_CC0}
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[0]}  ${EventType[1]}  ${EMPTY_List}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[0]}  ${EventType[1]}  ${EMPTY_List}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[1]}  ${EventType[7]}  ${PUSERNAME_U13_list}  ${EMPTY_List}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[1]}  ${EventType[7]}  ${PUSERNAME_U13_list}  ${EMPTY_List}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[1]}  ${EventType[8]}  ${EMPTY_List}  ${EMPTY_List}  ${EMPTY_List}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[1]}  ${EventType[8]}  ${EMPTY_List}  ${EMPTY_List}  ${EMPTY_List}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
@@ -1494,7 +1494,7 @@ JD-TC-Update_Notification_Settings_of_User-UH2
     ${PushMSG}=  Create Dictionary   number=${PUSERNAME_U1}   countryCode=${countryCode_CC0}
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
@@ -1525,17 +1525,17 @@ JD-TC-Update_Notification_Settings_of_User-UH4
     ${PushMSG}=  Create Dictionary   number=${PUSERNAME_U1}   countryCode=${countryCode_CC0}
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
 
-    ${resp}=  EnableDisable User  ${p1_id}  ${toggle[1]}
+    ${resp}=  EnableDisable User  ${u_id1}  ${toggle[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   02s
 
-    ${resp}=  Update Notification Settings of User  ${p1_id}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id1}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  EnableDisable User  ${p1_id}  ${toggle[0]}
+    ${resp}=  EnableDisable User  ${u_id1}  ${toggle[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   02s
@@ -1598,7 +1598,7 @@ JD-TC-Update_Notification_Settings_of_User-UH5
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_id40}   ${resp.json()[0]['id']}
+    Set Suite Variable   ${u_id140}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p0_id40}   ${resp.json()[1]['id']}
 
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
@@ -1608,7 +1608,7 @@ JD-TC-Update_Notification_Settings_of_User-UH5
     ${PushMSG}=  Create Dictionary   number=${PUSERNAME_U1}   countryCode=${countryCode_CC0}
     Set Suite Variable  @{PushMSG_Num_list}   ${PushMSG}
    
-    ${resp}=  Update Notification Settings of User  ${p1_id40}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id140}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U13_list}  ${PUser13_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   "${resp.json()}"   "${NO_PERMISSION}"

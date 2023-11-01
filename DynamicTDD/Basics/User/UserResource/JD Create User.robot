@@ -32,8 +32,11 @@ Get branch by license
         ${Branch_PH}=  Set Variable  ${MUSERNAME${a}}
         ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
         ${resp}=   Get Active License
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
@@ -1864,7 +1867,10 @@ JD-TC-CreateUser-UH16
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${subdomain}  ${decrypted_data['subSector']}
 
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -1960,7 +1966,11 @@ JD-TC-CreateUser-16
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${subdomain}  ${decrypted_data['subSector']}
+    # Set Test Variable  ${subdomain}  ${resp.json()['subSector']}
 
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
@@ -2477,7 +2487,10 @@ JD-TC-CreateUser-20
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}

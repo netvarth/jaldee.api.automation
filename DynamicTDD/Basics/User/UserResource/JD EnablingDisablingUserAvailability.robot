@@ -211,7 +211,11 @@ JD-TC-Enabling and Disabling User Availability-5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    # Set Test Variable  ${provider_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}

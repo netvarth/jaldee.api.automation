@@ -186,7 +186,7 @@ JD-TC-CreateLocation-3
       Set Suite Variable  ${tz3}
       Set Suite Variable  ${city3}
       Set Suite Variable  ${latti3}
-      Set Suite Variable  ${longi2}
+      Set Suite Variable  ${longi3}
       Set Suite Variable  ${postcode3}
       Set Suite Variable  ${address3}
       ${parking_type3}    Random Element   ${parkingType}

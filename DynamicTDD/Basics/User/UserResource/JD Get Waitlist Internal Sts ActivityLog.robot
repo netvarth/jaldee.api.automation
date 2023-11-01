@@ -18,7 +18,12 @@ JD-TC-WaitlistGetInternalStsActivityLog-1
      ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Set Suite Variable  ${user_name}  ${resp.json()['userName']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+     
+     # Set Suite Variable  ${user_name}  ${resp.json()['userName']}
      ${pid}=  get_acc_id  ${HLMUSERNAME12}
      Set Suite Variable  ${pid}
 

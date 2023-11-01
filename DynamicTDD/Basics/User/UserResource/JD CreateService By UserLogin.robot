@@ -183,9 +183,14 @@ JD-TC-ServiceCreationByUserLogin-4
           ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
           Log  ${resp.json()}
           Should Be Equal As Strings    ${resp.status_code}    200
-          Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-          ${domain}=   Set Variable    ${resp.json()['sector']}
-          ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+          ${decrypted_data}=  db.decrypt_data  ${resp.content}
+          Log  ${decrypted_data}
+          Set Test Variable   ${pkgId}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        #   Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+          ${domain}=   Set Variable    ${decrypted_data['sector']}
+          ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
           # ${resp2}=   Get Domain Settings    ${domain}  
           # Should Be Equal As Strings    ${resp.status_code}    200
           # Log  ${resp.json()}
