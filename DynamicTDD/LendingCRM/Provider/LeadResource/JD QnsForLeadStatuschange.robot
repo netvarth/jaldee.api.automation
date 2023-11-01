@@ -367,42 +367,329 @@ JD-TC-QnrForLeadStatuschange-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME12}  
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${resp1}=  AddCustomer  ${CUSERNAME12}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Suite Variable  ${pcid18}   ${resp1.json()}
-    ELSE
-        Set Suite Variable  ${pcid18}  ${resp.json()[0]['id']}
-    END
-  
+    ${fname}=   FakerLibrary.name
+    ${lname}=   FakerLibrary.name
+    ${desc}=   FakerLibrary.City
 
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${loc_name1}  ${resp.json()['place']}
+
+    ${resp}=   enquiryStatus  ${account_id}
+    ${resp}=   leadStatus     ${account_id}
+    ${resp}=   categorytype   ${account_id}
+    ${resp}=   tasktype       ${account_id}
+
+    ${resp}=    Get Lead Category Type
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${cat_len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${cat_len}
+        IF  '${resp.json()[${i}]['name']}'=='${unique_lnames[0]}'
+            Set Suite Variable  ${lead_cat_id}    ${resp.json()[${i}]['id']}
+            Set Suite Variable  ${lead_cat_name}  ${resp.json()[${i}]['name']}
+        END
+    END
+    
     ${resp}=  Get Lead Status
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}  Get Length  ${resp.json()}
     FOR   ${i}  IN RANGE   ${len}
-        Set Suite Variable  ${status_id${i}}    ${resp.json()[${i}]['id']}
-        Set Suite Variable  ${status_name${i}}  ${resp.json()[${i}]['name']}
+        Set Test Variable  ${status_Lid${i}}    ${resp.json()[${i}]['id']}
+        Set Test Variable  ${status_Lname${i}}  ${resp.json()[${i}]['name']}
     END
 
-    Log   ${status_id1}
-    Log   ${status_name1}
-   
-    ${title3}=  FakerLibrary.user name
-    ${desc}=   FakerLibrary.word 
-    ${targetPotential}=    FakerLibrary.Building Number
-    Set Suite Variable  ${targetPotential}
-    ${category}=    Create Dictionary   id=${category_id1}
+    ${resp}=    Get Lead Status
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}  Get Length  ${resp.json()}
+    FOR   ${i}  IN RANGE   ${len}
+        IF   '${resp.json()[${i}]['name']}' == 'New'
 
-    ${resp}=    Create Lead    ${title3}    ${desc}    ${targetPotential}      ${locId}    ${pcid18}   category=${category}
+            Set Test Variable  ${lead_sts_new_id}    ${resp.json()[${i}]['id']}
+            Set Test Variable  ${lead_sts_new_name}  ${resp.json()[${i}]['name']}
+
+        END
+    END
+
+    ${resp}=    updateEnquiryStatus  ${account_id}
+    ${resp}=    updateLeadStatus     ${account_id}
+    sleep  01s
+
+    ${resp}=  Get Provider Enquiry Category  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${leid1}        ${resp.json()['id']}
-    Set Suite Variable   ${leUid1}        ${resp.json()['uid']}
+    ${en_catagories}=  Set Variable  ${resp.json()}
+    ${random_catagories}=  Evaluate  random.choice($en_catagories)  random
+    ${rand_catagory_id}=  Set Variable  ${random_catagories['id']}  
+    ${rand_catagory_name}=  Set Variable  ${random_catagories['name']}
+
+    ${resp}=  Get Provider Enquiry Type  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${en_cat_types}=  Set Variable  ${resp.json()}
+    ${random_cat_types}=  Evaluate  random.choice($en_cat_types)  random
+    ${rand_cat_type_id}=  Set Variable  ${random_cat_types['id']}
+    ${rand_cat_type_name}=  Set Variable  ${random_cat_types['name']}
+
+    ${resp}=  Get Task Category Type  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${en_catagories}=  Set Variable  ${resp.json()}
+    ${random_catagories}=  Evaluate  random.choice($en_catagories)  random
+    ${rand_task_catagory_id}=  Set Variable  ${random_catagories['id']}
+    ${rand_task_catagory_name}=  Set Variable  ${random_catagories['name']}
+
+    ${resp}=    Get Task Type
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${task_cat_types}=  Set Variable  ${resp.json()}
+    ${random_cat_types}=  Evaluate  random.choice($task_cat_types)  random
+    ${rand_task_cat_type_id}=  Set Variable  ${random_cat_types['id']}
+    ${rand_task_cat_type_name}=  Set Variable  ${random_cat_types['name']}
+
+    ${resp}=    Get Task Priority
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${task_prios}=  Set Variable  ${resp.json()}
+    ${random_priority}=  Evaluate  random.choice($task_prios)  random
+    ${rand_task_priority_id}=  Set Variable  ${random_priority['id']}
+    ${rand_task_priority_name}=  Set Variable  ${random_priority['name']}
+
+    ${resp}=    Get Lead Priority
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${lead_prios}=  Set Variable  ${resp.json()}
+    ${random_priority}=  Evaluate  random.choice($lead_prios)  random
+    ${rand_lead_priority_id}=  Set Variable  ${random_priority['id']}
+    ${rand_lead_priority_name}=  Set Variable  ${random_priority['name']}
+
+    ${resp}=    Get Lead Type
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${ld_cat_type}=  Set Variable  ${resp.json()}
+    ${random_cat_type}=  Evaluate  random.choice($ld_cat_type)  random
+    ${rand_lead_cat_type_id}=  Set Variable  ${random_cat_type['id']}
+    ${rand_lead_cat_type_name}=  Set Variable  ${random_cat_type['name']}
+
+    ${lead_template_name}=   FakerLibrary.Domain Word
+    leadTemplate   ${account_id}  ${lead_template_name}  ${lead_sts_new_id}  category_id=${lead_cat_id}  type_id=${rand_lead_cat_type_id}  priority_id=${rand_lead_priority_id}  creator_provider_id=${provider_id}
+
+    ${resp}=    Get Lead Templates    
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${ld_temp_id}  ${resp.json()[0]['id']}
+
+    ${resp}=  Get Provider Enquiry Status  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}  Get Length  ${resp.json()}
+    FOR   ${i}  IN RANGE   ${len}
+        IF   '${resp.json()[${i}]['name']}' == 'Follow Up 1'
+
+            Set Test Variable  ${enq_sts_new_id}    ${resp.json()[${i}]['id']}
+            Set Test Variable  ${enq_sts_new_name}  ${resp.json()[${i}]['name']}
+
+        END
+    END
+
+    ${resp}=  enquiryTemplate  ${account_id}  ${en_temp_name}    ${enq_sts_new_id}  category_id=${rand_catagory_id}  type_id=${rand_cat_type_id}   creator_provider_id=${provider_id}  
+
+    ${resp}=  Get Enquiry Template
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${en_temp_id}  ${resp.json()[0]['id']}
+
+    ${resp}=    Get Task Status
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}  Get Length  ${resp.json()}
+    FOR   ${i}  IN RANGE   ${len}
+        IF   '${resp.json()[${i}]['name']}' == 'New'
+
+            Set Test Variable  ${new_status_id}    ${resp.json()[${i}]['id']}
+            Set Test Variable  ${new_status_name}  ${resp.json()[${i}]['name']}
+
+        END
+    END
+
+    taskTemplate  ${account_id}  ${task_temp_name1}   ${new_status_id}  origin_from=3  origin_id=${en_temp_id}  category_id=${rand_task_catagory_id}  type_id=${rand_task_cat_type_id}  priority_id=${rand_task_priority_id}  creator_provider_id=${provider_id}
+    taskTemplate  ${account_id}  ${task_temp_name2}   ${new_status_id}  origin_from=3  origin_id=${en_temp_id}  category_id=${rand_task_catagory_id}  type_id=${rand_task_cat_type_id}  priority_id=${rand_task_priority_id}  creator_provider_id=${provider_id}
+ 
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME21}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME21}  firstName=${fname}  lastName=${lname}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${pcid14}   ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${pcid14}  ${resp.json()[0]['id']}
+    END
+
+    updateEnquiryStatus  ${account_id}
+    sleep  01s
+    ${resp}=  categorytype  ${account_id}
+    ${resp}=  tasktype      ${account_id}
+
+    ${resp}=  Get Provider Enquiry Status  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}  Get Length  ${resp.json()}
+    FOR   ${i}  IN RANGE   ${len}
+        IF   '${resp.json()[${i}]['name']}' == 'Follow Up 1'
+
+            Set Test Variable  ${enq_sts_new_id}    ${resp.json()[${i}]['id']}
+            Set Test Variable  ${enq_sts_new_name}  ${resp.json()[${i}]['name']}
+
+        END
+    END
+
+    ${resp}=  enquiryTemplate  ${account_id}  ${en_temp_name}  ${enq_sts_new_id}  creator_provider_id=${provider_id}
+
+    ${resp}=  Get Enquiry Template
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Provider Enquiry Category  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${en_catagories}=  Set Variable  ${resp.json()}
+    ${random_catagories}=  Evaluate  random.choice($en_catagories)  random
+    ${rand_catagory_id}=  Set Variable  ${random_catagories['id']}
+    ${rand_catagory_name}=  Set Variable  ${random_catagories['name']}
+
+    ${resp}=  Get Enquiry with filter
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   not '${resp.content}' == '${emptylist}'
+        clear_enquiry  ${PUSERNAME26}
+    END
+
+    ${category}=  Create Dictionary   id=${rand_catagory_id}  
+    ${type}=  Create Dictionary   id=${rand_cat_type_id}
+    ${title}=  FakerLibrary.Job
+
+    # ${resp}=  Create Enquiry  ${locId}  ${pcid14}  category=${category}    
+    ${resp}=  Create Enquiry  ${locId1}  ${pcid14}  title=${title}  description=${desc}  category=${category}  type=${type}  enquireMasterId=${en_temp_id}  leadMasterId=${ld_temp_id}  isLeadAutogenerate=${bool[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${en_id}  ${resp.json()['id']}
+    Set Test Variable   ${en_uid}  ${resp.json()['uid']}
+
+#    follow up 1
+
+    ${resp}=  Get Provider Enquiry Status  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}  Get Length  ${resp.json()}
+    FOR   ${i}  IN RANGE   ${len}
+        Set Test Variable  ${status_id${i}}    ${resp.json()[${i}]['id']}
+        Set Test Variable  ${status_name${i}}  ${resp.json()[${i}]['name']}
+    END
+
+    Log many  ${status_id0}   ${status_id1}  ${status_id2}    ${status_id3}
+
+    ${resp}=  Get Enquiry by Uuid  ${en_uid}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update and Proceed Enquiry to Status  ${en_uid}  ${status_id0}  ${locId1}  ${pcid14}  &{resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Get Enquiry by Uuid  ${en_uid}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200  
+
+    ${resp}=    Get Provider Tasks
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+#    follow up 2
+
+    ${resp}=  Get Enquiry by Uuid  ${en_uid}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200  
+
+    ${resp}=  Update and Proceed Enquiry to Status  ${en_uid}  ${status_id1}  ${locId1}  ${pcid14}  &{resp.json()}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Get Enquiry by Uuid  ${en_uid}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=    Get Provider Tasks
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+#    KYC
+
+    ${dob}=    FakerLibrary.Date
+    ${relationName}=    FakerLibrary.First Name
+    ${idValue}=    FakerLibrary.Word
+    ${fileName}=    FakerLibrary.File Name
+    ${fileSize}=    FakerLibrary.Binary
+    ${caption}=    FakerLibrary.Text
+    ${resp}=  db.getType   ${jpegfile}
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${jpegfile}
+    Set Suite Variable    ${fileType}
+    ${permanentAddress}=    FakerLibrary.Word
+    ${permanentCity}=    FakerLibrary.City
+    ${permanentState}=    FakerLibrary.State
+    ${panNumber}=  FakerLibrary.Credit Card Number
+    ${caption3}=  Fakerlibrary.Sentence
+    
+    ${resp}=  db.getType   ${pdffile}
+    Log  ${resp}
+    ${fileType2}=  Get From Dictionary       ${resp}    ${pdffile}
+    Set Suite Variable    ${fileType2}
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType5}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType5}
+    ${list13}=  Create Dictionary         owner=${provider_id}   fileName=${jpgfile}    fileSize= 0.00458     caption=${caption3}     fileType=${fileType5}   order=${order}
+    ${list}=   Create List         ${list13}
+    ${valida1}=    Create Dictionary    idTypes=${idTypes}     idValue=${idValue}    attachments=${list}
+   
+    ${caption5}=  Fakerlibrary.Sentence
+    ${list1}=  Create Dictionary         owner=${provider_id}   fileName=${pdffile}    fileSize= 0.00458     caption=${caption5}     fileType=${fileType2}   order=${order}  
+    ${list}=   Create List       ${list1}
+    ${valida2}=    Create Dictionary    idTypes=UID     idValue=${idValue}    attachments=${list}
+    ${validationId}=    Create List    ${valida1}    ${valida2}
+    Set Suite Variable    ${validationId} 
+    
+    ${resp}=  Create KYC        ${en_uid}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${CUSERNAME14}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid14} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+
+    ${resp}=    Get KYC    ${en_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable   ${idkyc}        ${resp.json()[0]['id']}
+
+#    lead generation   
+
+    ${resp}=  Get Enquiry by Uuid  ${en_uid}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${resp}=  Change KYC Status     ${en_uid}      ${status_id2}          
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+
+    sleep  02s
+
+    ${resp}=    Get Leads With Filter    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${leUid1}   ${resp.json()[0]['uid']}
+
 
     ${resp}=    Get Lead By Id    ${leUid1}
     Log   ${resp.json()}
@@ -442,7 +729,7 @@ JD-TC-QnrForLeadStatuschange-1
     ${validationId}=    Create List    ${valida1}    ${valida2}
     Set Suite Variable    ${validationId} 
     
-    ${resp}=  Create KYC       ${leUid1}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${phoneNo}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid18} 
+    ${resp}=  Create KYC       ${leUid1}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${phoneNo}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid14} 
 
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -454,7 +741,7 @@ JD-TC-QnrForLeadStatuschange-1
     Should Be Equal As Strings      ${resp.json()[0]['originFrom']}  ${originFrom}
     Should Be Equal As Strings      ${resp.json()[0]['originUid']}  ${leUid1}
     Should Be Equal As Strings      ${resp.json()[0]['customerName']}  ${customerName}
-    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid18}
+    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid14}
     Should Be Equal As Strings      ${resp.json()[0]['relationName']}  ${relationName}
     Should Be Equal As Strings      ${resp.json()[0]['permanentAddress']}  ${permanentAddress}
     Should Be Equal As Strings      ${resp.json()[0]['permanentCity']}  ${permanentCity}
@@ -477,7 +764,7 @@ JD-TC-QnrForLeadStatuschange-1
     # ${permanentPinCode}=    FakerLibrary.Postalcode
     ${panNumber1}=  FakerLibrary.Credit Card Number
    
-    ${resp}=  Update KYC    ${idkyc}        ${leUid1}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName1}    ${telephoneType}    ${phoneNo}   ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${states[0]}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    customer=${pcid18}
+    ${resp}=  Update KYC    ${idkyc}        ${leUid1}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName1}    ${telephoneType}    ${phoneNo}   ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${states[0]}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    customer=${pcid14}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -489,12 +776,12 @@ JD-TC-QnrForLeadStatuschange-1
     Should Be Equal As Strings      ${resp.json()[0]['originUid']}  ${leUid1}
     Should Be Equal As Strings      ${resp.json()[0]['customerName']}  ${customerName}
     #Should Be Equal As Strings      ${resp.json()[0]['panNumber']}  ${panNumber1}
-    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid18}
+    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid14}
     # Should Be Equal As Strings      ${resp.json()[0]['relationName']}  ${relationName1}
     Should Be Equal As Strings      ${resp.json()[0]['permanentAddress']}  ${permanentAddress1}
     Should Be Equal As Strings      ${resp.json()[0]['permanentCity']}  ${permanentCity1}
 
-    # ${resp}=  Change KYC Status    ${originFrom}    ${leUid1}    ${pcid18}    ${customerName}    ${dob}        ${relationType}    ${relationName1}    ${telephoneType}    ${phoneNo}       ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${permanentState1}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    
+    # ${resp}=  Change KYC Status    ${originFrom}    ${leUid1}    ${pcid14}    ${customerName}    ${dob}        ${relationType}    ${relationName1}    ${telephoneType}    ${phoneNo}       ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${permanentState1}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    
     ${resp}=  Change KYC Status        ${leUid1}       ${status_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -541,7 +828,7 @@ JD-TC-QnrForLeadStatuschange-1
     ${fudata}=  db.fileUploadDTlead   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
     Log  ${fudata}
 
-    ${data}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid18}   &{fudata}
+    ${data}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid14}   &{fudata}
     Log  ${data}
     ${resp}=  Provider Validate Questionnaire  ${data}
     Log  ${resp.content}
@@ -586,7 +873,7 @@ JD-TC-QnrForLeadStatuschange-1
     ${fudata}=  db.fileUploadDTlead   ${resp.json()}  ${FileAction[0]}  ${mp4file}  
     Log  ${fudata}
 
-    ${data12}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid18}   &{fudata}
+    ${data12}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid14}   &{fudata}
     Log  ${data12}
 
 
@@ -665,7 +952,7 @@ JD-TC-QnrForLeadStatuschange-1
     ${fudata}=  db.fileUploadDTlead    ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
     Log  ${fudata}
 
-    ${datastatus}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid18}   &{fudata}
+    ${datastatus}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid14}   &{fudata}
     Log  ${datastatus}
     ${resp}=  Provider Validate Questionnaire  ${datastatus}
     Log  ${resp.content}
@@ -700,7 +987,7 @@ JD-TC-QnrForLeadStatuschange-1
     ${fudata}=  db.fileUploadDTlead    ${resp.json()}   ${FileAction[0]}   ${mp4file}   ${mp3file}
     Log  ${fudata}
 
-    ${datastatusloan}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid18}   &{fudata}
+    ${datastatusloan}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid14}   &{fudata}
     Log  ${datastatusloan}
     ${resp}=  Provider Validate Questionnaire  ${datastatusloan}
     Log  ${resp.content}
@@ -764,7 +1051,7 @@ JD-TC-QnrForLeadStatuschange-2
     Set Suite Variable  ${targetPotential}
     ${category}=    Create Dictionary   id=${category_id1}
 
-    ${resp}=    Create Lead    ${title3}    ${desc}    ${targetPotential}      ${locId}    ${pcid18}   category=${category}
+    ${resp}=    Create Lead    ${title3}    ${desc}    ${targetPotential}      ${locId}    ${pcid14}   category=${category}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${leid1}        ${resp.json()['id']}
@@ -808,7 +1095,7 @@ JD-TC-QnrForLeadStatuschange-2
     ${validationId}=    Create List    ${valida1}    ${valida2}
     Set Suite Variable    ${validationId} 
     
-    ${resp}=  Create KYC    ${originFrom}    ${leUid61}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${phoneNo}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid18} 
+    ${resp}=  Create KYC    ${originFrom}    ${leUid61}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${phoneNo}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid14} 
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -819,7 +1106,7 @@ JD-TC-QnrForLeadStatuschange-2
     Should Be Equal As Strings      ${resp.json()[0]['originFrom']}  ${originFrom}
     Should Be Equal As Strings      ${resp.json()[0]['originUid']}  ${leUid61}
     Should Be Equal As Strings      ${resp.json()[0]['customerName']}  ${customerName}
-    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid18}
+    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid14}
     Should Be Equal As Strings      ${resp.json()[0]['relationName']}  ${relationName}
     Should Be Equal As Strings      ${resp.json()[0]['permanentAddress']}  ${permanentAddress}
     Should Be Equal As Strings      ${resp.json()[0]['permanentCity']}  ${permanentCity}
@@ -842,7 +1129,7 @@ JD-TC-QnrForLeadStatuschange-2
     # ${permanentPinCode}=    FakerLibrary.Postalcode
     ${panNumber1}=  FakerLibrary.Credit Card Number
    
-    ${resp}=  Update KYC    ${idkyc}        ${leUid61}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName1}    ${telephoneType}    ${phoneNo}   ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${states[0]}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    customer=${pcid18}
+    ${resp}=  Update KYC    ${idkyc}        ${leUid61}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName1}    ${telephoneType}    ${phoneNo}   ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${states[0]}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    customer=${pcid14}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -853,12 +1140,12 @@ JD-TC-QnrForLeadStatuschange-2
     # Should Be Equal As Strings      ${resp.json()[0]['originFrom']}  ${originFrom}
     Should Be Equal As Strings      ${resp.json()[0]['originUid']}  ${leUid61}
     Should Be Equal As Strings      ${resp.json()[0]['customerName']}  ${customerName}
-    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid18}
+    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid14}
     # Should Be Equal As Strings      ${resp.json()[0]['relationName']}  ${relationName1}
     Should Be Equal As Strings      ${resp.json()[0]['permanentAddress']}  ${permanentAddress1}
     Should Be Equal As Strings      ${resp.json()[0]['permanentCity']}  ${permanentCity1}
 
-    # ${resp}=  Change KYC Status    ${originFrom}    ${leUid61}    ${pcid18}    ${customerName}    ${dob}        ${relationType}    ${relationName1}    ${telephoneType}    ${phoneNo}       ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${permanentState1}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    
+    # ${resp}=  Change KYC Status    ${originFrom}    ${leUid61}    ${pcid14}    ${customerName}    ${dob}        ${relationType}    ${relationName1}    ${telephoneType}    ${phoneNo}       ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${permanentState1}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    
     ${resp}=  Change KYC Status        ${leUid61}       ${status_id6}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -936,7 +1223,7 @@ JD-TC-QnrForLeadStatuschange-2
     ${fudata}=  db.fileUploadDTlead    ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
     Log  ${fudata}
 
-    ${datastatus}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid18}   &{fudata}
+    ${datastatus}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid14}   &{fudata}
     Log  ${datastatus}
     Set Suite Variable  ${datastatus}
     ${resp}=  Provider Validate Questionnaire  ${datastatus}
@@ -1032,7 +1319,7 @@ JD-TC-QnrForLeadStatuschange-UH3
     Set Suite Variable  ${targetPotential}
     ${category}=    Create Dictionary   id=${category_id1}
 
-    ${resp}=    Create Lead    ${title3}    ${desc}    ${targetPotential}      ${locId}    ${pcid18}   category=${category}
+    ${resp}=    Create Lead    ${title3}    ${desc}    ${targetPotential}      ${locId}    ${pcid14}   category=${category}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${leid1}        ${resp.json()['id']}
@@ -1076,7 +1363,7 @@ JD-TC-QnrForLeadStatuschange-UH3
     ${validationId}=    Create List    ${valida1}    ${valida2}
     Set Suite Variable    ${validationId} 
     
-    ${resp}=  Create KYC    ${originFrom}    ${leUid62}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${phoneNo}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid18} 
+    ${resp}=  Create KYC    ${originFrom}    ${leUid62}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${phoneNo}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid14} 
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -1087,7 +1374,7 @@ JD-TC-QnrForLeadStatuschange-UH3
     Should Be Equal As Strings      ${resp.json()[0]['originFrom']}  ${originFrom}
     Should Be Equal As Strings      ${resp.json()[0]['originUid']}  ${leUid62}
     Should Be Equal As Strings      ${resp.json()[0]['customerName']}  ${customerName}
-    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid18}
+    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid14}
     Should Be Equal As Strings      ${resp.json()[0]['relationName']}  ${relationName}
     Should Be Equal As Strings      ${resp.json()[0]['permanentAddress']}  ${permanentAddress}
     Should Be Equal As Strings      ${resp.json()[0]['permanentCity']}  ${permanentCity}
@@ -1110,7 +1397,7 @@ JD-TC-QnrForLeadStatuschange-UH3
     # ${permanentPinCode}=    FakerLibrary.Postalcode
     ${panNumber1}=  FakerLibrary.Credit Card Number
    
-    ${resp}=  Update KYC    ${idkyc}        ${leUid62}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName1}    ${telephoneType}    ${phoneNo}   ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${states[0]}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    customer=${pcid18}
+    ${resp}=  Update KYC    ${idkyc}        ${leUid62}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName1}    ${telephoneType}    ${phoneNo}   ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${states[0]}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    customer=${pcid14}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -1122,12 +1409,12 @@ JD-TC-QnrForLeadStatuschange-UH3
     Should Be Equal As Strings      ${resp.json()[0]['originUid']}  ${leUid62}
     Should Be Equal As Strings      ${resp.json()[0]['customerName']}  ${customerName}
     #Should Be Equal As Strings      ${resp.json()[0]['panNumber']}  ${panNumber1}
-    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid18}
+    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid14}
     # Should Be Equal As Strings      ${resp.json()[0]['relationName']}  ${relationName1}
     Should Be Equal As Strings      ${resp.json()[0]['permanentAddress']}  ${permanentAddress1}
     Should Be Equal As Strings      ${resp.json()[0]['permanentCity']}  ${permanentCity1}
 
-    # ${resp}=  Change KYC Status    ${originFrom}    ${leUid62}    ${pcid18}    ${customerName}    ${dob}        ${relationType}    ${relationName1}    ${telephoneType}    ${phoneNo}       ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${permanentState1}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    
+    # ${resp}=  Change KYC Status    ${originFrom}    ${leUid62}    ${pcid14}    ${customerName}    ${dob}        ${relationType}    ${relationName1}    ${telephoneType}    ${phoneNo}       ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${permanentState1}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    
     ${resp}=  Change KYC Status        ${leUid62}       ${status_id6}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
@@ -1202,7 +1489,7 @@ JD-TC-QnrForLeadStatuschange-UH3
     # ${fudata}=  db.fileUploadDTlead    ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
     # Log  ${fudata}
 
-    # ${datastatus}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid18}   &{fudata}
+    # ${datastatus}=  db.QuestionnaireAnswerslead   ${resp.json()}   ${pcid14}   &{fudata}
     # Log  ${datastatus}
     ${resp}=  Provider Validate Questionnaire  ${datastatus}
     Log  ${resp.content}
@@ -1246,7 +1533,7 @@ JD-TC-QnrForLeadStatuschange-UH4
     Set Suite Variable  ${targetPotential}
     ${category}=    Create Dictionary   id=${category_id1}
 
-    ${resp}=    Create Lead    ${title3}    ${desc}    ${targetPotential}      ${locId}    ${pcid18}   category=${category}
+    ${resp}=    Create Lead    ${title3}    ${desc}    ${targetPotential}      ${locId}    ${pcid14}   category=${category}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${leid1}        ${resp.json()['id']}
@@ -1290,7 +1577,7 @@ JD-TC-QnrForLeadStatuschange-UH4
     ${validationId}=    Create List    ${valida1}    ${valida2}
     Set Suite Variable    ${validationId} 
     
-    ${resp}=  Create KYC    ${originFrom}    ${leUid61}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${phoneNo}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid18} 
+    ${resp}=  Create KYC    ${originFrom}    ${leUid61}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName}    ${telephoneType}    ${phoneNo}     ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress}    ${permanentCity}   ${states[0]}    ${permanentPinCode}    ${panNumber}    ${bool[1]}   customer=${pcid14} 
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -1301,7 +1588,7 @@ JD-TC-QnrForLeadStatuschange-UH4
     Should Be Equal As Strings      ${resp.json()[0]['originFrom']}  ${originFrom}
     Should Be Equal As Strings      ${resp.json()[0]['originUid']}  ${leUid61}
     Should Be Equal As Strings      ${resp.json()[0]['customerName']}  ${customerName}
-    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid18}
+    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid14}
     Should Be Equal As Strings      ${resp.json()[0]['relationName']}  ${relationName}
     Should Be Equal As Strings      ${resp.json()[0]['permanentAddress']}  ${permanentAddress}
     Should Be Equal As Strings      ${resp.json()[0]['permanentCity']}  ${permanentCity}
@@ -1324,7 +1611,7 @@ JD-TC-QnrForLeadStatuschange-UH4
     # ${permanentPinCode}=    FakerLibrary.Postalcode
     ${panNumber1}=  FakerLibrary.Credit Card Number
    
-    ${resp}=  Update KYC    ${idkyc}        ${leUid61}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName1}    ${telephoneType}    ${phoneNo}   ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${states[0]}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    customer=${pcid18}
+    ${resp}=  Update KYC    ${idkyc}        ${leUid61}        ${customerName}    ${dob}        ${relationType[0]}    ${relationName1}    ${telephoneType}    ${phoneNo}   ${validationId}      ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${states[0]}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    customer=${pcid14}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -1335,12 +1622,12 @@ JD-TC-QnrForLeadStatuschange-UH4
     # Should Be Equal As Strings      ${resp.json()[0]['originFrom']}  ${originFrom}
     Should Be Equal As Strings      ${resp.json()[0]['originUid']}  ${leUid61}
     Should Be Equal As Strings      ${resp.json()[0]['customerName']}  ${customerName}
-    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid18}
+    Should Be Equal As Strings      ${resp.json()[0]['customer']}  ${pcid14}
     # Should Be Equal As Strings      ${resp.json()[0]['relationName']}  ${relationName1}
     Should Be Equal As Strings      ${resp.json()[0]['permanentAddress']}  ${permanentAddress1}
     Should Be Equal As Strings      ${resp.json()[0]['permanentCity']}  ${permanentCity1}
 
-    # ${resp}=  Change KYC Status    ${originFrom}    ${leUid61}    ${pcid18}    ${customerName}    ${dob}        ${relationType}    ${relationName1}    ${telephoneType}    ${phoneNo}       ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${permanentState1}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    
+    # ${resp}=  Change KYC Status    ${originFrom}    ${leUid61}    ${pcid14}    ${customerName}    ${dob}        ${relationType}    ${relationName1}    ${telephoneType}    ${phoneNo}       ${provider_id}    ${fileName}    0.0054    ${caption}    ${QnrfileTypes[1]}    ${order}    ${permanentAddress1}    ${permanentCity1}    ${permanentState1}    ${permanentPinCode}    ${panNumber1}    ${bool[1]}    
     ${resp}=  Change KYC Status        ${leUid61}       ${status_id6}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200

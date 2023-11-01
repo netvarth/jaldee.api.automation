@@ -50,6 +50,7 @@ JD-TC-Get_Member-1
     ${displayname}=    FakerLibrary.firstName
     ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
     ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
+    ${description2}=    FakerLibrary.bs
     ${name2}=           FakerLibrary.firstName
     ${displayname2}=    FakerLibrary.firstName
     ${effectiveFrom2}=  db.get_date_by_timezone  ${tz}

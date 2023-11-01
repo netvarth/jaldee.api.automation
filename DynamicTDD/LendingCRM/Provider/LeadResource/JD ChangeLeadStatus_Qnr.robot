@@ -21,6 +21,7 @@ Library           /ebs/TDD/excelfuncs.py
 
 
 Check Answers
+
     [Arguments]  ${resp}  ${data}  
     ${len}=  Get Length  ${resp.json()['questionnaire']['questionAnswers']}
     # ${answer}=  Set Variable  ${data}
@@ -49,6 +50,7 @@ Check Answers
 
 
 *** Variables ***
+
 ${self}     0
 ${xlFile}      ${EXECDIR}/TDD/LeadQnr.xlsx  
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
@@ -85,6 +87,7 @@ ${en_temp_name}   EnquiryName
 *** Test Cases ***
 
 JD-TC-LeadStatus-1
+
     [Documentation]  lead status change with  lead status qns
     
     ${wb}=  readWorkbook  ${xlFile}
@@ -103,7 +106,6 @@ JD-TC-LeadStatus-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-  
     ${domresp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${domresp.status_code}  200
 
