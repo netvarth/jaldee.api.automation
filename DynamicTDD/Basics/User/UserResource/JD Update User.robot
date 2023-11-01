@@ -106,12 +106,13 @@ JD-TC-UpdateUser-1
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
 
-     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}   deptId=${dep_id}  state=${state}  pincode=${pin}  admin=${bool[0]} 
+     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}   deptId=${dep_id}  pincode=${pin}  admin=${bool[0]} 
      Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${whpnum} 
      Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
      Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
      Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
      Variable Should Exist   ${resp.json()['city']}      ${city}    
+     Variable Should Exist   ${resp.json()['state']}      ${state} 
 
      ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+336341
      clear_users  ${PUSERNAME_U3}

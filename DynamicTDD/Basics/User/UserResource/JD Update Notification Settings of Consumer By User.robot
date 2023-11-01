@@ -68,10 +68,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
      Set Suite Variable  ${id}
      ${bs}=  FakerLibrary.bs
      Set Suite Variable  ${bs}
-
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}  ${DAY1}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
@@ -97,7 +94,9 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
     ${sTime}=  db.subtract_timezone_time  ${tz}  0  10
     Set Suite Variable  ${BsTime30}  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  1  30  

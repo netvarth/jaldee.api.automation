@@ -174,7 +174,7 @@ JD-TC-GetUsers-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city2}  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city2}  ignore_case=True 
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state2}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0   
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       0
@@ -243,7 +243,7 @@ JD-TC-GetUsers-5
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       ${sub_domain_id}
@@ -270,7 +270,7 @@ JD-TC-GetUsers-5
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[2]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U2}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city2}  
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city2}   ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state2}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          0
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       0

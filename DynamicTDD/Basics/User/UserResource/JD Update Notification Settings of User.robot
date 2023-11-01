@@ -65,11 +65,7 @@ JD-TC-Update_Notification_Settings_of_User-1
      Set Suite Variable  ${MUSERNAME_E1}
      ${id}=  get_id  ${MUSERNAME_E1}
      Set Suite Variable  ${id}
-
-
-
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}  ${DAY1}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
@@ -100,6 +96,9 @@ JD-TC-Update_Notification_Settings_of_User-1
     Set Suite Variable  ${BsTime30}  ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable  ${BeTime30}  ${eTime}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1} 
+
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
