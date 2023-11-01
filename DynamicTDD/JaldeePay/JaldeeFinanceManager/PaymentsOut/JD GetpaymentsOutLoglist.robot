@@ -162,6 +162,8 @@ JD-TC-Get PaymentsOut Log List-1
     Set Suite Variable    ${DAY}
     ${time_now}=    Get Current Date
     ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
+    Set Suite Variable    ${time_now}
+
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -179,10 +181,40 @@ JD-TC-Get PaymentsOut Log List-1
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['userType']}  ${userType[0]}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['localUserId']}  ${pid}
 
-*** Keywords ***
-Get PaymentsOut Log List UId
+JD-TC-Get PaymentsOut Log List-2
 
-    [Arguments]   ${uid}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/${uid}/statelist     expected_status=any
-    [Return]  ${resp}
+    [Documentation]  do a Update paymentOut then get it's log list.
+
+    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${paymentsOutStatus}=   FakerLibrary.word
+    ${paymentStatus}=   FakerLibrary.word
+
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get PaymentsOut Log List UId   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['account']}  ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['isPaymentsIn']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['date']}  ${DAY}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['time']}  ${time_now}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['userType']}  ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['localUserId']}  ${pid}
+
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][1]['date']}  ${DAY}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][1]['time']}  ${time_now}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][1]['userType']}  ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][1]['localUserId']}  ${pid}

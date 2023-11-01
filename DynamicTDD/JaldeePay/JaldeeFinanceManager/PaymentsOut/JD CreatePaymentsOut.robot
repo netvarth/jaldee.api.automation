@@ -158,7 +158,7 @@ JD-TC-Create PaymentsOut-1
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -285,7 +285,7 @@ JD-TC-Create PaymentsOut-7
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[1]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[1]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -308,7 +308,7 @@ JD-TC-Create PaymentsOut-8
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[12]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[12]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -331,7 +331,7 @@ JD-TC-Create PaymentsOut-9
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[8]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[8]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -354,7 +354,7 @@ JD-TC-Create PaymentsOut-10
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[6]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[6]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -377,7 +377,7 @@ JD-TC-Create PaymentsOut-11
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[7]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[7]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -400,7 +400,7 @@ JD-TC-Create PaymentsOut-12
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -423,7 +423,7 @@ JD-TC-Create PaymentsOut-13
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd              
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -446,7 +446,7 @@ JD-TC-Create PaymentsOut-14
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[3]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[3]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -469,7 +469,7 @@ JD-TC-Create PaymentsOut-15
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[10]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[10]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -492,7 +492,7 @@ JD-TC-Create PaymentsOut-16
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[13]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[13]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -515,7 +515,7 @@ JD-TC-Create PaymentsOut-17
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[14]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[14]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -539,7 +539,7 @@ JD-TC-Create PaymentsOut-18
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[2]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[2]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -562,7 +562,7 @@ JD-TC-Create PaymentsOut-19
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[15]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[15]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -609,7 +609,7 @@ JD-TC-Create PaymentsOut-21
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[1]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[1]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -632,7 +632,7 @@ JD-TC-Create PaymentsOut-22
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[12]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[12]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -655,7 +655,7 @@ JD-TC-Create PaymentsOut-23
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[8]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[8]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -678,7 +678,7 @@ JD-TC-Create PaymentsOut-24
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[6]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[6]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -701,7 +701,7 @@ JD-TC-Create PaymentsOut-25
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[7]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[7]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -724,7 +724,7 @@ JD-TC-Create PaymentsOut-26
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[9]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[9]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -747,7 +747,7 @@ JD-TC-Create PaymentsOut-27
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[4]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -770,7 +770,7 @@ JD-TC-Create PaymentsOut-28
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[3]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[3]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -793,7 +793,7 @@ JD-TC-Create PaymentsOut-29
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[10]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[10]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -816,7 +816,7 @@ JD-TC-Create PaymentsOut-30
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[13]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[13]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -839,7 +839,7 @@ JD-TC-Create PaymentsOut-31
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[14]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[14]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -863,7 +863,7 @@ JD-TC-Create PaymentsOut-32
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[2]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[2]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -886,7 +886,7 @@ JD-TC-Create PaymentsOut-33
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[15]}
+    ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[1]}    ${finance_payment_modes[15]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
