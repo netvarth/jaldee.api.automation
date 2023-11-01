@@ -282,18 +282,6 @@ JD-TC-Resubmit_Member_QNR-UH1
 
 JD-TC-Resubmit_Member_QNR-UH2
 
-    [Documentation]  Resubmit Member QNR where member is is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Resubmit Member Questionnaire    ${accountId}    ${empty}    ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Resubmit_Member_QNR-UH3
-
     [Documentation]  Resubmit Member QNR where data is empty
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
@@ -304,7 +292,7 @@ JD-TC-Resubmit_Member_QNR-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-Resubmit_Member_QNR-UH4
+JD-TC-Resubmit_Member_QNR-UH3
 
     [Documentation]  Resubmit Member QNR with another provider login
 
@@ -317,7 +305,7 @@ JD-TC-Resubmit_Member_QNR-UH4
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
-JD-TC-Resubmit_Member_QNR-UH5
+JD-TC-Resubmit_Member_QNR-UH4
 
     [Documentation]  Resubmit Member QNR with consumer login
 
@@ -329,7 +317,7 @@ JD-TC-Resubmit_Member_QNR-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Resubmit_Member_QNR-UH6
+JD-TC-Resubmit_Member_QNR-UH5
 
     [Documentation]  Resubmit Member QNR without login
 

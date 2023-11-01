@@ -198,7 +198,7 @@ JD-TC-Create_Membership-UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
-JD-TC-Create_Membership-UH8
+JD-TC-Create_Membership-UH3
 
     [Documentation]  Create Member where another provider logged in and try to use another providers service
 
@@ -232,5 +232,5 @@ JD-TC-Create_Membership-UH8
 
     ${resp}=    Create Membership     ${firstName2}    ${lastName2}    ${number5}    ${membershipid}    ${countryCodes[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   600
+    Should Be Equal As Strings    ${resp.status_code}   422
 

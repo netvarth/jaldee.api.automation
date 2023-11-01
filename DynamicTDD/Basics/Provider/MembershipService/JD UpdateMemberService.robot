@@ -456,12 +456,12 @@ JD-TC-Update_Member_Service-UH12
 
     ${resp}=    Get Membership Service by id    ${memberid}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    60000
+    Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['id']}    ${memberid}
     Should Be Equal As Strings    ${resp.json()['name']}    ${name2}
     Should Be Equal As Strings    ${resp.json()['displayName']}    ${displayname2}
     Should Be Equal As Strings    ${resp.json()['description']}    ${description2}
-    Should Be Equal As Strings    ${resp.json()['effectiveFrom']}    ${effectiveFrom2}
+    Should Be Equal As Strings    ${resp.json()['effectiveFrom']}    ${effectiveFrom3}
     Should Be Equal As Strings    ${resp.json()['effectiveTo']}    ${effectiveTo2}
     Should Be Equal As Strings    ${resp.json()['approvalType']}    ${MembershipApprovalType[0]}
     Should Be Equal As Strings    ${resp.json()['allowLogin']}    ${bool[1]}

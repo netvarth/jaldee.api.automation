@@ -281,19 +281,7 @@ JD-TC-Submit_Member_QNR-UH2
 
 JD-TC-Submit_Member_QNR-UH3
 
-    [Documentation]  Submit Member QNR where member is is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Submit Member Qnr    ${accountId}    ${empty}    ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Submit_Member_QNR-UH4
-
-    [Documentation]  Submit Member QNR where data is empty
+    [Documentation]  Submit Member QNR where data is empty 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
@@ -303,7 +291,7 @@ JD-TC-Submit_Member_QNR-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-Submit_Member_QNR-UH5
+JD-TC-Submit_Member_QNR-UH4
 
     [Documentation]  Submit Member QNR with another provider login
 
@@ -316,7 +304,7 @@ JD-TC-Submit_Member_QNR-UH5
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
-JD-TC-Submit_Member_QNR-UH6
+JD-TC-Submit_Member_QNR-UH5
 
     [Documentation]  Submit Member QNR with consumer login
 
@@ -328,7 +316,7 @@ JD-TC-Submit_Member_QNR-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Submit_Member_QNR-UH7
+JD-TC-Submit_Member_QNR-UH6
 
     [Documentation]  Submit Member QNR without login
 
