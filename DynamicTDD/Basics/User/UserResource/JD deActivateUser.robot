@@ -29,15 +29,20 @@ DeActivate Service Provider
 JD-TC-DeActivate Service Provider -1
     [Documentation]   Signup aprovider then create 2 user.one user have admin previlage. admin false user login and call deActivate url.
 
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.content}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-    ${d1}=  Random Int   min=0  max=${dlen-1}
-    Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
-    ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
-    ${sdom}=  Random Int   min=0  max=${sdlen-1}
-    Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.content}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${dlen}=  Get Length  ${domresp.json()}
+    # ${d1}=  Random Int   min=0  max=${dlen-1}
+    # Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
+    # ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    # ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    # Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+
+    ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    Log  ${iscorp_subdomains}
+    Set Suite Variable  ${dom}  ${iscorp_subdomains[0]['domain']}
+    Set Suite Variable  ${sub_dom}   ${iscorp_subdomains[0]['subdomains']}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

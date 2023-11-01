@@ -46,6 +46,7 @@ JD-TC-Get_Member-1
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
     ${description}=    FakerLibrary.bs
+    ${description2}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
     ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
