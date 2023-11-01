@@ -564,7 +564,11 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${P_Sector}  ${decrypted_data['sector']}
+    # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
     ${p_id}=  get_acc_id  ${MUSERNAME_E1}
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -762,7 +766,11 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${P_Sector}  ${decrypted_data['sector']}
+    # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
     ${p_id}=  get_acc_id  ${MUSERNAME_E1}
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
     Log   ${resp.json()}
