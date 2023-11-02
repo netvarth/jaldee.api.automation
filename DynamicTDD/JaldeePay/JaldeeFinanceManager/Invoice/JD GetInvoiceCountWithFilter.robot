@@ -427,6 +427,15 @@ JD-TC-GetInvoiceCountwithFilter-9
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()}   ${len}
 
+JD-TC-GetInvoiceCountwithFilter-UH1
+
+    [Documentation]   GetInvoiceCountwithFilter without login.
+
+    ${resp}=  Get Invoice Count With Filter   invoiceStatus-eq= ${status_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
     
 
 

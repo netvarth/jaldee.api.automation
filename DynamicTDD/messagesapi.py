@@ -2078,6 +2078,12 @@ INVALID_PAYMENTSIN_ID="Invalid PaymentsIn Id"
 JALDEE_FINANCE_DISABLED="Jaldee Finance disabled"
 INVALID_PAYMENTSIN_AMOUNT="Invalid PaymentsIn Amount"
 INVALID_PAYMENTSOUT_CATEGORY="Invalid PaymentsOut Category"
+INVALID_FM_INVOICE_ID= "Invalid Invoice Id"
+INVALID_INVOICE_CATEGORY_ID="Invalid Invoice Category Id"
+UPI_ID_CANNOT_BE_EMPTY="UPI ID cannot be empty"
+CANNOT_BE_EMPTY_GATEWAY_TRANSACTION_ID="Gateway Transaction ID cannot be empty"
+
+
 
 
 

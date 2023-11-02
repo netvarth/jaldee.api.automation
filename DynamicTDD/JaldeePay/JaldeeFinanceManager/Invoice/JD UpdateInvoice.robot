@@ -59,6 +59,7 @@ JD-TC-UpdateInvoice-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
+    Set Suite Variable   ${name1}
     ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -182,3 +183,89 @@ JD-TC-UpdateInvoice-1
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount1}
+
+JD-TC-UpdateInvoice-2
+
+    [Documentation]  Update invoice with empty invoice date.
+
+    ${resp}=  Provider Login  ${PUSERNAME41}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+ 
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.Add Date  -70
+    ${amount}=   Random Int  min=500  max=2000
+    ${invoiceId}=   FakerLibrary.word
+
+    ${amount1}=   Random Int  min=500  max=2000
+    ${amount1}=     roundval    ${amount1}   1
+
+
+
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}  ${amount1}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount1}
+
+JD-TC-UpdateInvoice-UH1
+
+    [Documentation]  Update invoice with invalid invoice uid.
+
+    ${resp}=  Provider Login  ${PUSERNAME41}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+ 
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${invoiceId}=   FakerLibrary.word
+
+    ${amount1}=   Random Int  min=500  max=2000
+    ${amount1}=     roundval    ${amount1}   1
+
+    ${fakeid}=    Random Int  min=1000   max=9999	
+
+    ${resp}=  Update Invoice   ${fakeid}    ${category_id2}  ${amount1}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-UpdateInvoice-UH2
+
+    [Documentation]  Update invoice with invalid category id.
+
+    ${resp}=  Provider Login  ${PUSERNAME41}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+ 
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${invoiceId}=   FakerLibrary.word
+
+    ${amount1}=   Random Int  min=500  max=2000
+    ${amount1}=     roundval    ${amount1}   1
+
+    ${fakeid}=    Random Int  min=1000   max=9999	
+
+    ${resp}=  Update Invoice   ${invoice_uid}    ${fakeid}  ${amount1}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_INVOICE_CATEGORY_ID}
+
+
+
+

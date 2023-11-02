@@ -300,3 +300,60 @@ JD-TC-GetInvoice by uid-3
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount1}
 
+JD-TC-GetInvoice by uid-UH1
+
+    [Documentation]   GetInvoice by invalid uid.
+
+    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fakeid}=    Random Int  min=1000   max=9999	
+
+    ${resp1}=  Get Invoice By Id  ${fakeid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp1.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-GetInvoice by uid-UH2
+
+    [Documentation]   GetInvoice by uid without login.
+
+    ${fakeid}=    Random Int  min=1000   max=9999	
+
+    ${resp1}=  Get Invoice By Id  ${fakeid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  419
+    Should Be Equal As Strings  "${resp1.json()}"      "${SESSION_EXPIRED}"
+
+JD-TC-GetInvoice by uid-UH3
+
+    [Documentation]   GetInvoice by  uid using another login.
+
+    ${resp}=  Provider Login  ${PUSERNAME137}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp1.json()}   ${INVALID_FM_INVOICE_ID}
+    
+
+
