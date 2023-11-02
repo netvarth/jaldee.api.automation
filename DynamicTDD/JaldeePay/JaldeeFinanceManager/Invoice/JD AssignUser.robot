@@ -91,7 +91,7 @@ JD-TC-Assign User-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name1}  ${categoryType[4]} 
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
@@ -175,6 +175,8 @@ JD-TC-Assign User-1
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
 
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Suite Variable  ${providerConsumerIdList}   
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -187,11 +189,10 @@ JD-TC-Assign User-1
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uid']}
-    Set Suite Variable   ${invoice_id}   ${resp.json()['id']}  
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
 
     
 
@@ -210,3 +211,86 @@ JD-TC-Assign User-1
     Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()[0]['assignedUserId']}  ${u_id}
+
+JD-TC-Assign User-UH1
+
+    [Documentation]  Assign User with invalid user id.
+
+    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fakeid}=    Random Int  min=1000   max=9999	
+    ${resp}=  Assign User   ${invoice_uid}  ${fakeid}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_USER_ID}
+
+JD-TC-Assign User-UH2
+
+    [Documentation]  Assign User with already assigned one.
+
+    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Assign User   ${invoice_uid}  ${u_id}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${ALREADY_ASSIGNED_USER}
+
+JD-TC-Assign User-UH3
+
+    [Documentation]  Assign User without login.
+
+    ${resp}=  Assign User   ${invoice_uid}  ${u_id}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"      "${SESSION_EXPIRED}"
+
+JD-TC-Assign User-UH4
+
+    [Documentation]  Assign User with another provider login.
+
+    ${resp}=  Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+
+    ${resp}=  Assign User   ${invoice_uid}  ${u_id}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+
+JD-TC-Assign User-UH5
+
+    [Documentation]  Assign User with invalid user id.
+
+    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fakeid}=    Random Int  min=1000   max=9999	
+    ${resp}=  Assign User   ${fakeid}  ${u_id}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}

@@ -13,48 +13,67 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_musers.py
+
 *** Keywords ***
-Update Invoice Status
+Apply Discount
 
-    [Arguments]    ${InvoiceUid}     ${userId}     
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}         &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/${userId}     expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
-
-*** Variables ***
-
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${pngfile}      /ebs/TDD/upload.png
-${pdffile}      /ebs/TDD/sample.pdf
-${jpgfile2}      /ebs/TDD/small.jpg
-${gif}      /ebs/TDD/sample.gif
-${xlsx}      /ebs/TDD/qnr.xlsx
-
-${order}    0
-${fileSize}  0.00458
-
-@{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
-
 
 *** Test Cases ***
 
-JD-TC-UpdateInvoiceStatus-1
+JD-TC-Apply Discount-1
 
-    [Documentation]  Create a invoice  and update it status.
+    [Documentation]  Create a invoice and assign the invoice to a user then unassign that user.
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+
+    ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
-
-
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
+    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+     
+    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000411224
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  get_address
+    ${dob}=  FakerLibrary.Date
+    ${pin}=  get_pincode
+    
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id}  ${resp.json()}
+
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -77,26 +96,14 @@ JD-TC-UpdateInvoiceStatus-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
-    
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id1}   ${resp.json()}
+
 
     ${name1}=   FakerLibrary.word
+    Set Suite Variable   ${name1}
     ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -165,16 +172,14 @@ JD-TC-UpdateInvoiceStatus-1
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-
     ${resp1}=  AddCustomer  ${CUSERNAME11}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
 
+
     ${providerConsumerIdList}=  Create List  ${pcid18}
-    Set Suite Variable  ${providerConsumerIdList}   
-
-
+    Set Suite Variable  ${providerConsumerIdList}  
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -187,75 +192,39 @@ JD-TC-UpdateInvoiceStatus-1
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
+    
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${status_id3}   ${resp.json()}
 
-    ${resp}=  Update Invoice Status   ${invoice_uid}    ${status_id3}
-    Log  ${resp.content}
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue}=     Random Int   min=50   max=100
+    ${discountValue}=  Convert To Number  ${discountValue}  1
+
+    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountValue}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get Invoice By Id  ${invoice_uid}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
-    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
-    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp1.json()['invoiceStatusName']}  ${New_status[0]}
-
-JD-TC-UpdateInvoiceStatus-UH1
-
-    [Documentation]  UpdateInvoiceStatus with invalid status id.
-
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Get Invoice By Id  ${invoice_uid1}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['discounts'][0]['fileName']}  ${jpgfile}
 
-    ${fakeid}=    Random Int  min=1000   max=9999	
-
-    ${resp}=  Update Invoice Status   ${invoice_uid}    ${fakeid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_STATUS_ID}
-
-JD-TC-UpdateInvoiceStatus-UH2
-
-    [Documentation]  UpdateInvoiceStatus with invalid invoice id.
-
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${fakeid}=    Random Int  min=1000   max=9999	
-
-    ${resp}=  Update Invoice Status   ${fakeid}    ${status_id3}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
-
-JD-TC-UpdateInvoiceStatus-UH3
-
-    [Documentation]  UpdateInvoiceStatus with with already updated one..
-
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-   ${ALREADY_IN_GIVEN_STATUS}=  format String   ${ALREADY_IN_GIVEN_STATUS}   ${New_status[0]}
-
-    ${resp}=  Update Invoice Status   ${invoice_uid}    ${status_id3} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${ALREADY_IN_GIVEN_STATUS}
 
 

@@ -75,18 +75,11 @@ JD-TC-UploadInvoiceAttachement-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name1}  ${categoryType[4]} 
+    Set Suite Variable   ${name1}
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -160,6 +153,8 @@ JD-TC-UploadInvoiceAttachement-1
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
 
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Suite Variable  ${providerConsumerIdList} 
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -172,11 +167,11 @@ JD-TC-UploadInvoiceAttachement-1
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uid']}
-    Set Suite Variable   ${invoice_id}   ${resp.json()['id']} 
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
+
 
     ${resp}=  db.getType   ${pdffile} 
     Log  ${resp}
@@ -194,7 +189,124 @@ JD-TC-UploadInvoiceAttachement-1
     
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
+    Set Suite Variable   ${Attachments}
 
     ${resp}=  Upload Finance Invoice Attachment   ${invoice_uid}     ${Attachments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+
+JD-TC-UploadInvoiceAttachement-2
+
+    [Documentation]   uploadinvoice attachment having drive id.
+
+    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    ${invoiceId}=   FakerLibrary.word
+
+    ${resp1}=  AddCustomer  ${CUSERNAME10}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid10}   ${resp1.json()}
+
+    ${resp1}=  AddCustomer  ${CUSERNAME9}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid9}   ${resp1.json()}
+
+    ${providerConsumerIdList}=  Create List  ${pcid10}  ${pcid9}
+    Set Test Variable  ${providerConsumerIdList}   
+
+    
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
+    Set Suite Variable  ${invoice_uid2}   ${resp.json()['uidList'][1]}  
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+
+
+
+    ${resp}    upload file to temporary location    ${LoanAction[0]}    ${pid}    ${ownerType[0]}    ${userName}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${pid}  fileName=${jpgfile}  fileSize=${fileSize}  caption=${caption1}  fileType=${fileType1}  order=${order}  driveId=${driveId}
+    Log  ${Attachments}
+    Set Test Variable   ${Attachments}
+
+        ${resp}=  Upload Finance Invoice Attachment   ${invoice_uid1}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${jpgfile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+
+JD-TC-UploadInvoiceAttachement-UH1
+
+    [Documentation]  UploadInvoiceAttachement with invalid invoice id.
+
+    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fakeid}=    Random Int  min=1000   max=9999	
+
+    ${resp}=  Upload Finance Invoice Attachment   ${fakeid}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-UploadInvoiceAttachement-UH2
+
+    [Documentation]  UploadInvoiceAttachement with empty attachment.
+
+    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Attachments}=    Create Dictionary   
+    Log  ${Attachments}
+
+    ${resp}=  Upload Finance Invoice Attachment   ${invoice_uid2}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${FILE_NAME_NOT_FOUND}
+
+
+
+
+

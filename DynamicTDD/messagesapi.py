@@ -2082,7 +2082,9 @@ INVALID_FM_INVOICE_ID= "Invalid Invoice Id"
 INVALID_INVOICE_CATEGORY_ID="Invalid Invoice Category Id"
 UPI_ID_CANNOT_BE_EMPTY="UPI ID cannot be empty"
 CANNOT_BE_EMPTY_GATEWAY_TRANSACTION_ID="Gateway Transaction ID cannot be empty"
-
+ALREADY_ASSIGNED_USER="This user already assigned"
+ALREADY_UNASSIGNED_USER="User already unassigned"
+INVALID_FM_USER_ID="Invalid User Id"
 
 
 

@@ -84,26 +84,14 @@ JD-TC-UnAssign User-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
-    
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id1}   ${resp.json()}
+
 
     ${name1}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name1}  ${categoryType[4]} 
+    Set Suite Variable   ${name1}
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
-
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -178,6 +166,9 @@ JD-TC-UnAssign User-1
     Set Suite Variable  ${pcid18}   ${resp1.json()}
 
 
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Suite Variable  ${providerConsumerIdList}  
+
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
@@ -189,11 +180,11 @@ JD-TC-UnAssign User-1
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${pcid18}
+    
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uid']}
-    Set Suite Variable   ${invoice_id}   ${resp.json()['id']}  
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
     
 
@@ -228,3 +219,69 @@ JD-TC-UnAssign User-1
     Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
     # Should Be Equal As Strings  ${resp1.json()[0]['assignedUserId']}  ${EMPTY}
+
+JD-TC-UnAssign User-UH1
+
+    [Documentation]  UnAssign User with invalid invoice id.
+
+    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fakeid}=    Random Int  min=1000   max=9999	
+    ${resp}=  UnAssign User   ${fakeid}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-UnAssign User-UH2
+
+    [Documentation]  UnAssign User that already unassigned.
+
+    ${resp}=  Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  UnAssign User   ${invoice_uid}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${ALREADY_UNASSIGNED_USER}
+
+JD-TC-UnAssign User-UH3
+
+    [Documentation]  UnAssign User without login.
+    ${resp}=  UnAssign User   ${invoice_uid}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"      "${SESSION_EXPIRED}"
+
+JD-TC-UnAssign User-UH4
+
+    [Documentation]  UnAssign User with another provider login.
+
+    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=  UnAssign User   ${invoice_uid}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
