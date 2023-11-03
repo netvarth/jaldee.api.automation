@@ -22,9 +22,18 @@ JD-TC-GetCategoryById-1
 
     [Documentation]  Create Category as Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME93}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
+
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -66,9 +75,9 @@ JD-TC-GetCategoryById-2
 
     [Documentation]  Create Category as Expense and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME93}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
@@ -89,10 +98,10 @@ JD-TC-GetCategoryById-3
 
     [Documentation]  Create Category as Payable and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME93}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[2]} 
     Log  ${resp.json()}
@@ -112,9 +121,9 @@ JD-TC-GetCategoryById-4
 
     [Documentation]  Create Category as Income and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME93}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
@@ -135,9 +144,9 @@ JD-TC-GetCategoryById-5
 
     [Documentation]  Create Category as Invoice and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME93}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME93}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
@@ -181,9 +190,9 @@ JD-TC-GetCategoryById-UH3
 
     [Documentation]   Get Category by Id Using another providers category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

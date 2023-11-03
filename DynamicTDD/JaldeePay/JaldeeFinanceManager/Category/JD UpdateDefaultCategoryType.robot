@@ -36,10 +36,17 @@ JD-TC- Update default category by type-1
 
     [Documentation]   Update default category by type
 
-    ${resp}=  Provider Login  ${PUSERNAME81}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -87,9 +94,9 @@ JD-TC- Update default category by type-2
 
     [Documentation]  Create Category as Expense and  Update default category by type.
 
-    ${resp}=  Provider Login  ${PUSERNAME81}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME81}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
@@ -115,9 +122,9 @@ JD-TC- Update default category by type-3
 
     [Documentation]  Create Category as Payable and  Update default category by type.
 
-    ${resp}=  Provider Login  ${PUSERNAME81}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME81}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[2]} 
@@ -143,9 +150,9 @@ JD-TC- Update default category by type-4
 
     [Documentation]  Create Category as Invoice and  Update default category by type.
 
-    ${resp}=  Provider Login  ${PUSERNAME81}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME81}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
@@ -202,9 +209,9 @@ JD-TC- Update default category by type-UH3
 
     [Documentation]  Create Category as Vendor then update it as Expense  .
 
-    ${resp}=  Provider Login  ${PUSERNAME105}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME105}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -258,9 +265,9 @@ JD-TC- Update default category by type-UH4
 
     [Documentation]  Create multiple Category as Vendor and try to  Update with different category by type.
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

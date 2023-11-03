@@ -22,9 +22,17 @@ JD-TC-GetCategoryByCategoryType-1
 
     [Documentation]  Create Category as Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME92}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -67,9 +75,9 @@ JD-TC-GetCategoryByCategoryType-2
 
     [Documentation]  Create Category as Expense and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME92}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
@@ -91,9 +99,9 @@ JD-TC-GetCategoryByCategoryType-3
 
     [Documentation]  Create Category as Payable and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME92}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[2]} 
@@ -115,9 +123,9 @@ JD-TC-GetCategoryByCategoryType-4
 
     [Documentation]  Create Category as Invoice and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME92}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
@@ -140,9 +148,9 @@ JD-TC-GetCategoryByCategoryType-5
 
     [Documentation]  Create multiple Category as Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -220,9 +228,9 @@ JD-TC-GetCategoryByCategoryType-UH3
 
     [Documentation]  Get category by category type , without create category.
 
-    ${resp}=  Provider Login  ${PUSERNAME99}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -257,9 +265,9 @@ JD-TC-GetCategoryByCategoryType-UH4
 
     [Documentation]  Create Category as Vendor then update it as Expense then try to get category type as vendor.
 
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

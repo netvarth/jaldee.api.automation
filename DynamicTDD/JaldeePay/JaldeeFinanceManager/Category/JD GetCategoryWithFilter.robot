@@ -24,9 +24,17 @@ JD-TC-GetCategorywithfilter-1
 
     [Documentation]  Create Category as Vendor and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -69,9 +77,9 @@ JD-TC-GetCategorywithfilter-2
 
     [Documentation]  Create Category as Vendor and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[0]}    name-eq=${name}
     Log  ${resp.json()}
@@ -86,9 +94,9 @@ JD-TC-GetCategorywithfilter-3
 
     [Documentation]  Create Category as Vendor and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[0]}    account-eq=${account_id1}
     Log  ${resp.json()}
@@ -104,9 +112,9 @@ JD-TC-GetCategorywithfilter-4
 
     [Documentation]  Create Category as Expense and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name1}=   FakerLibrary.word
     Set Suite Variable   ${name1} 
@@ -128,9 +136,9 @@ JD-TC-GetCategorywithfilter-5
 
     [Documentation]  Create Category as Expense and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=   Get Category With Filter   categoryType-eq=${categoryType[1]}    name-eq=${name1}
     Log  ${resp.json()}
@@ -145,9 +153,9 @@ JD-TC-GetCategorywithfilter-6
 
     [Documentation]  Create Category as Expense and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=   Get Category With Filter   categoryType-eq=${categoryType[1]}    account-eq=${account_id1}
     Log  ${resp.json()}
@@ -163,9 +171,9 @@ JD-TC-GetCategorywithfilter-7
 
     [Documentation]  Create Category as PaymentsOut and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     
     ${name2}=   FakerLibrary.word
     Set Suite Variable   ${name2} 
@@ -188,9 +196,9 @@ JD-TC-GetCategorywithfilter-8
 
     [Documentation]  Create Category as PaymentsOut and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[2]}    name-eq=${name2}
     Log  ${resp.json()}
@@ -205,9 +213,9 @@ JD-TC-GetCategorywithfilter-9
 
     [Documentation]  Create Category as PaymentsOut and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[2]}    account-eq=${account_id1}
     Log  ${resp.json()}
@@ -222,9 +230,9 @@ JD-TC-GetCategorywithfilter-10
 
     [Documentation]  Create Category as PaymentsIn and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name3}=   FakerLibrary.word
     Set Suite Variable   ${name3}
@@ -246,9 +254,9 @@ JD-TC-GetCategorywithfilter-11
 
     [Documentation]  Create Category as PaymentsIn and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    name-eq=${name3}
     Log  ${resp.json()}
@@ -263,9 +271,9 @@ JD-TC-GetCategorywithfilter-12
 
     [Documentation]  Create Category as PaymentsIn and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}
     Log  ${resp.json()}
@@ -304,9 +312,9 @@ JD-TC-GetCategorywithfilter-13
 
     [Documentation]  Create Category as Invoice and verify with id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name4}=   FakerLibrary.word
     Set Suite Variable   ${name4}
@@ -328,9 +336,9 @@ JD-TC-GetCategorywithfilter-14
 
     [Documentation]  Create Category as Invoice and verify with name Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    name-eq=${name4}
     Log  ${resp.json()}
@@ -345,9 +353,9 @@ JD-TC-GetCategorywithfilter-15
 
     [Documentation]  Create Category as Invoice and verify with account id Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Category With Filter   categoryType-eq=${categoryType[3]}    account-eq=${account_id1}
     Log  ${resp.json()}
@@ -363,9 +371,9 @@ JD-TC-GetCategorywithfilter-16
 
     [Documentation]  Create multiple Category as Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -437,9 +445,9 @@ JD-TC-GetCategorywithfilter-UH3
 
     [Documentation]  Get category by category type , without create category.
 
-    ${resp}=  Provider Login  ${PUSERNAME99}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME99}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -473,9 +481,9 @@ JD-TC-GetCategorywithfilter-UH4
 
     [Documentation]  Create Category as Vendor then update it as Expense then try to get category type as vendor.
 
-    ${resp}=  Provider Login  ${PUSERNAME102}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME102}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

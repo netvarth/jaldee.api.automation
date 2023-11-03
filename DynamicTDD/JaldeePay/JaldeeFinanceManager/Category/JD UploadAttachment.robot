@@ -34,10 +34,17 @@ JD-TC-UploadAttachment-1
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Vendor)
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -99,9 +106,9 @@ JD-TC-UploadAttachment-2
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Expense)
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
@@ -129,9 +136,9 @@ JD-TC-UploadAttachment-3
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is PaymentInOut)
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
@@ -159,9 +166,9 @@ JD-TC-UploadAttachment-4
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Invoice)
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
@@ -192,9 +199,9 @@ JD-TC-UploadAttachment-UH1
 
     [Documentation]  Create Category and upload a attachment with invalid category id.(categoryType is Vendor)
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
@@ -223,9 +230,9 @@ JD-TC-UploadAttachment-UH2
 
     [Documentation]  Create Category and upload a attachment with category id -Vendor id.(categoryType is Expense)
 
-    ${resp}=  Provider Login  ${PUSERNAME98}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word

@@ -32,9 +32,17 @@ JD-TC-Get count of Category-1
 
     [Documentation]  Create Category as Vendor and Get count of Category.
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME80}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -78,9 +86,9 @@ JD-TC-Get count of Category-2
 
     [Documentation]  Create Category as Expense and Get count of Category.
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME80}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
@@ -102,9 +110,9 @@ JD-TC-Get count of Category-3
 
     [Documentation]  Create Category as Payable and Get count of Category.
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME80}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[2]} 
@@ -127,9 +135,9 @@ JD-TC-Get count of Category-4
 
     [Documentation]  Create Category as Income and Get count of Category.
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME80}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
@@ -152,9 +160,9 @@ JD-TC-Get count of Category-5
 
     [Documentation]  Create Category as Invoice and Get count of Category.
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME80}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
@@ -201,9 +209,9 @@ JD-TC-Get count of Category-UH3
 
     [Documentation]   Get count of Category Using another providers category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

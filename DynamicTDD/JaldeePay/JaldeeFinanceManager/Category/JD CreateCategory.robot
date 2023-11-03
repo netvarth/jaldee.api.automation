@@ -22,9 +22,22 @@ JD-TC-CreateCategory-1
 
     [Documentation]  Create Category as Vendor.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME91}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
+
+    # ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -52,9 +65,9 @@ JD-TC-CreateCategory-2
 
     [Documentation]  Create Category as Expense.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME91}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
@@ -66,9 +79,9 @@ JD-TC-CreateCategory-3
 
     [Documentation]  Create Category as PaymentInOut.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME91}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[2]} 
@@ -80,9 +93,9 @@ JD-TC-CreateCategory-4
 
     [Documentation]  Create Category as Invoice.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME91}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
@@ -121,9 +134,9 @@ JD-TC-CreateCategory-UH3
 
     [Documentation]  Create Category with name as empty.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME91}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     
     ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Name
     
@@ -137,9 +150,9 @@ JD-TC-CreateCategory-UH4
 
     [Documentation]  Create Category without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME91}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -169,9 +182,9 @@ JD-TC-CreateCategory-UH5
 
     [Documentation]  Create same Category multiple times.
 
-    ${resp}=  Provider Login  ${PUSERNAME91}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME91}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

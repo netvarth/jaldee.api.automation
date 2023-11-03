@@ -22,9 +22,17 @@ JD-TC-UpdateCategory-1
 
     [Documentation]  Create Category as Vendor and update it as Expense.
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME96}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -78,9 +86,9 @@ JD-TC-UpdateCategory-2
 
     [Documentation]  Update Category as paymentinOut.
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME96}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${name1}=   FakerLibrary.word
     ${resp}=  Update Category   ${category_id1}  ${name1}  ${categoryType[2]} 
@@ -99,9 +107,9 @@ JD-TC-UpdateCategory-3
 
     [Documentation]  Update Category as Invoice.
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME96}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
     
     ${name1}=   FakerLibrary.word
     ${resp}=  Update Category   ${category_id1}  ${name1}  ${categoryType[3]} 
@@ -149,9 +157,9 @@ JD-TC-UpdateCategory-UH3
 
     [Documentation]  update Category with another providers category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME130}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME130}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
