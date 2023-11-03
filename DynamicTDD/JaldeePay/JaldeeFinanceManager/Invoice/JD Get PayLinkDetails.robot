@@ -176,22 +176,12 @@ JD-TC-CreateInvoice-1
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
-    ${item}=   Random Int  min=5  max=10
+    ${item}=   FakerLibrary.word
     ${quantity}=   Random Int  min=5  max=10
     ${rate}=   Random Int  min=50  max=1000
 
-    ${itemdata}=   FakerLibrary.words    	nb=4
 
-    ${displayName1}=   FakerLibrary.user name    
-    ${price1}=  Evaluate    random.uniform(50.0,300) 
-    ${itemName1}=   Set Variable     ${itemdata[0]} 
-    ${itemCode1}=   Set Variable     ${itemdata[1]}
-    ${resp}=  Create Sample Item   ${displayName1}   ${itemName1}  ${itemCode1}  ${price1}  ${bool[0]}     
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${item_id1}  ${resp.json()}
-
-
-    ${itemList}=  Create Dictionary  itemId=${item_id1}   quantity=${quantity}     
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
     # ${itemList}=    Create List    ${itemList}
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
@@ -221,6 +211,6 @@ JD-TC-CreateInvoice-1
     ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
     Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
 
-    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[0]}    ${boolean[0]}
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${bool[0]}    ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

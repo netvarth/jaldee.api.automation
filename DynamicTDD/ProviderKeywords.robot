@@ -11483,3 +11483,20 @@ Upload Finance PaymentsIn Attachment
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/paymentsIn/${payable_uid}/attachments  data=${data}  expected_status=any
    [Return]  ${resp}
+
+Generate Link For Invoice
+
+    [Arguments]    ${uuid}  ${phNo}  ${email}  ${emailNotification}    ${smsNotification}   @{vargs}
+    
+    ${data}=    Create Dictionary    uuid=${uuid}  phNo=${phNo}  email=${email}    emailNotification=${emailNotification}  smsNotification=${smsNotification}
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/createLink    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Get Payment Link Details
+
+    [Arguments]   ${paylink}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/link/${paylink}    expected_status=any
+    [Return]  ${resp}
