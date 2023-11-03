@@ -29,13 +29,26 @@ Apply Discount
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
 
+Remove Discount
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}         &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+
 *** Test Cases ***
 
-JD-TC-Apply Discount-1
+JD-TC-Remove Discount-1
 
-    [Documentation]  Create discount and apply discount with different discount value.
+    [Documentation]  Create discount and remove discount using different discount value.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -58,8 +71,7 @@ JD-TC-Apply Discount-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-
-
+     
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -208,17 +220,23 @@ JD-TC-Apply Discount-1
     Set Suite Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Set Suite Variable   ${rmvid}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['discounts'][0]['fileName']}  ${jpgfile}
 
-JD-TC-Apply Discount-2
+JD-TC-Remove Discount-2
 
-    [Documentation]   apply discount with same discount value(created discount value).
+    [Documentation]  remove discount .
 
-
-    ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -231,9 +249,11 @@ JD-TC-Apply Discount-2
     Set Test Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Set Suite Variable   ${rmvid}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
-

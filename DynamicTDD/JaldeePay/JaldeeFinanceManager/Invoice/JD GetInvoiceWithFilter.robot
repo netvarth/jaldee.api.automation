@@ -28,6 +28,7 @@ ${fileSize}  0.00458
 
 @{status}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
+${DisplayName1}   item1_DisplayName
 
 
 *** Test Cases ***
@@ -181,13 +182,26 @@ JD-TC-Get Invoice With Filter -1
     Set Suite Variable   ${amount}
     ${invoiceId}=   FakerLibrary.word
 
-    ${item}=   FakerLibrary.word
+    ${item1}=     FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price1}=     Random Int   min=400   max=500
+    ${price}=  Convert To Number  ${price1}  1
+    Set Suite Variable  ${price} 
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${itemId}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+
+
     ${quantity}=   Random Int  min=5  max=10
-    ${rate}=   Random Int  min=50  max=1000
-
-
-    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
-    # ${itemList}=    Create List    ${itemList}
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
+    ${netRate}=  Evaluate  ${promotionalPrice}*${quantity}
+    ${netRate}=  Convert To Number  ${netRate}  4
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
     Log  ${resp.json()}
@@ -198,7 +212,6 @@ JD-TC-Get Invoice With Filter -1
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}   
 
 
@@ -225,8 +238,13 @@ JD-TC-Get Invoice With Filter -1
     Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()[0]['vendorId']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid}
-    Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
+    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid18}
+    Should Be Equal As Strings  ${resp1.json()[0]['itemList'][0]['itemId']}  ${itemId}
+    Should Be Equal As Strings  ${resp1.json()[0]['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp1.json()[0]['itemList'][0]['price']}  ${promotionalPrice}
+    Should Be Equal As Strings  ${resp1.json()[0]['itemList'][0]['netRate']}  ${netRate}
+
 
 JD-TC-Get Invoice With Filter -2
 

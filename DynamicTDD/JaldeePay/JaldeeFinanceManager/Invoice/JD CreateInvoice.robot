@@ -25,9 +25,11 @@ ${xlsx}      /ebs/TDD/qnr.xlsx
 
 ${order}    0
 ${fileSize}  0.00458
+${service_duration}     30
 
-@{status}    New     Pending    Assigned     Approved    Rejected
+@{status1}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
+${DisplayName1}   item1_DisplayName
 
 *** Test Cases ***
 
@@ -176,18 +178,30 @@ JD-TC-CreateInvoice-1
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
-    ${item}=   FakerLibrary.word
+    ${item1}=     FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price1}=     Random Int   min=400   max=500
+    ${price}=  Convert To Number  ${price1}  1
+    Set Suite Variable  ${price} 
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${itemId}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+
+
     ${quantity}=   Random Int  min=5  max=10
-    ${rate}=   Random Int  min=50  max=1000
-
-
-    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
     # ${itemList}=    Create List    ${itemList}
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${status_id1}   ${resp.json()}
+    Set Suite Variable   ${status_id1}   ${resp.json()}
 
     
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
@@ -269,6 +283,81 @@ JD-TC-CreateInvoice-2
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid9}
+
+JD-TC-CreateInvoice-3
+
+    [Documentation]  Create  invoice using service list,item list and status.
+
+    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    ${invoiceId}=   FakerLibrary.word
+
+    ${resp1}=  AddCustomer  ${CUSERNAME12}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid12}   ${resp1.json()}
+
+    ${providerConsumerIdList}=  Create List  ${pcid12} 
+    Set Test Variable  ${providerConsumerIdList}   
+
+    ${SERVICE1}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid1}  ${resp.json()}
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  
+    ${serviceList}=    Create List    ${serviceList}
+
+
+
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
+    ${netRate}=  Evaluate  ${promotionalPrice}*${quantity}
+
+    
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}  invoiceStatus=${status_id1}   serviceList=${serviceList}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]}  
+
+
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid12}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['itemId']}  ${itemId}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['price']}  ${promotionalPrice}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['netRate']}  ${netRate}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${sid1}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  ${quantity}
+
+
 
 
 JD-TC-CreateInvoice-UH1

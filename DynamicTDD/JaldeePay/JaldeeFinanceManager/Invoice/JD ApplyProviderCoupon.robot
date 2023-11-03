@@ -16,26 +16,48 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/musers.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-*** Keywords ***
-Apply Discount
+*** Variables ***
 
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}         &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+${jpgfile}      /ebs/TDD/uploadimage.jpg
+${pngfile}      /ebs/TDD/upload.png
+${pdffile}      /ebs/TDD/sample.pdf
+${jpgfile2}      /ebs/TDD/small.jpg
+${gif}      /ebs/TDD/sample.gif
+${xlsx}      /ebs/TDD/qnr.xlsx
+
+${order}    0
+${fileSize}  0.00458
+${service_duration}     30
+@{emptylist}
+
+@{status1}    New     Pending    Assigned     Approved    Rejected
+@{New_status}    Proceed     Unassign    Block     Delete    Remove
+${DisplayName1}   item1_DisplayName
+
+
+*** Keywords ***
+Apply Provider Coupon
+
+    [Arguments]    ${uuid}     ${couponCode}         &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}   
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
+
+
+
 
 *** Test Cases ***
 
-JD-TC-Apply Discount-1
+JD-TC-Apply ProviderCoupon-1
 
-    [Documentation]  Create discount and apply discount with different discount value.
+    [Documentation]  Apply provider coupon.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -58,9 +80,7 @@ JD-TC-Apply Discount-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-
-
-
+     
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -76,6 +96,21 @@ JD-TC-Apply Discount-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
@@ -165,7 +200,40 @@ JD-TC-Apply Discount-1
 
 
     ${providerConsumerIdList}=  Create List  ${pcid18}
-    Set Suite Variable  ${providerConsumerIdList}  
+    Set Suite Variable  ${providerConsumerIdList} 
+
+    ${SERVICE1}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}    department=${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid1}  ${resp.json()} 
+
+    ${coupon}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${pc_amount}=   Random Int   min=10  max=50
+    ${pc_amount}=  Convert To Number  ${pc_amount}  1
+    Set Suite Variable  ${pc_amount}
+    ${cupn_code}=   FakerLibrary.word
+    Set Suite Variable  ${cupn_code}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  subtract_time  0  15
+    ${eTime}=  add_time   0  45
+    ${ST_DAY}=  get_date
+    ${EN_DAY}=  add_date   10
+    ${min_bill_amount}=   Random Int   min=90   max=100
+    ${max_disc_val}=   Random Int   min=90  max=100
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[1]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list     ${sid1}    
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${couponId}  ${resp.json()}
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -177,63 +245,55 @@ JD-TC-Apply Discount-1
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  
+    ${serviceList}=    Create List    ${serviceList}
     
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
-    ${discount1}=     FakerLibrary.word
-    ${desc}=   FakerLibrary.word
-    ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
-    Log  ${resp.json()}
-    Set Suite Variable   ${discountId}   ${resp.json()}   
+
+    ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
+    Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Discounts 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${privateNote}=     FakerLibrary.word
-    ${displayNote}=   FakerLibrary.word
-    ${discountValue1}=     Random Int   min=50   max=100
-    ${discountValue1}=  Convert To Number  ${discountValue1}  1
-
-    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}
-    Log  ${resp.json()}
-    Set Suite Variable   ${discountId1}   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['discounts'][0]['fileName']}  ${jpgfile}
+    Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['couponCode']}  ${cupn_code}
+    Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['date']}  ${ST_DAY}
+    Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['discount']}  ${pc_amount}
 
-JD-TC-Apply Discount-2
+# JD-TC-Apply ProviderCoupon-2
 
-    [Documentation]   apply discount with same discount value(created discount value).
+#     [Documentation]  Create a invoice and assign the invoice to a user then unassign that user.
 
+#     ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${privateNote}=     FakerLibrary.word
-    ${displayNote}=   FakerLibrary.word
-
-
-    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
-    Log  ${resp.json()}
-    Set Test Variable   ${discountId1}   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Invoice By Id  ${invoice_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${privateNote}=     FakerLibrary.word
+#     ${displayNote}=   FakerLibrary.word
 
 
+#     ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+#     Log  ${resp.json()}
+#     Set Test Variable   ${discountId1}   ${resp.json()}   
+#     Should Be Equal As Strings  ${resp.status_code}  200
 
+#     ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+#     Log  ${resp.json()}
+#     Set Suite Variable   ${rmvid}   ${resp.json()}   
+#     Should Be Equal As Strings  ${resp.status_code}  200
+
+#     ${resp}=  Get Invoice By Id  ${invoice_uid}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
