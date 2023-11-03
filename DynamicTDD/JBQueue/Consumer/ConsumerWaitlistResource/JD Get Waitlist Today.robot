@@ -19,6 +19,8 @@ ${SERVICE2}    SERVICE2
 ${self}        0
 
 *** Test Cases ***
+
+
 JD-TC-Get Waitlist Today-1
 	[Documentation]  Add To Waitlist By Consumer valid  provider
 
@@ -741,6 +743,109 @@ JD-TC-Get Waitlist Today-UH1
     Should Be Equal As Strings  ${resp.status_code}  419  
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"   
 
+
+
+# ............timezone cases........
+
+
+JD-TC-Get Waitlist Today-38
+
+	[Documentation]  taking a waitlist for a provider who has a branch in us. base location is ist.(online checkin from India),
+    ...   then verify get waitlist today details. 
+
+    clear_service   ${PUSERNAME228}
+    clear_location   ${PUSERNAME228}
+    clear_queue     ${PUSERNAME228}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME228}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable  ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+   
+    ${highest_package}=  get_highest_license_pkg
+    Log  ${highest_package}
+    Set Test variable  ${lic2}  ${highest_package[0]}
+
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${pid}=  get_acc_id  ${PUSERNAME228}
+    
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${US_tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${US_tz}  1  00  
+    ${DAY}=  db.get_date_by_timezone  ${US_tz}
+    ${address} =  FakerLibrary.address
+    ${postcode}=  FakerLibrary.postcode
+    ${parking}    Random Element     ${parkingType} 
+    ${24hours}    Random Element    ['True','False']
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${loc_id1}  ${resp.json()}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${s_id1}=   Create Sample Service  ${SERVICE1}
+    ${s_id2}=   Create Sample Service  ${SERVICE2}
+    ${q_name1}=    FakerLibrary.name
+    ${strt_time}=   db.subtract_timezone_time  ${US_tz}  3  00
+    ${end_time}=    add_timezone_time  ${US_tz}  0  10   
+    ${capacity}=  Random Int  min=8   max=20
+    ${parallel}=  Random Int   min=1   max=2
+    ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id1}  ${s_id1}   ${s_id2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${q_id1}   ${resp.json()}
+
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Consumer Login  ${CUSERNAME15}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+
+    ${cid}=  get_id  ${CUSERNAME15}   
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id1}  ${DAY}  ${s_id1}  ${cnote}  ${bool[0]}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${uuid1}  ${wid[0]}
+
+    ${resp}=  Get consumer Waitlist  
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${count}=  Get Length  ${resp.json()} 
+    Should Be Equal As Integers  ${count}  1
+
+
+JD-TC-Get Waitlist Today-39
+
+	[Documentation]  taking a waitlist for a provider in us( base location is US).(online checkin from India),
+    ...   then verify get waitlist today details. 
+
+    clear_service   ${PUSERNAME228}
+    clear_location   ${PUSERNAME228}
+    clear_queue     ${PUSERNAME228}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME228}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-FamilyMember-CLEAR
     clear_Family  ${membr1}

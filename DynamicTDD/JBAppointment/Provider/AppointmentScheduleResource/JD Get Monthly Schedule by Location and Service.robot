@@ -788,30 +788,38 @@ JD-TC-MonthlySchedule-6
 JD-TC-MonthlySchedule-7
     [Documentation]  Provider checks monthly schedule availability when there are more than one schedule in different locations for different services
 
-    ${licresp}=   Get Licensable Packages
-    Should Be Equal As Strings   ${licresp.status_code}   200
-    ${liclen}=  Get Length  ${licresp.json()}
-    Log   ${licresp.json()}
-    # FOR  ${pos}  IN RANGE  ${liclen}
-    Set Test Variable  ${pkgId}  ${licresp.json()[0]['pkgId']}
-    ${pkgId}    Convert To Integer  ${pkgId}
-    Set Test Variable  ${pkg_name}  ${licresp.json()[0]['displayName']}
-    # END
-    ${mlp_length}=   Get Length   ${multilocPro}
-    FOR   ${a}  IN RANGE   0    ${mlp_length}    
+    # ${licresp}=   Get Licensable Packages
+    # Should Be Equal As Strings   ${licresp.status_code}   200
+    # ${liclen}=  Get Length  ${licresp.json()}
+    # Log   ${licresp.json()}
+    # # FOR  ${pos}  IN RANGE  ${liclen}
+    # Set Test Variable  ${pkgId}  ${licresp.json()[0]['pkgId']}
+    # ${pkgId}    Convert To Integer  ${pkgId}
+    # Set Test Variable  ${pkg_name}  ${licresp.json()[0]['displayName']}
+    # # END
+    # ${mlp_length}=   Get Length   ${multilocPro}
+    # FOR   ${a}  IN RANGE   0    ${mlp_length}    
 
-        ${ml_pro}=  Evaluate  random.choice($multilocPro)  random
-        ${resp}=  Encrypted Provider Login  ${ml_pro}  ${PASSWORD}
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    #     ${ml_pro}=  Evaluate  random.choice($multilocPro)  random
+    #     ${resp}=  Encrypted Provider Login  ${ml_pro}  ${PASSWORD}
+    #     Log   ${resp.json()}
+    #     Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${decrypted_data}=  db.decrypt_data  ${resp.content}
-        Log  ${decrypted_data}
-        Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' ==  '${pkgId}'
+    #     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    #     Log  ${decrypted_data}
+    #     Exit For Loop If  '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' ==  '${pkgId}'
                 
-    END
+    # END
 
-    clear_service   ${ml_pro}
+    # clear_service   ${ml_pro}
+
+    clear_service   ${PUSERNAME67}
+    clear_multilocation   ${PUSERNAME67}
+    clear_queue     ${PUSERNAME67}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -833,7 +841,7 @@ JD-TC-MonthlySchedule-7
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
     ${lid2}=  Create Sample Location
 
-    clear_appt_schedule   ${PUSERNAME${a}}
+    clear_appt_schedule   ${PUSERNAME67}
     
     ${today}=  get_timezone_weekday  ${tz}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -842,8 +850,6 @@ JD-TC-MonthlySchedule-7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name1}=  FakerLibrary.bs
     ${parallel1}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval1}=  Convert To Integer   ${delta1/2}
@@ -1676,3 +1682,84 @@ JD-TC-MonthlySchedule-UH10
         ...   ELSE
         ...   Verify Response List  ${resp}  ${i}  date=${DAY2}  reason=${reason[2]}
     END
+
+
+# ..........timezone cases..............
+
+JD-TC-MonthlySchedule-9
+
+    [Documentation]  provider checks monthly schedule(today) for location in US (where one day difference in tz)
+
+    clear_service   ${PUSERNAME229}
+    clear_location   ${PUSERNAME229}
+    clear_queue     ${PUSERNAME229}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME229}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable  ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+   
+    ${highest_package}=  get_highest_license_pkg
+    Log  ${highest_package}
+    Set Test variable  ${lic2}  ${highest_package[0]}
+
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+   
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${pid}=  get_acc_id  ${PUSERNAME229}
+    
+    ${SERVICE1}=    FakerLibrary.Word
+    ${s_id1}=   Create Sample Service  ${SERVICE1}
+
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${US_tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${US_tz}  1  00  
+    ${DAY}=  db.get_date_by_timezone  ${US_tz}
+    ${DAY1}=  db.add_timezone_date  ${US_tz}  10       
+    ${address} =  FakerLibrary.address
+    ${postcode}=  FakerLibrary.postcode
+    ${parking}    Random Element     ${parkingType} 
+    ${24hours}    Random Element    ['True','False']
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${loc_id1}  ${resp.json()}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${duration}=  FakerLibrary.Random Int  min=1  max=5
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id1}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Monthly Schedule Availability by Location and Service  ${loc_id1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleName']}   ${schedule_name}
+    Should Be Equal As Strings  ${resp.json()[0]['scheduleId']}     ${sch_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['date']}           ${DAY}
+
+    
