@@ -11603,3 +11603,30 @@ Update Finance Service
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/updateservices    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
+
+Remove Service Level Discount
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    ${serviceId}      &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/serviceleveldiscount/${serviceId}    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Update Invoice Items
+
+    [Arguments]    ${uuid}     @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${ItemList}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${ItemList}  ${vargs[${index}]}
+    END
+    ${data}=    json.dumps    ${ItemList}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/updateitems    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
