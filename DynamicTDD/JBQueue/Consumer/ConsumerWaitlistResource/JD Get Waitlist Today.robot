@@ -816,10 +816,10 @@ JD-TC-Get Waitlist Today-38
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME15}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
 
-    ${cid}=  get_id  ${CUSERNAME15}   
+    ${cid}=  get_id  ${CUSERNAME18}   
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id1}  ${DAY}  ${s_id1}  ${cnote}  ${bool[0]}  ${self}
