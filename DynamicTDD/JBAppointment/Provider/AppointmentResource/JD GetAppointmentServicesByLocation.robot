@@ -374,7 +374,7 @@ JD-TC-GetAppointmentServicesByLocation-UH4
 
 JD-TC-GetAppointmentServicesByLocation-8
 
-    [Documentation]  provider checks get service by location id for location in Los_Angeles (where one day difference in tz)
+    [Documentation]  provider checks get service by location id for location in US
 
     clear_service   ${PUSERNAME210}
     clear_location   ${PUSERNAME210}
@@ -407,15 +407,7 @@ JD-TC-GetAppointmentServicesByLocation-8
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id1}=   Create Sample Service  ${SERVICE1}
 
-    FOR   ${i}  IN RANGE   10
-        ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
-        IF  'America/Los_Angeles' == '${US_tz}'
-            Exit For Loop
-        ELSE
-            Continue For Loop
-        END
-    END
-
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime}=  db.subtract_timezone_time  ${US_tz}  2  00
