@@ -36,32 +36,6 @@ ${service_duration}     30
 ${DisplayName1}   item1_DisplayName
 
 
-*** Keywords ***
-Apply Jaldee Coupon
-
-    [Arguments]    ${uuid}     ${jaldeeCouponCode}         &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${jaldeeCouponCode}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Remove Jaldee Coupon
-
-    [Arguments]    ${uuid}     ${jaldeeCouponCode}         &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${jaldeeCouponCode}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-
 *** Test Cases ***
 
 JD-TC-Remove JaldeeCoupon-1
@@ -145,6 +119,7 @@ JD-TC-Remove JaldeeCoupon-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
@@ -206,7 +181,7 @@ JD-TC-Remove JaldeeCoupon-1
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME11}
+    ${resp1}=  AddCustomer  ${CUSERNAME1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}

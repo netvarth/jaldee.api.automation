@@ -97,6 +97,7 @@ JD-TC-GetInvoice by uid-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
@@ -197,6 +198,7 @@ JD-TC-GetInvoice by uid-1
     ${quantity}=  Convert To Number  ${quantity}  1
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
     ${netRate}=  Evaluate  ${promotionalPrice}*${quantity}
+    ${netRate}=  Convert To Number  ${netRate}  4
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
     Log  ${resp.json()}

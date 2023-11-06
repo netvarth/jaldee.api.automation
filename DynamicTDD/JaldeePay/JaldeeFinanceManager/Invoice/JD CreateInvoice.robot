@@ -97,6 +97,7 @@ JD-TC-CreateInvoice-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
@@ -330,6 +331,7 @@ JD-TC-CreateInvoice-3
 
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
     ${netRate}=  Evaluate  ${promotionalPrice}*${quantity}
+     ${netRate}=  Convert To Number  ${netRate}  4
 
     
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}  invoiceStatus=${status_id1}   serviceList=${serviceList}

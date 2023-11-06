@@ -35,21 +35,6 @@ ${service_duration}     30
 ${DisplayName1}   item1_DisplayName
 
 
-*** Keywords ***
-Update Service
-
-    [Arguments]    ${uuid}     @{vargs}
-    ${len}=  Get Length  ${vargs}
-    ${serviceList}=  Create List  
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${serviceList}  ${vargs[${index}]}
-    END
-    ${data}=    json.dumps    ${serviceList}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/updateservices    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
 
 
 
@@ -135,6 +120,7 @@ JD-TC-UpdateService-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
@@ -252,7 +238,7 @@ JD-TC-UpdateService-1
     
 
 
-     ${resp}=  Update Service  ${invoice_uid}   ${serviceList1}   
+     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

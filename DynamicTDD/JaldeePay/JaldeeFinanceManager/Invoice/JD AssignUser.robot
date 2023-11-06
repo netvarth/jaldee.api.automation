@@ -110,6 +110,7 @@ JD-TC-Assign User-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
@@ -253,7 +254,7 @@ JD-TC-Assign User-UH4
 
     [Documentation]  Assign User with another provider login.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

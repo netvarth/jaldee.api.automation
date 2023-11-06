@@ -35,18 +35,6 @@ ${service_duration}     30
 ${DisplayName1}   item1_DisplayName
 
 
-*** Keywords ***
-Apply Service Level Discount
-
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    ${serviceId}      &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/serviceleveldiscount/${serviceId}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
 
 *** Test Cases ***
 
@@ -54,7 +42,7 @@ JD-TC-Apply Service Level Discount-1
 
     [Documentation]  Create discount and apply discount with different discount value.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -116,6 +104,7 @@ JD-TC-Apply Service Level Discount-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
@@ -253,7 +242,7 @@ JD-TC-Apply Service Level Discount-2
     [Documentation]   apply discount with same discount value(created discount value).
 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

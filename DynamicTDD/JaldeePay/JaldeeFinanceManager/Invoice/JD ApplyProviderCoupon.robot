@@ -35,21 +35,6 @@ ${service_duration}     30
 ${DisplayName1}   item1_DisplayName
 
 
-*** Keywords ***
-Apply Provider Coupon
-
-    [Arguments]    ${uuid}     ${couponCode}         &{kwargs}
-    ${data}=  Create Dictionary  couponCode=${couponCode}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-
-
 
 *** Test Cases ***
 
@@ -132,6 +117,7 @@ JD-TC-Apply ProviderCoupon-1
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
