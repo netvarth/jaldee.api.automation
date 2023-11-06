@@ -368,3 +368,103 @@ JD-TC-GetAppointmentServicesByLocation-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
+
+# ...........TIMEZONE CASES.........
+
+
+JD-TC-GetAppointmentServicesByLocation-8
+
+    [Documentation]  provider checks get service by location id for location in Los_Angeles (where one day difference in tz)
+
+    clear_service   ${PUSERNAME210}
+    clear_location   ${PUSERNAME210}
+    clear_queue     ${PUSERNAME210}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable  ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+   
+    ${highest_package}=  get_highest_license_pkg
+    Log  ${highest_package}
+    Set Test variable  ${lic2}  ${highest_package[0]}
+
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+   
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${pid}=  get_acc_id  ${PUSERNAME210}
+    
+    ${SERVICE1}=    FakerLibrary.Word
+    ${s_id1}=   Create Sample Service  ${SERVICE1}
+
+    FOR   ${i}  IN RANGE   10
+        ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
+        IF  'America/Los_Angeles' == '${US_tz}'
+            Exit For Loop
+        ELSE
+            Continue For Loop
+        END
+    END
+
+
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  db.subtract_timezone_time  ${US_tz}  2  00
+    # ${sTime1}=  add_timezone_time  ${US_tz}  1  30  
+    ${eTime}=  add_timezone_time  ${US_tz}  3  00  
+
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime}  ${eTime}
+
+    ${DAY}=  db.get_date_by_timezone  ${US_tz}
+    ${DAY1}=  db.add_timezone_date  ${US_tz}  10       
+    ${address} =  FakerLibrary.address
+    ${postcode}=  FakerLibrary.postcode
+    ${parking}    Random Element     ${parkingType} 
+    ${24hours}    Random Element    ['True','False']
+    ${url}=   FakerLibrary.url
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${loc_id1}  ${resp.json()}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${duration}=  FakerLibrary.Random Int  min=1  max=5
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY1}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id1}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable     ${slot1}   ${resp.json()['availableSlots'][0]['time']}   
+
+    ${resp}=    Get Appoinment Service By Location   ${loc_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}   200
+
+    Should Be Equal As Strings  ${resp.json()[0]['id']}       ${s_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}     ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceAvailability']['nextAvailableDate']}    ${DAY}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceAvailability']['nextAvailable']}     ${slot1}
+   
