@@ -6461,3 +6461,10 @@ def clear_multilocation (usrid):
     finally:
         if dbconn is not None:
             dbconn.close()
+
+
+def endtime_conversion(time1,time2):     
+    if time2[-2:] == "AM" and time1[-2:] == "PM": 
+        return "11:59 PM" + time2[2:2] 
+    else:
+        return str(time1)

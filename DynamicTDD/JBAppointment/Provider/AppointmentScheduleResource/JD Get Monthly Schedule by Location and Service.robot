@@ -1813,9 +1813,12 @@ JD-TC-MonthlySchedule-10
 
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${US_tz}  2  00
     # ${sTime1}=  add_timezone_time  ${US_tz}  1  30  
-    ${eTime1}=  add_timezone_time  ${US_tz}  1  00  
+    ${eTime}=  add_timezone_time  ${US_tz}  3  00  
+
+    ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime}
+
     ${DAY}=  db.get_date_by_timezone  ${US_tz}
     ${DAY1}=  db.add_timezone_date  ${US_tz}  10       
     ${address} =  FakerLibrary.address
@@ -1852,4 +1855,3 @@ JD-TC-MonthlySchedule-10
     Should Be Equal As Strings  ${resp.json()[0]['scheduleName']}   ${schedule_name}
     Should Be Equal As Strings  ${resp.json()[0]['scheduleId']}     ${sch_id1}
     Should Be Equal As Strings  ${resp.json()[0]['date']}           ${DAY}
- 
