@@ -201,11 +201,17 @@ JD-TC-Apply Discount-1
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['discounts'][0]['fileName']}  ${jpgfile}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['privateNote']}  ${privateNote}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['displayNote']}  ${displayNote}
 
-JD-TC-Apply Discount-2
+JD-TC-Apply Discount-UH1
 
-    [Documentation]   apply discount with same discount value(created discount value).
+    [Documentation]   apply already applied discount.
 
 
     ${resp}=  Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
@@ -219,11 +225,10 @@ JD-TC-Apply Discount-2
     ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}
     Set Test Variable   ${discountId1}   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${DISCOUNT_ALREADY_USED}
 
-    ${resp}=  Get Invoice By Id  ${invoice_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+
 
 
 

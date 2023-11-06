@@ -208,11 +208,11 @@ JD-TC-Remove Discount-1
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['discounts'][0]['fileName']}  ${jpgfile}
+    Should Be Equal As Strings  ${resp.json()['discounts']}  []
 
-JD-TC-Remove Discount-2
+JD-TC-Remove Discount-UH1
 
-    [Documentation]  remove discount .
+    [Documentation]  remove discount that already removed .
 
     ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
@@ -222,16 +222,9 @@ JD-TC-Remove Discount-2
     ${displayNote}=   FakerLibrary.word
 
 
-    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
-    Log  ${resp.json()}
-    Set Test Variable   ${discountId1}   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}
     Set Suite Variable   ${rmvid}   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
