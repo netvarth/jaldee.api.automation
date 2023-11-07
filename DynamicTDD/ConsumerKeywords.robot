@@ -1964,3 +1964,9 @@ Get locations by service
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/service/${serviceId}/location    expected_status=any
     [Return]  ${resp}
+
+Get Booking Invoices
+     [Arguments]      ${ynwuuid}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice//ynwuid/${ynwuuid}    expected_status=any
+    [Return]  ${resp}

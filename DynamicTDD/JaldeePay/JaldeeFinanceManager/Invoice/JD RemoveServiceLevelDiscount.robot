@@ -382,7 +382,8 @@ JD-TC-Remove Service Level Discount-1
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['discounts'][0]['fileName']}  ${jpgfile}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts']}  []
+
 
 JD-TC-Remove Service Level Discount-2
 
@@ -408,6 +409,7 @@ JD-TC-Remove Service Level Discount-2
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts']}  []
 
 
 

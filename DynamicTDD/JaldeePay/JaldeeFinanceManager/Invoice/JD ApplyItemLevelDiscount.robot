@@ -70,7 +70,7 @@ JD-TC-Apply Item Level Discount-1
     [Documentation]  Apply Item  Level Discount.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381833
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381838
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -388,6 +388,7 @@ JD-TC-Apply Item Level Discount-1
     ${discountValue1}=     Random Int   min=50   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
+
     ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -398,8 +399,13 @@ JD-TC-Apply Item Level Discount-1
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['discounts'][0]['fileName']}  ${jpgfile}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['privateNote']}  ${privateNote}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['displayNote']}  ${displayNote}
 
 JD-TC-Apply Item Level Discount-2
 
@@ -415,12 +421,9 @@ JD-TC-Apply Item Level Discount-2
 
 
     ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${DISCOUNT_ALREADY_USED}
 
-
-    ${resp}=  Get Invoice By Id  ${invoice_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 
