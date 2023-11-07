@@ -784,8 +784,12 @@ JD-TC-Get Waitlist Today-38
     
     ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${US_tz}  0  30  
-    ${eTime1}=  add_timezone_time  ${US_tz}  1  00  
+
+    ${sTime}=  add_timezone_time  ${US_tz}  0  30  
+    ${eTime}=  add_timezone_time  ${US_tz}  1  00  
+
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime}  ${eTime}
+
     ${DAY}=  db.get_date_by_timezone  ${US_tz}
     ${address} =  FakerLibrary.address
     ${postcode}=  FakerLibrary.postcode
@@ -828,12 +832,11 @@ JD-TC-Get Waitlist Today-38
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid1}  ${wid[0]}
 
-    ${resp}=  Get consumer Waitlist  
+    ${resp}=  Get consumer Waitlist  location-eq=${loc_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${count}=  Get Length  ${resp.json()} 
     Should Be Equal As Integers  ${count}  1
-
 
 JD-TC-Get Waitlist Today-39
 
