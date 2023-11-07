@@ -11661,3 +11661,51 @@ Update Bill Status
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}//billstatus/${billStatus}    expected_status=any
     [Return]  ${resp}
+
+Apply Provider Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Provider Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}      
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Service Level Discount for waitlist
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Service Level Discount for waitlist
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
