@@ -1978,7 +1978,7 @@ JD-TC-UpdateUser -20
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERPH1}
 
-     ${resp}=  Update User  ${u_id1}  ${firstname1}  ${lastname1}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Update User  ${u_id1}  ${firstname1}  ${lastname1}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1996,6 +1996,97 @@ JD-TC-UpdateUser -20
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
 
+
+
+JD-TC-UpdateUser -21
+    [Documentation]   create user with ph no and email and update phone number and update email to empty for the user and login
+
+    ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    Log  ${iscorp_subdomains}
+    Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
+    ${PO_Number}    Generate random string    4    123456789
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    clear_users  ${BUSERPH0}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains}  ${sub_domains}  ${BUSERPH0}   ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${BUSERPH0}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
+    ${id}=  get_id  ${BUSERPH0}
+    
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${u_id}  ${resp.json()[0]['id']}
+
+#     ${PO_Number}    Generate random string    4    123456789
+#     ${PO_Number}    Convert To Integer  ${PO_Number}
+#     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+${PO_Number}
+     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+678876
+#     clear_users  ${PUSERPH1}
+    ${firstname1}=  FakerLibrary.name
+    ${lastname1}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+  
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${u_id1}  ${resp.json()}
+
+    ${resp}=  Get User By Id  ${u_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERPH1}
+
+     ${resp}=  Update User  ${u_id1}  ${firstname1}  ${lastname1}  ${NULL}  ${NULL}  ${EMPTY}   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
 
 
 
