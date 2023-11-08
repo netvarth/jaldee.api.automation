@@ -11723,3 +11723,14 @@ Update bill view status
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${uid}/billviewstatus/${billViewStatus}     expected_status=any
     [Return]  ${resp}
+
+Share invoice as pdf 
+    [Arguments]    ${uuid}   ${emailNotification}    ${email}   ${html}  &{kwargs}
+    ${data}=    Create Dictionary       emailNotification=${emailNotification}  email=${email}   html=${html}
+     FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${uuid}/createSharePdf    data=${data}   expected_status=any
+    [Return]  ${resp}
