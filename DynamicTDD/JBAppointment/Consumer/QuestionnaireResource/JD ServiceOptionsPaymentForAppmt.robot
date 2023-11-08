@@ -944,8 +944,8 @@ JD-TC-ServiceOptionPaymentForAppointment-4
 
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
-    ${terminator}=  Create Dictionary  endDate=${EMPTY}  noOfOccurance=${EMPTY}
-    ${targetDate}=  Create Dictionary  startDate=${EMPTY}   timeSlots=${timeslot}  terminator=${terminator}  recurringType=${recurringtype[1]}   repeatIntervals=${list}
+    ${terminator}=  Create Dictionary  endDate=${DAY2}  noOfOccurance=${EMPTY}
+    ${targetDate}=  Create Dictionary  startDate=${DAY1}   timeSlots=${timeslot}  terminator=${terminator}  recurringType=${recurringtype[1]}   repeatIntervals=${list}
     ${targetDate}=  Create List   ${targetDate}
     ${resp}=   Create Jaldee Coupon   ${cupn_codeG}  ${cupn_name}  ${cupn_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  100  100  1000  10  10  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}   ${domains}   ${sub_domains}   ALL  ${licenses}     targetDate=${targetDate}
     LOg   ${resp.json()}
@@ -1290,8 +1290,8 @@ JD-TC-ServiceOptionPaymentForAppointment-5
 
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
-    ${terminator}=  Create Dictionary  endDate=${EMPTY}  noOfOccurance=${EMPTY}
-    ${targetDate}=  Create Dictionary  startDate=${EMPTY}   timeSlots=${timeslot}  terminator=${terminator}  recurringType=${recurringtype[1]}   repeatIntervals=${list}
+    ${terminator}=  Create Dictionary  endDate=${DAY2}  noOfOccurance=${EMPTY}
+    ${targetDate}=  Create Dictionary  startDate=${DAY1}   timeSlots=${timeslot}  terminator=${terminator}  recurringType=${recurringtype[1]}   repeatIntervals=${list}
     ${targetDate}=  Create List   ${targetDate}
     ${resp}=   Create Jaldee Coupon   ${cupn_codeG}  ${cupn_name}  ${cupn_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  100  100  1000  10  10  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}   ${domains}   ${sub_domains}   ALL  ${licenses}     targetDate=${targetDate}
     LOg   ${resp.json()}
