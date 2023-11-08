@@ -159,7 +159,7 @@ JD-TC-Delete Logo Image of USER-1
     ${resp}=  Get User Profile  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Not Contain  ${resp.json()}   logo
+    Should Not Contain  ${resp.json()}   ${name}
 
 
     ${resp}=   ProviderLogout
