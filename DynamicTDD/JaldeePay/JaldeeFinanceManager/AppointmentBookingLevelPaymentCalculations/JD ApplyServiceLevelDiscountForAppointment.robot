@@ -1,87 +1,130 @@
 *** Settings ***
-
-Suite Teardown    Delete All Sessions
+Suite Teardown    Delete All Sessions 
 Test Teardown     Delete All Sessions
-Force Tags        Finance Manager
+Force Tags        Waitlist
 Library           Collections
 Library           String
 Library           json
 Library           FakerLibrary
 Library           /ebs/TDD/db.py
-Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
-Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/consumermail.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Keywords ***
-Get finance Confiq
- 
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/Invoice     expected_status=any
-    [Return]  ${resp}
+Get Billable Subdomain
+    [Arguments]   ${domain}  ${jsondata}  ${posval}  
+    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
+    FOR  ${pos}  IN RANGE  ${length}
+            Set Suite Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
+            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
+            Should Be Equal As Strings    ${resp.status_code}    200
+            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
+    END
+    [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
-Get default finance category Confiq
- 
+
+
+Get Non Billable Subdomain
+    [Arguments]   ${domain}  ${jsondata}  ${posval}  
+    ${length}=  Get Length  ${jsondata.json()[${posval}]['subDomains']}
+    FOR  ${pos}  IN RANGE  ${length}
+            Set Test Variable  ${subdomain}  ${jsondata.json()[${posval}]['subDomains'][${pos}]['subDomain']}
+            ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
+            Should Be Equal As Strings    ${resp.status_code}    200
+            Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[0]}'
+    END
+    [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
+
+Apply Service Level Discount for Appointment
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/Invoice     expected_status=any
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
 
 *** Variables ***
-
-${xlFile}      ${EXECDIR}/TDD/ServiceoptionsQnr.xlsx   # DataSheet
-${jpgfile}     /ebs/TDD/uploadimage.jpg
-${pngfile}     /ebs/TDD/upload.png
-${pdffile}     /ebs/TDD/sample.pdf
-${mp4file}   /ebs/TDD/MP4file.mp4
-${avifile}   /ebs/TDD/AVIfile.avi
-${mp3file}   /ebs/TDD/MP3file.mp3
-${self}      0
-
-${order}    0
-${fileSize}  0.00458
-${service_duration}     30
-@{emptylist}
-
-@{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
-${DisplayName1}   item1_DisplayName
-${SERVICE1}  sampleservice11 
-${SERVICE2}  sampleservice22
-${self}     0
-${digits}       0123456789
-@{provider_list}
-@{dom_list}
-@{multiloc_providers}
-
+${waitlistedby}           PROVIDER
+${SERVICE1}               SERVICE1001
+${SERVICE2}               SERVICE2002
+${SERVICE3}               SERVICE3003
+${SERVICE4}               SERVICE4004
+${SERVICE5}               SERVICE3005
+${SERVICE6}               SERVICE4006
+${sample}                     4452135820
 
 *** Test Cases ***
 
-JD-TC-GetAppointmentToday-3
+JD-TC-AddToWaitlist-1
+      [Documentation]   Add a consumer to the waitlist for the current day
 
-    [Documentation]  Get provider's appointments for service with prepayment after prepayment
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888353
+    Set Suite Variable   ${PUSERPH0}
+    
+    ${licid}  ${licname}=  get_highest_license_pkg
+    Log  ${licid}
+    Log  ${licname}
+    ${domresp}=  Get BusinessDomainsConf
+    Log   ${domresp.json()}
+    Should Be Equal As Strings  ${domresp.status_code}  200
+    ${dlen}=  Get Length  ${domresp.json()}
+    FOR  ${pos}  IN RANGE  ${dlen}  
+        Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
+        ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
+        Set Suite Variable   ${sd1}
+        Exit For Loop IF     '${check}' == '${bool[1]}'
+    END
+    Log  ${d1}
+    Log  ${sd1}
 
-    ${billable_providers}   ${multilocPro}=    Multiloc and Billable Providers   min=80   max=90
-    Log   ${billable_providers}
-    ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[2]}
-    clear_location  ${billable_providers[2]}
-    ${pid}=  get_acc_id  ${billable_providers[2]}
-    ${cid}=  get_id  ${CUSERNAME32}
-
-    ${resp}=  Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${gender}=    Random Element    ${Genderlist}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Service
+    ${resp}=  Account Activation  ${PUSERPH0}  0
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  "${resp.json()}"    "true"
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
 
-    ${resp}=    Get Locations
+    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${pid}=  get_acc_id  ${PUSERPH0}
+    ${cid}=  get_id  ${CUSERNAME32}
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+
+      # ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
+      # Log    ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -94,26 +137,28 @@ JD-TC-GetAppointmentToday-3
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    ${resp}=  Get jp finance settings
+    ${resp}=  Get jp finance settings    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${resp}=    Get finance Confiq
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Get Bill Settings
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get default finance category Confiq
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=    Enable Disable bill    ${boolean[1]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    
+      # ${resp}=  AddCustomer  ${CUSERNAME1}
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
+      # Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-
+      # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings      ${resp.status_code}  200
+     
     ${lid}=  Create Sample Location
 
     ${desc}=   FakerLibrary.sentence
@@ -127,11 +172,8 @@ JD-TC-GetAppointmentToday-3
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${billable_providers[2]}
+    clear_appt_schedule   ${PUSERPH0}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -215,30 +257,31 @@ JD-TC-GetAppointmentToday-3
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-    
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid1}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid}
+
+    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings   ${resp.json()['merchantId']}  ${merchantid}
-    Set Test Variable   ${merchantid}   ${resp.json()['merchantId']}  
-    Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ConsumerLogout
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
+    Set Suite Variable   ${discountId}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${billable_providers[2]}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp1}=  Get Invoice With Filter  
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-
-    ${resp}=  Get Booking Invoices  ${apptid1}
+    ${resp}=   Get Discounts 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogout
+    ${discAmt}=    Evaluate  ${fullAmount}-${discountprice}
+
+    ${resp}=   Apply Service Level Discount for Appointment    ${apptid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+
