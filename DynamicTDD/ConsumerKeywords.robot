@@ -1968,5 +1968,14 @@ Get locations by service
 Get Booking Invoices
      [Arguments]      ${ynwuuid}  
     Check And Create YNW Session
-    ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice//ynwuid/${ynwuuid}    expected_status=any
+    ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
+    [Return]  ${resp}
+
+
+Get invoices bydate
+     [Arguments]      ${startDate}   ${endDate}
+    ${data}=  Create Dictionary   startDate=${startDate}    endDate=${endDate}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice/bydate   data=${data}   expected_status=any
     [Return]  ${resp}

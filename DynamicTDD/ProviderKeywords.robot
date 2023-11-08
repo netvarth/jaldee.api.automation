@@ -11659,7 +11659,7 @@ Update Bill Status
 
     [Arguments]   ${invoiceUid}    ${billStatus}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}//billstatus/${billStatus}    expected_status=any
+    ${resp}=  PUT On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}//billstatus/${billStatus}    expected_status=any
     [Return]  ${resp}
 
 Apply Provider Coupon for waitlist
@@ -11708,4 +11708,18 @@ Remove Service Level Discount for waitlist
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get Invoice Log List UId
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${uid}/invoicestatelog     expected_status=any
+    [Return]  ${resp}
+
+Update bill view status
+
+    [Arguments]   ${uid}    ${billViewStatus}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${uid}/billviewstatus/${billViewStatus}     expected_status=any
     [Return]  ${resp}
