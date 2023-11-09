@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
@@ -39,6 +40,25 @@ Get Non Billable Subdomain
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
+Apply Jaldee Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get Appointment level Bill Details
+
+    [Arguments]   ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
+    [Return]  ${resp}
+
 Apply Service Level Discount for Appointment
 
     [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
@@ -62,11 +82,10 @@ ${SERVICE6}               SERVICE4006
 ${sample}                     4452135820
 ${self}         0
 
-
 *** Test Cases ***
 
-JD-TC-AddToWaitlist-1
-      [Documentation]   Add a consumer to the waitlist for the current day
+JD-TC-ApplyJaldeeCouponforwaitlist-1
+      [Documentation]   Apply Jaldee Coupon for waitlist then get the bill details.
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888353
     Set Suite Variable   ${PUSERPH0}
@@ -152,9 +171,6 @@ JD-TC-AddToWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
-      # ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-      # Log    ${resp.json()}
-      # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -208,23 +224,6 @@ JD-TC-AddToWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # ${resp}=    Get Bill Settings
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Enable Disable bill    ${boolean[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-      # ${resp}=  AddCustomer  ${CUSERNAME1}
-      # Log   ${resp.json()}
-      # Should Be Equal As Strings  ${resp.status_code}  200
-      # Set Suite Variable  ${cid}  ${resp.json()}
-
-      # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-      # Log   ${resp.json()}
-      # Should Be Equal As Strings      ${resp.status_code}  200
-     
     ${lid}=  Create Sample Location
 
     ${desc}=   FakerLibrary.sentence
@@ -313,9 +312,6 @@ JD-TC-AddToWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}  ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}  ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[0]}
@@ -350,4 +346,8 @@ JD-TC-AddToWaitlist-1
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}

@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
@@ -39,16 +40,16 @@ Get Non Billable Subdomain
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
-Apply Service Level Discount for Appointment
+Apply Jaldee Coupon for Appointment
 
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
 
 *** Variables ***
@@ -65,8 +66,8 @@ ${self}         0
 
 *** Test Cases ***
 
-JD-TC-AddToWaitlist-1
-      [Documentation]   Add a consumer to the waitlist for the current day
+JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
+      [Documentation]   Apply Service Level Discount For Appointmnet.
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888353
     Set Suite Variable   ${PUSERPH0}
@@ -152,9 +153,6 @@ JD-TC-AddToWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
-      # ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-      # Log    ${resp.json()}
-      # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -208,23 +206,6 @@ JD-TC-AddToWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # ${resp}=    Get Bill Settings
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Enable Disable bill    ${boolean[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-      # ${resp}=  AddCustomer  ${CUSERNAME1}
-      # Log   ${resp.json()}
-      # Should Be Equal As Strings  ${resp.status_code}  200
-      # Set Suite Variable  ${cid}  ${resp.json()}
-
-      # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-      # Log   ${resp.json()}
-      # Should Be Equal As Strings      ${resp.status_code}  200
-     
     ${lid}=  Create Sample Location
 
     ${desc}=   FakerLibrary.sentence
@@ -313,9 +294,6 @@ JD-TC-AddToWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}  ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}  ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[0]}
@@ -324,30 +302,68 @@ JD-TC-AddToWaitlist-1
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
+    ${resp}=  Get BusinessDomainsConf
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${d1}  ${resp.json()[0]['domain']}
+    Set Test Variable  ${d2}  ${resp.json()[1]['domain']}
+    Set Test Variable  ${sd1}  ${resp.json()[0]['subDomains'][0]['subDomain']}
+    Set Test Variable  ${sd2}  ${resp.json()[0]['subDomains'][1]['subDomain']}
+    Set Test Variable  ${sd3}  ${resp.json()[1]['subDomains'][0]['subDomain']}
+    Set Test Variable  ${sd4}  ${resp.json()[1]['subDomains'][1]['subDomain']}
+    ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}  
+    ${licenses}=  Jaldee Coupon Target License  ${licid}
+    ${DAY1}=  get_date
+    Set Suite Variable  ${DAY1} 
+    ${DAY2}=  add_date  10
+    Set Suite Variable  ${DAY2}  
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${cup_code}=   FakerLibrary.word
+    Set Suite Variable   ${cup_code}
+    ${cup_name}=    FakerLibrary.name
+    Set Suite Variable   ${cup_name}
+    ${cup_des}=    FakerLibrary.sentence
+    Set Suite Variable   ${cup_des}
+    ${c_des}=   FakerLibrary.sentence
+    Set Suite Variable   ${c_des}  
+    ${p_des}=    FakerLibrary.sentence
+    Set Suite Variable   ${p_des}
+    clear_jaldeecoupon     ${cup_code}
+    ${resp}=  Create Jaldee Coupon  ${cup_code}  ${cup_name}  ${cup_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  100  100  1000  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Push Jaldee Coupon  ${cup_code}  ${cup_des}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Jaldee Coupon By CouponCode   ${cup_code}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${jaldee_amt}    ${resp.json()['discountValue']}  
+    ${resp}=  SuperAdmin Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${discount1}=     FakerLibrary.word
-    ${desc}=   FakerLibrary.word
-    ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
-    Log  ${resp.json()}
-    Set Suite Variable   ${discountId}   ${resp.json()}   
+    ${resp}=  Enable Jaldee Coupon By Provider  ${cup_code}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Discounts 
-    Log  ${resp.json()}
+    ${resp}=  Get Jaldee Coupons By Coupon_code  ${cup_code}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
 
-    ${discAmt}=    Evaluate  ${servicecharge}-${discountprice}
+    ${netRate}=    Evaluate  ${servicecharge}-50
 
-    ${resp}=   Apply Service Level Discount for Appointment    ${apptid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    ${resp}=   Apply Jaldee Coupon for Appointment    ${apptid1}    ${cup_code}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['netTotal']}                  ${servicecharge}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
-
-
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${netRate}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}                  ${netRate}
