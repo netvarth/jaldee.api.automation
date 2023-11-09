@@ -43,6 +43,49 @@ Get Date Time via Timezone
 *** Test Cases ***  
 Testing timezones
 
+
+    # Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    # Ref: https://www.nationsonline.org/oneworld/country_code_list.htm
+
+    # Asia
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=BG  coords_only=False        #Bangladesh -    Europe/Sofia
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=BX  coords_only=False        #Brunei -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=AM  coords_only=False        #Armenia -  	Asia/Yerevan
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=AZ  coords_only=False        #Azerbaijan -  	Asia/Baku
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=IO  coords_only=False        #British Indian Ocean Territory -  Indian/Chagos
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KH  coords_only=False        #Cambodia -   Asia/Bangkok, Asia/Phnom_Penh
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=CN  coords_only=False        #China -  	Asia/Shanghai, Asia/Chongqing, Asia/Chungking, Asia/Harbin, Asia/Kashgar
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=CC  coords_only=False        #Cocos Islands - Indian/Cocos, Asia/Yangon
+
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=GE  coords_only=False        #Georgia -    Asia/Tbilisi
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=HK  coords_only=False        #Hong Kong -   Asia/Hong_Kong
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=IN  coords_only=False        #India -  	Asia/Kolkata, Asia/Calcutta
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=ID  coords_only=False        #Indonesia - Asia/Jakarta, Asia/Jayapura, Asia/Makassar, Asia/Pontianak, Asia/Ujung_Pandang
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=JP  coords_only=False        #Japan - Asia/Tokyo
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KZ  coords_only=False        #Kazakhstan -   Asia/Almaty, Asia/Aqtau, Asia/Aqtobe, Asia/Atyrau, Asia/Oral, Asia/Qostanay, Asia/Qyzylorda, 
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KG  coords_only=False        #Kyrgyzstan -  	Asia/Bishkek
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=LA  coords_only=False        #Laos - Asia/Vientiane
+
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MO  coords_only=False        #Macao -  Asia/Macao, Asia/Macau
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MY  coords_only=False        #Malaysia - Asia/Singapore, Asia/Kuala_Lumpur, Asia/Kuching
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MV  coords_only=False        #Maldives -  Indian/Maldives
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MN  coords_only=False        #Mongolia -  Asia/Choibalsan, Asia/Hovd, Asia/Ulaanbaatar, Asia/Ulan_Bator
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MM  coords_only=False        #Myanmar -  Asia/Rangoon, Asia/Yangon
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NP  coords_only=False        #Nepal -   Asia/Dubai, Asia/Muscat
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KP  coords_only=False        #North Korea -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=PH  coords_only=False        #Philippines -  	Asia/Qatar
+    # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=SG  coords_only=False        #Singapore -  Asia/Singapore
+
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KR  coords_only=False        #South Korea -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=LK  coords_only=False        #Sri Lanka -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=TW  coords_only=False        #Taiwan -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=TJ  coords_only=False        #Tajikistan -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=TH  coords_only=False        #Thailand -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=VN  coords_only=False        #Vietnam -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=UZ  coords_only=False        #Uzbekistan -  	Asia/Qatar
+
+
+***COMMENT***
     # random.choices(test_list, k=4)
     ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
     ${CC1}=  Set Variable  ${splitCC}[0]
@@ -50,7 +93,7 @@ Testing timezones
     ${splitCC}=  Split String    ${US_CC}  separator=${SPACE}  max_split=1
     ${US_CC}=  Set Variable  ${splitCC}[0]
 
-***COMMENT***
+
     Log List   ${langs}
     ${Languages}=  random.choices  ${langs}  k=5
     Log  ${Languages}
@@ -111,6 +154,45 @@ Testing timezones
     # Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
     # Ref: https://www.nationsonline.org/oneworld/country_code_list.htm
 
+    # Asia
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=BG  coords_only=False        #Bangladesh -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=BX  coords_only=False        #Brunei -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=AM  coords_only=False        #Armenia -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=AZ  coords_only=False        #Azerbaijan -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=IO  coords_only=False        #British Indian Ocean Territory -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KH  coords_only=False        #Cambodia -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=CN  coords_only=False        #China -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=CC  coords_only=False        #Cocos Islands -  	Asia/Qatar
+
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=GE  coords_only=False        #Georgia -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=HK  coords_only=False        #Hong Kong -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=IN  coords_only=False        #India -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=ID  coords_only=False        #Indonesia -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=JP  coords_only=False        #Japan -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KZ  coords_only=False        #Kazakhstan -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KG  coords_only=False        #Kyrgyzstan -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=LA  coords_only=False        #Laos -  	Asia/Qatar
+
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MO  coords_only=False        #Macao -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MY  coords_only=False        #Malaysia -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MV  coords_only=False        #Maldives -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MN  coords_only=False        #Mongolia -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=MM  coords_only=False        #Myanmar -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NP  coords_only=False        #Nepal -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KP  coords_only=False        #North Korea -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=PH  coords_only=False        #Philippines -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=SG  coords_only=False        #Singapore -  	Asia/Qatar
+
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=KR  coords_only=False        #South Korea -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=LK  coords_only=False        #Sri Lanka -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=TW  coords_only=False        #Taiwan -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=TJ  coords_only=False        #Tajikistan -  	Asia/Qatar
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=TH  coords_only=False        #Thailand -    Asia/Dubai
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=VN  coords_only=False        #Vietnam -   Asia/Dubai, Asia/Muscat
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=UZ  coords_only=False        #Uzbekistan -  	Asia/Qatar
+
+
+    # Middle East
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=AE  coords_only=False    #UAE -    Asia/Dubai
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=OM  coords_only=False      #OMAN -   Asia/Dubai, Asia/Muscat
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=QA  coords_only=False      #Qatar -  	Asia/Qatar
