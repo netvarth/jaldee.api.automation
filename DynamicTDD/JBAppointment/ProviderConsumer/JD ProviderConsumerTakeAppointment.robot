@@ -3939,7 +3939,7 @@ JD-TC-providerConsumerAppointment-UH13
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_W}=  Evaluate  ${PUSERNAME}+5566045
+    ${PUSERNAME_W}=  Evaluate  ${PUSERNAME}+5568145
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_W}    ${highest_package[0]}
     Log  ${resp.content}
@@ -4383,7 +4383,7 @@ JD-TC-providerConsumerAppointment-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[2]}
+    ...   appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
     # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${firstName}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
@@ -5096,7 +5096,7 @@ JD-TC-providerConsumerAppointment-UH14
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_D}=  Evaluate  ${PUSERNAME}+5566054
+    ${PUSERNAME_D}=  Evaluate  ${PUSERNAME}+95694
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_D}    ${highest_package[0]}
     Log  ${resp.content}
