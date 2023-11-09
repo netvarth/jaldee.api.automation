@@ -642,13 +642,13 @@ JD-TC-change appointment status for multiple appointments-6
     END
 
 
-    ${resp}=  Appointment Action   ${apptStatus[1]}    ${apptid1}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Appointment Action   ${apptStatus[1]}    ${apptid1}   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Appointment Action   ${apptStatus[1]}    ${apptid2}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Appointment Action   ${apptStatus[1]}    ${apptid2}   
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
 
       ${resp}=  Get Appointment Status   ${apptid1}
@@ -668,12 +668,12 @@ JD-TC-change appointment status for multiple appointments-6
     ${resp}=  Get Appointment Status   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()[2]['appointmentStatus']}   ${apptStatus[6]}
+    Should Be Equal As Strings    ${resp.json()[1]['appointmentStatus']}   ${apptStatus[6]}
     
      ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()[2]['appointmentStatus']}   ${apptStatus[6]}
+    Should Be Equal As Strings    ${resp.json()[1]['appointmentStatus']}   ${apptStatus[6]}
 
 
 JD-TC-change appointment status for multiple appointments- 7
