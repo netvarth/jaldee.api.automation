@@ -52,6 +52,7 @@ JD-TC-Confirm Blocked Appointment-1
     clear_service   ${PUSERNAME47}
     clear_location  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
+    clear_appt_schedule   ${PUSERNAME47}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -93,9 +94,7 @@ JD-TC-Confirm Blocked Appointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-
-    clear_appt_schedule   ${PUSERNAME47}
-    
+ 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
