@@ -154,10 +154,10 @@ JD-TC-GetConsumerAppointments-1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${cid1}=  get_id  ${CUSERNAME10}
+    ${cid1}=  get_id  ${CUSERNAME34}
     Set Suite Variable   ${cid1}
     Set Suite Variable  ${f_Name1}  ${resp.json()['firstName']}
     Set Suite Variable  ${l_Name1}  ${resp.json()['lastName']}
@@ -225,7 +225,7 @@ JD-TC-GetConsumerAppointments-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME34}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cons_id1}   ${resp.json()[0]['id']}
@@ -245,7 +245,7 @@ JD-TC-GetConsumerAppointments-1
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -299,7 +299,7 @@ JD-TC-GetConsumerAppointments-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -344,7 +344,7 @@ JD-TC-GetConsumerAppointments-2
     ${encId3}=  Set Variable   ${resp.json()}
     Set Suite Variable   ${encId3}  
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -374,7 +374,7 @@ JD-TC-GetConsumerAppointments-3
 
     [Documentation]  Get consumer appointments by appointmentEncId.
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -404,7 +404,7 @@ JD-TC-GetConsumerAppointments-4
 
     [Documentation]  Get consumer appointments by first name.
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -471,7 +471,7 @@ JD-TC-GetConsumerAppointments-5
 
     [Documentation]  Get consumer appointments by last name.
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -539,7 +539,7 @@ JD-TC-GetConsumerAppointments-6
 
     [Documentation]  Get consumer appointments by schedule id.
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -581,7 +581,7 @@ JD-TC-GetConsumerAppointments-6
     ${encId4}=  Set Variable   ${resp.json()}
     Set Suite Variable   ${encId4}  
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -671,7 +671,7 @@ JD-TC-GetConsumerAppointments-7
 
     [Documentation]  Get consumer's appointments where appointment taken by consumer(apptBy).
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -754,7 +754,7 @@ JD-TC-GetConsumerAppointments-8
 
     [Documentation]  Get consumer appointments by appointment time.
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1140,7 +1140,7 @@ JD-TC-GetConsumerAppointments-10
 
     [Documentation]  Get consumer appointments by location.
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1207,7 +1207,7 @@ JD-TC-GetConsumerAppointments-11
 
     [Documentation]  Get consumer appointments by appointment start time.
     
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1285,7 +1285,7 @@ JD-TC-GetConsumerAppointments-12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1332,7 +1332,7 @@ JD-TC-GetConsumerAppointments-13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1379,7 +1379,7 @@ JD-TC-GetConsumerAppointments-14
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1428,7 +1428,7 @@ JD-TC-GetConsumerAppointments-15
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1477,7 +1477,7 @@ JD-TC-GetConsumerAppointments-16
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME10}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME34}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
