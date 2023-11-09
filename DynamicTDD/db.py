@@ -2593,18 +2593,18 @@ def get_notiscorp_subdomains_with_no_multilocation(flag):
 def clear_users(ph_no):
     print("In function: ", inspect.stack()[0].function)
     uid=  get_id(ph_no)
-    print ("1:", uid, "ph no:", ph_no)
+    print ("uid:", uid, "ph no:", ph_no)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     # print ("2:", dbconn)
     try:
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
             delete_entry('login_tbl','id',uid,cur) 
-            delete_entry('wl_history_tbl','provider',uid,cur)  
+            delete_entry('wl_history_tbl','provider',uid,cur)    
+            delete_entry('appmnt_archive_tbl','provider',uid,cur)
             delete_entry('service_tbl','provider',uid,cur)  
             delete_entry('user_team_tbl','local_user_id',uid,cur)  
             delete_entry('schedule_service_tbl','service_id',uid,cur)  
-            delete_entry('service_tbl','provider',uid,cur)  
             delete_entry('local_user_tbl','id',uid,cur)  
             delete_entry('login_history_tbl','user_id',uid,cur)
             delete_entry('crm_lead_tbl','generated_by_id',uid,cur)
