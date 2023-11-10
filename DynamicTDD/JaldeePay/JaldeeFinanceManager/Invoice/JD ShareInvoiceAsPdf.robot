@@ -31,6 +31,7 @@ ${service_duration}     30
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 
+
 *** Test Cases ***
 
 
@@ -99,7 +100,7 @@ JD-TC-Share invoice as pdf-1
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno1}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno1}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno1}.${test_mail}
+    Set Test Variable  ${email1}  ${vender_name}${vendor_phno1}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -117,7 +118,7 @@ JD-TC-Share invoice as pdf-1
     ${vendor_phno}=   Create List  ${vendor_phno}
     Set Suite Variable    ${vendor_phno}
     
-    ${email}=   Create List  ${email}
+    ${email}=   Create List  ${email1}
     Set Suite Variable    ${email}
 
     ${bankIfsc}    Random Number 	digits=5 
@@ -212,6 +213,14 @@ JD-TC-Share invoice as pdf-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
 
-    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[0]}    ${email}   ${html}
+
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    # Should Be Equal As Strings  ${resp1.json()['shared']}   ${boolean[1]} 

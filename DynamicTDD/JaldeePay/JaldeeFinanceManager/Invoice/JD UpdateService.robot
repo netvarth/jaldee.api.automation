@@ -247,6 +247,6 @@ JD-TC-UpdateService-1
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['serviceId']}  ${sid2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['serviceName']}  ${SERVICE2}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['quantity']}  ${quantity1}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity1}

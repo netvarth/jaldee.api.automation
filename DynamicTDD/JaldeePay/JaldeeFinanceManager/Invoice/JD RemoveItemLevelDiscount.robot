@@ -70,7 +70,7 @@ JD-TC-Remove Item Level Discount-1
     [Documentation]  Remove Item Level Discount.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381838
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381738
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

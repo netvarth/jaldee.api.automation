@@ -37,7 +37,7 @@ ${service_duration}     30
 @{status1}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
-${SERVICE1}  sampleservice11 
+${SERVICE1}  sampleservice33 
 ${SERVICE2}  sampleservice22
 ${self}     0
 ${digits}       0123456789
@@ -48,7 +48,7 @@ ${digits}       0123456789
 
 *** Test Cases ***
 
-JD-TC-GetAppointmentToday-3
+JD-TC-UpdateBillViewStatus-1
 
     [Documentation]  Get provider's appointments for service with prepayment after prepayment
 

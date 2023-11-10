@@ -2085,6 +2085,7 @@ CANNOT_BE_EMPTY_GATEWAY_TRANSACTION_ID="Gateway Transaction ID cannot be empty"
 ALREADY_ASSIGNED_USER="This user already assigned"
 ALREADY_UNASSIGNED_USER="User already unassigned"
 INVALID_FM_USER_ID="Invalid User Id"
+financehtml= "<html style=\"width: 210mm; height: 297mm; font-size: 1rem; font-family: 'Poppins', sans-serif !important;\"><head><title></title></head><body ><div><h1>INVOICE</h1><p>Sample Invoice PDF</p></div></body></html>"
 
 
 

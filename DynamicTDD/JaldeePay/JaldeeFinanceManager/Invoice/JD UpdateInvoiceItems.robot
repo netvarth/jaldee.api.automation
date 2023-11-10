@@ -159,7 +159,7 @@ JD-TC-UpdateInvoiceItem-1
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME11}
+    ${resp1}=  AddCustomer  ${CUSERNAME4}
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable   ${pcid18}   ${resp1.json()}
@@ -199,7 +199,7 @@ JD-TC-UpdateInvoiceItem-1
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
     # ${itemList}=    Create List    ${itemList}
 
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
+    ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
@@ -246,5 +246,5 @@ JD-TC-UpdateInvoiceItem-1
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][1]['itemName']}  ${DisplayName2}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][1]['itemName']}  ${item2}
     Should Be Equal As Strings  ${resp1.json()['itemList'][1]['itemId']}  ${itemId1}

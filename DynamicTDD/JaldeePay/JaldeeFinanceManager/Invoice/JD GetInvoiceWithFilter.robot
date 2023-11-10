@@ -286,7 +286,7 @@ JD-TC-Get Invoice With Filter -2
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
     Set Suite Variable  ${invoice_uid2}   ${resp.json()['uidList'][1]}  
 
-    ${resp1}=  Get Invoice With Filter   vendorId-eq= ${vendor_uid1}
+    ${resp1}=  Get Invoice With Filter   vendorUid-eq= ${vendor_uid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}

@@ -282,7 +282,7 @@ JD-TC-GetInvoiceCountwithFilter-2
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
     # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
 
-    ${resp1}=  Get Invoice Count With Filter   vendorId-eq= ${vendor_uid1}
+    ${resp1}=  Get Invoice Count With Filter   vendorUid-eq= ${vendor_uid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()}   ${len1}

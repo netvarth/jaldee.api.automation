@@ -11847,3 +11847,37 @@ Get Appointment level Bill Details
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
     [Return]  ${resp}
+
+
+Get Category List Configuration
+
+    [Arguments]   ${categoryType}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/config/${categoryType}       expected_status=any
+    [Return]  ${resp}
+
+Copy Category Status List Configuration
+
+    [Arguments]   ${categoryType}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/${categoryType}       expected_status=any
+    [Return]  ${resp}
+
+Get Status List Configuration
+
+    [Arguments]   ${categoryType}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/config/${categoryType}       expected_status=any
+    [Return]  ${resp}
+
+Get finance Confiq
+ 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/Invoice     expected_status=any
+    [Return]  ${resp}
+
+Get default finance category Confiq
+ 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/Invoice     expected_status=any
+    [Return]  ${resp}

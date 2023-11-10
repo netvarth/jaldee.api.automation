@@ -16,18 +16,8 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/musers.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-*** Keywords ***
-Get finance Confiq
- 
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/Invoice     expected_status=any
-    [Return]  ${resp}
 
-Get default finance category Confiq
- 
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/Invoice     expected_status=any
-    [Return]  ${resp}
+
 
 *** Variables ***
 
@@ -59,7 +49,7 @@ ${digits}       0123456789
 
 *** Test Cases ***
 
-JD-TC-GetAppointmentToday-3
+JD-TC-UpdateBillStatus-1
 
     [Documentation]  Get provider's appointments for service with prepayment after prepayment
 

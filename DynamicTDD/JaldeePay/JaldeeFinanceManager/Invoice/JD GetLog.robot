@@ -64,6 +64,14 @@ JD-TC-Get Log-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+       ${resp}=    Get finance Confiq
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get default finance category Confiq
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${name}=   FakerLibrary.word
     Set Suite Variable   ${name}
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
@@ -216,7 +224,8 @@ JD-TC-Get Log-1
     ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}   
+ 
 
     ${resp}=  Get Invoice Log List UId   ${invoice_uid}
     Log  ${resp.json()}

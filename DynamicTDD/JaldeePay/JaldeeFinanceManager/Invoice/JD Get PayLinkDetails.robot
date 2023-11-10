@@ -32,11 +32,11 @@ ${fileSize}  0.00458
 *** Test Cases ***
 
 
-JD-TC-CreateInvoice-1
+JD-TC-GetPayLinkDetails-1
 
     [Documentation]  Create a invoice with valid details.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -157,7 +157,7 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME11}
+    ${resp1}=  AddCustomer  ${CUSERNAME3}
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable   ${pcid18}   ${resp1.json()}
