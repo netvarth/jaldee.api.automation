@@ -493,15 +493,15 @@ JD-TC-Get Appmt Schedule By ServiceId_LocationId and Date-5
     ${resp}=  Get Appmt Schedule By ServiceId_LocationId and Date   ${accId}   ${p1_l2}  ${p1_s2}  ${DAY1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()}   ${EMPTY_List}
-    Verify Response List  ${resp}   0  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[1]}
+    Should Be Equal As Strings  ${resp.json()}   ${EMPTY_List}
+    # Verify Response List  ${resp}   0  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[1]}
 
 
     ${resp}=  Get Appmt Schedule By ServiceId_LocationId and Date   ${accId}   ${p1_l2}  ${p1_s3}  ${DAY1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()}   ${EMPTY_List}
-    Verify Response List  ${resp}   0  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[1]}
+    Should Be Equal As Strings  ${resp.json()}   ${EMPTY_List}
+    # Verify Response List  ${resp}   0  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[1]}
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
