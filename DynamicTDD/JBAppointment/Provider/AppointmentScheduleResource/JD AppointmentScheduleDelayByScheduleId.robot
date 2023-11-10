@@ -22,6 +22,365 @@ ${count}        0
 
 *** Test Cases ***  
 
+
+JD-TC-Appointment Schedule Delay By Scheduleid-7
+    [Documentation]   Applying More Add delay times and verifying notification messages for one particular consumer
+    
+    ${resp}=  Consumer Login  ${CUSERNAME22}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${jdconID5}   ${resp.json()['id']}
+    Set Suite Variable  ${fname5}   ${resp.json()['firstName']}
+    Set Suite Variable  ${lname5}   ${resp.json()['lastName']}
+    Set Suite Variable  ${uname5}   ${resp.json()['userName']}
+
+    ${resp}=  Consumer Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    clear_Consumermsg  ${CUSERNAME22}
+    # clear_Consumermsg  ${CUSERNAME3}
+    @{dom_list}=  Create List
+    ${multilocdoms}=  get_mutilocation_domains
+    Log  ${multilocdoms}
+    ${domlen}=  Get Length   ${multilocdoms}
+    FOR   ${i}  IN RANGE   ${domlen}
+        ${dom}=  Convert To String   ${multilocdoms[${i}]['domain']}
+        Append To List   ${dom_list}  ${dom}
+    END
+    Log   ${dom_list}
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
+    ${len}=   Split to lines  ${resp}
+    ${length}=  Get Length   ${len}
+    
+    FOR   ${b}  IN RANGE   ${length}    
+        ${resp1}=  Encrypted Provider Login  ${PUSERNAME${b}}  ${PASSWORD}
+        # Log   ${resp1.json()}
+        Should Be Equal As Strings    ${resp1.status_code}    200
+
+        ${decrypted_data}=  db.decrypt_data  ${resp1.content}
+        Log  ${decrypted_data}
+
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+        # ${domain}=   Set Variable    ${resp1.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp1.json()['subSector']}
+        ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
+        Log Many  ${status} 	${value}
+        ${count}=   Run Keyword If   '${status}' == 'PASS'  Evaluate  ${count}+1
+        ...         ELSE  Set Variable   ${count}
+        Exit For Loop If  '${status}' == 'PASS' and '${count}' == '2'
+    END
+    Set Suite Variable   ${b}
+    ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${accountId}   ${decrypted_data['id']}
+    Set Suite Variable   ${Pf_name}   ${decrypted_data['firstName']}
+    ${pid2}=    get_acc_id   ${PUSERNAME${b}}
+
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${bsname}  ${resp.json()['businessName']}
+
+    ${lid}=     Create Sample Location
+
+    ${resp}=   Get Location By Id   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
+    ${SERVICE2}=    FakerLibrary.name
+    ${s_id2}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable   ${s_id2}
+    clear_appt_schedule   ${PUSERNAME${b}}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
+    ${schedule_name}=  FakerLibrary.bs
+    Set Suite Variable   ${schedule_name}
+    ${parallel}=  FakerLibrary.Random Int  min=6  max=20
+    Set Suite Variable   ${parallel}
+    ${duration}=   Random Int  min=2  max=5
+    Set Suite Variable   ${duration} 
+    
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool[1]}  ${s_id2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id}  ${resp.json()}
+      
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration}  apptState=${Qstate[0]}  parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
+    Should Be Equal As Strings  ${resp.json()['apptSchedule']['startDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['apptSchedule']['terminator']['endDate']}  ${DAY2}
+    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id2}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}   ${s_id2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}  
+
+    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME22}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable  ${cid8}  ${resp.json()[0]['id']}
+
+    ${resp}=  AddCustomer  ${CUSERNAME22}  firstName=${fname5}   lastName=${lname5}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid8}   ${resp.json()}
+
+    ${apptfor}=  Create Dictionary  id=${cid8}   apptTime=${slot1}
+    ${apptfor1}=   Create List  ${apptfor}
+    Set Suite Variable   ${apptfor1}
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid8}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Suite Variable  ${apptid1}  ${apptid[0]}
+
+    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId1}=  Set Variable   ${resp.json()}
+
+    ${resp}=    Get Appointments Today
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${apptid4_time}   ${resp.json()[0]['appmtTime']}
+    Set Suite Variable   ${consumer_id4}   ${resp.json()[0]['consumer']['id']}
+    Set Suite Variable   ${conf_name4}   ${resp.json()[0]['consumer']['userProfile']['firstName']}
+
+    ${delay_time}=   Random Int  min=10   max=30
+    ${resp}=  Add Appointment Schedule Delay  ${sch_id}  ${delay_time}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Appointment Schedule Delay    ${sch_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}    200
+    Verify Response  ${resp}     delayDuration=${delay_time}
+
+    ${resp}=  Get Appointment Messages
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    ${confirmAppt_push}=  Set Variable   ${resp.json()['confirmationMessages']['SP_APP']} 
+    ${defapptDelayAdd_msg}=  Set Variable   ${resp.json()['delayMessages']['Consumer_APP']}
+
+    ${resp}=   ProviderLogout
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  ConsumerLogin  ${CUSERNAME22}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${consumername}  ${resp.json()['userName']}
+    Set Suite Variable  ${rcid4}  ${resp.json()['id']}
+
+    
+    # ${date}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
+    ${date}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
+    ${hrs}  ${mins}=   convert_hour_minutes   ${delay_time}
+    # ${converted_slot}=  convert_slot_12hr  ${slot1} 
+    # log    ${converted_slot}
+    # ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [username]   ${consumername} 
+    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [service]   ${SERVICE2}
+    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [date]   ${date}
+    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [time]   ${converted_slot}
+    # ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [providerName]   ${bsname}
+
+    ${bookingid}=  Format String  ${bookinglink}  ${encId1}  ${encId1}
+    ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [consumer]   ${uname5}
+    ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [bookingId]   ${encId1}
+    
+    ${hrs}  ${mins}=   convert_hour_minutes   ${delay_time}
+    ${msg}=  Replace String  ${defapptDelayAdd_msg}  [consumer]   ${uname5}
+    ${msg}=  Replace String  ${msg}  [bookingId]   ${encId1}
+    ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[0]}
+    ${msg}=  Replace String  ${msg}  [delaytime]   ${hrs}${SPACE}hrs${SPACE}${mins}${SPACE}mins
+    
+    sleep  2s
+    ${resp}=  Get Consumer Communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${desc}=    FakerLibrary.sentence
+    # ${date}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
+    # ${hrs}  ${mins}=   convert_hour_minutes   ${delay_time}
+    # ${apptid4_converted_slot}=  convert_slot_12hr  ${apptid4_time}
+    # ${msg}=  Replace String    ${defapptDelayAdd_msg}  [provider name]   ${bsname}
+    # ${msg}=  Replace String  ${msg}  [service]  ${SERVICE2}
+    # ${msg}=  Replace String  ${msg}  [delay time in hrs and mts]  ${hrs}${SPACE}hrs${SPACE}${mins}${SPACE}mins
+    # ${msg}=  Replace String  ${msg}  [time]     ${apptid4_converted_slot}
+    # ${msg}=  Replace String  ${msg}  [date]     ${date}
+    # Log  ${msg}
+
+
+    Verify Response List  ${resp}  0  waitlistId=${apptid1}  service=${SERVICE2} on ${date}  accountId=${pid2}
+    Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}  0
+    # Should Be Equal As Strings  ${resp.json()[0]['owner']['name']}  ${Pf_name}
+    Should Be Equal As Strings  ${resp.json()[0]['msg']}   ${defconfirm_msg}
+    Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}  ${consumer_id4}
+    Should Be Equal As Strings  ${resp.json()[0]['receiver']['name']}  ${uname5}
+
+    Verify Response List  ${resp}  1  waitlistId=${apptid1}  service=${SERVICE2} on ${date}  accountId=${pid2}
+    Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}  0
+    # Should Be Equal As Strings  ${resp.json()[1]['owner']['name']}  ${Pf_name}
+    Should Be Equal As Strings  ${resp.json()[1]['msg']}   ${msg}
+    Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}  ${consumer_id4}
+    Should Be Equal As Strings  ${resp.json()[1]['receiver']['name']}  ${uname5}
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME${b}}    ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    #updateIncreasingAddDelayTime
+    comment   updateIncreasingAddDelayTime
+    ${des}=   FakerLibrary.sentence
+    ${delay_time2}=    Random Int  min=30    max=60
+    ${resp}=  Add Appointment Schedule Delay  ${sch_id}  ${delay_time2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Appointment Schedule Delay    ${sch_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}    200
+    # Verify Response  ${resp}     delayDuration=${delay_time2}
+
+    ${resp}=  ConsumerLogin  ${CUSERNAME22}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${consumername}  ${resp.json()['userName']}
+    Set Suite Variable  ${rcid4}  ${resp.json()['id']}
+
+    # ${date}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
+    ${date}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
+    ${hrs}  ${mins}=   convert_hour_minutes   ${delay_time2}
+
+    ${bookingid}=  Format String  ${bookinglink}  ${encId1}  ${encId1}
+    ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [consumer]   ${uname5}
+    ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [bookingId]   ${encId1}
+    
+    # ${hrs}  ${mins}=   convert_hour_minutes   ${delay_time2}
+    ${msg}=  Replace String  ${defapptDelayAdd_msg}  [consumer]   ${uname5}
+    ${msg}=  Replace String  ${msg}  [bookingId]   ${encId1}
+    ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[0]}
+    ${msg}=  Replace String  ${msg}  [delaytime]   ${hrs}${SPACE}hrs${SPACE}${mins}${SPACE}mins
+    
+    sleep   2s
+    ${resp}=  Get Consumer Communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${desc}=    FakerLibrary.sentence
+    # ${date}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
+    # ${hrs}  ${mins}=   convert_hour_minutes   ${delay_time2}
+    # ${apptid4_converted_slot}=  convert_slot_12hr  ${apptid4_time}
+    # ${msg}=  Replace String    ${defapptDelayAdd_msg}  [provider name]   ${bsname}
+    # ${msg}=  Replace String  ${msg}  [service]  ${SERVICE2}
+    # ${msg}=  Replace String  ${msg}  [delay time in hrs and mts]  ${hrs}${SPACE}hrs${SPACE}${mins}${SPACE}mins
+    # ${msg}=  Replace String  ${msg}  [time]     ${apptid4_converted_slot}
+    # ${msg}=  Replace String  ${msg}  [date]     ${date}
+    # Log  ${msg}
+
+
+    # Verify Response List  ${resp}  2  waitlistId=${apptid1}  service=${SERVICE2} on ${date}  accountId=${pid2}
+    # Should Be Equal As Strings  ${resp.json()[2]['owner']['id']}  0
+    # # Should Be Equal As Strings  ${resp.json()[1]['owner']['name']}  ${Pf_name}
+    # Should Be Equal As Strings  ${resp.json()[2]['msg']}   ${msg}
+    # Should Be Equal As Strings  ${resp.json()[2]['receiver']['id']}  ${consumer_id4}
+    # Should Be Equal As Strings  ${resp.json()[2]['receiver']['name']}  ${consumername}
+
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME${b}}    ${PASSWORD}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    #UpdateWithDecresingAddDelayTime
+    comment   UpdateWithDecresingAddDelayTime
+    ${des}=   FakerLibrary.sentence
+    ${delay_time3}=    Random Int  min=1    max=${delay_time2}
+    ${resp}=  Add Appointment Schedule Delay  ${sch_id}  ${delay_time3}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Appointment Schedule Delay    ${sch_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}    200
+    Verify Response  ${resp}     delayDuration=${delay_time3}
+
+    ${resp}=  ConsumerLogin  ${CUSERNAME22}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${consumername}  ${resp.json()['userName']}
+    Set Suite Variable  ${rcid4}  ${resp.json()['id']}
+
+    # ${date}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
+    ${date}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
+    ${hrs}  ${mins}=   convert_hour_minutes   ${delay_time3}
+
+    ${bookingid}=  Format String  ${bookinglink}  ${encId1}  ${encId1}
+    ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [consumer]   ${uname5}
+    ${defconfirm_msg}=  Replace String  ${defconfirm_msg}  [bookingId]   ${encId1}
+    
+    # ${hrs}  ${mins}=   convert_hour_minutes   ${delay_time3}
+    ${msg}=  Replace String  ${defapptDelayAdd_msg}  [consumer]   ${uname5}
+    ${msg}=  Replace String  ${msg}  [bookingId]   ${encId1}
+    ${msg}=  Replace String  ${msg}  [delayType]   ${delayType[1]}
+    ${msg}=  Replace String  ${msg}  [delaytime]   ${hrs}${SPACE}hrs${SPACE}${mins}${SPACE}mins
+   
+    sleep   2s
+    ${resp}=  Get Consumer Communications
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${desc}=    FakerLibrary.sentence
+    # ${date}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
+    # ${delay_time}=   Convert To String  ${delay_time3}
+    # ${apptid4_converted_slot}=  convert_slot_12hr  ${apptid4_time}
+    # ${msg}=  Replace String    ${delayappmt}  [username]  ${consumername}
+    # ${msg}=  Replace String  ${msg}  [apptid_time]  ${apptid4_converted_slot}
+    # ${msg}=  Replace String  ${msg}  [service]  ${SERVICE2}
+    # ${msg}=  Replace String  ${msg}  [minutes]  ${delay_time}
+    # ${msg}=  Replace String  ${msg}  [time]     0
+    # ${msg}=  Replace String  ${msg}  [date]     ${DAY1}
+    
+    Log  ${msg}
+
+    # Verify Response List  ${resp}  3  waitlistId=${apptid1}  service=${SERVICE2} on ${date}  accountId=${pid2}
+    # Should Be Equal As Strings  ${resp.json()[3]['owner']['id']}  0
+    # # Should Be Equal As Strings  ${resp.json()[2]['owner']['name']}  ${Pf_name}
+    # Should Be Equal As Strings  ${resp.json()[3]['msg']}   ${msg}
+    # Should Be Equal As Strings  ${resp.json()[3]['receiver']['id']}  ${consumer_id4}
+    # Should Be Equal As Strings  ${resp.json()[3]['receiver']['name']}  ${consumername}
+
+
+
+
+*** comment ***
 JD-TC-Appointment Schedule Delay By Scheduleid-1
     [Documentation]    Add Delay time Send message and verifying sent notifications to Different consumers    
     
