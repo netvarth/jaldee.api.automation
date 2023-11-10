@@ -11734,3 +11734,116 @@ Share invoice as pdf
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${uuid}/createSharePdf    data=${data}   expected_status=any
     [Return]  ${resp}
+
+
+Apply Jaldee Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Jaldee Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get Waitlist level Bill Details
+
+    [Arguments]   ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/waitlist/${uuid}/billdetails     expected_status=any
+    [Return]  ${resp}
+
+Apply Jaldee Coupon for Appointment
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Jaldee Coupon for Appointment
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Provider Coupon for Appointment
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Provider Coupon for Appointment
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Service Level Discount for Appointment
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+
+Remove Service Level Discount for Appointment
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+    
+Get Appointment level Bill Details
+
+    [Arguments]   ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
+    [Return]  ${resp}
