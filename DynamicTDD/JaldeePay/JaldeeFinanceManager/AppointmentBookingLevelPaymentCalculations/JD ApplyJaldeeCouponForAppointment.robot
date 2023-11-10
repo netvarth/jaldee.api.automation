@@ -40,18 +40,6 @@ Get Non Billable Subdomain
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
-Apply Jaldee Coupon for Appointment
-
-    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
 *** Variables ***
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
@@ -69,7 +57,7 @@ ${self}         0
 JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
       [Documentation]   Apply Service Level Discount For Appointmnet.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888353
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888340
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

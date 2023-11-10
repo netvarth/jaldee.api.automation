@@ -52,13 +52,6 @@ Apply Jaldee Coupon for waitlist
     ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
 
-Get Waitlist level Bill Details
-
-    [Arguments]   ${uuid}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/waitlist/${uuid}/billdetails     expected_status=any
-    [Return]  ${resp}
-
 *** Variables ***
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
@@ -74,7 +67,7 @@ ${sample}                     4452135820
 JD-TC-ApplyJaldeeCouponforwaitlist-1
       [Documentation]   Apply Jaldee Coupon for waitlist then get the bill details.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+31284533
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+31284535
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

@@ -54,7 +54,7 @@ ${sample}                     4452135820
 JD-TC-ApplyProviderCouponforwaitlist-1
       [Documentation]   Apply Provider Coupon for waitlist.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33788833
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33788832
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

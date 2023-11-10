@@ -54,7 +54,7 @@ ${sample}                     4452135820
 JD-TC-AddToWaitlist-1
       [Documentation]   Add a consumer to the waitlist for the current day
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888353
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888354
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

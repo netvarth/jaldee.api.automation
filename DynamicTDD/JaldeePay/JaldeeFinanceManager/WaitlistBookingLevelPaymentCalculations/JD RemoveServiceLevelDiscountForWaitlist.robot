@@ -55,7 +55,7 @@ ${sample}                     4452135820
 JD-TC-RemoveServiceLevelDiscountforwaitlist-1
       [Documentation]   Apply Service Level Discount then remove that Discount.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3378833
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3378839
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

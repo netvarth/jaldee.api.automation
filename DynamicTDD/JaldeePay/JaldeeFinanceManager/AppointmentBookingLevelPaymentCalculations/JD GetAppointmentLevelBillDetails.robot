@@ -40,36 +40,7 @@ Get Non Billable Subdomain
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
-Apply Jaldee Coupon for waitlist
 
-    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Get Appointment level Bill Details
-
-    [Arguments]   ${uuid}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
-    [Return]  ${resp}
-
-Apply Service Level Discount for Appointment
-
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
 
 *** Variables ***
 ${waitlistedby}           PROVIDER
@@ -87,7 +58,7 @@ ${self}         0
 JD-TC-ApplyJaldeeCouponforwaitlist-1
       [Documentation]   Apply Jaldee Coupon for waitlist then get the bill details.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888353
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888343
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

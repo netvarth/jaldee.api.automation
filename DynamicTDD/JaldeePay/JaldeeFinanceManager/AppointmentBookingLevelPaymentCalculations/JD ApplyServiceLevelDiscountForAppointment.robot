@@ -39,18 +39,6 @@ Get Non Billable Subdomain
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
-Apply Service Level Discount for Appointment
-
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
 *** Variables ***
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
@@ -65,10 +53,10 @@ ${self}         0
 
 *** Test Cases ***
 
-JD-TC-AddToWaitlist-1
-      [Documentation]   Add a consumer to the waitlist for the current day
+JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
+      [Documentation]   Apply Service Level Discount For Appointmnet.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888353
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888342
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -152,9 +140,6 @@ JD-TC-AddToWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
-      # ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-      # Log    ${resp.json()}
-      # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -208,23 +193,6 @@ JD-TC-AddToWaitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # ${resp}=    Get Bill Settings
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Enable Disable bill    ${boolean[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-      # ${resp}=  AddCustomer  ${CUSERNAME1}
-      # Log   ${resp.json()}
-      # Should Be Equal As Strings  ${resp.status_code}  200
-      # Set Suite Variable  ${cid}  ${resp.json()}
-
-      # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-      # Log   ${resp.json()}
-      # Should Be Equal As Strings      ${resp.status_code}  200
-     
     ${lid}=  Create Sample Location
 
     ${desc}=   FakerLibrary.sentence
@@ -313,9 +281,6 @@ JD-TC-AddToWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}  ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}  ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[0]}

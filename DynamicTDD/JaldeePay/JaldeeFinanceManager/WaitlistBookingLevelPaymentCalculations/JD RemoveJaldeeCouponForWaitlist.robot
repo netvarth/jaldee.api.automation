@@ -39,31 +39,6 @@ Get Non Billable Subdomain
             Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[0]}'
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
-
-Apply Jaldee Coupon for waitlist
-
-    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Remove Jaldee Coupon for waitlist
-
-    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
 *** Variables ***
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
@@ -79,7 +54,7 @@ ${sample}                     4452135820
 JD-TC-ApplyJaldeeCouponforwaitlist-1
       [Documentation]   Apply Jaldee Coupon for waitlist.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33784533
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33784536
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

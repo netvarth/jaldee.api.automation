@@ -57,7 +57,7 @@ ${sample}                     4452135820
 JD-TC-RemoveProviderCouponforwaitlist-1
       [Documentation]   Apply Provider Coupon for waitlist then remove that coupon.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+4388833
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+4388837
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
