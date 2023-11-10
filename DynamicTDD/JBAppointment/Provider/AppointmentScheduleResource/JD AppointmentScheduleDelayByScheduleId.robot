@@ -94,12 +94,19 @@ JD-TC-Appointment Schedule Delay By Scheduleid-1
 
     clear_service   ${PUSERNAME61}
     clear_location  ${PUSERNAME61}
-    
+    clear_appt_schedule   ${PUSERNAME61}
+
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location By Id   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
-    clear_appt_schedule   ${PUSERNAME61}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -362,10 +369,12 @@ JD-TC-Appointment Schedule Delay By Scheduleid-2
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME61}
     clear_consumer_msgs  ${CUSERNAME5}
     clear_provider_msgs  ${PUSERNAME61}
@@ -847,6 +856,12 @@ JD-TC-Appointment Schedule Delay By Scheduleid-6
     Set Suite Variable   ${lid}
     ${lid2}=  Create Sample Location
     Set Suite Variable   ${lid2}
+
+    ${resp}=   Get Location By Id   ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME1}
@@ -980,6 +995,12 @@ JD-TC-Appointment Schedule Delay By Scheduleid-7
     Set Suite Variable  ${bsname}  ${resp.json()['businessName']}
 
     ${lid}=     Create Sample Location
+
+    ${resp}=   Get Location By Id   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${SERVICE2}=    FakerLibrary.name
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
