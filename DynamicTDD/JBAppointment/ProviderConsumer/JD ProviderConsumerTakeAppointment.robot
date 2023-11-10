@@ -237,7 +237,7 @@ JD-TC-providerConsumerAppointment-1
 
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -286,7 +286,7 @@ JD-TC-providerConsumerAppointment-2
     
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${cnote}=   FakerLibrary.name
-    ${resp}=    Take Appointment with ApptMode For Provider    ${appointmentMode[2]}   ${pid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=    Take Appointment with ApptMode For Provider    ${appointmentMode[2]}   ${pid}  ${s_id}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -377,7 +377,7 @@ JD-TC-providerConsumerAppointment-3
     
     ${cnote}=   FakerLibrary.name
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
      Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -471,7 +471,7 @@ JD-TC-providerConsumerAppointment-UH1
     
     ${cnote}=   FakerLibrary.name
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
      Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -520,7 +520,7 @@ JD-TC-providerConsumerAppointment-4
     ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -609,7 +609,7 @@ JD-TC-providerConsumerAppointment-5
     # ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY1}=  db.add_timezone_date  ${tz}  1     
 
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -637,7 +637,7 @@ JD-TC-providerConsumerAppointment-5
     ${DAY2}=  db.add_timezone_date  ${tz}  2 
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}   location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -704,7 +704,7 @@ JD-TC-providerConsumerAppointment-6
 
     ${DAY3}=   db.add_timezone_date  ${tz}   3
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -803,7 +803,7 @@ JD-TC-providerConsumerAppointment-7
     
     ${DAY5}=   db.add_timezone_date  ${tz}   5
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY5}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY5}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -827,7 +827,10 @@ JD-TC-providerConsumerAppointment-7
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                                     ${DAY5}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot3}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
+
+
 JD-TC-providerConsumerAppointment-8
+
     [Documentation]     ProviderConsumer takes Future appointment for same service in diffrent Appointment Schedule 
 
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
@@ -855,7 +858,7 @@ JD-TC-providerConsumerAppointment-8
     
     ${DAY5}=   db.add_timezone_date  ${tz}   4
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY5}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY5}  ${cnote}   ${apptfor}  location=${{str('${lid}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
           
