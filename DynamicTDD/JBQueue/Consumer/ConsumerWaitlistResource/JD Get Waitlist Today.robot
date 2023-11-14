@@ -71,6 +71,7 @@ JD-TC-Get Waitlist Today-39
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
 
+    clear_service   ${USProvider}  
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -98,7 +99,7 @@ JD-TC-Get Waitlist Today-39
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${sTime}=  db.get_time_by_timezone  ${US_tz}  
-    ${eTime}=  db.add_timezone_time  ${US_tz}  0  30  
+    ${eTime}=  db.add_timezone_time  ${US_tz}  1  30  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
