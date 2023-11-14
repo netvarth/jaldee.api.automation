@@ -51,16 +51,11 @@ Apply Discount for Order
     ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
 
-Remove Discount for Order
+Get Order level Bill Details
 
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
+    [Arguments]   ${uuid}  
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
+    ${resp}=  GET On Session  ynw  /provider/orders/${uuid}/billdetails     expected_status=any
     [Return]  ${resp}
 
 *** Variables ***
@@ -79,10 +74,10 @@ ${coupon}          wheat
 
 *** Test Cases ***
 
-JD-TC-ApplyDiscountForOrder-1
+JD-TC-GetOrderBillDetails-1
       [Documentation]   Create order by provider for Home Delivery when payment type is NONE (No Advancepayment),then apply discount for Order.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33885330
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33881342
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -415,7 +410,6 @@ JD-TC-ApplyDiscountForOrder-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${item_amt}=    Evaluate  ${promotionalPrice}*${item_quantity1}
-    ${item_amt}=  Convert To Number  ${item_amt}  2
 
     ${discAmt}=    Evaluate  ${item_amt}-${discountprice}
     ${discAmt}=  Convert To Number  ${discAmt}  2
@@ -426,9 +420,10 @@ JD-TC-ApplyDiscountForOrder-1
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
     # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-
-    ${resp}=   Remove Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    ${resp}=   Get Order level Bill Details    ${orderid1}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${item_amt}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
 

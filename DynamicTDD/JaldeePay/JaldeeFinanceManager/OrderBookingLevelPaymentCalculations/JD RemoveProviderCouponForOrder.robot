@@ -39,28 +39,28 @@ Get Non Billable Subdomain
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
-Apply Discount for Order
+Apply Provider Coupon for Order
 
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
 
-Remove Discount for Order
+Remove Provider Coupon for Order
 
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
 
 *** Variables ***
@@ -79,10 +79,10 @@ ${coupon}          wheat
 
 *** Test Cases ***
 
-JD-TC-ApplyDiscountForOrder-1
-      [Documentation]   Create order by provider for Home Delivery when payment type is NONE (No Advancepayment),then apply discount for Order.
+JD-TC-RemoveProviderCouponForOrder-1
+      [Documentation]   Create order by provider for Home Delivery when payment type is NONE (No Advancepayment),then apply provider coupon for Order.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33885330
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33882342
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -401,34 +401,51 @@ JD-TC-ApplyDiscountForOrder-1
     Should Be Equal As Strings  ${resp.json()['homeDelivery']}            ${bool[1]} 
     Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]} 
 
-    ${discount1}=     FakerLibrary.word
-    ${desc}=   FakerLibrary.word
-    ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
-    Log  ${resp.json()}
-    Set Suite Variable   ${discountId}   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${coupon}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${pc_amount}=   Random Int   min=10  max=50
+    ${pc_amount}=  Convert To Number  ${pc_amount}  1
+    Set Suite Variable  ${pc_amount}
+    ${cupn_code}=   FakerLibrary.word
+    Set Suite Variable  ${cupn_code}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  subtract_time  0  15
+    ${eTime}=  add_time   0  45
+    ${ST_DAY}=  get_date
+    ${EN_DAY}=  add_date   10
+    ${min_bill_amount}=   Random Int   min=90   max=100
+    ${max_disc_val}=   Random Int   min=90  max=100
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[1]}    ${bookingChannel[0]}
+    ${coupn_based}=  Create List   ${couponBasedOn[1]}
+    ${catalogues}=  Create List   ${CatalogId1}
+    ${items}=   Create list   ${itemId}
+    # ${groups}=   Create list   ${groupid}
 
-    ${resp}=   Get Discounts 
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list     ${s_id}    
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}   catalogues=${catalogues}    items=${items}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${couponId}  ${resp.json()}
+
+    ${resp}=  Get Coupons 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${item_amt}=    Evaluate  ${promotionalPrice}*${item_quantity1}
-    ${item_amt}=  Convert To Number  ${item_amt}  2
 
-    ${discAmt}=    Evaluate  ${item_amt}-${discountprice}
-    ${discAmt}=  Convert To Number  ${discAmt}  2
+    ${discAmt}=    Evaluate  ${item_amt}-${pc_amount}
 
-    ${resp}=   Apply Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    ${resp}=   Apply Provider Coupon for Order    ${orderid1}    ${cupn_code}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
-    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-
-    ${resp}=   Remove Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    ${resp}=   Remove Provider Coupon for Order    ${orderid1}    ${cupn_code}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${item_amt}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
 

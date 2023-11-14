@@ -70,7 +70,7 @@ ${coupon}          wheat
 JD-TC-ApplyDiscountForOrder-1
       [Documentation]   Create order by provider for Home Delivery when payment type is NONE (No Advancepayment),then apply discount for Order.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888342
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33883342
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -405,6 +405,7 @@ JD-TC-ApplyDiscountForOrder-1
     ${item_amt}=    Evaluate  ${promotionalPrice}*${item_quantity1}
 
     ${discAmt}=    Evaluate  ${item_amt}-${discountprice}
+    ${discAmt}=  Convert To Number  ${discAmt}  2
 
     ${resp}=   Apply Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
     Log  ${resp.json()}

@@ -9,6 +9,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/consumermail.py
@@ -39,28 +40,16 @@ Get Non Billable Subdomain
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
-Apply Discount for Order
+Apply Jaldee Coupon for Order
 
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Remove Discount for Order
-
-    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
-    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
 
 *** Variables ***
@@ -79,10 +68,10 @@ ${coupon}          wheat
 
 *** Test Cases ***
 
-JD-TC-ApplyDiscountForOrder-1
-      [Documentation]   Create order by provider for Home Delivery when payment type is NONE (No Advancepayment),then apply discount for Order.
+JD-TC-ApplyJaldeeCouponForOrder-1
+      [Documentation]   Create order by provider for Home Delivery when payment type is NONE (No Advancepayment),then apply provider coupon for Order.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33885330
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33872242
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -245,13 +234,13 @@ JD-TC-ApplyDiscountForOrder-1
     Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
 
     ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${endDate}=  add_date  9      
 
     ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${endDate1}=  add_date  10  
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate2}=  get_date
+    ${endDate2}=  add_date  20     
    
 
     ${noOfOccurance}=  Random Int  min=0   max=0
@@ -361,7 +350,7 @@ JD-TC-ApplyDiscountForOrder-1
     # ${cid20}=  get_id  ${CUSERNAME20}
     # Set Suite Variable   ${cid20}
 
-    ${DAY1}=  add_date   12
+    # ${DAY1}=  add_date   12
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -401,34 +390,71 @@ JD-TC-ApplyDiscountForOrder-1
     Should Be Equal As Strings  ${resp.json()['homeDelivery']}            ${bool[1]} 
     Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]} 
 
-    ${discount1}=     FakerLibrary.word
-    ${desc}=   FakerLibrary.word
-    ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    ${resp}=  Get BusinessDomainsConf
     Log  ${resp.json()}
-    Set Suite Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${d1}  ${resp.json()[0]['domain']}
+    Set Test Variable  ${d2}  ${resp.json()[1]['domain']}
+    Set Test Variable  ${sd1}  ${resp.json()[0]['subDomains'][0]['subDomain']}
+    Set Test Variable  ${sd2}  ${resp.json()[0]['subDomains'][1]['subDomain']}
+    Set Test Variable  ${sd3}  ${resp.json()[1]['subDomains'][0]['subDomain']}
+    Set Test Variable  ${sd4}  ${resp.json()[1]['subDomains'][1]['subDomain']}
+    ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}  
+    ${licenses}=  Jaldee Coupon Target License  ${licid}
+    ${DAY1}=  get_date
+    Set Suite Variable  ${DAY1} 
+    ${DAY2}=  add_date  10
+    Set Suite Variable  ${DAY2}  
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${cup_code}=   FakerLibrary.word
+    Set Suite Variable   ${cup_code}
+    ${cup_name}=    FakerLibrary.name
+    Set Suite Variable   ${cup_name}
+    ${cup_des}=    FakerLibrary.sentence
+    Set Suite Variable   ${cup_des}
+    ${c_des}=   FakerLibrary.sentence
+    Set Suite Variable   ${c_des}  
+    ${p_des}=    FakerLibrary.sentence
+    Set Suite Variable   ${p_des}
+    clear_jaldeecoupon     ${cup_code}
+    ${resp}=  Create Jaldee Coupon  ${cup_code}  ${cup_name}  ${cup_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  100  100  1000  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Discounts 
-    Log  ${resp.json()}
+    ${resp}=  Push Jaldee Coupon  ${cup_code}  ${cup_des}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Jaldee Coupon By CouponCode   ${cup_code}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${jaldee_amt}    ${resp.json()['discountValue']}  
+    ${resp}=  SuperAdmin Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Enable Jaldee Coupon By Provider  ${cup_code}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get Jaldee Coupons By Coupon_code  ${cup_code}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
+
     ${item_amt}=    Evaluate  ${promotionalPrice}*${item_quantity1}
-    ${item_amt}=  Convert To Number  ${item_amt}  2
 
-    ${discAmt}=    Evaluate  ${item_amt}-${discountprice}
+    ${discAmt}=    Evaluate  ${item_amt}-${jaldee_amt} 
     ${discAmt}=  Convert To Number  ${discAmt}  2
 
-    ${resp}=   Apply Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    ${resp}=   Apply Jaldee Coupon for Order    ${orderid1}    ${cup_code}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
-    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
-
-    ${resp}=   Remove Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${item_amt}
 
