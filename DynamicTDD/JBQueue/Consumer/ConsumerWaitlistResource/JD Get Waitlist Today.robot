@@ -287,6 +287,13 @@ JD-TC-Get Waitlist Today-39
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  1
 
+    ${resp}=    Get Consumer Appointments Today 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${len}=  Get Length  ${resp.json()}
+    Should Be Equal As Integers  ${len}  1
+
 
 *** COMMENT ***
     ${s_id1}=   Create Sample Service  ${SERVICE1}
