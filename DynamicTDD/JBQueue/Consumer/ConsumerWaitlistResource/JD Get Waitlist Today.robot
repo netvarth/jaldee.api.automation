@@ -13,6 +13,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 
 *** Variables ***
 ${SERVICE1}    SERVICE1
@@ -187,15 +188,46 @@ JD-TC-Get Waitlist Today-39
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login    ${CUSERNAME9}  ${PASSWORD}
+    ${firstName}=  FakerLibrary.name
+    ${lastName}=  FakerLibrary.last_name
+    # ${primaryMobileNo}    FakerLibrary.Numerify   text=%#########
+    # ${CountryCode}  FakerLibrary.Country Code
+    ${Number}=  random_phone_num_generator
+    Log  ${Number}
+    ${CountryCode}=  Set Variable  ${Number.country_code}
+    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
+    
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${pid}   countryCode=${CountryCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${pid}  countryCode=${CountryCode}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings    ${resp.status_code}   200    
 
-    Set Test Variable  ${f_Name}  ${resp.json()['firstName']}
-    Set Test Variable  ${l_Name}  ${resp.json()['lastName']}
-    Set Test Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']} 
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${pid}  ${token}  countryCode=${CountryCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${cid}=  get_id  ${CUSERNAME9}   
+    # ${resp}=  Consumer Login    ${CUSERNAME9}  ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+
+    # Set Test Variable  ${f_Name}  ${resp.json()['firstName']}
+    # Set Test Variable  ${l_Name}  ${resp.json()['lastName']}
+    # Set Test Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']} 
+
+    # ${cid}=  get_id  ${CUSERNAME9}   
 
     ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id1}   ${pid}  
     Log  ${resp.content}
