@@ -47,6 +47,11 @@ Testing timezones
     # Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
     # Ref: https://www.nationsonline.org/oneworld/country_code_list.htm
 
+    # New Zealand
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+
+***COMMENT***
+
     # Asia
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=BG  coords_only=False        #Bangladesh -    Europe/Sofia
     # ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=BX  coords_only=False        #Brunei -   Asia/Dubai, Asia/Muscat

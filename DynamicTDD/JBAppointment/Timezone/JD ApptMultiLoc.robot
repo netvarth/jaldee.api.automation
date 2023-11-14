@@ -395,14 +395,13 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ############################## US ##############################
     Comment  Provider in US
-    ${PO_Number}=  FakerLibrary.Numerify  %#####
-    ${USProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # ${PO_Number}=  FakerLibrary.Numerify  %#####
+    # ${USProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
 
-    # ${licresp}=   Get Licensable Packages
-    # Should Be Equal As Strings  ${licresp.status_code}  200
-    # ${liclen}=  Get Length  ${licresp.json()}
-    # Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
-    # Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
+    ${Number}=  random_phone_num_generator
+    Log  ${Number}
+    ${US_CC}=  Set Variable  ${Number.country_code}
+    ${USProvider}=  Set Variable  ${Number.national_number}
 
     ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
 
@@ -467,6 +466,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${url}=   FakerLibrary.url
     ${sTime}=  db.get_time_by_timezone  ${US_tz}  
     ${eTime}=  db.add_timezone_time  ${US_tz}  0  30  
+    ${sTime}  ${eTime}=  db.endtime_conversion  ${sTime}  ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -540,6 +540,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${DAY2}=  db.add_timezone_date  ${US_tz1}  10     
     ${sTime1}=  add_timezone_time  ${US_tz1}  0  30  
     ${eTime1}=  add_timezone_time  ${US_tz1}  1  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -562,6 +563,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${DAY4}=  db.add_timezone_date  ${US_tz}  10  
     ${sTime2}=  add_timezone_time  ${US_tz}  1  00  
     ${eTime2}=  add_timezone_time  ${US_tz}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.administrative unit
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
@@ -581,6 +583,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_time   ${sTime1}  ${delta}
     ${eTime3}=  add_two   ${sTime3}  ${delta}
+    ${sTime3}  ${eTime3}=  db.endtime_conversion  ${sTime3}  ${eTime3}
     ${schedule_name}=  FakerLibrary.administrative unit
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -606,9 +609,22 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## UAE ##############################
 
     Comment  Provider in Middle East (UAE)
-    ${PO_Number}=  FakerLibrary.Numerify  %#######
-    ${MEProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # ${PO_Number}=  FakerLibrary.Numerify  %#######
+    # ${MEProvider}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # ${MEProvider}=  Set Variable  
+
+    # ${Number}=  random_phone_num_generator
+    # Log  ${Number}
+    # ${CC1}=  Set Variable  ${Number.country_code}
+    # ${MEProvider}=  Set Variable  ${Number.national_number}
+    # ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
+    # ${CC1}=  Set Variable  ${splitCC}[0]
+
+    ${other_numbers}=   country_code_numbers  ${UAE_CC}
+    Log List  ${other_numbers}
+    ${unique_numbers}=    Remove Duplicates    ${other_numbers}
+    ${MEProvider}=  Evaluate  random.choice($unique_numbers)  random
+    # Remove Values From List  ${unique_numbers}  ${MEProvider}
 
     ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
 
@@ -676,6 +692,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${url}=   FakerLibrary.url
     ${sTime}=  db.get_time_by_timezone  ${AE_tz}  
     ${eTime}=  db.add_timezone_time  ${AE_tz}  0  30  
+    ${sTime}  ${eTime}=  db.endtime_conversion  ${sTime}  ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}  timezone=${AE_tz}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -765,6 +782,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${DAY4}=  db.add_timezone_date  ${AE_tz}  10  
     ${sTime2}=  add_timezone_time  ${AE_tz}  1  00  
     ${eTime2}=  add_timezone_time  ${AE_tz}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.administrative unit
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
@@ -854,6 +872,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${url}=   FakerLibrary.url
     ${sTime}=  db.get_time_by_timezone  ${IN_tz}  
     ${eTime}=  db.add_timezone_time  ${IN_tz}  0  30  
+    ${sTime}  ${eTime}=  db.endtime_conversion  ${sTime}  ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -917,6 +936,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${DAY4}=  db.add_timezone_date  ${IN_tz}  10  
     ${sTime2}=  add_timezone_time  ${IN_tz}  1  00  
     ${eTime2}=  add_timezone_time  ${IN_tz}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.administrative unit
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
@@ -1740,6 +1760,7 @@ JD-TC-Take Appointment in Different Timezone-3
     ${url}=   FakerLibrary.url
     ${sTime}=  db.get_time_by_timezone  ${tz}  
     ${eTime}=  db.add_timezone_time  ${tz}  0  30  
+    ${sTime}  ${eTime}=  db.endtime_conversion  ${sTime}  ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1812,6 +1833,7 @@ JD-TC-Take Appointment in Different Timezone-3
     ${DAY2}=  db.add_timezone_date  ${tz1}  10     
     ${sTime1}=  add_timezone_time  ${tz1}  0  30  
     ${eTime1}=  add_timezone_time  ${tz1}  1  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -1824,16 +1846,17 @@ JD-TC-Take Appointment in Different Timezone-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${SERVICE1}=   FakerLibrary.job
+    ${SERVICE1}=   FakerLibrary.street name
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
 
-    ${SERVICE2}=   FakerLibrary.job
+    ${SERVICE2}=   FakerLibrary.street name
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
 
     ${DAY3}=  db.get_date_by_timezone  ${tz}
     ${DAY4}=  db.add_timezone_date  ${tz}  10  
     ${sTime2}=  add_timezone_time  ${tz}  1  00  
     ${eTime2}=  add_timezone_time  ${tz}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.administrative unit
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
@@ -1851,6 +1874,7 @@ JD-TC-Take Appointment in Different Timezone-3
     ${sTime3}=  add_timezone_time  ${tz1}  0  30
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime3}  ${delta}
+    ${sTime3}  ${eTime3}=  db.endtime_conversion  ${sTime3}  ${eTime3}
     ${schedule_name}=  FakerLibrary.administrative unit
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -1946,12 +1970,19 @@ JD-TC-Take Appointment in Different Timezone-4
     
     ############################## US ##############################
     Comment  Multi User Account in US
-    ${PO_Number}=  FakerLibrary.Numerify  %#####
-    ${US_MultiUser}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${CC1}  country_calling_code
+    # ${PO_Number}=  FakerLibrary.Numerify  %#####
+    # ${US_MultiUser}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # ${CC1}  country_calling_code
     # ${CC1}=    Remove String    ${CC1}    ${SPACE}
-    ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
-    ${CC1}=  Set Variable  ${splitCC}[0]
+    # ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
+    # ${CC1}=  Set Variable  ${splitCC}[0]
+
+    ${Number}=  random_phone_num_generator
+    Log  ${Number}
+    ${CC1}=  Set Variable  ${Number.country_code}
+    ${US_MultiUser}=  Set Variable  ${Number.national_number}
+    # ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
+    # ${CC1}=  Set Variable  ${splitCC}[0]
 
     # ${licresp}=   Get Licensable Packages
     # Should Be Equal As Strings  ${licresp.status_code}  200
@@ -2013,6 +2044,10 @@ JD-TC-Take Appointment in Different Timezone-4
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${US_M_Email}  ${views}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ${bool}
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
@@ -2020,12 +2055,9 @@ JD-TC-Take Appointment in Different Timezone-4
     ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
     ${US_tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     ${DAY}=  db.get_date_by_timezone  ${US_tz}
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ${bool}
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
     ${sTime}=  db.get_time_by_timezone  ${US_tz}  
     ${eTime}=  db.add_timezone_time  ${US_tz}  0  30  
+    ${sTime}  ${eTime}=  db.endtime_conversion  ${sTime}  ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2051,9 +2083,12 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${spec}=  get_Specializations  ${resp.json()}
     Log  ${spec}
-    ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
-    Log  ${specials}
-    Set To Dictionary    ${spec}    specialization    ${specials}
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    IF  ${spec_len}>3
+        ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
+        Log  ${specials}
+        Set To Dictionary    ${spec}    specialization    ${specials}
+    END
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2102,7 +2137,7 @@ JD-TC-Take Appointment in Different Timezone-4
     
     FOR   ${i}  IN RANGE   5
         ${latti1}  ${longi1}  ${city1}  ${country_abbr1}  ${US_tz1_orig}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
-        IF  '${US_tz_orig}' == '${US_tz1_orig}'
+        IF  '${US_tz}' == '${US_tz1_orig}'
             Continue For Loop
         ELSE
             Exit For Loop
@@ -2118,6 +2153,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY2}=  db.add_timezone_date  ${US_tz1}  10     
     ${sTime1}=  add_timezone_time  ${US_tz1}  0  30  
     ${eTime1}=  add_timezone_time  ${US_tz1}  1  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -2135,6 +2171,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY2}=  db.add_timezone_date  ${US_tz2}  10     
     ${sTime1}=  add_timezone_time  ${US_tz2}  0  30  
     ${eTime1}=  add_timezone_time  ${US_tz2}  1  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -2310,6 +2347,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY4}=  db.add_timezone_date  ${US_tz1}  10  
     ${sTime2}=  add_timezone_time  ${US_tz1}  1  00  
     ${eTime2}=  add_timezone_time  ${US_tz1}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
@@ -2399,6 +2437,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY4}=  db.add_timezone_date  ${US_tz2}  10  
     ${sTime2}=  add_timezone_time  ${US_tz2}  1  00  
     ${eTime2}=  add_timezone_time  ${US_tz2}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
@@ -2419,18 +2458,19 @@ JD-TC-Take Appointment in Different Timezone-4
     ############################## ME ##############################
     # Saudi Arabia
     Comment  Multi User Account in Middle East - Saudi Arabia
-    ${PO_Number}=  FakerLibrary.Numerify  %#####
-    ${ME_MultiUser}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${CC1}  country_calling_code
-    # ${CC1}=    Remove String    ${CC1}    ${SPACE}
-    ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
-    ${CC1}=  Set Variable  ${splitCC}[0]
+    # ${PO_Number}=  FakerLibrary.Numerify  %#####
+    # ${ME_MultiUser}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # ${CC1}  country_calling_code
+    # # ${CC1}=    Remove String    ${CC1}    ${SPACE}
+    # ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
+    # ${CC1}=  Set Variable  ${splitCC}[0]
 
-    # ${licresp}=   Get Licensable Packages
-    # Should Be Equal As Strings  ${licresp.status_code}  200
-    # ${liclen}=  Get Length  ${licresp.json()}
-    # Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
-    # Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
+    ${Number}=  random_phone_num_generator
+    Log  ${Number}
+    ${CC1}=  Set Variable  ${Number.country_code}
+    ${ME_MultiUser}=  Set Variable  ${Number.national_number}
+    # ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
+    # ${CC1}=  Set Variable  ${splitCC}[0]
 
     ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
 
@@ -2486,6 +2526,10 @@ JD-TC-Take Appointment in Different Timezone-4
     ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${ME_M_Email}  ${views}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ${bool}
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
     ${bs}=  FakerLibrary.bs
     ${companySuffix}=  FakerLibrary.companySuffix
     ${address} =  FakerLibrary.address
@@ -2493,12 +2537,9 @@ JD-TC-Take Appointment in Different Timezone-4
     ${latti}  ${longi}  ${city}  ${country_abbr}  ${ME_tz}=  FakerLibrary.Local Latlng  country_code=SA  coords_only=False
     ${ME_tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     ${DAY}=  db.get_date_by_timezone  ${ME_tz}
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ${bool}
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
     ${sTime}=  db.get_time_by_timezone  ${ME_tz}  
     ${eTime}=  db.add_timezone_time  ${ME_tz}  0  30  
+    ${sTime}  ${eTime}=  db.endtime_conversion  ${sTime}  ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2524,9 +2565,12 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${spec}=  get_Specializations  ${resp.json()}
     Log  ${spec}
-    ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
-    Log  ${specials}
-    Set To Dictionary    ${spec}    specialization    ${specials}
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    IF  ${spec_len}>3
+        ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
+        Log  ${specials}
+        Set To Dictionary    ${spec}    specialization    ${specials}
+    END
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2585,6 +2629,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY2}=  db.add_timezone_date  ${ME_tz1}  10     
     ${sTime1}=  add_timezone_time  ${ME_tz1}  0  30  
     ${eTime1}=  add_timezone_time  ${ME_tz1}  1  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -2604,6 +2649,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY2}=  db.add_timezone_date  ${ME_tz2}  10     
     ${sTime1}=  add_timezone_time  ${ME_tz2}  0  30  
     ${eTime1}=  add_timezone_time  ${ME_tz2}  1  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -2768,6 +2814,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY4}=  db.add_timezone_date  ${ME_tz}  10  
     ${sTime2}=  add_timezone_time  ${ME_tz}  1  00  
     ${eTime2}=  add_timezone_time  ${ME_tz}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
@@ -2857,6 +2904,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY4}=  db.add_timezone_date  ${US_tz2}  10  
     ${sTime2}=  add_timezone_time  ${US_tz2}  1  00  
     ${eTime2}=  add_timezone_time  ${US_tz2}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
@@ -2877,10 +2925,10 @@ JD-TC-Take Appointment in Different Timezone-4
     Comment  Multi User Account in Asia - India
     ${PO_Number}=  FakerLibrary.Numerify  %#####
     ${IN_MultiUser}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${CC1}  country_calling_code
-    # ${CC1}=    Remove String    ${CC1}    ${SPACE}
-    ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
-    ${CC1}=  Set Variable  ${splitCC}[0]
+    ${CC1}  Set Variable   ${countryCode[0]}
+    # # ${CC1}=    Remove String    ${CC1}    ${SPACE}
+    # ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
+    # ${CC1}=  Set Variable  ${splitCC}[0]
 
     # ${licresp}=   Get Licensable Packages
     # Should Be Equal As Strings  ${licresp.status_code}  200
@@ -2944,10 +2992,10 @@ JD-TC-Take Appointment in Different Timezone-4
     ${emails1}=  Emails  ${name3}  Email  ${IN_MU_Email}  ${views}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
-    ${desc}=   FakerLibrary.sentence
+    ${desc}=   FakerLibrary.catch_phrase
     ${url}=   FakerLibrary.url
     ${bs}=  FakerLibrary.bs
-    ${companySuffix}=  FakerLibrary.companySuffix
+    ${shortname}=  FakerLibrary.company
     ${address} =  FakerLibrary.address
     ${postcode}=  FakerLibrary.postcode
     ${latti}  ${longi}  ${city}  ${country_abbr}  ${IN_tz}=  FakerLibrary.Local Latlng  country_code=IN  coords_only=False
@@ -2955,7 +3003,8 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY}=  db.get_date_by_timezone  ${IN_tz}
     ${sTime}=  db.get_time_by_timezone  ${IN_tz}  
     ${eTime}=  db.add_timezone_time  ${IN_tz}  0  30  
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    ${sTime}  ${eTime}=  db.endtime_conversion  ${sTime}  ${eTime}
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}  ${shortname}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2980,9 +3029,12 @@ JD-TC-Take Appointment in Different Timezone-4
 
     ${spec}=  get_Specializations  ${resp.json()}
     Log  ${spec}
-    ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
-    Log  ${specials}
-    Set To Dictionary    ${spec}    specialization    ${specials}
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    IF  ${spec_len}>3
+        ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
+        Log  ${specials}
+        Set To Dictionary    ${spec}    specialization    ${specials}
+    END
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3039,6 +3091,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY2}=  db.add_timezone_date  ${IN_tz1}  10     
     ${sTime1}=  add_timezone_time  ${IN_tz1}  0  30  
     ${eTime1}=  add_timezone_time  ${IN_tz1}  1  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -3058,6 +3111,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY2}=  db.add_timezone_date  ${ID_tz1}  10     
     ${sTime1}=  add_timezone_time  ${ID_tz1}  0  30  
     ${eTime1}=  add_timezone_time  ${ID_tz1}  1  00  
+    ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime1}  ${eTime1}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -3222,6 +3276,7 @@ JD-TC-Take Appointment in Different Timezone-4
     ${DAY4}=  db.add_timezone_date  ${ME_tz}  10  
     ${sTime2}=  add_timezone_time  ${ME_tz}  1  00  
     ${eTime2}=  add_timezone_time  ${ME_tz}  1  30  
+    ${sTime2}  ${eTime2}=  db.endtime_conversion  ${sTime2}  ${eTime2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     # ${maxval}=  Convert To Integer   ${delta/2}
