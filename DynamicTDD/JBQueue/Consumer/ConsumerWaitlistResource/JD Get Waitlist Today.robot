@@ -138,6 +138,26 @@ JD-TC-Get Waitlist Today-39
     # ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=New Zealand  coords_only=False
     # ${list}=  Create List  1  2  3  4  5  6  7
 
+    ${resp}=  Enable Appointment
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep   01s
+    
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
