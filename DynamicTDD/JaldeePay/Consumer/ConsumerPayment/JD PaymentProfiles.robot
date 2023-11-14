@@ -4033,7 +4033,7 @@ JD-TC-paymentprofiles-9
     Set Test Variable  ${ModeId1}          ${PUSERNAME48}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentence
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Description1}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}  countryCode=${countryCodes[0]}  value=${ModeId1}   status=${ModeStatus1}   instructions=${Description1}
     ${virtualCallingModes1}=  Create List  ${VScallingMode1}
 
     ${Total1}=   Random Int   min=100   max=500
