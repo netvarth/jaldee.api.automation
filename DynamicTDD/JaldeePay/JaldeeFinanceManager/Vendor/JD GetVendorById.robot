@@ -66,9 +66,10 @@ JD-TC-GetVendorById-1
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
-    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Set Suite Variable    ${vendor_phn}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phn}
+    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
     ${address}=  FakerLibrary.city
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
@@ -144,7 +145,7 @@ JD-TC-GetVendorById-1
     Should Be Equal As Strings  ${resp.json()['contactInfo']['address']}  ${address}
     Should Be Equal As Strings  ${resp.json()['contactInfo']['state']}  ${state}
     Should Be Equal As Strings  ${resp.json()['contactInfo']['pincode']}  ${pin}
-    Should Be Equal As Strings  ${resp.json()['contactInfo']['phoneNumbers'][0]}  ${vendor_phno[0]}
+    Should Be Equal As Strings  ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_phn}
     Should Be Equal As Strings  ${resp.json()['contactInfo']['emails'][0]}  ${email[0]}
     Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
     # Should Be Equal As Strings  ${resp.json()['createdDate']}  ${vendor_id1}
@@ -178,9 +179,9 @@ JD-TC-GetVendorById-2
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
-    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phn}
+    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
     ${address}=  FakerLibrary.city
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
@@ -256,7 +257,7 @@ JD-TC-GetVendorById-2
     Should Be Equal As Strings  ${resp.json()['contactInfo']['address']}  ${address}
     Should Be Equal As Strings  ${resp.json()['contactInfo']['state']}  ${state}
     Should Be Equal As Strings  ${resp.json()['contactInfo']['pincode']}  ${pin}
-    Should Be Equal As Strings  ${resp.json()['contactInfo']['phoneNumbers'][0]}  ${vendor_phno[0]}
+    Should Be Equal As Strings  ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_phn}
     Should Be Equal As Strings  ${resp.json()['contactInfo']['emails'][0]}  ${email[0]}
     Should Be Equal As Strings  ${resp.json()['status']}  ${toggle[0]}
     # Should Be Equal As Strings  ${resp.json()['createdDate']}  ${vendor_id1}

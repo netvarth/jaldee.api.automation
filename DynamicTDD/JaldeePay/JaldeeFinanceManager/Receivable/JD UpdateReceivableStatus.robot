@@ -61,6 +61,7 @@ JD-TC-UpdateReceivableStatus-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
     Set Suite Variable  ${userName}  ${resp.json()['userName']}
+*** comment ***
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -96,13 +97,13 @@ JD-TC-UpdateReceivableStatus-1
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name1}  ${categoryType[4]} 
+    ${resp}=  Create Category   ${name1}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
     ${name2}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name2}  ${categoryType[4]} 
+    ${resp}=  Create Category   ${name2}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id3}   ${resp.json()}

@@ -40,30 +40,6 @@ Get Non Billable Subdomain
     END
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
-Apply Jaldee Coupon for Order
-
-    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
-Remove Jaldee Coupon for Order
-
-    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
-    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
-
 *** Variables ***
 ${waitlistedby}           PROVIDER
 ${SERVICE1}               SERVICE1001
