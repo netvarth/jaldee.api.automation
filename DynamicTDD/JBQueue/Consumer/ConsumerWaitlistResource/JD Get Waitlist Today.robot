@@ -212,7 +212,7 @@ JD-TC-Get Waitlist Today-39
     ${primaryMobileNo}=  Set Variable  ${Number.national_number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${pid}   countryCode=${CountryCode}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${pid}   countryCode=${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -221,14 +221,14 @@ JD-TC-Get Waitlist Today-39
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${pid}  countryCode=${CountryCode}
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${pid}  countryCode=${countryCodes[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200    
 
     ${resp}=  Customer Logout   
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${pid}  ${token}  countryCode=${CountryCode}
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${pid}  ${token}  countryCode=${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
