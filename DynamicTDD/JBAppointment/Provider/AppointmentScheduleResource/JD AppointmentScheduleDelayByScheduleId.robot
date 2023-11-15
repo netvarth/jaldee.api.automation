@@ -1215,8 +1215,8 @@ JD-TC-Appointment Schedule Delay By Scheduleid-7
     # Should Be Equal As Strings  ${resp.json()[2]['receiver']['id']}  ${consumer_id4}
     # Should Be Equal As Strings  ${resp.json()[2]['receiver']['name']}  ${consumername}
 
-    # ${resp}=   Encrypted Provider Login  ${PUSERNAME${b}}    ${PASSWORD}
-    # Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME${b}}    ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     #UpdateWithDecresingAddDelayTime
     comment   UpdateWithDecresingAddDelayTime

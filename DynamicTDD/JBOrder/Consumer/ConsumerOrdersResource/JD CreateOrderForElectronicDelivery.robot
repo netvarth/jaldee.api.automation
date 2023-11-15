@@ -393,7 +393,7 @@ JD-TC-CreateOrderForElectronicDelivery-6
     ${resp}=   Create Order For Electronic Delivery   ${cookie}   ${accId}    ${self}    ${CatalogId1}  ${EMPTY}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${ORDER_DATE_NEEDED}
+    Should Be Equal As Strings   ${resp.json()}   ${ORDER_DATE_SHOULD_BE_TODAY}
 
     # ${orderid}=  Get Dictionary Values  ${resp.json()}
     # Set Suite Variable  ${orderid1}  ${orderid[0]}

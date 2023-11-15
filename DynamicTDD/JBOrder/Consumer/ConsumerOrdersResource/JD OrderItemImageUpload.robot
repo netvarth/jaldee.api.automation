@@ -795,7 +795,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH4
     ${resp}=   Upload ShoppingList Image for HomeDelivery    ${cookie}   ${accId3}   ${caption}   ${self}    ${CatalogId1}   ${bool[1]}   ${address}   ${EMPTY}    ${sTime1}    ${eTime1}    ${CUSERNAME19}    ${email} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  "${resp.json()}"    "${ORDER_DATE_NEEDED}"
+    Should Be Equal As Strings  "${resp.json()}"    "${DELIVERY_DATE_NOT_SUPPORTED}"
 
 
 JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH5

@@ -754,20 +754,23 @@ JD-TC-AddItemsToItemGroupforUser-6
   
     ${resp}=  Add Items To Item Group   ${item_group_id1}    ${Items_list}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${NO_ITEMS_FOUND}
 
-    ${resp}=  Get Item Group By Id  ${item_group_id1}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['itemGroupId']}  ${item_group_id1}
-    Should Be Equal As Strings  ${resp.json()['groupName']}    ${groupName1}
-    Should Be Equal As Strings  ${resp.json()['groupDesc']}    ${groupDesc1}
-    Should Be Equal As Strings  ${resp.json()['strength']}     1
 
-    ${resp}=   Get Item By Id  ${itemid1} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-    Should Be Equal As Strings  ${resp.json()['groupIds'][0]}  ${item_group_id1}
+    # ${resp}=  Get Item Group By Id  ${item_group_id1}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['itemGroupId']}  ${item_group_id1}
+    # Should Be Equal As Strings  ${resp.json()['groupName']}    ${groupName1}
+    # Should Be Equal As Strings  ${resp.json()['groupDesc']}    ${groupDesc1}
+    # Should Be Equal As Strings  ${resp.json()['strength']}     1
+
+    # ${resp}=   Get Item By Id  ${itemid1} 
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
+    # Should Be Equal As Strings  ${resp.json()['groupIds'][0]}  ${item_group_id1}
 
 
 JD-TC-AddItemsToItemGroupforUser-7

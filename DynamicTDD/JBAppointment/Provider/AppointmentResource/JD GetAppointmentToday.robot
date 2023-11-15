@@ -5971,7 +5971,7 @@ JD-TC-GetAppointmentToday-29
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Verify Response  ${resp}  scheduleId=${sch_id1}
+    Verify Response  ${resp}  id=${sch_id1}
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}

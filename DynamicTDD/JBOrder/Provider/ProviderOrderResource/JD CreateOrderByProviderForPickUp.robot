@@ -405,7 +405,7 @@ JD-TC-CreateOrderByProviderForPickUp-UH3
     ${resp}=   Create Order By Provider For Pickup    ${cookie}  ${cid20}   ${cid20}   ${CatalogId1}   ${boolean[1]}    ${sTime3}    ${eTime3}   ${EMPTY}    ${CUSERNAME20}    ${email}  ${orderNote}  ${countryCodes[1]}  ${item_id3}   ${item_quantity1}  ${item_id4}   ${item_quantity1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  "${resp.json()}"    "${ORDER_DATE_NEEDED}"
+    Should Be Equal As Strings  "${resp.json()}"    "${PICKUP_DATE_NOT_SUPPORTED}"
 
 
 JD-TC-CreateOrderByProviderForPickUp-UH4

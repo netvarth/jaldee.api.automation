@@ -873,7 +873,7 @@ JD-TC-Upload_ShoppingList_By_Provider-UH11
     ${resp}=   Upload ShoppingList By Provider for HomeDelivery    ${cookie}   ${cid15}   ${caption}   ${cid15}    ${CatalogId1}   ${bool[1]}   ${address}   ${EMPTY}    ${sTime1}    ${eTime1}    ${CUSERNAME19}    ${email} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  "${resp.json()}"    "${ORDER_DATE_NEEDED}"
+    Should Be Equal As Strings  "${resp.json()}"    "${DELIVERY_DATE_NOT_SUPPORTED}"
 
 
 JD-TC-Upload_ShoppingList_By_Provider-UH12

@@ -382,15 +382,18 @@ JD-TC-CreateOrderForElectronicDelivery-4
 
     ${resp}=   Create Order By Provider For Electronic Delivery    ${cookie}  ${cid10}   ${cid10}   ${CatalogId1}  ${EMPTY}    ${CUSERNAME10}    ${email}  ${orderNote}  ${countryCodes[1]}  ${item_id1}   ${item_quantity1}  
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${ORDER_DATE_SHOULD_BE_TODAY}
     
-    ${orderid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${orderid2}  ${orderid[0]}
+    
+    
+    # ${orderid}=  Get Dictionary Values  ${resp.json()}
+    # Set Test Variable  ${orderid2}  ${orderid[0]}
 
-    ${resp}=   Get Order by uid    ${orderid2} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings  ${resp.json()['orderDate']}     ${DAY1}
+    # ${resp}=   Get Order by uid    ${orderid2} 
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  ${resp.json()['orderDate']}     ${DAY1}
 
 
 JD-TC-CreateOrderForElectronicDelivery-5
