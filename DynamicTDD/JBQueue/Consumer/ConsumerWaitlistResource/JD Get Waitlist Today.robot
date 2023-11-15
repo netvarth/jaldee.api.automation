@@ -1206,10 +1206,12 @@ JD-TC-Get Waitlist Today-41
     ${lastName}=  FakerLibrary.last_name
     # ${primaryMobileNo}    FakerLibrary.Numerify   text=%#########
     # ${CountryCode}  FakerLibrary.Country Code
-    ${Number}=  random_phone_num_generator
-    Log  ${Number}
-    ${CountryCode}=  Set Variable  ${Number.country_code}
-    ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    # ${Number}=  random_phone_num_generator
+    # Log  ${Number}
+    # ${CountryCode}=  Set Variable  ${Number.country_code}
+    # ${primaryMobileNo}=  Set Variable  ${Number.national_number}
+    ${Number}=  FakerLibrary.Numerify  %#####
+    ${primaryMobileNo}=  Evaluate  ${CUSERNAME}+${Number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${pid}   countryCode=${countryCodes[0]}
