@@ -145,6 +145,10 @@ JD-TC-Get Waitlist Today-39
     ${resp}=  Enable Appointment
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Enable Waitlist
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     sleep   01s
     
     ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
