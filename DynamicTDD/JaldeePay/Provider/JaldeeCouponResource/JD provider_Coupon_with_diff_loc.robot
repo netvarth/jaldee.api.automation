@@ -197,21 +197,6 @@ JD-TC-provider_Coupon_with_diff_loc-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id1}  ${resp.json()}
 
-    ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY2}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  100  ${lid2}  ${s_id1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${qid1}  ${resp.json()}
-
-    ${des}=   FakerLibrary.sentence
-    Set Suite Variable   ${des}
-    
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY2}  ${des}  ${bool[1]}  ${cid}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${wid}  ${wid[0]}
-    
-    ${wid1}=  Get Dictionary Values  ${resp.json()}
-    Set Suite Variable  ${wid1}  ${wid1[0]}
-
     ${coupon}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2
     ${pc_amount}=   Random Int   min=10  max=50
@@ -240,6 +225,21 @@ JD-TC-provider_Coupon_with_diff_loc-1
     ${resp}=  Get Coupons 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY2}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  100  ${lid2}  ${s_id1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${qid1}  ${resp.json()}
+
+    ${des}=   FakerLibrary.sentence
+    Set Suite Variable   ${des}
+    
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY2}  ${des}  ${bool[1]}  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid}  ${wid[0]}
+    
+    ${wid1}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid1}  ${wid1[0]}
     
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
