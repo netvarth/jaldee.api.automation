@@ -228,7 +228,10 @@ JD-TC-provider_Coupon_with_diff_loc-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${coupon_code}  ${resp.json()[0]['couponCode']}
 
-    ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY2}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  100  ${lid2}  ${s_id1}
+    ${sTime22}=  db.get_time_by_timezone  ${US_tz}  
+    ${eTime22}=  db.add_timezone_time  ${US_tz}  0  30 
+
+    ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY2}  ${EMPTY}  ${EMPTY}  ${sTime22}  ${eTime22}  1  100  ${lid2}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
 
