@@ -146,16 +146,16 @@ JD-TC-provider_Coupon_with_diff_loc-1
     ${city}=   FakerLibrary.City
     ${address} =  FakerLibrary.address
     ${postcode}=  FakerLibrary.postcode
-    ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz_orig}=  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
-    ${US_tz}=  db.get_Timezone_by_lat_long   ${latti}  ${longi}
-    ${DAY1}=  db.get_date_by_timezone  ${US_tz}
+    ${latti}  ${longi}  ${city}  ${country_abbr}  ${NZ_tz}=  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${NZ_tz}=  db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    ${DAY1}=  db.get_date_by_timezone  ${NZ_tz}
     # ${sTime}  ${eTime}=  db.endtime_conversion  ${sTime}  ${eTime}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  db.get_time_by_timezone  ${US_tz}  
-    ${eTime}=  db.add_timezone_time  ${US_tz}  0  30  
+    ${sTime}=  db.get_time_by_timezone  ${NZ_tz}  
+    ${eTime}=  db.add_timezone_time  ${NZ_tz}  0  30  
 
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.content}
@@ -205,10 +205,11 @@ JD-TC-provider_Coupon_with_diff_loc-1
     ${cupn_code}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    # ${sTime}=  subtract_time  0  15
+    # ${eTime}=  add_time   0  45
+    # ${ST_DAY}=  get_date
+
+    ${EN_DAY}=  db.add_timezone_date  ${NZ_tz}  10
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -217,7 +218,7 @@ JD-TC-provider_Coupon_with_diff_loc-1
     ${tc}=  FakerLibrary.sentence
     ${services}=   Create list     ${s_id1}    
 
-    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${DAY1}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${couponId}  ${resp.json()}
