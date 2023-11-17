@@ -963,6 +963,7 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ########################### Consumer 1- c1 ###########################
     
+    Comment  Consumer 1- c1
     ${firstName}=  FakerLibrary.name
     ${lastName}=  FakerLibrary.last_name
     # ${primaryMobileNo}    FakerLibrary.Numerify   text=%#########
@@ -973,7 +974,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${primaryMobileNo}=  Set Variable  ${Number.national_number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}  alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1014,6 +1015,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for USProvider ##############################
     # USProvider- acc_id1, US_tz, p1_l1, p1_l2, p1_s1, p1_s2, p1_sch1, p1_sch2
     
+    Comment  Consumer 1- c1- US
     ${resp}=  Get Appointment Schedules Consumer  ${acc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1085,7 +1087,8 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for MEProvider ##############################
     # MEProvider- acc_id2, AE_tz, p2_l1, p2_s1, p2_sch1
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id2}   countryCode=${CountryCode}
+    Comment  Consumer 1- c1- UAE
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id2}   countryCode=${CountryCode}  alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1145,7 +1148,8 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for INProvider ##############################
     # INProvider- acc_id3, IN_tz, p3_l1, p3_s1, p3_sch1
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id3}   countryCode=${CountryCode}
+    Comment  Consumer 1- c1- IN
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id3}   countryCode=${CountryCode}  alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1205,6 +1209,7 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ########################### Consumer 2- c2 ###########################
 
+    Comment  Consumer 2- c2
     ${firstName}=  FakerLibrary.name
     ${lastName}=  FakerLibrary.last_name
     # ${primaryMobileNo}    FakerLibrary.Numerify   text=%#########
@@ -1215,7 +1220,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${primaryMobileNo}=  Set Variable  ${Number.national_number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}  alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1256,6 +1261,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for USProvider ##############################
     # USProvider- acc_id1, US_tz, p1_l1, p1_l2, p1_s1, p1_s2, p1_sch1, p1_sch2
     
+    Comment  Consumer 2- c2- US
     ${resp}=  Get Appointment Schedules Consumer  ${acc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1327,7 +1333,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for MEProvider ##############################
     # MEProvider- acc_id2, AE_tz, p2_l1, p2_s1, p2_sch1
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id2}   countryCode=${CountryCode}
+    Comment  Consumer 2- c2- ME
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id2}   countryCode=${CountryCode}  alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1387,7 +1395,9 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for INProvider ##############################
     # INProvider- acc_id3, IN_tz, p3_l1, p3_s1, p3_sch1
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id3}   countryCode=${CountryCode}
+    Comment  Consumer 2- c2- IN
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id3}   countryCode=${CountryCode}  alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1447,6 +1457,7 @@ JD-TC-Take Appointment in Different Timezone-2
 
     ########################### Consumer 3- c3 ###########################
 
+    Comment  Consumer 3- c3
     ${firstName}=  FakerLibrary.name
     ${lastName}=  FakerLibrary.last_name
     # ${primaryMobileNo}    FakerLibrary.Numerify   text=%#########
@@ -1457,7 +1468,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ${primaryMobileNo}=  Set Variable  ${Number.national_number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}   alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1499,6 +1510,7 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for USProvider ##############################
     # USProvider- acc_id1, US_tz, p1_l1, p1_l2, p1_s1, p1_s2, p1_sch1, p1_sch2
     
+    Comment  Consumer 3- c3- US
     ${resp}=  Get Appointment Schedules Consumer  ${acc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1572,7 +1584,8 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for MEProvider ##############################
     # MEProvider- acc_id2, AE_tz, p2_l1, p2_s1, p2_sch1
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id2}   countryCode=${CountryCode}
+    Comment  Consumer 3- c3- ME
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id2}   countryCode=${CountryCode}   alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1632,7 +1645,8 @@ JD-TC-Take Appointment in Different Timezone-2
     ############################## Take appt for INProvider ##############################
     # INProvider- acc_id3, IN_tz, p3_l1, p3_s1, p3_sch1
 
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id3}   countryCode=${CountryCode}
+    Comment  Consumer 3- c3- IN
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id3}   countryCode=${CountryCode}   alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1904,7 +1918,7 @@ JD-TC-Take Appointment in Different Timezone-3
     ${primaryMobileNo}=  Set Variable  ${Number.national_number}
     Set Test Variable  ${email}  ${C_Email}${primaryMobileNo}.${test_mail}
     
-    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id1}   countryCode=${CountryCode}  alternateLoginId=${email}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

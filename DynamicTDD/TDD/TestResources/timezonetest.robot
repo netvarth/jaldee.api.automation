@@ -49,6 +49,17 @@ Testing timezones
 
     # New Zealand
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+    ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=NZ  coords_only=False
+
+
+
 
 ***COMMENT***
 
