@@ -175,8 +175,6 @@ JD-TC-CreateInvoice-1
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
     ${item1}=     FakerLibrary.word
@@ -204,8 +202,29 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
+    ${SERVICE1}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid1}  ${resp.json()}
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  
+    ${serviceList}=    Create List    ${serviceList}
+
+
+    ${itemName}=    FakerLibrary.word
+    Set Suite Variable  ${itemName}
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+    ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    ${adhocItemList}=    Create List    ${adhocItemList}
+
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -220,7 +239,11 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${sid1}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['itemName']}  ${itemName}
+    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['price']}  ${price}
 
 JD-TC-CreateInvoice-2
 
@@ -237,8 +260,6 @@ JD-TC-CreateInvoice-2
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
     ${resp1}=  AddCustomer  ${CUSERNAME10}
@@ -255,7 +276,7 @@ JD-TC-CreateInvoice-2
     Set Test Variable  ${providerConsumerIdList}   
 
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
@@ -270,7 +291,6 @@ JD-TC-CreateInvoice-2
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid10}
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid2}
@@ -282,7 +302,6 @@ JD-TC-CreateInvoice-2
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid9}
 
 JD-TC-CreateInvoice-3
@@ -312,29 +331,16 @@ JD-TC-CreateInvoice-3
     ${providerConsumerIdList}=  Create List  ${pcid12} 
     Set Test Variable  ${providerConsumerIdList}   
 
-    ${SERVICE1}=    FakerLibrary.word
-    Set Suite Variable  ${SERVICE1}
-    ${desc}=   FakerLibrary.sentence
-    ${servicecharge}=   Random Int  min=100  max=500
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sid1}  ${resp.json()}
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-
-    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  
-    ${serviceList}=    Create List    ${serviceList}
-
-
 
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
     ${netRate}=  Evaluate  ${promotionalPrice}*${quantity}
      ${netRate}=  Convert To Number  ${netRate}  4
 
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}  invoiceStatus=${status_id1}   serviceList=${serviceList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}  invoiceStatus=${status_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]}  
@@ -350,14 +356,12 @@ JD-TC-CreateInvoice-3
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid12}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['itemId']}  ${itemId}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['price']}  ${promotionalPrice}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['netRate']}  ${netRate}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${sid1}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  ${quantity}
+
 
 
 
@@ -377,14 +381,12 @@ JD-TC-CreateInvoice-UH1
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${EMPTY}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_INVOICE_AMOUNT}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
 JD-TC-CreateInvoice-UH2
 
@@ -401,11 +403,9 @@ JD-TC-CreateInvoice-UH2
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${EMPTY}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${EMPTY}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_INVOICE_CATEGORY}
@@ -425,18 +425,16 @@ JD-TC-CreateInvoice-UH3
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${EMPTY}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}    ${EMPTY}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVOICE_DATE_CANNOT_EMPTY}
 
 JD-TC-CreateInvoice-UH4
 
-    [Documentation]  Create a invoice with EMPTY invoiceLabel.
+    [Documentation]  Create a invoice with EMPTY service list,itemlist and adhoc list.
 
     ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
@@ -449,11 +447,10 @@ JD-TC-CreateInvoice-UH4
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+
     ${invoiceId}=   FakerLibrary.word
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${EMPTY}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${EMPTY}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()}  ${INVALID_INVOICE_AMOUNT}

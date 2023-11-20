@@ -364,7 +364,7 @@ JD-TC-Apply Item Level Discount-1
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
     
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  ${itemList}  serviceList=${serviceList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  ${itemList}  serviceList=${serviceList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 

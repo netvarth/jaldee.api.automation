@@ -178,8 +178,7 @@ JD-TC-GetInvoiceCountwithFilter-1
     Set Suite Variable  ${invoiceLabel}
     ${invoiceDate}=   db.get_date
     Set Suite Variable  ${invoiceDate}
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
+
     ${invoiceId}=   FakerLibrary.word
 
     ${item1}=     FakerLibrary.word
@@ -208,7 +207,7 @@ JD-TC-GetInvoiceCountwithFilter-1
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()['idList']}
@@ -227,7 +226,7 @@ JD-TC-GetInvoiceCountwithFilter-1
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
     # Should Be Equal As Strings  ${resp1.json()[0]['amount']}  ${amount}
 
-    ${resp1}=  Get Invoice Count With Filter   userId-eq=${pid}   amount-eq= ${amount}
+    ${resp1}=  Get Invoice Count With Filter   userId-eq=${pid}   
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()}   ${len}
@@ -245,8 +244,6 @@ JD-TC-GetInvoiceCountwithFilter-2
 
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
     ${resp1}=  AddCustomer  ${CUSERNAME10}
@@ -263,7 +260,7 @@ JD-TC-GetInvoiceCountwithFilter-2
     Set Test Variable  ${providerConsumerIdList}   
 
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len1}=  Get Length  ${resp.json()['idList']}

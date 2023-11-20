@@ -175,8 +175,6 @@ JD-TC-UpdateInvoiceItem-1
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
     ${item1}=     FakerLibrary.word
@@ -205,7 +203,7 @@ JD-TC-UpdateInvoiceItem-1
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -245,6 +243,5 @@ JD-TC-UpdateInvoiceItem-1
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()['itemList'][1]['itemName']}  ${item2}
     Should Be Equal As Strings  ${resp1.json()['itemList'][1]['itemId']}  ${itemId1}

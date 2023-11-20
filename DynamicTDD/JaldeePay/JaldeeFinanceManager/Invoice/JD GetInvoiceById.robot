@@ -175,8 +175,6 @@ JD-TC-GetInvoice by uid-1
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
     ${item1}=     FakerLibrary.word
@@ -206,7 +204,7 @@ JD-TC-GetInvoice by uid-1
     Set Test Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -221,7 +219,6 @@ JD-TC-GetInvoice by uid-1
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['itemId']}  ${itemId}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['price']}  ${promotionalPrice}
@@ -242,8 +239,6 @@ JD-TC-GetInvoice by uid-2
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
 
     ${resp1}=  AddCustomer  ${CUSERNAME10}
@@ -259,8 +254,18 @@ JD-TC-GetInvoice by uid-2
     ${providerConsumerIdList}=  Create List  ${pcid10}  ${pcid9}
     Set Test Variable  ${providerConsumerIdList}   
 
+    ${itemName}=    FakerLibrary.word
+    Set Suite Variable  ${itemName}
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    ${adhocItemList}=    Create List    ${adhocItemList}
+
     
-    ${resp}=  Create Invoice   ${category_id2}  ${amount}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
@@ -275,7 +280,6 @@ JD-TC-GetInvoice by uid-2
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid10}
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid2}
@@ -287,7 +291,6 @@ JD-TC-GetInvoice by uid-2
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount}
     Should Be Equal As Strings  ${resp1.json()['providerConsumerId']}  ${pcid9}
 
 JD-TC-GetInvoice by uid-3
@@ -298,12 +301,10 @@ JD-TC-GetInvoice by uid-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-   ${amount1}=   Random Int  min=500  max=2000
-   ${amount1}=     roundval    ${amount1}   1
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date
 
-    ${resp}=  Update Invoice   ${invoice_uid1}    ${category_id2}  ${amount1}  ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    ${resp}=  Update Invoice   ${invoice_uid1}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -317,7 +318,7 @@ JD-TC-GetInvoice by uid-3
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['amount']}  ${amount1}
+
 
 JD-TC-GetInvoice by uid-UH1
 

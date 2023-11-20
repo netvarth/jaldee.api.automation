@@ -10648,7 +10648,7 @@ Upload Finance Expense Attachment
 
 Create Invoice
 
-    [Arguments]    ${invoiceCategoryId}  ${amount}  ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}  ${invoiceId}    ${providerConsumerIdList}  @{vargs}   &{kwargs}
+    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}  ${invoiceId}    ${providerConsumerIdList}  @{vargs}   &{kwargs}
 
      ${len}=  Get Length  ${vargs}
     ${itemList}=  Create List  
@@ -10657,7 +10657,7 @@ Create Invoice
         Exit For Loop If  ${len}==0
         Append To List  ${itemList}  ${vargs[${index}]}
     END
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}   amount=${amount}  invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   itemList=${itemList} 
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   itemList=${itemList} 
 
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
@@ -10670,8 +10670,8 @@ Create Invoice
 
 Update Invoice
 
-    [Arguments]    ${uid}     ${invoiceCategoryId}  ${amount}  ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}      &{kwargs}
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}   amount=${amount}  invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  
+    [Arguments]    ${uid}     ${invoiceCategoryId}    ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}      &{kwargs}
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END

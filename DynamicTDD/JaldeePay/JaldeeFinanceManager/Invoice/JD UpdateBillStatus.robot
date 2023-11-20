@@ -53,7 +53,7 @@ JD-TC-UpdateBillStatus-1
 
     [Documentation]  Get provider's appointments for service with prepayment after prepayment
 
-    ${billable_providers}   ${multilocPro}=    Multiloc and Billable Providers   min=80   max=90
+    ${billable_providers}   ${multilocPro}=    Multiloc and Billable Providers   min=91   max=100
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
     clear_service   ${billable_providers[2]}
