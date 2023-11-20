@@ -25,11 +25,12 @@ ${xlsx}      /ebs/TDD/qnr.xlsx
 
 ${order}    0
 ${fileSize}  0.00458
+${service_duration}     30
+@{emptylist}
 
-@{status}    New     Pending    Assigned     Approved    Rejected
+@{status1}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
-
 *** Test Cases ***
 
 
@@ -198,7 +199,7 @@ JD-TC-GetInvoiceCountwithFilter-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
     ${netRate}=  Evaluate  ${promotionalPrice}*${quantity}
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
@@ -257,10 +258,25 @@ JD-TC-GetInvoiceCountwithFilter-2
     Set Suite Variable   ${pcid9}   ${resp1.json()}
 
     ${providerConsumerIdList}=  Create List  ${pcid10}  ${pcid9}
-    Set Test Variable  ${providerConsumerIdList}   
+    Set Test Variable  ${providerConsumerIdList}  
+
+    ${SERVICE1}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${serviceprice}=   Random Int  min=10  max=15
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid1}  ${resp.json()}
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
+    ${serviceList}=    Create List    ${serviceList} 
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  serviceList=${serviceList} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len1}=  Get Length  ${resp.json()['idList']}

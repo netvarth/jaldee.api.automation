@@ -200,7 +200,7 @@ JD-TC-Get Invoice With Filter -1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}   price=${promotionalPrice}
     ${netRate}=  Evaluate  ${promotionalPrice}*${quantity}
     ${netRate}=  Convert To Number  ${netRate}  4
 
@@ -272,10 +272,20 @@ JD-TC-Get Invoice With Filter -2
     Set Suite Variable   ${pcid9}   ${resp1.json()}
 
     ${providerConsumerIdList}=  Create List  ${pcid10}  ${pcid9}
-    Set Test Variable  ${providerConsumerIdList}   
+    Set Test Variable  ${providerConsumerIdList}  
+
+        ${itemName}=    FakerLibrary.word
+    Set Suite Variable  ${itemName}
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    ${adhocItemList}=    Create List    ${adhocItemList} 
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len1}=  Get Length  ${resp.json()['idList']}

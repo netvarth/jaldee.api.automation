@@ -188,8 +188,10 @@ JD-TC-UpdateInvoice-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
+        ${serviceprice}=   Random Int  min=10  max=15
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
 
-    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
 
     ${itemName}=    FakerLibrary.word

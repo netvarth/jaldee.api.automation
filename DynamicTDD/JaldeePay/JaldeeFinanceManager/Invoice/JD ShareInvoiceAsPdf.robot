@@ -196,7 +196,7 @@ JD-TC-Share invoice as pdf-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}   price=${promotionalPrice} 
     # ${itemList}=    Create List    ${itemList}
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 

@@ -190,7 +190,7 @@ JD-TC-CreateInvoice-1
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
 
-    ${itemList}=  Create Dictionary  itemId=${item_id1}   quantity=${quantity}     
+    ${itemList}=  Create Dictionary  itemId=${item_id1}   quantity=${quantity}   price=${price1}  
     # ${itemList}=    Create List    ${itemList}
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 

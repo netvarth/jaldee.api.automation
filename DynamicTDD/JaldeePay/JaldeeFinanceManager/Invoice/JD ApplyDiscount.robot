@@ -173,7 +173,7 @@ JD-TC-Apply Discount-1
     ${price}=   Random Int  min=10  max=15
     ${price}=  Convert To Number  ${price}  1
 
-    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=   Random Int  min=100  max=150
     ${quantity}=  Convert To Number  ${quantity}  1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}

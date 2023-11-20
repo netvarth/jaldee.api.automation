@@ -340,8 +340,10 @@ JD-TC-Apply Item Level Discount-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
+        ${serviceprice}=   Random Int  min=10  max=15
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
 
-    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
 
      ${item1}=     FakerLibrary.word
@@ -361,7 +363,7 @@ JD-TC-Apply Item Level Discount-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
     
     
     ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  ${itemList}  serviceList=${serviceList}

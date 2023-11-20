@@ -194,7 +194,7 @@ JD-TC-UpdateInvoiceItem-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}   price=${promotionalPrice}
     # ${itemList}=    Create List    ${itemList}
 
     ${resp}=  Create Finance Status   ${New_status[4]}  ${categoryType[3]} 
@@ -228,7 +228,7 @@ JD-TC-UpdateInvoiceItem-1
     ${quantity1}=   Random Int  min=5  max=10
     ${quantity1}=  Convert To Number  ${quantity1}  1
 
-    ${itemList1}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity1}  
+    ${itemList1}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity1}   price=${promotionalPrice}
 
     ${resp}=  Update Invoice Items  ${invoice_uid}   ${itemList1}   
     Log  ${resp.content}

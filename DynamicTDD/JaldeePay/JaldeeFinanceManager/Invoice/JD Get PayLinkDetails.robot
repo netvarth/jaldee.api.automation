@@ -182,7 +182,7 @@ JD-TC-GetPayLinkDetails-1
     ${rate}=   Random Int  min=50  max=1000
 
 
-    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}
+    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}  price=${rate}
     # ${itemList}=    Create List    ${itemList}
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
