@@ -1055,6 +1055,10 @@ JD-TC-UpdateVendor-19
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                 200
 
+    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    Log                           ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}                                 200
+    
     ${resp}=                      Update Vendor          ${vendor_uid1}    ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno1}    ${emails}    bankInfo=${bankInfo}    attachments=${attachments}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

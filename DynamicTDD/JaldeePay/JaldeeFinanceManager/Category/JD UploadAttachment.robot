@@ -106,10 +106,10 @@ JD-TC-UploadAttachment-2
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Expense)
 
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+    # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
@@ -139,7 +139,7 @@ JD-TC-UploadAttachment-3
       ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+    # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[2]} 
@@ -169,7 +169,7 @@ JD-TC-UploadAttachment-4
       ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+    # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
@@ -202,7 +202,7 @@ JD-TC-UploadAttachment-UH1
       ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+    # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
@@ -233,7 +233,7 @@ JD-TC-UploadAttachment-UH2
       ${resp}=  Encrypted Provider Login    ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+    # Set Test Variable  ${userName}  ${resp.json()['userName']}
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 

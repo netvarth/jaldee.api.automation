@@ -136,11 +136,11 @@ JD-TC-GetCategoryByCategoryType-4
     ${resp}=  Get Category By CategoryType   ${categoryType[3]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[3]['id']}            ${category_id1}
-    Should Be Equal As Strings  ${resp.json()[3]['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()[3]['categoryType']}  ${categoryType[3]}
-    Should Be Equal As Strings  ${resp.json()[3]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[3]['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[6]['id']}            ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[6]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[6]['categoryType']}  ${categoryType[3]}
+    Should Be Equal As Strings  ${resp.json()[6]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[6]['status']}        ${toggle[0]}
 
 
 
@@ -188,17 +188,17 @@ JD-TC-GetCategoryByCategoryType-5
     ${resp}=  Get Category By CategoryType   ${categoryType[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[3]['id']}            ${category_id1}
-    Should Be Equal As Strings  ${resp.json()[3]['name']}          ${name1}
-    Should Be Equal As Strings  ${resp.json()[3]['categoryType']}  ${categoryType[0]}
-    Should Be Equal As Strings  ${resp.json()[3]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[3]['status']}        ${toggle[0]}
-
-    Should Be Equal As Strings  ${resp.json()[4]['id']}            ${category_id2}
-    Should Be Equal As Strings  ${resp.json()[4]['name']}          ${name2}
+    Should Be Equal As Strings  ${resp.json()[4]['id']}            ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[4]['name']}          ${name1}
     Should Be Equal As Strings  ${resp.json()[4]['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()[4]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[4]['status']}        ${toggle[0]}
+
+    Should Be Equal As Strings  ${resp.json()[5]['id']}            ${category_id2}
+    Should Be Equal As Strings  ${resp.json()[5]['name']}          ${name2}
+    Should Be Equal As Strings  ${resp.json()[5]['categoryType']}  ${categoryType[0]}
+    Should Be Equal As Strings  ${resp.json()[5]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[5]['status']}        ${toggle[0]}
 
 
 JD-TC-GetCategoryByCategoryType-UH1
@@ -228,7 +228,7 @@ JD-TC-GetCategoryByCategoryType-UH3
 
     [Documentation]  Get category by category type , without create category.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -265,7 +265,7 @@ JD-TC-GetCategoryByCategoryType-UH4
 
     [Documentation]  Create Category as Vendor then update it as Expense then try to get category type as vendor.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

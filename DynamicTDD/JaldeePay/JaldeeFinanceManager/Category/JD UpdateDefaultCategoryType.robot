@@ -94,7 +94,7 @@ JD-TC- Update default category by type-2
 
     [Documentation]  Create Category as Expense and  Update default category by type.
 
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -122,7 +122,7 @@ JD-TC- Update default category by type-3
 
     [Documentation]  Create Category as Payable and  Update default category by type.
 
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME81}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
@@ -150,7 +150,7 @@ JD-TC- Update default category by type-4
 
     [Documentation]  Create Category as Invoice and  Update default category by type.
 
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

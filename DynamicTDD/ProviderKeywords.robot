@@ -11961,3 +11961,16 @@ Get Order level Bill Details
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/${uuid}/billdetails     expected_status=any
     [Return]  ${resp}
+
+
+Make Payment By Cash 
+
+    [Arguments]    ${uuid}     ${acceptPaymentBy}    ${amount}     ${paymentNote}     &{kwargs}
+    ${data}=  Create Dictionary  uuid=${uuid}     acceptPaymentBy=${acceptPaymentBy}     amount=${amount}     paymentNote=${paymentNote}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/payment/acceptPayment    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}

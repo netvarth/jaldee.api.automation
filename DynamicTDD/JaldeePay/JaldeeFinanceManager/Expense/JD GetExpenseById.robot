@@ -275,8 +275,8 @@ JD-TC-GetExpenseById-2
     Should Be Equal As Strings  ${resp.json()['expenseDate']}  ${expenseDate}
     Should Be Equal As Strings  ${resp.json()['expenseFor']}  ${expenseFor}
     Should Be Equal As Strings  ${resp.json()['expenseFor']}  ${expenseFor}
-    Should Be Equal As Strings  ${resp.json()['itemList'][1]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp.json()['departmentList'][1]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()['departmentList'][0]['deptId']}  ${deptId}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][1]['fileName']}  ${jpgfile}
 
 
@@ -346,8 +346,8 @@ JD-TC-GetExpenseById-3
     Should Be Equal As Strings  ${resp.json()['expenseDate']}  ${expenseDate}
     Should Be Equal As Strings  ${resp.json()['expenseFor']}  ${expenseFor}
     Should Be Equal As Strings  ${resp.json()['expenseFor']}  ${expenseFor}
-    Should Be Equal As Strings  ${resp.json()['itemList'][2]['quantity']}  ${quantity}
-    Should Be Equal As Strings  ${resp.json()['departmentList'][2]['deptId']}  ${deptId}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()['departmentList'][0]['deptId']}  ${deptId}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][2]['fileName']}  ${jpgfile}
 
 JD-TC-GetExpenseById-4

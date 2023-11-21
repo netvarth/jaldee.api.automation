@@ -297,7 +297,7 @@ JD-TC-GetExpenseWithFilter-2
     Should Be Equal As Strings  ${resp.json()[0]['expenseFor']}  ${expenseFor}
     Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
-    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${jpgfile}
+    Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][1]['fileName']}  ${jpgfile}
 
 JD-TC-GetExpenseWithFilter-3
 
