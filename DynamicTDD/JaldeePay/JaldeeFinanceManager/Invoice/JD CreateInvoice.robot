@@ -174,7 +174,8 @@ JD-TC-CreateInvoice-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
+    # ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   Get Current Date    result_format=%Y/%m/%d
     ${invoiceId}=   FakerLibrary.word
 
     ${item1}=     FakerLibrary.word
