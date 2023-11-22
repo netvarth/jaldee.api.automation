@@ -211,7 +211,11 @@ JD-TC-UpdateService-1
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
 
-    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  
+        ${serviceprice}=   Random Int  min=1000  max=1500
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}   price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
     
     
@@ -232,7 +236,8 @@ JD-TC-UpdateService-1
      ${quantity1}=   Random Int  min=5  max=10
     ${quantity1}=  Convert To Number  ${quantity1}  1
 
-    ${serviceList1}=  Create Dictionary  serviceId=${sid2}   quantity=${quantity1}  
+
+    ${serviceList1}=  Create Dictionary  serviceId=${sid2}   quantity=${quantity1}   price=${serviceprice}
     
 
 

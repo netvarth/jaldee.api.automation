@@ -339,7 +339,7 @@ JD-TC-Remove Service Level Discount-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-        ${serviceprice}=   Random Int  min=10  max=15
+        ${serviceprice}=   Random Int  min=1000  max=1500
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}

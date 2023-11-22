@@ -272,6 +272,10 @@ JD-TC-GetInvoiceCountwithFilter-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
 
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList} 
 

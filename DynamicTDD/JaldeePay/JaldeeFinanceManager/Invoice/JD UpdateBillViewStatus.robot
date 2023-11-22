@@ -63,6 +63,8 @@ JD-TC-UpdateBillViewStatus-1
     ${resp}=  Provider Login  ${billable_providers[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+#-------------------------- Dev deleted this url from finance--------------------------------
+*** comment ***
 
     ${resp}=   Get Service
     Log   ${resp.json()}

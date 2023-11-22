@@ -38,7 +38,7 @@ ${DisplayName1}   item1_DisplayName
 
 *** Test Cases ***
 
-JD-TC-Apply ProviderCoupon-1
+JD-TC-Remove ProviderCoupon-1
 
     [Documentation]  Apply provider coupon.
 
@@ -232,7 +232,7 @@ JD-TC-Apply ProviderCoupon-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-        ${serviceprice}=   Random Int  min=10  max=15
+        ${serviceprice}=   Random Int  min=1000  max=1500
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
 
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
