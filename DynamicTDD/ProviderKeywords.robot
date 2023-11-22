@@ -11398,9 +11398,10 @@ Auto Invoice Generation For Service
 
 Create PaymentsIn
 
-    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}    ${paymentMode}   &{kwargs}    
+    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}    ${paymentMode}   &{kwargs}   
 
-    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+
+    # ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
     ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}   paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
@@ -11414,7 +11415,7 @@ Create PaymentsIn
 Update PaymentsIn
     [Arguments]    ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}    ${paymentMode}   &{kwargs}
 
-    ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+    # ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
     ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}      paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}

@@ -32,7 +32,7 @@ ${fileSize}  0.00458
 *** Test Cases ***
 
 
-JD-TC-CreateInvoice-1
+JD-TC-GenerateLinkForInvoice-1
 
     [Documentation]  Create a invoice with valid details.
 
