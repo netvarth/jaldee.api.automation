@@ -174,8 +174,8 @@ JD-TC-Get PaymentsIn-1
     Set Suite Variable    ${uploadedDocuments}
 
  
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -195,6 +195,7 @@ JD-TC-Get PaymentsIn-1
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 JD-TC-Get PaymentsIn-2
 
@@ -210,8 +211,8 @@ JD-TC-Get PaymentsIn-2
     ${receivedDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
-
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -230,6 +231,7 @@ JD-TC-Get PaymentsIn-2
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 JD-TC-Get PaymentsIn-3
 
@@ -250,8 +252,8 @@ JD-TC-Get PaymentsIn-3
     ${receivedDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
-
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -273,6 +275,7 @@ JD-TC-Get PaymentsIn-3
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 JD-TC-Get PaymentsIn-4
 
