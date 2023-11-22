@@ -11973,5 +11973,17 @@ Make Payment By Cash
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/payment/acceptPayment    data=${data}  expected_status=any    headers=${headers}
+    ${resp}=    POST On Session    ynw    /provider/payment/acceptPayment    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Make Payment By Cash For Invoice
+
+    [Arguments]    ${uuid}     ${acceptPaymentBy}    ${amount}     ${paymentNote}     &{kwargs}
+    ${data}=  Create Dictionary  uuid=${uuid}     acceptPaymentBy=${acceptPaymentBy}     amount=${amount}     paymentNote=${paymentNote}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/acceptPayment    data=${data}  expected_status=any    headers=${headers}
     [Return]  ${resp}
