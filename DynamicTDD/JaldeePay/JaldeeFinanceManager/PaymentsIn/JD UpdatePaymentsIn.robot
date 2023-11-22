@@ -174,8 +174,8 @@ JD-TC-Update PaymentIn-1
     Set Suite Variable    ${uploadedDocuments}
 
  
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -184,7 +184,7 @@ JD-TC-Update PaymentIn-1
     ${amount1}=   Random Int  min=500  max=2000
     ${amount1}=     roundval    ${amount1}   1
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount1}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount1}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -204,6 +204,7 @@ JD-TC-Update PaymentIn-1
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 
@@ -224,8 +225,33 @@ JD-TC-Update PaymentIn-2
     ${receivedDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
+    ${merchantId}=   FakerLibrary.word
+    Set Suite Variable   ${merchantId}
+    ${merchantKey}=   FakerLibrary.word
+    Set Suite Variable   ${merchantKey}
+    ${orderId}=   FakerLibrary.word
+    Set Suite Variable   ${orderId}
+    ${gatewayTxnId}=   FakerLibrary.word
+    Set Suite Variable   ${gatewayTxnId}
+    ${upiId}=   FakerLibrary.word
+    Set Suite Variable   ${upiId}
+    ${bankaccountNo}=  Generate_random_value  size=16  chars=string.digits
+    Set Suite Variable   ${bankaccountNo}
+    ${ifsc}=  Generate_ifsc_code
+    Set Suite Variable   ${ifsc}
+    ${bankName}=  FakerLibrary.company
+    Set Suite Variable   ${bankName}
+    ${branchName}=   FakerLibrary.word
+    Set Suite Variable   ${branchName}
+    ${gstNumber}  ${pancardNo}=   db.Generate_gst_number   ${Container_id}
+    Set Suite Variable   ${gstNumber}
+    Set Suite Variable   ${pancardNo}
+    ${bankCheckNo}=   FakerLibrary.word
+    Set Suite Variable   ${bankCheckNo}
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[1]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
 
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -244,6 +270,20 @@ JD-TC-Update PaymentIn-2
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 
 JD-TC-Update PaymentIn-3
@@ -263,8 +303,8 @@ JD-TC-Update PaymentIn-3
     ${amount}=     roundval    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
 
-
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${EMPTY}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${EMPTY}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}       ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -282,6 +322,7 @@ JD-TC-Update PaymentIn-3
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 
@@ -308,8 +349,8 @@ JD-TC-Update PaymentIn-UH1
     ${amount}=     roundval    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
 
-
-     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSIN_ID}
@@ -331,8 +372,8 @@ JD-TC-Update PaymentIn-UH2
     ${amount}=     roundval    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
 
-
-     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -356,8 +397,8 @@ JD-TC-Update PaymentIn-UH3
     ${amount}=     roundval    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
 
-
-     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+     ${resp}=  Update PaymentsIn   ${fakeid}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -382,8 +423,8 @@ JD-TC-Update PaymentIn-UH4
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 
-
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${EMPTY}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${EMPTY}      ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_VENDOR}

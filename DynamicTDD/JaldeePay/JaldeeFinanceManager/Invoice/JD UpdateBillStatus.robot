@@ -158,8 +158,10 @@ JD-TC-UpdateBillStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${userName}   ${resp.json()['userName']}
     Set Test Variable  ${fname}   ${resp.json()['firstName']}
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    Set Test Variable  ${primaryPhoneNumber}   ${resp.json()['primaryPhoneNumber']}
 
     ${resp}=  Get Appointment Schedules Consumer  ${pid}
     Log   ${resp.json()}
@@ -221,13 +223,22 @@ JD-TC-UpdateBillStatus-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get Invoice With Filter  
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-
     ${resp}=  Get Booking Invoices  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
+    Should Be Equal As Strings  ${resp.json()[0]['userId']}   ${cid}
+    Should Be Equal As Strings  ${resp.json()[0]['invoiceDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()[0]['billedTo']}   ${userName}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['firstName']}   ${fname}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['lastName']}  ${lname}
+    Should Be Equal As Strings  ${resp.json()[0]['providerConsumerData']['phoneNos'][0]['number']}  ${primaryPhoneNumber}
+    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${s_id}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${SERVICE1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  ${primaryPhoneNumber}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${servicecharge}
+
 
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
