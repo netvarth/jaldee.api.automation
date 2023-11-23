@@ -193,13 +193,13 @@ JD-TC-MakePaymentByCashForBooking-1
       Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
       Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
 
-    ${adhoc_amt}=    Evaluate  ${price}*${quantity}
-    ${service_amt}=    Evaluate  ${serviceprice}*${quantity}
-    ${item_amt}=    Evaluate  ${promotionalPrice}*${quantity}
+    # ${adhoc_amt}=    Evaluate  ${price}*${quantity}
+    # ${service_amt}=    Evaluate  ${serviceprice}*${quantity}
+    # ${item_amt}=    Evaluate  ${promotionalPrice}*${quantity}
 
-    ${discAmt}=    Evaluate  ${adhoc_amt}+${service_amt}+${item_amt}
+    # ${discAmt}=    Evaluate  ${adhoc_amt}+${service_amt}+${item_amt}
 
-    ${balance}=    evaluate    ${discAmt}-10
+    ${balance}=    evaluate    ${fullAmount}-10
 
     ${note}=    FakerLibrary.word
     ${resp}=  Make Payment By Cash   ${wid}  ${payment_modes[0]}  10  ${note}
@@ -209,4 +209,16 @@ JD-TC-MakePaymentByCashForBooking-1
     ${resp}=  Get Waitlist By Id  ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp1.json()['amountDue']}  ${balance}
+    Should Be Equal As Strings  ${resp.json()['amountPaid']}  10.0
+    # Should Be Equal As Strings  ${resp.json()['token']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['date']}  ${CUR_DAY}
+    Should Be Equal As Strings  ${resp.json()['providerAccount']['id']}  ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}  ${cid}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['waitlistStatus']}  ${wl_status[1]}
+    Should Be Equal As Strings  ${resp.json()['ynwUuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['paymentStatus']}  ${paymentStatus[1]}
+    Should Be Equal As Strings  ${resp.json()['netRate']}  ${balance}
     
