@@ -178,8 +178,8 @@ JD-TC-Get PaymentsOut Log List-1
     Set Suite Variable    ${DAY}
     ${time_now}=    Get Current Date
     ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}       ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -196,4 +196,5 @@ JD-TC-Get PaymentsOut Log List-1
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['time']}  ${time_now}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['userType']}  ${userType[0]}
     Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['localUserId']}  ${pid}
+
 

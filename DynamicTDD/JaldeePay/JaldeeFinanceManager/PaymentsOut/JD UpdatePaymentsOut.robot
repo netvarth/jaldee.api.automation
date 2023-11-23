@@ -201,9 +201,32 @@ JD-TC-Update PaymentOut-2
     ${dueDate}=   db.get_date
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
+    ${merchantId}=   FakerLibrary.word
+    Set Suite Variable   ${merchantId}
+    ${merchantKey}=   FakerLibrary.word
+    Set Suite Variable   ${merchantKey}
+    ${orderId}=   FakerLibrary.word
+    Set Suite Variable   ${orderId}
+    ${gatewayTxnId}=   FakerLibrary.word
+    Set Suite Variable   ${gatewayTxnId}
+    ${upiId}=   FakerLibrary.word
+    Set Suite Variable   ${upiId}
+    ${bankaccountNo}=  Generate_random_value  size=16  chars=string.digits
+    Set Suite Variable   ${bankaccountNo}
+    ${ifsc}=  Generate_ifsc_code
+    Set Suite Variable   ${ifsc}
+    ${bankName}=  FakerLibrary.company
+    Set Suite Variable   ${bankName}
+    ${branchName}=   FakerLibrary.word
+    Set Suite Variable   ${branchName}
+    ${gstNumber}  ${pancardNo}=   db.Generate_gst_number   ${Container_id}
+    Set Suite Variable   ${gstNumber}
+    Set Suite Variable   ${pancardNo}
+    ${bankCheckNo}=   FakerLibrary.word
+    Set Suite Variable   ${bankCheckNo}
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[12]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd  
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[12]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -221,6 +244,19 @@ JD-TC-Update PaymentOut-2
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[12]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-3
 
@@ -243,7 +279,7 @@ JD-TC-Update PaymentOut-3
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[1]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[1]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -261,6 +297,19 @@ JD-TC-Update PaymentOut-3
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-4
 
@@ -283,7 +332,7 @@ JD-TC-Update PaymentOut-4
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[8]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[8]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -301,6 +350,19 @@ JD-TC-Update PaymentOut-4
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[8]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-5
 
@@ -323,7 +385,7 @@ JD-TC-Update PaymentOut-5
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[6]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[6]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -341,6 +403,19 @@ JD-TC-Update PaymentOut-5
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[6]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-6
 
@@ -363,7 +438,7 @@ JD-TC-Update PaymentOut-6
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[7]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[7]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -381,6 +456,19 @@ JD-TC-Update PaymentOut-6
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[7]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-7
 
@@ -403,7 +491,7 @@ JD-TC-Update PaymentOut-7
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -421,6 +509,19 @@ JD-TC-Update PaymentOut-7
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[9]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-8
 
@@ -443,7 +544,7 @@ JD-TC-Update PaymentOut-8
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[9]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -461,6 +562,19 @@ JD-TC-Update PaymentOut-8
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[9]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-9
 
@@ -483,7 +597,7 @@ JD-TC-Update PaymentOut-9
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}  merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd  
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}  merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -501,6 +615,19 @@ JD-TC-Update PaymentOut-9
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-10
 
@@ -523,7 +650,7 @@ JD-TC-Update PaymentOut-10
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[3]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[3]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -541,6 +668,19 @@ JD-TC-Update PaymentOut-10
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[3]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-11
 
@@ -563,7 +703,7 @@ JD-TC-Update PaymentOut-11
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[10]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[10]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -581,6 +721,19 @@ JD-TC-Update PaymentOut-11
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[10]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-12
 
@@ -603,7 +756,7 @@ JD-TC-Update PaymentOut-12
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[13]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[13]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -621,6 +774,19 @@ JD-TC-Update PaymentOut-12
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[13]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-13
 
@@ -642,7 +808,7 @@ JD-TC-Update PaymentOut-13
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[14]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[14]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -660,6 +826,19 @@ JD-TC-Update PaymentOut-13
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[14]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-14
 
@@ -682,7 +861,7 @@ JD-TC-Update PaymentOut-14
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[2]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[2]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -700,6 +879,19 @@ JD-TC-Update PaymentOut-14
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[2]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-15
 
@@ -722,7 +914,7 @@ JD-TC-Update PaymentOut-15
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[15]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[15]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -740,6 +932,19 @@ JD-TC-Update PaymentOut-15
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[15]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-16
 
@@ -762,7 +967,7 @@ JD-TC-Update PaymentOut-16
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -780,6 +985,19 @@ JD-TC-Update PaymentOut-16
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-17
 
@@ -802,7 +1020,7 @@ JD-TC-Update PaymentOut-17
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -820,6 +1038,19 @@ JD-TC-Update PaymentOut-17
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 
 
@@ -844,7 +1075,7 @@ JD-TC-Update PaymentOut-18
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -862,6 +1093,19 @@ JD-TC-Update PaymentOut-18
     Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 JD-TC-Update PaymentOut-UH1
 
@@ -885,7 +1129,7 @@ JD-TC-Update PaymentOut-UH1
     ${fakeid}=   FakerLibrary.Random Number
 
 
-    ${resp}=  Update PaymentsOut   ${fakeid}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${fakeid}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_ID}
@@ -908,7 +1152,7 @@ JD-TC-Update PaymentOut-UH2
     ${fakeid}=   FakerLibrary.Random Number
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${EMPTY}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd 
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${EMPTY}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -933,7 +1177,7 @@ JD-TC-Update PaymentOut-UH3
     ${fakeid}=   FakerLibrary.Random Number
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${EMPTY}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${EMPTY}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -960,7 +1204,7 @@ JD-TC-Update PaymentOut-UH4
     ${fake}=      FakerLibrary.Random Number
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${fake}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${fake}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTS_OUT_STATUS_ID}
@@ -987,7 +1231,7 @@ JD-TC-Update PaymentOut-UH5
     ${fakeid}=   FakerLibrary.Random Number
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${SPACE}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${SPACE}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_CATEGORY}
@@ -1013,7 +1257,7 @@ JD-TC-Update PaymentOut-UH6
     ${amount}=     roundval    ${amount}   1
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${EMPTY}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${EMPTY}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_VENDOR}

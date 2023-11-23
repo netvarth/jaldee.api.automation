@@ -185,8 +185,8 @@ JD-TC-GetPayableWithFilter-1
     Set Suite Variable    ${uploadedDocuments}
 
  
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -206,6 +206,7 @@ JD-TC-GetPayableWithFilter-1
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 JD-TC-GetPayableWithFilter-2
 
@@ -229,6 +230,7 @@ JD-TC-GetPayableWithFilter-2
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 JD-TC-GetPayableWithFilter-3
 
@@ -252,6 +254,7 @@ JD-TC-GetPayableWithFilter-3
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 JD-TC-GetPayableWithFilter-4
 
@@ -294,10 +297,32 @@ JD-TC-GetPayableWithFilter-4
     Log  ${Attachments}
     ${uploadedDocuments}=  Create List   ${Attachments}
     Set Suite Variable    ${uploadedDocuments}
-
+    ${merchantId}=   FakerLibrary.word
+    Set Suite Variable   ${merchantId}
+    ${merchantKey}=   FakerLibrary.word
+    Set Suite Variable   ${merchantKey}
+    ${orderId}=   FakerLibrary.word
+    Set Suite Variable   ${orderId}
+    ${gatewayTxnId}=   FakerLibrary.word
+    Set Suite Variable   ${gatewayTxnId}
+    ${upiId}=   FakerLibrary.word
+    Set Suite Variable   ${upiId}
+    ${bankaccountNo}=  Generate_random_value  size=16  chars=string.digits
+    Set Suite Variable   ${bankaccountNo}
+    ${ifsc}=  Generate_ifsc_code
+    Set Suite Variable   ${ifsc}
+    ${bankName}=  FakerLibrary.company
+    Set Suite Variable   ${bankName}
+    ${branchName}=   FakerLibrary.word
+    Set Suite Variable   ${branchName}
+    ${gstNumber}  ${pancardNo}=   db.Generate_gst_number   ${Container_id}
+    Set Suite Variable   ${gstNumber}
+    Set Suite Variable   ${pancardNo}
+    ${bankCheckNo}=   FakerLibrary.word
+    Set Suite Variable   ${bankCheckNo}
  
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[1]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}       ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -317,6 +342,20 @@ JD-TC-GetPayableWithFilter-4
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 
 
@@ -347,8 +386,8 @@ JD-TC-GetPayableWithFilter-5
 
 
 
-
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[2]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -366,6 +405,20 @@ JD-TC-GetPayableWithFilter-5
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 
 JD-TC-GetPayableWithFilter-6
@@ -398,8 +451,8 @@ JD-TC-GetPayableWithFilter-6
     Set Test Variable  ${amount}  
 
 
-
-    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}    
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -421,6 +474,7 @@ JD-TC-GetPayableWithFilter-6
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 JD-TC-GetPayableWithFilter-7
@@ -461,8 +515,8 @@ JD-TC-GetPayableWithFilter-7
     Set Suite Variable    ${uploadedDocuments}
 
  
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}         ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}
@@ -482,6 +536,7 @@ JD-TC-GetPayableWithFilter-7
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['caption']}  ${caption1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileType']}  ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 
@@ -508,7 +563,7 @@ JD-TC-GetPayableWithFilter-8
     # Should Be Equal As Strings  ${resp.json()['paidDate']}  ${receivedDate}
     # Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     # Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 JD-TC-GetPayableWithFilter-UH1

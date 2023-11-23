@@ -189,6 +189,29 @@ JD-TC-UpdatePaymentInStatus-1
     Set Suite Variable    ${fileType1}
     ${caption1}=  Fakerlibrary.Sentence
     Set Suite Variable    ${caption1}
+    ${merchantId}=   FakerLibrary.word
+    Set Suite Variable   ${merchantId}
+    ${merchantKey}=   FakerLibrary.word
+    Set Suite Variable   ${merchantKey}
+    ${orderId}=   FakerLibrary.word
+    Set Suite Variable   ${orderId}
+    ${gatewayTxnId}=   FakerLibrary.word
+    Set Suite Variable   ${gatewayTxnId}
+    ${upiId}=   FakerLibrary.word
+    Set Suite Variable   ${upiId}
+    ${bankaccountNo}=  Generate_random_value  size=16  chars=string.digits
+    Set Suite Variable   ${bankaccountNo}
+    ${ifsc}=  Generate_ifsc_code
+    Set Suite Variable   ${ifsc}
+    ${bankName}=  FakerLibrary.company
+    Set Suite Variable   ${bankName}
+    ${branchName}=   FakerLibrary.word
+    Set Suite Variable   ${branchName}
+    ${gstNumber}  ${pancardNo}=   db.Generate_gst_number   ${Container_id}
+    Set Suite Variable   ${gstNumber}
+    Set Suite Variable   ${pancardNo}
+    ${bankCheckNo}=   FakerLibrary.word
+    Set Suite Variable   ${bankCheckNo}
 
 
 
@@ -203,8 +226,8 @@ JD-TC-UpdatePaymentInStatus-1
     Set Suite Variable    ${uploadedDocuments}
 
  
-
-    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${finance_payment_modes[0]}    uploadedDocuments=${uploadedDocuments}
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[1]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}     ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payable_uid1}   ${resp.json()['uid']}

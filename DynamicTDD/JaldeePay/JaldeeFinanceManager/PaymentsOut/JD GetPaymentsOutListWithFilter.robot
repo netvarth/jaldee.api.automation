@@ -296,10 +296,32 @@ JD-TC-GetPayableWithFilter-5
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     Set Test Variable  ${amount}  
+    ${merchantId}=   FakerLibrary.word
+    Set Suite Variable   ${merchantId}
+    ${merchantKey}=   FakerLibrary.word
+    Set Suite Variable   ${merchantKey}
+    ${orderId}=   FakerLibrary.word
+    Set Suite Variable   ${orderId}
+    ${gatewayTxnId}=   FakerLibrary.word
+    Set Suite Variable   ${gatewayTxnId}
+    ${upiId}=   FakerLibrary.word
+    Set Suite Variable   ${upiId}
+    ${bankaccountNo}=  Generate_random_value  size=16  chars=string.digits
+    Set Suite Variable   ${bankaccountNo}
+    ${ifsc}=  Generate_ifsc_code
+    Set Suite Variable   ${ifsc}
+    ${bankName}=  FakerLibrary.company
+    Set Suite Variable   ${bankName}
+    ${branchName}=   FakerLibrary.word
+    Set Suite Variable   ${branchName}
+    ${gstNumber}  ${pancardNo}=   db.Generate_gst_number   ${Container_id}
+    Set Suite Variable   ${gstNumber}
+    Set Suite Variable   ${pancardNo}
+    ${bankCheckNo}=   FakerLibrary.word
+    Set Suite Variable   ${bankCheckNo}
 
 
-
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}    merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}       merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -317,6 +339,19 @@ JD-TC-GetPayableWithFilter-5
     Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id0}
     Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
     Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 
 JD-TC-GetPayableWithFilter-6
@@ -350,7 +385,7 @@ JD-TC-GetPayableWithFilter-6
 
 
 
-    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=dsafgsdgsdg    merchantKey=dsafgsdgsdg    paymentGateway=PAYTM    orderId=dsafgsdgsdg     gatewayTxnId=dsafgsdgsdg    upiId=dsafgsdgsdg      bankaccountNo=kjbgkjsbgds    ifscCode=agfygadsf    bankName=gfadjfa    branchName=asfasgf    pancardNo=afsdfasg    gstNumber=afgagaG    bankCheckNo=adgasdgsgd
+    ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${SPACE}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}        merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -372,6 +407,19 @@ JD-TC-GetPayableWithFilter-6
     Should Be Equal As Strings  ${resp.json()[0]['paymentsOutStatus']}  ${status_id1}
     Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[4]}
     Should Be Equal As Strings  ${resp.json()[0]['vendorUid']}  ${vendor_uid1}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['merchantId']}  ${merchantId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['merchantKey']}  ${merchantKey}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentGateway']}  ${paymentGateway[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['orderId']}  ${orderId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['gatewayTxnId']}  ${gatewayTxnId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['upiId']}  ${upiId}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankaccountNo']}  ${bankaccountNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['ifscCode']}  ${ifsc}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankName']}  ${bankName}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['branchName']}  ${branchName}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['pancardNo']}  ${pancardNo}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['gstNumber']}  ${gstNumber}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['bankCheckNo']}  ${bankCheckNo}
 
 
 JD-TC-GetPayableWithFilter-7
@@ -441,7 +489,7 @@ JD-TC-GetPayableWithFilter-8
     # Should Be Equal As Strings  ${resp.json()['paidDate']}  ${dueDate}
     # Should Be Equal As Strings  ${resp.json()['paymentsOutUid']}  ${payable_uid1}
     # Should Be Equal As Strings  ${resp.json()['paymentsOutStatus']}  ${status_id0}
-    # Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
 
 
 JD-TC-GetPayableWithFilter-UH1

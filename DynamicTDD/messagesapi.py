@@ -2086,6 +2086,7 @@ ALREADY_ASSIGNED_USER="This user already assigned"
 ALREADY_UNASSIGNED_USER="User already unassigned"
 INVALID_FM_USER_ID="Invalid User Id"
 LINE_ITEMS_CANNOT_EMPTY="Line Items cannot be empty"
+PAYMENT_GATEWAY_CANNOT_BE_EMPTY="Payment Gateway cannot be empty"
 financehtml= "<html style=\"width: 210mm; height: 297mm; font-size: 1rem; font-family: 'Poppins', sans-serif !important;\"><head><title></title></head><body ><div><h1>INVOICE</h1><p>Sample Invoice PDF</p></div></body></html>"
 
 
